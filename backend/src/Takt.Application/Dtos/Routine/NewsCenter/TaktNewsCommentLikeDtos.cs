@@ -1,0 +1,374 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Dtos.Routine.NewsCenter
+// 文件名称：TaktNewsCommentLikeDtos.cs
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：NewsCommentLike 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNewsCommentLike 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.ComponentModel.DataAnnotations;
+using Mapster;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models;
+
+namespace Takt.Application.Dtos.Routine.NewsCenter;
+
+// ========================================
+// NewsCommentLike 响应 DTO
+// ========================================
+
+/// <summary>
+/// 新闻中心评论点赞记录实体
+/// 对应前端 TaktNewsCommentLikeDto
+/// 继承 TaktCompanyDtoBase
+/// </summary>
+public class TaktNewsCommentLikeDto : TaktCompanyDtoBase
+{
+    /// <summary>
+    /// NewsCommentLikeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long NewsCommentLikeId { get; set; }
+
+    /// <summary>
+    /// 评论 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CommentId { get; set; }
+
+    /// <summary>
+    /// 评论 名称（填充字段）
+    /// </summary>
+    public string? CommentName { get; set; }
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户姓名
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 点赞时间
+    /// </summary>
+    public DateTime LikeTime { get; set; }
+
+    /// <summary>
+    /// 评论（主表）
+    /// （主表：TaktNewsComment）
+    /// </summary>
+    public TaktNewsCommentDto? Comment { get; set; }
+
+}
+
+// ========================================
+// NewsCommentLike 查询 DTO
+// ========================================
+
+/// <summary>
+/// NewsCommentLike 分页查询 DTO
+/// 继承 TaktPagedQuery
+/// </summary>
+public class TaktNewsCommentLikeQueryDto : TaktPagedQuery
+{
+    /// <summary>
+    /// 租户编码
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评论 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CommentId { get; set; }
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户姓名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 点赞时间（范围查询-开始）
+    /// </summary>
+    public DateTime? LikeTimeStart { get; set; }
+
+    /// <summary>
+    /// 点赞时间（范围查询-结束）
+    /// </summary>
+    public DateTime? LikeTimeEnd { get; set; }
+
+    /// <summary>
+    /// 创建时间（范围查询-开始）
+    /// </summary>
+    public DateTime? CreatedAtStart { get; set; }
+
+    /// <summary>
+    /// 创建时间（范围查询-结束）
+    /// </summary>
+    public DateTime? CreatedAtEnd { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注（模糊查询）
+    /// </summary>
+    public string? Remark { get; set; }
+}
+
+// ========================================
+// 创建NewsCommentLike DTO
+// ========================================
+
+/// <summary>
+/// 创建NewsCommentLike DTO
+/// </summary>
+public class TaktNewsCommentLikeCreateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评论 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CommentId { get; set; }
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户姓名
+    /// </summary>
+    [Required(ErrorMessage = "用户姓名不能为空")]
+    public string UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 点赞时间
+    /// </summary>
+    public DateTime LikeTime { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 更新NewsCommentLike DTO
+// ========================================
+
+/// <summary>
+/// 更新NewsCommentLike DTO
+/// 继承 TaktNewsCommentLikeCreateDto，添加 NewsCommentLikeId 字段
+/// </summary>
+public class TaktNewsCommentLikeUpdateDto : TaktNewsCommentLikeCreateDto
+{
+    /// <summary>
+    /// NewsCommentLikeID（标识要更新的实体）
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long NewsCommentLikeId { get; set; }
+
+}
+
+// ========================================
+// 导入 DTO
+// ========================================
+
+/// <summary>
+/// NewsCommentLike 导入模板行 DTO
+/// </summary>
+public class TaktNewsCommentLikeTemplateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评论 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CommentId { get; set; }
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户姓名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+/// <summary>
+/// NewsCommentLike 导入 DTO（独立实现，不继承 TemplateDto）
+/// </summary>
+public class TaktNewsCommentLikeImportDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评论 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CommentId { get; set; }
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// 用户姓名
+    /// </summary>
+    public string? UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 导出 DTO
+// ========================================
+
+/// <summary>
+/// NewsCommentLike 导出 DTO（独立实现，不继承响应 Dto）
+/// </summary>
+public class TaktNewsCommentLikeExportDto
+{
+    /// <summary>
+    /// NewsCommentLikeID
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long NewsCommentLikeId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评论 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CommentId { get; set; }
+
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 用户姓名
+    /// </summary>
+    public string UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 点赞时间
+    /// </summary>
+    public DateTime LikeTime { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
+}

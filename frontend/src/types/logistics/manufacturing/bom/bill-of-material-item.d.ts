@@ -1,0 +1,682 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/types/logistics/manufacturing/bom
+// 文件名称：bill-of-material-item.d.ts
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type {
+  CompanyDtoBase,
+  TaktPagedQuery
+} from '@/types/common';
+
+import type {
+  Material
+} from '@/types/logistics/materials/material';
+
+/**
+ * Takt物料清单明细实体（扁平BOM行：一头多行，每行一个直接子件；多层BOM通过子件物料关联其BOM头递归展开）
+ * 对应前端 TaktBillOfMaterialItemDto
+ * 继承 TaktCompanyDtoBase
+ * 对应前端 BillOfMaterialItem
+ * @description 对应后端 TaktBillOfMaterialItemDto
+ */
+export interface BillOfMaterialItem extends CompanyDtoBase {
+  /**
+   * BillOfMaterialItemID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  billOfMaterialItemId: string;
+
+  /**
+   * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
+   */
+  billOfMaterialId: string;
+
+  /**
+   * 物料清单名称（填充字段）
+   */
+  billOfMaterialName?: string;
+
+  /**
+   * BOM编码（冗余，便于查询）
+   */
+  bomCode: string;
+
+  /**
+   * 行号（项号，步长10：10/20/30…）
+   */
+  lineNumber: number;
+
+  /**
+   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   */
+  materialId: string;
+
+  /**
+   * 子项物料名称（填充字段）
+   */
+  materialName?: string;
+
+  /**
+   * 子项物料编码（冗余，component_item_code）
+   */
+  materialCode: string;
+
+  /**
+   * 用量（quantity）
+   */
+  usageQuantity: number;
+
+  /**
+   * 单位（unit）
+   */
+  materialUnit: string;
+
+  /**
+   * 损耗率（0-100，scrap_rate）
+   */
+  scrapRate: number;
+
+  /**
+   * 实际用量（用量 × (1 + 损耗率/100)）
+   */
+  actualUsageQuantity: number;
+
+  /**
+   * 工序号（operation_seq）
+   */
+  operationSeq: number;
+
+  /**
+   * 工作中心（work_center）
+   */
+  workCenter?: string;
+
+  /**
+   * 位号（position，PCB位号等）
+   */
+  position?: string;
+
+  /**
+   * 替代组号（substitute_group）
+   */
+  substituteGroup?: string;
+
+  /**
+   * 替代优先级（组内越小越优先）
+   */
+  substitutePriority: number;
+
+  /**
+   * 是否可选件（0=否，1=是，optional_flag）
+   */
+  isOptional: number;
+
+  /**
+   * 是否虚拟件（0=否，1=是，phantom_flag）
+   */
+  isPhantom: number;
+
+  /**
+   * 物料清单（BOM头） （主表：TaktBillOfMaterial）
+   */
+  bom?: BillOfMaterial;
+
+  /**
+   * 子项物料（工厂物料主数据） （主表：TaktMaterial）
+   */
+  material?: Material;
+
+}
+
+
+/**
+ * BillOfMaterialItem 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 BillOfMaterialItemQuery
+ * @description 对应后端 TaktBillOfMaterialItemQueryDto
+ */
+export interface BillOfMaterialItemQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode?: string;
+
+  /**
+   * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
+   */
+  billOfMaterialId?: string;
+
+  /**
+   * BOM编码（冗余，便于查询）
+   */
+  bomCode?: string;
+
+  /**
+   * 行号（项号，步长10：10/20/30…）
+   */
+  lineNumber?: number;
+
+  /**
+   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   */
+  materialId?: string;
+
+  /**
+   * 子项物料编码（冗余，component_item_code）
+   */
+  materialCode?: string;
+
+  /**
+   * 用量（quantity）
+   */
+  usageQuantity?: number;
+
+  /**
+   * 单位（unit）
+   */
+  materialUnit?: string;
+
+  /**
+   * 损耗率（0-100，scrap_rate）
+   */
+  scrapRate?: number;
+
+  /**
+   * 实际用量（用量 × (1 + 损耗率/100)）
+   */
+  actualUsageQuantity?: number;
+
+  /**
+   * 工序号（operation_seq）
+   */
+  operationSeq?: number;
+
+  /**
+   * 工作中心（work_center）
+   */
+  workCenter?: string;
+
+  /**
+   * 位号（position，PCB位号等）
+   */
+  position?: string;
+
+  /**
+   * 替代组号（substitute_group）
+   */
+  substituteGroup?: string;
+
+  /**
+   * 替代优先级（组内越小越优先）
+   */
+  substitutePriority?: number;
+
+  /**
+   * 是否可选件（0=否，1=是，optional_flag）
+   */
+  isOptional?: number;
+
+  /**
+   * 是否虚拟件（0=否，1=是，phantom_flag）
+   */
+  isPhantom?: number;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建BillOfMaterialItem DTO
+ * 对应前端 BillOfMaterialItemCreate
+ * @description 对应后端 TaktBillOfMaterialItemCreateDto
+ */
+export interface BillOfMaterialItemCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode: string;
+
+  /**
+   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture: string;
+
+  /**
+   * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
+   */
+  billOfMaterialId: string;
+
+  /**
+   * BOM编码（冗余，便于查询）
+   */
+  bomCode: string;
+
+  /**
+   * 行号（项号，步长10：10/20/30…）
+   */
+  lineNumber: number;
+
+  /**
+   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   */
+  materialId: string;
+
+  /**
+   * 子项物料编码（冗余，component_item_code）
+   */
+  materialCode: string;
+
+  /**
+   * 用量（quantity）
+   */
+  usageQuantity: number;
+
+  /**
+   * 单位（unit）
+   */
+  materialUnit: string;
+
+  /**
+   * 损耗率（0-100，scrap_rate）
+   */
+  scrapRate: number;
+
+  /**
+   * 实际用量（用量 × (1 + 损耗率/100)）
+   */
+  actualUsageQuantity: number;
+
+  /**
+   * 工序号（operation_seq）
+   */
+  operationSeq: number;
+
+  /**
+   * 工作中心（work_center）
+   */
+  workCenter?: string;
+
+  /**
+   * 位号（position，PCB位号等）
+   */
+  position?: string;
+
+  /**
+   * 替代组号（substitute_group）
+   */
+  substituteGroup?: string;
+
+  /**
+   * 替代优先级（组内越小越优先）
+   */
+  substitutePriority: number;
+
+  /**
+   * 是否可选件（0=否，1=是，optional_flag）
+   */
+  isOptional: number;
+
+  /**
+   * 是否虚拟件（0=否，1=是，phantom_flag）
+   */
+  isPhantom: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新BillOfMaterialItem DTO
+ * 继承 TaktBillOfMaterialItemCreateDto，添加 BillOfMaterialItemId 字段
+ * 对应前端 BillOfMaterialItemUpdate
+ * @description 对应后端 TaktBillOfMaterialItemUpdateDto
+ */
+export interface BillOfMaterialItemUpdate extends BillOfMaterialItemCreate {
+  /**
+   * BillOfMaterialItemID（标识要更新的实体）
+   */
+  billOfMaterialItemId: string;
+
+}
+
+
+/**
+ * BillOfMaterialItem 导入模板行 DTO
+ * 对应前端 BillOfMaterialItemTemplate
+ * @description 对应后端 TaktBillOfMaterialItemTemplateDto
+ */
+export interface BillOfMaterialItemTemplate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
+   */
+  billOfMaterialId?: string;
+
+  /**
+   * BOM编码（冗余，便于查询）
+   */
+  bomCode?: string;
+
+  /**
+   * 行号（项号，步长10：10/20/30…）
+   */
+  lineNumber?: number;
+
+  /**
+   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   */
+  materialId?: string;
+
+  /**
+   * 子项物料编码（冗余，component_item_code）
+   */
+  materialCode?: string;
+
+  /**
+   * 单位（unit）
+   */
+  materialUnit?: string;
+
+  /**
+   * 工序号（operation_seq）
+   */
+  operationSeq?: number;
+
+  /**
+   * 工作中心（work_center）
+   */
+  workCenter?: string;
+
+  /**
+   * 位号（position，PCB位号等）
+   */
+  position?: string;
+
+  /**
+   * 替代组号（substitute_group）
+   */
+  substituteGroup?: string;
+
+  /**
+   * 替代优先级（组内越小越优先）
+   */
+  substitutePriority?: number;
+
+  /**
+   * 是否可选件（0=否，1=是，optional_flag）
+   */
+  isOptional?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * BillOfMaterialItem 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 BillOfMaterialItemImport
+ * @description 对应后端 TaktBillOfMaterialItemImportDto
+ */
+export interface BillOfMaterialItemImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture?: string;
+
+  /**
+   * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
+   */
+  billOfMaterialId?: string;
+
+  /**
+   * BOM编码（冗余，便于查询）
+   */
+  bomCode?: string;
+
+  /**
+   * 行号（项号，步长10：10/20/30…）
+   */
+  lineNumber?: number;
+
+  /**
+   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   */
+  materialId?: string;
+
+  /**
+   * 子项物料编码（冗余，component_item_code）
+   */
+  materialCode?: string;
+
+  /**
+   * 单位（unit）
+   */
+  materialUnit?: string;
+
+  /**
+   * 工序号（operation_seq）
+   */
+  operationSeq?: number;
+
+  /**
+   * 工作中心（work_center）
+   */
+  workCenter?: string;
+
+  /**
+   * 位号（position，PCB位号等）
+   */
+  position?: string;
+
+  /**
+   * 替代组号（substitute_group）
+   */
+  substituteGroup?: string;
+
+  /**
+   * 替代优先级（组内越小越优先）
+   */
+  substitutePriority?: number;
+
+  /**
+   * 是否可选件（0=否，1=是，optional_flag）
+   */
+  isOptional?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * BillOfMaterialItem 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 BillOfMaterialItemExport
+ * @description 对应后端 TaktBillOfMaterialItemExportDto
+ */
+export interface BillOfMaterialItemExport {
+  /**
+   * BillOfMaterialItemID
+   */
+  billOfMaterialItemId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
+   */
+  billOfMaterialId: string;
+
+  /**
+   * BOM编码（冗余，便于查询）
+   */
+  bomCode: string;
+
+  /**
+   * 行号（项号，步长10：10/20/30…）
+   */
+  lineNumber: number;
+
+  /**
+   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   */
+  materialId: string;
+
+  /**
+   * 子项物料编码（冗余，component_item_code）
+   */
+  materialCode: string;
+
+  /**
+   * 用量（quantity）
+   */
+  usageQuantity: number;
+
+  /**
+   * 单位（unit）
+   */
+  materialUnit: string;
+
+  /**
+   * 损耗率（0-100，scrap_rate）
+   */
+  scrapRate: number;
+
+  /**
+   * 实际用量（用量 × (1 + 损耗率/100)）
+   */
+  actualUsageQuantity: number;
+
+  /**
+   * 工序号（operation_seq）
+   */
+  operationSeq: number;
+
+  /**
+   * 工作中心（work_center）
+   */
+  workCenter?: string;
+
+  /**
+   * 位号（position，PCB位号等）
+   */
+  position?: string;
+
+  /**
+   * 替代组号（substitute_group）
+   */
+  substituteGroup?: string;
+
+  /**
+   * 替代优先级（组内越小越优先）
+   */
+  substitutePriority: number;
+
+  /**
+   * 是否可选件（0=否，1=是，optional_flag）
+   */
+  isOptional: number;
+
+  /**
+   * 是否虚拟件（0=否，1=是，phantom_flag）
+   */
+  isPhantom: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+  /**
+   * 创建时间
+   */
+  createdAt: string;
+
+}
+

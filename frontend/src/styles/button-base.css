@@ -1,0 +1,947 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：button-base.css
+ * 创建时间：2026-05-26
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：Takt 自定义按钮（takt-button-*）；按 action 配色 + 通用交互（对照原 button.less，纯 CSS）
+ *
+ * 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+/*
+ * 色板 token：color-base.css（--takt-cn-* / --takt-jp-* / --takt-*）
+ * 按钮语义 token：:root --takt-btn-fg-solid / --takt-btn-fg-on-light（实心字色，非色板）
+ * 各 action 配色段：.takt-button-{action} 注入 --takt-btn-*；交互见 button-base.rules.css
+ */
+
+@import './button-base.rules.css';
+
+/* ---------- 禁用态颜色（与 Ant Design Vue genDisabledStyle token 一致） ---------- */
+:root {
+  --takt-btn-fg-solid: var(--takt-white);
+  --takt-btn-fg-on-light: #1a1a1a;
+  --takt-btn-disabled-border: rgba(0, 0, 0, 0.15);
+  --takt-btn-disabled-color: rgba(0, 0, 0, 0.25);
+  --takt-btn-disabled-bg: rgba(0, 0, 0, 0.04);
+  --takt-btn-disabled-border-dark: rgba(255, 255, 255, 0.15);
+  --takt-btn-disabled-color-dark: rgba(255, 255, 255, 0.25);
+  --takt-btn-disabled-bg-dark: rgba(255, 255, 255, 0.08);
+}
+
+/* @takt-generated variants-begin */
+/* 共 114 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-base.rules.css */
+
+/* query · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-query {
+  --takt-btn-bg: var(--takt-cn-qunqing);
+  --takt-btn-border: var(--takt-cn-qunqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qunqing);
+}
+
+/* create · var(--takt-cn-baolan) · fg var(--takt-btn-fg-solid) */
+.takt-button-create {
+  --takt-btn-bg: var(--takt-cn-baolan);
+  --takt-btn-border: var(--takt-cn-baolan);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-baolan);
+}
+
+/* update · var(--takt-cn-chengqian) · fg var(--takt-btn-fg-solid) */
+.takt-button-update {
+  --takt-btn-bg: var(--takt-cn-chengqian);
+  --takt-btn-border: var(--takt-cn-chengqian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-chengqian);
+}
+
+/* delete · var(--takt-jp-shoujou) · fg var(--takt-btn-fg-solid) */
+.takt-button-delete {
+  --takt-btn-bg: var(--takt-jp-shoujou);
+  --takt-btn-border: var(--takt-jp-shoujou);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-shoujou);
+}
+
+/* detail · var(--takt-cn-qingse) · fg var(--takt-btn-fg-solid) */
+.takt-button-detail {
+  --takt-btn-bg: var(--takt-cn-qingse);
+  --takt-btn-border: var(--takt-cn-qingse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingse);
+}
+
+/* unlock · var(--takt-cn-zhusha) · fg var(--takt-btn-fg-solid) */
+.takt-button-unlock {
+  --takt-btn-bg: var(--takt-cn-zhusha);
+  --takt-btn-border: var(--takt-cn-zhusha);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhusha);
+}
+
+/* preview · var(--takt-cn-weilan) · fg var(--takt-btn-fg-on-light) */
+.takt-button-preview {
+  --takt-btn-bg: var(--takt-cn-weilan);
+  --takt-btn-border: var(--takt-cn-weilan);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-weilan);
+}
+
+/* print · var(--takt-cn-chengqian) · fg var(--takt-btn-fg-solid) */
+.takt-button-print {
+  --takt-btn-bg: var(--takt-cn-chengqian);
+  --takt-btn-border: var(--takt-cn-chengqian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-chengqian);
+}
+
+/* import · var(--takt-cn-qinglian) · fg var(--takt-btn-fg-solid) */
+.takt-button-import {
+  --takt-btn-bg: var(--takt-cn-qinglian);
+  --takt-btn-border: var(--takt-cn-qinglian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qinglian);
+}
+
+/* export · var(--takt-jp-iroha) · fg var(--takt-btn-fg-solid) */
+.takt-button-export {
+  --takt-btn-bg: var(--takt-jp-iroha);
+  --takt-btn-border: var(--takt-jp-iroha);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-iroha);
+}
+
+/* template · var(--takt-cn-lanqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-template {
+  --takt-btn-bg: var(--takt-cn-lanqing);
+  --takt-btn-border: var(--takt-cn-lanqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lanqing);
+}
+
+/* approve · var(--takt-cn-zhusha) · fg var(--takt-btn-fg-solid) */
+.takt-button-approve {
+  --takt-btn-bg: var(--takt-cn-zhusha);
+  --takt-btn-border: var(--takt-cn-zhusha);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhusha);
+}
+
+/* revoke · var(--takt-cn-fenhong) · fg var(--takt-btn-fg-solid) */
+.takt-button-revoke {
+  --takt-btn-bg: var(--takt-cn-fenhong);
+  --takt-btn-border: var(--takt-cn-fenhong);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-fenhong);
+}
+
+/* copy · var(--takt-jp-gunjyo) · fg var(--takt-btn-fg-solid) */
+.takt-button-copy {
+  --takt-btn-bg: var(--takt-jp-gunjyo);
+  --takt-btn-border: var(--takt-jp-gunjyo);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-gunjyo);
+}
+
+/* insert · var(--takt-jp-gunjyo) · fg var(--takt-btn-fg-solid) */
+.takt-button-insert {
+  --takt-btn-bg: var(--takt-jp-gunjyo);
+  --takt-btn-border: var(--takt-jp-gunjyo);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-gunjyo);
+}
+
+/* clone · var(--takt-jp-murasaki) · fg var(--takt-btn-fg-solid) */
+.takt-button-clone {
+  --takt-btn-bg: var(--takt-jp-murasaki);
+  --takt-btn-border: var(--takt-jp-murasaki);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-murasaki);
+}
+
+/* suspend · var(--takt-cn-zhujiao) · fg var(--takt-btn-fg-solid) */
+.takt-button-suspend {
+  --takt-btn-bg: var(--takt-cn-zhujiao);
+  --takt-btn-border: var(--takt-cn-zhujiao);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhujiao);
+}
+
+/* resume · var(--takt-cn-lvse) · fg var(--takt-btn-fg-solid) */
+.takt-button-resume {
+  --takt-btn-bg: var(--takt-cn-lvse);
+  --takt-btn-border: var(--takt-cn-lvse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lvse);
+}
+
+/* submit · var(--takt-cn-zhusha) · fg var(--takt-btn-fg-solid) */
+.takt-button-submit {
+  --takt-btn-bg: var(--takt-cn-zhusha);
+  --takt-btn-border: var(--takt-cn-zhusha);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhusha);
+}
+
+/* withdraw · var(--takt-cn-juhong) · fg var(--takt-btn-fg-solid) */
+.takt-button-withdraw {
+  --takt-btn-bg: var(--takt-cn-juhong);
+  --takt-btn-border: var(--takt-cn-juhong);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-juhong);
+}
+
+/* transfer · var(--takt-cn-feise) · fg var(--takt-btn-fg-solid) */
+.takt-button-transfer {
+  --takt-btn-bg: var(--takt-cn-feise);
+  --takt-btn-border: var(--takt-cn-feise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-feise);
+}
+
+/* delegate · var(--takt-cn-taohong) · fg var(--takt-btn-fg-solid) */
+.takt-button-delegate {
+  --takt-btn-bg: var(--takt-cn-taohong);
+  --takt-btn-border: var(--takt-cn-taohong);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-taohong);
+}
+
+/* return · var(--takt-jp-momo) · fg var(--takt-btn-fg-solid) */
+.takt-button-return {
+  --takt-btn-bg: var(--takt-jp-momo);
+  --takt-btn-border: var(--takt-jp-momo);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-momo);
+}
+
+/* urge · var(--takt-jp-beni) · fg var(--takt-btn-fg-solid) */
+.takt-button-urge {
+  --takt-btn-bg: var(--takt-jp-beni);
+  --takt-btn-border: var(--takt-jp-beni);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-beni);
+}
+
+/* addsign · var(--takt-jp-momoji) · fg var(--takt-btn-fg-solid) */
+.takt-button-addsign {
+  --takt-btn-bg: var(--takt-jp-momoji);
+  --takt-btn-border: var(--takt-jp-momoji);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-momoji);
+}
+
+/* subsign · var(--takt-jp-kurenai) · fg var(--takt-btn-fg-solid) */
+.takt-button-subsign {
+  --takt-btn-bg: var(--takt-jp-kurenai);
+  --takt-btn-border: var(--takt-jp-kurenai);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kurenai);
+}
+
+/* progress · var(--takt-cn-dianqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-progress {
+  --takt-btn-bg: var(--takt-cn-dianqing);
+  --takt-btn-border: var(--takt-cn-dianqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-dianqing);
+}
+
+/* history · var(--takt-cn-qingbi) · fg var(--takt-btn-fg-solid) */
+.takt-button-history {
+  --takt-btn-bg: var(--takt-cn-qingbi);
+  --takt-btn-border: var(--takt-cn-qingbi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingbi);
+}
+
+/* publish · var(--takt-cn-zangqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-publish {
+  --takt-btn-bg: var(--takt-cn-zangqing);
+  --takt-btn-border: var(--takt-cn-zangqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zangqing);
+}
+
+/* disable · var(--takt-memorial-gray) · fg var(--takt-btn-fg-solid) */
+.takt-button-disable {
+  --takt-btn-bg: var(--takt-memorial-gray);
+  --takt-btn-border: var(--takt-memorial-gray);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-memorial-gray);
+}
+
+/* enable · var(--takt-cn-lvse) · fg var(--takt-btn-fg-solid) */
+.takt-button-enable {
+  --takt-btn-bg: var(--takt-cn-lvse);
+  --takt-btn-border: var(--takt-cn-lvse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lvse);
+}
+
+/* version · var(--takt-cn-zitan) · fg var(--takt-btn-fg-solid) */
+.takt-button-version {
+  --takt-btn-bg: var(--takt-cn-zitan);
+  --takt-btn-border: var(--takt-cn-zitan);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zitan);
+}
+
+/* design · var(--takt-cn-qingse) · fg var(--takt-btn-fg-solid) */
+.takt-button-design {
+  --takt-btn-bg: var(--takt-cn-qingse);
+  --takt-btn-border: var(--takt-cn-qingse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingse);
+}
+
+/* config · var(--takt-cn-zijiang) · fg var(--takt-btn-fg-solid) */
+.takt-button-config {
+  --takt-btn-bg: var(--takt-cn-zijiang);
+  --takt-btn-border: var(--takt-cn-zijiang);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zijiang);
+}
+
+/* validate · var(--takt-cn-qinglian) · fg var(--takt-btn-fg-solid) */
+.takt-button-validate {
+  --takt-btn-bg: var(--takt-cn-qinglian);
+  --takt-btn-border: var(--takt-cn-qinglian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qinglian);
+}
+
+/* start · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-start {
+  --takt-btn-bg: var(--takt-cn-qunqing);
+  --takt-btn-border: var(--takt-cn-qunqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qunqing);
+}
+
+/* terminate · var(--takt-cn-jiangzi) · fg var(--takt-btn-fg-solid) */
+.takt-button-terminate {
+  --takt-btn-bg: var(--takt-cn-jiangzi);
+  --takt-btn-border: var(--takt-cn-jiangzi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-jiangzi);
+}
+
+/* field · var(--takt-cn-xueqing) · fg var(--takt-btn-fg-on-light) */
+.takt-button-field {
+  --takt-btn-bg: var(--takt-cn-xueqing);
+  --takt-btn-border: var(--takt-cn-xueqing);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-xueqing);
+}
+
+/* permission · var(--takt-jp-murasaki) · fg var(--takt-btn-fg-on-light) */
+.takt-button-permission {
+  --takt-btn-bg: var(--takt-jp-murasaki);
+  --takt-btn-border: var(--takt-jp-murasaki);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-jp-murasaki);
+}
+
+/* datasource · var(--takt-jp-usumurasaki) · fg var(--takt-btn-fg-on-light) */
+.takt-button-datasource {
+  --takt-btn-bg: var(--takt-jp-usumurasaki);
+  --takt-btn-border: var(--takt-jp-usumurasaki);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-jp-usumurasaki);
+}
+
+/* theme · var(--takt-jp-wakamurasaki) · fg var(--takt-btn-fg-on-light) */
+.takt-button-theme {
+  --takt-btn-bg: var(--takt-jp-wakamurasaki);
+  --takt-btn-border: var(--takt-jp-wakamurasaki);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-jp-wakamurasaki);
+}
+
+/* data · var(--takt-cn-huohong) · fg var(--takt-btn-fg-solid) */
+.takt-button-data {
+  --takt-btn-bg: var(--takt-cn-huohong);
+  --takt-btn-border: var(--takt-cn-huohong);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-huohong);
+}
+
+/* archive · var(--takt-cn-jujube) · fg var(--takt-btn-fg-solid) */
+.takt-button-archive {
+  --takt-btn-bg: var(--takt-cn-jujube);
+  --takt-btn-border: var(--takt-cn-jujube);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-jujube);
+}
+
+/* clean · var(--takt-cn-zhujiao) · fg var(--takt-btn-fg-solid) */
+.takt-button-clean {
+  --takt-btn-bg: var(--takt-cn-zhujiao);
+  --takt-btn-border: var(--takt-cn-zhujiao);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhujiao);
+}
+
+/* draft · var(--takt-cn-juhuang) · fg var(--takt-btn-fg-solid) */
+.takt-button-draft {
+  --takt-btn-bg: var(--takt-cn-juhuang);
+  --takt-btn-border: var(--takt-cn-juhuang);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-juhuang);
+}
+
+/* deletedraft · var(--takt-jp-youkan) · fg var(--takt-btn-fg-solid) */
+.takt-button-deletedraft {
+  --takt-btn-bg: var(--takt-jp-youkan);
+  --takt-btn-border: var(--takt-jp-youkan);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-youkan);
+}
+
+/* send · var(--takt-cn-honggan) · fg var(--takt-btn-fg-solid) */
+.takt-button-send {
+  --takt-btn-bg: var(--takt-cn-honggan);
+  --takt-btn-border: var(--takt-cn-honggan);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-honggan);
+}
+
+/* forward · var(--takt-cn-hong) · fg var(--takt-btn-fg-solid) */
+.takt-button-forward {
+  --takt-btn-bg: var(--takt-cn-hong);
+  --takt-btn-border: var(--takt-cn-hong);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-hong);
+}
+
+/* reply · var(--takt-jp-fujimurasaki) · fg var(--takt-btn-fg-solid) */
+.takt-button-reply {
+  --takt-btn-bg: var(--takt-jp-fujimurasaki);
+  --takt-btn-border: var(--takt-jp-fujimurasaki);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-fujimurasaki);
+}
+
+/* read · var(--takt-cn-honggan) · fg var(--takt-btn-fg-solid) */
+.takt-button-read {
+  --takt-btn-bg: var(--takt-cn-honggan);
+  --takt-btn-border: var(--takt-cn-honggan);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-honggan);
+}
+
+/* unread · var(--takt-jp-chairo) · fg var(--takt-btn-fg-solid) */
+.takt-button-unread {
+  --takt-btn-bg: var(--takt-jp-chairo);
+  --takt-btn-border: var(--takt-jp-chairo);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-chairo);
+}
+
+/* circulate · var(--takt-jp-sakura) · fg var(--takt-btn-fg-solid) */
+.takt-button-circulate {
+  --takt-btn-bg: var(--takt-jp-sakura);
+  --takt-btn-border: var(--takt-jp-sakura);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-sakura);
+}
+
+/* sign · var(--takt-cn-jujube) · fg var(--takt-btn-fg-solid) */
+.takt-button-sign {
+  --takt-btn-bg: var(--takt-cn-jujube);
+  --takt-btn-border: var(--takt-cn-jujube);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-jujube);
+}
+
+/* confirm · var(--takt-jp-kurenai) · fg var(--takt-btn-fg-solid) */
+.takt-button-confirm {
+  --takt-btn-bg: var(--takt-jp-kurenai);
+  --takt-btn-border: var(--takt-jp-kurenai);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kurenai);
+}
+
+/* like · var(--takt-jp-shoujou) · fg var(--takt-btn-fg-solid) */
+.takt-button-like {
+  --takt-btn-bg: var(--takt-jp-shoujou);
+  --takt-btn-border: var(--takt-jp-shoujou);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-shoujou);
+}
+
+/* unlike · var(--takt-jp-beni) · fg var(--takt-btn-fg-solid) */
+.takt-button-unlike {
+  --takt-btn-bg: var(--takt-jp-beni);
+  --takt-btn-border: var(--takt-jp-beni);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-beni);
+}
+
+/* favorite · var(--takt-jp-kurenai) · fg var(--takt-btn-fg-solid) */
+.takt-button-favorite {
+  --takt-btn-bg: var(--takt-jp-kurenai);
+  --takt-btn-border: var(--takt-jp-kurenai);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kurenai);
+}
+
+/* unfavorite · var(--takt-cn-lvse) · fg var(--takt-btn-fg-solid) */
+.takt-button-unfavorite {
+  --takt-btn-bg: var(--takt-cn-lvse);
+  --takt-btn-border: var(--takt-cn-lvse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lvse);
+}
+
+/* share · var(--takt-jp-shoubuiro) · fg var(--takt-btn-fg-solid) */
+.takt-button-share {
+  --takt-btn-bg: var(--takt-jp-shoubuiro);
+  --takt-btn-border: var(--takt-jp-shoubuiro);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-shoubuiro);
+}
+
+/* unshare · var(--takt-jp-kikyou) · fg var(--takt-btn-fg-on-light) */
+.takt-button-unshare {
+  --takt-btn-bg: var(--takt-jp-kikyou);
+  --takt-btn-border: var(--takt-jp-kikyou);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-jp-kikyou);
+}
+
+/* comment · var(--takt-cn-qiuhuang) · fg var(--takt-btn-fg-on-light) */
+.takt-button-comment {
+  --takt-btn-bg: var(--takt-cn-qiuhuang);
+  --takt-btn-border: var(--takt-cn-qiuhuang);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-qiuhuang);
+}
+
+/* uncomment · var(--takt-cn-nenlv) · fg var(--takt-btn-fg-on-light) */
+.takt-button-uncomment {
+  --takt-btn-bg: var(--takt-cn-nenlv);
+  --takt-btn-border: var(--takt-cn-nenlv);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-nenlv);
+}
+
+/* flagging · var(--takt-cn-liulv) · fg var(--takt-btn-fg-on-light) */
+.takt-button-flagging {
+  --takt-btn-bg: var(--takt-cn-liulv);
+  --takt-btn-border: var(--takt-cn-liulv);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-liulv);
+}
+
+/* unflagging · var(--takt-cn-shengqi) · fg var(--takt-btn-fg-on-light) */
+.takt-button-unflagging {
+  --takt-btn-bg: var(--takt-cn-shengqi);
+  --takt-btn-border: var(--takt-cn-shengqi);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-shengqi);
+}
+
+/* follow · var(--takt-cn-conglv) · fg var(--takt-btn-fg-on-light) */
+.takt-button-follow {
+  --takt-btn-bg: var(--takt-cn-conglv);
+  --takt-btn-border: var(--takt-cn-conglv);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-conglv);
+}
+
+/* unfollow · var(--takt-cn-caolv) · fg var(--takt-btn-fg-on-light) */
+.takt-button-unfollow {
+  --takt-btn-bg: var(--takt-cn-caolv);
+  --takt-btn-border: var(--takt-cn-caolv);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-caolv);
+}
+
+/* upload · var(--takt-cn-cuiqing) · fg var(--takt-btn-fg-on-light) */
+.takt-button-upload {
+  --takt-btn-bg: var(--takt-cn-cuiqing);
+  --takt-btn-border: var(--takt-cn-cuiqing);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-cuiqing);
+}
+
+/* download · var(--takt-cn-youlv) · fg var(--takt-btn-fg-solid) */
+.takt-button-download {
+  --takt-btn-bg: var(--takt-cn-youlv);
+  --takt-btn-border: var(--takt-cn-youlv);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-youlv);
+}
+
+/* destroy · var(--takt-cn-chengqian) · fg var(--takt-btn-fg-solid) */
+.takt-button-destroy {
+  --takt-btn-bg: var(--takt-cn-chengqian);
+  --takt-btn-border: var(--takt-cn-chengqian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-chengqian);
+}
+
+/* run · var(--takt-cn-qingbi) · fg var(--takt-btn-fg-solid) */
+.takt-button-run {
+  --takt-btn-bg: var(--takt-cn-qingbi);
+  --takt-btn-border: var(--takt-cn-qingbi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingbi);
+}
+
+/* stop · var(--takt-cn-bise) · fg var(--takt-btn-fg-solid) */
+.takt-button-stop {
+  --takt-btn-bg: var(--takt-cn-bise);
+  --takt-btn-border: var(--takt-cn-bise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-bise);
+}
+
+/* restart · var(--takt-cn-songbeilv) · fg var(--takt-btn-fg-solid) */
+.takt-button-restart {
+  --takt-btn-bg: var(--takt-cn-songbeilv);
+  --takt-btn-border: var(--takt-cn-songbeilv);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-songbeilv);
+}
+
+/* refresh · var(--takt-jp-midori) · fg var(--takt-btn-fg-solid) */
+.takt-button-refresh {
+  --takt-btn-bg: var(--takt-jp-midori);
+  --takt-btn-border: var(--takt-jp-midori);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-midori);
+}
+
+/* reset · var(--takt-jp-nezumi) · fg var(--takt-btn-fg-solid) */
+.takt-button-reset {
+  --takt-btn-bg: var(--takt-jp-nezumi);
+  --takt-btn-border: var(--takt-jp-nezumi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-nezumi);
+}
+
+/* empty · var(--takt-jp-mizu) · fg var(--takt-btn-fg-on-light) */
+.takt-button-empty {
+  --takt-btn-bg: var(--takt-jp-mizu);
+  --takt-btn-border: var(--takt-jp-mizu);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-jp-mizu);
+}
+
+/* authorize · var(--takt-jp-koubai) · fg var(--takt-btn-fg-solid) */
+.takt-button-authorize {
+  --takt-btn-bg: var(--takt-jp-koubai);
+  --takt-btn-border: var(--takt-jp-koubai);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-koubai);
+}
+
+/* allocate · var(--takt-jp-fujimurasaki) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate {
+  --takt-btn-bg: var(--takt-jp-fujimurasaki);
+  --takt-btn-border: var(--takt-jp-fujimurasaki);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-fujimurasaki);
+}
+
+/* allocate-user-role · var(--takt-cn-chengqian) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-user-role {
+  --takt-btn-bg: var(--takt-cn-chengqian);
+  --takt-btn-border: var(--takt-cn-chengqian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-chengqian);
+}
+
+/* allocate-role-menu · var(--takt-cn-qingbi) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-role-menu {
+  --takt-btn-bg: var(--takt-cn-qingbi);
+  --takt-btn-border: var(--takt-cn-qingbi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingbi);
+}
+
+/* allocate-dept-role · var(--takt-cn-bise) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-dept-role {
+  --takt-btn-bg: var(--takt-cn-bise);
+  --takt-btn-border: var(--takt-cn-bise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-bise);
+}
+
+/* allocate-dept-user · var(--takt-cn-songbeilv) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-dept-user {
+  --takt-btn-bg: var(--takt-cn-songbeilv);
+  --takt-btn-border: var(--takt-cn-songbeilv);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-songbeilv);
+}
+
+/* allocate-post-user · var(--takt-jp-midori) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-post-user {
+  --takt-btn-bg: var(--takt-jp-midori);
+  --takt-btn-border: var(--takt-jp-midori);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-midori);
+}
+
+/* allocate-tenant-user · var(--takt-jp-moegi) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-tenant-user {
+  --takt-btn-bg: var(--takt-jp-moegi);
+  --takt-btn-border: var(--takt-jp-moegi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-moegi);
+}
+
+/* allocate-user-tenant · var(--takt-jp-moegi) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-user-tenant {
+  --takt-btn-bg: var(--takt-jp-moegi);
+  --takt-btn-border: var(--takt-jp-moegi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-moegi);
+}
+
+/* allocate-user-company · var(--takt-cn-baolan) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-user-company {
+  --takt-btn-bg: var(--takt-cn-baolan);
+  --takt-btn-border: var(--takt-cn-baolan);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-baolan);
+}
+
+/* allocate-role-company · var(--takt-cn-bise) · fg var(--takt-btn-fg-solid) */
+.takt-button-allocate-role-company {
+  --takt-btn-bg: var(--takt-cn-bise);
+  --takt-btn-border: var(--takt-cn-bise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-bise);
+}
+
+/* resetpwd · var(--takt-cn-juhong) · fg var(--takt-btn-fg-solid) */
+.takt-button-resetpwd {
+  --takt-btn-bg: var(--takt-cn-juhong);
+  --takt-btn-border: var(--takt-cn-juhong);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-juhong);
+}
+
+/* changepwd · var(--takt-cn-huangse) · fg var(--takt-btn-fg-on-light) */
+.takt-button-changepwd {
+  --takt-btn-bg: var(--takt-cn-huangse);
+  --takt-btn-border: var(--takt-cn-huangse);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-huangse);
+}
+
+/* change · var(--takt-jp-asagi) · fg var(--takt-btn-fg-on-light) */
+.takt-button-change {
+  --takt-btn-bg: var(--takt-jp-asagi);
+  --takt-btn-border: var(--takt-jp-asagi);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-jp-asagi);
+}
+
+/* truncate · var(--takt-jp-warabi) · fg var(--takt-btn-fg-solid) */
+.takt-button-truncate {
+  --takt-btn-bg: var(--takt-jp-warabi);
+  --takt-btn-border: var(--takt-jp-warabi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-warabi);
+}
+
+/* calculate · var(--takt-jp-kurenai) · fg var(--takt-btn-fg-solid) */
+.takt-button-calculate {
+  --takt-btn-bg: var(--takt-jp-kurenai);
+  --takt-btn-border: var(--takt-jp-kurenai);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kurenai);
+}
+
+/* fullscreen · var(--takt-jp-gunjyo) · fg var(--takt-btn-fg-solid) */
+.takt-button-fullscreen {
+  --takt-btn-bg: var(--takt-jp-gunjyo);
+  --takt-btn-border: var(--takt-jp-gunjyo);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-gunjyo);
+}
+
+/* expand · var(--takt-jp-kon) · fg var(--takt-btn-fg-solid) */
+.takt-button-expand {
+  --takt-btn-bg: var(--takt-jp-kon);
+  --takt-btn-border: var(--takt-jp-kon);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kon);
+}
+
+/* more · var(--takt-jp-gunjyo) · fg var(--takt-btn-fg-solid) */
+.takt-button-more {
+  --takt-btn-bg: var(--takt-jp-gunjyo);
+  --takt-btn-border: var(--takt-jp-gunjyo);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-gunjyo);
+}
+
+/* transpose · var(--takt-jp-sora) · fg var(--takt-btn-fg-on-light) */
+.takt-button-transpose {
+  --takt-btn-bg: var(--takt-jp-sora);
+  --takt-btn-border: var(--takt-jp-sora);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-jp-sora);
+}
+
+/* create-row · var(--takt-jp-moegi) · fg var(--takt-btn-fg-solid) */
+.takt-button-create-row {
+  --takt-btn-bg: var(--takt-jp-moegi);
+  --takt-btn-border: var(--takt-jp-moegi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-moegi);
+}
+
+/* delete-row · var(--takt-cn-feise) · fg var(--takt-btn-fg-solid) */
+.takt-button-delete-row {
+  --takt-btn-bg: var(--takt-cn-feise);
+  --takt-btn-border: var(--takt-cn-feise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-feise);
+}
+
+/* book · var(--takt-cn-chengse) · fg var(--takt-btn-fg-solid) */
+.takt-button-book {
+  --takt-btn-bg: var(--takt-cn-chengse);
+  --takt-btn-border: var(--takt-cn-chengse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-chengse);
+}
+
+/* closing · var(--takt-cn-juhuang) · fg var(--takt-btn-fg-on-light) */
+.takt-button-closing {
+  --takt-btn-bg: var(--takt-cn-juhuang);
+  --takt-btn-border: var(--takt-cn-juhuang);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-juhuang);
+}
+
+/* reconcile · var(--takt-cn-tangerine) · fg var(--takt-btn-fg-on-light) */
+.takt-button-reconcile {
+  --takt-btn-bg: var(--takt-cn-tangerine);
+  --takt-btn-border: var(--takt-cn-tangerine);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-tangerine);
+}
+
+/* payment · var(--takt-cn-huangse) · fg var(--takt-btn-fg-on-light) */
+.takt-button-payment {
+  --takt-btn-bg: var(--takt-cn-huangse);
+  --takt-btn-border: var(--takt-cn-huangse);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-huangse);
+}
+
+/* depreciation · var(--takt-cn-yahuang) · fg var(--takt-btn-fg-on-light) */
+.takt-button-depreciation {
+  --takt-btn-bg: var(--takt-cn-yahuang);
+  --takt-btn-border: var(--takt-cn-yahuang);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-yahuang);
+}
+
+/* reimburse · var(--takt-cn-tangerine) · fg var(--takt-btn-fg-on-light) */
+.takt-button-reimburse {
+  --takt-btn-bg: var(--takt-cn-tangerine);
+  --takt-btn-border: var(--takt-cn-tangerine);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-tangerine);
+}
+
+/* reversal · var(--takt-cn-jianghuang) · fg var(--takt-btn-fg-on-light) */
+.takt-button-reversal {
+  --takt-btn-bg: var(--takt-cn-jianghuang);
+  --takt-btn-border: var(--takt-cn-jianghuang);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-jianghuang);
+}
+
+/* accrual · var(--takt-cn-kuxiang) · fg var(--takt-btn-fg-solid) */
+.takt-button-accrual {
+  --takt-btn-bg: var(--takt-cn-kuxiang);
+  --takt-btn-border: var(--takt-cn-kuxiang);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-kuxiang);
+}
+
+/* period · var(--takt-cn-feicui) · fg var(--takt-btn-fg-solid) */
+.takt-button-period {
+  --takt-btn-bg: var(--takt-cn-feicui);
+  --takt-btn-border: var(--takt-cn-feicui);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-feicui);
+}
+
+/* carryforward · var(--takt-cn-yunu) · fg var(--takt-btn-fg-on-light) */
+.takt-button-carryforward {
+  --takt-btn-bg: var(--takt-cn-yunu);
+  --takt-btn-border: var(--takt-cn-yunu);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-yunu);
+}
+
+/* cancel · var(--takt-cn-haikese) · fg var(--takt-btn-fg-solid) */
+.takt-button-cancel {
+  --takt-btn-bg: var(--takt-cn-haikese);
+  --takt-btn-border: var(--takt-cn-haikese);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-haikese);
+}
+
+/* generate · var(--takt-klein-blue) · fg var(--takt-btn-fg-solid) */
+.takt-button-generate {
+  --takt-btn-bg: var(--takt-klein-blue);
+  --takt-btn-border: var(--takt-klein-blue);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-klein-blue);
+}
+
+/* sync · var(--takt-cn-jujube) · fg var(--takt-btn-fg-solid) */
+.takt-button-sync {
+  --takt-btn-bg: var(--takt-cn-jujube);
+  --takt-btn-border: var(--takt-cn-jujube);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-jujube);
+}
+
+/* columns · var(--takt-cn-zise) · fg var(--takt-btn-fg-solid) */
+.takt-button-columns {
+  --takt-btn-bg: var(--takt-cn-zise);
+  --takt-btn-border: var(--takt-cn-zise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zise);
+}
+
+/* tables · var(--takt-jp-kaki) · fg var(--takt-btn-fg-solid) */
+.takt-button-tables {
+  --takt-btn-bg: var(--takt-jp-kaki);
+  --takt-btn-border: var(--takt-jp-kaki);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kaki);
+}
+
+/* databases · var(--takt-jp-mame) · fg var(--takt-btn-fg-solid) */
+.takt-button-databases {
+  --takt-btn-bg: var(--takt-jp-mame);
+  --takt-btn-border: var(--takt-jp-mame);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-mame);
+}
+
+/* initialize · var(--takt-memorial-gray) · fg var(--takt-btn-fg-solid) */
+.takt-button-initialize {
+  --takt-btn-bg: var(--takt-memorial-gray);
+  --takt-btn-border: var(--takt-memorial-gray);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-memorial-gray);
+}
+/* @takt-generated variants-end */

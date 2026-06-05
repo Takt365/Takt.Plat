@@ -1,0 +1,423 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/types/foundation
+// 文件名称：dict-type.d.ts
+// 创建时间：2026-06-02
+// 创建人：Takt365(Auto Generated)
+// 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type { TaktPagedQuery, TenantDtoBase } from '@/types/common';
+
+/**
+ * 字典类型实体 用于定义系统中使用的各种字典分类，如：订单状态、用户类型、审批状态等 租户级实体：字典类型在租户内共享，不需要公司隔离
+ * 对应前端 TaktDictTypeDto
+ * 继承 TaktTenantDtoBase
+ * 对应前端 DictType
+ * @description 对应后端 TaktDictTypeDto
+ */
+export interface DictType extends TenantDtoBase {
+  /**
+   * DictTypeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  dictTypeId: string;
+
+  /**
+   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   */
+  dictTypeCode: string;
+
+  /**
+   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   */
+  dictTypeName: string;
+
+  /**
+   * 数据源（0=表数据，1=SQL脚本）
+   */
+  dataSource: number;
+
+  /**
+   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   */
+  dictScript?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   */
+  isBuiltIn: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  dictStatus: number;
+
+  /**
+   * 字典数据列表（一对多关联） （子表：TaktDictData）
+   */
+  dictDataList?: DictData[];
+
+}
+
+
+/**
+ * DictType 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 DictTypeQuery
+ * @description 对应后端 TaktDictTypeQueryDto
+ */
+export interface DictTypeQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   */
+  dictTypeCode?: string;
+
+  /**
+   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   */
+  dictTypeName?: string;
+
+  /**
+   * 数据源（0=表数据，1=SQL脚本）
+   */
+  dataSource?: number;
+
+  /**
+   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   */
+  dictScript?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  dictStatus?: number;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建DictType DTO
+ * 对应前端 DictTypeCreate
+ * @description 对应后端 TaktDictTypeCreateDto
+ */
+export interface DictTypeCreate {
+  /**
+   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   */
+  dictTypeCode: string;
+
+  /**
+   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   */
+  dictTypeName: string;
+
+  /**
+   * 数据源（0=表数据，1=SQL脚本）
+   */
+  dataSource: number;
+
+  /**
+   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   */
+  dictScript?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   */
+  isBuiltIn: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  dictStatus: number;
+
+  /**
+   * 字典数据列表（一对多关联）（子表，级联保存）
+   */
+  dictDataList?: DictDataCreate[];
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新DictType DTO
+ * 继承 TaktDictTypeCreateDto，添加 DictTypeId 字段
+ * 对应前端 DictTypeUpdate
+ * @description 对应后端 TaktDictTypeUpdateDto
+ */
+export interface DictTypeUpdate extends DictTypeCreate {
+  /**
+   * DictTypeID（标识要更新的实体）
+   */
+  dictTypeId: string;
+
+}
+
+
+/**
+ * DictType 状态更新 DTO
+ * 对应前端 DictTypeStatus
+ * @description 对应后端 TaktDictTypeStatusDto
+ */
+export interface DictTypeStatus {
+  /**
+   * DictTypeID
+   */
+  dictTypeId: string;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  dictStatus: number;
+
+}
+
+
+/**
+ * DictType 排序更新 DTO
+ * 对应前端 DictTypeSort
+ * @description 对应后端 TaktDictTypeSortDto
+ */
+export interface DictTypeSort {
+  /**
+   * DictTypeID
+   */
+  dictTypeId: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+}
+
+
+/**
+ * DictType 导入模板行 DTO
+ * 对应前端 DictTypeTemplate
+ * @description 对应后端 TaktDictTypeTemplateDto
+ */
+export interface DictTypeTemplate {
+  /**
+   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   */
+  dictTypeCode?: string;
+
+  /**
+   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   */
+  dictTypeName?: string;
+
+  /**
+   * 数据源（0=表数据，1=SQL脚本）
+   */
+  dataSource?: number;
+
+  /**
+   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   */
+  dictScript?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  dictStatus?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * DictType 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 DictTypeImport
+ * @description 对应后端 TaktDictTypeImportDto
+ */
+export interface DictTypeImport {
+  /**
+   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   */
+  dictTypeCode?: string;
+
+  /**
+   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   */
+  dictTypeName?: string;
+
+  /**
+   * 数据源（0=表数据，1=SQL脚本）
+   */
+  dataSource?: number;
+
+  /**
+   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   */
+  dictScript?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  dictStatus?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * DictType 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 DictTypeExport
+ * @description 对应后端 TaktDictTypeExportDto
+ */
+export interface DictTypeExport {
+  /**
+   * DictTypeID
+   */
+  dictTypeId: string;
+
+  /**
+   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   */
+  dictTypeCode: string;
+
+  /**
+   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   */
+  dictTypeName: string;
+
+  /**
+   * 数据源（0=表数据，1=SQL脚本）
+   */
+  dataSource: number;
+
+  /**
+   * 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
+   */
+  dictScript?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
+   */
+  isBuiltIn: number;
+
+  /**
+   * 状态（1=启用，0=禁用）
+   */
+  dictStatus: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+  /**
+   * 创建时间
+   */
+  createdAt: string;
+
+}
+

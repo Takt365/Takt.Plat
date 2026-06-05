@@ -1,0 +1,277 @@
+---
+description: Takt 前端规范（Ant Design Vue 4 + Tailwind CSS 4、API、视图、i18n）；与 00-project 一并始终生效
+globs: frontend/**/*.{ts,tsx,vue}
+alwaysApply: true
+---
+
+# Takt 前端开发规范
+
+通用命名、文件头、JSDoc、Git 提交见 `@.cursor/rules/00-project.mdc`。
+
+**技术栈（强制）**：
+
+| 类别 | 选型 | 说明 |
+|------|------|------|
+| 构建 | Vite 7 | `frontend/vite.config.ts` |
+| 框架 | Vue 3 Composition API + TypeScript | `<script setup lang="ts">` |
+| UI 组件 | **Ant Design Vue 4.x**（`ant-design-vue` ^4.2） | 表单、表格、弹窗、反馈等一律用 `a-*` |
+| 样式 | **Tailwind CSS 4.x**（`@tailwindcss/vite`） | 入口 `frontend/src/styles/global.css` |
+| 状态 / 路由 / 请求 | Pinia、vue-router、Axios | 见下文各节 |
+| 图标 | `@remixicon/vue`（优先）、`@ant-design/icons-vue` | 与 Ant Design 按钮 `icon` 槽配合 |
+
+**目标**：请求自动携带租户/公司、路由与按钮权限、实体翻译与后端种子对齐；视觉与主题 token 跟 Ant Design 同步。
+
+---
+
+## 一、UI 与样式（Ant Design Vue 4 + Tailwind）
+
+### 1.1 分工
+
+- **Ant Design Vue**：交互组件（`a-button`、`a-form`、`a-table`、`a-modal`、`a-spin`、`a-typography-text` 等），禁止用原生 HTML 重复实现已有组件。
+- **Tailwind**：布局（`flex`、`grid`）、间距（`p-*`、`gap-*`）、尺寸（`w-full`、`h-10`）、排版（`text-sm`）、圆角、显隐；颜色优先用 `global.css` 映射的语义色（见下表）。
+- **主题色（Ant Design 主色）**：使用 `bg-primary`、`text-primary`、`border-primary` 等（对应 `--ant-color-primary`，由 `takt-theme-sync` 写入），禁止在业务组件写死 `#1890ff` 等主色 hex（渐变背景等装饰除外）。
+- **标准色板**：`frontend/src/styles/color-base.css`（全局 `@import`）；使用 `var(--takt-cn-*)` / `var(--takt-jp-*)` / `var(--takt-*)`、`bg-feicui` 等。
+- **自定义按钮**：`frontend/src/styles/button-base.css`（唯一入口；增删 action 配色运行 `scripts/gen-button-variants.mjs` 刷新标记段）；类名 `takt-button-{action}`，禁止再引用 `button.less`。
+- ❌ **禁止**新增 `color-base.less`、`button.less` 或全局 `*.less` 样式；流程设计器样式为 `workflow.css`。
+
+| Tailwind 语义类 | 来源（Ant Design token） |
+|-----------------|--------------------------|
+| `bg-primary` / `text-primary` / `border-primary` | `--ant-color-primary` |
+| `bg-page` | `--ant-color-bg-layout` |
+| `bg-container` | `--ant-color-bg-container` |
+| `text-text` / `text-text-secondary` | `--ant-color-text` / `--ant-color-text-secondary` |
+| `border-border` | `--ant-color-border` |
+
+- **暗色**：使用 `dark:` 变体（`global.css` 中 `@custom-variant dark` 绑定 `[data-theme=dark]`），禁止 `[data-theme='dark']` 手写大块 scoped 样式。
+
+### 1.2 禁止与例外
+
+| ❌ 禁止 | ✅ 允许 |
+|--------|--------|
+| 新建 `<style scoped>` 大块布局/颜色（验证码、登录、CRUD 页） | 模板 `class="..."` Tailwind 工具类 |
+| 新增 `lang="css"` / `sass` 业务样式 | `frontend/src/styles/global.css` 内 `@layer components` 复用块（如 `.takt-captcha-shine`） |
+| 重复造轮子 Modal / Form / Table | 业务封装：`takt-modal` 等，内部仍基于 `a-modal` |
+| 硬编码中文文案 | `vue-i18n` 的 `t('...')` |
+
+**例外（须极简）**：
+
+1. 动态像素（滑块 `left`、`width`、缩放 `transform`）→ 仅用 `:style` 绑定。
+2. 覆盖 Ant Design **内部** DOM → 优先 `global.css` 的 `@layer components`（如 `.takt-login-toolbar .ant-radio-button-wrapper`）；确属单组件且无法抽离时，简短 `:deep()` 并注释原因。
+3. `takt-modal` 视口级弹窗尺寸 → 保留 teleport 到 `body` 的全局类（`.takt-modal-viewport-size`），新弹窗默认用 `takt-modal`，紧凑窗体设 `:use-viewport-size="false"`。
+
+### 1.3 参照实现
+
+- 全局入口与 token：`frontend/src/styles/global.css`
+- 紧凑弹窗 + 默认底栏：`frontend/src/components/business/takt-modal/index.vue`
+- 验证码：`frontend/src/components/common/takt-captcha-slider`、`takt-captcha-behavior`
+- 登录页：`frontend/src/views/login/index.vue`
+
+---
+
+## 二、目录结构（`frontend/src/`）
+
+| 目录 | 职责 |
+|------|------|
+| `api/` | 按后端模块划分；`routine/business/` 与 `routine/tasks/` 分开 |
+| `types/` | 与 `api/` 一一对应；ID 与后端 `long` 对齐用 **`string`** |
+| `views/` | 页面；子组件放 `components/` |
+| `components/common/` | 通用展示组件 |
+| `components/business/` | 业务通用组件（`takt-modal`、`takt-action-column` 等） |
+| `stores/` | Pinia，按模块拆分 |
+| `locales/` | 静态文案（`{目录}.page.*`，见 §6.2）；动态 `entity.*` 与后端种子对齐 |
+| `composables/` | `useXxx` |
+| `router/` | 路由（懒加载） |
+| `styles/` | `global.css`（入口）、`color-base.css`、`button-base.css`、`action-column-base.css`、`dict-tag-base.css` |
+
+文件名 **kebab-case**（`user-form.vue`、`user-api.ts`），见 `00-project` §1.1。
+
+---
+
+## 三、API 层（`api/`）
+
+- **唯一请求实例**：`import request from '@/api/request'`
+- ❌ 禁止在 `api/` 内用相对路径引用 request（`../request`）
+- ❌ 禁止 `getList`、`create`、`remove` 等无实体前缀导出名
+
+| 功能 | 规范 | User 示例 |
+|------|------|-----------|
+| 列表 | `getXxxList` | `getUserList` |
+| 详情 | `getXxxById` | `getUserById` |
+| 新增 | `createXxx` | `createUser` |
+| 更新 | `updateXxx` | `updateUser` |
+| 单删 | `deleteXxxById` | `deleteUserById` |
+| 批删 | `deleteXxxBatch` | `deleteUserBatch` |
+| 状态 | `updateXxxStatus` | `updateUserStatus` |
+| 模板/导入/导出 | `getXxxTemplate` / `importXxxData` / `exportXxxData` | `getUserTemplate` |
+
+路径与后端 REST 一致：**API 路径前缀与控制器 `[controller]` 一致，使用复数**（如 `TaktHolidays`、`TaktUsers`，对应 `TaktHolidaysController`）。应用服务仍为单数命名，勿与路由混用。导入/导出：`responseType: 'blob'`；导入用 `FormData`。
+
+**请求拦截**（须携带）：`Authorization`、`X-Tenant-Code`、`X-Company-Code`（`useTenantStore`）。
+
+---
+
+## 四、类型（`types/`）
+
+- 主实体对齐 `TaktCompanyEntityBase`（`@/types/common`）
+- 分页：`TaktPagedQuery` / `TaktPagedResult<T>`
+- DTO：`TaktUserDto`、`TaktUserCreateDto`、`TaktUserQueryDto`
+- 字段多行 JSDoc；主键 `id: string`
+
+---
+
+## 五、视图与组件（`views/`、`*.vue`）
+
+- **Composition API**：`<script setup lang="ts">`
+- **自动导入**（`vite.config.ts`）：
+  - `unplugin-auto-import`：`vue`、`vue-router`、`pinia`、`logger` / `createLogger`（`@/utils/logger`，`main.ts` 中 `initLogger` 初始化）→ ❌ 视图/表单 `.vue` 中勿重复 `import` 上述 API
+  - `unplugin-vue-components`：`src/components/**` 与 Ant Design Vue → ❌ `.vue` 中勿重复 `import TaktModal from '@/components/...'`（模板 `<takt-modal />` 即可；类型见 `components.d.ts`）
+  - ✅ 仍须显式 import：`vue-i18n`、`ant-design-vue`（非 `a-*` 的 API，如 `message`）、`composables`、`api`、`stores`、`types`、脚本内用到的 `import type`、**未**列入 auto-import 的 API（如 `render` from `vue`）
+  - `composables/`、`stores/` 等 `.ts` 可保留显式 import（非 SFC 场景）
+- **`<script setup>` 注释**（强制）：
+  - 顶部块注释说明页面/组件职责
+  - 每个 `ref` / `reactive` / `computed` 及 Pinia、composable 解构项：单行 `/** … */`
+  - 每个函数：`/**` + `@param` / `@returns`（见 `00-project` JSDoc）
+- 模板分区注释：查询栏、工具栏、表格、分页、表单等
+- 模板标签 kebab-case：`<user-form />`
+- 用户可见文案 **必须** `t('...')`
+
+**标准 CRUD 页**：结构、逻辑映射、Tailwind 布局风格与参照模块一致。
+
+**权限按钮**（`领域:目录[:子目录…]:实体:操作`，段数随菜单深度，见 `00-project` §1.7）：
+
+```vue
+<a-button v-permission="'identity:user:create'">新增</a-button>
+```
+
+**弹窗**：使用 `<takt-modal v-model:open="..." />`，勿再包一层 `a-modal` 重复底栏。
+
+---
+
+## 六、国际化（i18n）
+
+**翻译键与权限码总规范**：见 `@.cursor/rules/00-project.mdc` §1.6（翻译键）、§1.7（权限码）。下文为前端落地细则。
+
+### 6.1 静态 vs 动态
+
+| 来源 | 目录 / 机制 | 引用键格式 |
+|------|-------------|------------|
+| **静态**（本仓库 `locales/**/*.ts`） | `import.meta.glob` + `takt-locale-merge` 按**文件路径**嵌套 | **`{业务目录}.page.*`**（点多段，见 §6.2） |
+| **动态**（登录后后端种子） | `mergeDynamicLocaleMessages` | 与后端 `I18nKey` 一致：`entity.*`、`common.page.*`、`menu.*`、`org.dept.*` 等 |
+
+- 用户可见文案一律 `t('...')` / `$t('...')`，禁止硬编码。
+- ❌ 禁止在 `locales/entity` 重复后端 `ResourceKey`（动态实体翻译仅走后端）。
+- **`TaktSelect` `dict-type`**：与后端 `DictTypeCode` 一致，小写蛇形。
+
+### 6.2 静态翻译（强制）
+
+**原则**：**业务领域与目录由 `locales/` 下文件路径自动提取**（`resolveLocaleNamespaceSegments` → `nestLocalePayloadUnderNamespace`）；文件内 **`export default` 必须以 `page` 为唯一顶层**；引用键 = **`{路径前缀}.page.*`**。
+
+**键名生成（固定流程）**：
+
+1. 文件路径 `locales/{领域}/{子目录}/…/{locale}.ts` → 去掉语言文件名后，目录段用 `.` 连接 → **路径前缀**（如 `identity/user` → `identity.user`）
+2. 文件内容 `export default { page: { … } }` → 挂载在路径前缀下
+3. 组件引用：`t('{路径前缀}.page.{字段路径}')`（如 `t('identity.user.page.title')`）
+
+| 强制项 | 要求 |
+|--------|------|
+| 路径前缀 | **只由目录决定**，与 `views/`、`api/` 子域划分一致；勿在文件内重复包 `identity: { user: { page } }` |
+| 文件根结构 | `export default { page: { … } }` |
+| 禁止 | 根级直接写字段、`{ 模块名: { page: … } }` 重复包一层、无 `page` 的对象 |
+| `t()` 键 | **`{路径前缀}.page.*`**，不可省略 `.page`，不可用 `page.` 作业务前缀 |
+
+合并逻辑见 `frontend/src/locales/index.ts`、`frontend/src/utils/takt-locale-merge.ts`。
+
+| 语言文件路径 | 文件内 `export default` | 组件中引用 |
+|--------------|-------------------------|------------|
+| `locales/common/zh-CN.ts` | `{ page: { app, button, menu, … } }` | `common.page.app.title` |
+| `locales/login/zh-CN.ts` | `{ page: { title, captcha, … } }` | `login.page.title` |
+| `locales/error/zh-CN.ts` | `{ page: { http, notfound, … } }` | `error.page.http.network` |
+| `locales/identity/user/zh-CN.ts` | `{ page: { title, field, … } }` | `identity.user.page.title` |
+| `locales/dashboard/workspace/zh-CN.ts` | `{ page: { modules, … } }` | `dashboard.workspace.page.modules.welcome` |
+
+**文件内结构（✅ / ❌）**：
+
+```typescript
+// ✅ locales/identity/user/zh-CN.ts — 路径自动得 identity.user，勿再包 identity/user
+export default {
+  page: {
+    title: '用户管理',
+    field: { username: '用户名' },
+  },
+};
+
+// ✅ locales/login/zh-CN.ts
+export default {
+  page: {
+    title: '登录',
+    placeholder: { username: '请输入用户名' },
+  },
+};
+
+// ❌ 重复目录名（合并后会变成 identity.user.identity.user.page.*）
+export default { identity: { user: { page: { title: '…' } } } };
+
+// ❌ 缺少 page 顶级（合并后为 identity.user.title，与约定不符）
+export default { title: '用户管理' };
+```
+
+**引用（✅ / ❌）**：
+
+```vue
+{{ t('identity.user.page.title') }}  <!-- ✅ -->
+{{ t('login.page.title') }}          <!-- ✅ -->
+{{ t('common.page.button.query') }}  <!-- ✅ -->
+{{ t('identity.user.title') }}       <!-- ❌ 缺少 .page -->
+{{ t('user.page.title') }}           <!-- ❌ 缺少路径前缀 identity -->
+{{ t('page.error.title404') }}       <!-- ❌ 不要用 page 作业务前缀 -->
+```
+
+- 路由 `meta.titleKey`、工具函数（如 `takt-http-error-message.ts`）中的键须与上表一致。
+- 新建模块：在 `locales/{领域}/{子模块}/` 下新增 `zh-CN.ts` / `en-US.ts` / `ja-JP.ts`，三语结构对齐；文件头「功能描述」注明引用键前缀（如 `引用键 identity.user.page.*`）。
+- 子域划分与 `views/`、`api/` 目录一致；通用文案放 `locales/common/`，勿散落多份。
+
+### 6.3 动态翻译（后端种子）
+
+- 键与后端 `TaktTranslation.I18nKey` **完全一致**（小写、点号分段、段内无下划线）。
+- 结构同 `00-project` §1.6：`用途.目录[.子目录…].末段`；**`menu.*` 随菜单层级加深而加长**（如 `menu.logistics.manufacturing.ecn.quality`）。
+- 常见：`entity.{段}.{字段}`、`common.page.*`、`menu.*`、`org.dept.{编码}`。
+- 列表/表单列标题优先 `entity.*`；页面壳、工作台用 `common.page.*`；菜单标题用 `menu.*` 且与菜单种子 `I18nKey` 一致。
+- ❌ 禁止 `greetings.*`、`quotes.quote_*`、`dept.head_office` 等与种子/约定不一致的键。
+
+---
+
+## 七、同步 / 异步
+
+| 必须异步 | 必须同步 |
+|----------|----------|
+| API、上传下载、路由守卫 | 表单本地校验、UI 显隐、computed |
+| Pinia action 调 API | state / getter |
+
+`views/`、`api/` 中 I/O 使用 **async/await**；异步须有 loading。
+
+---
+
+## 八、Pinia
+
+- 按模块 `defineStore`；调 API 的 action 为 **async**
+
+---
+
+## 九、运行时
+
+- TypeScript `target: ES2020`
+- 路由与重型库：**懒加载**
+- 大列表：**虚拟滚动**
+
+---
+
+## 十、Agent 约束
+
+- 新建页面：先确认 `api/`、`types/`、`views/` 与后端模块一致
+- 导出 API、composable 须完整 JSDoc（见 `00-project`）
+- 新建 `.vue` 须 8 行 HTML 文件头
+- **所有新 UI 必须用 Ant Design Vue 4 组件 + Tailwind 工具类**；不得生成大块 scoped CSS
+- 前后端方法名对齐：`getUserList` ↔ `GetUserListAsync`
+- 有参照模块时复制结构再替换实体名；验证码/登录以 `takt-captcha-*`、`login/index.vue` 为参照
+- **静态 i18n**：新增/修改 `locales/**/*.ts` 时 **`export default` 根键必须为 `page`**（§6.2）；`t()` 使用 `{路径}.page.*`；参照 `locales/dashboard/workspace/zh-CN.ts`、`locales/error/zh-CN.ts`
+- **动态 i18n / 权限**：`t()` 键遵守 `00-project` §1.6；`v-permission` 遵守 §1.7（冒号分段、末段为操作、无下划线）

@@ -1,0 +1,240 @@
+﻿// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：{{ table.controller_namespace }}
+// 文件名称：{{ if table.controller_class_name != null && table.controller_class_name != ""; table.controller_class_name; else; table.entity_class_name + "sController"; end }}.cs
+// 创建时间：2025-02-02
+// 创建人：{{ table.gen_author }}
+// 功能描述：{{ table.comment }}控制器，对齐 TaktHolidaysController / TaktLoginLogsController 约定
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using {{ table.dto_namespace }};
+using {{ table.service_namespace }};
+using Takt.Shared.Constants;
+using Takt.Shared.Helpers;
+using Takt.WebApi.Controllers;
+
+namespace {{ table.controller_namespace }};
+
+/// <summary>
+/// {{ table.comment }}控制器
+/// </summary>
+[ApiModule(TaktModule.{{ table.api_module_enum }}, "{{ table.api_module_name }}")]
+[Route("api/[controller]", Name = "{{ table.comment }}")]
+public class {{ if table.controller_class_name != null && table.controller_class_name != ""; table.controller_class_name; else; table.entity_class_name + "sController"; end }} : TaktControllerBase
+{
+    private readonly {{ if table.i_service_class_name != null && table.i_service_class_name != ""; table.i_service_class_name; else; "I" + table.entity_class_name + "Service"; end }} _{{ table.entity_name_camel }}Service;
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="{{ table.entity_name_camel }}Service">{{ table.comment }}服务</param>
+    public {{ if table.controller_class_name != null && table.controller_class_name != ""; table.controller_class_name; else; table.entity_class_name + "sController"; end }}(
+        {{ if table.i_service_class_name != null && table.i_service_class_name != ""; table.i_service_class_name; else; "I" + table.entity_class_name + "Service"; end }} {{ table.entity_name_camel }}Service)
+    {
+        _{{ table.entity_name_camel }}Service = {{ table.entity_name_camel }}Service;
+    }
+{{~ for cat in table.dto_category_descriptors ~}}
+{{ type = cat.Name }}
+{{~ if type == "QueryDto" ~}}
+    /// <summary>
+    /// 获取{{ table.comment }}列表（分页）
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:list", "{{ table.comment }}列表")]
+    [HttpGet("list")]
+    public async Task<IActionResult> Get{{ table.entity_name_pascal }}ListAsync([FromQuery] {{ table.entity_class_name }}QueryDto queryDto)
+    {
+        try
+        {
+            var result = await _{{ table.entity_name_camel }}Service.Get{{ table.entity_name_pascal }}ListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据ID获取{{ table.comment }}
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:query", "{{ table.comment }}详情")]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get{{ table.entity_name_pascal }}ByIdAsync(long id)
+    {
+        try
+        {
+            var result = await _{{ table.entity_name_camel }}Service.Get{{ table.entity_name_pascal }}ByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound("{{ table.comment }}不存在");
+            }
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取{{ table.comment }}下拉选项
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:query", "{{ table.comment }}选项")]
+    [HttpGet("options")]
+    public async Task<IActionResult> Get{{ table.entity_name_pascal }}OptionsAsync()
+    {
+        try
+        {
+            var result = await _{{ table.entity_name_camel }}Service.Get{{ table.entity_name_pascal }}OptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+{{~ else if type == "CreateDto" ~}}
+    /// <summary>
+    /// 创建{{ table.comment }}
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:create", "创建{{ table.comment }}")]
+    [HttpPost]
+    public async Task<IActionResult> Create{{ table.entity_name_pascal }}Async([FromBody] {{ table.entity_class_name }}CreateDto dto)
+    {
+        try
+        {
+            var result = await _{{ table.entity_name_camel }}Service.Create{{ table.entity_name_pascal }}Async(dto);
+            return Success(result, "创建成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+{{~ else if type == "UpdateDto" ~}}
+    /// <summary>
+    /// 更新{{ table.comment }}
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:update", "更新{{ table.comment }}")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update{{ table.entity_name_pascal }}Async(long id, [FromBody] {{ table.entity_class_name }}UpdateDto dto)
+    {
+        try
+        {
+            var result = await _{{ table.entity_name_camel }}Service.Update{{ table.entity_name_pascal }}Async(id, dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+{{ if table.is_delete == 1 }}
+    /// <summary>
+    /// 删除{{ table.comment }}
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:delete", "删除{{ table.comment }}")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete{{ table.entity_name_pascal }}ByIdAsync(long id)
+    {
+        try
+        {
+            await _{{ table.entity_name_camel }}Service.Delete{{ table.entity_name_pascal }}ByIdAsync(id);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 批量删除{{ table.comment }}
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:delete", "批量删除{{ table.comment }}")]
+    [HttpDelete("batch")]
+    public async Task<IActionResult> Delete{{ table.entity_name_pascal }}BatchAsync([FromBody] IEnumerable<long> ids)
+    {
+        try
+        {
+            await _{{ table.entity_name_camel }}Service.Delete{{ table.entity_name_pascal }}BatchAsync(ids);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+{{ end }}
+{{~ else if type == "TemplateDto" ~}}
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:import", "获取{{ table.comment }}导入模板")]
+    [HttpGet("template")]
+    public async Task<IActionResult> Get{{ table.entity_name_pascal }}TemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? fileName = null)
+    {
+        try
+        {
+            var (resultFileName, content) = await _{{ table.entity_name_camel }}Service.Get{{ table.entity_name_pascal }}TemplateAsync(sheetName, fileName);
+            return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+{{~ else if type == "ImportDto" ~}}
+    /// <summary>
+    /// 导入{{ table.comment }}
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:import", "导入{{ table.comment }}")]
+    [HttpPost("import")]
+    public async Task<IActionResult> Import{{ table.entity_name_pascal }}Async(IFormFile file, [FromQuery] string? sheetName = null)
+    {
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("请选择要导入的文件");
+            }
+            await using var stream = file.OpenReadStream();
+            var (success, fail, errors) = await _{{ table.entity_name_camel }}Service.Import{{ table.entity_name_pascal }}Async(stream, sheetName);
+            return Success(new
+            {
+                SuccessCount = success,
+                FailCount = fail,
+                Errors = errors
+            }, $"导入完成：成功{success}条，失败{fail}条");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+{{~ else if type == "ExportDto" ~}}
+    /// <summary>
+    /// 导出{{ table.comment }}
+    /// </summary>
+    [TaktPermission("{{ table.perms_prefix_canonical }}:export", "导出{{ table.comment }}")]
+    [HttpGet("export")]
+    public async Task<IActionResult> Export{{ table.entity_name_pascal }}Async([FromQuery] {{ table.entity_class_name }}QueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? fileName = null)
+    {
+        try
+        {
+            var (resultFileName, fileContent) = await _{{ table.entity_name_camel }}Service.Export{{ table.entity_name_pascal }}Async(query, sheetName, fileName);
+            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+{{~ end ~}}
+{{~ end ~}}
+}

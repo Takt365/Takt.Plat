@@ -1,0 +1,10 @@
+/**
+ * 業務組件 · 繁體中文
+ */
+export default {
+  page: {
+    columndrawer: {
+      fixed: '固定',
+    },
+  }
+}

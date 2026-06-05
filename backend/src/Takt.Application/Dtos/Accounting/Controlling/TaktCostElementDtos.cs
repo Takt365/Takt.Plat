@@ -1,0 +1,597 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Dtos.Accounting.Controlling
+// 文件名称：TaktCostElementDtos.cs
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：CostElement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostElement 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.ComponentModel.DataAnnotations;
+using Mapster;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models;
+
+namespace Takt.Application.Dtos.Accounting.Controlling;
+
+// ========================================
+// CostElement 响应 DTO
+// ========================================
+
+/// <summary>
+/// 成本要素实体
+/// 对应前端 TaktCostElementDto
+/// 继承 TaktCompanyDtoBase
+/// </summary>
+public class TaktCostElementDto : TaktCompanyDtoBase
+{
+    /// <summary>
+    /// CostElementID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CostElementId { get; set; }
+
+    /// <summary>
+    /// 成本要素编码
+    /// </summary>
+    public string CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素名称
+    /// </summary>
+    public string CostElementName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素类型（0=初级，1=次级）
+    /// </summary>
+    public int CostElementType { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// </summary>
+    public int CostElementCategory { get; set; } = 0;
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ParentId { get; set; }
+
+    /// <summary>
+    /// 成本要素层级
+    /// </summary>
+    public int CostElementLevel { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素状态（1=启用，0=禁用）
+    /// </summary>
+    public int CostElementStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+}
+
+// ========================================
+// CostElement 树形响应 DTO
+// ========================================
+
+/// <summary>
+/// CostElement 树形列表/树选择 DTO（含子节点）
+/// 对应 GetCostElementTreeAsync 等接口
+/// </summary>
+public class TaktCostElementTreeDto : TaktCostElementDto
+{
+    /// <summary>
+    /// 子节点
+    /// </summary>
+    public List<TaktCostElementTreeDto> Children { get; set; } = new();
+}
+
+// ========================================
+// CostElement 查询 DTO
+// ========================================
+
+/// <summary>
+/// CostElement 分页查询 DTO
+/// 继承 TaktPagedQuery
+/// </summary>
+public class TaktCostElementQueryDto : TaktPagedQuery
+{
+    /// <summary>
+    /// 租户编码
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素编码
+    /// </summary>
+    public string? CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素名称
+    /// </summary>
+    public string? CostElementName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素类型（0=初级，1=次级）
+    /// </summary>
+    public int? CostElementType { get; set; }
+
+    /// <summary>
+    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// </summary>
+    public int? CostElementCategory { get; set; }
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ParentId { get; set; }
+
+    /// <summary>
+    /// 成本要素层级
+    /// </summary>
+    public int? CostElementLevel { get; set; }
+
+    /// <summary>
+    /// 成本要素状态（1=启用，0=禁用）
+    /// </summary>
+    public int? CostElementStatus { get; set; }
+
+    /// <summary>
+    /// 生效日期（范围查询-开始）
+    /// </summary>
+    public DateTime? ValidFromStart { get; set; }
+
+    /// <summary>
+    /// 生效日期（范围查询-结束）
+    /// </summary>
+    public DateTime? ValidFromEnd { get; set; }
+
+    /// <summary>
+    /// 失效日期（范围查询-开始）
+    /// </summary>
+    public DateTime? ValidToStart { get; set; }
+
+    /// <summary>
+    /// 失效日期（范围查询-结束）
+    /// </summary>
+    public DateTime? ValidToEnd { get; set; }
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 创建时间（范围查询-开始）
+    /// </summary>
+    public DateTime? CreatedAtStart { get; set; }
+
+    /// <summary>
+    /// 创建时间（范围查询-结束）
+    /// </summary>
+    public DateTime? CreatedAtEnd { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注（模糊查询）
+    /// </summary>
+    public string? Remark { get; set; }
+}
+
+// ========================================
+// 创建CostElement DTO
+// ========================================
+
+/// <summary>
+/// 创建CostElement DTO
+/// </summary>
+public class TaktCostElementCreateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素编码
+    /// </summary>
+    [Required(ErrorMessage = "成本要素编码不能为空")]
+    public string CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素名称
+    /// </summary>
+    [Required(ErrorMessage = "成本要素名称不能为空")]
+    public string CostElementName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素类型（0=初级，1=次级）
+    /// </summary>
+    public int CostElementType { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// </summary>
+    public int CostElementCategory { get; set; } = 0;
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ParentId { get; set; }
+
+    /// <summary>
+    /// 成本要素层级
+    /// </summary>
+    public int CostElementLevel { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素状态（1=启用，0=禁用）
+    /// </summary>
+    public int CostElementStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 更新CostElement DTO
+// ========================================
+
+/// <summary>
+/// 更新CostElement DTO
+/// 继承 TaktCostElementCreateDto，添加 CostElementId 字段
+/// </summary>
+public class TaktCostElementUpdateDto : TaktCostElementCreateDto
+{
+    /// <summary>
+    /// CostElementID（标识要更新的实体）
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CostElementId { get; set; }
+
+}
+
+// ========================================
+// CostElement 状态 DTO
+// ========================================
+
+/// <summary>
+/// CostElement 状态更新 DTO
+/// </summary>
+public class TaktCostElementStatusDto
+{
+    /// <summary>
+    /// CostElementID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CostElementId { get; set; }
+
+    /// <summary>
+    /// 成本要素状态（1=启用，0=禁用）
+    /// </summary>
+    [Required(ErrorMessage = "成本要素状态（1=启用，0=禁用）不能为空")]
+    public int CostElementStatus { get; set; } = 0;
+}
+
+// ========================================
+// CostElement 排序 DTO
+// ========================================
+
+/// <summary>
+/// CostElement 排序更新 DTO
+/// </summary>
+public class TaktCostElementSortDto
+{
+    /// <summary>
+    /// CostElementID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CostElementId { get; set; }
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    [Required(ErrorMessage = "排序号不能为空")]
+    public int SortOrder { get; set; } = 0;
+}
+
+// ========================================
+// 导入 DTO
+// ========================================
+
+/// <summary>
+/// CostElement 导入模板行 DTO
+/// </summary>
+public class TaktCostElementTemplateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素编码
+    /// </summary>
+    public string? CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素名称
+    /// </summary>
+    public string? CostElementName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素类型（0=初级，1=次级）
+    /// </summary>
+    public int? CostElementType { get; set; }
+
+    /// <summary>
+    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// </summary>
+    public int? CostElementCategory { get; set; }
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ParentId { get; set; }
+
+    /// <summary>
+    /// 成本要素层级
+    /// </summary>
+    public int? CostElementLevel { get; set; }
+
+    /// <summary>
+    /// 成本要素状态（1=启用，0=禁用）
+    /// </summary>
+    public int? CostElementStatus { get; set; }
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+/// <summary>
+/// CostElement 导入 DTO（独立实现，不继承 TemplateDto）
+/// </summary>
+public class TaktCostElementImportDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素编码
+    /// </summary>
+    public string? CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素名称
+    /// </summary>
+    public string? CostElementName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素类型（0=初级，1=次级）
+    /// </summary>
+    public int? CostElementType { get; set; }
+
+    /// <summary>
+    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// </summary>
+    public int? CostElementCategory { get; set; }
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ParentId { get; set; }
+
+    /// <summary>
+    /// 成本要素层级
+    /// </summary>
+    public int? CostElementLevel { get; set; }
+
+    /// <summary>
+    /// 成本要素状态（1=启用，0=禁用）
+    /// </summary>
+    public int? CostElementStatus { get; set; }
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 导出 DTO
+// ========================================
+
+/// <summary>
+/// CostElement 导出 DTO（独立实现，不继承响应 Dto）
+/// </summary>
+public class TaktCostElementExportDto
+{
+    /// <summary>
+    /// CostElementID
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long CostElementId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素编码
+    /// </summary>
+    public string CostElementCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素名称
+    /// </summary>
+    public string CostElementName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本要素类型（0=初级，1=次级）
+    /// </summary>
+    public int CostElementType { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+    /// </summary>
+    public int CostElementCategory { get; set; } = 0;
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ParentId { get; set; }
+
+    /// <summary>
+    /// 成本要素层级
+    /// </summary>
+    public int CostElementLevel { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素状态（1=启用，0=禁用）
+    /// </summary>
+    public int CostElementStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 排序号
+    /// </summary>
+    public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
+}

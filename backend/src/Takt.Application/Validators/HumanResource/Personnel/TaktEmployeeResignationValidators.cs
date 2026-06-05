@@ -1,0 +1,99 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Validators.HumanResource.Personnel
+// 文件名称：TaktEmployeeResignationValidators.cs
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：EmployeeResignation 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeResignation 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using FluentValidation;
+using Takt.Application.Dtos.HumanResource.Personnel;
+
+namespace Takt.Application.Validators.HumanResource.Personnel;
+
+// ========================================
+// 创建EmployeeResignation 验证器
+// ========================================
+
+/// <summary>
+/// 创建EmployeeResignation DTO 验证器
+/// </summary>
+public class TaktEmployeeResignationCreateValidator : AbstractValidator<TaktEmployeeResignationCreateDto>
+{
+    /// <summary>
+    /// 初始化 创建EmployeeResignation 校验规则
+    /// </summary>
+    public TaktEmployeeResignationCreateValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("员工ID不能为负数");
+        RuleFor(x => x.Reason)
+            .MaximumLength(500).WithMessage("离职原因长度不能超过500个字符");
+        RuleFor(x => x.HandoverNotes)
+            .MaximumLength(2000).WithMessage("工作交接说明长度不能超过2000个字符");
+        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
+    }
+}
+
+// ========================================
+// 更新EmployeeResignation 验证器
+// ========================================
+
+/// <summary>
+/// 更新EmployeeResignation DTO 验证器
+/// </summary>
+public class TaktEmployeeResignationUpdateValidator : AbstractValidator<TaktEmployeeResignationUpdateDto>
+{
+    /// <summary>
+    /// 初始化 更新EmployeeResignation 校验规则
+    /// </summary>
+    public TaktEmployeeResignationUpdateValidator()
+    {
+        RuleFor(x => x.EmployeeResignationId)
+            .GreaterThan(0).WithMessage("EmployeeResignationID无效");
+    }
+}
+
+// ========================================
+// 导入EmployeeResignation 验证器
+// ========================================
+
+/// <summary>
+/// 导入EmployeeResignation DTO 验证器
+/// </summary>
+public class TaktEmployeeResignationImportValidator : AbstractValidator<TaktEmployeeResignationImportDto>
+{
+    /// <summary>
+    /// 初始化 导入EmployeeResignation 校验规则
+    /// </summary>
+    public TaktEmployeeResignationImportValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+        RuleFor(x => x.CompanyCode)
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("员工ID不能为负数");
+        RuleFor(x => x.Reason)
+            .MaximumLength(500).WithMessage("离职原因长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Reason));
+        RuleFor(x => x.HandoverNotes)
+            .MaximumLength(2000).WithMessage("工作交接说明长度不能超过2000个字符").When(x => !string.IsNullOrWhiteSpace(x.HandoverNotes));
+        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
+    }
+}

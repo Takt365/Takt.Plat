@@ -1,0 +1,101 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Shared.Options
+// 文件名称：TaktPrimaryKeyTypeOptions.cs
+// 创建时间：2025-01-20
+// 创建人：Takt365(Cursor AI)
+// 功能描述：主键类型配置选项（仓储根据实体字段类型自动判断）
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+namespace Takt.Shared.Options;
+
+/// <summary>
+/// 主键类型配置选项
+/// </summary>
+public class PrimaryKeyTypeOptions
+{
+    public const string SectionName = "PrimaryKeyType";
+
+    /// <summary>
+    /// 数据库自增ID配置
+    /// </summary>
+    public IdentityIdOptions Identity { get; set; } = null!;
+
+    /// <summary>
+    /// GUID配置
+    /// </summary>
+    public GuidIdOptions Guid { get; set; } = null!;
+
+    /// <summary>
+    /// 雪花ID配置
+    /// </summary>
+    public SnowflakeIdOptions Snowflake { get; set; } = null!;
+
+    /// <summary>
+    /// 验证配置
+    /// </summary>
+    public void Validate()
+    {
+        if (Identity == null)
+        {
+            throw new InvalidOperationException($"{SectionName}:Identity 配置不能为空");
+        }
+
+        if (Guid == null)
+        {
+            throw new InvalidOperationException($"{SectionName}:Guid 配置不能为空");
+        }
+
+        if (Snowflake == null)
+        {
+            throw new InvalidOperationException($"{SectionName}:Snowflake 配置不能为空");
+        }
+
+        if (Snowflake.Enabled && (Snowflake.WorkId < 0 || Snowflake.WorkId > 63))
+        {
+            throw new InvalidOperationException(
+                $"{SectionName}:Snowflake:WorkId 必须在 0-63 范围内，当前值={Snowflake.WorkId}");
+        }
+    }
+}
+
+/// <summary>
+/// 数据库自增ID配置
+/// </summary>
+public class IdentityIdOptions
+{
+    /// <summary>
+    /// 是否启用
+    /// </summary>
+    public bool Enabled { get; set; }
+}
+
+/// <summary>
+/// GUID配置
+/// </summary>
+public class GuidIdOptions
+{
+    /// <summary>
+    /// 是否启用
+    /// </summary>
+    public bool Enabled { get; set; }
+}
+
+/// <summary>
+/// 雪花ID配置
+/// </summary>
+public class SnowflakeIdOptions
+{
+    /// <summary>
+    /// 是否启用
+    /// </summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>
+    /// 工作机器ID（0-63，必须唯一）
+    /// </summary>
+    public long WorkId { get; set; }
+}

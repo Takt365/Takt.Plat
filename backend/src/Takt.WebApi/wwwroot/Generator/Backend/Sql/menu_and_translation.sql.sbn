@@ -1,0 +1,69 @@
+-- ========================================
+-- 项目名称：节拍工厂·Takt Plat (TDF)
+-- 文件名称：menu_and_translation.sql
+-- 功能描述：根据 IsGenMenu、IsGenTranslation 生成菜单与翻译 SQL（租户隔离：TenantCode，无 ConfigId）
+-- 数据源格式：table.data_source =「数据库名:TenantCode」，如 Takt_000_Dev:000
+-- ========================================
+
+{{~ ds = table.data_source | string.default "" ~}}
+{{~ ds_parts = ds | string.split ":" ~}}
+{{~ tenant_code = (ds_parts.size > 0 ? ds_parts[ds_parts.size - 1] : "000") | string.strip ~}}
+{{~ tenant_db = (ds_parts.size > 0 ? ds_parts[0] : "Takt_000_Dev") | string.strip ~}}
+{{~ mod = table.api_module_enum | string.downcase ~}}
+{{~ module_group = 8 ~}}
+{{~ if mod == "identity" ~}}{{~ module_group = 1 ~}}{{~ end ~}}
+{{~ if mod == "routine" ~}}{{~ module_group = 2 ~}}{{~ end ~}}
+{{~ if mod == "accounting" ~}}{{~ module_group = 3 ~}}{{~ end ~}}
+{{~ if mod == "logistics" ~}}{{~ module_group = 4 ~}}{{~ end ~}}
+{{~ if mod == "humanresource" ~}}{{~ module_group = 5 ~}}{{~ end ~}}
+{{~ if mod == "workflow" ~}}{{~ module_group = 6 ~}}{{~ end ~}}
+{{~ if mod == "code" ~}}{{~ module_group = 7 ~}}{{~ end ~}}
+{{~ if mod == "statistics" ~}}{{~ module_group = 9 ~}}{{~ end ~}}
+{{ menu_code = (table.table_name | string.replace "takt_" "") | string.upcase }}
+{{ i18n_key = "menu." + (table.gen_module_name | string.downcase | string.replace "_" ".") + "." + (table.entity_name_camel | string.downcase) }}
+{{ route_path = "/" + table.frontend_module_path + "/" + table.entity_name_kebab }}
+{{ component_path = table.frontend_module_path + "/" + table.entity_name_kebab + "/index" }}
+{{ permission = table.perms_prefix_canonical + ":list" }}
+
+{{~ if table.is_gen_menu == 1 ~}}
+-- ---------- 菜单 SQL（IsGenMenu = 1 时生成） ----------
+-- 表：{{ tenant_db }}.dbo.takt_identity_menu（tenant_code={{ tenant_code }}）
+INSERT INTO {{ tenant_db }}.dbo.takt_identity_menu (
+  id, tenant_code, menu_code, menu_name, i18n_key, icon, parent_id, level, menu_path, is_leaf, menu_type, permission, route_path, component_path, sort_order, is_external, external_url, is_cached, is_visible, menu_status, is_built_in, description, created_by, created_at, is_deleted
+) VALUES (
+  {{ table.sql_menu_id }}, N'{{ tenant_code }}', N'{{ menu_code }}', N'{{ table.comment | string.replace "'" "''" }}', N'{{ i18n_key }}', N'', {{ table.parent_menu_id }}, 3, N'', 1, 1, N'{{ permission }}', N'{{ route_path }}', N'{{ component_path }}', 0, 0, N'', 0, 1, 1, 0, N'', 0, GETDATE(), 0
+);
+
+{{~ if table.sql_menu_button_rows && table.sql_menu_button_rows.size > 0 ~}}
+{{~ for btn in table.sql_menu_button_rows ~}}
+INSERT INTO {{ tenant_db }}.dbo.takt_identity_menu (
+  id, tenant_code, menu_code, menu_name, i18n_key, icon, parent_id, level, menu_path, is_leaf, menu_type, permission, route_path, component_path, sort_order, is_external, external_url, is_cached, is_visible, menu_status, is_built_in, description, created_by, created_at, is_deleted
+) VALUES (
+  {{ btn.id }}, N'{{ tenant_code }}', N'{{ btn.menu_code | string.replace "'" "''" }}', N'{{ btn.menu_name | string.replace "'" "''" }}', N'{{ btn.menu_l10n_key | string.replace "'" "''" }}', N'', {{ table.sql_menu_id }}, 3, N'', 1, 2, N'{{ btn.permission | string.replace "'" "''" }}', N'', N'', {{ btn.order_num }}, 0, N'', 0, 1, 1, 0, N'', 0, GETDATE(), 0
+);
+{{~ end ~}}
+{{~ end ~}}
+
+{{~ else ~}}
+-- ---------- 菜单 SQL 已跳过 ----------
+-- 当前 IsGenMenu={{ table.is_gen_menu }}，仅当 IsGenMenu=1 时生成菜单 SQL。
+{{~ end ~}}
+{{~ if table.is_gen_translation == 1 ~}}
+-- ---------- 翻译 SQL（IsGenTranslation = 1 时生成） ----------
+-- 表：{{ tenant_db }}.dbo.takt_foundation_translation（tenant_code={{ tenant_code }}）
+INSERT INTO {{ tenant_db }}.dbo.takt_foundation_translation (
+  id, tenant_code, culture_id, culture_code, i18n_key, translation_text, resource_group, resource_type, created_by, created_at, is_deleted
+) VALUES
+{{~ for row in table.sql_translation_rows ~}}
+{{~ row_group = (row.resource_group == "menu" ? module_group : 10) ~}}
+{{~ if for.first ~}}
+  ({{ row.id }}, N'{{ tenant_code }}', (SELECT TOP 1 id FROM {{ tenant_db }}.dbo.takt_foundation_culture WHERE culture_code = N'{{ row.culture }}' AND tenant_code = N'{{ tenant_code }}' AND is_deleted = 0), N'{{ row.culture }}', N'{{ row.resource_key | string.replace "'" "''" }}', N'{{ row.translation_value | string.replace "'" "''" }}', {{ row_group }}, 0, 0, GETDATE(), 0)
+{{~ else ~}}
+  ,({{ row.id }}, N'{{ tenant_code }}', (SELECT TOP 1 id FROM {{ tenant_db }}.dbo.takt_foundation_culture WHERE culture_code = N'{{ row.culture }}' AND tenant_code = N'{{ tenant_code }}' AND is_deleted = 0), N'{{ row.culture }}', N'{{ row.resource_key | string.replace "'" "''" }}', N'{{ row.translation_value | string.replace "'" "''" }}', {{ row_group }}, 0, 0, GETDATE(), 0)
+{{~ end ~}}
+{{~ end ~}}
+;
+{{~ else ~}}
+-- ---------- 翻译 SQL 已跳过 ----------
+-- 当前 IsGenTranslation={{ table.is_gen_translation }}，仅当 IsGenTranslation=1 时生成翻译 SQL。
+{{~ end ~}}

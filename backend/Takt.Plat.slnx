@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="src/Takt.Application/Takt.Application.csproj" />
+  <Project Path="src/Takt.Domain/Takt.Domain.csproj" />
+  <Project Path="src/Takt.Infrastructure/Takt.Infrastructure.csproj" />
+  <Project Path="src/Takt.Shared/Takt.Shared.csproj" />
+  <Project Path="src/Takt.WebApi/Takt.WebApi.csproj" />
+</Solution>

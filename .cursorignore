@@ -1,0 +1,51 @@
+# 依赖
+node_modules/
+vendor/
+venv/
+.venv/
+packages/
+
+# 构建产物
+dist/
+build/
+.next/
+out/
+__pycache__/
+*.pyc
+
+# 锁文件
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+Pipfile.lock
+
+# 媒体和二进制文件
+*.png
+*.jpg
+*.gif
+*.svg
+*.ico
+*.woff
+*.woff2
+*.ttf
+*.mp4
+*.pdf
+
+# 生成的代码
+*.generated.*
+*.min.js
+*.min.css
+
+# 敏感文件
+# .env
+# .env.*
+credentials.json
+*.key
+*.pem
+
+# IDE 和系统
+.git/
+.idea/
+.vscode/
+*.log# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)

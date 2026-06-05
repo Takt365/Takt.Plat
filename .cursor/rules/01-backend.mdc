@@ -1,0 +1,196 @@
+---
+description: Takt 后端规范（.NET 9 DDD、控制器、应用服务、实体与种子）；与 00-project 一并始终生效
+globs: backend/**/*.cs
+alwaysApply: true
+---
+
+# Takt 后端开发规范
+
+通用命名、文件头、XML 注释、Git 提交见 `@.cursor/rules/00-project.mdc`。架构见 `README.md`。
+
+**标准参照**（新增 CRUD 模块时对齐）：
+- 应用服务：`@backend/src/Takt.Application/Services/Statistics/Logging/TaktLoginLogService.cs`
+- 控制器基类：`@backend/src/Takt.WebApi/Controllers/TaktControllerBase.cs`
+- 实体示例：`@backend/src/Takt.Domain/Entities/Identity/TaktUser.cs`
+
+---
+
+## 一、技术栈与目录
+
+- **.NET 9** + **SqlSugar** + **Autofac** + **DDD 分层**
+- 根目录：`backend/src/`
+  - `Takt.Domain` — 实体、仓储接口
+  - `Takt.Application` — DTO、应用服务、验证器
+  - `Takt.Infrastructure` — 仓储实现、中间件、种子、多库映射
+  - `Takt.Shared` — `TaktPagedQuery`、`TaktPagedResult`、异常、工具
+  - `Takt.WebApi` — 控制器、`Program.cs`
+
+---
+
+## 二、分层与依赖（强制）
+
+```
+Takt.WebApi → Takt.Application、Takt.Infrastructure、Takt.Shared（组合根显式引用）
+Takt.Application → Takt.Domain、Takt.Shared
+Takt.Infrastructure → Takt.Domain、Takt.Application、Takt.Shared（与 Takt.Net 一致，供 Autofac 扫描注册）
+Takt.Domain → Takt.Shared
+```
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | Domain 不依赖 Application / Infrastructure / WebApi |
+| ✅ | Application 仅依赖 Domain、Shared |
+| ✅ | Infrastructure 引用 Domain、Application、Shared（`TaktAutofacModule` 扫描应用服务与 FluentValidation） |
+| ✅ | WebApi 显式引用 Application + Infrastructure + Shared |
+| ✅ | 控制器只注入 `ITaktXxxService` |
+| ❌ | 控制器直接访问仓储或 SqlSugar 客户端 |
+| ❌ | Application 引用 Infrastructure |
+
+---
+
+## 三、类型与命名空间
+
+| 类型 | 命名空间示例 |
+|------|----------------|
+| 实体 | `Takt.Domain.Entities.{领域}` |
+| DTO | `Takt.Application.Dtos.{领域}` |
+| 服务 | `Takt.Application.Services.{领域}` 或 `Takt.Application.{领域}` |
+| 控制器（复数类名） | `Takt.WebApi.Controllers.{领域}` |
+| 应用服务（单数类名） | `Takt.Application.Services.{领域}` |
+
+**DTO 后缀**：`TaktXxxDto`、`TaktXxxQueryDto`（继承 `TaktPagedQuery`）、`TaktXxxCreateDto`、`TaktXxxUpdateDto`、`TaktXxxStatusDto`、`TaktXxxSortDto`、`TaktXxxTemplateDto`、`TaktXxxImportDto`、`TaktXxxExportDto`；禁止 `TaktCreateXxxDto` / `TaktUpdateXxxDto`；允许多类一文件（如 `TaktUserDtos.cs`）。
+
+**服务（单数）**：接口 `ITaktXxxService`，实现 `TaktXxxService`，继承 `TaktServiceBase`。类名与文件名使用**单数**资源名（DDD 应用服务表示领域能力，非 REST 集合）。
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 应用服务 | `Takt` + 单数 + `Service` | `TaktHolidayService`、`TaktHolidayThemeService` |
+| 服务接口 | `I` + 同上 | `ITaktHolidayService` |
+
+方法命名（实体前缀 + `Async`）见 `00-project` §1.4，不在此重复。
+
+---
+
+## 四、控制器
+
+**控制器（复数）**：类名与文件名使用**复数**（REST 资源集合 + `[controller]` 路由约定）。应用服务保持单数，二者不得混用。
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 控制器 | `Takt` + 复数 + `Controller` | `TaktHolidaysController`、`TaktHolidayThemesController` |
+| 路由 | `api/[controller]` → `api/TaktHolidays` | 与类名去掉 `Controller` 后一致 |
+| 前端 API 前缀 | 与路由段一致（复数） | `TaktHolidays`、`TaktHolidayThemes` |
+
+- 继承 `TaktControllerBase`，路由 `[Route("api/[controller]")]`
+- 异常统一 `try/catch` + `HandleException(ex)`；成功 `Success(result)`
+- 分页列表返回 `TaktPagedResult<T>`
+
+| HTTP | 路由 | 方法示例 |
+|------|------|----------|
+| GET | `list` | `GetUserListAsync` |
+| GET | `{id}` | `GetUserByIdAsync` |
+| POST | — | `CreateUserAsync` |
+| PUT | `{id}` | `UpdateUserAsync` |
+| DELETE | `{id}` | `DeleteUserByIdAsync` |
+
+**权限**（强制，详见 `00-project` §1.7）：
+- 需登录/鉴权：按 OpenIddict / `[Authorize]` 配置
+- 公开端点：`[AllowAnonymous]`
+- **权限码**：`领域:目录[:子目录…]:实体:操作` — 小写，**冒号** `:` 分隔；中间目录段数随菜单层级（非固定四段）；末段为操作；菜单种子 `Permission`、控制器特性、`v-permission` 三者一致
+  - ✅ `identity:user:list`、`logistics:material:purchasing:supplier:list`、`manufacturing:output:pcba:production:list`
+  - ❌ `identity:user:list_view`（段内下划线）、`identity.user.list`（误用点号）、`identity:user`（缺少末段操作）
+
+**请求头**：`X-Tenant-Code`、`X-Company-Code`（基类已读）。
+
+---
+
+## 五、应用服务 CRUD
+
+与 `TaktLoginLogService` 保持一致：**命名、参数/返回值、XML 注释、方法体结构、异常处理**。
+
+| 功能 | 方法 |
+|------|------|
+| 列表 | `GetXxxListAsync` → `TaktPagedResult<TaktXxxDto>` |
+| 详情 | `GetXxxByIdAsync` |
+| 新增 | `CreateXxxAsync` |
+| 更新 | `UpdateXxxAsync` |
+| 单删 | `DeleteXxxByIdAsync` |
+| 批删 | `DeleteXxxBatchAsync` |
+| 模板 | `GetXxxTemplateAsync` |
+| 导入 | `ImportXxxAsync` |
+| 导出 | `ExportXxxAsync` |
+| 状态 | `UpdateXxxStatusAsync` |
+
+**实现要点**：
+- 列表：`QueryExpression` + `_repository.GetPagedAsync` + `Adapt` + `TaktPagedResult.Create`
+- 存在性：查无数据时 `return null` 或 `ThrowBusinessException` / `ThrowBusinessExceptionLocalized`（`TaktServiceBase`），禁止静默吞掉错误
+- 业务错误：统一 `ThrowBusinessException` / `ThrowBusinessExceptionLocalized`，或 `TaktBusinessException`
+- 批量删除前：`if (list.Any())` 再调仓储，避免空集合
+- 标准业务模块须具备 CRUD + 导入模板 + 导入 + 导出（不支持须在模块注释说明）
+
+---
+
+## 六、实体与数据库
+
+- 业务实体继承 `TaktTenantEntityBase` / `TaktCompanyEntityBase` / `TaktApprovalEntityBase`（主键 `Id` 为 `long`）
+- 表名：`takt_{模块}_{实体}` 小写下划线（如 `takt_identity_user`）
+- 属性：PascalCase；列映射小写下划线
+- 多租户字段：`TenantCode`（3 位）、`CompanyCode`（4 位）
+- 索引：`[SugarIndex("ix_...", ...)]` 声明在实体属性上
+- 导航属性：放在实体文件**末尾**「导航属性区域」；仅必要时 `[Navigate]`
+
+**实体基类选型**（按隔离粒度，❌ 禁止引入 `ConfigId` / `config_id` 列）：
+- 租户级共享：`TaktTenantEntityBase`（用户、角色、菜单、字典类型、翻译等）
+- 公司级业务：`TaktCompanyEntityBase`（部门、员工、业务单据等）
+- 带审批流：`TaktApprovalEntityBase`
+
+**新增实体检查清单**：
+1. 选定上表基类之一（定义见 `@backend/src/Takt.Domain/Entities/TaktEntityBase.cs`）
+2. 多库按 `TenantCode` 映射：`ConnectionStrings:Tenant_{tenantCode}`；启动初始化见 `Program.cs` → `TaktSeedDataCoordinator.InitializeAllAsync`
+3. 业务种子：新建 `TaktXxxSeedData`，实现 `ITaktSeedDataCoordinator`；`SeedAsync(IServiceProvider, string? tenantCode)` 由协调器传入租户编码；类名以 `SeedData` 结尾，由 Autofac 自动注册（`TaktAutofacModule`）
+4. 参照：`@backend/src/Takt.Infrastructure/Data/Seeds/TaktUserSeedData.cs`
+
+**种子规则**：
+- 实现 `SeedAsync` 返回 `(InsertCount, UpdateCount)`，**幂等**（存在则更新，不存在则插入）
+- 通过 `Order` 控制执行顺序；子种子可由协调类（如 `TaktMenuSeedData`）统一调用
+- 默认密码从配置 `PasswordPolicy:DefaultPassword` 读取，禁止硬编码明文
+
+**国际化翻译键（i18n 种子，强制，详见 `00-project` §1.6）**：
+- **格式**：小写 + 点号 `.` 分段；结构为 `用途.目录[.子目录…].末段`，**中间目录随菜单/模块加深可为多级**（与权限码层级对应，分隔符为 `.`）
+- **段内**：仅 `a-z`、`0-9`；❌ 禁止 `quote_a`、`head_office`、`technology_dept` 等下划线拼段
+- **菜单标题**：`menu.{领域}.{目录…}.{项}`，与 `TaktMenu*SeedData` 的 `I18nKey`、路由层级一致；子菜单加深则键加长
+- **实体字段标签**：`entity.{段}._self`、`entity.{段}.{字段名}`（如 `entity.dept.deptName`）
+- **部门显示名**：`org.dept.{部门编码小写}`（如 `org.dept.d1000`），与 `TaktDeptSeedData.DeptCode` 对齐
+- ❌ 勿在 `TaktMenuI18nSeedData` 重复 `TaktCommonI18nSeedData` 的 `common.button.*`
+- 一实体字段翻译一种子类（`HumanResource/Organization/TaktDeptI18nSeedData.cs`）；业务数据翻译（部门名等）用根目录 `TaktDeptI18nSeedData.cs`，禁止混文件
+
+---
+
+## 七、三层隔离与权限目标
+
+- **Client-Company-Data**：`TenantCode` → `CompanyCode` → 业务数据
+- 服务通过 `TaktServiceBase` 获取 `CurrentTenantCode`、`CurrentCompanyCode`、用户上下文、本地化、日志；仓储层按 `TenantCode` + `CompanyCode` + `IsDeleted` 过滤
+- RBAC + 数据权限由中间件与应用层过滤共同完成
+
+---
+
+## 八、代码生成脚本（`scripts/`）
+
+| 脚本 | 输出命名 |
+|------|----------|
+| `generate-services-from-dtos.cjs` | `ITakt{单数}Service` / `Takt{单数}Service` |
+| `generate-controllers-from-services.cjs` | `Takt{复数}Controller`（路由 `api/Takt{复数}`） |
+| `generate-from-backend.cjs` | 前端 `*_API_BASE` 与控制器路由段一致（**复数**）；types/api 文件名仍按实体**单数** kebab-case |
+
+复数规则见 `scripts/generate-script-common.cjs`（`pluralizeEntityShort` / `getControllerClassName`）。手工新增控制器勿使用单数类名（如 ❌ `TaktHolidayController`）。
+
+---
+
+## 九、Agent 约束
+
+- 新建控制器/服务：先读参照文件，再生成代码
+- 禁止无 `Takt` 前缀的类/文件名
+- 禁止控制器内写 SqlSugar 查询
+- 私有方法（`QueryExpression`、`FillXxxDto`）也需完整 XML 注释
+- 控制器必须复数、应用服务必须单数（见 §三、§四、§八）
+- 新增 i18n 种子：强制执行 `00-project` §1.6；新增菜单/按钮权限：强制执行 §1.7

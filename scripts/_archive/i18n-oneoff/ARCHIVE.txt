@@ -1,0 +1,6 @@
+本目录为历史一次性 i18n/菜单迁移与校验脚本，未接入 generate-all.cjs。
+日常开发请使用：
+  - scripts/generate-all.cjs（含 generate-entity-i18n-seed，已含 zh-HK）
+  - scripts/generate-dict-i18n-seed.cjs（字典种子变更后手工执行）
+  - scripts/rbac-parent-config.cjs（RBAC 配置，被 generate-* 引用）
+勿再运行本目录脚本，除非做同类数据迁移。

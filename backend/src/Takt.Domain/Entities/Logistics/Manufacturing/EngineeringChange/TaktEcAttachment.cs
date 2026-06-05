@@ -1,0 +1,72 @@
+﻿// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange
+// 文件名称：TaktEcAttachment.cs
+// 功能描述：设变附件实体，一个设变可对应多条附件；类别：联络、EPP、FPP、外部联络、TCJ 等。
+// ========================================
+
+using SqlSugar;
+using Takt.Domain.Entities;
+
+namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
+
+/// <summary>
+/// 设变附件实体。文件类别：Liaison/EPP/FPP/ExternalLiaison/TCJ 等；文件编号为联络编号等。
+/// </summary>
+[SugarTable("takt_logistics_manufacturing_ec_attachment", "设变附件表")]
+[SugarIndex("ix_ec_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_ec_attachment_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_attachment_type", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(AttachmentType), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_doc_no", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DocNo), OrderByType.Asc, false)]
+public class TaktEcAttachment : TaktCompanyEntityBase
+{
+    /// <summary>
+    /// 设变主表ID
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_id", ColumnDescription = "设变ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcId { get; set; }
+
+    /// <summary>
+    /// 设变单号（冗余字段,便于查询）
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string EcNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
+    /// 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+    /// </summary>
+    [SugarColumn(ColumnName = "attachment_type", ColumnDescription = "文件类别", ColumnDataType = "nvarchar", Length = 30, IsNullable = false)]
+    public string AttachmentType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件编号（如联络编号等）
+    /// </summary>
+    [SugarColumn(ColumnName = "doc_no", ColumnDescription = "文件编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string DocNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件名称
+    /// </summary>
+    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    public string FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（URL）
+    /// </summary>
+    [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
+    public string AccessUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设变主表（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(EcId))]
+    public TaktEc? Ec { get; set; }
+}

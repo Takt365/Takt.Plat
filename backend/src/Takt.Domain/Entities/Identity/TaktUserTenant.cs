@@ -1,0 +1,57 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Domain.Entities.Identity
+// 文件名称：TaktUserTenant.cs
+// 创建时间：2026-05-27
+// 创建人：Takt365(Cursor AI)
+// 功能描述：用户-租户关联实体，用户可访问多个租户（一对多）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using SqlSugar;
+using Takt.Shared.Enums;
+
+namespace Takt.Domain.Entities.Identity;
+
+/// <summary>
+/// 用户-租户关联实体
+/// 一个用户可关联多个租户；<see cref="TaktTenantEntityBase.TenantCode"/> 即为关联的租户编码。
+/// </summary>
+[SugarTable("takt_identity_user_tenant", "用户-租户关联表")]
+[SugarIndex("ix_user_tenant_tenant", nameof(TenantCode), OrderByType.Asc, false)]
+[SugarIndex("ix_user_tenant_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_user_tenant_unique", nameof(TenantCode), OrderByType.Asc, nameof(UserId), OrderByType.Asc, true)]
+[SugarIndex("ix_user_tenant_user", nameof(TenantCode), OrderByType.Asc, nameof(UserId), OrderByType.Asc, false)]
+[SugarIndex("ix_user_tenant_user_default", nameof(TenantCode), OrderByType.Asc, nameof(UserId), OrderByType.Asc, nameof(IsDefault), OrderByType.Asc, false)]
+public class TaktUserTenant : TaktTenantEntityBase
+{
+    /// <summary>
+    /// 用户ID
+    /// </summary>
+    [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_default", ColumnDescription = "是否默认租户", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public TaktYesNo IsDefault { get; set; } = TaktYesNo.No;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 用户（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(UserId), nameof(TaktUser.Id))]
+    public TaktUser User { get; set; } = null!;
+
+    /// <summary>
+    /// 可访问租户（多对一，按 <see cref="TenantCode"/> 关联）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(TenantCode), nameof(TaktTenant.TenantCode))]
+    public TaktTenant Tenant { get; set; } = null!;
+}

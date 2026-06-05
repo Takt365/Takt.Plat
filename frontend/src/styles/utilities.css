@@ -1,0 +1,739 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：utilities.css
+ * 创建时间：2026-05-27
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：布局与语义工具类（与 Tailwind 并存，供 Vue 模板 class 使用）
+ *
+ * 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+/* ---------- 语义色（Ant Design token / color-base） ---------- */
+.bg-page {
+  background-color: var(--ant-color-bg-layout);
+}
+
+.bg-primary {
+  background-color: var(--ant-color-primary);
+}
+
+.bg-container {
+  background-color: var(--ant-color-bg-container);
+}
+
+.bg-feicui {
+  background-color: var(--takt-cn-feicui);
+}
+
+.bg-scrollbar-track {
+  background-color: var(--ant-color-fill-quaternary);
+}
+
+.bg-scrollbar-thumb {
+  background-color: var(--ant-color-fill-secondary);
+}
+
+.text-text {
+  color: var(--ant-color-text);
+}
+
+.text-text-secondary {
+  color: var(--ant-color-text-secondary);
+}
+
+.text-primary {
+  color: var(--ant-color-primary);
+}
+
+.text-link {
+  color: var(--ant-color-link);
+}
+
+.text-link-hover {
+  color: var(--ant-color-link-hover);
+}
+
+.text-link-active {
+  color: var(--ant-color-link-active);
+}
+
+.border-border {
+  border-color: var(--ant-color-border);
+}
+
+.border-primary {
+  border-color: var(--ant-color-primary);
+}
+
+/* ---------- 渐变（多 class 组合） ---------- */
+.bg-gradient-to-br {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--tw-gradient-from, transparent),
+    var(--tw-gradient-to, transparent)
+  );
+}
+
+.bg-gradient-to-r {
+  background-image: linear-gradient(
+    to right,
+    var(--tw-gradient-from, transparent),
+    var(--tw-gradient-to, transparent)
+  );
+}
+
+.from-\[\#667eea\] {
+  --tw-gradient-from: #667eea;
+}
+
+.to-\[\#764ba2\] {
+  --tw-gradient-to: #764ba2;
+}
+
+.from-\[\#4f6ef7\] {
+  --tw-gradient-from: #4f6ef7;
+}
+
+.to-\[\#7b4fd6\] {
+  --tw-gradient-to: #7b4fd6;
+}
+
+.from-\[var\(--ant-color-fill-quaternary\)\] {
+  --tw-gradient-from: var(--ant-color-fill-quaternary);
+}
+
+.to-\[var\(--ant-color-bg-container\)\] {
+  --tw-gradient-to: var(--ant-color-bg-container);
+}
+
+/* ---------- 布局 / 盒模型 ---------- */
+.block {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.box-border {
+  box-sizing: border-box;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-visible {
+  overflow: visible;
+}
+
+/* ---------- 尺寸 ---------- */
+.w-full {
+  width: 100%;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.w-0 {
+  width: 0;
+}
+
+.w-0\.5 {
+  width: 0.125rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.min-h-full {
+  min-height: 100%;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.min-h-32 {
+  min-height: 8rem;
+}
+
+.max-w-full {
+  max-width: 100%;
+}
+
+.max-h-full {
+  max-height: 100%;
+}
+
+.max-w-\[400px\] {
+  max-width: 400px;
+}
+
+.h-\[33\.33vh\] {
+  height: 33.33vh;
+}
+
+.h-\[66\.67vh\] {
+  height: 66.67vh;
+}
+
+.size-4 {
+  width: 1rem;
+  height: 1rem;
+}
+
+.size-10 {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+/* ---------- 间距 ---------- */
+.p-0 {
+  padding: 0;
+}
+
+.p-0\.5 {
+  padding: 0.125rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+/* ---------- 定位 ---------- */
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.inset-0 {
+  inset: 0;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.top-1\/2 {
+  top: 50%;
+}
+
+.top-4 {
+  top: 1rem;
+}
+
+.top-6 {
+  top: 1.5rem;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.left-6 {
+  left: 1.5rem;
+}
+
+.right-4 {
+  right: 1rem;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.-top-px {
+  top: -1px;
+}
+
+.z-0 {
+  z-index: 0;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.z-\[1\] {
+  z-index: 1;
+}
+
+.z-\[2\] {
+  z-index: 2;
+}
+
+.-translate-x-1\/2 {
+  transform: translateX(-50%);
+}
+
+.-translate-y-1\/2 {
+  transform: translateY(-50%);
+}
+
+/* ---------- 文字 ---------- */
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-\[32px\] {
+  font-size: 32px;
+}
+
+.text-\[48px\] {
+  font-size: 48px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.text-white\/65 {
+  color: rgb(255 255 255 / 65%);
+}
+
+.text-white\/75 {
+  color: rgb(255 255 255 / 75%);
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.leading-tight {
+  line-height: 1.25;
+}
+
+.leading-snug {
+  line-height: 1.375;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
+}
+
+.leading-\[1\.5715\] {
+  line-height: 1.5715;
+}
+
+.align-middle {
+  vertical-align: middle;
+}
+
+.align-\[-0\.125em\] {
+  vertical-align: -0.125em;
+}
+
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.select-none {
+  user-select: none;
+}
+
+.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.text-transparent {
+  color: transparent;
+}
+
+.bg-inherit {
+  background-color: inherit;
+}
+
+.fill-current {
+  fill: currentColor;
+}
+
+.opacity-95 {
+  opacity: 0.95;
+}
+
+/* ---------- 边框 / 圆角 / 阴影 ---------- */
+.border {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.rounded-l {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.shadow-md {
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 10%),
+    0 2px 4px -2px rgb(0 0 0 / 10%);
+}
+
+/* ---------- 背景 / 对象 ---------- */
+.bg-white\/95 {
+  background-color: rgb(255 255 255 / 95%);
+}
+
+.bg-\[var\(--ant-color-fill-quaternary\)\] {
+  background-color: var(--ant-color-fill-quaternary);
+}
+
+.bg-\[var\(--ant-color-error\)\] {
+  background-color: var(--ant-color-error);
+}
+
+.object-contain {
+  object-fit: contain;
+}
+
+.object-none {
+  object-fit: none;
+}
+
+.outline-none {
+  outline: none;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+/* ---------- 光标 ---------- */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-ew-resize {
+  cursor: ew-resize;
+}
+
+.cursor-no-drop {
+  cursor: no-drop;
+}
+
+/* ---------- 过渡 / 动画 ---------- */
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-75 {
+  transition-duration: 75ms;
+}
+
+.duration-200 {
+  transition-duration: 200ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ease-\[cubic-bezier\(0\.4\,0\,0\.2\,1\)\] {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-\[left\] {
+  transition-property: left;
+}
+
+.transition-\[width\] {
+  transition-property: width;
+}
+
+.will-change-\[left\] {
+  will-change: left;
+}
+
+.will-change-\[width\] {
+  will-change: width;
+}
+
+/* ---------- hover ---------- */
+.hover\:opacity-85:hover {
+  opacity: 0.85;
+}
+
+.hover\:opacity-90:hover {
+  opacity: 0.9;
+}
+
+/* ---------- important 修饰 ---------- */
+.\!mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.\!mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+.\!inline-flex {
+  display: inline-flex !important;
+}
+
+.\!w-0 {
+  width: 0 !important;
+}
+
+.\!left-0 {
+  left: 0 !important;
+}
+
+.\!transition-none {
+  transition: none !important;
+}
+
+.\!transition-\[width\] {
+  transition-property: width !important;
+}
+
+.\!transition-\[left\] {
+  transition-property: left !important;
+}
+
+/* ---------- 子选择器变体（原 Tailwind arbitrary variant） ---------- */
+.\[\&\_\.ant-btn\]\:inline-flex .ant-btn {
+  display: inline-flex;
+}
+
+.\[\&\_\.ant-btn\]\:items-center .ant-btn {
+  align-items: center;
+}
+
+.\[\&\_\.ant-btn\]\:gap-1 .ant-btn {
+  gap: 0.25rem;
+}
+
+.\[\&\_\.anticon\]\:\!me-0 .anticon {
+  margin-inline-end: 0 !important;
+}
+
+.\[\&\_\.takt-captcha-progress\]\:transition-none .takt-captcha-progress {
+  transition: none;
+}
+
+/* ---------- 响应式 ---------- */
+@media (min-width: 768px) {
+  .md\:text-\[22px\] {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:flex {
+    display: flex;
+  }
+
+  .lg\:w-2\/3 {
+    width: 66.666667%;
+  }
+
+  .lg\:w-1\/3 {
+    width: 33.333333%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:px-12 {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+/* ---------- 暗色（data-theme=dark） ---------- */
+[data-theme='dark'] {
+  .dark\:bg-\[\#262626\] {
+    background-color: #262626;
+  }
+
+  .dark\:from-\[\#262626\] {
+    --tw-gradient-from: #262626;
+  }
+
+  .dark\:to-\[\#1f1f1f\] {
+    --tw-gradient-to: #1f1f1f;
+  }
+}

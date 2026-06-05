@@ -1,0 +1,612 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：dict-tag-base.css
+ * 创建时间：2026-05-25
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：字典标签样式（CssClass / ListClass 0-69，中日传统色系）
+ *
+ * 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+
+/* 字典标签基础样式 */
+.takt-dict-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+  border: none !important;
+}
+.takt-dict-tag:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 70种字典标签颜色样式（对应 CssClass 或 ListClass 值 0-69） */
+/* 使用中国传统色系和日本传统色系；14-69 采用日本传统色系覆盖 */
+
+/* 0. default - 默认（苍苍） */
+.takt-dict-tag-0,
+.ant-tag.takt-dict-tag-0 {
+  background-color: #94adc4;
+  border: none;
+  color: #202d39;
+}
+
+/* 1. success - 成功（青葱） */
+.takt-dict-tag-1,
+.ant-tag.takt-dict-tag-1 {
+  background-color: #a7e1d3;
+  border: none;
+  color: #308b75;
+}
+
+/* 2. error - 错误（檆丹） */
+.takt-dict-tag-2,
+.ant-tag.takt-dict-tag-2 {
+  background-color: #f8c7c9;
+  border: none;
+  color: #e3292f;
+}
+
+/* 3. warning - 警告（黄栗留） */
+.takt-dict-tag-3,
+.ant-tag.takt-dict-tag-3 {
+  background-color: #f1d346;
+  border: none;
+  color: #635308;
+}
+
+/* 4. processing - 处理中（群青） */
+.takt-dict-tag-4,
+.ant-tag.takt-dict-tag-4 {
+  background-color: #91bacf;
+  border: none;
+  color: #3c708b;
+}
+
+/* 5. info - 信息（宝蓝） */
+.takt-dict-tag-5,
+.ant-tag.takt-dict-tag-5 {
+  background-color: #98a2dd;
+  border: none;
+  color: #3646a6;
+}
+
+/* 6. blue - 蓝色（石青） */
+.takt-dict-tag-6,
+.ant-tag.takt-dict-tag-6 {
+  background-color: #47ffc9;
+  border: none;
+  color: #00ad7a;
+}
+
+/* 7. cyan - 青色（蔚蓝） */
+.takt-dict-tag-7,
+.ant-tag.takt-dict-tag-7 {
+  background-color: #bdf9ff;
+  border: none;
+  color: #00c4d6;
+}
+
+/* 8. green - 绿色（油绿） */
+.takt-dict-tag-8,
+.ant-tag.takt-dict-tag-8 {
+  background-color: #23ff38;
+  border: none;
+  color: #00700b;
+}
+
+/* 9. orange - 橙色（朱膘） */
+.takt-dict-tag-9,
+.ant-tag.takt-dict-tag-9 {
+  background-color: #ff824d;
+  border: none;
+  color: #992e00;
+}
+
+/* 10. red - 红色（大红） */
+.takt-dict-tag-10,
+.ant-tag.takt-dict-tag-10 {
+  background-color: #ff4d5b;
+  border: none;
+  color: #b3000e;
+}
+
+/* 11. purple - 紫色（青莲） */
+.takt-dict-tag-11,
+.ant-tag.takt-dict-tag-11 {
+  background-color: #b34fe2;
+  border: none;
+  color: #601682;
+}
+
+/* 12. pink - 粉色（桃红） */
+.takt-dict-tag-12,
+.ant-tag.takt-dict-tag-12 {
+  background-color: #fac0c4;
+  border: none;
+  color: #ec1b2c;
+}
+
+/* 13. gold - 金色（栀子） */
+.takt-dict-tag-13,
+.ant-tag.takt-dict-tag-13 {
+  background-color: #ebc450;
+  border: none;
+  color: #644d0b;
+}
+
+/* 14. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-14,
+.ant-tag.takt-dict-tag-14 {
+  background-color: #cfeaef;
+  border: none;
+  color: #5db9c7;
+}
+
+/* 15. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-15,
+.ant-tag.takt-dict-tag-15 {
+  background-color: #f5b6b7;
+  border: none;
+  color: #e64648;
+}
+
+/* 16. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-16,
+.ant-tag.takt-dict-tag-16 {
+  background-color: #d5b6cb;
+  border: none;
+  color: #fff;
+}
+
+/* 17. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-17,
+.ant-tag.takt-dict-tag-17 {
+  background-color: #dad247;
+  border: none;
+  color: #646014;
+}
+
+/* 18. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-18,
+.ant-tag.takt-dict-tag-18 {
+  background-color: #fff252;
+  border: none;
+  color: #a99c00;
+}
+
+/* 19. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-19,
+.ant-tag.takt-dict-tag-19 {
+  background-color: #d8ac58;
+  border: none;
+  color: #fff;
+}
+
+/* 20. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-20,
+.ant-tag.takt-dict-tag-20 {
+  background-color: #bc5ea1;
+  border: none;
+  color: #6d2d5b;
+}
+
+/* 21. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-21,
+.ant-tag.takt-dict-tag-21 {
+  background-color: #dbac3b;
+  border: none;
+  color: #5d4611;
+}
+
+/* 22. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-22,
+.ant-tag.takt-dict-tag-22 {
+  background-color: #f19893;
+  border: none;
+  color: #e22c22;
+}
+
+/* 23. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-23,
+.ant-tag.takt-dict-tag-23 {
+  background-color: #ee84b3;
+  border: none;
+  color: #d61d6e;
+}
+
+/* 24. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-24,
+.ant-tag.takt-dict-tag-24 {
+  background-color: #fffdfd;
+  border: none;
+  color: #f16868;
+}
+
+/* 25. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-25,
+.ant-tag.takt-dict-tag-25 {
+  background-color: #9f6ea0;
+  border: none;
+  color: #3d283d;
+}
+
+/* 26. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-26,
+.ant-tag.takt-dict-tag-26 {
+  background-color: #bc5ea1;
+  border: none;
+  color: #6d2d5b;
+}
+
+/* 27. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-27,
+.ant-tag.takt-dict-tag-27 {
+  background-color: #ef8487;
+  border: none;
+  color: #fff;
+}
+
+/* 28. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-28,
+.ant-tag.takt-dict-tag-28 {
+  background-color: #ee84b3;
+  border: none;
+  color: #e22b7b;
+}
+
+/* 29. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-29,
+.ant-tag.takt-dict-tag-29 {
+  background-color: #f7c9d4;
+  border: none;
+  color: #e44469;
+}
+
+/* 30. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-30,
+.ant-tag.takt-dict-tag-30 {
+  background-color: #c476ae;
+  border: none;
+  color: #82386e;
+}
+
+/* 31. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-31,
+.ant-tag.takt-dict-tag-31 {
+  background-color: #bc5ea1;
+  border: none;
+  color: #fff;
+}
+
+/* 32. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-32,
+.ant-tag.takt-dict-tag-32 {
+  background-color: #ffffff;
+  border: none;
+  color: #f37f7f;
+}
+
+/* 33. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-33,
+.ant-tag.takt-dict-tag-33 {
+  background-color: #f19893;
+  border: none;
+  color: #e22c22;
+}
+
+/* 34. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-34,
+.ant-tag.takt-dict-tag-34 {
+  background-color: #ee84b3;
+  border: none;
+  color: #d61d6e;
+}
+
+/* 35. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-35,
+.ant-tag.takt-dict-tag-35 {
+  background-color: #d5b6cb;
+  border: none;
+  color: #fff;
+}
+
+/* 36. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-36,
+.ant-tag.takt-dict-tag-36 {
+  background-color: #bc5ea1;
+  border: none;
+  color: #7e356a;
+}
+
+/* 37. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-37,
+.ant-tag.takt-dict-tag-37 {
+  background-color: #ef8487;
+  border: none;
+  color: #e3292f;
+}
+
+/* 38. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-38,
+.ant-tag.takt-dict-tag-38 {
+  background-color: #ffffff;
+  border: none;
+  color: #f37f7f;
+}
+
+/* 39. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-39,
+.ant-tag.takt-dict-tag-39 {
+  background-color: #7f3528;
+  border: none;
+  color: #000000;
+}
+
+/* 40. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-40,
+.ant-tag.takt-dict-tag-40 {
+  background-color: #b55f33;
+  border: none;
+  color: #321a0e;
+}
+
+/* 41. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-41,
+.ant-tag.takt-dict-tag-41 {
+  background-color: #d1905b;
+  border: none;
+  color: #9a5e2c;
+}
+
+/* 42. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-42,
+.ant-tag.takt-dict-tag-42 {
+  background-color: #4d6e8b;
+  border: none;
+  color: #fff;
+}
+
+/* 43. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-43,
+.ant-tag.takt-dict-tag-43 {
+  background-color: #bc5ea1;
+  border: none;
+  color: #6d2d5b;
+}
+
+/* 44. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-44,
+.ant-tag.takt-dict-tag-44 {
+  background-color: #f7c4c5;
+  border: none;
+  color: #e33032;
+}
+
+/* 45. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-45,
+.ant-tag.takt-dict-tag-45 {
+  background-color: #f092bb;
+  border: none;
+  color: #bf1a63;
+}
+
+/* 46. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-46,
+.ant-tag.takt-dict-tag-46 {
+  background-color: #daeff2;
+  border: none;
+  color: #5db9c7;
+}
+
+/* 47. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-47,
+.ant-tag.takt-dict-tag-47 {
+  background-color: #f19893;
+  border: none;
+  color: #d0241b;
+}
+
+/* 48. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-48,
+.ant-tag.takt-dict-tag-48 {
+  background-color: #d49867;
+  border: none;
+  color: #724620;
+}
+
+/* 49. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-49,
+.ant-tag.takt-dict-tag-49 {
+  background-color: #ef8487;
+  border: none;
+  color: #e3292f;
+}
+
+/* 50. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-50,
+.ant-tag.takt-dict-tag-50 {
+  background-color: #f19893;
+  border: none;
+  color: #e54138;
+}
+
+/* 51. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-51,
+.ant-tag.takt-dict-tag-51 {
+  background-color: #b2604f;
+  border: none;
+  color: #3d211b;
+}
+
+/* 52. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-52,
+.ant-tag.takt-dict-tag-52 {
+  background-color: #c49e64;
+  border: none;
+  color: #5d4623;
+}
+
+/* 53. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-53,
+.ant-tag.takt-dict-tag-53 {
+  background-color: #a95830;
+  border: none;
+  color: #fff;
+}
+
+/* 54. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-54,
+.ant-tag.takt-dict-tag-54 {
+  background-color: #dbd44f;
+  border: none;
+  color: #8e881d;
+}
+
+/* 55. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-55,
+.ant-tag.takt-dict-tag-55 {
+  background-color: #d3aa50;
+  border: none;
+  color: #624b18;
+}
+
+/* 56. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-56,
+.ant-tag.takt-dict-tag-56 {
+  background-color: #ee84b3;
+  border: none;
+  color: #d61d6e;
+}
+
+/* 57. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-57,
+.ant-tag.takt-dict-tag-57 {
+  background-color: #733024;
+  border: none;
+  color: #fff;
+}
+
+/* 58. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-58,
+.ant-tag.takt-dict-tag-58 {
+  background-color: #ff190d;
+  border: none;
+  color: #8c0700;
+}
+
+/* 59. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-59,
+.ant-tag.takt-dict-tag-59 {
+  background-color: #f3a4a0;
+  border: none;
+  color: #d0241b;
+}
+
+/* 60. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-60,
+.ant-tag.takt-dict-tag-60 {
+  background-color: #f5b6b7;
+  border: none;
+  color: #e33032;
+}
+
+/* 61. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-61,
+.ant-tag.takt-dict-tag-61 {
+  background-color: #f3a7ae;
+  border: none;
+  color: #e12131;
+}
+
+/* 62. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-62,
+.ant-tag.takt-dict-tag-62 {
+  background-color: #a95830;
+  border: none;
+  color: #321a0e;
+}
+
+/* 63. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-63,
+.ant-tag.takt-dict-tag-63 {
+  background-color: #ddaf44;
+  border: none;
+  color: #5d4611;
+}
+
+/* 64. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-64,
+.ant-tag.takt-dict-tag-64 {
+  background-color: #ff9850;
+  border: none;
+  color: #9c4000;
+}
+
+/* 65. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-65,
+.ant-tag.takt-dict-tag-65 {
+  background-color: #008867;
+  border: none;
+  color: #000000;
+}
+
+/* 66. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-66,
+.ant-tag.takt-dict-tag-66 {
+  background-color: #f5b6b7;
+  border: none;
+  color: #e33032;
+}
+
+/* 67. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-67,
+.ant-tag.takt-dict-tag-67 {
+  background-color: #d0a443;
+  border: none;
+  color: #4e3b13;
+}
+
+/* 68. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-68,
+.ant-tag.takt-dict-tag-68 {
+  background-color: #00beae;
+  border: none;
+  color: #000b0a;
+}
+
+/* 69. 字典标签颜色（日本传统色系） */
+.takt-dict-tag-69,
+.ant-tag.takt-dict-tag-69 {
+  background-color: #a8dbe0;
+  border: none;
+  color: #4bb5be;
+}
+
+/* 标签尺寸 */
+.takt-dict-tag-small {
+  font-size: 12px;
+  padding: 0 6px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.takt-dict-tag-middle {
+  font-size: 14px;
+  padding: 0 8px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.takt-dict-tag-large {
+  font-size: 16px;
+  padding: 0 10px;
+  height: 28px;
+  line-height: 28px;
+}

@@ -1,0 +1,41 @@
+# ========================================
+# 依赖与构建
+# ========================================
+node_modules/
+frontend/dist/
+backend/**/bin/
+backend/**/obj/
+backend/.vs/
+*.user
+*.suo
+
+# ========================================
+# 日志与本地运行产物
+# ========================================
+backend/src/Takt.WebApi/logs/
+*.log
+
+# ========================================
+# 前端环境配置（提交 env*.example，勿提交真实 .env）
+# ========================================
+frontend/.env
+frontend/.env.*
+!frontend/env.example
+!frontend/env.*.example
+
+# ========================================
+# 后端应用配置（提交 *Example* / *.example.json，勿提交真实 appsettings）
+# ========================================
+backend/src/Takt.WebApi/appsettings.json
+backend/src/Takt.WebApi/appsettings.Development.json
+backend/src/Takt.WebApi/appsettings.Production.json
+!backend/src/Takt.WebApi/appsettings.Example.json
+!backend/src/Takt.WebApi/appsettings.*.Example.json
+!backend/src/Takt.WebApi/appsettings.*.example.json
+
+# ========================================
+# 密钥与凭证
+# ========================================
+credentials.json
+*.pfx
+secrets.json

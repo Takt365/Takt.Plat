@@ -1,0 +1,247 @@
+---
+description: Takt.Plat 项目通用约定（命名、注释、Git 提交）
+alwaysApply: true
+---
+
+# 项目通用约定
+
+全栈命名、文件头/注释、Git 提交。架构见 `README.md`；后端见 `@.cursor/rules/01-backend.mdc`；前端见 `@.cursor/rules/02-frontend.mdc`。
+
+---
+
+## 一、命名规范
+
+### 1. 文件与目录
+
+| 范围 | 规则 | 示例 |
+|------|------|------|
+| **后端 C#** | PascalCase，文件名=类名，**必须以 `Takt` 为前缀** | ✅ `TaktUser.cs` ❌ `User.cs` |
+| **前端 TS/TSX / Vue** | **kebab-case**（页面、组件、API 均适用） | ✅ `user-api.ts`、`user-form.vue` ❌ `UserForm.vue` |
+| **.NET 项目** | `Takt` 前缀 + PascalCase | `Takt.Domain` |
+| **命名空间** | `Takt.{Layer}.{SubNamespace}` | `Takt.Domain.Entities.Identity` |
+
+目录按 `backend/`、`frontend/` 模块划分；新增文件前先确认目标目录（详见各域规则）。
+
+### 2. 类 / 类型 / 组件
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 实体 / 服务类 | `Takt` + PascalCase（**单数**） | `TaktUser`、`TaktUserService` |
+| 应用服务 | `Takt` + 单数 + `Service` | `TaktHolidayService`、`ITaktHolidayService` |
+| API 控制器 | `Takt` + **复数** + `Controller` | `TaktUsersController`、`TaktHolidaysController` |
+| 接口 | `I` + PascalCase | `ITaktUserService` |
+| DTO / 前端类型 | `Takt` + 实体 + 语义 + `Dto` | `TaktUserDto`、`TaktUserCreateDto`、`TaktUserQueryDto` |
+| Vue 组件名（代码内） | PascalCase（与文件名对应） | 文件 `user-form.vue` → 组件 `UserForm`；模板标签用 `<user-form />` |
+
+### 3. 变量与常量
+
+- **变量**：camelCase（`tenantCode`、`formData`）
+- **C# 私有字段**：`_` + camelCase（`_userService`）
+- **布尔**：`is` / `has` / `should` 开头（`isLoading`、`hasPermission`）
+- **常量**：`UPPER_SNAKE_CASE`（`MAX_PAGE_SIZE`）
+
+### 4. 后端方法（C#）
+
+- **PascalCase**；I/O 与可 `await` 的公共方法以 **`Async`** 结尾
+- **必须**「实体名 + 语义」；`Xxx` 为实体 PascalCase（`User`、`LoginLog`）
+- ❌ 禁止：`GetListAsync`、`GetByIdAsync`、`CreateAsync` 等无实体前缀命名
+
+| 功能 | 方法名 | 示例 |
+|------|--------|------|
+| 分页列表 | `GetXxxListAsync` | `GetUserListAsync` |
+| 详情 | `GetXxxByIdAsync` | `GetUserByIdAsync` |
+| 新增 | `CreateXxxAsync` | `CreateUserAsync` |
+| 更新 | `UpdateXxxAsync` | `UpdateUserAsync` |
+| 单删 | `DeleteXxxByIdAsync` | `DeleteUserByIdAsync` |
+| 批删 | `DeleteXxxBatchAsync` | `DeleteUserBatchAsync` |
+| 导入模板 | `GetXxxTemplateAsync` | `GetUserTemplateAsync` |
+| 导入 | `ImportXxxAsync` | `ImportUserAsync` |
+| 导出 | `ExportXxxAsync` | `ExportUserAsync` |
+| 状态 | `UpdateXxxStatusAsync` | `UpdateUserStatusAsync` |
+
+非标准能力同样带实体前缀（如 `ValidateUserAsync`）。私有辅助方法 PascalCase + 动词（`FillUserDto`）。
+
+### 5. 前端函数（TypeScript / Vue）
+
+- **函数 / 变量**：camelCase，动词开头（`loadUserData`、`handleSubmit`）
+- **API 导出**（`api/**/*.ts`）：必须「实体 + 语义」；❌ 禁止 `getList`、`create`、`remove`
+- **Composable**：`use` + PascalCase（`useUserForm`）
+- **defineExpose**：camelCase（`validate`、`getValues`）
+
+| 功能 | 规范 | 示例 |
+|------|------|------|
+| 分页列表 | `getXxxList` | `getUserList` |
+| 详情 | `getXxxById` | `getUserById` |
+| 新增 | `createXxx` | `createUser` |
+| 更新 | `updateXxx` | `updateUser` |
+| 单删 | `deleteXxxById` | `deleteUserById` |
+| 批删 | `deleteXxxBatch` | `deleteUserBatch` |
+| 状态 | `updateXxxStatus` | `updateUserStatus` |
+| 导入/导出 | `getXxxTemplate` / `importXxxData` / `exportXxxData` | `getUserTemplate` |
+
+**前后端对齐**：`GetUserListAsync` ↔ `getUserList`（仅大小写风格不同）。
+
+### 6. 翻译键（I18nKey / ResourceKey，强制）
+
+后端 `TaktTranslation.I18nKey`、菜单/业务种子中的 `I18nKey`、前端动态 `t('…')` 与后端种子**必须一致**。
+
+| 规则 | 说明 |
+|------|------|
+| **分隔符** | 仅用小写 + **点号** `.` 分段 |
+| **结构** | **`用途/领域` . `目录` [ . `子目录` … ] . `末段`** — 与权限码同理，**中间目录随菜单/模块加深可为多级**，段数不固定 |
+| **段内字符** | 每段仅 `a-z`、`0-9`；❌ 禁止用下划线拼成「假一段」（如 `quote_a`、`head_office`、`technology_dept`） |
+| **与菜单对齐** | `menu.*` 须与菜单种子 `I18nKey`、`RoutePath` 层级一致；子菜单加深则键同步加长 |
+| **与业务编码对齐** | 部门等业务数据末段用小写业务编码（`HEAD_OFFICE` → `headoffice`，`D1000` → `d1000`） |
+
+**常见用途与末段含义（前缀勿混用）**：
+
+| 用途 | 键形态 | 说明 |
+|------|--------|------|
+| 菜单标题 | `menu.{领域}.{目录…}.{菜单项}` | 随层级加深：`menu.humanresource.organization.dept`、`menu.logistics.manufacturing.ecn.quality` |
+| 页面/工作台 | `common.page.{分类}.{项}` | `common.page.greeting.morning`、`common.page.quote.a` |
+| 实体字段 | `entity.{实体}.{字段}` | `entity.dept.deptName`、`entity.holiday._self` |
+| 组织/部门名 | `org.dept.{编码}` | 与 `TaktDeptSeedData.DeptCode` 小写对齐：`org.dept.d1000` |
+| 认证/校验/错误 | `auth.*`、`validation.*`、`error.*` | 见 `TaktCommonI18nSeedData` |
+
+```text
+✅ menu.dashboard.workspace                    （3 段）
+✅ menu.routine.business.news                （4 段）
+✅ menu.logistics.manufacturing.ecn.quality  （5 段，随菜单加深）
+✅ common.page.greeting.forenoon
+✅ entity.holiday.holidayName
+✅ org.dept.headoffice
+❌ greetings.morning                           （与前端 common.page 不一致）
+❌ quotes.quote_a                              （段内下划线）
+❌ dept.head_office                            （应 org.dept.headoffice）
+❌ dept.technology_dept                      （应 org.dept.d0700 且菜单 I18nKey 一并改）
+```
+
+- 新增/修改 i18n 种子前：先查前端 `t('…')`、菜单种子 `I18nKey` 是否已有约定，**禁止**在 `TaktMenuI18nSeedData` 重复 `TaktCommonI18nSeedData` 已有键（如 `common.button.*`）。
+
+**前端静态翻译文件（`frontend/src/locales/**/*.ts`，强制）**：
+
+| 规则 | 说明 |
+|------|------|
+| **路径 → 业务前缀** | `import.meta.glob` + `takt-locale-merge` **按文件在 `locales/` 下的目录自动嵌套**；路径段用 `.` 连接即为业务域前缀 |
+| **顶层节点** | 每个语言文件 `export default` **必须且仅能**以 **`page`** 为对象根键 |
+| **引用键** | **`{路径前缀}.page.{…}`** — 路径前缀由目录自动得出，**禁止**在文件内再手写一层模块名 |
+| **与动态区分** | 静态文件内不写 `entity.*` / `menu.*` 扁平键；动态文案走后端种子 + `mergeDynamicLocaleMessages` |
+
+```text
+locales/identity/user/zh-CN.ts
+  → 自动前缀 identity.user
+  → export default { page: { title: '…' } }
+  → t('identity.user.page.title')
+
+locales/dashboard/workspace/zh-CN.ts
+  → dashboard.workspace.page.modules.welcome
+```
+
+详见 `@.cursor/rules/02-frontend.mdc` §6.2；合并实现见 `frontend/src/utils/takt-locale-merge.ts`。
+
+### 7. 权限码（Permission，强制）
+
+菜单种子 `Permission`、后端鉴权特性、前端 `v-permission` **必须一致**。
+
+| 规则 | 说明 |
+|------|------|
+| **结构** | **`领域` : `目录` [ : `子目录` … ] : `实体` : `操作`** — 小写，**冒号** `:` 分隔 |
+| **段数** | **不固定**；中间「目录路径」随菜单层级加深，可为 0～多级（工程内已有 3 段～ 5 段及以上） |
+| **末段** | 必须为 **操作**（`list`、`create`、`update`、`delete`、`export` 等） |
+| **段内字符** | 每段仅 `a-z`、`0-9`；❌ 禁止下划线（如 `list_view`） |
+| **与菜单对齐** | 路径段与菜单 `RoutePath` / 模块目录一致，勿自创与种子无关的缩写 |
+
+```text
+✅ identity:user:list                              （3 段：无中间目录）
+✅ routine:business:news:list                      （4 段）
+✅ humanresource:attendance:holiday:create         （4 段）
+✅ logistics:material:purchasing:supplier:list     （5 段）
+✅ manufacturing:output:pcba:production:list       （5 段）
+✅ manufacturing:ecn:technical:list
+❌ identity:user:list_view     （段内下划线）
+❌ identity.user.list          （误用点号）
+❌ identity:user               （缺少末段操作）
+❌ list:identity:user          （操作不在末段）
+```
+
+---
+
+## 二、注释规范
+
+### 1. 必须写注释的场景
+
+- 所有 **公共** 类、方法、属性（C# XML）
+- **导出** 函数、Props、Composable、`defineExpose`（JSDoc）
+- 复杂业务逻辑、非直观 workaround
+- 新建/修改文件：**文件头不得省略**
+
+### 2. 文件头（强制）
+
+**C#** — 首尾 `// ========================================`，含：项目名称、命名空间、文件名称、创建时间、创建人、功能描述；功能描述与版权信息之间**一行仅含 `// `**；`·` 两侧各空一格。
+
+**TypeScript** — 同 C# 块注释格式；不含 `locales/**` 纯数据、不含 `*.d.ts`。`locales/**/*.ts` 文件头「功能描述」须注明静态引用键前缀（如 `引用键 common.page.*`），结构见 `@.cursor/rules/02-frontend.mdc` §6.2。
+
+**Vue** — 文件最顶部 HTML 注释 **固定 8 行**；**禁止** 创建时间/创建人；**禁止** 再套一层 `//` 文件头。
+
+参照现有实现：`@backend/src/Takt.Domain/Entities/Identity/TaktUser.cs`
+
+### 3. 代码注释风格
+
+**C#**：公共成员使用 `/// <summary>`，方法含 `<param>`、`<returns>`。
+
+**TypeScript / Vue**：导出函数完整 JSDoc（摘要、`@param {Type}`、`@returns {Type}`）；类型字段用多行块注释；❌ 禁止关键字段仅单行 `/** 说明 */`。
+
+```typescript
+/**
+ * 获取用户列表（分页）
+ * @param queryDto 查询参数
+ * @returns {Promise<TaktPagedResult<TaktUserDto>>} 分页结果
+ */
+export function getUserList(queryDto: TaktUserQueryDto) { ... }
+```
+
+**行内注释**：说明「为什么」，不重复代码字面含义（❌ `// 设置 name`）。
+
+---
+
+## 三、Git 提交规范
+
+**格式**：`<type>(<scope>): <subject>`
+
+| type | 说明 |
+|------|------|
+| `feat` | 新功能 |
+| `fix` | 修复 Bug |
+| `docs` | 文档 |
+| `refactor` | 重构 |
+| `style` | 格式（不影响逻辑） |
+| `test` | 测试 |
+| `chore` | 构建/工具 |
+
+**要求**：
+- `subject` 简洁、说清「做了什么」，禁止 `update`、`fix bug` 等空泛描述
+- 同一仓库内中英文提交信息风格保持一致
+
+**示例**：
+```
+feat(identity): 用户列表分页查询
+fix(dept): 修复部门唯一索引冲突
+```
+
+---
+
+## 四、空行格式（强制）
+
+**绝不允许多余空白行**（隔行空行、连续多行空行等）。细则见 `@.cursor/rules/03-format-blank-lines.mdc`；写入/保存前必检，违反视为未完成。
+
+---
+
+## 五、Agent 行为约束
+
+- 生成或修改代码时遵守本节及上文命名、注释、提交规范
+- **空行**：强制执行 `03-format-blank-lines.mdc`，参照 `TaktUser.cs`、`TaktCultureSeedData.cs` 等正常密度
+- **翻译键**：遵守 §1.6（动态键：小写点号、中间目录可多级；**静态 `locales/**`：`export default` 根键必须为 `page`**）；种子与前端 `t()` / 菜单 `I18nKey` 对齐
+- **权限码**：遵守 §1.7（`领域:目录[:子目录…]:实体:操作`，段数随菜单深度、末段为操作、冒号分隔、小写、无下划线）
+- 新增后端接口/服务：对照 `@.cursor/rules/01-backend.mdc` 中的参照文件
+- 发现与规范冲突时，主动按规范修正，勿引入无 `Takt` 前缀的 C# 文件名或泛化方法名
+- 发现文件出现「隔行空行」或行数异常翻倍时，**只整理空行**，不改动业务逻辑

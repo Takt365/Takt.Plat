@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="common.auth.invalid.credentials" xml:space="preserve">
+    <value>Incorrect username or password</value>
+  </data>
+  <data name="common.permission.tenant.no.access" xml:space="preserve">
+    <value>You do not have permission to sign in to the selected tenant</value>
+  </data>
+  <data name="common.permission.company.no.access" xml:space="preserve">
+    <value>You do not have access to any company</value>
+  </data>
+  <data name="common.system.feature.disabled" xml:space="preserve">
+    <value>{feature} is not enabled</value>
+  </data>
+  <data name="common.system.internal.error" xml:space="preserve">
+    <value>Unable to complete the request. Please try again later.</value>
+  </data>
+  <data name="common.feedback.success" xml:space="preserve">
+    <value>Operation successful</value>
+  </data>
+  <data name="common.feedback.failed" xml:space="preserve">
+    <value>Operation failed</value>
+  </data>
+  <data name="common.feedback.query.success" xml:space="preserve">
+    <value>Retrieved successfully</value>
+  </data>
+  <data name="common.system.bad.request" xml:space="preserve">
+    <value>Invalid request parameters</value>
+  </data>
+  <data name="common.permission.unauthorized" xml:space="preserve">
+    <value>Please sign in first</value>
+  </data>
+  <data name="common.permission.forbidden" xml:space="preserve">
+    <value>Access forbidden</value>
+  </data>
+  <data name="common.system.resource.not.found" xml:space="preserve">
+    <value>Resource not found</value>
+  </data>
+  <data name="common.validation.required" xml:space="preserve">
+    <value>{field} is required</value>
+  </data>
+  <data name="common.validation.length.between" xml:space="preserve">
+    <value>{field} must be {min}–{max} characters</value>
+  </data>
+  <data name="common.validation.too.long" xml:space="preserve">
+    <value>{field} is too long (maximum {max} characters)</value>
+  </data>
+  <data name="common.validation.duplicate" xml:space="preserve">
+    <value>{field} already exists</value>
+  </data>
+  <data name="common.validation.not.found" xml:space="preserve">
+    <value>{field} not found</value>
+  </data>
+  <data name="common.validation.not.found.or.expired" xml:space="preserve">
+    <value>{field} not found or expired</value>
+  </data>
+  <data name="common.validation.expired" xml:space="preserve">
+    <value>{field} has expired</value>
+  </data>
+  <data name="common.validation.invalid.format" xml:space="preserve">
+    <value>Invalid {field} format</value>
+  </data>
+  <data name="common.validation.too.fast.retry" xml:space="preserve">
+    <value>Too fast, please try again</value>
+  </data>
+  <data name="common.validation.verify.failed" xml:space="preserve">
+    <value>Verification failed</value>
+  </data>
+  <data name="common.field.captcha" xml:space="preserve">
+    <value>Captcha</value>
+  </data>
+  <data name="common.field.tenant.code" xml:space="preserve">
+    <value>Tenant code</value>
+  </data>
+  <data name="common.field.company.code" xml:space="preserve">
+    <value>Company code</value>
+  </data>
+  <data name="common.field.password.cipher" xml:space="preserve">
+    <value>Encrypted password payload</value>
+  </data>
+  <data name="common.field.password.encryption" xml:space="preserve">
+    <value>Password encryption transport</value>
+  </data>
+  <data name="common.field.captcha.id" xml:space="preserve">
+    <value>Captcha ID</value>
+  </data>
+  <data name="common.field.captcha.payload" xml:space="preserve">
+    <value>Captcha payload</value>
+  </data>
+  <data name="common.field.slider.position" xml:space="preserve">
+    <value>Slider position</value>
+  </data>
+  <data name="common.field.behavior.data" xml:space="preserve">
+    <value>Behavior verification data</value>
+  </data>
+  <data name="common.field.mouse.trajectory" xml:space="preserve">
+    <value>Mouse trajectory</value>
+  </data>
+</root>

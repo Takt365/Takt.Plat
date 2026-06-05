@@ -1,0 +1,98 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Domain.Entities.HumanResource.Personnel
+// 文件名称：TaktEmployeeTransfer.cs
+// 创建时间：2026-06-03
+// 创建人：Takt365(Cursor AI)
+// 功能描述：员工调动记录实体（人事-调动管理）
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using SqlSugar;
+using Takt.Domain.Entities;
+
+namespace Takt.Domain.Entities.HumanResource.Personnel;
+
+/// <summary>
+/// 员工调动记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
+/// </summary>
+[SugarTable("takt_human_resource_personnel_employee_transfer", "员工调动表")]
+[SugarIndex("ix_employee_transfer_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_employee_transfer_employee", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EmployeeId), OrderByType.Asc, false)]
+[SugarIndex("ix_employee_transfer_approval", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApprovalStatus), OrderByType.Asc, false)]
+public class TaktEmployeeTransfer : TaktApprovalEntityBase
+{
+    /// <summary>
+    /// 员工ID
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
+    public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 调动类型（0=转岗，1=调岗）
+    /// </summary>
+    [SugarColumn(ColumnName = "transfer_type", ColumnDescription = "调动类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int TransferType { get; set; }
+
+    /// <summary>
+    /// 调出部门ID
+    /// </summary>
+    [SugarColumn(ColumnName = "from_dept_id", ColumnDescription = "调出部门ID", ColumnDataType = "bigint", IsNullable = false)]
+    public long FromDeptId { get; set; }
+
+    /// <summary>
+    /// 调出部门名称
+    /// </summary>
+    [SugarColumn(ColumnName = "from_dept_name", ColumnDescription = "调出部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string FromDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 调出岗位ID
+    /// </summary>
+    [SugarColumn(ColumnName = "from_post_id", ColumnDescription = "调出岗位ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? FromPostId { get; set; }
+
+    /// <summary>
+    /// 调出岗位名称
+    /// </summary>
+    [SugarColumn(ColumnName = "from_post_name", ColumnDescription = "调出岗位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? FromPostName { get; set; }
+
+    /// <summary>
+    /// 调入部门ID
+    /// </summary>
+    [SugarColumn(ColumnName = "to_dept_id", ColumnDescription = "调入部门ID", ColumnDataType = "bigint", IsNullable = false)]
+    public long ToDeptId { get; set; }
+
+    /// <summary>
+    /// 调入部门名称
+    /// </summary>
+    [SugarColumn(ColumnName = "to_dept_name", ColumnDescription = "调入部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string ToDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 调入岗位ID
+    /// </summary>
+    [SugarColumn(ColumnName = "to_post_id", ColumnDescription = "调入岗位ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? ToPostId { get; set; }
+
+    /// <summary>
+    /// 调入岗位名称
+    /// </summary>
+    [SugarColumn(ColumnName = "to_post_name", ColumnDescription = "调入岗位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? ToPostName { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    [SugarColumn(ColumnName = "effective_date", ColumnDescription = "生效日期", ColumnDataType = "datetime", IsNullable = true)]
+    public DateTime? EffectiveDate { get; set; }
+
+    /// <summary>
+    /// 调动原因
+    /// </summary>
+    [SugarColumn(ColumnName = "reason", ColumnDescription = "调动原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    public string? Reason { get; set; }
+}

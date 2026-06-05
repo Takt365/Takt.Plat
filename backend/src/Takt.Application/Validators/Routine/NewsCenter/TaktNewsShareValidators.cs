@@ -1,0 +1,105 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Validators.Routine.NewsCenter
+// 文件名称：TaktNewsShareValidators.cs
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：NewsShare 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktNewsShare 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using FluentValidation;
+using Takt.Application.Dtos.Routine.NewsCenter;
+
+namespace Takt.Application.Validators.Routine.NewsCenter;
+
+// ========================================
+// 创建NewsShare 验证器
+// ========================================
+
+/// <summary>
+/// 创建NewsShare DTO 验证器
+/// </summary>
+public class TaktNewsShareCreateValidator : AbstractValidator<TaktNewsShareCreateDto>
+{
+    /// <summary>
+    /// 初始化 创建NewsShare 校验规则
+    /// </summary>
+    public TaktNewsShareCreateValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.NewsId)
+            .GreaterThanOrEqualTo(0).WithMessage("新闻 ID不能为负数");
+        RuleFor(x => x.UserId)
+            .GreaterThanOrEqualTo(0).WithMessage("分享人 ID不能为负数");
+        RuleFor(x => x.UserName)
+            .NotEmpty().WithMessage("分享人姓名不能为空")
+            .MaximumLength(20).WithMessage("分享人姓名长度不能超过20个字符");
+        RuleFor(x => x.ShareChannel)
+            .MaximumLength(50).WithMessage("分享渠道长度不能超过50个字符");
+        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
+    }
+}
+
+// ========================================
+// 更新NewsShare 验证器
+// ========================================
+
+/// <summary>
+/// 更新NewsShare DTO 验证器
+/// </summary>
+public class TaktNewsShareUpdateValidator : AbstractValidator<TaktNewsShareUpdateDto>
+{
+    /// <summary>
+    /// 初始化 更新NewsShare 校验规则
+    /// </summary>
+    public TaktNewsShareUpdateValidator()
+    {
+        RuleFor(x => x.NewsShareId)
+            .GreaterThan(0).WithMessage("NewsShareID无效");
+    }
+}
+
+// ========================================
+// 导入NewsShare 验证器
+// ========================================
+
+/// <summary>
+/// 导入NewsShare DTO 验证器
+/// </summary>
+public class TaktNewsShareImportValidator : AbstractValidator<TaktNewsShareImportDto>
+{
+    /// <summary>
+    /// 初始化 导入NewsShare 校验规则
+    /// </summary>
+    public TaktNewsShareImportValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+        RuleFor(x => x.CompanyCode)
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.NewsId)
+            .GreaterThanOrEqualTo(0).WithMessage("新闻 ID不能为负数");
+        RuleFor(x => x.UserId)
+            .GreaterThanOrEqualTo(0).WithMessage("分享人 ID不能为负数");
+        RuleFor(x => x.UserName)
+            .NotEmpty().WithMessage("分享人姓名不能为空")
+            .MaximumLength(20).WithMessage("分享人姓名长度不能超过20个字符");
+        RuleFor(x => x.ShareChannel)
+            .MaximumLength(50).WithMessage("分享渠道长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ShareChannel));
+        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
+    }
+}

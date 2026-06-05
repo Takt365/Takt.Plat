@@ -1,0 +1,58 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Domain.Entities.Identity
+// 文件名称：TaktUserCompany.cs
+// 创建时间：2025-01-20
+// 创建人：Takt365(Cursor AI)
+// 功能描述：用户公司关联实体，支持用户跨公司访问（多对多关系）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using SqlSugar;
+using Takt.Domain.Entities.Accounting.Financial;
+using Takt.Shared.Enums;
+
+namespace Takt.Domain.Entities.Identity;
+
+/// <summary>
+/// 用户公司关联实体
+/// 支持用户跨公司访问（多对多关系）
+/// 例如：用户D1010在租户100下可以访问公司2300和2400
+/// </summary>
+[SugarTable("takt_identity_user_company", "用户公司关联表")]
+[SugarIndex("ix_user_company_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_user_company_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_user_company_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(UserId), OrderByType.Asc, true)]
+[SugarIndex("ix_user_company_user_default", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(UserId), OrderByType.Asc, nameof(IsDefault), OrderByType.Asc, false)]
+public class TaktUserCompany : TaktCompanyEntityBase
+{
+    /// <summary>
+    /// 用户ID
+    /// </summary>
+    [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
+    public long UserId { get; set; }
+
+    /// <summary>
+    /// 是否默认登录公司（1=是，0=否；同一用户在同一租户下仅应有一条为是）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_default", ColumnDescription = "是否默认公司", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public TaktYesNo IsDefault { get; set; } = TaktYesNo.No;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 用户（多对一）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(UserId), nameof(TaktUser.Id))]
+    public TaktUser User { get; set; } = null!;
+
+    /// <summary>
+    /// 可访问公司（多对一，按 <see cref="CompanyCode"/> 关联）
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(CompanyCode), nameof(TaktCompany.CompanyCode))]
+    public TaktCompany Company { get; set; } = null!;
+}

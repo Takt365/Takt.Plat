@@ -1,0 +1,239 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Infrastructure.Middleware
+// 文件名称：TaktLoggingMiddleware.cs
+// 创建时间：2026-05-25
+// 创建人：Takt365(Cursor AI)
+// 功能描述：统一 HTTP 请求日志中间件（采集、格式化、上报）
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.Diagnostics;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Http;
+using Takt.Infrastructure.Data.Context;
+using Takt.Infrastructure.SignalR;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models.Logging;
+
+namespace Takt.Infrastructure.Middleware;
+
+/// <summary>
+/// 统一 HTTP 请求日志中间件
+/// </summary>
+/// <remarks>
+/// <para>在每个 HTTP 请求生命周期内完成以下工作：</para>
+/// <list type="number">
+/// <item><description>生成短 <c>RequestId</c> 并写入 <see cref="HttpContext.Items"/>，供下游关联日志。</description></item>
+/// <item><description>基于租户/公司请求头、用户 Claims、客户端 IP 等构建 <see cref="TaktLogContext"/>，并通过 <see cref="TaktLogger.BeginScope"/> 注入 Serilog 作用域。</description></item>
+/// <item><description>记录请求开始日志；SignalR Hub 协商/WebSocket 等走 <see cref="TaktSignalRLogging"/> 专用格式。</description></item>
+/// <item><description>在 <c>finally</c> 中统计耗时，按状态码与阈值分级输出（5xx Error、4xx Warning、&gt;1s 慢请求 Warning、Hub 完成日志、其余 Debug）。</description></item>
+/// <item><description>调用 <see cref="TaktSqlSugarAuditAop.TryPersistOperLog"/> 将符合条件的写操作 API 持久化到 <c>TaktOperLog</c>（Statistics.Logging 模块 API 与日志表 CUD 由审计 AOP 动态排除）。</description></item>
+/// </list>
+/// </remarks>
+public class TaktLoggingMiddleware
+{
+    /// <summary>
+    /// 慢请求告警阈值（毫秒）；超过该值记录 Warning 级别日志
+    /// </summary>
+    private const int SlowRequestThresholdMs = 1000;
+
+    /// <summary>
+    /// 管道中的下一个中间件委托
+    /// </summary>
+    private readonly RequestDelegate _next;
+
+    /// <summary>
+    /// 初始化 <see cref="TaktLoggingMiddleware"/> 实例
+    /// </summary>
+    /// <param name="next">ASP.NET Core 请求管道中的下一个中间件</param>
+    public TaktLoggingMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    /// <summary>
+    /// 处理 HTTP 请求：建立日志作用域、记录开始/结束日志，并在请求结束时尝试写入操作日志
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <param name="dbContext">当前租户 SqlSugar 上下文，用于将操作日志写入 <c>takt_statistics_logging_oper_log</c></param>
+    /// <returns>表示中间件异步执行的任务</returns>
+    public async Task InvokeAsync(HttpContext context, TaktSqlSugarContext dbContext)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        var requestId = Guid.NewGuid().ToString("N")[..8];
+        context.Items["RequestId"] = requestId;
+
+        var logContext = BuildRequestContext(context, requestId);
+        using var scope = TaktLogger.BeginScope(logContext);
+
+        var request = context.Request;
+        var pathValue = request.Path.Value ?? string.Empty;
+        var isSignalRHubRequest = IsSignalRHubRequest(pathValue);
+        var requestBody = await ReadRequestBodyAsync(context);
+
+        if (isSignalRHubRequest)
+        {
+            TaktLogger.Information(
+                logContext,
+                "{HttpPrefix}SignalR HTTP 请求开始: {Method} {Path}",
+                TaktLogFormatter.FormatHttpRequestPrefix(logContext),
+                request.Method,
+                request.Path);
+        }
+        else
+        {
+            TaktLogger.Information(
+                logContext,
+                "{HttpPrefix}HTTP 请求开始: {Method} {Path}",
+                TaktLogFormatter.FormatHttpRequestPrefix(logContext),
+                request.Method,
+                request.Path);
+        }
+
+        try
+        {
+            await _next(context);
+        }
+        finally
+        {
+            stopwatch.Stop();
+            var response = context.Response;
+            var elapsedMs = stopwatch.ElapsedMilliseconds;
+            logContext.Extra = new Dictionary<string, object?>
+            {
+                ["StatusCode"] = response.StatusCode,
+                ["ElapsedMs"] = elapsedMs
+            };
+
+            if (response.StatusCode >= 500)
+            {
+                TaktLogger.Error(
+                    logContext,
+                    "{HttpPrefix}HTTP 请求失败: {Method} {Path}, StatusCode={StatusCode}, Elapsed={ElapsedMs}ms",
+                    TaktLogFormatter.FormatHttpRequestPrefix(logContext),
+                    request.Method,
+                    request.Path,
+                    response.StatusCode,
+                    elapsedMs);
+            }
+            else if (response.StatusCode >= 400)
+            {
+                TaktLogger.Warning(
+                    logContext,
+                    "{HttpPrefix}HTTP 请求警告: {Method} {Path}, StatusCode={StatusCode}, Elapsed={ElapsedMs}ms",
+                    TaktLogFormatter.FormatHttpRequestPrefix(logContext),
+                    request.Method,
+                    request.Path,
+                    response.StatusCode,
+                    elapsedMs);
+            }
+            else if (elapsedMs > SlowRequestThresholdMs)
+            {
+                TaktLogger.Warning(
+                    logContext,
+                    "{HttpPrefix}慢请求: {Method} {Path}, StatusCode={StatusCode}, Elapsed={ElapsedMs}ms",
+                    TaktLogFormatter.FormatHttpRequestPrefix(logContext),
+                    request.Method,
+                    request.Path,
+                    response.StatusCode,
+                    elapsedMs);
+            }
+            else if (isSignalRHubRequest)
+            {
+                TaktSignalRLogging.LogHubHttpCompleted(
+                    logContext,
+                    request.Method,
+                    pathValue,
+                    response.StatusCode,
+                    elapsedMs);
+            }
+            else
+            {
+                TaktLogger.Debug(
+                    logContext,
+                    "{HttpPrefix}HTTP 请求完成: {Method} {Path}, StatusCode={StatusCode}, Elapsed={ElapsedMs}ms",
+                    TaktLogFormatter.FormatHttpRequestPrefix(logContext),
+                    request.Method,
+                    request.Path,
+                    response.StatusCode,
+                    elapsedMs);
+            }
+
+            TaktSqlSugarAuditAop.TryPersistOperLog(
+                dbContext.Db,
+                context,
+                elapsedMs,
+                response.StatusCode,
+                requestBody);
+        }
+    }
+
+    /// <summary>
+    /// 读取可重复使用的请求体文本，供操作日志 <c>RequestParam</c> 字段使用
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <returns>
+    /// POST/PUT/PATCH 且存在请求体时的 UTF-8 文本；无正文或非写方法时返回 <see langword="null"/>。
+    /// 读取后会将 <see cref="HttpRequest.Body"/> 位置重置为 0，不影响后续模型绑定。
+    /// </returns>
+    private static async Task<string?> ReadRequestBodyAsync(HttpContext context)
+    {
+        var request = context.Request;
+        if (request.ContentLength is null or 0)
+        {
+            return null;
+        }
+
+        if (request.Method is not ("POST" or "PUT" or "PATCH"))
+        {
+            return null;
+        }
+
+        request.EnableBuffering();
+        request.Body.Position = 0;
+        using var reader = new StreamReader(request.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
+        var body = await reader.ReadToEndAsync();
+        request.Body.Position = 0;
+        return body;
+    }
+
+    /// <summary>
+    /// 判断当前请求是否为 SignalR Hub 相关 HTTP 流量（协商、WebSocket 升级等）
+    /// </summary>
+    /// <param name="path">请求路径（通常为 <see cref="PathString.Value"/>）</param>
+    /// <returns>路径包含 <c>/hubs/</c>（不区分大小写）时为 <see langword="true"/></returns>
+    private static bool IsSignalRHubRequest(string path)
+    {
+        return path.Contains("/hubs/", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 根据 HTTP 上下文构建单次请求的结构化日志上下文
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <param name="requestId">本次请求关联 ID（8 位十六进制，写入 <see cref="TaktLogContext.RequestId"/>）</param>
+    /// <returns>
+    /// 包含模块 <c>request</c>、动作 <c>http</c>、路由、客户端 IP、
+    /// <c>X-Tenant-Code</c> / <c>X-Company-Code</c> 请求头及当前用户标识的 <see cref="TaktLogContext"/>
+    /// </returns>
+    private static TaktLogContext BuildRequestContext(HttpContext context, string requestId)
+    {
+        var user = context.User;
+        return new TaktLogContext
+        {
+            Module = "request",
+            Action = "http",
+            RequestId = requestId,
+            Route = context.Request.Path.Value,
+            ClientIp = context.Connection.RemoteIpAddress?.ToString(),
+            TenantCode = context.Request.Headers["X-Tenant-Code"].FirstOrDefault(),
+            CompanyCode = context.Request.Headers["X-Company-Code"].FirstOrDefault(),
+            UserId = user.FindFirstValue(ClaimTypes.NameIdentifier),
+            Username = user.Identity?.Name
+        };
+    }
+}

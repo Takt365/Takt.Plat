@@ -1,0 +1,490 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Dtos.Logistics.Materials
+// 文件名称：TaktManufacturerMaterialDtos.cs
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：ManufacturerMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktManufacturerMaterial 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.ComponentModel.DataAnnotations;
+using Mapster;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models;
+
+namespace Takt.Application.Dtos.Logistics.Materials;
+
+// ========================================
+// ManufacturerMaterial 响应 DTO
+// ========================================
+
+/// <summary>
+/// Takt制造商物料明细实体
+/// 对应前端 TaktManufacturerMaterialDto
+/// 继承 TaktCompanyDtoBase
+/// </summary>
+public class TaktManufacturerMaterialDto : TaktCompanyDtoBase
+{
+    /// <summary>
+    /// ManufacturerMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ManufacturerMaterialId { get; set; }
+
+    /// <summary>
+    /// 制造商ID（关联TaktManufacturer主表）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ManufacturerId { get; set; }
+
+    /// <summary>
+    /// 制造商名称（填充字段）
+    /// </summary>
+    public string? ManufacturerName { get; set; }
+
+    /// <summary>
+    /// 制造商编码（冗余字段，便于查询）
+    /// </summary>
+    public string ManufacturerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
+    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// </summary>
+    public int MaterialType { get; set; } = 0;
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    public string ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料名称（制造商内部的物料名称）
+    /// </summary>
+    public string ManufacturerMaterialName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料规格
+    /// </summary>
+    public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（对应的内部物料编码）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+}
+
+// ========================================
+// ManufacturerMaterial 查询 DTO
+// ========================================
+
+/// <summary>
+/// ManufacturerMaterial 分页查询 DTO
+/// 继承 TaktPagedQuery
+/// </summary>
+public class TaktManufacturerMaterialQueryDto : TaktPagedQuery
+{
+    /// <summary>
+    /// 租户编码
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商ID（关联TaktManufacturer主表）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ManufacturerId { get; set; }
+
+    /// <summary>
+    /// 制造商编码（冗余字段，便于查询）
+    /// </summary>
+    public string? ManufacturerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// </summary>
+    public int? MaterialType { get; set; }
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料名称（制造商内部的物料名称）
+    /// </summary>
+    public string? ManufacturerMaterialName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料规格
+    /// </summary>
+    public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（对应的内部物料编码）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 创建时间（范围查询-开始）
+    /// </summary>
+    public DateTime? CreatedAtStart { get; set; }
+
+    /// <summary>
+    /// 创建时间（范围查询-结束）
+    /// </summary>
+    public DateTime? CreatedAtEnd { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注（模糊查询）
+    /// </summary>
+    public string? Remark { get; set; }
+}
+
+// ========================================
+// 创建ManufacturerMaterial DTO
+// ========================================
+
+/// <summary>
+/// 创建ManufacturerMaterial DTO
+/// </summary>
+public class TaktManufacturerMaterialCreateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商ID（关联TaktManufacturer主表）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ManufacturerId { get; set; }
+
+    /// <summary>
+    /// 制造商编码（冗余字段，便于查询）
+    /// </summary>
+    [Required(ErrorMessage = "制造商编码（冗余字段，便于查询）不能为空")]
+    public string ManufacturerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
+    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// </summary>
+    public int MaterialType { get; set; } = 0;
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    [Required(ErrorMessage = "制造商物料编码（制造商内部的物料编号）不能为空")]
+    public string ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料名称（制造商内部的物料名称）
+    /// </summary>
+    [Required(ErrorMessage = "制造商物料名称（制造商内部的物料名称）不能为空")]
+    public string ManufacturerMaterialName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料规格
+    /// </summary>
+    public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（对应的内部物料编码）
+    /// </summary>
+    [Required(ErrorMessage = "物料编码（对应的内部物料编码）不能为空")]
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 更新ManufacturerMaterial DTO
+// ========================================
+
+/// <summary>
+/// 更新ManufacturerMaterial DTO
+/// 继承 TaktManufacturerMaterialCreateDto，添加 ManufacturerMaterialId 字段
+/// </summary>
+public class TaktManufacturerMaterialUpdateDto : TaktManufacturerMaterialCreateDto
+{
+    /// <summary>
+    /// ManufacturerMaterialID（标识要更新的实体）
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ManufacturerMaterialId { get; set; }
+
+}
+
+// ========================================
+// 导入 DTO
+// ========================================
+
+/// <summary>
+/// ManufacturerMaterial 导入模板行 DTO
+/// </summary>
+public class TaktManufacturerMaterialTemplateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商ID（关联TaktManufacturer主表）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ManufacturerId { get; set; }
+
+    /// <summary>
+    /// 制造商编码（冗余字段，便于查询）
+    /// </summary>
+    public string? ManufacturerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// </summary>
+    public int? MaterialType { get; set; }
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料名称（制造商内部的物料名称）
+    /// </summary>
+    public string? ManufacturerMaterialName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料规格
+    /// </summary>
+    public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（对应的内部物料编码）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+/// <summary>
+/// ManufacturerMaterial 导入 DTO（独立实现，不继承 TemplateDto）
+/// </summary>
+public class TaktManufacturerMaterialImportDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商ID（关联TaktManufacturer主表）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ManufacturerId { get; set; }
+
+    /// <summary>
+    /// 制造商编码（冗余字段，便于查询）
+    /// </summary>
+    public string? ManufacturerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
+
+    /// <summary>
+    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// </summary>
+    public int? MaterialType { get; set; }
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    public string? ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料名称（制造商内部的物料名称）
+    /// </summary>
+    public string? ManufacturerMaterialName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料规格
+    /// </summary>
+    public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（对应的内部物料编码）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 导出 DTO
+// ========================================
+
+/// <summary>
+/// ManufacturerMaterial 导出 DTO（独立实现，不继承响应 Dto）
+/// </summary>
+public class TaktManufacturerMaterialExportDto
+{
+    /// <summary>
+    /// ManufacturerMaterialID
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ManufacturerMaterialId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商ID（关联TaktManufacturer主表）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ManufacturerId { get; set; }
+
+    /// <summary>
+    /// 制造商编码（冗余字段，便于查询）
+    /// </summary>
+    public string ManufacturerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 0;
+
+    /// <summary>
+    /// 物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）
+    /// </summary>
+    public int MaterialType { get; set; } = 0;
+
+    /// <summary>
+    /// 制造商物料编码（制造商内部的物料编号）
+    /// </summary>
+    public string ManufacturerMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料名称（制造商内部的物料名称）
+    /// </summary>
+    public string ManufacturerMaterialName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商物料规格
+    /// </summary>
+    public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（对应的内部物料编码）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtFieldJson { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
+}

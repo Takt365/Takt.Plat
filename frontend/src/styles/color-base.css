@@ -1,0 +1,133 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：color-base.css
+ * 创建时间：2026-05-26
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：标准色板（通用色 2、中国传统色 48、日本传统色 37、著名色 11）；各色值唯一
+ *
+ * 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+:root {
+  /* 通用色 */
+  --takt-white: #ffffff;
+  --takt-black: #000000;
+
+  /* 中国传统色系（48种） */
+  /* 红色系 */
+  --takt-cn-hong: #e60012; /* 1.大红 */
+  --takt-cn-zhujiao: #ff4c00; /* 2.朱红 */
+  --takt-cn-zhusha: #ff461f; /* 3.朱砂 */
+  --takt-cn-huohong: #ff2d51; /* 4.火红 */
+  --takt-cn-feise: #ed5736; /* 5.妃色 */
+  --takt-cn-taohong: #f47983; /* 6.桃红 */
+  --takt-cn-fenhong: #ffb3a7; /* 7.粉红 */
+  /* 橙色系 */
+  --takt-cn-chengse: #fa8c35; /* 8.橙色 */
+  --takt-cn-juhong: #f20c00; /* 9.橘红 */
+  --takt-cn-juhuang: #ff8936; /* 10.橘黄 */
+  --takt-cn-chengqian: #ffa400; /* 11.橙黄 */
+  --takt-cn-tangerine: #ffa631; /* 12.杏黄 */
+  --takt-cn-jujube: #c32136; /* 13.枣红 */
+  --takt-cn-honggan: #60281e; /* 14.栗色 */
+  /* 黄色系 */
+  --takt-cn-huangse: #fff143; /* 15.鹅黄 */
+  --takt-cn-yahuang: #faff72; /* 16.鸭黄 */
+  --takt-cn-shengqi: #eaff56; /* 17.樱草色 */
+  --takt-cn-jianghuang: #ffc773; /* 18.姜黄 */
+  --takt-cn-kuxiang: #f0c239; /* 19.缃色 */
+  --takt-cn-qiuhuang: #d9b611; /* 20.秋香色 */
+  /* 绿色系 */
+  --takt-cn-lvse: #00e500; /* 21.绿色 */
+  --takt-cn-caolv: #40de5a; /* 22.草绿 */
+  --takt-cn-nenlv: #bddd22; /* 23.嫩绿 */
+  --takt-cn-liulv: #afdd22; /* 24.柳绿 */
+  --takt-cn-conglv: #9ed900; /* 25.葱绿 */
+  --takt-cn-youlv: #00bc12; /* 26.油绿 */
+  --takt-cn-songbeilv: #21a675; /* 27.松柏绿 */
+  /* 青色系 */
+  --takt-cn-qingse: #00e09e; /* 28.青色 */
+  --takt-cn-cuiqing: #00e079; /* 29.青翠 */
+  --takt-cn-bise: #1bd1a5; /* 30.碧色 */
+  --takt-cn-qingbi: #48c0a3; /* 31.青碧 */
+  --takt-cn-feicui: #3de1ad; /* 32.翡翠色 */
+  --takt-cn-yunu: #e0eee8; /* 33.鸭卵青 */
+  --takt-cn-haikese: #88ada6; /* 34.水色 */
+  /* 蓝色系 */
+  --takt-cn-lanse: #44cef6; /* 35.蓝 */
+  --takt-cn-lanqing: #3eede7; /* 36.碧蓝 */
+  --takt-cn-weilan: #70f3ff; /* 37.蔚蓝 */
+  --takt-cn-baolan: #4b5cc4; /* 38.宝蓝 */
+  --takt-cn-dianqing: #177cb0; /* 39.靛青 */
+  --takt-cn-zangqing: #2e4e7e; /* 40.藏青 */
+  --takt-cn-yuebai: #d6ecf0; /* 41.月白 */
+  /* 紫色系 */
+  --takt-cn-zise: #8d4bbb; /* 42.紫色 */
+  --takt-cn-zijiang: #815463; /* 43.紫酱 */
+  --takt-cn-jiangzi: #815476; /* 44.酱紫 */
+  --takt-cn-zitan: #4c221b; /* 45.紫檀 */
+  --takt-cn-qinglian: #801dae; /* 46.青莲 */
+  --takt-cn-qunqing: #4c8dae; /* 47.群青 */
+  --takt-cn-xueqing: #b0a4e3; /* 48.雪青 */
+
+  /* 日本传统色系（37种） */
+  /* 红色系 */
+  --takt-jp-sakura: #fef4f4; /* 1.桜色 */
+  --takt-jp-momo: #f09199; /* 2.桃色 */
+  --takt-jp-beni: #eb6ea5; /* 3.赤紫 */
+  --takt-jp-koubai: #f2a0a1; /* 4.紅梅色 */
+  --takt-jp-iroha: #ee827c; /* 5.甚三紅 */
+  --takt-jp-kurenai: #b44c97; /* 6.紅藤色 */
+  --takt-jp-shoujou: #ec6d71; /* 7.真朱 */
+  /* 橙色系 */
+  --takt-jp-kouji: #d9a62e; /* 8.櫨染 */
+  --takt-jp-kogane: #e6b422; /* 9.黄金 */
+  --takt-jp-youkan: #cb8347; /* 10.紅鬱金 */
+  --takt-jp-kaki: #954e2a; /* 11.柿渋色 */
+  --takt-jp-hiwamochi: #d7cf3a; /* 12.鶸色 */
+  --takt-jp-momoji: #e95295; /* 13.躑躅色 */
+  /* 黄色系 */
+  --takt-jp-warabi: #d3a243; /* 14.黄朽葉色 */
+  --takt-jp-mame: #dccb18; /* 15.菜種油色 */
+  --takt-jp-uji: #f4b3c2; /* 16.鴇色 */
+  /* 绿色系 */
+  --takt-jp-moegi: #006e54; /* 17.萌葱色 */
+  --takt-jp-wakatake: #2a83a2; /* 18.花浅葱 */
+  --takt-jp-asagi: #00a3af; /* 19.浅葱色 */
+  --takt-jp-midori: #00a497; /* 20.青緑 */
+  --takt-jp-seigaiha: #478384; /* 21.青碧 */
+  --takt-jp-yamaume: #c89932; /* 22.山吹茶 */
+  /* 青色系 */
+  --takt-jp-mizu: #bce2e8; /* 23.水色 */
+  --takt-jp-mizuasagi: #80aba9; /* 24.水浅葱 */
+  --takt-jp-sora: #a0d8ef; /* 25.空色 */
+  --takt-jp-ao: #008899; /* 26.納戸色 */
+  --takt-jp-kon: #44617b; /* 27.紺 */
+  --takt-jp-gunjyo: #83ccd2; /* 28.白群 */
+  /* 紫色系 */
+  --takt-jp-murasaki: #895b8a; /* 29.古代紫 */
+  --takt-jp-wakamurasaki: #bc64a4; /* 30.若紫 */
+  --takt-jp-fujimurasaki: #cca6bf; /* 31.紅藤色 */
+  --takt-jp-usumurasaki: #c4a3bf; /* 32.浅紫 */
+  --takt-jp-shoubuiro: #9d5b8b; /* 33.京紫 */
+  --takt-jp-kikyou: #cc7eb1; /* 34.菖蒲色 */
+  /* 茶/灰色系 */
+  --takt-jp-chairo: #965042; /* 35.茶色 */
+  --takt-jp-kogecha: #b98c46; /* 36.黄唐茶 */
+  --takt-jp-nezumi: #888e7e; /* 37.利休鼠 */
+
+  /* 著名色彩（11种） */
+  --takt-mars-green: #2e8b57; /* 1.马尔斯绿 */
+  --takt-tiffany-blue: #00a0b0; /* 2.蒂芙尼蓝 */
+  --takt-chinese-red: #ff0000; /* 3.中国红 */
+  --takt-titian-red: #ff6347; /* 4.提香红 */
+  --takt-burgundy: #990033; /* 5.勃艮第红 */
+  --takt-bordeaux: #8c1515; /* 6.波尔多红 */
+  --takt-klein-blue: #002fa7; /* 7.克莱因蓝 */
+  --takt-van-dyke-brown: #4c2b18; /* 8.凡戴克棕 */
+  --takt-prussian-blue: #003153; /* 9.普鲁士蓝 */
+  --takt-sennelier-yellow: #f9dc24; /* 10.申布伦黄 */
+  --takt-memorial-gray: #808080; /* 11.纪念灰 */
+}

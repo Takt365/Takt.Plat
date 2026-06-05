@@ -1,0 +1,302 @@
+/* 通用交互规则（配色见 button-base.css @takt-generated variants） */
+
+/* ---------- 操作列下拉：字色 / hover（与 plain-borderless 同源 --takt-btn-tone） ---------- */
+.takt-action-column-dropdown-menu [class*='takt-button-'].ant-menu-item,
+.takt-action-column-dropdown [class*='takt-button-'].ant-menu-item,
+.takt-action-column-dropdown-menu [class*='takt-button-'].ant-dropdown-menu-item,
+.takt-action-column-dropdown [class*='takt-button-'].ant-dropdown-menu-item {
+  color: var(--takt-btn-tone) !important;
+}
+
+.takt-action-column-dropdown-menu [class*='takt-button-'].ant-menu-item:is(:hover, .ant-menu-item-active):not(.ant-menu-item-disabled),
+.takt-action-column-dropdown [class*='takt-button-'].ant-menu-item:is(:hover, .ant-menu-item-active):not(.ant-menu-item-disabled),
+.takt-action-column-dropdown-menu [class*='takt-button-'].ant-dropdown-menu-item:hover:not(.ant-dropdown-menu-item-disabled),
+.takt-action-column-dropdown [class*='takt-button-'].ant-dropdown-menu-item:hover:not(.ant-dropdown-menu-item-disabled) {
+  background-color: var(--takt-btn-tone) !important;
+  color: var(--takt-btn-fg-solid) !important;
+}
+
+.takt-action-column-dropdown-menu [class*='takt-button-'].ant-menu-item:is(:hover, .ant-menu-item-active):not(.ant-menu-item-disabled) :is(i, svg, .anticon),
+.takt-action-column-dropdown [class*='takt-button-'].ant-menu-item:is(:hover, .ant-menu-item-active):not(.ant-menu-item-disabled) :is(i, svg, .anticon) {
+  color: var(--takt-btn-fg-solid) !important;
+}
+
+.takt-action-column-dropdown-menu [class*='takt-button-'].ant-menu-item :is(i, svg, .anticon),
+.takt-action-column-dropdown [class*='takt-button-'].ant-menu-item :is(i, svg, .anticon) {
+  color: currentColor;
+}
+
+/* ---------- 基础布局与过渡 ---------- */
+[class*='takt-button-'],
+.takt-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+[class*='takt-button-']:is(:focus, :focus-visible, :active) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+[class*='takt-button-'] :is(> .anticon, > span.anticon, > span:has(svg):not(.anticon), > i[class*='ri-'], .anticon, i[class*='ri-'], [class*='icon']:not(.anticon), [class*='Icon']:not(.anticon)) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+  line-height: 1;
+  vertical-align: middle;
+  font-size: inherit;
+}
+
+[class*='takt-button-'] svg:not(.anticon svg) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: 1em !important;
+  height: 1em !important;
+  max-width: 1em !important;
+  max-height: 1em !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  vertical-align: -0.125em !important;
+  font-size: inherit !important;
+}
+
+[class*='takt-button-'] > span:not(:empty):not(.anticon) {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  margin: 0;
+}
+
+.takt-button-empty-arrow {
+  margin-left: 2px;
+  font-size: 12px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+/* ---------- 实心（hover 5% / active 10%） ---------- */
+.ant-btn[class*='takt-button-']:not(.takt-button-plain, .takt-button-plain-borderless, .ant-btn-text, .ant-btn-link, .ant-btn-ghost),
+.ant-btn[class*='takt-button-'].ant-btn-primary:not(.takt-button-plain, .takt-button-plain-borderless, .ant-btn-text, .ant-btn-link, .ant-btn-ghost) {
+  background-color: var(--takt-btn-bg);
+  border-color: var(--takt-btn-border);
+  color: var(--takt-btn-fg);
+}
+
+.ant-btn[class*='takt-button-']:not(.takt-button-plain, .takt-button-plain-borderless, .ant-btn-text, .ant-btn-link, .ant-btn-ghost):is(:hover, :focus, :focus-visible):not(:disabled, .ant-btn-disabled, .ant-btn-loading),
+.ant-btn[class*='takt-button-'].ant-btn-primary:not(.takt-button-plain, .takt-button-plain-borderless, .ant-btn-text, .ant-btn-link, .ant-btn-ghost):is(:hover, :focus, :focus-visible):not(:disabled, .ant-btn-disabled, .ant-btn-loading) {
+  background-color: color-mix(in srgb, var(--takt-btn-bg), black 5%);
+  border-color: color-mix(in srgb, var(--takt-btn-border), black 5%);
+  color: var(--takt-btn-fg);
+}
+
+.ant-btn[class*='takt-button-']:not(.takt-button-plain, .takt-button-plain-borderless, .ant-btn-text, .ant-btn-link, .ant-btn-ghost):active:not(:disabled, .ant-btn-disabled, .ant-btn-loading),
+.ant-btn[class*='takt-button-'].ant-btn-primary:not(.takt-button-plain, .takt-button-plain-borderless, .ant-btn-text, .ant-btn-link, .ant-btn-ghost):active:not(:disabled, .ant-btn-disabled, .ant-btn-loading) {
+  background-color: color-mix(in srgb, var(--takt-btn-bg), black 10%);
+  border-color: color-mix(in srgb, var(--takt-btn-border), black 10%);
+  color: var(--takt-btn-fg);
+}
+
+/* ---------- 实心禁用 / 加载 ---------- */
+.ant-btn[class*='takt-button-']:is(:disabled, .ant-btn-disabled) {
+  cursor: not-allowed !important;
+  border-color: var(--takt-btn-disabled-border) !important;
+  color: var(--takt-btn-disabled-color) !important;
+  background-color: var(--takt-btn-disabled-bg) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  outline: none !important;
+}
+
+[data-theme='dark'] .ant-btn[class*='takt-button-']:is(:disabled, .ant-btn-disabled),
+[data-doc-theme='dark'] .ant-btn[class*='takt-button-']:is(:disabled, .ant-btn-disabled) {
+  border-color: var(--takt-btn-disabled-border-dark) !important;
+  color: var(--takt-btn-disabled-color-dark) !important;
+  background-color: var(--takt-btn-disabled-bg-dark) !important;
+}
+
+[class*='takt-button-'].ant-btn-loading {
+  cursor: wait;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* ---------- Plain / Text / Link / Ghost ---------- */
+.ant-btn[class*='takt-button-']:is(.takt-button-plain, .ant-btn-text, .ant-btn-link, .ant-btn-ghost),
+.takt-button-plain,
+[class*='takt-button-'].takt-button-plain {
+  background-color: transparent !important;
+  border: 1px solid currentColor !important;
+  border-color: var(--takt-btn-tone) !important;
+  color: var(--takt-btn-tone) !important;
+}
+
+.ant-btn[class*='takt-button-']:is(.takt-button-plain, .ant-btn-text, .ant-btn-link, .ant-btn-ghost):is(:hover, :focus, :focus-visible, :active):not(:disabled, .ant-btn-disabled, .ant-btn-loading) {
+  background-color: var(--takt-btn-tone) !important;
+  border-color: var(--takt-btn-tone) !important;
+  border-width: 1px !important;
+  color: var(--takt-btn-fg-solid) !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.ant-btn[class*='takt-button-']:is(.takt-button-plain, .ant-btn-text, .ant-btn-link, .ant-btn-ghost):is(:disabled, .ant-btn-disabled),
+.takt-button-plain:is(:disabled, .ant-btn-disabled),
+[class*='takt-button-'].takt-button-plain:is(:disabled, .ant-btn-disabled) {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+  pointer-events: none;
+  background-color: transparent !important;
+}
+
+.ant-btn[class*='takt-button-']:is(.takt-button-plain, .ant-btn-text, .ant-btn-link, .ant-btn-ghost).ant-btn-loading,
+[class*='takt-button-'].takt-button-plain.ant-btn-loading {
+  cursor: wait;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+[class*='takt-button-'].takt-button-plain.takt-button-plain-icon-only {
+  padding: 0;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  gap: 0;
+  background-color: transparent !important;
+  border: 1px solid currentColor !important;
+  border-color: var(--takt-btn-tone) !important;
+}
+
+[class*='takt-button-'].takt-button-plain.takt-button-plain-icon-only.ant-btn-lg {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+[class*='takt-button-'].takt-button-plain.takt-button-plain-icon-only.ant-btn-sm {
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- Plain-borderless（操作列） ---------- */
+.ant-btn[class*='takt-button-'].takt-button-plain-borderless,
+[class*='takt-button-'].takt-button-plain-borderless {
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  color: var(--takt-btn-tone) !important;
+  gap: 8px;
+}
+
+.ant-btn[class*='takt-button-'].takt-button-plain-borderless:is(:hover, :focus, :focus-visible, :active):not(:disabled, .ant-btn-disabled, .ant-btn-loading) {
+  background-color: var(--takt-btn-tone) !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+  color: var(--takt-btn-fg-solid) !important;
+  outline: none;
+  box-shadow: none;
+}
+
+[class*='takt-button-'].takt-button-plain-borderless.takt-button-plain-icon-only {
+  padding: 0;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  gap: 0;
+}
+
+[class*='takt-button-'].takt-button-plain-borderless.takt-button-plain-icon-only.ant-btn-lg {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+[class*='takt-button-'].takt-button-plain-borderless.takt-button-plain-icon-only.ant-btn-sm {
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.ant-btn[class*='takt-button-'].takt-button-plain-borderless:is(:disabled, .ant-btn-disabled),
+[class*='takt-button-'].takt-button-plain-borderless:is(:disabled, .ant-btn-disabled) {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+  pointer-events: none;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.ant-btn[class*='takt-button-'].takt-button-plain-borderless.ant-btn-loading,
+[class*='takt-button-'].takt-button-plain-borderless.ant-btn-loading {
+  cursor: wait;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+[class*='takt-button-'].takt-button-plain-borderless:not(:hover, :active, :focus, :focus-visible),
+[class*='takt-button-'].takt-button-plain-borderless:is(.ant-btn-primary, .ant-btn-default, .ant-btn-dashed):not(:hover, :active, :focus, :focus-visible) {
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+}
+
+/* ---------- Circle / Round ---------- */
+[class*='takt-button-'].ant-btn-circle {
+  border-radius: 50%;
+  min-width: 32px;
+  padding: 0;
+}
+
+[class*='takt-button-'].ant-btn-circle.ant-btn-lg {
+  min-width: 40px;
+}
+
+[class*='takt-button-'].ant-btn-circle.ant-btn-sm {
+  min-width: 24px;
+}
+
+[class*='takt-button-'].takt-button-circle {
+  padding: 0;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  gap: 0;
+}
+
+[class*='takt-button-'].takt-button-circle.ant-btn-lg {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+[class*='takt-button-'].takt-button-circle.ant-btn-sm {
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+[class*='takt-button-'].ant-btn-round {
+  border-radius: 32px;
+}
+
+[class*='takt-button-'].takt-button-circle :is(.anticon, svg, [class*='icon'], [class*='Icon']) {
+  margin: 0;
+}
+
+[class*='takt-button-'].takt-button-circle > span {
+  display: none !important;
+}

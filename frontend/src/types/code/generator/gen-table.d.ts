@@ -1,0 +1,1258 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/types/code/generator
+// 文件名称：gen-table.d.ts
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：code/generator 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type {
+  TaktPagedQuery,
+  TenantDtoBase
+} from '@/types/common';
+
+/**
+ * Takt代码生成表配置实体
+ * 对应前端 TaktGenTableDto
+ * 继承 TaktTenantDtoBase
+ * 对应前端 GenTable
+ * @description 对应后端 TaktGenTableDto
+ */
+export interface GenTable extends TenantDtoBase {
+  /**
+   * GenTableID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  genTableId: string;
+
+  /**
+   * 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
+   */
+  dataSource: string;
+
+  /**
+   * 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
+   */
+  tableName: string;
+
+  /**
+   * 表描述（表注释）
+   */
+  tableComment?: string;
+
+  /**
+   * 关联父表名（用于主子表）
+   */
+  subTableName?: string;
+
+  /**
+   * 本表关联父表的外键名（用于主子表）
+   */
+  subTableFkName?: string;
+
+  /**
+   * 树编码字段（用于树形结构）
+   */
+  treeCode?: string;
+
+  /**
+   * 树父编码字段（用于树形结构）
+   */
+  treeParentCode?: string;
+
+  /**
+   * 树名称字段（用于树形结构）
+   */
+  treeName?: string;
+
+  /**
+   * 是否在数据库中（1=是库表，0=不是库表）
+   */
+  inDatabase: number;
+
+  /**
+   * 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
+   */
+  genTemplateCategory: string;
+
+  /**
+   * 模块名（功能模块名称）
+   */
+  genModuleName?: string;
+
+  /**
+   * 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
+   */
+  genBusinessName: string;
+
+  /**
+   * 功能名（用于接口与注释的中文名称，如：公司、部门）
+   */
+  genFunctionName?: string;
+
+  /**
+   * 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
+   */
+  permsPrefix: string;
+
+  /**
+   * 菜单权限组
+   */
+  menuButtonGroup?: string;
+
+  /**
+   * 命名空间前缀（用于生成类名、方法名等的前缀）
+   */
+  namePrefix?: string;
+
+  /**
+   * 实体命名空间（默认当前项目：Takt.Domain.Entities）
+   */
+  entityNamespace?: string;
+
+  /**
+   * 实体类名称（首字母大写，驼峰命名）
+   */
+  entityClassName: string;
+
+  /**
+   * 传输对象Dto命名空间（默认当前项目：Takt.Application.Dtos）
+   */
+  dtoNamespace?: string;
+
+  /**
+   * 传输对象 Dto 类名
+   */
+  dtoClassName?: string;
+
+  /**
+   * 服务命名空间（默认当前项目：Takt.Application.Services）
+   */
+  serviceNamespace?: string;
+
+  /**
+   * 服务接口类名称
+   */
+  iServiceClassName?: string;
+
+  /**
+   * 服务类名称
+   */
+  serviceClassName?: string;
+
+  /**
+   * 控制器命名空间（默认当前项目：Takt.WebApi.Controllers）
+   */
+  controllerNamespace?: string;
+
+  /**
+   * 控制器类名称
+   */
+  controllerClassName?: string;
+
+  /**
+   * 是否生成仓储层（1=是，0=否）
+   */
+  isRepository: number;
+
+  /**
+   * 仓储接口命名空间（默认当前项目：Takt.Domain.Repositories）
+   */
+  repositoryInterfaceNamespace?: string;
+
+  /**
+   * 仓储接口类名称
+   */
+  iRepositoryClassName?: string;
+
+  /**
+   * 仓储命名空间（默认当前项目：Takt.Infrastructure.Repositories）
+   */
+  repositoryNamespace?: string;
+
+  /**
+   * 仓储类名称
+   */
+  repositoryClassName?: string;
+
+  /**
+   * 生成功能，JSON 格式。对象形式：{"查看":"View","新增":"Create","更新":"Update","删除":"Delete",...}，键为中文功能名、值为英文标识；也支持数组 ["查询","新增",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>
+   */
+  genFunction?: string;
+
+  /**
+   * 生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）
+   */
+  genMethod: number;
+
+  /**
+   * 生成路径（默认为项目根目录）
+   */
+  genPath: string;
+
+  /**
+   * 是否生成菜单（1=是，0=否）
+   */
+  isGenMenu: number;
+
+  /**
+   * 上级菜单ID
+   */
+  parentMenuId: string;
+
+  /**
+   * 上级菜单名称（填充字段）
+   */
+  parentMenuName?: string;
+
+  /**
+   * 是否生成翻译（1=是，0=否）
+   */
+  isGenTranslation: number;
+
+  /**
+   * 排序字段
+   */
+  sortField: string;
+
+  /**
+   * 排序类型（asc=升序，desc=降序）
+   */
+  sortType: string;
+
+  /**
+   * 前端UI框架（1=element plus，2=ant design vue）
+   */
+  frontUi: number;
+
+  /**
+   * 前端表单布局（12=一行一列，24=一行两列）
+   */
+  frontFormLayout: number;
+
+  /**
+   * 前端操作按钮样式（0=文本，1=标准）
+   */
+  frontBtnStyle: number;
+
+  /**
+   * 是否生成代码（1=是，0=否）
+   */
+  isGenCode: number;
+
+  /**
+   * 代码生成次数（每次生成成功后自增）
+   */
+  genCodeCount: number;
+
+  /**
+   * 是否使用tabs（1=是，0=否）
+   */
+  isUseTabs: number;
+
+  /**
+   * tabs标签中字段的数量
+   */
+  tabsFieldCount: number;
+
+  /**
+   * 作者
+   */
+  genAuthor: string;
+
+  /**
+   * 其他生成选项（JSON格式，存储其他生成配置）
+   */
+  otherGenOptions?: string;
+
+  /**
+   * 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id） （子表：TaktGenTableColumn）
+   */
+  columns?: GenTableColumn[];
+
+}
+
+
+/**
+ * GenTable 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 GenTableQuery
+ * @description 对应后端 TaktGenTableQueryDto
+ */
+export interface GenTableQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
+   */
+  dataSource?: string;
+
+  /**
+   * 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
+   */
+  tableName?: string;
+
+  /**
+   * 表描述（表注释）
+   */
+  tableComment?: string;
+
+  /**
+   * 关联父表名（用于主子表）
+   */
+  subTableName?: string;
+
+  /**
+   * 本表关联父表的外键名（用于主子表）
+   */
+  subTableFkName?: string;
+
+  /**
+   * 树编码字段（用于树形结构）
+   */
+  treeCode?: string;
+
+  /**
+   * 树父编码字段（用于树形结构）
+   */
+  treeParentCode?: string;
+
+  /**
+   * 树名称字段（用于树形结构）
+   */
+  treeName?: string;
+
+  /**
+   * 是否在数据库中（1=是库表，0=不是库表）
+   */
+  inDatabase?: number;
+
+  /**
+   * 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
+   */
+  genTemplateCategory?: string;
+
+  /**
+   * 模块名（功能模块名称）
+   */
+  genModuleName?: string;
+
+  /**
+   * 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
+   */
+  genBusinessName?: string;
+
+  /**
+   * 功能名（用于接口与注释的中文名称，如：公司、部门）
+   */
+  genFunctionName?: string;
+
+  /**
+   * 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
+   */
+  permsPrefix?: string;
+
+  /**
+   * 菜单权限组
+   */
+  menuButtonGroup?: string;
+
+  /**
+   * 命名空间前缀（用于生成类名、方法名等的前缀）
+   */
+  namePrefix?: string;
+
+  /**
+   * 实体命名空间（默认当前项目：Takt.Domain.Entities）
+   */
+  entityNamespace?: string;
+
+  /**
+   * 实体类名称（首字母大写，驼峰命名）
+   */
+  entityClassName?: string;
+
+  /**
+   * 传输对象Dto命名空间（默认当前项目：Takt.Application.Dtos）
+   */
+  dtoNamespace?: string;
+
+  /**
+   * 传输对象 Dto 类名
+   */
+  dtoClassName?: string;
+
+  /**
+   * 服务命名空间（默认当前项目：Takt.Application.Services）
+   */
+  serviceNamespace?: string;
+
+  /**
+   * 服务接口类名称
+   */
+  iServiceClassName?: string;
+
+  /**
+   * 服务类名称
+   */
+  serviceClassName?: string;
+
+  /**
+   * 控制器命名空间（默认当前项目：Takt.WebApi.Controllers）
+   */
+  controllerNamespace?: string;
+
+  /**
+   * 控制器类名称
+   */
+  controllerClassName?: string;
+
+  /**
+   * 是否生成仓储层（1=是，0=否）
+   */
+  isRepository?: number;
+
+  /**
+   * 仓储接口命名空间（默认当前项目：Takt.Domain.Repositories）
+   */
+  repositoryInterfaceNamespace?: string;
+
+  /**
+   * 仓储接口类名称
+   */
+  iRepositoryClassName?: string;
+
+  /**
+   * 仓储命名空间（默认当前项目：Takt.Infrastructure.Repositories）
+   */
+  repositoryNamespace?: string;
+
+  /**
+   * 仓储类名称
+   */
+  repositoryClassName?: string;
+
+  /**
+   * 生成功能，JSON 格式。对象形式：{"查看":"View","新增":"Create","更新":"Update","删除":"Delete",...}，键为中文功能名、值为英文标识；也支持数组 ["查询","新增",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>
+   */
+  genFunction?: string;
+
+  /**
+   * 生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）
+   */
+  genMethod?: number;
+
+  /**
+   * 生成路径（默认为项目根目录）
+   */
+  genPath?: string;
+
+  /**
+   * 是否生成菜单（1=是，0=否）
+   */
+  isGenMenu?: number;
+
+  /**
+   * 上级菜单ID
+   */
+  parentMenuId?: string;
+
+  /**
+   * 是否生成翻译（1=是，0=否）
+   */
+  isGenTranslation?: number;
+
+  /**
+   * 排序字段
+   */
+  sortField?: string;
+
+  /**
+   * 排序类型（asc=升序，desc=降序）
+   */
+  sortType?: string;
+
+  /**
+   * 前端UI框架（1=element plus，2=ant design vue）
+   */
+  frontUi?: number;
+
+  /**
+   * 前端表单布局（12=一行一列，24=一行两列）
+   */
+  frontFormLayout?: number;
+
+  /**
+   * 前端操作按钮样式（0=文本，1=标准）
+   */
+  frontBtnStyle?: number;
+
+  /**
+   * 是否生成代码（1=是，0=否）
+   */
+  isGenCode?: number;
+
+  /**
+   * 代码生成次数（每次生成成功后自增）
+   */
+  genCodeCount?: number;
+
+  /**
+   * 是否使用tabs（1=是，0=否）
+   */
+  isUseTabs?: number;
+
+  /**
+   * tabs标签中字段的数量
+   */
+  tabsFieldCount?: number;
+
+  /**
+   * 作者
+   */
+  genAuthor?: string;
+
+  /**
+   * 其他生成选项（JSON格式，存储其他生成配置）
+   */
+  otherGenOptions?: string;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建GenTable DTO
+ * 对应前端 GenTableCreate
+ * @description 对应后端 TaktGenTableCreateDto
+ */
+export interface GenTableCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
+   */
+  dataSource: string;
+
+  /**
+   * 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
+   */
+  tableName: string;
+
+  /**
+   * 表描述（表注释）
+   */
+  tableComment?: string;
+
+  /**
+   * 关联父表名（用于主子表）
+   */
+  subTableName?: string;
+
+  /**
+   * 本表关联父表的外键名（用于主子表）
+   */
+  subTableFkName?: string;
+
+  /**
+   * 树编码字段（用于树形结构）
+   */
+  treeCode?: string;
+
+  /**
+   * 树父编码字段（用于树形结构）
+   */
+  treeParentCode?: string;
+
+  /**
+   * 树名称字段（用于树形结构）
+   */
+  treeName?: string;
+
+  /**
+   * 是否在数据库中（1=是库表，0=不是库表）
+   */
+  inDatabase: number;
+
+  /**
+   * 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
+   */
+  genTemplateCategory: string;
+
+  /**
+   * 模块名（功能模块名称）
+   */
+  genModuleName?: string;
+
+  /**
+   * 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
+   */
+  genBusinessName: string;
+
+  /**
+   * 功能名（用于接口与注释的中文名称，如：公司、部门）
+   */
+  genFunctionName?: string;
+
+  /**
+   * 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
+   */
+  permsPrefix: string;
+
+  /**
+   * 菜单权限组
+   */
+  menuButtonGroup?: string;
+
+  /**
+   * 命名空间前缀（用于生成类名、方法名等的前缀）
+   */
+  namePrefix?: string;
+
+  /**
+   * 实体命名空间（默认当前项目：Takt.Domain.Entities）
+   */
+  entityNamespace?: string;
+
+  /**
+   * 实体类名称（首字母大写，驼峰命名）
+   */
+  entityClassName: string;
+
+  /**
+   * 传输对象Dto命名空间（默认当前项目：Takt.Application.Dtos）
+   */
+  dtoNamespace?: string;
+
+  /**
+   * 传输对象 Dto 类名
+   */
+  dtoClassName?: string;
+
+  /**
+   * 服务命名空间（默认当前项目：Takt.Application.Services）
+   */
+  serviceNamespace?: string;
+
+  /**
+   * 服务接口类名称
+   */
+  iServiceClassName?: string;
+
+  /**
+   * 服务类名称
+   */
+  serviceClassName?: string;
+
+  /**
+   * 控制器命名空间（默认当前项目：Takt.WebApi.Controllers）
+   */
+  controllerNamespace?: string;
+
+  /**
+   * 控制器类名称
+   */
+  controllerClassName?: string;
+
+  /**
+   * 是否生成仓储层（1=是，0=否）
+   */
+  isRepository: number;
+
+  /**
+   * 仓储接口命名空间（默认当前项目：Takt.Domain.Repositories）
+   */
+  repositoryInterfaceNamespace?: string;
+
+  /**
+   * 仓储接口类名称
+   */
+  iRepositoryClassName?: string;
+
+  /**
+   * 仓储命名空间（默认当前项目：Takt.Infrastructure.Repositories）
+   */
+  repositoryNamespace?: string;
+
+  /**
+   * 仓储类名称
+   */
+  repositoryClassName?: string;
+
+  /**
+   * 生成功能，JSON 格式。对象形式：{"查看":"View","新增":"Create","更新":"Update","删除":"Delete",...}，键为中文功能名、值为英文标识；也支持数组 ["查询","新增",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>
+   */
+  genFunction?: string;
+
+  /**
+   * 生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）
+   */
+  genMethod: number;
+
+  /**
+   * 生成路径（默认为项目根目录）
+   */
+  genPath: string;
+
+  /**
+   * 是否生成菜单（1=是，0=否）
+   */
+  isGenMenu: number;
+
+  /**
+   * 上级菜单ID
+   */
+  parentMenuId: string;
+
+  /**
+   * 是否生成翻译（1=是，0=否）
+   */
+  isGenTranslation: number;
+
+  /**
+   * 排序字段
+   */
+  sortField: string;
+
+  /**
+   * 排序类型（asc=升序，desc=降序）
+   */
+  sortType: string;
+
+  /**
+   * 前端UI框架（1=element plus，2=ant design vue）
+   */
+  frontUi: number;
+
+  /**
+   * 前端表单布局（12=一行一列，24=一行两列）
+   */
+  frontFormLayout: number;
+
+  /**
+   * 前端操作按钮样式（0=文本，1=标准）
+   */
+  frontBtnStyle: number;
+
+  /**
+   * 是否生成代码（1=是，0=否）
+   */
+  isGenCode: number;
+
+  /**
+   * 代码生成次数（每次生成成功后自增）
+   */
+  genCodeCount: number;
+
+  /**
+   * 是否使用tabs（1=是，0=否）
+   */
+  isUseTabs: number;
+
+  /**
+   * tabs标签中字段的数量
+   */
+  tabsFieldCount: number;
+
+  /**
+   * 作者
+   */
+  genAuthor: string;
+
+  /**
+   * 其他生成选项（JSON格式，存储其他生成配置）
+   */
+  otherGenOptions?: string;
+
+  /**
+   * 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存）
+   */
+  columns?: GenTableColumnCreate[];
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新GenTable DTO
+ * 继承 TaktGenTableCreateDto，添加 GenTableId 字段
+ * 对应前端 GenTableUpdate
+ * @description 对应后端 TaktGenTableUpdateDto
+ */
+export interface GenTableUpdate extends GenTableCreate {
+  /**
+   * GenTableID（标识要更新的实体）
+   */
+  genTableId: string;
+
+}
+
+
+/**
+ * GenTable 导入模板行 DTO
+ * 对应前端 GenTableTemplate
+ * @description 对应后端 TaktGenTableTemplateDto
+ */
+export interface GenTableTemplate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
+   */
+  dataSource?: string;
+
+  /**
+   * 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
+   */
+  tableName?: string;
+
+  /**
+   * 表描述（表注释）
+   */
+  tableComment?: string;
+
+  /**
+   * 关联父表名（用于主子表）
+   */
+  subTableName?: string;
+
+  /**
+   * 本表关联父表的外键名（用于主子表）
+   */
+  subTableFkName?: string;
+
+  /**
+   * 树编码字段（用于树形结构）
+   */
+  treeCode?: string;
+
+  /**
+   * 树父编码字段（用于树形结构）
+   */
+  treeParentCode?: string;
+
+  /**
+   * 树名称字段（用于树形结构）
+   */
+  treeName?: string;
+
+  /**
+   * 是否在数据库中（1=是库表，0=不是库表）
+   */
+  inDatabase?: number;
+
+  /**
+   * 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
+   */
+  genTemplateCategory?: string;
+
+  /**
+   * 模块名（功能模块名称）
+   */
+  genModuleName?: string;
+
+  /**
+   * 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
+   */
+  genBusinessName?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * GenTable 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 GenTableImport
+ * @description 对应后端 TaktGenTableImportDto
+ */
+export interface GenTableImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
+   */
+  dataSource?: string;
+
+  /**
+   * 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
+   */
+  tableName?: string;
+
+  /**
+   * 表描述（表注释）
+   */
+  tableComment?: string;
+
+  /**
+   * 关联父表名（用于主子表）
+   */
+  subTableName?: string;
+
+  /**
+   * 本表关联父表的外键名（用于主子表）
+   */
+  subTableFkName?: string;
+
+  /**
+   * 树编码字段（用于树形结构）
+   */
+  treeCode?: string;
+
+  /**
+   * 树父编码字段（用于树形结构）
+   */
+  treeParentCode?: string;
+
+  /**
+   * 树名称字段（用于树形结构）
+   */
+  treeName?: string;
+
+  /**
+   * 是否在数据库中（1=是库表，0=不是库表）
+   */
+  inDatabase?: number;
+
+  /**
+   * 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
+   */
+  genTemplateCategory?: string;
+
+  /**
+   * 模块名（功能模块名称）
+   */
+  genModuleName?: string;
+
+  /**
+   * 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
+   */
+  genBusinessName?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * GenTable 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 GenTableExport
+ * @description 对应后端 TaktGenTableExportDto
+ */
+export interface GenTableExport {
+  /**
+   * GenTableID
+   */
+  genTableId: string;
+
+  /**
+   * 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
+   */
+  dataSource: string;
+
+  /**
+   * 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
+   */
+  tableName: string;
+
+  /**
+   * 表描述（表注释）
+   */
+  tableComment?: string;
+
+  /**
+   * 关联父表名（用于主子表）
+   */
+  subTableName?: string;
+
+  /**
+   * 本表关联父表的外键名（用于主子表）
+   */
+  subTableFkName?: string;
+
+  /**
+   * 树编码字段（用于树形结构）
+   */
+  treeCode?: string;
+
+  /**
+   * 树父编码字段（用于树形结构）
+   */
+  treeParentCode?: string;
+
+  /**
+   * 树名称字段（用于树形结构）
+   */
+  treeName?: string;
+
+  /**
+   * 是否在数据库中（1=是库表，0=不是库表）
+   */
+  inDatabase: number;
+
+  /**
+   * 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
+   */
+  genTemplateCategory: string;
+
+  /**
+   * 模块名（功能模块名称）
+   */
+  genModuleName?: string;
+
+  /**
+   * 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
+   */
+  genBusinessName: string;
+
+  /**
+   * 功能名（用于接口与注释的中文名称，如：公司、部门）
+   */
+  genFunctionName?: string;
+
+  /**
+   * 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
+   */
+  permsPrefix: string;
+
+  /**
+   * 菜单权限组
+   */
+  menuButtonGroup?: string;
+
+  /**
+   * 命名空间前缀（用于生成类名、方法名等的前缀）
+   */
+  namePrefix?: string;
+
+  /**
+   * 实体命名空间（默认当前项目：Takt.Domain.Entities）
+   */
+  entityNamespace?: string;
+
+  /**
+   * 实体类名称（首字母大写，驼峰命名）
+   */
+  entityClassName: string;
+
+  /**
+   * 传输对象Dto命名空间（默认当前项目：Takt.Application.Dtos）
+   */
+  dtoNamespace?: string;
+
+  /**
+   * 传输对象 Dto 类名
+   */
+  dtoClassName?: string;
+
+  /**
+   * 服务命名空间（默认当前项目：Takt.Application.Services）
+   */
+  serviceNamespace?: string;
+
+  /**
+   * 服务接口类名称
+   */
+  iServiceClassName?: string;
+
+  /**
+   * 服务类名称
+   */
+  serviceClassName?: string;
+
+  /**
+   * 控制器命名空间（默认当前项目：Takt.WebApi.Controllers）
+   */
+  controllerNamespace?: string;
+
+  /**
+   * 控制器类名称
+   */
+  controllerClassName?: string;
+
+  /**
+   * 是否生成仓储层（1=是，0=否）
+   */
+  isRepository: number;
+
+  /**
+   * 仓储接口命名空间（默认当前项目：Takt.Domain.Repositories）
+   */
+  repositoryInterfaceNamespace?: string;
+
+  /**
+   * 仓储接口类名称
+   */
+  iRepositoryClassName?: string;
+
+  /**
+   * 仓储命名空间（默认当前项目：Takt.Infrastructure.Repositories）
+   */
+  repositoryNamespace?: string;
+
+  /**
+   * 仓储类名称
+   */
+  repositoryClassName?: string;
+
+  /**
+   * 生成功能，JSON 格式。对象形式：{"查看":"View","新增":"Create","更新":"Update","删除":"Delete",...}，键为中文功能名、值为英文标识；也支持数组 ["查询","新增",...] 或逗号分隔。 <para><b>核心设计</b>：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：</para> <para>- Query → QueryDto（查询传输对象）</para> <para>- Create → CreateDto（创建传输对象）</para> <para>- Update → UpdateDto（更新传输对象）</para> <para>- Status → StatusDto（状态传输对象）</para> <para>- Sort → SortDto（排序传输对象）</para> <para>- Import → TemplateDto + ImportDto（模板+导入传输对象）</para> <para>- Export → ExportDto（导出传输对象）</para> <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>
+   */
+  genFunction?: string;
+
+  /**
+   * 生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）
+   */
+  genMethod: number;
+
+  /**
+   * 生成路径（默认为项目根目录）
+   */
+  genPath: string;
+
+  /**
+   * 是否生成菜单（1=是，0=否）
+   */
+  isGenMenu: number;
+
+  /**
+   * 上级菜单ID
+   */
+  parentMenuId: string;
+
+  /**
+   * 是否生成翻译（1=是，0=否）
+   */
+  isGenTranslation: number;
+
+  /**
+   * 排序字段
+   */
+  sortField: string;
+
+  /**
+   * 排序类型（asc=升序，desc=降序）
+   */
+  sortType: string;
+
+  /**
+   * 前端UI框架（1=element plus，2=ant design vue）
+   */
+  frontUi: number;
+
+  /**
+   * 前端表单布局（12=一行一列，24=一行两列）
+   */
+  frontFormLayout: number;
+
+  /**
+   * 前端操作按钮样式（0=文本，1=标准）
+   */
+  frontBtnStyle: number;
+
+  /**
+   * 是否生成代码（1=是，0=否）
+   */
+  isGenCode: number;
+
+  /**
+   * 代码生成次数（每次生成成功后自增）
+   */
+  genCodeCount: number;
+
+  /**
+   * 是否使用tabs（1=是，0=否）
+   */
+  isUseTabs: number;
+
+  /**
+   * tabs标签中字段的数量
+   */
+  tabsFieldCount: number;
+
+  /**
+   * 作者
+   */
+  genAuthor: string;
+
+  /**
+   * 其他生成选项（JSON格式，存储其他生成配置）
+   */
+  otherGenOptions?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+  /**
+   * 创建时间
+   */
+  createdAt: string;
+
+}
+

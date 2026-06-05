@@ -1,0 +1,110 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Validators.HumanResource.Personnel
+// 文件名称：TaktEmployeeEducationValidators.cs
+// 创建时间：2026-06-05
+// 创建人：Takt365(Auto Generated)
+// 功能描述：EmployeeEducation 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeEducation 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using FluentValidation;
+using Takt.Application.Dtos.HumanResource.Personnel;
+using Takt.Shared.Enums;
+
+namespace Takt.Application.Validators.HumanResource.Personnel;
+
+// ========================================
+// 创建EmployeeEducation 验证器
+// ========================================
+
+/// <summary>
+/// 创建EmployeeEducation DTO 验证器
+/// </summary>
+public class TaktEmployeeEducationCreateValidator : AbstractValidator<TaktEmployeeEducationCreateDto>
+{
+    /// <summary>
+    /// 初始化 创建EmployeeEducation 校验规则
+    /// </summary>
+    public TaktEmployeeEducationCreateValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("员工ID不能为负数");
+        RuleFor(x => x.SchoolName)
+            .NotEmpty().WithMessage("学校名称不能为空")
+            .MaximumLength(200).WithMessage("学校名称长度不能超过200个字符");
+        RuleFor(x => x.MajorName)
+            .MaximumLength(100).WithMessage("专业名称长度不能超过100个字符");
+        RuleFor(x => x.CertificateNo)
+            .MaximumLength(100).WithMessage("证书编号长度不能超过100个字符");
+        RuleFor(x => x.IsHighest)
+            .IsInEnum().WithMessage("是否最高学历无效");
+        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
+    }
+}
+
+// ========================================
+// 更新EmployeeEducation 验证器
+// ========================================
+
+/// <summary>
+/// 更新EmployeeEducation DTO 验证器
+/// </summary>
+public class TaktEmployeeEducationUpdateValidator : AbstractValidator<TaktEmployeeEducationUpdateDto>
+{
+    /// <summary>
+    /// 初始化 更新EmployeeEducation 校验规则
+    /// </summary>
+    public TaktEmployeeEducationUpdateValidator()
+    {
+        RuleFor(x => x.EmployeeEducationId)
+            .GreaterThan(0).WithMessage("EmployeeEducationID无效");
+    }
+}
+
+// ========================================
+// 导入EmployeeEducation 验证器
+// ========================================
+
+/// <summary>
+/// 导入EmployeeEducation DTO 验证器
+/// </summary>
+public class TaktEmployeeEducationImportValidator : AbstractValidator<TaktEmployeeEducationImportDto>
+{
+    /// <summary>
+    /// 初始化 导入EmployeeEducation 校验规则
+    /// </summary>
+    public TaktEmployeeEducationImportValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+        RuleFor(x => x.CompanyCode)
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.EmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("员工ID不能为负数");
+        RuleFor(x => x.SchoolName)
+            .NotEmpty().WithMessage("学校名称不能为空")
+            .MaximumLength(200).WithMessage("学校名称长度不能超过200个字符");
+        RuleFor(x => x.MajorName)
+            .MaximumLength(100).WithMessage("专业名称长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.MajorName));
+        RuleFor(x => x.CertificateNo)
+            .MaximumLength(100).WithMessage("证书编号长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.CertificateNo));
+        RuleFor(x => x.IsHighest)
+            .IsInEnum().WithMessage("是否最高学历无效");
+        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
+    }
+}

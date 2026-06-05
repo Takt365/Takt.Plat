@@ -1,0 +1,52 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Shared.Options
+// 文件名称：TaktAccountLockOptions.cs
+// 创建时间：2025-01-20
+// 创建人：Takt365(Cursor AI)
+// 功能描述：账户锁定配置选项
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+namespace Takt.Shared.Options;
+
+/// <summary>
+/// 账户锁定配置选项
+/// </summary>
+public class TaktAccountLockOptions
+{
+    public const string SectionName = "AccountLock";
+
+    /// <summary>
+    /// 是否启用账户锁定
+    /// </summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>
+    /// 错误次数限制
+    /// </summary>
+    public int ErrorLimit { get; set; }
+
+    /// <summary>
+    /// 锁定原因模板
+    /// </summary>
+    public string LockReason { get; set; } = null!;
+
+    /// <summary>
+    /// 验证配置
+    /// </summary>
+    public void Validate()
+    {
+        if (ErrorLimit <= 0)
+        {
+            throw new InvalidOperationException($"{SectionName}:ErrorLimit 必须大于 0");
+        }
+
+        if (string.IsNullOrWhiteSpace(LockReason))
+        {
+            throw new InvalidOperationException($"{SectionName}:LockReason 不能为空");
+        }
+    }
+}

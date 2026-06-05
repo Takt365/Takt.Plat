@@ -1,0 +1,251 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.WebApi.Controllers.Logistics.Serial
+// 文件名称：TaktProductSerialOutboundsController.cs
+// 创建时间：2026-06-05
+// 创建人：Takt365(Cursor AI)
+// 功能描述：产品序列号出库控制器
+// 
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Microsoft.AspNetCore.Mvc;
+using Takt.Application.Dtos.Logistics.Serial;
+using Takt.Application.Services.Logistics.Serial;
+using Takt.Shared.Constants;
+
+namespace Takt.WebApi.Controllers.Logistics.Serial;
+
+/// <summary>
+/// 产品序列号出库控制器
+/// 提供产品序列号出库的 REST API
+/// </summary>
+[ApiModule(TaktModule.Logistics, "后勤管理")]
+[Route("api/[controller]", Name = "产品序列号出库")]
+public class TaktProductSerialOutboundsController : TaktControllerBase
+{
+    private readonly ITaktProductSerialOutboundService _productSerialOutboundService;
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="productSerialOutboundService">产品序列号出库服务</param>
+    public TaktProductSerialOutboundsController(ITaktProductSerialOutboundService productSerialOutboundService)
+    {
+        _productSerialOutboundService = productSerialOutboundService;
+    }
+
+    /// <summary>
+    /// 获取产品序列号出库列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:list", "产品序列号出库列表")]
+    [HttpGet("list")]
+    public async Task<IActionResult> GetProductSerialOutboundListAsync([FromQuery] TaktProductSerialOutboundQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _productSerialOutboundService.GetProductSerialOutboundListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据ID获取产品序列号出库
+    /// </summary>
+    /// <param name="id">产品序列号出库ID</param>
+    /// <returns>产品序列号出库DTO</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:query", "产品序列号出库详情")]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProductSerialOutboundByIdAsync(long id)
+    {
+        try
+        {
+            var result = await _productSerialOutboundService.GetProductSerialOutboundByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound("产品序列号出库不存在");
+            }
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取产品序列号出库选项列表
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:query", "产品序列号出库选项")]
+    [HttpGet("options")]
+    public async Task<IActionResult> GetProductSerialOutboundOptionsAsync()
+    {
+        try
+        {
+            var result = await _productSerialOutboundService.GetProductSerialOutboundOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 创建产品序列号出库
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>产品序列号出库DTO</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:create", "创建产品序列号出库")]
+    [HttpPost]
+    public async Task<IActionResult> CreateProductSerialOutboundAsync([FromBody] TaktProductSerialOutboundCreateDto dto)
+    {
+        try
+        {
+            var result = await _productSerialOutboundService.CreateProductSerialOutboundAsync(dto);
+            return Success(result, "创建成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新产品序列号出库
+    /// </summary>
+    /// <param name="id">产品序列号出库ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>产品序列号出库DTO</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:update", "更新产品序列号出库")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateProductSerialOutboundAsync(long id, [FromBody] TaktProductSerialOutboundUpdateDto dto)
+    {
+        try
+        {
+            var result = await _productSerialOutboundService.UpdateProductSerialOutboundAsync(id, dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 删除产品序列号出库
+    /// </summary>
+    /// <param name="id">产品序列号出库ID</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:delete", "删除产品序列号出库")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProductSerialOutboundByIdAsync(long id)
+    {
+        try
+        {
+            await _productSerialOutboundService.DeleteProductSerialOutboundByIdAsync(id);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 批量删除产品序列号出库
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:delete", "批量删除产品序列号出库")]
+    [HttpDelete("batch")]
+    public async Task<IActionResult> DeleteProductSerialOutboundBatchAsync([FromBody] IEnumerable<long> ids)
+    {
+        try
+        {
+            await _productSerialOutboundService.DeleteProductSerialOutboundBatchAsync(ids);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <returns>Excel文件</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:import", "获取产品序列号出库导入模板")]
+    [HttpGet("template")]
+    public async Task<IActionResult> GetProductSerialOutboundTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    {
+        try
+        {
+            var (resultFileName, content) = await _productSerialOutboundService.GetProductSerialOutboundTemplateAsync(sheetName, templateName);
+            return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 导入产品序列号出库
+    /// </summary>
+    /// <param name="file">Excel文件</param>
+    /// <returns>导入结果</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:import", "导入产品序列号出库")]
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportProductSerialOutboundAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    {
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("请选择要导入的文件");
+            }
+
+            await using var stream = file.OpenReadStream();
+            var (success, fail, errors) = await _productSerialOutboundService.ImportProductSerialOutboundAsync(stream, sheetName);
+            return Success(new
+            {
+                SuccessCount = success,
+                FailCount = fail,
+                Errors = errors
+            }, $"导入完成：成功{success}条，失败{fail}条");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 导出产品序列号出库
+    /// </summary>
+    /// <returns>Excel文件</returns>
+    [TaktPermission("logistics:serial:productserialoutbound:export", "导出产品序列号出库")]
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportProductSerialOutboundAsync([FromQuery] TaktProductSerialOutboundQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    {
+        try
+        {
+            var (resultFileName, fileContent) = await _productSerialOutboundService.ExportProductSerialOutboundAsync(query, sheetName, exportName);
+            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+}

@@ -1,0 +1,487 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/types/foundation
+// 文件名称：online.d.ts
+// 创建时间：2026-05-25
+// 创建人：Takt365(Auto Generated)
+// 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktOnlineDto → Online）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type { TaktPagedQuery } from '@/types/common';
+
+/**
+ * 在线用户实体 公司级实体：在线用户按租户+公司双重隔离
+ * 对应前端 Online
+ * 继承 CompanyDtoBase
+ * @description 对应后端 TaktOnlineDto
+ */
+export interface Online extends CompanyDtoBase {
+  /**
+   * OnlineID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  onlineId: string;
+
+  /**
+   * SignalR 连接 ID（租户+公司内唯一）
+   */
+  connectionId: string;
+
+  /**
+   * SignalR 连接 名称（填充字段）
+   */
+  connectionName?: string;
+
+  /**
+   * 用户名
+   */
+  userName: string;
+
+  /**
+   * 用户 ID
+   */
+  userId?: string;
+
+  /**
+   * 在线状态（0=在线，1=离线，2=离开）
+   */
+  onlineStatus: number;
+
+  /**
+   * 连接 IP 地址
+   */
+  connectIp?: string;
+
+  /**
+   * 连接地点
+   */
+  connectLocation?: string;
+
+  /**
+   * User-Agent
+   */
+  userAgent?: string;
+
+  /**
+   * 设备类型
+   */
+  deviceType?: number;
+
+  /**
+   * 浏览器类型
+   */
+  browserType?: number;
+
+  /**
+   * 操作系统
+   */
+  operatingSystem?: number;
+
+  /**
+   * 连接时间
+   */
+  connectTime: string;
+
+  /**
+   * 最后活动时间
+   */
+  lastActiveTime?: string;
+
+  /**
+   * 断开时间
+   */
+  disconnectTime?: string;
+
+  /**
+   * 连接时长（秒）
+   */
+  connectionDuration?: number;
+
+}
+
+
+/**
+ * Online 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * @description 对应后端 TaktOnlineQueryDto
+ */
+export interface OnlineQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode?: string;
+
+  /**
+   * SignalR 连接 ID（租户+公司内唯一）
+   */
+  connectionId?: string;
+
+  /**
+   * 用户名
+   */
+  userName?: string;
+
+  /**
+   * 用户 ID
+   */
+  userId?: string;
+
+  /**
+   * 在线状态（0=在线，1=离线，2=离开）
+   */
+  onlineStatus?: number;
+
+  /**
+   * 连接 IP 地址
+   */
+  connectIp?: string;
+
+  /**
+   * 连接地点
+   */
+  connectLocation?: string;
+
+  /**
+   * User-Agent
+   */
+  userAgent?: string;
+
+  /**
+   * 设备类型
+   */
+  deviceType?: number;
+
+  /**
+   * 浏览器类型
+   */
+  browserType?: number;
+
+  /**
+   * 操作系统
+   */
+  operatingSystem?: number;
+
+  /**
+   * 连接时间（范围查询-开始）
+   */
+  connectTimeStart?: string;
+
+  /**
+   * 连接时间（范围查询-结束）
+   */
+  connectTimeEnd?: string;
+
+  /**
+   * 最后活动时间（范围查询-开始）
+   */
+  lastActiveTimeStart?: string;
+
+  /**
+   * 最后活动时间（范围查询-结束）
+   */
+  lastActiveTimeEnd?: string;
+
+  /**
+   * 断开时间（范围查询-开始）
+   */
+  disconnectTimeStart?: string;
+
+  /**
+   * 断开时间（范围查询-结束）
+   */
+  disconnectTimeEnd?: string;
+
+  /**
+   * 连接时长（秒）
+   */
+  connectionDuration?: number;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建Online DTO
+ * @description 对应后端 TaktOnlineCreateDto
+ */
+export interface OnlineCreate {
+  /**
+   * SignalR 连接 ID（租户+公司内唯一）
+   */
+  connectionId: string;
+
+  /**
+   * 用户名
+   */
+  userName: string;
+
+  /**
+   * 用户 ID
+   */
+  userId?: string;
+
+  /**
+   * 在线状态（0=在线，1=离线，2=离开）
+   */
+  onlineStatus: number;
+
+  /**
+   * 连接 IP 地址
+   */
+  connectIp?: string;
+
+  /**
+   * 连接地点
+   */
+  connectLocation?: string;
+
+  /**
+   * User-Agent
+   */
+  userAgent?: string;
+
+  /**
+   * 设备类型
+   */
+  deviceType?: number;
+
+  /**
+   * 浏览器类型
+   */
+  browserType?: number;
+
+  /**
+   * 操作系统
+   */
+  operatingSystem?: number;
+
+  /**
+   * 连接时间
+   */
+  connectTime: string;
+
+  /**
+   * 最后活动时间
+   */
+  lastActiveTime?: string;
+
+  /**
+   * 断开时间
+   */
+  disconnectTime?: string;
+
+  /**
+   * 连接时长（秒）
+   */
+  connectionDuration?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新Online DTO
+ * 继承 OnlineCreate，添加 OnlineId 字段
+ * @description 对应后端 TaktOnlineUpdateDto
+ */
+export interface OnlineUpdate extends OnlineCreate {
+  /**
+   * OnlineID（标识要更新的实体）
+   */
+  onlineId: string;
+
+}
+
+
+/**
+ * Online 状态更新 DTO
+ * @description 对应后端 TaktOnlineStatusDto
+ */
+export interface OnlineStatus {
+  /**
+   * OnlineID
+   */
+  onlineId: string;
+
+  /**
+   * 在线状态（0=在线，1=离线，2=离开）
+   */
+  onlineStatus: number;
+
+}
+
+
+/**
+ * Online 导出 DTO（独立实现，不继承响应 Dto）
+ * @description 对应后端 TaktOnlineExportDto
+ */
+export interface OnlineExport {
+  /**
+   * OnlineID
+   */
+  onlineId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * SignalR 连接 ID（租户+公司内唯一）
+   */
+  connectionId: string;
+
+  /**
+   * 用户名
+   */
+  userName: string;
+
+  /**
+   * 用户 ID
+   */
+  userId?: string;
+
+  /**
+   * 在线状态（0=在线，1=离线，2=离开）
+   */
+  onlineStatus: number;
+
+  /**
+   * 连接 IP 地址
+   */
+  connectIp?: string;
+
+  /**
+   * 连接地点
+   */
+  connectLocation?: string;
+
+  /**
+   * User-Agent
+   */
+  userAgent?: string;
+
+  /**
+   * 设备类型
+   */
+  deviceType?: number;
+
+  /**
+   * 浏览器类型
+   */
+  browserType?: number;
+
+  /**
+   * 操作系统
+   */
+  operatingSystem?: number;
+
+  /**
+   * 连接时间
+   */
+  connectTime: string;
+
+  /**
+   * 最后活动时间
+   */
+  lastActiveTime?: string;
+
+  /**
+   * 断开时间
+   */
+  disconnectTime?: string;
+
+  /**
+   * 连接时长（秒）
+   */
+  connectionDuration?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+  /**
+   * 创建时间
+   */
+  createdAt: string;
+
+}
+
+
+/**
+ * 当前登录用户在线统计 DTO
+ * @description 对应后端 TaktOnlineStatisticsDto
+ */
+export interface OnlineStatistics {
+  /**
+   * 用户名
+   */
+  userName: string;
+
+  /**
+   * 用户 ID
+   */
+  userId?: string;
+
+  /**
+   * 当前用户活跃在线连接数（多终端/多标签页分别计数）
+   */
+  onlineCount: number;
+
+  /**
+   * 当前在线总时长（秒）：当前用户所有活跃会话从连接至今累计
+   */
+  currentDurationSeconds: number;
+
+  /**
+   * 当天累计在线时长（秒）：当前用户当日各会话有效时长之和
+   */
+  todayDurationSeconds: number;
+
+  /**
+   * 当月累计在线时长（秒）：当前用户当月各会话有效时长之和
+   */
+  monthDurationSeconds: number;
+}
+
