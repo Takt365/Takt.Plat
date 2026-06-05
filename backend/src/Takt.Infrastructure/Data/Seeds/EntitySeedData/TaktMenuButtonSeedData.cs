@@ -194,16 +194,28 @@ public class TaktMenuButtonSeedData
         return string.Empty;
     }
 
-    /// <summary>通用 CRUD 按钮显示名称（末项固定为「批量」）。</summary>
+    /// <summary>
+    /// 通用 CRUD 按钮显示名称（含树表全场景、主子表明细全场景；末项固定为「批量」）。
+    /// </summary>
     private static readonly string[] GenericButtonNames =
     {
-        "查询", "新增", "修改", "删除", "详情", "预览", "打印", "导入", "导出", "模板", "审批", "撤销", "树", "选项", "主题", "批量"
+        "查询", "新增", "修改", "删除", "详情", "预览", "打印", "导入", "导出", "模板", "审批", "撤销", "树", "选项", "主题",
+        "展开", "收缩", "新增根", "新增下级", "同级新增", "插入", "编辑节点", "复制节点",
+        "删除当前", "删除本级及子级", "移动", "上移", "下移", "置顶", "置底", "提升层级", "降级层级",
+        "新增行", "插入行", "编辑行", "修改行", "删除行", "复制行", "克隆行",
+        "行上移", "行下移", "清空明细", "导入明细", "导出明细", "明细批量",
+        "批量"
     };
 
     /// <summary>通用 CRUD 按钮权限后缀（与 <see cref="GenericButtonNames"/> 一一对应）。</summary>
     private static readonly string[] GenericButtonPerms =
     {
-        "query", "create", "update", "delete", "detail", "preview", "print", "import", "export", "template", "approve", "revoke", "tree", "options", "theme", "batch"
+        "query", "create", "update", "delete", "detail", "preview", "print", "import", "export", "template", "approve", "revoke", "tree", "options", "theme",
+        "expand", "collapse", "createroot", "createchild", "createsibling", "insert", "editnode", "clonenode",
+        "deletecurrent", "deletesubtree", "move", "moveup", "movedown", "movetop", "movebottom", "promote", "demote",
+        "createrow", "insertrow", "editrow", "updaterow", "deleterow", "copyrow", "clonerow",
+        "moverowup", "moverowdown", "cleardetail", "importdetail", "exportdetail", "detailbatch",
+        "batch"
     };
 
     /// <summary>会计模块扩展按钮（继承通用，仅追加财务操作）。</summary>
@@ -220,12 +232,12 @@ public class TaktMenuButtonSeedData
     /// <summary>代码生成模块扩展按钮。</summary>
     private static readonly string[] CodeExtraNames =
     {
-        "生成", "下载", "同步", "字段", "表", "数据库", "初始化", "克隆", "清空", "截断", "移动"
+        "生成", "下载", "同步", "字段", "表", "数据库", "初始化", "克隆", "清空", "截断"
     };
 
     private static readonly string[] CodeExtraPerms =
     {
-        "generate", "download", "sync", "columns", "tables", "databases", "initialize", "clone", "empty", "truncate", "move"
+        "generate", "download", "sync", "columns", "tables", "databases", "initialize", "clone", "empty", "truncate"
     };
 
     /// <summary>基础设置模块扩展按钮（敏感词过滤/替换）。</summary>
@@ -289,6 +301,19 @@ public class TaktMenuButtonSeedData
         "archive", "clean"
     };
 
+    /// <summary>统计看板模块扩展按钮（日志清理/归档、服务监控、报表统计等）。</summary>
+    private static readonly string[] StatisticsExtraNames =
+    {
+        "刷新", "清空", "清空7天", "清空30天", "清空全部", "截断", "归档", "销毁", "清理",
+        "下载", "同步", "核算", "转置", "重置", "运行", "停止", "重启"
+    };
+
+    private static readonly string[] StatisticsExtraPerms =
+    {
+        "refresh", "empty", "empty7d", "empty30d", "emptyall", "truncate", "archive", "destroy", "clean",
+        "download", "sync", "calculate", "transpose", "reset", "run", "stop", "restart"
+    };
+
     /// <summary>后勤/物料模块扩展按钮（未列入主模块顺序，仍继承通用）。</summary>
     private static readonly string[] LogisticsExtraNames =
     {
@@ -345,7 +370,7 @@ public class TaktMenuButtonSeedData
             "identity" => MergeModuleButtons(IdentityExtraNames, IdentityExtraPerms),
             "routine" => MergeModuleButtons(RoutineExtraNames, RoutineExtraPerms),
             "workflow" => MergeModuleButtons(WorkflowExtraNames, WorkflowExtraPerms),
-            "statistics" => MergeModuleButtons(Array.Empty<string>(), Array.Empty<string>()),
+            "statistics" => MergeModuleButtons(StatisticsExtraNames, StatisticsExtraPerms),
             "logistics" or "material" => MergeModuleButtons(LogisticsExtraNames, LogisticsExtraPerms),
             _ => (GenericButtonNames, GenericButtonPerms)
         };

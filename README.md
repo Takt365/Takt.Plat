@@ -256,6 +256,6 @@ cd frontend && npm run generate:vue        # 仅生成 CRUD 页面
 
 ## 许可
 
-[MIT License](LICENSE) · Copyright (c) 2025 Takt Technologies Co., Ltd.
+[MIT License](LICENSE) · Copyright (c) 2026 Takt Technologies Co., Ltd.
 
 **维护者**：Takt.Plat（Cursor AI 等）
