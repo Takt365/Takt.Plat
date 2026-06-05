@@ -1,0 +1,227 @@
+---
+description: C# 工具类设计规范（无状态、无存储、单一职责、纯函数、参数校验、完整注释、泛型约束、扩展方法慎用）；与 00-project、01-backend 一并生效
+globs: backend/**/Helpers/**/*.cs,backend/**/Utils/**/*.cs
+alwaysApply: true
+---
+
+# C# 工具类设计规范
+
+通用命名、文件头、XML 注释见 `@.cursor/rules/00-project.mdc`；分层与目录见 `@.cursor/rules/01-backend.mdc`。
+
+**设计核心（强制）**：无状态、单一职责、纯函数、高内聚、零副作用、异常安全。
+
+**五条硬约束（强制，写入/审查 Helper 必检）**：
+
+| # | 约束 | 详见 |
+|---|------|------|
+| 1 | **禁止在静态工具中存储状态** | §一 |
+| 2 | **扩展方法不能滥用** | §八 |
+| 3 | **泛型必须加约束** | §七 |
+| 4 | **方法参数必填校验** | §六 |
+| 5 | **工具类注释完整** | §九 |
+
+**标准参照**：
+- `@backend/src/Takt.Shared/Helpers/TaktNamingHelper.cs` — 纯静态、无 I/O、输入输出明确
+- `@backend/src/Takt.Shared/Helpers/TaktStringHelper.cs` — 字符串领域工具方法集合
+- `@backend/src/Takt.Shared/Helpers/TaktExcelHelper.cs` — 泛型导入导出、`where T : class` 约束与入口参数校验
+
+---
+
+## 一、无状态（禁止在静态工具中存储状态）
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 优先 `public static class TaktXxxHelper` |
+| ✅ | 方法仅依赖参数与编译期常量（`const`）；`static readonly` 仅限不可变配置常量 |
+| ❌ | **禁止存储状态**：实例/静态字段、`static` 集合、缓存字典、`Lazy<T>`、`ThreadStatic`、可变 `static readonly` |
+| ❌ | 在静态工具中「记住」上次调用结果、租户上下文、配置快照、连接池句柄 |
+| ❌ | 构造函数注入、`HttpContext` / `IServiceProvider` 等运行时上下文 |
+| ❌ | 在工具类内缓存业务数据或租户/用户会话 |
+
+```csharp
+// ❌ 静态工具中存储（禁止）
+private static readonly Dictionary<string, string> _cache = new();
+private static DateTime _lastRun;
+```
+
+需要依赖外部服务（数据库、邮件、OSS）时，**不得**写成无参静态工具类；应使用应用服务或带**显式依赖参数**的网关类，并在类注释中说明非「纯工具」边界。
+
+---
+
+## 二、单一职责
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 一个 Helper 只负责一个技术或语义域（字符串、命名、正则、加解密、Excel 等） |
+| ✅ | 文件名 = 类名，`Takt` 前缀 + 领域 + `Helper` |
+| ❌ | 在同一 Helper 中混合无关能力（如字符串格式化 + FTP 上传 + 权限校验） |
+| ❌ | 把 CRUD 业务编排、仓储访问塞进 Helper |
+
+新增方法前先问：该方法是否**仅**属于本 Helper 的职责域？否则拆类或下沉到 Application 服务。
+
+---
+
+## 三、纯函数
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 相同合法输入 → 相同输出（除文档声明的随机/时间戳类方法） |
+| ✅ | 参数校验用 `ArgumentException.ThrowIfNullOrWhiteSpace` 等，失败即抛异常 |
+| ❌ | 隐式读取 `DateTime.Now`、`Random`、环境变量、配置文件（除非方法名与 XML 明确为「生成/随机/当前时间」） |
+| ❌ | 依赖调用顺序或外部可变全局状态 |
+
+```csharp
+// ✅ 纯函数：输出完全由参数决定
+public static string EntitySelfResourceKey(string entityTypeName) { ... }
+
+// ❌ 隐式依赖当前时间，调用方无法预测结果
+public static string BuildFileName(string baseName) => $"{baseName}_{DateTime.Now:yyyyMMdd}";
+```
+
+---
+
+## 四、高内聚
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 同一 Helper 内方法共享同一抽象词汇（如「命名」「掩码」「Excel 列映射」） |
+| ✅ | 私有静态辅助方法仅服务本类公开 API，保持类内闭环 |
+| ❌ | 为复用一行代码而创建「万能 Utils」大杂烩 |
+| ❌ | 公开 API 暴露与类主题无关的「顺便」方法 |
+
+目录：`Takt.Shared/Helpers/`（跨层通用）；WebApi / Infrastructure 专有辅助放在对应层，仍遵守本节。
+
+---
+
+## 五、零副作用
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 默认：不修改传入的可变对象、不写库、不发 HTTP、不写日志、不改文件系统 |
+| ✅ | 返回值或 `out`/`ref` 参数表达结果；异常表达失败 |
+| ❌ | 在工具方法内 `Save`、发邮件、删文件等副作用操作且无明确命名 |
+| ⚠️ | 文件/网络/邮件类 Helper（如 `TaktFileHelper`、`TaktMailHelper`）允许 I/O，但须：方法名动词表达副作用（`Read`/`Write`/`Send`）、XML 注释写清前置条件与异常、不与纯转换逻辑混在同一方法 |
+
+```csharp
+// ✅ 无副作用：返回新字符串
+public static string MaskPhone(string phone) => ...;
+
+// ❌ 副作用藏在「格式化」方法里
+public static string FormatAndSaveAudit(object entity) { File.WriteAllText(...); return "ok"; }
+```
+
+---
+
+## 六、参数必填校验与异常安全
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | **所有公开方法**入口校验必填参数：`ArgumentNullException.ThrowIfNull`、`ArgumentException.ThrowIfNullOrWhiteSpace` / `ThrowIfNullOrEmpty` |
+| ✅ | 集合/流等引用类型必填：`ThrowIfNull`；若业务要求非空集合，显式 `if (!data.Any()) throw ...` 或文档声明允许空 |
+| ✅ | 可选参数用 `T?` + 默认值，并在 XML 说明「为空时默认行为」 |
+| ✅ | 异常类型与语义匹配：非法参数 → `Argument*`；前置条件不满足 → `InvalidOperationException`；I/O 失败保留原始异常为 `InnerException` |
+| ✅ | 公开方法 XML 写清 `<param>`、`<returns>`、`<exception cref="...">` |
+| ✅ | 纯转换 Helper 不捕获后吞掉异常；让调用方感知失败 |
+| ❌ | 跳过必填校验直接 dereference；依赖调用方「不会传 null」 |
+| ❌ | 空 `catch`、捕获 `Exception` 后返回 `default`/`null`/`""` 且 XML 未声明 |
+| ❌ | 在 `Takt.Shared` Helper 内抛 `TaktBusinessException` 或写业务错误码（属 Application 层） |
+| ⚠️ | I/O 类 Helper 仅在需要释放资源或补充上下文时使用 `try/finally`/`catch` 并 `throw` 包装；禁止把异常转成「成功 + 空结果」 |
+
+```csharp
+// ✅ 入口校验 + 文档化异常
+/// <exception cref="ArgumentException">entityTypeName 为空</exception>
+public static string DefaultSheetNameEnglish(string entityTypeName)
+{
+    ArgumentException.ThrowIfNullOrWhiteSpace(entityTypeName);
+    ...
+}
+
+// ❌ 吞掉异常，调用方无法区分失败与合法空值
+public static string TryParseId(string input)
+{
+    try { return int.Parse(input).ToString(); }
+    catch { return string.Empty; }
+}
+```
+
+可选「尝试」语义时：方法名用 `TryXxx`，返回 `(bool Success, T? Value)` 或 `bool TryXxx(..., out T? value)`，**不得**静默失败。
+
+---
+
+## 七、通用泛型（必须加约束）
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 仅当算法与具体类型无关时使用泛型（集合遍历、映射、DTO/实体 Excel 行读写等） |
+| ✅ | 泛型方法放在**职责域 Helper** 内（如 `TaktExcelHelper.ExportAsync<T>`），禁止新建 `TaktGenericHelper` 万能类 |
+| ✅ | **每个类型参数必须带 `where` 约束**（`class`、`struct`、`class, new()`、`notnull` 等）；禁止无约束裸 `T` |
+| ✅ | 输入参数优先 `IEnumerable<T>` / `IReadOnlyList<T>`；输出可为具体集合类型 |
+| ✅ | XML 含 `<typeparam name="T">` 说明；多类型参数用 `TKey`/`TValue`/`TEntity` 等语义名 |
+| ❌ | 无约束 `T`、`Convert<T>(object)`、`(T)(object)value` 强转绕过类型安全 |
+| ❌ | 用泛型把业务实体与基础设施揉进同一「通用」方法（应拆为命名明确的非泛型 API 或下沉服务） |
+
+```csharp
+// ✅ 领域 Helper 内的泛型 API（参照 TaktExcelHelper）
+public static async Task<(string fileName, byte[] content)> ExportAsync<T>(
+    IEnumerable<T> data,
+    string sheetName = "Data",
+    string? fileName = null) where T : class
+{
+    ArgumentNullException.ThrowIfNull(data);
+    ArgumentException.ThrowIfNullOrEmpty(sheetName);
+    ...
+}
+
+// ❌ 无约束 + 强转
+public static T Convert<T>(object value) => (T)value;
+```
+
+新增泛型方法前：能否用非泛型 + 明确类型表达？若不能，再引入 `T` 并**必须**写清 `where` 与 `<typeparam>`。
+
+---
+
+## 八、扩展方法（禁止滥用）
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | Helper 内优先**普通静态方法**：`TaktStringHelper.MaskPhone(phone)` |
+| ✅ | 扩展方法仅用于 **DI/管道/bootstrap**：`backend/**/Extensions/` 下 `AddTaktXxx` / `UseTaktXxx`（参照 `TaktServiceCollectionExtensions`） |
+| ✅ | 扩展类命名 `TaktXxxExtensions`，文件放 `Extensions/`，与 Helper 分离 |
+| ❌ | 在 `Helpers/` 内定义 `this string`、`this object`、`this IEnumerable<T>` 等链式扩展 |
+| ❌ | 用扩展方法给业务 DTO/实体「挂」CRUD、权限、仓储逻辑 |
+| ❌ | 为省一个类名参数把 Helper 逻辑改成扩展（降低可发现性、难检索） |
+
+```csharp
+// ✅ Helper：意图明确、易跳转
+TaktMaskHelper.MaskPhone(phone);
+
+// ❌ 滥用扩展：伪装成实例方法
+phone.MaskAsPhone();
+```
+
+---
+
+## 九、注释完整
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | **文件头**八段块注释（见 `00-project` §二） |
+| ✅ | **类** `/// <summary>` 说明职责域与非纯工具边界（若有 I/O） |
+| ✅ | **每个公开静态方法**：`<summary>`、`<param>`（全参数）、`<returns>`；泛型加 `<typeparam>`；可能抛异常加 `<exception>` |
+| ✅ | 私有静态辅助方法若含非直观逻辑，同样写 `<summary>` |
+| ❌ | 无 XML 的 public 方法；`<param>` 遗漏；复制粘贴与参数名不一致 |
+| ❌ | 仅用单行 `//` 代替公开 API 文档 |
+
+参照 `@backend/src/Takt.Shared/Helpers/TaktNamingHelper.cs` 的类注释与方法 `<param>` / `<returns>` 密度。
+
+---
+
+## 十、Agent 约束
+
+- 新建/修改 Helper 前对照 `TaktNamingHelper` 的静态结构与 XML 注释密度
+- 空行格式遵守 `@.cursor/rules/03-format-blank-lines.mdc`
+- 若方法需 `async` + 外部 I/O，评估是否应为 `TaktXxxService` 而非 Helper
+- 禁止无 `Takt` 前缀的 `StringUtils`、`CommonHelper` 等泛化类名
+- **禁止**在静态工具中存储状态（§一）；**禁止**在 `Helpers/` 写扩展方法（§八）
+- 泛型**必须**加 `where` 约束（§七）；公开方法**必须**入口校验必填参数（§六）
+- 文件头、类、公开/复杂私有方法 XML 注释完整（§九）

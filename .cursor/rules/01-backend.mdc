@@ -194,3 +194,4 @@ Takt.Domain → Takt.Shared
 - 私有方法（`QueryExpression`、`FillXxxDto`）也需完整 XML 注释
 - 控制器必须复数、应用服务必须单数（见 §三、§四、§八）
 - 新增 i18n 种子：强制执行 `00-project` §1.6；新增菜单/按钮权限：强制执行 §1.7
+- 新建/修改工具类（Helper/Utils）：见 `@.cursor/rules/04-csharp-utils.mdc`
