@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-contract/components -->
 <!-- 文件名称：contract-form.vue -->
 <!-- 功能描述：员工合同维护弹窗内嵌表单。由 employee-contract/index.vue 引用；defineExpose 提供 validate、getValues、resetFields。 -->

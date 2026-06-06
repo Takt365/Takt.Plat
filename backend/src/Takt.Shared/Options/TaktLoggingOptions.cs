@@ -24,7 +24,7 @@ public class TaktLoggingOptions
     /// <summary>
     /// 应用名称
     /// </summary>
-    public string AppName { get; set; } = "Takt Digital Factory";
+    public string AppName { get; set; } = "Takt Plat";
 
     /// <summary>
     /// 应用版本

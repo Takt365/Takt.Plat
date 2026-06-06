@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/attendance-exception -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：考勤异常列表页。关键字占位与 entity.attendanceexception.keyword 检索（与 common.form.placeholder.search 拼接）；高级查询字段对应后端 TaktAttendanceExceptionQueryDto（前端 AttendanceExceptionQuery）；CRUD、导入导出、列设置。API @/api/human-resource/attendance-leave/attendance-exception，权限与 TaktAttendanceExceptionsController 一致。 -->

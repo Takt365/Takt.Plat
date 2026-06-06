@@ -1,5 +1,5 @@
 // ========================================
-// 项目名称：节拍数字工厂 · Takt Digital Factory (TDF)
+// 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/utils
 // 文件名称：naming.ts
 // 功能描述：与后端 TaktNamingHelper 对齐的 Excel 导入导出命名（sheet = 去 Takt 后的英文名，fileName = 实体类名）。

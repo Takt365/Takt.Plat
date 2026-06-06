@@ -4,7 +4,7 @@
 export default {
   page: {
     title: '服務條款',
-    p1: '歡迎使用 Takt.Net（節拍數字工廠 · Takt Digital Factory）。',
+    p1: '歡迎使用 Takt.Net（節拍數字工廠 · Takt Plat）。',
     p2: '本軟件採用 {0} 開源。項目地址：',
     p2license: 'MIT License',
     p3: '使用本系統即表示您同意：在遵守適用法律及本協議的前提下使用本軟件；不得將本軟件用於任何違法或侵害他人權益的用途；作者不對因使用或無法使用本軟件而產生的任何直接或間接損失承擔責任。',

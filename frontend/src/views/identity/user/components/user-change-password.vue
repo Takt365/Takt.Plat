@@ -1,5 +1,5 @@
 ﻿<!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/identity/user/components -->
 <!-- 文件名称：user-change-password.vue -->
 <!-- 功能描述：修改密码弹窗内嵌表单。由 user/index.vue 引用；defineExpose 提供 validate、getValues、resetFields；表单模型为 ChangePassword；旧/新/确认密码校验含 isValidPassword；loading 结束时 watch 重置表单。 -->

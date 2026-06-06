@@ -1249,7 +1249,7 @@ async function handleDelete() {
     total.value = res.total ?? 0` : `    dataSource.value = []
     total.value = 0`;
   return `<!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/${viewModulePath} -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：${comment}管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->
@@ -1662,7 +1662,7 @@ watch(
   ],`;
     }).join('\n');
   return `<!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/${viewModulePath}/components -->
 <!-- 文件名称：${entityKebab}-form.vue -->
 <!-- 功能描述：${comment}维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->

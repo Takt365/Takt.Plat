@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/attendance-result -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：考勤日结结果列表页。关键字与 entity.attendanceresult.keyword 检索；高级查询前端 AttendanceResultQuery 与后端 TaktAttendanceResultQueryDto 对应；CRUD、导入导出、列设置；出勤状态列与用户视图一致使用 `#bodyCell` + `TaktDictTag`（`hr_attendance_result_status`）。API @/api/human-resource/attendance-leave/attendance-result，权限与 TaktAttendanceResultsController 一致。 -->

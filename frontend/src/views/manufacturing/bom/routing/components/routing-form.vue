@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/manufacturing/bom/routing/components -->
 <!-- 文件名称：routing-form.vue -->
 <!-- 功能描述：工艺路线主表实体维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->

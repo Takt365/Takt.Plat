@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/purchase-price-item/components -->
 <!-- 文件名称：purchase-price-item-form.vue -->
 <!-- 功能描述：Takt采购价格明细实体维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->

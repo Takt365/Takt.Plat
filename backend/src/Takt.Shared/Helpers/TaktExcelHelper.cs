@@ -62,7 +62,7 @@ public static class TaktExcelHelper
     {
         // EPPlus 8.0+ 设置非商业许可证（官方API）
         // 根据EPPlus 8官方文档：https://www.epplussoftware.com/
-        ExcelPackage.License.SetNonCommercialPersonal("Takt Digital Factory (TDF) ");
+        ExcelPackage.License.SetNonCommercialPersonal("Takt Plat (TDF) ");
     }
 
     /// <summary>

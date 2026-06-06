@@ -90,7 +90,7 @@ public static class TaktSwaggerCollectionExtensions
 
         app.MapScalarApiReference(ScalarEndpointPrefix, options =>
         {
-            options.WithTitle("Takt Digital Factory API");
+            options.WithTitle("Takt Plat API");
             options.WithOpenApiRoutePattern(OpenApiRoutePattern);
             options.AddDocuments(scalarDocuments);
             options.ExpandAllTags();
@@ -151,7 +151,7 @@ public static class TaktSwaggerCollectionExtensions
         {
             document.Info = new OpenApiInfo
             {
-                Title = $"Takt Digital Factory - {group.DisplayName}",
+                Title = $"Takt Plat - {group.DisplayName}",
                 Version = group.DocumentName,
                 Description = $"业务模块：{group.DisplayName}（{group.DocumentName}）",
             };

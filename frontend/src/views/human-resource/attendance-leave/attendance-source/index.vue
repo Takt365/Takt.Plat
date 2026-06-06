@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/attendance-source -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：考勤源记录列表页。分页、关键字、高级查询、CRUD、导入导出、列设置；与请假/加班列表骨架一致。 -->

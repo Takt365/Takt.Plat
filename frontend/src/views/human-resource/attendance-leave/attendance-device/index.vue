@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/attendance-device -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：考勤设备列表页。关键字占位与 entity.attendancedevice.keyword 检索（与 common.form.placeholder.search 拼接）；高级查询字段对应后端 TaktAttendanceDeviceQueryDto（前端 AttendanceDeviceQuery）；CRUD、导入导出、列设置；设备状态列与用户视图一致使用 `#bodyCell` + `TaktDictTag`（`hr_attendance_device_status`）。API @/api/human-resource/attendance-leave/attendance-device，权限与 TaktAttendanceDevicesController 一致。 -->

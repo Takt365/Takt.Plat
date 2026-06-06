@@ -62,7 +62,7 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
         var startTime = process.StartTime;
         var dto = new TaktAppStatusDto
         {
-            ApplicationName = loggingOptions?.AppName ?? "Takt Digital Factory",
+            ApplicationName = loggingOptions?.AppName ?? "Takt Plat",
             ApplicationVersion = loggingOptions?.AppVersion
                 ?? Assembly.GetEntryAssembly()?.GetName().Version?.ToString()
                 ?? "1.0.0.0",

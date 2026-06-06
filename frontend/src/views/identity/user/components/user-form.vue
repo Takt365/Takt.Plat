@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/identity/user/components -->
 <!-- 文件名称：user-form.vue -->
 <!-- 功能描述：用户维护弹窗内嵌表单。由 user/index.vue 引用；defineExpose 提供 validate、getValues、resetFields、setServerValidationErrors。员工/用户信息/权限多标签；TaktSelect 字典 sys_user_type、sys_normal_disable；视图模型见 `@/types/identity/user-form-view`（勿写入自动生成的 user.d.ts）；新增密码由父组件映射为 UserCreate.passwordHash。 -->

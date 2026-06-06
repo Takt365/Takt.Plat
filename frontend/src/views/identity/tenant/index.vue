@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/identity/tenant -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：租户实体 代表系统中的独立租户管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->

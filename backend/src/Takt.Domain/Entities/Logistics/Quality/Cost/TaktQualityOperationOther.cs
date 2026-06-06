@@ -1,5 +1,5 @@
 ﻿// ========================================
-// 项目名称:节拍数字工厂 ·Takt Digital Factory (TDF)
+// 项目名称:节拍数字工厂 ·Takt Plat (TDF)
 // 命名空间:Takt.Domain.Entities.Logistics.Quality.Cost
 // 文件名称:TaktQualityOperationOther.cs
 // 创建时间:2026-05-08

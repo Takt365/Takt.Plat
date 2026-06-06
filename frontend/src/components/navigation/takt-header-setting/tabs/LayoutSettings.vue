@@ -37,7 +37,7 @@
         </template>
         <a-input
           v-model:value="setting.logoText"
-          placeholder="Takt Digital Factory (TDF) "
+          placeholder="Takt Plat (TDF) "
           @input="handleChange"
           @blur="handleChange"
         />

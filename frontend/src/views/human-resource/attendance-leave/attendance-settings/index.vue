@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/attendance-settings -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：考勤方案（考勤设置）列表页。关键字与 entity.attendancesetting.keyword 检索；高级查询按方案编码/名称；CRUD、导入导出、列设置。权限与 TaktAttendanceSettingsController 一致；实体文案键 entity.attendancesetting.*。 -->

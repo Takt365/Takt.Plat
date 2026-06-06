@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/clock-in/components -->
 <!-- 文件名称：attendance-punch-form.vue -->
 <!-- 创建人：Takt365(Cursor AI) -->

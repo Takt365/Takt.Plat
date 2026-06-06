@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/setting -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：系统设置实体 存储系统的各种配置参数管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->

@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-attachment/components -->
 <!-- 文件名称：attachment-form.vue -->
 <!-- 功能描述：员工附件维护弹窗内嵌表单。由 employee-attachment/index.vue 引用；defineExpose 提供 validate、getValues、resetFields。表单模型复用 `@/types/human-resource/personnel/employee-attachment` 中 EmployeeAttachmentCreate。 -->

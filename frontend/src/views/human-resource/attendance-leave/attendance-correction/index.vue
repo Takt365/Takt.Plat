@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/attendance-correction -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：补卡申请列表页。关键字与 entity.attendancecorrection.keyword 检索；高级查询字段对应后端 TaktAttendanceCorrectionQueryDto（前端 AttendanceCorrectionQuery）；CRUD、导入导出、列设置；审批状态列与用户视图一致使用 `#bodyCell` + `TaktDictTag`（`hr_attendance_correction_approval`）。API @/api/human-resource/attendance-leave/attendance-correction，权限与 TaktAttendanceCorrectionsController 一致。 -->

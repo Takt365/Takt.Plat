@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/schedule/components -->
 <!-- 文件名称：work-shift-tab.vue -->
 <!-- 功能描述：班次定义子页（嵌入排班 Tab）。关键字与 entity.workshift.keyword 检索、高级查询、CRUD、导入导出、列设置；导入 sheet 与 TaktWorkShift 实体 Excel 约定一致。权限 humanresource:attendanceleave:workshift:*。 -->

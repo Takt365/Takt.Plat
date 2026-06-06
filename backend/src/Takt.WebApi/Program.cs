@@ -40,7 +40,7 @@ Log.Logger = TaktLoggingCollectionExtensions.CreateTaktGlobalLogger(bootstrapCon
 try
 {
     TaktLogger.Information("╔══════════════════════════════════════════════════════════╗");
-    TaktLogger.Information("║          Takt Digital Factory (TDF) 启动中...           ║");
+    TaktLogger.Information("║          Takt Plat (TDF) 启动中...           ║");
     TaktLogger.Information("╚══════════════════════════════════════════════════════════╝");
 
     var builder = WebApplication.CreateBuilder(args);
@@ -263,7 +263,7 @@ try
     // 8. 输出启动完成信息
     // ========================================
     TaktLogger.Information("╔══════════════════════════════════════════════════════════╗");
-    TaktLogger.Information("║              Takt Digital Factory 启动成功！             ║");
+    TaktLogger.Information("║              Takt Plat 启动成功！             ║");
     TaktLogger.Information("╠══════════════════════════════════════════════════════════╣");
     TaktLogger.Information("║  环境: {Environment,-42} ║", app.Environment.EnvironmentName);
     TaktLogger.Information("║  时间: {Timestamp,-42} ║", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));

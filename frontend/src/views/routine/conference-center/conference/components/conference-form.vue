@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/conference-center/conference/components -->
 <!-- 文件名称：conference-form.vue -->
 <!-- 功能描述：会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->

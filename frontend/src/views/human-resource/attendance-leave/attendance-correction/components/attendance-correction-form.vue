@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance-leave/attendance-correction/components -->
 <!-- 文件名称：attendance-correction-form.vue -->
 <!-- 功能描述：补卡维护弹窗内嵌表单。由 attendance-correction/index.vue 引用；defineExpose 提供 validate、getValues、resetFields。布局与 leave-form / holiday-form 一致（a-tabs → formContentClass → a-form）。字典 hr_attendance_correction_kind、hr_attendance_correction_approval。 -->

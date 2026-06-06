@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF)  -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF)  -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-career -->
 <!-- 文件名称：index.vue -->
 <!-- 创建时间：2025-01-20 -->

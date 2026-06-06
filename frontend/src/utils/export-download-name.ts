@@ -1,5 +1,5 @@
 // ========================================
-// 项目名称：节拍数字工厂 · Takt Digital Factory (TDF)
+// 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/utils
 // 文件名称：export-download-name.ts
 // 功能描述：按服务端响应头还原下载文件名。是否导出为 zip（如 TaktExcelHelper 超行数分批）仅由后端决定，前端不做格式推断或用户选择。

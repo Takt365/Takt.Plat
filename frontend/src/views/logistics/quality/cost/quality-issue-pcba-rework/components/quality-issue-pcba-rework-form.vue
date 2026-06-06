@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/cost/quality-issue-pcba-rework/components -->
 <!-- 文件名称：quality-issue-pcba-rework-form.vue -->
 <!-- 功能描述：品质问题应对明细 - PCBA不良改修应对维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->

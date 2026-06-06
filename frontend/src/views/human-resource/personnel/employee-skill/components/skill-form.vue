@@ -1,5 +1,5 @@
 <!-- ======================================== -->
-<!-- 项目名称：节拍数字工厂 · Takt Digital Factory (TDF) -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/personnel/employee-skill/components -->
 <!-- 文件名称：skill-form.vue -->
 <!-- 功能描述：员工业务技能维护弹窗内嵌表单。由 employee-skill/index.vue 引用；defineExpose 提供 validate、getValues、resetFields。 -->
