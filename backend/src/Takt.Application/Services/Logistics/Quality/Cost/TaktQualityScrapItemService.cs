@@ -284,7 +284,7 @@ public class TaktQualityScrapItemService : TaktServiceBase, ITaktQualityScrapIte
     public async Task<(string fileName, byte[] fileContent)> ExportQualityScrapItemAsync(TaktQualityScrapItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQualityScrapItemQueryDto());
-        var list = await _qualityScrapItemRepository.GetListAsync(predicate);
+        var list = await _qualityScrapItemRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -33,7 +33,6 @@ namespace Takt.Shared.Helpers;
 public static class TaktExcelHelper
 {
     private static TaktExcelOptions? _configuredOptions;
-    private const int MaxImportRowsPerFile = 1000;
     /// <summary>
     /// Excel（.xlsx）模板或单文件导出使用的 Content-Type。
     /// </summary>
@@ -45,6 +44,10 @@ public static class TaktExcelHelper
     private const string TimestampFormat = "yyyyMMddHHmmss";
 
     private const string ImportRowLimitExceededKey = TaktValidationI18nKeys.DataImportRowLimitExceeded;
+    private const string ImportSheetLimitExceededKey = TaktValidationI18nKeys.DataImportSheetLimitExceeded;
+    private const string ImportSheetRowLimitExceededKey = TaktValidationI18nKeys.DataImportSheetRowLimitExceeded;
+    private const string ExportSheetLimitExceededKey = TaktValidationI18nKeys.DataExportSheetLimitExceeded;
+    private const string ExportSheetRowLimitExceededKey = TaktValidationI18nKeys.DataExportSheetRowLimitExceeded;
     private const string ExcelHelperNotConfiguredKey = TaktValidationI18nKeys.SystemNotConfigured;
     private const string ExportMultiSheetAtLeastOneSheetKey = TaktValidationI18nKeys.Insufficient;
     private const string ExportMultiSheetNameRequiredKey = TaktValidationI18nKeys.Required;
@@ -158,6 +161,46 @@ public static class TaktExcelHelper
     }
 
     /// <summary>
+    /// 解析单文件最大导入行数（<c>Excel:Import:MaxRowsPerFile</c>）
+    /// </summary>
+    /// <param name="excelOptions">可选显式配置</param>
+    /// <returns>最大导入行数</returns>
+    private static int ResolveMaxImportRowsPerFile(TaktExcelOptions? excelOptions = null) =>
+        ResolveExcelOptions(excelOptions).Import.MaxRowsPerFile;
+
+    /// <summary>
+    /// 解析单 Sheet 最大导出行数（<c>Excel:Export:MaxRowsPerSheet</c>）
+    /// </summary>
+    /// <param name="excelOptions">可选显式配置</param>
+    /// <returns>单 Sheet 最大行数</returns>
+    private static int ResolveMaxExportRowsPerSheet(TaktExcelOptions? excelOptions = null) =>
+        ResolveExcelOptions(excelOptions).Export.MaxRowsPerSheet;
+
+    /// <summary>
+    /// 解析单文件最大导入 Sheet 数量（<c>Excel:Import:MaxSheetsPerFile</c>）
+    /// </summary>
+    /// <param name="excelOptions">可选显式配置</param>
+    /// <returns>最大 Sheet 数量</returns>
+    private static int ResolveMaxImportSheetsPerFile(TaktExcelOptions? excelOptions = null) =>
+        ResolveExcelOptions(excelOptions).Import.MaxSheetsPerFile;
+
+    /// <summary>
+    /// 解析单 Sheet 最大导入行数（<c>Excel:Import:MaxRowsPerSheet</c>）
+    /// </summary>
+    /// <param name="excelOptions">可选显式配置</param>
+    /// <returns>单 Sheet 最大导入行数</returns>
+    private static int ResolveMaxImportRowsPerSheet(TaktExcelOptions? excelOptions = null) =>
+        ResolveExcelOptions(excelOptions).Import.MaxRowsPerSheet;
+
+    /// <summary>
+    /// 解析单文件最大导出 Sheet 数量（<c>Excel:Export:MaxSheetsPerFile</c>）
+    /// </summary>
+    /// <param name="excelOptions">可选显式配置</param>
+    /// <returns>最大 Sheet 数量</returns>
+    private static int ResolveMaxExportSheetsPerFile(TaktExcelOptions? excelOptions = null) =>
+        ResolveExcelOptions(excelOptions).Export.MaxSheetsPerFile;
+
+    /// <summary>
     /// 设置工作簿属性（确保所有导出的 Excel 文件都包含完整的 <see cref="TaktExcelOptions"/> 信息）。
     /// </summary>
     /// <param name="workbook">目标工作簿</param>
@@ -203,10 +246,10 @@ public static class TaktExcelHelper
         ArgumentNullException.ThrowIfNull(data);
         ArgumentException.ThrowIfNullOrEmpty(sheetName);
         var workbookOptions = ResolveExcelOptions(excelOptions);
+        var maxRowsPerSheet = ResolveMaxExportRowsPerSheet(excelOptions);
 
         try
         {
-            const int maxRows = 10000;
             var dataList = data.ToList();
             int total = dataList.Count;
 
@@ -222,7 +265,7 @@ public static class TaktExcelHelper
                 return (actualFileName, content);
             }
 
-            if (total <= maxRows)
+            if (total <= maxRowsPerSheet)
             {
                 // 只生成一个Excel
                 using var package = new ExcelPackage();
@@ -235,14 +278,14 @@ public static class TaktExcelHelper
             }
             else
             {
-                // 超过10000，分批生成多个Excel并打包zip
-                int fileCount = (int)Math.Ceiling(total / (double)maxRows);
+                // 超过 MaxRowsPerSheet，分批生成多个 Excel 并打包 zip
+                int fileCount = (int)Math.Ceiling(total / (double)maxRowsPerSheet);
                 var fileList = new List<(string fileName, byte[] content)>();
                 var exportBaseName = NormalizeFileNameBase(fileName ?? sheetName);
                 if (string.IsNullOrWhiteSpace(exportBaseName)) exportBaseName = sheetName;
                 for (int i = 0; i < fileCount; i++)
                 {
-                    var batch = dataList.Skip(i * maxRows).Take(maxRows).ToList();
+                    var batch = dataList.Skip(i * maxRowsPerSheet).Take(maxRowsPerSheet).ToList();
                     using var package = new ExcelPackage();
                     SetWorkbookProperties(package.Workbook, workbookOptions);
                     await Task.Run(() => ExportToSheetAsync(package, batch, sheetName));
@@ -293,7 +336,8 @@ public static class TaktExcelHelper
         {
             using var package = new ExcelPackage(fileStream);
             var result = ImportFromSheet<T>(package, sheetName);
-            if (result.Count > MaxImportRowsPerFile)
+            var maxImportRows = ResolveMaxImportRowsPerFile();
+            if (result.Count > maxImportRows)
                 throw new TaktLocalizedException(
                     ImportRowLimitExceededKey,
                     "Frontend",
@@ -301,7 +345,7 @@ public static class TaktExcelHelper
                     new Dictionary<string, string>(StringComparer.Ordinal)
                     {
                         ["count"] = result.Count.ToString(CultureInfo.InvariantCulture),
-                        ["max"] = MaxImportRowsPerFile.ToString(CultureInfo.InvariantCulture),
+                        ["max"] = maxImportRows.ToString(CultureInfo.InvariantCulture),
                     },
                     null);
             TaktLogger.Information("[TaktExcelHelper] 导入Excel成功，Sheet: {SheetName}, 数据类型: {TypeName}, 数据行数: {RowCount}", sheetName, typeof(T).Name, result.Count);
@@ -330,6 +374,8 @@ public static class TaktExcelHelper
     {
         ArgumentNullException.ThrowIfNull(sheets);
         var workbookOptions = ResolveExcelOptions(excelOptions);
+        var maxSheetsPerFile = ResolveMaxExportSheetsPerFile(excelOptions);
+        var maxRowsPerSheet = ResolveMaxExportRowsPerSheet(excelOptions);
         if (!sheets.Any())
         {
             throw new TaktLocalizedException(
@@ -337,6 +383,20 @@ public static class TaktExcelHelper
                 "Frontend",
                 TaktValidationI18nKeys.FieldSheet,
                 null,
+                null);
+        }
+
+        if (sheets.Count > maxSheetsPerFile)
+        {
+            throw new TaktLocalizedException(
+                ExportSheetLimitExceededKey,
+                "Frontend",
+                null,
+                new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["count"] = sheets.Count.ToString(CultureInfo.InvariantCulture),
+                    ["max"] = maxSheetsPerFile.ToString(CultureInfo.InvariantCulture),
+                },
                 null);
         }
 
@@ -369,6 +429,21 @@ public static class TaktExcelHelper
                 }
 
                 var sheetData = sheet.Value.ToList();
+                if (sheetData.Count > maxRowsPerSheet)
+                {
+                    throw new TaktLocalizedException(
+                        ExportSheetRowLimitExceededKey,
+                        "Frontend",
+                        null,
+                        new Dictionary<string, string>(StringComparer.Ordinal)
+                        {
+                            ["sheet"] = sheet.Key,
+                            ["count"] = sheetData.Count.ToString(CultureInfo.InvariantCulture),
+                            ["max"] = maxRowsPerSheet.ToString(CultureInfo.InvariantCulture),
+                        },
+                        null);
+                }
+
                 totalRows += sheetData.Count;
                 ExportToSheetAsync(package, sheetData, sheet.Key);
             }
@@ -400,15 +475,51 @@ public static class TaktExcelHelper
         {
             using var package = new ExcelPackage(fileStream);
             var result = new Dictionary<string, List<T>>();
+            var worksheets = package.Workbook.Worksheets
+                .Where(worksheet => worksheet?.Name != null)
+                .ToList();
+            var maxSheetsPerFile = ResolveMaxImportSheetsPerFile();
+            var maxRowsPerSheet = ResolveMaxImportRowsPerSheet();
+            var maxImportRows = ResolveMaxImportRowsPerFile();
 
-            foreach (var worksheet in package.Workbook.Worksheets)
+            if (worksheets.Count > maxSheetsPerFile)
             {
-                if (worksheet?.Name == null) continue;
-                result[worksheet.Name] = ImportFromSheet<T>(package, worksheet.Name);
+                throw new TaktLocalizedException(
+                    ImportSheetLimitExceededKey,
+                    "Frontend",
+                    null,
+                    new Dictionary<string, string>(StringComparer.Ordinal)
+                    {
+                        ["count"] = worksheets.Count.ToString(CultureInfo.InvariantCulture),
+                        ["max"] = maxSheetsPerFile.ToString(CultureInfo.InvariantCulture),
+                    },
+                    null);
+            }
+
+            foreach (var worksheet in worksheets)
+            {
+                var sheetName = worksheet.Name;
+                var sheetRows = ImportFromSheet<T>(package, sheetName);
+                if (sheetRows.Count > maxRowsPerSheet)
+                {
+                    throw new TaktLocalizedException(
+                        ImportSheetRowLimitExceededKey,
+                        "Frontend",
+                        null,
+                        new Dictionary<string, string>(StringComparer.Ordinal)
+                        {
+                            ["sheet"] = sheetName,
+                            ["count"] = sheetRows.Count.ToString(CultureInfo.InvariantCulture),
+                            ["max"] = maxRowsPerSheet.ToString(CultureInfo.InvariantCulture),
+                        },
+                        null);
+                }
+
+                result[sheetName] = sheetRows;
             }
 
             var totalRows = result.Values.Sum(list => list.Count);
-            if (totalRows > MaxImportRowsPerFile)
+            if (totalRows > maxImportRows)
                 throw new TaktLocalizedException(
                     ImportRowLimitExceededKey,
                     "Frontend",
@@ -416,7 +527,7 @@ public static class TaktExcelHelper
                     new Dictionary<string, string>(StringComparer.Ordinal)
                     {
                         ["count"] = totalRows.ToString(CultureInfo.InvariantCulture),
-                        ["max"] = MaxImportRowsPerFile.ToString(CultureInfo.InvariantCulture),
+                        ["max"] = maxImportRows.ToString(CultureInfo.InvariantCulture),
                     },
                     null);
             TaktLogger.Information("[TaktExcelHelper] 导入多Sheet Excel成功，Sheet数量: {SheetCount}, 数据类型: {TypeName}, 总数据行数: {RowCount}", result.Count, typeof(T).Name, totalRows);

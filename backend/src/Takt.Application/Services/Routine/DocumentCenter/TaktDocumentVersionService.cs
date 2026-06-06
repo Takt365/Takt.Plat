@@ -261,7 +261,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     public async Task<(string fileName, byte[] fileContent)> ExportDocumentVersionAsync(TaktDocumentVersionQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktDocumentVersionQueryDto());
-        var list = await _documentVersionRepository.GetListAsync(predicate);
+        var list = await _documentVersionRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

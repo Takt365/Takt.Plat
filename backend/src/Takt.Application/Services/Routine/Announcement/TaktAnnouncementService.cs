@@ -238,7 +238,7 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     public async Task<(string fileName, byte[] fileContent)> ExportAnnouncementAsync(TaktAnnouncementQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAnnouncementQueryDto());
-        var list = await _announcementRepository.GetListAsync(predicate);
+        var list = await _announcementRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

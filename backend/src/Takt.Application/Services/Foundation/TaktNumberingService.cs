@@ -284,7 +284,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     public async Task<(string fileName, byte[] fileContent)> ExportNumberingAsync(TaktNumberingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktNumberingQueryDto());
-        var list = await _numberingRepository.GetListAsync(predicate);
+        var list = await _numberingRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

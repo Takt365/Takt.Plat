@@ -221,7 +221,7 @@ public class TaktShiftScheduleService : TaktServiceBase, ITaktShiftScheduleServi
     public async Task<(string fileName, byte[] fileContent)> ExportShiftScheduleAsync(TaktShiftScheduleQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktShiftScheduleQueryDto());
-        var list = await _shiftScheduleRepository.GetListAsync(predicate);
+        var list = await _shiftScheduleRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

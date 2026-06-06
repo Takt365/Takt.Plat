@@ -16,6 +16,8 @@ using Takt.Domain.Entities;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Infrastructure.Data.Context;
+using Microsoft.Extensions.Options;
+using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Repositories;
@@ -42,6 +44,11 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// 主键类型配置
     /// </summary>
     private readonly PrimaryKeyTypeOptions _primaryKeyTypeOptions;
+
+    /// <summary>
+    /// Excel 导入导出配置
+    /// </summary>
+    private readonly TaktExcelOptions _excelOptions;
 
     /// <summary>
     /// 当前租户编码
@@ -139,14 +146,17 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <param name="dbContext">数据库上下文</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="primaryKeyTypeOptions">主键类型配置</param>
+    /// <param name="excelOptions">Excel 导入导出配置</param>
     public TaktCompanyRepository(
         TaktSqlSugarContext dbContext,
         ITaktUserContext userContext,
-        Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions)
+        IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions,
+        IOptions<TaktExcelOptions> excelOptions)
     {
         _dbContext = dbContext;
         _userContext = userContext;
         _primaryKeyTypeOptions = primaryKeyTypeOptions.Value;
+        _excelOptions = excelOptions.Value;
     }
 
     // ========================================
@@ -204,6 +214,19 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
             : await query.OrderBy(orderBy).ToListAsync();
     }
 
+    /// <inheritdoc />
+    public virtual async Task<List<TEntity>> GetListForExportAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        int? maxRows = null)
+    {
+        var take = maxRows ?? _excelOptions.Export.MaxRowsPerRequest;
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(take);
+        return await ApplyReadScope(Db.Queryable<TEntity>().Where(predicate))
+            .OrderByDescending(x => x.CreatedAt)
+            .Take(take)
+            .ToListAsync();
+    }
+
     // ========================================
     // 分页查询
     // ========================================
@@ -213,12 +236,14 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// </summary>
     public virtual async Task<(List<TEntity> Items, int Total)> GetPagedAsync(int pageIndex, int pageSize)
     {
+        pageIndex = TaktPagedClamp.NormalizePageIndex(pageIndex);
+        pageSize = TaktPagedClamp.NormalizePageSize(pageSize);
         var filterQuery = ApplyReadScope(Db.Queryable<TEntity>());
 
         var total = await filterQuery.CountAsync();
         var items = await filterQuery
             .OrderByDescending(x => x.CreatedAt)
-            .Skip((pageIndex - 1) * pageSize)
+            .Skip(TaktPagedClamp.ComputeSkip(pageIndex, pageSize))
             .Take(pageSize)
             .ToListAsync();
 
@@ -244,6 +269,8 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         Expression<Func<TEntity, object>>? orderBy = null,
         bool isDesc = true)
     {
+        pageIndex = TaktPagedClamp.NormalizePageIndex(pageIndex);
+        pageSize = TaktPagedClamp.NormalizePageSize(pageSize);
         var filterQuery = ApplyReadScope(Db.Queryable<TEntity>().Where(predicate));
 
         var total = await filterQuery.CountAsync();
@@ -259,7 +286,7 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         }
 
         var items = await pageQuery
-            .Skip((pageIndex - 1) * pageSize)
+            .Skip(TaktPagedClamp.ComputeSkip(pageIndex, pageSize))
             .Take(pageSize)
             .ToListAsync();
 

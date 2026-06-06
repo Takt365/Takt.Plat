@@ -302,7 +302,7 @@ public class TaktVendorService : TaktServiceBase, ITaktVendorService
     public async Task<(string fileName, byte[] fileContent)> ExportVendorAsync(TaktVendorQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktVendorQueryDto());
-        var list = await _vendorRepository.GetListAsync(predicate);
+        var list = await _vendorRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

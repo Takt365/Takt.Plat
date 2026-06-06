@@ -278,7 +278,7 @@ public class TaktProductSerialOutboundItemService : TaktServiceBase, ITaktProduc
     public async Task<(string fileName, byte[] fileContent)> ExportProductSerialOutboundItemAsync(TaktProductSerialOutboundItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktProductSerialOutboundItemQueryDto());
-        var list = await _productSerialOutboundItemRepository.GetListAsync(predicate);
+        var list = await _productSerialOutboundItemRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

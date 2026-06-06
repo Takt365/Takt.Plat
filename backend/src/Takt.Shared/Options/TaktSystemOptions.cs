@@ -37,7 +37,7 @@ public class TaktSystemOptions
     /// <summary>
     /// 运行环境（Development/Staging/Production）
     /// </summary>
-    public string Environment { get; set; } = null!;
+    public string Environment { get; set; } = "Development";
 
     /// <summary>
     /// 验证配置

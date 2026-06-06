@@ -174,7 +174,7 @@ public class TaktAssetChangeLogService : TaktServiceBase, ITaktAssetChangeLogSer
     public async Task<(string fileName, byte[] fileContent)> ExportAssetChangeLogAsync(TaktAssetChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAssetChangeLogQueryDto());
-        var list = await _assetChangeLogRepository.GetListAsync(predicate);
+        var list = await _assetChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

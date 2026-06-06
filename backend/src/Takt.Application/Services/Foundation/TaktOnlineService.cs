@@ -270,7 +270,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
     public async Task<(string fileName, byte[] fileContent)> ExportOnlineAsync(TaktOnlineQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktOnlineQueryDto());
-        var list = await _onlineRepository.GetListAsync(predicate);
+        var list = await _onlineRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

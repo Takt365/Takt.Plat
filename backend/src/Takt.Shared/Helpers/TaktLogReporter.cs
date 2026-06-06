@@ -36,6 +36,11 @@ public static class TaktLogReporter
     private static int _isFlushing;
 
     /// <summary>
+    /// 远端上报队列最大条数（超出时丢弃最旧条目，防止上报失败导致内存无限增长）
+    /// </summary>
+    private const int MaxQueueSize = 10_000;
+
+    /// <summary>
     /// 配置上报器
     /// </summary>
     /// <param name="options">日志配置</param>
@@ -69,6 +74,9 @@ public static class TaktLogReporter
         }
 
         Queue.Enqueue(entry);
+        while (Queue.Count > MaxQueueSize && Queue.TryDequeue(out _))
+        {
+        }
 
         if (Queue.Count >= _options.BatchSize)
         {
@@ -111,18 +119,12 @@ public static class TaktLogReporter
             using var response = await HttpClient.PostAsync(_options.RemoteReportUrl, content).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                foreach (var item in batch)
-                {
-                    Queue.Enqueue(item);
-                }
+                RequeueBatch(batch);
             }
         }
         catch
         {
-            foreach (var item in batch)
-            {
-                Queue.Enqueue(item);
-            }
+            RequeueBatch(batch);
         }
         finally
         {
@@ -139,6 +141,18 @@ public static class TaktLogReporter
         {
             _flushTimer?.Dispose();
             _flushTimer = null;
+        }
+    }
+
+    private static void RequeueBatch(List<TaktLogEntry> batch)
+    {
+        foreach (var item in batch)
+        {
+            Queue.Enqueue(item);
+        }
+
+        while (Queue.Count > MaxQueueSize && Queue.TryDequeue(out _))
+        {
         }
     }
 

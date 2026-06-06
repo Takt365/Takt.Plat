@@ -286,7 +286,7 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
     public async Task<(string fileName, byte[] fileContent)> ExportSalesPriceItemAsync(TaktSalesPriceItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSalesPriceItemQueryDto());
-        var list = await _salesPriceItemRepository.GetListAsync(predicate);
+        var list = await _salesPriceItemRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

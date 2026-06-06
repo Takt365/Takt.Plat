@@ -256,7 +256,7 @@ public class TaktTicketCategoryAssignService : TaktServiceBase, ITaktTicketCateg
     public async Task<(string fileName, byte[] fileContent)> ExportTicketCategoryAssignAsync(TaktTicketCategoryAssignQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTicketCategoryAssignQueryDto());
-        var list = await _ticketCategoryAssignRepository.GetListAsync(predicate);
+        var list = await _ticketCategoryAssignRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

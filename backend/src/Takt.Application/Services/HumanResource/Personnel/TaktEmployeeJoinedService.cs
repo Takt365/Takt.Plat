@@ -221,7 +221,7 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeJoinedAsync(TaktEmployeeJoinedQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeJoinedQueryDto());
-        var list = await _employeeJoinedRepository.GetListAsync(predicate);
+        var list = await _employeeJoinedRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

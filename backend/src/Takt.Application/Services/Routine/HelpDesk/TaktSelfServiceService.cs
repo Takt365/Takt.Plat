@@ -274,7 +274,7 @@ public class TaktSelfServiceService : TaktServiceBase, ITaktSelfServiceService
     public async Task<(string fileName, byte[] fileContent)> ExportSelfServiceAsync(TaktSelfServiceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSelfServiceQueryDto());
-        var list = await _selfServiceRepository.GetListAsync(predicate);
+        var list = await _selfServiceRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

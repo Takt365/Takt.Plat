@@ -221,7 +221,7 @@ public class TaktEmployeeExperienceService : TaktServiceBase, ITaktEmployeeExper
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeExperienceAsync(TaktEmployeeExperienceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeExperienceQueryDto());
-        var list = await _employeeExperienceRepository.GetListAsync(predicate);
+        var list = await _employeeExperienceRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -252,7 +252,7 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
     public async Task<(string fileName, byte[] fileContent)> ExportCalendarAsync(TaktCalendarQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktCalendarQueryDto());
-        var list = await _calendarRepository.GetListAsync(predicate);
+        var list = await _calendarRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

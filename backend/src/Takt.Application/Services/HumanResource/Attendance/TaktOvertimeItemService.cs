@@ -281,7 +281,7 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
     public async Task<(string fileName, byte[] fileContent)> ExportOvertimeItemAsync(TaktOvertimeItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktOvertimeItemQueryDto());
-        var list = await _overtimeItemRepository.GetListAsync(predicate);
+        var list = await _overtimeItemRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

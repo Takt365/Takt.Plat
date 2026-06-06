@@ -295,7 +295,7 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     public async Task<(string fileName, byte[] fileContent)> ExportPurchaseRequestAsync(TaktPurchaseRequestQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPurchaseRequestQueryDto());
-        var list = await _purchaseRequestRepository.GetListAsync(predicate);
+        var list = await _purchaseRequestRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

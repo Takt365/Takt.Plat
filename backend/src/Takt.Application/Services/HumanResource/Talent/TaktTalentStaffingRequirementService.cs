@@ -263,7 +263,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
     public async Task<(string fileName, byte[] fileContent)> ExportTalentStaffingRequirementAsync(TaktTalentStaffingRequirementQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTalentStaffingRequirementQueryDto());
-        var list = await _talentStaffingRequirementRepository.GetListAsync(predicate);
+        var list = await _talentStaffingRequirementRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

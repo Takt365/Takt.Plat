@@ -24,27 +24,27 @@ public class TaktCacheOptions
     /// <summary>
     /// 缓存提供者：Memory（内存缓存）或 Redis（Redis缓存）
     /// </summary>
-    public string Provider { get; set; } = null!;
+    public string Provider { get; set; } = "Memory";
 
     /// <summary>
     /// 默认过期时间（分钟）
     /// </summary>
-    public int DefaultExpirationMinutes { get; set; }
+    public int DefaultExpirationMinutes { get; set; } = 30;
 
     /// <summary>
     /// 是否启用滑动过期（每次访问时重置过期时间）
     /// </summary>
-    public bool EnableSlidingExpiration { get; set; }
+    public bool EnableSlidingExpiration { get; set; } = true;
 
     /// <summary>
     /// 内存缓存配置
     /// </summary>
-    public TaktCacheMemoryOptions Memory { get; set; } = null!;
+    public TaktCacheMemoryOptions Memory { get; set; } = new();
 
     /// <summary>
     /// Redis缓存配置
     /// </summary>
-    public TaktCacheRedisOptions Redis { get; set; } = null!;
+    public TaktCacheRedisOptions Redis { get; set; } = new();
 
     /// <summary>
     /// 菜单缓存配置（树/全量列表自动缓存开关）
@@ -99,19 +99,7 @@ public class TaktCacheOptions
             throw new InvalidOperationException("Cache:DefaultExpirationMinutes 必须大于 0");
         }
 
-        if (Memory == null)
-        {
-            throw new InvalidOperationException("Cache:Memory 配置不能为空");
-        }
-
         Memory.Validate();
-
-        if (Redis == null)
-        {
-            throw new InvalidOperationException("Cache:Redis 配置不能为空");
-        }
-
-        Menu ??= new TaktMenuCacheOptions();
 
         if (IsMemoryProvider)
         {
@@ -140,20 +128,30 @@ public class TaktCacheOptions
 public class TaktCacheMemoryOptions
 {
     /// <summary>
+    /// 缓存容量上限（抽象 Size 单位总和；须与写入项的 <c>MemoryCacheEntryOptions.Size</c> 配合）
+    /// </summary>
+    public int SizeLimit { get; set; } = 4096;
+
+    /// <summary>
     /// 压缩百分比（0.0-1.0），映射到 <see cref="Microsoft.Extensions.Caching.Memory.MemoryCacheOptions.CompactionPercentage"/>
     /// </summary>
-    public double CompactionPercentage { get; set; }
+    public double CompactionPercentage { get; set; } = 0.25;
 
     /// <summary>
     /// 过期扫描频率（秒），映射到 <see cref="Microsoft.Extensions.Caching.Memory.MemoryCacheOptions.ExpirationScanFrequency"/>
     /// </summary>
-    public int ExpirationScanFrequency { get; set; }
+    public int ExpirationScanFrequency { get; set; } = 60;
 
     /// <summary>
     /// 验证内存缓存配置（仅校验实际绑定到 MemoryCache 的项）
     /// </summary>
     public void Validate()
     {
+        if (SizeLimit <= 0)
+        {
+            throw new InvalidOperationException("Cache:Memory:SizeLimit 必须大于 0");
+        }
+
         if (CompactionPercentage < 0 || CompactionPercentage > 1)
         {
             throw new InvalidOperationException("Cache:Memory:CompactionPercentage 必须在 0 到 1 之间");
@@ -179,12 +177,12 @@ public class TaktCacheRedisOptions
     /// <summary>
     /// Redis连接字符串
     /// </summary>
-    public string ConnectionString { get; set; } = null!;
+    public string ConnectionString { get; set; } = string.Empty;
 
     /// <summary>
     /// 实例名称前缀，用于区分不同应用的缓存键
     /// </summary>
-    public string InstanceName { get; set; } = null!;
+    public string InstanceName { get; set; } = "Takt.Net";
 
     /// <summary>
     /// 默认数据库编号
@@ -194,17 +192,17 @@ public class TaktCacheRedisOptions
     /// <summary>
     /// 连接超时时间（毫秒）
     /// </summary>
-    public int ConnectTimeout { get; set; }
+    public int ConnectTimeout { get; set; } = 5000;
 
     /// <summary>
     /// 同步超时时间（毫秒）
     /// </summary>
-    public int SyncTimeout { get; set; }
+    public int SyncTimeout { get; set; } = 5000;
 
     /// <summary>
     /// 是否允许管理员操作
     /// </summary>
-    public bool AllowAdmin { get; set; }
+    public bool AllowAdmin { get; set; } = true;
 
     /// <summary>
     /// 是否启用SSL
@@ -214,17 +212,17 @@ public class TaktCacheRedisOptions
     /// <summary>
     /// Redis密码
     /// </summary>
-    public string Password { get; set; } = null!;
+    public string Password { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否启用压缩
     /// </summary>
-    public bool EnableCompression { get; set; }
+    public bool EnableCompression { get; set; } = true;
 
     /// <summary>
     /// 压缩阈值（字节），超过此大小的值才会压缩
     /// </summary>
-    public int CompressionThreshold { get; set; }
+    public int CompressionThreshold { get; set; } = 1024;
 
     /// <summary>
     /// 验证 Redis 缓存配置（Provider 为 Redis 时调用）

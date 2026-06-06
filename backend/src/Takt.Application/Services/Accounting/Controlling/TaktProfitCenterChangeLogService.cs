@@ -174,7 +174,7 @@ public class TaktProfitCenterChangeLogService : TaktServiceBase, ITaktProfitCent
     public async Task<(string fileName, byte[] fileContent)> ExportProfitCenterChangeLogAsync(TaktProfitCenterChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktProfitCenterChangeLogQueryDto());
-        var list = await _profitCenterChangeLogRepository.GetListAsync(predicate);
+        var list = await _profitCenterChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

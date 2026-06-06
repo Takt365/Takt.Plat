@@ -287,7 +287,7 @@ public class TaktInspectionStandardService : TaktServiceBase, ITaktInspectionSta
     public async Task<(string fileName, byte[] fileContent)> ExportInspectionStandardAsync(TaktInspectionStandardQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktInspectionStandardQueryDto());
-        var list = await _inspectionStandardRepository.GetListAsync(predicate);
+        var list = await _inspectionStandardRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

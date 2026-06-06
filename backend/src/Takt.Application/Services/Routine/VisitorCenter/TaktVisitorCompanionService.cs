@@ -230,7 +230,7 @@ public class TaktVisitorCompanionService : TaktServiceBase, ITaktVisitorCompanio
     public async Task<(string fileName, byte[] fileContent)> ExportVisitorCompanionAsync(TaktVisitorCompanionQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktVisitorCompanionQueryDto());
-        var list = await _visitorCompanionRepository.GetListAsync(predicate);
+        var list = await _visitorCompanionRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

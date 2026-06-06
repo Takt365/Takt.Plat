@@ -292,7 +292,7 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
     public async Task<(string fileName, byte[] fileContent)> ExportApsScheduleAsync(TaktApsScheduleQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktApsScheduleQueryDto());
-        var list = await _apsScheduleRepository.GetListAsync(predicate);
+        var list = await _apsScheduleRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

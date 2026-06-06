@@ -83,6 +83,18 @@ public static class TaktValidationI18nKeys
     /// <summary>导入行数超限</summary>
     public const string DataImportRowLimitExceeded = "common.data.import.row.limit.exceeded";
 
+    /// <summary>导入 Sheet 数量超限</summary>
+    public const string DataImportSheetLimitExceeded = "common.data.import.sheet.limit.exceeded";
+
+    /// <summary>导入单 Sheet 行数超限</summary>
+    public const string DataImportSheetRowLimitExceeded = "common.data.import.sheet.row.limit.exceeded";
+
+    /// <summary>导出 Sheet 数量超限</summary>
+    public const string DataExportSheetLimitExceeded = "common.data.export.sheet.limit.exceeded";
+
+    /// <summary>导出单 Sheet 行数超限</summary>
+    public const string DataExportSheetRowLimitExceeded = "common.data.export.sheet.row.limit.exceeded";
+
     /// <summary>操作</summary>
     public const string ActionOperation = "common.action.operation";
 

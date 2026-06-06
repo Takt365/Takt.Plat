@@ -313,7 +313,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
     public async Task<(string fileName, byte[] fileContent)> ExportDictTypeAsync(TaktDictTypeQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktDictTypeQueryDto());
-        var list = await _dictTypeRepository.GetListAsync(predicate);
+        var list = await _dictTypeRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

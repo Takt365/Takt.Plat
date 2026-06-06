@@ -266,7 +266,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     public async Task<(string fileName, byte[] fileContent)> ExportAssetAsync(TaktAssetQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAssetQueryDto());
-        var list = await _assetRepository.GetListAsync(predicate);
+        var list = await _assetRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

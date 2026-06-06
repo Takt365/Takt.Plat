@@ -301,7 +301,7 @@ public class TaktIpqcDefectHandlingService : TaktServiceBase, ITaktIpqcDefectHan
     public async Task<(string fileName, byte[] fileContent)> ExportIpqcDefectHandlingAsync(TaktIpqcDefectHandlingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktIpqcDefectHandlingQueryDto());
-        var list = await _ipqcDefectHandlingRepository.GetListAsync(predicate);
+        var list = await _ipqcDefectHandlingRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

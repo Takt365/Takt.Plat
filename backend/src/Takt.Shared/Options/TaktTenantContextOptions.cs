@@ -22,12 +22,12 @@ public class TaktTenantContextOptions
     /// <summary>
     /// 租户请求头名称
     /// </summary>
-    public string TenantHeaderName { get; set; } = null!;
+    public string TenantHeaderName { get; set; } = "X-Tenant-Code";
 
     /// <summary>
     /// 公司请求头名称
     /// </summary>
-    public string CompanyHeaderName { get; set; } = null!;
+    public string CompanyHeaderName { get; set; } = "X-Company-Code";
 
     /// <summary>
     /// 验证配置是否完整

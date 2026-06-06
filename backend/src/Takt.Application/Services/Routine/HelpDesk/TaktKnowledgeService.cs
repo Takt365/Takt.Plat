@@ -288,7 +288,7 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
     public async Task<(string fileName, byte[] fileContent)> ExportKnowledgeAsync(TaktKnowledgeQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktKnowledgeQueryDto());
-        var list = await _knowledgeRepository.GetListAsync(predicate);
+        var list = await _knowledgeRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

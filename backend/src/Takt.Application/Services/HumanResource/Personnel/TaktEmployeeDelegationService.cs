@@ -258,7 +258,7 @@ public class TaktEmployeeDelegationService : TaktServiceBase, ITaktEmployeeDeleg
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeDelegationAsync(TaktEmployeeDelegationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeDelegationQueryDto());
-        var list = await _employeeDelegationRepository.GetListAsync(predicate);
+        var list = await _employeeDelegationRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

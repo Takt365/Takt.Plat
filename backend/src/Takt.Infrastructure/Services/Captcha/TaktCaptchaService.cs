@@ -65,6 +65,11 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     private volatile bool _behaviorCleanupStarted;
 
     /// <summary>
+    /// 滑块验证码后台清理任务是否已启动
+    /// </summary>
+    private volatile bool _sliderCleanupStarted;
+
+    /// <summary>
     /// 初始化验证码服务
     /// </summary>
     /// <param name="captchaOptions">验证码配置（Captcha 节点）</param>
@@ -165,6 +170,8 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
         var targetX = _random.Next(minX, maxX + 1);
         var targetY = (_sliderOptions.Height - sliderSize) / 2;
         var targetPosition = (int)((double)targetX / _sliderOptions.Width * 100);
+
+        EnsureSliderCleanupStarted();
 
         SliderStore[captchaId] = new TaktSliderCaptchaData
         {
@@ -621,6 +628,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
         var elapsedSeconds = (DateTime.UtcNow - captchaData.CreatedAt).TotalSeconds;
         if (elapsedSeconds < _behaviorOptions.MinCompleteSeconds)
         {
+            BehaviorStore.TryRemove(request.CaptchaId, out _);
             return FailMessage(TaktValidationI18nKeys.TooFastRetry);
         }
 
@@ -805,9 +813,44 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     }
 
     /// <summary>
+    /// 首次生成滑块验证码时启动过期清理后台任务
+    /// </summary>
+    private void EnsureSliderCleanupStarted()
+    {
+        if (_sliderCleanupStarted)
+        {
+            return;
+        }
+
+        lock (SliderStore)
+        {
+            if (_sliderCleanupStarted)
+            {
+                return;
+            }
+
+            _ = Task.Run(() => CleanupExpiredCaptchaStoreAsync(SliderStore, "Slider"));
+            _sliderCleanupStarted = true;
+        }
+    }
+
+    /// <summary>
     /// 后台循环清理过期的行为验证码内存项（每 5 分钟扫描一次）
     /// </summary>
     private async Task CleanupExpiredBehaviorDataAsync()
+    {
+        await CleanupExpiredCaptchaStoreAsync(BehaviorStore, "Behavior");
+    }
+
+    /// <summary>
+    /// 后台循环清理验证码内存存储中的过期项（每 5 分钟扫描一次）
+    /// </summary>
+    /// <typeparam name="TData">验证码缓存项类型</typeparam>
+    /// <param name="store">内存存储</param>
+    /// <param name="storeName">存储名称（日志用）</param>
+    private async Task CleanupExpiredCaptchaStoreAsync<TData>(
+        ConcurrentDictionary<string, TData> store,
+        string storeName) where TData : class
     {
         while (true)
         {
@@ -815,17 +858,23 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
             {
                 await Task.Delay(TimeSpan.FromMinutes(5));
                 var expirationTime = DateTime.UtcNow.AddMinutes(-_expirationMinutes);
-                foreach (var kvp in BehaviorStore)
+                foreach (var kvp in store)
                 {
-                    if (kvp.Value.CreatedAt < expirationTime)
+                    var createdAt = kvp.Value switch
                     {
-                        BehaviorStore.TryRemove(kvp.Key, out _);
+                        TaktSliderCaptchaData slider => slider.CreatedAt,
+                        TaktBehaviorCaptchaData behavior => behavior.CreatedAt,
+                        _ => DateTime.MinValue,
+                    };
+                    if (createdAt < expirationTime)
+                    {
+                        store.TryRemove(kvp.Key, out _);
                     }
                 }
             }
             catch (Exception ex)
             {
-                TaktLogger.Error(ex, "[Captcha Behavior] 清理过期数据失败");
+                TaktLogger.Error(ex, "[Captcha {StoreName}] 清理过期数据失败", storeName);
             }
         }
     }

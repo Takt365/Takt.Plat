@@ -298,7 +298,7 @@ public class TaktMaintenanceService : TaktServiceBase, ITaktMaintenanceService
     public async Task<(string fileName, byte[] fileContent)> ExportMaintenanceAsync(TaktMaintenanceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktMaintenanceQueryDto());
-        var list = await _maintenanceRepository.GetListAsync(predicate);
+        var list = await _maintenanceRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

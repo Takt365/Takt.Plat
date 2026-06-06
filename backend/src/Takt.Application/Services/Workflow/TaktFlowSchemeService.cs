@@ -304,7 +304,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
     public async Task<(string fileName, byte[] fileContent)> ExportFlowSchemeAsync(TaktFlowSchemeQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktFlowSchemeQueryDto());
-        var list = await _flowSchemeRepository.GetListAsync(predicate);
+        var list = await _flowSchemeRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -174,7 +174,7 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
     public async Task<(string fileName, byte[] fileContent)> ExportLoginLogAsync(TaktLoginLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktLoginLogQueryDto());
-        var list = await _loginLogRepository.GetListAsync(predicate);
+        var list = await _loginLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

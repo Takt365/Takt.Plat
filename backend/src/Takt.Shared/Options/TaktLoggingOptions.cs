@@ -24,22 +24,22 @@ public class TaktLoggingOptions
     /// <summary>
     /// 应用名称
     /// </summary>
-    public string AppName { get; set; } = null!;
+    public string AppName { get; set; } = "Takt Digital Factory";
 
     /// <summary>
     /// 应用版本
     /// </summary>
-    public string AppVersion { get; set; } = null!;
+    public string AppVersion { get; set; } = "1.0.0";
 
     /// <summary>
     /// 运行环境
     /// </summary>
-    public string Environment { get; set; } = null!;
+    public string Environment { get; set; } = "Development";
 
     /// <summary>
     /// 最低采集级别
     /// </summary>
-    public TaktLogLevel MinLevel { get; set; }
+    public TaktLogLevel MinLevel { get; set; } = TaktLogLevel.Info;
 
     /// <summary>
     /// 是否启用远端上报
@@ -49,27 +49,29 @@ public class TaktLoggingOptions
     /// <summary>
     /// 远端上报地址（POST JSON）
     /// </summary>
-    public string RemoteReportUrl { get; set; } = null!;
+    public string RemoteReportUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 批量上报条数阈值
     /// </summary>
-    public int BatchSize { get; set; }
+    public int BatchSize { get; set; } = 20;
 
     /// <summary>
     /// 定时 flush 间隔（毫秒）
     /// </summary>
-    public int FlushIntervalMs { get; set; }
+    public int FlushIntervalMs { get; set; } = 10000;
 
     /// <summary>
     /// 控制台输出模板（Serilog outputTemplate）
     /// </summary>
-    public string ConsoleOutputTemplate { get; set; } = null!;
+    public string ConsoleOutputTemplate { get; set; } =
+        "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
     /// <summary>
     /// 文件输出模板（Serilog outputTemplate）
     /// </summary>
-    public string FileOutputTemplate { get; set; } = null!;
+    public string FileOutputTemplate { get; set; } =
+        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
     /// <summary>
     /// 验证配置

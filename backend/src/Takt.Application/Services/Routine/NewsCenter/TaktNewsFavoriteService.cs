@@ -261,7 +261,7 @@ public class TaktNewsFavoriteService : TaktServiceBase, ITaktNewsFavoriteService
     public async Task<(string fileName, byte[] fileContent)> ExportNewsFavoriteAsync(TaktNewsFavoriteQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktNewsFavoriteQueryDto());
-        var list = await _newsFavoriteRepository.GetListAsync(predicate);
+        var list = await _newsFavoriteRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

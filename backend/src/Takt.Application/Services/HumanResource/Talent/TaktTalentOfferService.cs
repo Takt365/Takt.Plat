@@ -236,7 +236,7 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
     public async Task<(string fileName, byte[] fileContent)> ExportTalentOfferAsync(TaktTalentOfferQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTalentOfferQueryDto());
-        var list = await _talentOfferRepository.GetListAsync(predicate);
+        var list = await _talentOfferRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -261,7 +261,7 @@ public class TaktNewsCommentLikeService : TaktServiceBase, ITaktNewsCommentLikeS
     public async Task<(string fileName, byte[] fileContent)> ExportNewsCommentLikeAsync(TaktNewsCommentLikeQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktNewsCommentLikeQueryDto());
-        var list = await _newsCommentLikeRepository.GetListAsync(predicate);
+        var list = await _newsCommentLikeRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

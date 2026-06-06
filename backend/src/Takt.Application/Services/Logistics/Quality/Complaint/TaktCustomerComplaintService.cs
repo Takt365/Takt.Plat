@@ -319,7 +319,7 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
     public async Task<(string fileName, byte[] fileContent)> ExportCustomerComplaintAsync(TaktCustomerComplaintQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktCustomerComplaintQueryDto());
-        var list = await _customerComplaintRepository.GetListAsync(predicate);
+        var list = await _customerComplaintRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

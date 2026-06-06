@@ -281,7 +281,7 @@ public class TaktQualityOperationReliabilityService : TaktServiceBase, ITaktQual
     public async Task<(string fileName, byte[] fileContent)> ExportQualityOperationReliabilityAsync(TaktQualityOperationReliabilityQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQualityOperationReliabilityQueryDto());
-        var list = await _qualityOperationReliabilityRepository.GetListAsync(predicate);
+        var list = await _qualityOperationReliabilityRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

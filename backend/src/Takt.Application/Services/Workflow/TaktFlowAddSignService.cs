@@ -221,7 +221,7 @@ public class TaktFlowAddSignService : TaktServiceBase, ITaktFlowAddSignService
     public async Task<(string fileName, byte[] fileContent)> ExportFlowAddSignAsync(TaktFlowAddSignQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktFlowAddSignQueryDto());
-        var list = await _flowAddSignRepository.GetListAsync(predicate);
+        var list = await _flowAddSignRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

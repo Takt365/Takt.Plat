@@ -280,7 +280,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
     public async Task<(string fileName, byte[] fileContent)> ExportTalentJobPostingAsync(TaktTalentJobPostingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTalentJobPostingQueryDto());
-        var list = await _talentJobPostingRepository.GetListAsync(predicate);
+        var list = await _talentJobPostingRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

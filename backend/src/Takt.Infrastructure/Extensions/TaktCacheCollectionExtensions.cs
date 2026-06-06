@@ -44,6 +44,7 @@ public static class TaktCacheCollectionExtensions
         // 全应用唯一 IMemoryCache：业务 ITaktCacheService 与 OpenIddict 等框架共用；选项来自 Cache:Memory
         services.AddMemoryCache(options =>
         {
+            options.SizeLimit = memoryOptions.SizeLimit;
             options.CompactionPercentage = memoryOptions.CompactionPercentage;
             options.ExpirationScanFrequency = TimeSpan.FromSeconds(
                 Math.Max(1, memoryOptions.ExpirationScanFrequency));

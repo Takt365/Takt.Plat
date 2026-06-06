@@ -255,7 +255,7 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
     public async Task<(string fileName, byte[] fileContent)> ExportHolidayAsync(TaktHolidayQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktHolidayQueryDto());
-        var list = await _holidayRepository.GetListAsync(predicate);
+        var list = await _holidayRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

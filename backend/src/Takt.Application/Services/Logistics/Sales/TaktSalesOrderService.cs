@@ -292,7 +292,7 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
     public async Task<(string fileName, byte[] fileContent)> ExportSalesOrderAsync(TaktSalesOrderQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSalesOrderQueryDto());
-        var list = await _salesOrderRepository.GetListAsync(predicate);
+        var list = await _salesOrderRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

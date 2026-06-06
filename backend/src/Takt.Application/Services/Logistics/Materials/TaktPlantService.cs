@@ -301,7 +301,7 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
     public async Task<(string fileName, byte[] fileContent)> ExportPlantAsync(TaktPlantQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPlantQueryDto());
-        var list = await _plantRepository.GetListAsync(predicate);
+        var list = await _plantRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

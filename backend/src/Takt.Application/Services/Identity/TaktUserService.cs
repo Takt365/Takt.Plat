@@ -724,7 +724,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     {
         var predicate = QueryExpression(query ?? new TaktUserQueryDto());
 
-        var list = await _userRepository.GetListAsync(predicate);
+        var list = await _userRepository.GetListForExportAsync(predicate);
 
         if (list == null || list.Count == 0)
         {

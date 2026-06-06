@@ -278,7 +278,7 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     public async Task<(string fileName, byte[] fileContent)> ExportConferenceParticipantAsync(TaktConferenceParticipantQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktConferenceParticipantQueryDto());
-        var list = await _conferenceParticipantRepository.GetListAsync(predicate);
+        var list = await _conferenceParticipantRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

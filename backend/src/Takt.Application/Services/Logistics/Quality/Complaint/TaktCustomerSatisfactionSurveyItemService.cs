@@ -298,7 +298,7 @@ public class TaktCustomerSatisfactionSurveyItemService : TaktServiceBase, ITaktC
     public async Task<(string fileName, byte[] fileContent)> ExportCustomerSatisfactionSurveyItemAsync(TaktCustomerSatisfactionSurveyItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktCustomerSatisfactionSurveyItemQueryDto());
-        var list = await _customerSatisfactionSurveyItemRepository.GetListAsync(predicate);
+        var list = await _customerSatisfactionSurveyItemRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -4,7 +4,7 @@
 // 文件名称：TaktQuartzOptions.cs
 // 创建时间：2026-06-05
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Quartz 定时任务调度配置选项，绑定 appsettings <c>Quartz</c> 节
+// 功能描述：Quartz 定时任务调度配置；appsettings 覆盖本类默认值
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

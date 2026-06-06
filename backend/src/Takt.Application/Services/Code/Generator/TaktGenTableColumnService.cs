@@ -306,7 +306,7 @@ public class TaktGenTableColumnService : TaktServiceBase, ITaktGenTableColumnSer
     public async Task<(string fileName, byte[] fileContent)> ExportGenTableColumnAsync(TaktGenTableColumnQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktGenTableColumnQueryDto());
-        var list = await _genTableColumnRepository.GetListAsync(predicate);
+        var list = await _genTableColumnRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

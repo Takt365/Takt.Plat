@@ -281,7 +281,7 @@ public class TaktEcDeptService : TaktServiceBase, ITaktEcDeptService
     public async Task<(string fileName, byte[] fileContent)> ExportEcDeptAsync(TaktEcDeptQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEcDeptQueryDto());
-        var list = await _ecDeptRepository.GetListAsync(predicate);
+        var list = await _ecDeptRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

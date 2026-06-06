@@ -302,7 +302,7 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
     public async Task<(string fileName, byte[] fileContent)> ExportSupplierAsync(TaktSupplierQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSupplierQueryDto());
-        var list = await _supplierRepository.GetListAsync(predicate);
+        var list = await _supplierRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -266,7 +266,7 @@ public class TaktVisitorService : TaktServiceBase, ITaktVisitorService
     public async Task<(string fileName, byte[] fileContent)> ExportVisitorAsync(TaktVisitorQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktVisitorQueryDto());
-        var list = await _visitorRepository.GetListAsync(predicate);
+        var list = await _visitorRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

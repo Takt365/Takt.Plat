@@ -174,7 +174,7 @@ public class TaktSalesPriceChangeLogService : TaktServiceBase, ITaktSalesPriceCh
     public async Task<(string fileName, byte[] fileContent)> ExportSalesPriceChangeLogAsync(TaktSalesPriceChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSalesPriceChangeLogQueryDto());
-        var list = await _salesPriceChangeLogRepository.GetListAsync(predicate);
+        var list = await _salesPriceChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

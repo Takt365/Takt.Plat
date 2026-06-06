@@ -181,7 +181,7 @@ public class TaktBillOfMaterialChangeLogService : TaktServiceBase, ITaktBillOfMa
     public async Task<(string fileName, byte[] fileContent)> ExportBillOfMaterialChangeLogAsync(TaktBillOfMaterialChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktBillOfMaterialChangeLogQueryDto());
-        var list = await _billOfMaterialChangeLogRepository.GetListAsync(predicate);
+        var list = await _billOfMaterialChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

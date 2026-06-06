@@ -101,12 +101,43 @@ try
         builder.Configuration.GetSection(TaktExcelOptions.SectionName));
     builder.Services.AddSingleton(excelOptions);
     TaktExcelHelper.Configure(excelOptions);
-    TaktLogger.Information("  ✓ Excel 导入导出配置已加载 - 作者: {Author}, 标题: {Title}", excelOptions.Author, excelOptions.Title);
+    TaktLogger.Information(
+        "  ✓ Excel 导入导出配置已加载 - 作者: {Author}, 导入行/Sheet/单Sheet: {ImportMaxRows}/{ImportMaxSheets}/{ImportMaxRowsPerSheet}, 导出请求/单Sheet/Sheet数: {ExportRequestMax}/{ExportSheetMaxRows}/{ExportMaxSheets}",
+        excelOptions.Author,
+        excelOptions.Import.MaxRowsPerFile,
+        excelOptions.Import.MaxSheetsPerFile,
+        excelOptions.Import.MaxRowsPerSheet,
+        excelOptions.Export.MaxRowsPerRequest,
+        excelOptions.Export.MaxRowsPerSheet,
+        excelOptions.Export.MaxSheetsPerFile);
     
+    var authenticationOptions = builder.Configuration.RequireAuthentication();
+    builder.Services.Configure<TaktAuthenticationOptions>(
+        builder.Configuration.GetSection(TaktAuthenticationOptions.SectionName));
+
+    var accountLockOptions = builder.Configuration.RequireAccountLock();
+    builder.Services.Configure<TaktAccountLockOptions>(
+        builder.Configuration.GetSection(TaktAccountLockOptions.SectionName));
+
+    var systemOptions = builder.Configuration.RequireSystem();
+    builder.Services.Configure<TaktSystemOptions>(
+        builder.Configuration.GetSection(TaktSystemOptions.SectionName));
+
+    var emailOptions = builder.Configuration.RequireEmail();
+    builder.Services.Configure<TaktEmailOptions>(
+        builder.Configuration.GetSection(TaktEmailOptions.SectionName));
+
+    TaktLogger.Information(
+        "  ✓ 认证/账户锁定/系统/邮件配置已绑定校验 - Token有效期: {AccessHours}h, 账户锁定: {AccountLockEnabled}, 环境: {SystemEnv}",
+        authenticationOptions.AccessTokenLifetimeHours,
+        accountLockOptions.Enabled,
+        systemOptions.Environment);
+
     builder.Services.AddSingleton(passwordPolicyOptions);
     builder.Services.AddSingleton(tenantOptions);
     builder.Services.AddSingleton(databaseOptions);
-    
+    builder.Services.AddSingleton(emailOptions);
+
     TaktLogger.Information("  ✓ 数据库配置已加载 - 类型: {DbType}", databaseOptions.GetSugarDbType());
     TaktLogger.Information("  ✓ 连接字符串模板: {Template}", databaseOptions.ConnectionStringTemplate);
 

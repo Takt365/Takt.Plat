@@ -221,7 +221,7 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeEducationAsync(TaktEmployeeEducationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeEducationQueryDto());
-        var list = await _employeeEducationRepository.GetListAsync(predicate);
+        var list = await _employeeEducationRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

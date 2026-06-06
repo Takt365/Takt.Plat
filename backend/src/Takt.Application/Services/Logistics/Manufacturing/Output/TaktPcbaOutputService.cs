@@ -282,7 +282,7 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     public async Task<(string fileName, byte[] fileContent)> ExportPcbaOutputAsync(TaktPcbaOutputQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPcbaOutputQueryDto());
-        var list = await _pcbaOutputRepository.GetListAsync(predicate);
+        var list = await _pcbaOutputRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

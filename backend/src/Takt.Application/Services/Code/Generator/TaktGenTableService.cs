@@ -273,7 +273,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     public async Task<(string fileName, byte[] fileContent)> ExportGenTableAsync(TaktGenTableQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktGenTableQueryDto());
-        var list = await _genTableRepository.GetListAsync(predicate);
+        var list = await _genTableRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

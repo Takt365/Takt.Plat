@@ -63,6 +63,14 @@ public interface ITaktTenantRepository<TEntity> : ITaktUniqueExistenceRepository
     /// <returns>实体列表</returns>
     Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> orderBy, bool isDesc = true);
 
+    /// <summary>
+    /// 导出用条件查询（带上限行数上限，防止全表加载 OOM）
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <param name="maxRows">最大行数；为空时使用 <c>Excel:Export:MaxRowsPerRequest</c> 配置</param>
+    /// <returns>实体列表</returns>
+    Task<List<TEntity>> GetListForExportAsync(Expression<Func<TEntity, bool>> predicate, int? maxRows = null);
+
     // ========================================
     // 分页查询
     // ========================================

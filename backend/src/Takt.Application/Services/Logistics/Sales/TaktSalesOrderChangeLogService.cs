@@ -174,7 +174,7 @@ public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderCh
     public async Task<(string fileName, byte[] fileContent)> ExportSalesOrderChangeLogAsync(TaktSalesOrderChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSalesOrderChangeLogQueryDto());
-        var list = await _salesOrderChangeLogRepository.GetListAsync(predicate);
+        var list = await _salesOrderChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

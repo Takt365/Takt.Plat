@@ -14,6 +14,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
+using Takt.Shared.Options;
 using System.IO;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -108,28 +109,12 @@ public static class TaktMailHelper
 
         try
         {
-            // 从配置中读取邮件设置
-            var smtpHost = configuration["Email:SmtpHost"];
-            var smtpPortStr = configuration["Email:SmtpPort"];
-            var smtpPort = int.TryParse(smtpPortStr, out var port) ? port : 587;
-            var smtpUsername = configuration["Email:SmtpUsername"];
-            var smtpPassword = configuration["Email:SmtpPassword"];
-            var fromEmail = configuration["Email:FromEmail"];
-            var fromName = configuration["Email:FromName"] ?? "节拍数字工厂";
-            var enableSslStr = configuration["Email:EnableSsl"];
-            var enableSsl = string.IsNullOrEmpty(enableSslStr) || bool.TryParse(enableSslStr, out var ssl) && ssl;
-            var skipSslValidationStr = configuration["Email:SkipSslCertificateValidation"];
-            var skipSslValidation = bool.TryParse(skipSslValidationStr, out var skipSsl) && skipSsl;
-
-            if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUsername) || string.IsNullOrEmpty(smtpPassword) || string.IsNullOrEmpty(fromEmail))
-            {
-                TaktLogger.Warning("[TaktMailHelper] 邮件配置不完整，无法发送邮件");
-                throw new InvalidOperationException("邮件配置不完整，请检查 appsettings.json 中的 Email 配置节点");
-            }
+            var email = BindEmailOptions(configuration);
+            EnsureEmailReadyForSend(email);
 
             // 创建邮件消息
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(fromName, fromEmail));
+            message.From.Add(new MailboxAddress(email.FromName, email.FromEmail));
             
             // 添加收件人
             foreach (var recipient in to)
@@ -180,10 +165,10 @@ public static class TaktMailHelper
 
             // 发送邮件
             using var client = new SmtpClient();
-            if (skipSslValidation)
+            if (email.SkipSslCertificateValidation)
                 client.ServerCertificateValidationCallback = (_, _2, _3, _4) => true;
-            await client.ConnectAsync(smtpHost, smtpPort, enableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
-            await client.AuthenticateAsync(smtpUsername, smtpPassword);
+            await client.ConnectAsync(email.SmtpHost, email.SmtpPort, email.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
+            await client.AuthenticateAsync(email.SmtpUsername, email.SmtpPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
 
@@ -257,31 +242,15 @@ public static class TaktMailHelper
 
         try
         {
-            // 从配置中读取邮件设置
-            var smtpHost = configuration["Email:SmtpHost"];
-            var smtpPortStr = configuration["Email:SmtpPort"];
-            var smtpPort = int.TryParse(smtpPortStr, out var port) ? port : 587;
-            var smtpUsername = configuration["Email:SmtpUsername"];
-            var smtpPassword = configuration["Email:SmtpPassword"];
-            var configFromEmail = configuration["Email:FromEmail"];
-            var fromName = configuration["Email:FromName"] ?? "节拍数字工厂";
-            var enableSslStr = configuration["Email:EnableSsl"];
-            var enableSsl = string.IsNullOrEmpty(enableSslStr) || bool.TryParse(enableSslStr, out var ssl) && ssl;
-            var skipSslValidationStr = configuration["Email:SkipSslCertificateValidation"];
-            var skipSslValidation = bool.TryParse(skipSslValidationStr, out var skipSsl) && skipSsl;
+            var email = BindEmailOptions(configuration);
+            EnsureEmailReadyForSend(email);
 
             // 使用自定义发件人邮箱或配置中的邮箱
-            var actualFromEmail = !string.IsNullOrWhiteSpace(fromEmail) ? fromEmail : configFromEmail;
-
-            if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUsername) || string.IsNullOrEmpty(smtpPassword) || string.IsNullOrEmpty(actualFromEmail))
-            {
-                TaktLogger.Warning("[TaktMailHelper] 邮件配置不完整，无法发送邮件");
-                throw new InvalidOperationException("邮件配置不完整，请检查 appsettings.json 中的 Email 配置节点");
-            }
+            var actualFromEmail = !string.IsNullOrWhiteSpace(fromEmail) ? fromEmail : email.FromEmail;
 
             // 创建邮件消息
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(fromName, actualFromEmail));
+            message.From.Add(new MailboxAddress(email.FromName, actualFromEmail));
             
             // 添加回复地址
             if (!string.IsNullOrWhiteSpace(replyTo))
@@ -338,15 +307,8 @@ public static class TaktMailHelper
                 bodyBuilder.TextBody = body;
             }
 
-            // 检查附件支持配置
-            var enableAttachmentsStr = configuration["Email:EnableAttachments"];
-            var enableAttachments = string.IsNullOrEmpty(enableAttachmentsStr) || bool.TryParse(enableAttachmentsStr, out var enableAtt) && enableAtt;
-            var maxAttachmentSizeMBStr = configuration["Email:MaxAttachmentSizeMB"];
-            var maxAttachmentSizeMB = double.TryParse(maxAttachmentSizeMBStr, out var maxAttMB) ? maxAttMB : 25.0;
-            var maxAttachmentSizeBytes = (long)(maxAttachmentSizeMB * 1024 * 1024);
-            var maxEmailSizeMBStr = configuration["Email:MaxEmailSizeMB"];
-            var maxEmailSizeMB = double.TryParse(maxEmailSizeMBStr, out var maxEmailMB) ? maxEmailMB : 50.0;
-            var maxEmailSizeBytes = (long)(maxEmailSizeMB * 1024 * 1024);
+            var maxAttachmentSizeBytes = (long)email.MaxAttachmentSizeMB * 1024 * 1024;
+            var maxEmailSizeBytes = (long)email.MaxEmailSizeMB * 1024 * 1024;
 
             // 计算邮件正文大小（字节）
             var bodySizeBytes = Encoding.UTF8.GetByteCount(body);
@@ -355,7 +317,7 @@ public static class TaktMailHelper
             // 添加附件
             if (attachments != null && attachments.Any())
             {
-                if (!enableAttachments)
+                if (!email.EnableAttachments)
                 {
                     TaktLogger.Warning("[TaktMailHelper] 附件功能已禁用，跳过所有附件");
                     throw new InvalidOperationException("附件功能已禁用，请检查 appsettings.json 中的 Email:EnableAttachments 配置");
@@ -374,8 +336,8 @@ public static class TaktMailHelper
                         {
                             var fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
                             TaktLogger.Warning("[TaktMailHelper] 附件大小超过限制: {FileName}, 大小: {SizeMB:F2} MB, 限制: {MaxSizeMB:F2} MB", 
-                                fileName, fileSizeMB, maxAttachmentSizeMB);
-                            throw new InvalidOperationException($"附件大小超过限制: {fileName} ({fileSizeMB:F2} MB) > {maxAttachmentSizeMB:F2} MB");
+                                fileName, fileSizeMB, email.MaxAttachmentSizeMB);
+                            throw new InvalidOperationException($"附件大小超过限制: {fileName} ({fileSizeMB:F2} MB) > {email.MaxAttachmentSizeMB:F2} MB");
                         }
 
                         // 检查总邮件大小
@@ -383,8 +345,8 @@ public static class TaktMailHelper
                         {
                             var totalSizeMB = (totalSizeBytes + fileSizeBytes) / (1024.0 * 1024.0);
                             TaktLogger.Warning("[TaktMailHelper] 邮件总大小超过限制: 当前大小: {TotalSizeMB:F2} MB, 限制: {MaxSizeMB:F2} MB", 
-                                totalSizeMB, maxEmailSizeMB);
-                            throw new InvalidOperationException($"邮件总大小超过限制: {totalSizeMB:F2} MB > {maxEmailSizeMB:F2} MB");
+                                totalSizeMB, email.MaxEmailSizeMB);
+                            throw new InvalidOperationException($"邮件总大小超过限制: {totalSizeMB:F2} MB > {email.MaxEmailSizeMB:F2} MB");
                         }
 
                         bodyBuilder.Attachments.Add(attachmentPath);
@@ -403,10 +365,10 @@ public static class TaktMailHelper
 
             // 发送邮件
             using var client = new SmtpClient();
-            if (skipSslValidation)
+            if (email.SkipSslCertificateValidation)
                 client.ServerCertificateValidationCallback = (_, _2, _3, _4) => true;
-            await client.ConnectAsync(smtpHost, smtpPort, enableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
-            await client.AuthenticateAsync(smtpUsername, smtpPassword);
+            await client.ConnectAsync(email.SmtpHost, email.SmtpPort, email.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
+            await client.AuthenticateAsync(email.SmtpUsername, email.SmtpPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
 
@@ -448,40 +410,17 @@ public static class TaktMailHelper
 
         try
         {
-            // 从配置中读取邮件设置
-            var smtpHost = configuration["Email:SmtpHost"];
-            var smtpPortStr = configuration["Email:SmtpPort"];
-            var smtpPort = int.TryParse(smtpPortStr, out var port) ? port : 587;
-            var smtpUsername = configuration["Email:SmtpUsername"];
-            var smtpPassword = configuration["Email:SmtpPassword"];
-            var fromEmail = configuration["Email:FromEmail"];
-            var fromName = configuration["Email:FromName"] ?? "节拍数字工厂";
-            var enableSslStr = configuration["Email:EnableSsl"];
-            var enableSsl = string.IsNullOrEmpty(enableSslStr) || bool.TryParse(enableSslStr, out var ssl) && ssl;
-            var skipSslValidationStr = configuration["Email:SkipSslCertificateValidation"];
-            var skipSslValidation = bool.TryParse(skipSslValidationStr, out var skipSsl) && skipSsl;
-
-            if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpUsername) || string.IsNullOrEmpty(smtpPassword) || string.IsNullOrEmpty(fromEmail))
-            {
-                TaktLogger.Warning("[TaktMailHelper] 邮件配置不完整，无法发送邮件");
-                throw new InvalidOperationException("邮件配置不完整，请检查 appsettings.json 中的 Email 配置节点");
-            }
+            var email = BindEmailOptions(configuration);
+            EnsureEmailReadyForSend(email);
 
             // 创建邮件消息
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(fromName, fromEmail));
+            message.From.Add(new MailboxAddress(email.FromName, email.FromEmail));
             message.To.Add(MailboxAddress.Parse(to));
             message.Subject = subject;
 
-            // 检查附件支持配置
-            var enableAttachmentsStr = configuration["Email:EnableAttachments"];
-            var enableAttachments = string.IsNullOrEmpty(enableAttachmentsStr) || bool.TryParse(enableAttachmentsStr, out var enableAtt) && enableAtt;
-            var maxAttachmentSizeMBStr = configuration["Email:MaxAttachmentSizeMB"];
-            var maxAttachmentSizeMB = double.TryParse(maxAttachmentSizeMBStr, out var maxAttMB) ? maxAttMB : 25.0;
-            var maxAttachmentSizeBytes = (long)(maxAttachmentSizeMB * 1024 * 1024);
-            var maxEmailSizeMBStr = configuration["Email:MaxEmailSizeMB"];
-            var maxEmailSizeMB = double.TryParse(maxEmailSizeMBStr, out var maxEmailMB) ? maxEmailMB : 50.0;
-            var maxEmailSizeBytes = (long)(maxEmailSizeMB * 1024 * 1024);
+            var maxAttachmentSizeBytes = (long)email.MaxAttachmentSizeMB * 1024 * 1024;
+            var maxEmailSizeBytes = (long)email.MaxEmailSizeMB * 1024 * 1024;
 
             // 计算邮件正文大小（字节）
             var bodySizeBytes = Encoding.UTF8.GetByteCount(htmlBody);
@@ -507,8 +446,8 @@ public static class TaktMailHelper
                         {
                             var totalSizeMB = (totalSizeBytes + fileSizeBytes) / (1024.0 * 1024.0);
                             TaktLogger.Warning("[TaktMailHelper] 邮件总大小超过限制（含内嵌图片）: 当前大小: {TotalSizeMB:F2} MB, 限制: {MaxSizeMB:F2} MB", 
-                                totalSizeMB, maxEmailSizeMB);
-                            throw new InvalidOperationException($"邮件总大小超过限制: {totalSizeMB:F2} MB > {maxEmailSizeMB:F2} MB");
+                                totalSizeMB, email.MaxEmailSizeMB);
+                            throw new InvalidOperationException($"邮件总大小超过限制: {totalSizeMB:F2} MB > {email.MaxEmailSizeMB:F2} MB");
                         }
 
                         var linkedResource = bodyBuilder.LinkedResources.Add(image.Value);
@@ -528,7 +467,7 @@ public static class TaktMailHelper
             // 添加附件
             if (attachments != null && attachments.Any())
             {
-                if (!enableAttachments)
+                if (!email.EnableAttachments)
                 {
                     TaktLogger.Warning("[TaktMailHelper] 附件功能已禁用，跳过所有附件");
                     throw new InvalidOperationException("附件功能已禁用，请检查 appsettings.json 中的 Email:EnableAttachments 配置");
@@ -547,8 +486,8 @@ public static class TaktMailHelper
                         {
                             var fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
                             TaktLogger.Warning("[TaktMailHelper] 附件大小超过限制: {FileName}, 大小: {SizeMB:F2} MB, 限制: {MaxSizeMB:F2} MB", 
-                                fileName, fileSizeMB, maxAttachmentSizeMB);
-                            throw new InvalidOperationException($"附件大小超过限制: {fileName} ({fileSizeMB:F2} MB) > {maxAttachmentSizeMB:F2} MB");
+                                fileName, fileSizeMB, email.MaxAttachmentSizeMB);
+                            throw new InvalidOperationException($"附件大小超过限制: {fileName} ({fileSizeMB:F2} MB) > {email.MaxAttachmentSizeMB:F2} MB");
                         }
 
                         // 检查总邮件大小
@@ -556,8 +495,8 @@ public static class TaktMailHelper
                         {
                             var totalSizeMB = (totalSizeBytes + fileSizeBytes) / (1024.0 * 1024.0);
                             TaktLogger.Warning("[TaktMailHelper] 邮件总大小超过限制: 当前大小: {TotalSizeMB:F2} MB, 限制: {MaxSizeMB:F2} MB", 
-                                totalSizeMB, maxEmailSizeMB);
-                            throw new InvalidOperationException($"邮件总大小超过限制: {totalSizeMB:F2} MB > {maxEmailSizeMB:F2} MB");
+                                totalSizeMB, email.MaxEmailSizeMB);
+                            throw new InvalidOperationException($"邮件总大小超过限制: {totalSizeMB:F2} MB > {email.MaxEmailSizeMB:F2} MB");
                         }
 
                         bodyBuilder.Attachments.Add(attachmentPath);
@@ -576,10 +515,10 @@ public static class TaktMailHelper
 
             // 发送邮件
             using var client = new SmtpClient();
-            if (skipSslValidation)
+            if (email.SkipSslCertificateValidation)
                 client.ServerCertificateValidationCallback = (_, _2, _3, _4) => true;
-            await client.ConnectAsync(smtpHost, smtpPort, enableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
-            await client.AuthenticateAsync(smtpUsername, smtpPassword);
+            await client.ConnectAsync(email.SmtpHost, email.SmtpPort, email.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
+            await client.AuthenticateAsync(email.SmtpUsername, email.SmtpPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
 
@@ -597,6 +536,31 @@ public static class TaktMailHelper
         {
             TaktLogger.Error(ex, "[TaktMailHelper] 邮件发送失败（含内嵌图片），收件人: {Recipient}, 主题: {Subject}", to, subject);
             throw;
+        }
+    }
+
+    /// <summary>
+    /// 从配置绑定 Email 节（启动期已校验；缺失或绑定失败时抛异常）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>邮件配置</returns>
+    private static TaktEmailOptions BindEmailOptions(IConfiguration configuration) =>
+        configuration.BindOptions<TaktEmailOptions>(TaktEmailOptions.SectionName);
+
+    /// <summary>
+    /// 发信前校验 SMTP 凭据（启动期仅校验数值范围，凭据由运维在 appsettings 覆盖）
+    /// </summary>
+    /// <param name="email">邮件配置</param>
+    private static void EnsureEmailReadyForSend(TaktEmailOptions email)
+    {
+        ArgumentNullException.ThrowIfNull(email);
+        if (string.IsNullOrWhiteSpace(email.SmtpHost)
+            || string.IsNullOrWhiteSpace(email.SmtpUsername)
+            || string.IsNullOrWhiteSpace(email.FromEmail)
+            || string.IsNullOrWhiteSpace(email.FromName))
+        {
+            throw new InvalidOperationException(
+                "邮件 SMTP 凭据不完整，请在 appsettings Email 节配置 SmtpHost/SmtpUsername/FromEmail/FromName");
         }
     }
 }

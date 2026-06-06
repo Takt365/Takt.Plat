@@ -181,7 +181,7 @@ public class TaktApsScheduleChangeLogService : TaktServiceBase, ITaktApsSchedule
     public async Task<(string fileName, byte[] fileContent)> ExportApsScheduleChangeLogAsync(TaktApsScheduleChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktApsScheduleChangeLogQueryDto());
-        var list = await _apsScheduleChangeLogRepository.GetListAsync(predicate);
+        var list = await _apsScheduleChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

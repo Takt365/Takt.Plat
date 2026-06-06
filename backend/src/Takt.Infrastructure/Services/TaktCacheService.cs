@@ -187,7 +187,10 @@ public class TaktCacheService : ITaktCacheService
     private MemoryCacheEntryOptions CreateMemoryEntryOptions(TimeSpan? absoluteExpiration)
     {
         var expiration = absoluteExpiration ?? TimeSpan.FromMinutes(_options.DefaultExpirationMinutes);
-        var entry = new MemoryCacheEntryOptions();
+        var entry = new MemoryCacheEntryOptions
+        {
+            Size = 1,
+        };
 
         if (_options.EnableSlidingExpiration)
         {

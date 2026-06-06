@@ -174,7 +174,7 @@ public class TaktAccountTitleChangeLogService : TaktServiceBase, ITaktAccountTit
     public async Task<(string fileName, byte[] fileContent)> ExportAccountTitleChangeLogAsync(TaktAccountTitleChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAccountTitleChangeLogQueryDto());
-        var list = await _accountTitleChangeLogRepository.GetListAsync(predicate);
+        var list = await _accountTitleChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -221,7 +221,7 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeTransferAsync(TaktEmployeeTransferQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeTransferQueryDto());
-        var list = await _employeeTransferRepository.GetListAsync(predicate);
+        var list = await _employeeTransferRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

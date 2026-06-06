@@ -22,17 +22,17 @@ public class TaktLocalizationOptions
     /// <summary>
     /// 默认语言（appsettings Localization:DefaultCulture；租户无启用语言时兜底）
     /// </summary>
-    public string DefaultCulture { get; set; } = null!;
+    public string DefaultCulture { get; set; } = "en-US";
 
     /// <summary>
     /// 资源文件路径
     /// </summary>
-    public string ResourcesPath { get; set; } = null!;
+    public string ResourcesPath { get; set; } = "Resources";
 
     /// <summary>
     /// 是否从数据库加载翻译（true=数据库，false=resx文件）
     /// </summary>
-    public bool UseDatabaseLocalization { get; set; }
+    public bool UseDatabaseLocalization { get; set; } = true;
 
     /// <summary>
     /// 验证配置

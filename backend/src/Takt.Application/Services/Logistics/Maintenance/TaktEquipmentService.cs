@@ -287,7 +287,7 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     public async Task<(string fileName, byte[] fileContent)> ExportEquipmentAsync(TaktEquipmentQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEquipmentQueryDto());
-        var list = await _equipmentRepository.GetListAsync(predicate);
+        var list = await _equipmentRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

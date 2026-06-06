@@ -333,7 +333,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     public async Task<(string fileName, byte[] fileContent)> ExportBillOfMaterialAsync(TaktBillOfMaterialQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktBillOfMaterialQueryDto());
-        var list = await _billOfMaterialRepository.GetListAsync(predicate);
+        var list = await _billOfMaterialRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

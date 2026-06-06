@@ -4,7 +4,7 @@
 // 文件名称：TaktSecurityOptions.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：安全配置选项
+// 功能描述：安全配置选项；appsettings 覆盖本类默认值
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -22,40 +22,24 @@ public class TaktSecurityOptions
     /// <summary>
     /// 频率限制配置
     /// </summary>
-    public TaktRateLimitOptions RateLimit { get; set; } = null!;
+    public TaktRateLimitOptions RateLimit { get; set; } = new();
 
     /// <summary>
     /// CSRF 防护配置
     /// </summary>
-    public TaktCsrfProtectionOptions CsrfProtection { get; set; } = null!;
+    public TaktCsrfProtectionOptions CsrfProtection { get; set; } = new();
 
     /// <summary>
     /// XSS 防护配置
     /// </summary>
-    public TaktXssProtectionOptions XssProtection { get; set; } = null!;
+    public TaktXssProtectionOptions XssProtection { get; set; } = new();
 
     /// <summary>
     /// 验证配置
     /// </summary>
     public void Validate()
     {
-        if (RateLimit == null)
-        {
-            throw new InvalidOperationException($"{SectionName}:RateLimit 配置不能为空");
-        }
-
         RateLimit.Validate();
-
-        if (CsrfProtection == null)
-        {
-            throw new InvalidOperationException($"{SectionName}:CsrfProtection 配置不能为空");
-        }
-
-        if (XssProtection == null)
-        {
-            throw new InvalidOperationException($"{SectionName}:XssProtection 配置不能为空");
-        }
-
         XssProtection.Validate();
     }
 }
@@ -68,17 +52,17 @@ public class TaktRateLimitOptions
     /// <summary>
     /// 是否启用全局限流
     /// </summary>
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     /// <summary>
     /// 最大请求数
     /// </summary>
-    public int MaxRequests { get; set; }
+    public int MaxRequests { get; set; } = 1000;
 
     /// <summary>
     /// 时间窗口（秒）
     /// </summary>
-    public int TimeWindowSeconds { get; set; }
+    public int TimeWindowSeconds { get; set; } = 60;
 
     /// <summary>
     /// 验证配置
@@ -105,7 +89,7 @@ public class TaktCsrfProtectionOptions
     /// <summary>
     /// 是否启用 CSRF 防护
     /// </summary>
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 }
 
 /// <summary>
@@ -116,19 +100,26 @@ public class TaktXssProtectionOptions
     /// <summary>
     /// 是否启用 XSS 防护
     /// </summary>
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     /// <summary>
     /// 允许的文件扩展名
     /// </summary>
-    public List<string> AllowedFileExtensions { get; set; } = null!;
+    public List<string> AllowedFileExtensions { get; set; } =
+    [
+        "zip", "rar", "7z", "tar", "gz", "bz2", "xz",
+        "jpg", "jpeg", "png", "gif", "tif", "tiff", "svg",
+        "mp4", "avi", "mov", "wmv", "flv", "mkv", "webm",
+        "mp3", "wav", "flac", "aac", "ogg", "wma",
+        "pdf", "docx", "xlsx", "pptx", "txt", "xml", "json"
+    ];
 
     /// <summary>
     /// 验证配置
     /// </summary>
     public void Validate()
     {
-        if (Enabled && (AllowedFileExtensions == null || AllowedFileExtensions.Count == 0))
+        if (Enabled && AllowedFileExtensions.Count == 0)
         {
             throw new InvalidOperationException(
                 $"{TaktSecurityOptions.SectionName}:XssProtection:AllowedFileExtensions 在启用时不能为空");

@@ -266,7 +266,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
     public async Task<(string fileName, byte[] fileContent)> ExportQuartzTaskAsync(TaktQuartzTaskQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQuartzTaskQueryDto());
-        var list = await _quartzTaskRepository.GetListAsync(predicate);
+        var list = await _quartzTaskRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

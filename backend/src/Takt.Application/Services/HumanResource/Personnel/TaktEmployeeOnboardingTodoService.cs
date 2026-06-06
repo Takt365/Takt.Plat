@@ -247,7 +247,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeOnboardingTodoAsync(TaktEmployeeOnboardingTodoQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeOnboardingTodoQueryDto());
-        var list = await _employeeOnboardingTodoRepository.GetListAsync(predicate);
+        var list = await _employeeOnboardingTodoRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

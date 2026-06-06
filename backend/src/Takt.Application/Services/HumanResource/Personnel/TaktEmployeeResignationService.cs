@@ -221,7 +221,7 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeResignationAsync(TaktEmployeeResignationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeResignationQueryDto());
-        var list = await _employeeResignationRepository.GetListAsync(predicate);
+        var list = await _employeeResignationRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

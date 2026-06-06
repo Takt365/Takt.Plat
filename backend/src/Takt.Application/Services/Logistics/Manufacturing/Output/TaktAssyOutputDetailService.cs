@@ -281,7 +281,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     public async Task<(string fileName, byte[] fileContent)> ExportAssyOutputDetailAsync(TaktAssyOutputDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAssyOutputDetailQueryDto());
-        var list = await _assyOutputDetailRepository.GetListAsync(predicate);
+        var list = await _assyOutputDetailRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

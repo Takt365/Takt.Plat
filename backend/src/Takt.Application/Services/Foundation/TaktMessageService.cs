@@ -223,7 +223,7 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     public async Task<(string fileName, byte[] fileContent)> ExportMessageAsync(TaktMessageQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktMessageQueryDto());
-        var list = await _messageRepository.GetListAsync(predicate);
+        var list = await _messageRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -363,7 +363,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     public async Task<(string fileName, byte[] fileContent)> ExportAccountTitleAsync(TaktAccountTitleQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAccountTitleQueryDto());
-        var list = await _accountTitleRepository.GetListAsync(predicate);
+        var list = await _accountTitleRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

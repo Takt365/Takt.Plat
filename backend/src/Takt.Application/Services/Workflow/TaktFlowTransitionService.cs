@@ -221,7 +221,7 @@ public class TaktFlowTransitionService : TaktServiceBase, ITaktFlowTransitionSer
     public async Task<(string fileName, byte[] fileContent)> ExportFlowTransitionAsync(TaktFlowTransitionQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktFlowTransitionQueryDto());
-        var list = await _flowTransitionRepository.GetListAsync(predicate);
+        var list = await _flowTransitionRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

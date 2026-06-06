@@ -272,7 +272,7 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
     public async Task<(string fileName, byte[] fileContent)> ExportStandardOperationRateAsync(TaktStandardOperationRateQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktStandardOperationRateQueryDto());
-        var list = await _standardOperationRateRepository.GetListAsync(predicate);
+        var list = await _standardOperationRateRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

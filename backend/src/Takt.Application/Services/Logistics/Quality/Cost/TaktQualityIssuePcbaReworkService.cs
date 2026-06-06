@@ -281,7 +281,7 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
     public async Task<(string fileName, byte[] fileContent)> ExportQualityIssuePcbaReworkAsync(TaktQualityIssuePcbaReworkQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQualityIssuePcbaReworkQueryDto());
-        var list = await _qualityIssuePcbaReworkRepository.GetListAsync(predicate);
+        var list = await _qualityIssuePcbaReworkRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

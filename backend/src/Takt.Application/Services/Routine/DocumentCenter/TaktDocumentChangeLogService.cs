@@ -181,7 +181,7 @@ public class TaktDocumentChangeLogService : TaktServiceBase, ITaktDocumentChange
     public async Task<(string fileName, byte[] fileContent)> ExportDocumentChangeLogAsync(TaktDocumentChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktDocumentChangeLogQueryDto());
-        var list = await _documentChangeLogRepository.GetListAsync(predicate);
+        var list = await _documentChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

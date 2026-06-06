@@ -181,7 +181,7 @@ public class TaktRoutingChangeLogService : TaktServiceBase, ITaktRoutingChangeLo
     public async Task<(string fileName, byte[] fileContent)> ExportRoutingChangeLogAsync(TaktRoutingChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktRoutingChangeLogQueryDto());
-        var list = await _routingChangeLogRepository.GetListAsync(predicate);
+        var list = await _routingChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

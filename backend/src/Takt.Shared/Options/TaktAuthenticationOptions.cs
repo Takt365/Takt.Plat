@@ -22,17 +22,17 @@ public class TaktAuthenticationOptions
     /// <summary>
     /// Access Token 有效期（小时）
     /// </summary>
-    public int AccessTokenLifetimeHours { get; set; }
+    public int AccessTokenLifetimeHours { get; set; } = 2;
 
     /// <summary>
     /// Refresh Token 有效期（天）
     /// </summary>
-    public int RefreshTokenLifetimeDays { get; set; }
+    public int RefreshTokenLifetimeDays { get; set; } = 7;
 
     /// <summary>
     /// Refresh Token 重用宽限期（分钟）
     /// </summary>
-    public int RefreshTokenReuseLeewayMinutes { get; set; }
+    public int RefreshTokenReuseLeewayMinutes { get; set; } = 5;
 
     /// <summary>
     /// 验证配置

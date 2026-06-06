@@ -42,6 +42,11 @@ public class TaktLoggingMiddleware
     private const int SlowRequestThresholdMs = 1000;
 
     /// <summary>
+    /// 操作日志请求体最大采样字节数（超出部分截断，防止大 POST 占满内存）
+    /// </summary>
+    private const int MaxOperLogBodyBytes = 64 * 1024;
+
+    /// <summary>
     /// 管道中的下一个中间件委托
     /// </summary>
     private readonly RequestDelegate _next;
@@ -193,11 +198,36 @@ public class TaktLoggingMiddleware
             return null;
         }
 
-        request.EnableBuffering();
+        if (request.ContentLength > MaxOperLogBodyBytes)
+        {
+            request.EnableBuffering(MaxOperLogBodyBytes);
+        }
+        else
+        {
+            request.EnableBuffering();
+        }
+
         request.Body.Position = 0;
-        using var reader = new StreamReader(request.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
-        var body = await reader.ReadToEndAsync();
+        var buffer = new char[MaxOperLogBodyBytes];
+        using var reader = new StreamReader(
+            request.Body,
+            Encoding.UTF8,
+            detectEncodingFromByteOrderMarks: false,
+            bufferSize: 4096,
+            leaveOpen: true);
+        var readCount = await reader.ReadBlockAsync(buffer, 0, MaxOperLogBodyBytes);
         request.Body.Position = 0;
+        if (readCount <= 0)
+        {
+            return null;
+        }
+
+        var body = new string(buffer, 0, readCount);
+        if (request.ContentLength > MaxOperLogBodyBytes)
+        {
+            body += "…[truncated]";
+        }
+
         return body;
     }
 

@@ -298,7 +298,7 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
     public async Task<(string fileName, byte[] fileContent)> ExportPcbaInspectionDetailAsync(TaktPcbaInspectionDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPcbaInspectionDetailQueryDto());
-        var list = await _pcbaInspectionDetailRepository.GetListAsync(predicate);
+        var list = await _pcbaInspectionDetailRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

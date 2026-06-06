@@ -266,7 +266,7 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
     public async Task<(string fileName, byte[] fileContent)> ExportEmployeeContractAsync(TaktEmployeeContractQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEmployeeContractQueryDto());
-        var list = await _employeeContractRepository.GetListAsync(predicate);
+        var list = await _employeeContractRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

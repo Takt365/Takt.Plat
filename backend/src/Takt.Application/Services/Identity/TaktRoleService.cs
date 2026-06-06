@@ -361,7 +361,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
     public async Task<(string fileName, byte[] fileContent)> ExportRoleAsync(TaktRoleQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktRoleQueryDto());
-        var list = await _roleRepository.GetListAsync(predicate);
+        var list = await _roleRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

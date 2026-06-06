@@ -310,7 +310,7 @@ public class TaktPurchasePriceScaleService : TaktServiceBase, ITaktPurchasePrice
     public async Task<(string fileName, byte[] fileContent)> ExportPurchasePriceScaleAsync(TaktPurchasePriceScaleQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPurchasePriceScaleQueryDto());
-        var list = await _purchasePriceScaleRepository.GetListAsync(predicate);
+        var list = await _purchasePriceScaleRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

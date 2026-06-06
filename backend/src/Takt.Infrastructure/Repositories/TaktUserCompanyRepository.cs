@@ -38,11 +38,13 @@ public class TaktUserCompanyRepository : TaktCompanyRepository<TaktUserCompany>
     /// <param name="dbContext">数据库上下文</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="primaryKeyTypeOptions">主键类型配置</param>
+    /// <param name="excelOptions">Excel 导入导出配置</param>
     public TaktUserCompanyRepository(
         TaktSqlSugarContext dbContext,
         ITaktUserContext userContext,
-        Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions)
-        : base(dbContext, userContext, primaryKeyTypeOptions)
+        Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions,
+        Microsoft.Extensions.Options.IOptions<TaktExcelOptions> excelOptions)
+        : base(dbContext, userContext, primaryKeyTypeOptions, excelOptions)
     {
     }
 }

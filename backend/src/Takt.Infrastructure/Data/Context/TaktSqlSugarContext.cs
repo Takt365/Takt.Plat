@@ -25,12 +25,16 @@ namespace Takt.Infrastructure.Data.Context;
 /// <summary>
 /// SqlSugar数据库上下文（运行时 ORM；启动步骤 2 负责租户库与表结构初始化）
 /// </summary>
-public class TaktSqlSugarContext
+public class TaktSqlSugarContext : IDisposable
 {
     /// <summary>
     /// SqlSugar 客户端（当前租户连接）
     /// </summary>
     private readonly ISqlSugarClient _db;
+    /// <summary>
+    /// 是否已释放
+    /// </summary>
+    private bool _disposed;
     /// <summary>
     /// 应用程序配置
     /// </summary>
@@ -409,6 +413,35 @@ public class TaktSqlSugarContext
     public void RollbackTran()
     {
         _db.Ado.RollbackTran();
+    }
+
+    /// <summary>
+    /// 释放 SqlSugar 客户端与连接资源（请求作用域结束时由 DI 调用）
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// 释放托管资源
+    /// </summary>
+    /// <param name="disposing">是否释放托管对象</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (disposing && _db is SqlSugarClient client)
+        {
+            client.Close();
+            client.Dispose();
+        }
+
+        _disposed = true;
     }
 }
 

@@ -266,7 +266,7 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
     public async Task<(string fileName, byte[] fileContent)> ExportCountersignAsync(TaktCountersignQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktCountersignQueryDto());
-        var list = await _countersignRepository.GetListAsync(predicate);
+        var list = await _countersignRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

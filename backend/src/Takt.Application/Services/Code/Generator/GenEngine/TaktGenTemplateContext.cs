@@ -1212,7 +1212,7 @@ public class TaktGenTableTemplateModel
                 MethodName = $"Export{ep}Async",
                 Signature = $"{entity}QueryDto? query, string? sheetName, string? fileName",
                 ReturnType = "Task<(string fileName, byte[] content)>",
-                Body = "var predicate = QueryExpression(query ?? new " + entity + "QueryDto());\n        var list = await " + repo + ".GetListAsync(predicate);\n        if (list == null || list.Count == 0)\n        {\n            return await TaktExcelHelper.ExportAsync(\n                new List<" + entity + "ExportDto>(),\n                sheetName ?? \"" + funcName + "数据\",\n                fileName ?? \"" + funcName + "导出.xlsx\");\n        }\n        var exportData = list.Adapt<List<" + entity + "ExportDto>();\n        return await TaktExcelHelper.ExportAsync(\n            exportData,\n            sheetName ?? \"" + funcName + "数据\",\n            fileName ?? \"" + funcName + "导出.xlsx\");"
+                Body = "var predicate = QueryExpression(query ?? new " + entity + "QueryDto());\n        var list = await " + repo + ".GetListForExportAsync(predicate);\n        if (list == null || list.Count == 0)\n        {\n            return await TaktExcelHelper.ExportAsync(\n                new List<" + entity + "ExportDto>(),\n                sheetName ?? \"" + funcName + "数据\",\n                fileName ?? \"" + funcName + "导出.xlsx\");\n        }\n        var exportData = list.Adapt<List<" + entity + "ExportDto>();\n        return await TaktExcelHelper.ExportAsync(\n            exportData,\n            sheetName ?? \"" + funcName + "数据\",\n            fileName ?? \"" + funcName + "导出.xlsx\");"
             });
         }
     }

@@ -340,7 +340,7 @@ public class TaktNewsService : TaktServiceBase, ITaktNewsService
     public async Task<(string fileName, byte[] fileContent)> ExportNewsAsync(TaktNewsQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktNewsQueryDto());
-        var list = await _newsRepository.GetListAsync(predicate);
+        var list = await _newsRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -363,7 +363,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     public async Task<(string fileName, byte[] fileContent)> ExportCostCenterAsync(TaktCostCenterQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktCostCenterQueryDto());
-        var list = await _costCenterRepository.GetListAsync(predicate);
+        var list = await _costCenterRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -316,7 +316,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
     public async Task<(string fileName, byte[] fileContent)> ExportRoutingItemAsync(TaktRoutingItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktRoutingItemQueryDto());
-        var list = await _routingItemRepository.GetListAsync(predicate);
+        var list = await _routingItemRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

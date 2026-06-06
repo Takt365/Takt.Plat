@@ -319,7 +319,7 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
     public async Task<(string fileName, byte[] fileContent)> ExportSupplierEvaluationAsync(TaktSupplierEvaluationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSupplierEvaluationQueryDto());
-        var list = await _supplierEvaluationRepository.GetListAsync(predicate);
+        var list = await _supplierEvaluationRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

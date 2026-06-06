@@ -411,7 +411,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
     public async Task<(string fileName, byte[] fileContent)> ExportMenuAsync(TaktMenuQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktMenuQueryDto());
-        var list = await _menuRepository.GetListAsync(predicate);
+        var list = await _menuRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

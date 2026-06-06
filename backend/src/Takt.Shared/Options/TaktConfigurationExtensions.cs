@@ -4,7 +4,7 @@
 // 文件名称：TaktConfigurationExtensions.cs
 // 创建时间：2026-05-25
 // 创建人：Takt365(Cursor AI)
-// 功能描述：配置节绑定扩展（Database / Init / TenantContext 统一入口）
+// 功能描述：配置节绑定扩展（Options 默认值 + appsettings 覆盖 + 启动校验）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,28 +15,36 @@ using Microsoft.Extensions.Configuration;
 namespace Takt.Shared.Options;
 
 /// <summary>
-/// 配置节绑定扩展（<see cref="TaktDatabaseOptions"/>、<see cref="TaktInitOptions"/> 等唯一绑定入口）
+/// 配置节绑定扩展（标准三层：Options 默认值 → appsettings 覆盖 → <see cref="Validate"/> 校验）
 /// </summary>
 public static class TaktConfigurationExtensions
 {
     /// <summary>
-    /// 绑定配置节，缺失或绑定失败时抛出异常
+    /// 以 Options 类型默认值为底线，将 <paramref name="sectionName"/> 绑定为覆盖项
     /// </summary>
-    /// <typeparam name="T">配置类型</typeparam>
+    /// <typeparam name="T">须有无参构造函数的配置类型</typeparam>
     /// <param name="configuration">应用配置</param>
     /// <param name="sectionName">配置节名称</param>
-    /// <returns>绑定结果</returns>
-    public static T RequireOptions<T>(this IConfiguration configuration, string sectionName)
-        where T : class
+    /// <returns>合并后的配置实例</returns>
+    public static T BindOptions<T>(this IConfiguration configuration, string sectionName)
+        where T : class, new()
     {
         ArgumentNullException.ThrowIfNull(configuration);
-        var options = configuration.GetSection(sectionName).Get<T>();
-        if (options == null)
-        {
-            throw new InvalidOperationException($"配置节 {sectionName} 缺失或无法绑定");
-        }
+        var options = new T();
+        configuration.GetSection(sectionName).Bind(options);
         return options;
     }
+
+    /// <summary>
+    /// 绑定配置节（同 <see cref="BindOptions{T}"/>，保留历史调用名）
+    /// </summary>
+    /// <typeparam name="T">须有无参构造函数的配置类型</typeparam>
+    /// <param name="configuration">应用配置</param>
+    /// <param name="sectionName">配置节名称</param>
+    /// <returns>合并后的配置实例</returns>
+    public static T RequireOptions<T>(this IConfiguration configuration, string sectionName)
+        where T : class, new()
+        => configuration.BindOptions<T>(sectionName);
 
     /// <summary>
     /// 绑定并校验 <c>Database</c> 节（租户/公司/工厂范围与种子源）
@@ -136,12 +144,8 @@ public static class TaktConfigurationExtensions
         ArgumentNullException.ThrowIfNull(configuration);
         ArgumentException.ThrowIfNullOrWhiteSpace(provider);
 
-        var options = configuration.GetSection($"{TaktFtpOptions.SectionName}:{provider}").Get<TaktFtpOptions>();
-        if (options == null)
-        {
-            throw new InvalidOperationException($"配置节 {TaktFtpOptions.SectionName}:{provider} 缺失或无法绑定");
-        }
-
+        var options = new TaktFtpOptions();
+        configuration.GetSection($"{TaktFtpOptions.SectionName}:{provider}").Bind(options);
         options.Validate(provider);
         return options;
     }
@@ -157,12 +161,8 @@ public static class TaktConfigurationExtensions
         ArgumentNullException.ThrowIfNull(configuration);
         ArgumentException.ThrowIfNullOrWhiteSpace(provider);
 
-        var options = configuration.GetSection($"{TaktOssOptions.SectionName}:{provider}").Get<TaktOssOptions>();
-        if (options == null)
-        {
-            throw new InvalidOperationException($"配置节 {TaktOssOptions.SectionName}:{provider} 缺失或无法绑定");
-        }
-
+        var options = new TaktOssOptions();
+        configuration.GetSection($"{TaktOssOptions.SectionName}:{provider}").Bind(options);
         options.Validate(provider);
         return options;
     }
@@ -177,6 +177,98 @@ public static class TaktConfigurationExtensions
         var options = configuration.RequireOptions<TaktQuartzOptions>(TaktQuartzOptions.SectionName);
         options.Validate();
         return options;
+    }
+
+    /// <summary>
+    /// 绑定并校验 <c>Authentication</c> 节（Token 生命周期）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>认证配置</returns>
+    public static TaktAuthenticationOptions RequireAuthentication(this IConfiguration configuration)
+    {
+        var options = configuration.RequireOptions<TaktAuthenticationOptions>(TaktAuthenticationOptions.SectionName);
+        options.Validate();
+        return options;
+    }
+
+    /// <summary>
+    /// 绑定并校验 <c>AccountLock</c> 节（登录失败锁定策略）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>账户锁定配置</returns>
+    public static TaktAccountLockOptions RequireAccountLock(this IConfiguration configuration)
+    {
+        var options = configuration.RequireOptions<TaktAccountLockOptions>(TaktAccountLockOptions.SectionName);
+        options.Validate();
+        return options;
+    }
+
+    /// <summary>
+    /// 绑定并校验 <c>System</c> 节（运行环境与系统开关）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>系统配置</returns>
+    public static TaktSystemOptions RequireSystem(this IConfiguration configuration)
+    {
+        var options = configuration.RequireOptions<TaktSystemOptions>(TaktSystemOptions.SectionName);
+        options.Validate();
+        return options;
+    }
+
+    /// <summary>
+    /// 绑定并校验 <c>Email</c> 节（SMTP 发信参数）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>邮件配置</returns>
+    public static TaktEmailOptions RequireEmail(this IConfiguration configuration)
+    {
+        var options = configuration.RequireOptions<TaktEmailOptions>(TaktEmailOptions.SectionName);
+        options.Validate();
+        return options;
+    }
+
+    /// <summary>
+    /// 校验 <c>appsettings:Ftp</c> 下所有已声明的提供商子节（跳过 <c>_</c> 前缀注释键）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    public static void ValidateConfiguredFtpProviders(this IConfiguration configuration)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        var section = configuration.GetSection(TaktFtpOptions.SectionName);
+        var providers = section.GetChildren()
+            .Where(c => !c.Key.StartsWith('_'))
+            .ToList();
+        if (providers.Count == 0)
+        {
+            throw new InvalidOperationException($"配置节 {TaktFtpOptions.SectionName} 缺失或无可校验的提供商子节");
+        }
+
+        foreach (var child in providers)
+        {
+            configuration.RequireFtpProvider(child.Key);
+        }
+    }
+
+    /// <summary>
+    /// 校验 <c>appsettings:Oss</c> 下所有已声明的提供商子节（跳过 <c>_</c> 前缀注释键）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    public static void ValidateConfiguredOssProviders(this IConfiguration configuration)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        var section = configuration.GetSection(TaktOssOptions.SectionName);
+        var providers = section.GetChildren()
+            .Where(c => !c.Key.StartsWith('_'))
+            .ToList();
+        if (providers.Count == 0)
+        {
+            throw new InvalidOperationException($"配置节 {TaktOssOptions.SectionName} 缺失或无可校验的提供商子节");
+        }
+
+        foreach (var child in providers)
+        {
+            configuration.RequireOssProvider(child.Key);
+        }
     }
 }
 

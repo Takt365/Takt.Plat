@@ -181,7 +181,7 @@ public class TaktFqcOrderChangeLogService : TaktServiceBase, ITaktFqcOrderChange
     public async Task<(string fileName, byte[] fileContent)> ExportFqcOrderChangeLogAsync(TaktFqcOrderChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktFqcOrderChangeLogQueryDto());
-        var list = await _fqcOrderChangeLogRepository.GetListAsync(predicate);
+        var list = await _fqcOrderChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

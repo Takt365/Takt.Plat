@@ -281,7 +281,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
     public async Task<(string fileName, byte[] fileContent)> ExportPcbaRepairDetailAsync(TaktPcbaRepairDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPcbaRepairDetailQueryDto());
-        var list = await _pcbaRepairDetailRepository.GetListAsync(predicate);
+        var list = await _pcbaRepairDetailRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

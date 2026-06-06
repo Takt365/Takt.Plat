@@ -272,7 +272,7 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
     public async Task<(string fileName, byte[] fileContent)> ExportProductionTeamAsync(TaktProductionTeamQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktProductionTeamQueryDto());
-        var list = await _productionTeamRepository.GetListAsync(predicate);
+        var list = await _productionTeamRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

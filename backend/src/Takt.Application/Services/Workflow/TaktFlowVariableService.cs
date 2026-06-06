@@ -252,7 +252,7 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
     public async Task<(string fileName, byte[] fileContent)> ExportFlowVariableAsync(TaktFlowVariableQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktFlowVariableQueryDto());
-        var list = await _flowVariableRepository.GetListAsync(predicate);
+        var list = await _flowVariableRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

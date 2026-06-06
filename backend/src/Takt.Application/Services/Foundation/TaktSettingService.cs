@@ -303,7 +303,7 @@ public class TaktSettingService : TaktServiceBase, ITaktSettingService
     public async Task<(string fileName, byte[] fileContent)> ExportSettingAsync(TaktSettingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSettingQueryDto());
-        var list = await _settingRepository.GetListAsync(predicate);
+        var list = await _settingRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

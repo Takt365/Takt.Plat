@@ -285,7 +285,7 @@ public class TaktWorkShiftService : TaktServiceBase, ITaktWorkShiftService
     public async Task<(string fileName, byte[] fileContent)> ExportWorkShiftAsync(TaktWorkShiftQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktWorkShiftQueryDto());
-        var list = await _workShiftRepository.GetListAsync(predicate);
+        var list = await _workShiftRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

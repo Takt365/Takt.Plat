@@ -252,7 +252,7 @@ public class TaktStandardWageRateService : TaktServiceBase, ITaktStandardWageRat
     public async Task<(string fileName, byte[] fileContent)> ExportStandardWageRateAsync(TaktStandardWageRateQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktStandardWageRateQueryDto());
-        var list = await _standardWageRateRepository.GetListAsync(predicate);
+        var list = await _standardWageRateRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

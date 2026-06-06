@@ -281,7 +281,7 @@ public class TaktQualityOperationCustomerResponseService : TaktServiceBase, ITak
     public async Task<(string fileName, byte[] fileContent)> ExportQualityOperationCustomerResponseAsync(TaktQualityOperationCustomerResponseQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQualityOperationCustomerResponseQueryDto());
-        var list = await _qualityOperationCustomerResponseRepository.GetListAsync(predicate);
+        var list = await _qualityOperationCustomerResponseRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

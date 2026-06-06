@@ -252,7 +252,7 @@ public class TaktTalentInterviewService : TaktServiceBase, ITaktTalentInterviewS
     public async Task<(string fileName, byte[] fileContent)> ExportTalentInterviewAsync(TaktTalentInterviewQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTalentInterviewQueryDto());
-        var list = await _talentInterviewRepository.GetListAsync(predicate);
+        var list = await _talentInterviewRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

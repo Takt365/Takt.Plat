@@ -28,7 +28,7 @@ public class TaktFtpOptions
     public string Host { get; set; } = string.Empty;
 
     /// <summary>
-    /// FTP 端口（默认 21）
+    /// FTP 端口
     /// </summary>
     public int Port { get; set; } = 21;
 
@@ -48,7 +48,7 @@ public class TaktFtpOptions
     public bool EnableSsl { get; set; }
 
     /// <summary>
-    /// 连接超时时间（秒，默认 30）
+    /// 连接超时时间（秒）
     /// </summary>
     public int Timeout { get; set; } = 30;
 

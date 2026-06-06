@@ -299,7 +299,7 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
     public async Task<(string fileName, byte[] fileContent)> ExportFlowInstanceAsync(TaktFlowInstanceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktFlowInstanceQueryDto());
-        var list = await _flowInstanceRepository.GetListAsync(predicate);
+        var list = await _flowInstanceRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

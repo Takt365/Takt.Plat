@@ -280,7 +280,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     public async Task<(string fileName, byte[] fileContent)> ExportTicketAsync(TaktTicketQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTicketQueryDto());
-        var list = await _ticketRepository.GetListAsync(predicate);
+        var list = await _ticketRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

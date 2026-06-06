@@ -22,38 +22,23 @@ public class PrimaryKeyTypeOptions
     /// <summary>
     /// 数据库自增ID配置
     /// </summary>
-    public IdentityIdOptions Identity { get; set; } = null!;
+    public IdentityIdOptions Identity { get; set; } = new() { Enabled = true };
 
     /// <summary>
     /// GUID配置
     /// </summary>
-    public GuidIdOptions Guid { get; set; } = null!;
+    public GuidIdOptions Guid { get; set; } = new() { Enabled = true };
 
     /// <summary>
     /// 雪花ID配置
     /// </summary>
-    public SnowflakeIdOptions Snowflake { get; set; } = null!;
+    public SnowflakeIdOptions Snowflake { get; set; } = new() { Enabled = true, WorkId = 1 };
 
     /// <summary>
     /// 验证配置
     /// </summary>
     public void Validate()
     {
-        if (Identity == null)
-        {
-            throw new InvalidOperationException($"{SectionName}:Identity 配置不能为空");
-        }
-
-        if (Guid == null)
-        {
-            throw new InvalidOperationException($"{SectionName}:Guid 配置不能为空");
-        }
-
-        if (Snowflake == null)
-        {
-            throw new InvalidOperationException($"{SectionName}:Snowflake 配置不能为空");
-        }
-
         if (Snowflake.Enabled && (Snowflake.WorkId < 0 || Snowflake.WorkId > 63))
         {
             throw new InvalidOperationException(

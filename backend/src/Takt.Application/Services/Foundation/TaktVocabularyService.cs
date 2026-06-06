@@ -265,7 +265,7 @@ public class TaktVocabularyService : TaktServiceBase, ITaktVocabularyService
     public async Task<(string fileName, byte[] fileContent)> ExportVocabularyAsync(TaktVocabularyQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktVocabularyQueryDto());
-        var list = await _vocabularyRepository.GetListAsync(predicate);
+        var list = await _vocabularyRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

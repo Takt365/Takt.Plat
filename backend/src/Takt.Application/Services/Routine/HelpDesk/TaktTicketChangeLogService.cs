@@ -181,7 +181,7 @@ public class TaktTicketChangeLogService : TaktServiceBase, ITaktTicketChangeLogS
     public async Task<(string fileName, byte[] fileContent)> ExportTicketChangeLogAsync(TaktTicketChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTicketChangeLogQueryDto());
-        var list = await _ticketChangeLogRepository.GetListAsync(predicate);
+        var list = await _ticketChangeLogRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

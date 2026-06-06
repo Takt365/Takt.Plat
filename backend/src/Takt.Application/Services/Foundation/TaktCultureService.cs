@@ -320,7 +320,7 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
     public async Task<(string fileName, byte[] fileContent)> ExportCultureAsync(TaktCultureQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktCultureQueryDto());
-        var list = await _cultureRepository.GetListAsync(predicate);
+        var list = await _cultureRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -22,32 +22,32 @@ public class TaktPasswordPolicyOptions
     /// <summary>
     /// 默认密码（用于初始化用户账号）
     /// </summary>
-    public string DefaultPassword { get; set; } = null!;
+    public string DefaultPassword { get; set; } = string.Empty;
 
     /// <summary>
     /// 最小密码长度
     /// </summary>
-    public int MinLength { get; set; }
+    public int MinLength { get; set; } = 8;
 
     /// <summary>
     /// 是否要求包含数字
     /// </summary>
-    public bool RequireDigit { get; set; }
+    public bool RequireDigit { get; set; } = true;
 
     /// <summary>
     /// 是否要求包含小写字母
     /// </summary>
-    public bool RequireLowercase { get; set; }
+    public bool RequireLowercase { get; set; } = true;
 
     /// <summary>
     /// 是否要求包含大写字母
     /// </summary>
-    public bool RequireUppercase { get; set; }
+    public bool RequireUppercase { get; set; } = true;
 
     /// <summary>
     /// 是否要求包含特殊字符
     /// </summary>
-    public bool RequireSpecialCharacter { get; set; }
+    public bool RequireSpecialCharacter { get; set; } = true;
 
     /// <summary>
     /// 登录密码 RSA 传输加密（前端密文 → 后端解密 → PBKDF2 验密）

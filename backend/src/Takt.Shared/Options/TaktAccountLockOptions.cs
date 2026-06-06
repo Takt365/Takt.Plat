@@ -22,17 +22,17 @@ public class TaktAccountLockOptions
     /// <summary>
     /// 是否启用账户锁定
     /// </summary>
-    public bool Enabled { get; set; }
+    public bool Enabled { get; set; } = true;
 
     /// <summary>
     /// 错误次数限制
     /// </summary>
-    public int ErrorLimit { get; set; }
+    public int ErrorLimit { get; set; } = 5;
 
     /// <summary>
     /// 锁定原因模板
     /// </summary>
-    public string LockReason { get; set; } = null!;
+    public string LockReason { get; set; } = "连续登录失败{ErrorCount}次，达到错误次数限制（{ErrorLimit}次）";
 
     /// <summary>
     /// 验证配置

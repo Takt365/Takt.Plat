@@ -358,7 +358,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
     public async Task<(string fileName, byte[] fileContent)> ExportPostAsync(TaktPostQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPostQueryDto());
-        var list = await _postRepository.GetListAsync(predicate);
+        var list = await _postRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

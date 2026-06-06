@@ -257,7 +257,7 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     public async Task<(string fileName, byte[] fileContent)> ExportModelDestinationAsync(TaktModelDestinationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktModelDestinationQueryDto());
-        var list = await _modelDestinationRepository.GetListAsync(predicate);
+        var list = await _modelDestinationRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

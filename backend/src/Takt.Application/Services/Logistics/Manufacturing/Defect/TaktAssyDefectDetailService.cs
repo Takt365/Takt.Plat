@@ -281,7 +281,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     public async Task<(string fileName, byte[] fileContent)> ExportAssyDefectDetailAsync(TaktAssyDefectDetailQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAssyDefectDetailQueryDto());
-        var list = await _assyDefectDetailRepository.GetListAsync(predicate);
+        var list = await _assyDefectDetailRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

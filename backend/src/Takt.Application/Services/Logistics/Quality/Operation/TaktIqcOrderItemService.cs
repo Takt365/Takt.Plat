@@ -303,7 +303,7 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
     public async Task<(string fileName, byte[] fileContent)> ExportIqcOrderItemAsync(TaktIqcOrderItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktIqcOrderItemQueryDto());
-        var list = await _iqcOrderItemRepository.GetListAsync(predicate);
+        var list = await _iqcOrderItemRepository.GetListForExportAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(
