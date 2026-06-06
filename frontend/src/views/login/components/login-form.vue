@@ -321,6 +321,12 @@ const captchaModalOpen = ref(false);
 /** verify-password 签发的登录票据 */
 const loginTicket = ref<string | null>(null);
 
+/** 验密成功时绑定的租户+用户名（signin 须与签发时一致） */
+const loginSessionContext = ref<{ tenantCode: string; username: string } | null>(null);
+
+/** 防止验证码通过后重复触发 signin */
+const signInSubmitting = ref(false);
+
 /** 登录密码 RSA 公钥 PEM */
 const loginPublicKeyPem = ref('');
 
@@ -421,7 +427,8 @@ async function buildCipherPasswordAsync(): Promise<string> {
     throw new Error(t('login.page.message.publicKeyMissing'));
   }
 
-  const cipher = encryptLoginPassword(formData.password, loginPublicKeyPem.value);
+  const plain = formData.password.trim();
+  const cipher = encryptLoginPassword(plain, loginPublicKeyPem.value);
   if (!cipher) {
     throw new Error(t('login.page.message.encryptFail'));
   }
@@ -435,7 +442,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: t('login.page.validate.tenantRequired'),
-      trigger: 'blur',
+      trigger: ['blur', 'change'],
     },
     {
       validator: async (_rule, value) => {
@@ -457,7 +464,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         }
         return Promise.resolve();
       },
-      trigger: 'blur',
+      trigger: ['blur', 'change'],
     },
   ],
   username: [
@@ -503,30 +510,49 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 }));
 
 /**
+ * 解析当前登录凭据（租户 + 用户名，与后端 NormalizeLogin* 一致）
+ * @returns {object} 租户编码与用户名
+ */
+function resolveLoginCredentials(): { tenantCode: string; username: string } {
+  const tenantCode = (tenantStore.tenantCode || formData.tenantCode.trim());
+  const username = formData.username.trim().toLowerCase();
+  return { tenantCode, username };
+}
+
+/**
  * 建立 Cookie 会话并跳转 OpenIddict 授权
  * @param captcha 验证码提交载荷
  */
 async function completeSignInAsync(captcha?: TaktCaptchaSubmitPayload): Promise<void> {
+  const ctx = loginSessionContext.value;
+  if (!ctx?.tenantCode || !ctx.username) {
+    throw new Error(t('login.page.message.fail'));
+  }
+  const ticket = loginTicket.value?.trim();
+  if (!ticket) {
+    throw new Error(t('login.page.message.fail'));
+  }
   const cultureCode = resolveRequestLocale();
 
   await signInSession({
-    username: formData.username,
-    tenantCode: tenantStore.tenantCode,
+    username: ctx.username,
+    tenantCode: ctx.tenantCode,
     cultureCode,
     rememberMe: formData.rememberMe,
-    loginTicket: loginTicket.value ?? undefined,
+    loginTicket: ticket,
     captchaId: captcha?.captchaId,
     captchaCode: captcha?.captchaCode,
   });
 
   loginTicket.value = null;
+  loginSessionContext.value = null;
 
   const returnUrl = route.query.returnUrl as string | undefined;
   if (returnUrl) {
     sessionStorage.setItem('takt.oauth.return_after_login', returnUrl);
   }
 
-  tenantStore.persistOAuthTenantCode(tenantStore.tenantCode);
+  tenantStore.persistOAuthTenantCode(ctx.tenantCode);
   await redirectToAuthorize();
 }
 
@@ -550,6 +576,19 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
 
   if (tenantNoAccessHints.some((hint) => msg.includes(hint))) {
     return t('login.page.message.tenantNoAccess');
+  }
+
+  const passwordCipherHints = [
+    'common.field.password.cipher',
+    'common.validation.invalidformat',
+    '密码传输密文',
+    'Encrypted password payload',
+    'パスワード暗号文',
+    '密碼傳輸密文',
+  ] as const;
+
+  if (passwordCipherHints.some((hint) => msg.toLowerCase().includes(hint.toLowerCase()))) {
+    return t('login.page.message.passwordCipherInvalid');
   }
 
   const invalidCredentialsHints = [
@@ -579,19 +618,31 @@ async function handleLogin(): Promise<void> {
   try {
     const tenantOk = await commitTenantAsync();
     if (!tenantOk) {
+      await formRef.value?.validateFields(['tenantCode']).catch(() => undefined);
       return;
     }
+
+    await commitUsernamePreviewAsync();
+    await formRef.value?.validate();
+
+    const { tenantCode, username } = resolveLoginCredentials();
     const cipherPassword = await buildCipherPasswordAsync();
 
     const verifyResult = normalizeSessionVerifyPasswordResponse(
       await verifySessionPassword({
-        username: formData.username,
+        username,
         password: cipherPassword,
-        tenantCode: tenantStore.tenantCode,
+        tenantCode,
       }),
     );
 
-    loginTicket.value = verifyResult.loginTicket;
+    const ticket = verifyResult.loginTicket?.trim();
+    if (!ticket) {
+      throw new Error(t('login.page.message.fail'));
+    }
+
+    loginTicket.value = ticket;
+    loginSessionContext.value = { tenantCode, username };
 
     let needCaptcha = verifyResult.captchaRequired;
     if (!needCaptcha) {
@@ -606,6 +657,7 @@ async function handleLogin(): Promise<void> {
     await completeSignInAsync();
   } catch (error) {
     loginTicket.value = null;
+    loginSessionContext.value = null;
     message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
   } finally {
     loading.value = false;
@@ -616,7 +668,7 @@ async function handleLogin(): Promise<void> {
  * 验证码弹窗确认
  */
 async function handleCaptchaConfirm(): Promise<void> {
-  if (loading.value) {
+  if (loading.value || signInSubmitting.value) {
     return;
   }
 
@@ -625,14 +677,28 @@ async function handleCaptchaConfirm(): Promise<void> {
     return;
   }
 
+  const ctx = loginSessionContext.value;
+  if (!ctx?.tenantCode || !loginTicket.value?.trim()) {
+    message.error(t('login.page.message.fail'));
+    captchaModalOpen.value = true;
+    return;
+  }
+
   loading.value = true;
+  signInSubmitting.value = true;
   try {
+    if (tenantStore.tenantCode !== ctx.tenantCode) {
+      tenantStore.setTenant(ctx.tenantCode);
+    }
     await completeSignInAsync(payload);
   } catch (error) {
+    loginTicket.value = null;
+    loginSessionContext.value = null;
     message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
     captchaModalOpen.value = true;
   } finally {
     loading.value = false;
+    signInSubmitting.value = false;
   }
 }
 
@@ -641,6 +707,7 @@ async function handleCaptchaConfirm(): Promise<void> {
  */
 function handleCaptchaCancel(): void {
   loginTicket.value = null;
+  loginSessionContext.value = null;
   cancelCaptcha();
 }
 

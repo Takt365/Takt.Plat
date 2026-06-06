@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Complaint;
 
 namespace Takt.Application.Services.Logistics.Quality.Complaint;
 
@@ -119,7 +118,7 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
     public async Task<TaktSupplierEvaluationItemDto> CreateSupplierEvaluationItemAsync(TaktSupplierEvaluationItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSupplierEvaluationItem>();
-                await StampSupplierEvaluationItemSupplierEvaluationAsync(entity, dto);
+        await StampSupplierEvaluationItemSupplierEvaluationAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _supplierEvaluationItemRepository,
             x => x.EvaluationId == entity.EvaluationId
@@ -154,7 +153,7 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
             throw new TaktBusinessException("供应商评价考核项目明细不存在");
         }
         dto.Adapt(entity);
-                await StampSupplierEvaluationItemSupplierEvaluationAsync(entity, dto);
+        await StampSupplierEvaluationItemSupplierEvaluationAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _supplierEvaluationItemRepository,
             x => x.EvaluationId == entity.EvaluationId

@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Scheduling;
 
@@ -115,7 +114,7 @@ public class TaktApsScheduleChangeLogService : TaktServiceBase, ITaktApsSchedule
     public async Task<TaktApsScheduleChangeLogDto> CreateApsScheduleChangeLogAsync(TaktApsScheduleChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktApsScheduleChangeLog>();
-                await StampApsScheduleChangeLogApsScheduleAsync(entity, dto);
+        await StampApsScheduleChangeLogApsScheduleAsync(entity, dto);
         entity = await _apsScheduleChangeLogRepository.CreateAsync(entity);
         return await GetApsScheduleChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktApsScheduleChangeLogDto>();
     }
@@ -134,7 +133,7 @@ public class TaktApsScheduleChangeLogService : TaktServiceBase, ITaktApsSchedule
             throw new TaktBusinessException("APS排程变更日志不存在");
         }
         dto.Adapt(entity);
-                await StampApsScheduleChangeLogApsScheduleAsync(entity, dto);
+        await StampApsScheduleChangeLogApsScheduleAsync(entity, dto);
         await _apsScheduleChangeLogRepository.UpdateAsync(entity);
         return await GetApsScheduleChangeLogByIdAsync(id) ?? throw new TaktBusinessException("APS排程变更日志不存在");
     }

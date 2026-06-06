@@ -276,10 +276,11 @@ public class TaktAutofacModule : Autofac.Module
         type.IsClass && !type.IsAbstract && type.Name.EndsWith("Repository");
 
     /// <summary>
-    /// 判断是否为应用服务类
+    /// 判断是否为应用服务类（排除已由 MS DI 以 Singleton 注册的 <see cref="TaktCacheService"/>，避免每请求独立内存缓存导致登录票据跨请求失效）
     /// </summary>
-    private static bool IsService(Type type) => 
-        type.IsClass && !type.IsAbstract && type.Name.EndsWith("Service");
+    private static bool IsService(Type type) =>
+        type.IsClass && !type.IsAbstract && type.Name.EndsWith("Service")
+        && type != typeof(TaktCacheService);
 
     /// <summary>
     /// 判断是否为验证器类（排除 FluentValidation AbstractValidator，由 MS DI 注册）

@@ -47,6 +47,7 @@ export default {
       default: '请求失败',
       defaultWithStatus: '请求失败（HTTP {status}）',
       loginFailed: '登录失败，请检查账号、密码与租户',
+      tenantDatabaseHint: '租户业务库不可用，请检查数据库是否已创建或联系管理员执行 InitDb。',
       status: {
         400: '请求参数错误',
         401: '登录已过期，请重新登录',

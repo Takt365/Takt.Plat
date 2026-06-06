@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.ConferenceCenter;
 
 namespace Takt.Application.Services.Routine.ConferenceCenter;
 
@@ -115,7 +114,7 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     public async Task<TaktConferenceParticipantDto> CreateConferenceParticipantAsync(TaktConferenceParticipantCreateDto dto)
     {
         var entity = dto.Adapt<TaktConferenceParticipant>();
-                await StampConferenceParticipantConferenceAsync(entity, dto);
+        await StampConferenceParticipantConferenceAsync(entity, dto);
         var isUnique_ix_conference_participant_unique = await _uniqueValidator.IsUniqueAsync(
             _conferenceParticipantRepository,
             x => x.ConferenceId == entity.ConferenceId
@@ -142,7 +141,7 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
             throw new TaktBusinessException("会议参与人不存在");
         }
         dto.Adapt(entity);
-                await StampConferenceParticipantConferenceAsync(entity, dto);
+        await StampConferenceParticipantConferenceAsync(entity, dto);
         var isUnique_ix_conference_participant_unique = await _uniqueValidator.IsUniqueAsync(
             _conferenceParticipantRepository,
             x => x.ConferenceId == entity.ConferenceId

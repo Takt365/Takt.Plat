@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Defect;
 
@@ -119,7 +118,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     public async Task<TaktAssyDefectDetailDto> CreateAssyDefectDetailAsync(TaktAssyDefectDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktAssyDefectDetail>();
-                await StampAssyDefectDetailAssyDefectAsync(entity, dto);
+        await StampAssyDefectDetailAssyDefectAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_defect_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyDefectDetailRepository,
             x => x.AssyDefectId == entity.AssyDefectId
@@ -154,7 +153,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             throw new TaktBusinessException("组立不良明细不存在");
         }
         dto.Adapt(entity);
-                await StampAssyDefectDetailAssyDefectAsync(entity, dto);
+        await StampAssyDefectDetailAssyDefectAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_defect_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyDefectDetailRepository,
             x => x.AssyDefectId == entity.AssyDefectId

@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.NewsCenter;
 
 namespace Takt.Application.Services.Routine.NewsCenter;
 
@@ -115,7 +114,7 @@ public class TaktNewsCommentLikeService : TaktServiceBase, ITaktNewsCommentLikeS
     public async Task<TaktNewsCommentLikeDto> CreateNewsCommentLikeAsync(TaktNewsCommentLikeCreateDto dto)
     {
         var entity = dto.Adapt<TaktNewsCommentLike>();
-                await StampNewsCommentLikeNewsCommentAsync(entity, dto);
+        await StampNewsCommentLikeNewsCommentAsync(entity, dto);
         var isUnique_ix_news_comment_like_unique = await _uniqueValidator.IsUniqueAsync(
             _newsCommentLikeRepository,
             x => x.CommentId == entity.CommentId
@@ -142,7 +141,7 @@ public class TaktNewsCommentLikeService : TaktServiceBase, ITaktNewsCommentLikeS
             throw new TaktBusinessException("新闻中心评论点赞记录不存在");
         }
         dto.Adapt(entity);
-                await StampNewsCommentLikeNewsCommentAsync(entity, dto);
+        await StampNewsCommentLikeNewsCommentAsync(entity, dto);
         var isUnique_ix_news_comment_like_unique = await _uniqueValidator.IsUniqueAsync(
             _newsCommentLikeRepository,
             x => x.CommentId == entity.CommentId

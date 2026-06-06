@@ -46,6 +46,7 @@ export function signInSession(dto: TaktLoginRequestDto): Promise<boolean> {
     data: dto,
     skipTokenRefresh: true,
     skipLoginAuthError: true,
+    skipErrorNotification: true,
   });
 }
 
@@ -193,5 +194,6 @@ export function verifySessionPassword(
     data: dto,
     skipTokenRefresh: true,
     skipLoginAuthError: true,
+    skipErrorNotification: true,
   });
 }

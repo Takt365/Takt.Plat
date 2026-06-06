@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 
@@ -119,7 +118,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     public async Task<TaktAssyOutputDetailDto> CreateAssyOutputDetailAsync(TaktAssyOutputDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktAssyOutputDetail>();
-                await StampAssyOutputDetailAssyOutputAsync(entity, dto);
+        await StampAssyOutputDetailAssyOutputAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputDetailRepository,
             x => x.AssyOutputId == entity.AssyOutputId
@@ -154,7 +153,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
             throw new TaktBusinessException("组立日报明细不存在");
         }
         dto.Adapt(entity);
-                await StampAssyOutputDetailAssyOutputAsync(entity, dto);
+        await StampAssyOutputDetailAssyOutputAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputDetailRepository,
             x => x.AssyOutputId == entity.AssyOutputId

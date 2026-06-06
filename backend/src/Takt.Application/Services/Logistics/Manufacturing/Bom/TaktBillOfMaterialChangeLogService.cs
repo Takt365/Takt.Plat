@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
@@ -115,7 +114,7 @@ public class TaktBillOfMaterialChangeLogService : TaktServiceBase, ITaktBillOfMa
     public async Task<TaktBillOfMaterialChangeLogDto> CreateBillOfMaterialChangeLogAsync(TaktBillOfMaterialChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktBillOfMaterialChangeLog>();
-                await StampBillOfMaterialChangeLogBillOfMaterialAsync(entity, dto);
+        await StampBillOfMaterialChangeLogBillOfMaterialAsync(entity, dto);
         entity = await _billOfMaterialChangeLogRepository.CreateAsync(entity);
         return await GetBillOfMaterialChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktBillOfMaterialChangeLogDto>();
     }
@@ -134,7 +133,7 @@ public class TaktBillOfMaterialChangeLogService : TaktServiceBase, ITaktBillOfMa
             throw new TaktBusinessException("BOM变更记录不存在");
         }
         dto.Adapt(entity);
-                await StampBillOfMaterialChangeLogBillOfMaterialAsync(entity, dto);
+        await StampBillOfMaterialChangeLogBillOfMaterialAsync(entity, dto);
         await _billOfMaterialChangeLogRepository.UpdateAsync(entity);
         return await GetBillOfMaterialChangeLogByIdAsync(id) ?? throw new TaktBusinessException("BOM变更记录不存在");
     }

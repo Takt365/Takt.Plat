@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.HelpDesk;
 
 namespace Takt.Application.Services.Routine.HelpDesk;
 
@@ -115,7 +114,7 @@ public class TaktTicketEvaluationService : TaktServiceBase, ITaktTicketEvaluatio
     public async Task<TaktTicketEvaluationDto> CreateTicketEvaluationAsync(TaktTicketEvaluationCreateDto dto)
     {
         var entity = dto.Adapt<TaktTicketEvaluation>();
-                await StampTicketEvaluationTicketAsync(entity, dto);
+        await StampTicketEvaluationTicketAsync(entity, dto);
         var isUnique_ix_ticket_evaluation_ticket_unique = await _uniqueValidator.IsUniqueAsync(
             _ticketEvaluationRepository,
             x => x.TicketId == entity.TicketId);
@@ -141,7 +140,7 @@ public class TaktTicketEvaluationService : TaktServiceBase, ITaktTicketEvaluatio
             throw new TaktBusinessException("工单服务评价不存在");
         }
         dto.Adapt(entity);
-                await StampTicketEvaluationTicketAsync(entity, dto);
+        await StampTicketEvaluationTicketAsync(entity, dto);
         var isUnique_ix_ticket_evaluation_ticket_unique = await _uniqueValidator.IsUniqueAsync(
             _ticketEvaluationRepository,
             x => x.TicketId == entity.TicketId,

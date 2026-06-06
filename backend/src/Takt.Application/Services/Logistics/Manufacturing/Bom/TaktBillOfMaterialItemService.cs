@@ -21,7 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
+using Takt.Domain.Entities.Logistics.Materials;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
@@ -32,6 +32,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
 {
     private readonly ITaktCompanyRepository<TaktBillOfMaterialItem> _billOfMaterialItemRepository;
     private readonly ITaktCompanyRepository<TaktBillOfMaterial> _billOfMaterialRepository;
+    private readonly ITaktCompanyRepository<TaktMaterial> _materialRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -40,6 +41,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     /// </summary>
     /// <param name="billOfMaterialItemRepository">物料清单明细仓储</param>
     /// <param name="billOfMaterialRepository">物料清单仓储</param>
+    /// <param name="materialRepository">物料仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -47,6 +49,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     public TaktBillOfMaterialItemService(
         ITaktCompanyRepository<TaktBillOfMaterialItem> billOfMaterialItemRepository,
         ITaktCompanyRepository<TaktBillOfMaterial> billOfMaterialRepository,
+        ITaktCompanyRepository<TaktMaterial> materialRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -55,6 +58,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     {
         _billOfMaterialItemRepository = billOfMaterialItemRepository;
         _billOfMaterialRepository = billOfMaterialRepository;
+        _materialRepository = materialRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -119,7 +123,8 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     public async Task<TaktBillOfMaterialItemDto> CreateBillOfMaterialItemAsync(TaktBillOfMaterialItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktBillOfMaterialItem>();
-                await StampBillOfMaterialItemBillOfMaterialAsync(entity, dto);
+        await StampBillOfMaterialItemBillOfMaterialAsync(entity, dto);
+        await StampBillOfMaterialItemMaterialAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique = await _uniqueValidator.IsUniqueAsync(
             _billOfMaterialItemRepository,
             x => x.BillOfMaterialId == entity.BillOfMaterialId
@@ -155,7 +160,8 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             throw new TaktBusinessException("物料清单明细不存在");
         }
         dto.Adapt(entity);
-                await StampBillOfMaterialItemBillOfMaterialAsync(entity, dto);
+        await StampBillOfMaterialItemBillOfMaterialAsync(entity, dto);
+        await StampBillOfMaterialItemMaterialAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique = await _uniqueValidator.IsUniqueAsync(
             _billOfMaterialItemRepository,
             x => x.BillOfMaterialId == entity.BillOfMaterialId
@@ -240,6 +246,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
                 var entity = rows[i].Adapt<TaktBillOfMaterialItem>();
                 var importDto = rows[i].Adapt<TaktBillOfMaterialItemCreateDto>();
                 await StampBillOfMaterialItemBillOfMaterialAsync(entity, importDto);
+                await StampBillOfMaterialItemMaterialAsync(entity, importDto);
                 var importKey = $"{entity.BillOfMaterialId}|{entity.LineNumber}|{entity.MaterialId}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -321,6 +328,26 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             throw new TaktBusinessException("物料清单不存在");
         }
         entity.BillOfMaterialId = master.Id;
+    }
+
+    /// <summary>
+    /// 同步物料清单明细主表外键（ManyToOne → 物料）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampBillOfMaterialItemMaterialAsync(TaktBillOfMaterialItem entity, TaktBillOfMaterialItemCreateDto dto)
+    {
+        if (dto.MaterialId <= 0)
+        {
+            return;
+        }
+        var master = await _materialRepository.GetByIdAsync(dto.MaterialId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("物料不存在");
+        }
+        entity.MaterialId = master.Id;
     }
     // ========================================
     // 查询表达式

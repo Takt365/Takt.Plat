@@ -341,10 +341,10 @@ public class TaktMenuLevel2SeedData
             insertCount += insertLogistics2;
             updateCount += updateLogistics2;
 
-            var (insertLogistics3, updateLogistics3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "MANUFACTURING", menu =>
+            var (insertLogistics3, updateLogistics3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING", menu =>
             {
                 menu.MenuName = "生产执行";
-                menu.MenuCode = "MANUFACTURING";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING";
                 menu.I18nKey = "menu.logistics.manufacturing._self";
                 menu.Icon = "RiIndeterminateCircleLine";
                 menu.ParentId = logisticsMenu.Id;
@@ -416,6 +416,25 @@ public class TaktMenuLevel2SeedData
             });
             insertCount += insertLogistics6;
             updateCount += updateLogistics6;
+
+            var (insertLogistics7, updateLogistics7) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_SERIAL", menu =>
+            {
+                menu.MenuName = "序列号管理";
+                menu.MenuCode = "LOGISTICS_SERIAL";
+                menu.I18nKey = "menu.logistics.serial._self";
+                menu.Icon = "RiBarcodeLine";
+                menu.ParentId = logisticsMenu.Id;
+                menu.MenuType = 0;
+                menu.RoutePath = "/logistics/serial";
+                menu.ComponentPath = "";
+                menu.SortOrder = 7;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLogistics7;
+            updateCount += updateLogistics7;
         }
 
         // ========== 人力资源下的二级菜单 (SortOrder: 6) ==========

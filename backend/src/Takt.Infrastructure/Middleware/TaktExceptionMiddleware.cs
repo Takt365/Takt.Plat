@@ -14,6 +14,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
@@ -114,6 +115,24 @@ public class TaktExceptionMiddleware
                 break;
 
             default:
+                if (TaktTenantDatabaseHelper.IsInfrastructureFailure(exception))
+                {
+                    statusCode = HttpStatusCode.BadRequest;
+                    var configuration = context.RequestServices.GetService<IConfiguration>();
+                    var tenantCode = context.Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim() ?? "000";
+                    var tenantDbEx = TaktTenantDatabaseHelper.CreateBusinessException(exception, configuration, tenantCode);
+                    errorCode = tenantDbEx.ErrorCode ?? "error.tenant.database.connection";
+                    message = tenantDbEx.Message;
+                    logContext.Action = "tenant_database";
+                    TaktLogger.Warning(
+                        logContext,
+                        "{HttpPrefix}租户业务库不可用: Tenant={TenantCode}, Message={Message}",
+                        TaktLogFormatter.FormatHttpRequestPrefix(logContext),
+                        tenantCode,
+                        message);
+                    break;
+                }
+
                 logContext.Action = "unhandled";
                 TaktLogger.Error(
                     exception,

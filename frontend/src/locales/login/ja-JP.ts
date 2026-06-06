@@ -46,7 +46,7 @@ export default {
     },
     validate: {
       tenantRequired: 'テナントコードを入力してください',
-      tenantInvalid: 'テナントコードの形式が正しくありません',
+      tenantInvalid: 'テナントコードは3桁の数字である必要があります',
       usernameRequired: 'ユーザー名を入力してください',
       usernameInvalid: 'ユーザー名の形式が正しくありません',
       passwordRequired: 'パスワードを入力してください',

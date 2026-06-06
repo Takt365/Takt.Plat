@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Operation;
 
 namespace Takt.Application.Services.Logistics.Quality.Operation;
 
@@ -119,7 +118,7 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
     public async Task<TaktInspectionStandardItemDto> CreateInspectionStandardItemAsync(TaktInspectionStandardItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktInspectionStandardItem>();
-                await StampInspectionStandardItemInspectionStandardAsync(entity, dto);
+        await StampInspectionStandardItemInspectionStandardAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_inspection_standard_item_unique = await _uniqueValidator.IsUniqueAsync(
             _inspectionStandardItemRepository,
             x => x.InspectionStandardId == entity.InspectionStandardId
@@ -156,7 +155,7 @@ public class TaktInspectionStandardItemService : TaktServiceBase, ITaktInspectio
             throw new TaktBusinessException("检验标准明细不存在");
         }
         dto.Adapt(entity);
-                await StampInspectionStandardItemInspectionStandardAsync(entity, dto);
+        await StampInspectionStandardItemInspectionStandardAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_inspection_standard_item_unique = await _uniqueValidator.IsUniqueAsync(
             _inspectionStandardItemRepository,
             x => x.InspectionStandardId == entity.InspectionStandardId

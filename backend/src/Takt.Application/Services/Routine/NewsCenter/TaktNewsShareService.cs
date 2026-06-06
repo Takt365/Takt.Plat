@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.NewsCenter;
 
 namespace Takt.Application.Services.Routine.NewsCenter;
 
@@ -115,7 +114,7 @@ public class TaktNewsShareService : TaktServiceBase, ITaktNewsShareService
     public async Task<TaktNewsShareDto> CreateNewsShareAsync(TaktNewsShareCreateDto dto)
     {
         var entity = dto.Adapt<TaktNewsShare>();
-                await StampNewsShareNewsAsync(entity, dto);
+        await StampNewsShareNewsAsync(entity, dto);
         entity = await _newsShareRepository.CreateAsync(entity);
         return await GetNewsShareByIdAsync(entity.Id) ?? entity.Adapt<TaktNewsShareDto>();
     }
@@ -134,7 +133,7 @@ public class TaktNewsShareService : TaktServiceBase, ITaktNewsShareService
             throw new TaktBusinessException("新闻中心分享记录不存在");
         }
         dto.Adapt(entity);
-                await StampNewsShareNewsAsync(entity, dto);
+        await StampNewsShareNewsAsync(entity, dto);
         await _newsShareRepository.UpdateAsync(entity);
         return await GetNewsShareByIdAsync(id) ?? throw new TaktBusinessException("新闻中心分享记录不存在");
     }

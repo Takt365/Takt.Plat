@@ -39,7 +39,7 @@ public class TaktServerMonitorsController : TaktControllerBase
     /// 获取服务器硬件信息
     /// </summary>
     /// <returns>服务器硬件信息 DTO</returns>
-    [TaktPermission("statistics:logging:servermonitor:query", "服务器硬件信息")]
+    [TaktPermission("statistics:logging:servermonitor:list", "服务器硬件信息")]
     [HttpGet("hardware")]
     public async Task<IActionResult> GetServerHardwareAsync()
     {
@@ -58,7 +58,7 @@ public class TaktServerMonitorsController : TaktControllerBase
     /// 获取应用运行状态
     /// </summary>
     /// <returns>应用运行状态 DTO</returns>
-    [TaktPermission("statistics:logging:servermonitor:query", "应用运行状态")]
+    [TaktPermission("statistics:logging:servermonitor:list", "应用运行状态")]
     [HttpGet("app-status")]
     public async Task<IActionResult> GetAppStatusAsync()
     {

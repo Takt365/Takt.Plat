@@ -23,6 +23,7 @@ import { useTranslationStore } from '@/stores/foundation/translation';
 import {
   TAKT_DEFAULT_LOCALE,
   TAKT_LOCALE_STORAGE_KEY,
+  TAKT_SUPPORTED_LOCALES,
 } from '@/utils/common';
 import {
   readStoredLocale,
@@ -289,6 +290,19 @@ export const useLocaleStore = defineStore('locale', () => {
   }
 
   /**
+   * 读取用户已持久化的语言偏好（localStorage）；无有效记录时返回 null
+   * @returns 区域文化编码或 null
+   */
+  function readPersistedLocalePreference(): string | null {
+    const stored = localStorage.getItem(TAKT_LOCALE_STORAGE_KEY);
+    if (!stored || !(TAKT_SUPPORTED_LOCALES as readonly string[]).includes(stored)) {
+      return null;
+    }
+
+    return resolveTaktCultureCode(stored);
+  }
+
+  /**
    * 登录后按用户资料 DefaultCulture 对齐界面语言（不覆盖用户手动切换）
    * @param cultureCode 用户默认区域文化编码 BCP47
    */
@@ -297,13 +311,25 @@ export const useLocaleStore = defineStore('locale', () => {
       return;
     }
 
-    const normalized = resolveTaktCultureCode(cultureCode.trim());
-    if (i18n.global.locale.value === normalized) {
+    const normalizedProfile = resolveTaktCultureCode(cultureCode.trim());
+    const persisted = readPersistedLocalePreference();
+
+    // OAuth 全页跳转后 loginLocaleUserOverride 会丢失；localStorage 中已与资料默认语言不同的偏好须保留（登录页手动选择或应用内切换）
+    if (persisted && persisted !== normalizedProfile) {
+      if (i18n.global.locale.value !== persisted) {
+        applyLocale(persisted, true);
+      }
+
+      void useTranslationStore().loadTranslationMessagesAsync(persisted);
       return;
     }
 
-    applyLocale(normalized, true);
-    void useTranslationStore().loadTranslationMessagesAsync(normalized);
+    if (i18n.global.locale.value === normalizedProfile) {
+      return;
+    }
+
+    applyLocale(normalizedProfile, true);
+    void useTranslationStore().loadTranslationMessagesAsync(normalizedProfile);
   }
 
   return {

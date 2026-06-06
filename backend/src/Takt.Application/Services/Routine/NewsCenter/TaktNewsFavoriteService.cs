@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.NewsCenter;
 
 namespace Takt.Application.Services.Routine.NewsCenter;
 
@@ -115,7 +114,7 @@ public class TaktNewsFavoriteService : TaktServiceBase, ITaktNewsFavoriteService
     public async Task<TaktNewsFavoriteDto> CreateNewsFavoriteAsync(TaktNewsFavoriteCreateDto dto)
     {
         var entity = dto.Adapt<TaktNewsFavorite>();
-                await StampNewsFavoriteNewsAsync(entity, dto);
+        await StampNewsFavoriteNewsAsync(entity, dto);
         var isUnique_ix_news_favorite_unique = await _uniqueValidator.IsUniqueAsync(
             _newsFavoriteRepository,
             x => x.NewsId == entity.NewsId
@@ -142,7 +141,7 @@ public class TaktNewsFavoriteService : TaktServiceBase, ITaktNewsFavoriteService
             throw new TaktBusinessException("新闻中心收藏记录不存在");
         }
         dto.Adapt(entity);
-                await StampNewsFavoriteNewsAsync(entity, dto);
+        await StampNewsFavoriteNewsAsync(entity, dto);
         var isUnique_ix_news_favorite_unique = await _uniqueValidator.IsUniqueAsync(
             _newsFavoriteRepository,
             x => x.NewsId == entity.NewsId

@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Cost;
 
 namespace Takt.Application.Services.Logistics.Quality.Cost;
 
@@ -119,7 +118,7 @@ public class TaktQualityOperationCustomerResponseService : TaktServiceBase, ITak
     public async Task<TaktQualityOperationCustomerResponseDto> CreateQualityOperationCustomerResponseAsync(TaktQualityOperationCustomerResponseCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityOperationCustomerResponse>();
-                await StampQualityOperationCustomerResponseQualityOperationAsync(entity, dto);
+        await StampQualityOperationCustomerResponseQualityOperationAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_operation_customer_response_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityOperationCustomerResponseRepository,
             x => x.QualityOperationId == entity.QualityOperationId
@@ -154,7 +153,7 @@ public class TaktQualityOperationCustomerResponseService : TaktServiceBase, ITak
             throw new TaktBusinessException("品质业务顾客品质要求对应费用明细不存在");
         }
         dto.Adapt(entity);
-                await StampQualityOperationCustomerResponseQualityOperationAsync(entity, dto);
+        await StampQualityOperationCustomerResponseQualityOperationAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_operation_customer_response_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityOperationCustomerResponseRepository,
             x => x.QualityOperationId == entity.QualityOperationId

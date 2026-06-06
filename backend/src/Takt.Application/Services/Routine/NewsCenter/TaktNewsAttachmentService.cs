@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.NewsCenter;
 
 namespace Takt.Application.Services.Routine.NewsCenter;
 
@@ -119,7 +118,7 @@ public class TaktNewsAttachmentService : TaktServiceBase, ITaktNewsAttachmentSer
     public async Task<TaktNewsAttachmentDto> CreateNewsAttachmentAsync(TaktNewsAttachmentCreateDto dto)
     {
         var entity = dto.Adapt<TaktNewsAttachment>();
-                await StampNewsAttachmentNewsAsync(entity, dto);
+        await StampNewsAttachmentNewsAsync(entity, dto);
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _newsAttachmentRepository.GetMaxIntAsync(
@@ -145,7 +144,7 @@ public class TaktNewsAttachmentService : TaktServiceBase, ITaktNewsAttachmentSer
             throw new TaktBusinessException("新闻中心附件不存在");
         }
         dto.Adapt(entity);
-                await StampNewsAttachmentNewsAsync(entity, dto);
+        await StampNewsAttachmentNewsAsync(entity, dto);
         await _newsAttachmentRepository.UpdateAsync(entity);
         return await GetNewsAttachmentByIdAsync(id) ?? throw new TaktBusinessException("新闻中心附件不存在");
     }

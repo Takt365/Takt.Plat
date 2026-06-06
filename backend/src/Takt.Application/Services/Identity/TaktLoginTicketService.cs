@@ -53,7 +53,7 @@ public class TaktLoginTicketService : ITaktLoginTicketService
         {
             UserId = userId,
             TenantCode = tenantCode.Trim(),
-            Username = username.Trim(),
+            Username = username.Trim().ToLowerInvariant(),
         };
 
         await _cacheService.SetAsync(
@@ -91,16 +91,15 @@ public class TaktLoginTicketService : ITaktLoginTicketService
             return null;
         }
 
-        await _cacheService.RemoveAsync(key, cancellationToken);
-
         var trimmedTenant = tenantCode.Trim();
-        var trimmedUsername = username.Trim();
+        var normalizedUsername = username.Trim().ToLowerInvariant();
         if (!string.Equals(payload.TenantCode, trimmedTenant, StringComparison.OrdinalIgnoreCase)
-            || !string.Equals(payload.Username, trimmedUsername, StringComparison.Ordinal))
+            || !string.Equals(payload.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase))
         {
             return null;
         }
 
+        await _cacheService.RemoveAsync(key, cancellationToken);
         return payload.UserId;
     }
 }

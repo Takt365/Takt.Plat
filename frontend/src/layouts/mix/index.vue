@@ -57,9 +57,11 @@
         :theme="themeStore.resolvedTheme === 'dark' ? 'dark' : 'light'"
         :style="{ position: settingSafe.fixedSider ? 'fixed' : 'relative', height: `calc(100vh - ${headerHeight}px)`, left: 0, top: settingSafe.fixedHeader ? `${headerHeight}px` : 0 }"
       >
-        <TaktMixMenu
-          :collapsed="collapsed"
-        />
+        <div class="sider-menu-scroll">
+          <TaktMixMenu
+            :collapsed="collapsed"
+          />
+        </div>
       </a-layout-sider>
       
       <!-- 内容区域 -->
@@ -132,6 +134,20 @@ const contentMaxHeight = computed(() => 'calc(100vh - 44px)')
 <style scoped lang="css">
 .mix-layout {
   height: 100vh;
+
+  .layout-sider :deep(.ant-layout-sider-children) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .sider-menu-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
   .header-title {
     display: flex;

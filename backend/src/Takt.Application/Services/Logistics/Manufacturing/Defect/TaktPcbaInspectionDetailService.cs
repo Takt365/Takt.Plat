@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Defect;
 
@@ -119,7 +118,7 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
     public async Task<TaktPcbaInspectionDetailDto> CreatePcbaInspectionDetailAsync(TaktPcbaInspectionDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktPcbaInspectionDetail>();
-                await StampPcbaInspectionDetailPcbaInspectionAsync(entity, dto);
+        await StampPcbaInspectionDetailPcbaInspectionAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaInspectionDetailRepository,
             x => x.PcbaInspectionId == entity.PcbaInspectionId
@@ -154,7 +153,7 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
             throw new TaktBusinessException("PCBA检查明细不存在");
         }
         dto.Adapt(entity);
-                await StampPcbaInspectionDetailPcbaInspectionAsync(entity, dto);
+        await StampPcbaInspectionDetailPcbaInspectionAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaInspectionDetailRepository,
             x => x.PcbaInspectionId == entity.PcbaInspectionId

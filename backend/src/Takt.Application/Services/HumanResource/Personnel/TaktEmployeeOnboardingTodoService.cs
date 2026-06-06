@@ -32,6 +32,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
 {
     private readonly ITaktCompanyRepository<TaktEmployeeOnboardingTodo> _employeeOnboardingTodoRepository;
     private readonly ITaktApprovalRepository<TaktTalentOffer> _talentOfferRepository;
+    private readonly ITaktApprovalRepository<TaktEmployeeJoined> _employeeJoinedRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
@@ -39,12 +40,14 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="employeeOnboardingTodoRepository">入职待办仓储</param>
     /// <param name="talentOfferRepository">录用信息仓储</param>
+    /// <param name="employeeJoinedRepository">员工入职上岗仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeOnboardingTodoService(
         ITaktCompanyRepository<TaktEmployeeOnboardingTodo> employeeOnboardingTodoRepository,
         ITaktApprovalRepository<TaktTalentOffer> talentOfferRepository,
+        ITaktApprovalRepository<TaktEmployeeJoined> employeeJoinedRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -52,6 +55,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     {
         _employeeOnboardingTodoRepository = employeeOnboardingTodoRepository;
         _talentOfferRepository = talentOfferRepository;
+        _employeeJoinedRepository = employeeJoinedRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -115,7 +119,8 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     public async Task<TaktEmployeeOnboardingTodoDto> CreateEmployeeOnboardingTodoAsync(TaktEmployeeOnboardingTodoCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployeeOnboardingTodo>();
-                await StampEmployeeOnboardingTodoTalentOfferAsync(entity, dto);
+        await StampEmployeeOnboardingTodoTalentOfferAsync(entity, dto);
+        await StampEmployeeOnboardingTodoEmployeeJoinedAsync(entity, dto);
         entity = await _employeeOnboardingTodoRepository.CreateAsync(entity);
         return await GetEmployeeOnboardingTodoByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeOnboardingTodoDto>();
     }
@@ -134,7 +139,8 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
             throw new TaktBusinessException("入职待办不存在");
         }
         dto.Adapt(entity);
-                await StampEmployeeOnboardingTodoTalentOfferAsync(entity, dto);
+        await StampEmployeeOnboardingTodoTalentOfferAsync(entity, dto);
+        await StampEmployeeOnboardingTodoEmployeeJoinedAsync(entity, dto);
         await _employeeOnboardingTodoRepository.UpdateAsync(entity);
         return await GetEmployeeOnboardingTodoByIdAsync(id) ?? throw new TaktBusinessException("入职待办不存在");
     }
@@ -225,6 +231,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
                 var entity = rows[i].Adapt<TaktEmployeeOnboardingTodo>();
                 var importDto = rows[i].Adapt<TaktEmployeeOnboardingTodoCreateDto>();
                 await StampEmployeeOnboardingTodoTalentOfferAsync(entity, importDto);
+                await StampEmployeeOnboardingTodoEmployeeJoinedAsync(entity, importDto);
                 await _employeeOnboardingTodoRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -284,6 +291,26 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
             throw new TaktBusinessException("录用信息不存在");
         }
         entity.OfferId = master.Id;
+    }
+
+    /// <summary>
+    /// 同步入职待办主表外键（ManyToOne → 员工入职上岗）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampEmployeeOnboardingTodoEmployeeJoinedAsync(TaktEmployeeOnboardingTodo entity, TaktEmployeeOnboardingTodoCreateDto dto)
+    {
+        if (dto.EmployeeJoinedId is not > 0)
+        {
+            return;
+        }
+        var master = await _employeeJoinedRepository.GetByIdAsync(dto.EmployeeJoinedId.Value);
+        if (master == null)
+        {
+            throw new TaktBusinessException("员工入职上岗不存在");
+        }
+        entity.EmployeeJoinedId = master.Id;
     }
     // ========================================
     // 查询表达式

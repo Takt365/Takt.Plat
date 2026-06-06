@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -119,7 +118,7 @@ public class TaktEcDeptService : TaktServiceBase, ITaktEcDeptService
     public async Task<TaktEcDeptDto> CreateEcDeptAsync(TaktEcDeptCreateDto dto)
     {
         var entity = dto.Adapt<TaktEcDept>();
-                await StampEcDeptEcDetailAsync(entity, dto);
+        await StampEcDeptEcDetailAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_dept_unique = await _uniqueValidator.IsUniqueAsync(
             _ecDeptRepository,
             x => x.EcnDetailId == entity.EcnDetailId
@@ -154,7 +153,7 @@ public class TaktEcDeptService : TaktServiceBase, ITaktEcDeptService
             throw new TaktBusinessException("设变部门不存在");
         }
         dto.Adapt(entity);
-                await StampEcDeptEcDetailAsync(entity, dto);
+        await StampEcDeptEcDetailAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_dept_unique = await _uniqueValidator.IsUniqueAsync(
             _ecDeptRepository,
             x => x.EcnDetailId == entity.EcnDetailId

@@ -675,6 +675,45 @@ function isEntityLongPropertyNullable(entityFile, propName) {
   return new RegExp(`public\\s+long\\?\\s+${propName}\\s*\\{`).test(content);
 }
 
+/**
+ * DTO 类（含基类）上是否为可空 long 外键
+ * @param {string} dtoContent
+ * @param {string} className
+ * @param {string} propName
+ * @returns {boolean}
+ */
+function isDtoClassLongPropertyNullable(dtoContent, className, propName) {
+  if (!dtoContent || !className) {
+    return false;
+  }
+  const block = extractClassBlock(dtoContent, className);
+  if (block && new RegExp(`public\\s+long\\?\\s+${propName}\\s*\\{`).test(block)) {
+    return true;
+  }
+  const startRegex = new RegExp(
+    `public\\s+(?:partial\\s+)?class\\s+${className}\\b[^\\{]*(?::\\s*(\\w+))?`,
+  );
+  const startMatch = startRegex.exec(dtoContent);
+  if (startMatch?.[1]) {
+    return isDtoClassLongPropertyNullable(dtoContent, startMatch[1], propName);
+  }
+  return false;
+}
+
+/**
+ * ManyToOne Stamp 方法参数为 CreateDto，仅依据 CreateDto 判定外键是否 long?
+ * @param {string} dtoContent
+ * @param {object} dtoInfo
+ * @param {string} propName
+ * @returns {boolean}
+ */
+function isStampLongIdFieldNullable(dtoContent, dtoInfo, propName) {
+  if (!dtoInfo?.create) {
+    return false;
+  }
+  return isDtoClassLongPropertyNullable(dtoContent, dtoInfo.create, propName);
+}
+
 function wrapMasterIdExpr(entityFile, entityVar, fieldName) {
   const expr = `${entityVar}.${fieldName}`;
   if (isEntityLongPropertyNullable(entityFile, fieldName)) {
@@ -795,26 +834,7 @@ function buildChildForeignKeyAssignment(childVar, entityVar, fkField) {
   return `${childVar}.${fkField} = ${entityVar}.Id;`;
 }
 
-function parseManyToOneMaster(entityFile) {
-  const content = readUtf8(entityFile);
-  const classMatch = content.match(/public\s+class\s+(Takt\w+)\s*:\s*\w+/);
-  if (!classMatch) {
-    return null;
-  }
-  const classBody = extractClassBlock(content, classMatch[1]);
-  if (!classBody) {
-    return null;
-  }
-  const { navigationBody } = splitClassBodyByNavigationRegion(classBody);
-  const body = navigationBody.trim() ? navigationBody : classBody;
-  const navMatch = body.match(
-    /\[Navigate\(\s*NavigateType\.ManyToOne\s*,\s*nameof\((\w+)\)\s*\)\][\s\S]*?public\s+(Takt\w+)\??\s+\w+\s*\{/,
-  );
-  if (!navMatch) {
-    return null;
-  }
-  const fkField = navMatch[1];
-  const masterEntity = navMatch[2];
+function parseManyToOneMasterRecord(entityFile, fkField, masterEntity) {
   const masterShort = masterEntity.replace(/^Takt/, '');
   const masterFile = findEntityFile(masterEntity);
   if (!masterFile) {
@@ -839,7 +859,49 @@ function parseManyToOneMaster(entityFile) {
   };
 }
 
-function buildManyToOneStampMethodBody(master, childEntityFile, masterDesc) {
+/**
+ * 解析实体上全部 ManyToOne 导航（按声明顺序）
+ * @param {string} entityFile
+ * @returns {Array<object>}
+ */
+function parseManyToOneMasters(entityFile) {
+  const content = readUtf8(entityFile);
+  const classMatch = content.match(/public\s+class\s+(Takt\w+)\s*:\s*\w+/);
+  if (!classMatch) {
+    return [];
+  }
+  const classBody = extractClassBlock(content, classMatch[1]);
+  if (!classBody) {
+    return [];
+  }
+  const { navigationBody } = splitClassBodyByNavigationRegion(classBody);
+  const body = navigationBody.trim() ? navigationBody : classBody;
+  const navRegex =
+    /\[Navigate\(\s*NavigateType\.ManyToOne\s*,\s*nameof\((\w+)\)\s*\)\][\s\S]*?public\s+(Takt\w+)\??\s+\w+\s*\{/g;
+  const masters = [];
+  const seenFk = new Set();
+  let navMatch;
+  while ((navMatch = navRegex.exec(body)) !== null) {
+    const fkField = navMatch[1];
+    if (seenFk.has(fkField)) {
+      continue;
+    }
+    seenFk.add(fkField);
+    const record = parseManyToOneMasterRecord(entityFile, fkField, navMatch[2]);
+    if (record) {
+      masters.push(record);
+    }
+  }
+  return masters;
+}
+
+/** @deprecated 使用 parseManyToOneMasters；保留首条以兼容旧调用 */
+function parseManyToOneMaster(entityFile) {
+  const masters = parseManyToOneMasters(entityFile);
+  return masters.length ? masters[0] : null;
+}
+
+function buildManyToOneStampMethodBody(master, childEntityFile, masterDesc, dtoContent, dtoInfo) {
   const stampFields = getChildStampFields(childEntityFile, master.fkField, master.masterIdField);
   const stampSync = stampFields
     .map(
@@ -852,11 +914,16 @@ function buildManyToOneStampMethodBody(master, childEntityFile, masterDesc) {
   const fk = master.fkField;
   const dtoLookupField = master.masterIdField || fk;
   if (fk.endsWith('Id')) {
-    return `        if (dto.${dtoLookupField} <= 0)
+    const nullableLongId = isStampLongIdFieldNullable(dtoContent, dtoInfo, dtoLookupField);
+    const idGuard = nullableLongId
+      ? `if (dto.${dtoLookupField} is not > 0)`
+      : `if (dto.${dtoLookupField} <= 0)`;
+    const idArg = nullableLongId ? `dto.${dtoLookupField}.Value` : `dto.${dtoLookupField}`;
+    return `        ${idGuard}
         {
             return;
         }
-        var master = await ${master.masterRepoField}.GetByIdAsync(dto.${dtoLookupField});
+        var master = await ${master.masterRepoField}.GetByIdAsync(${idArg});
         if (master == null)
         {
             throw new TaktBusinessException("${masterDesc}不存在");
@@ -881,40 +948,98 @@ ${stampSync ? `${stampSync}\n` : ''}`;
 ${idAssign}${stampSync ? `${stampSync}\n` : ''}`;
 }
 
-function generateManyToOneMasterStampExtras(entityFile, entityName, entityShort, dtoInfo, desc) {
-  const master = parseManyToOneMaster(entityFile);
-  if (!master) {
+function generateManyToOneMasterStampExtras(entityFile, entityName, entityShort, dtoInfo, desc, dtoContent) {
+  const masters = parseManyToOneMasters(entityFile);
+  if (!masters.length) {
     return null;
   }
 
-  const masterEntityFile = findEntityFile(master.masterEntity);
-  const masterDesc = extractEntityDescription(masterEntityFile) || master.masterShort;
-  const stampBody = buildManyToOneStampMethodBody(master, entityFile, masterDesc);
-  const masterEntityNs = masterEntityFile ? getEntityNamespace(masterEntityFile) : null;
-  const extraUsings = masterEntityNs ? [masterEntityNs] : [];
+  const seenRepoFields = new Set();
+  const stampParts = [];
+  const extraUsings = [];
+  for (const master of masters) {
+    if (seenRepoFields.has(master.masterRepoField)) {
+      continue;
+    }
+    seenRepoFields.add(master.masterRepoField);
+    const masterEntityFile = findEntityFile(master.masterEntity);
+    const masterDesc = extractEntityDescription(masterEntityFile) || master.masterShort;
+    const stampBody = buildManyToOneStampMethodBody(
+      master,
+      entityFile,
+      masterDesc,
+      dtoContent,
+      dtoInfo,
+    );
+    const masterEntityNs = masterEntityFile ? getEntityNamespace(masterEntityFile) : null;
+    if (masterEntityNs) {
+      extraUsings.push(masterEntityNs);
+    }
+    const repoParam = `${master.masterShort.charAt(0).toLowerCase()}${master.masterShort.slice(1)}Repository`;
+    stampParts.push({
+      master,
+      masterDesc,
+      stampBody,
+      repoParam,
+    });
+  }
+  if (!stampParts.length) {
+    return null;
+  }
 
   return {
-    masterEntity: master.masterEntity,
-    masterShort: master.masterShort,
+    masterEntity: stampParts[0].master.masterEntity,
+    masterShort: stampParts[0].master.masterShort,
+    masterEntities: stampParts.map((part) => part.master.masterEntity),
     extraUsings,
-    ctorFields: `    private readonly ${master.masterRepoInterface}<${master.masterEntity}> ${master.masterRepoField};`,
-    ctorParams: `        ${master.masterRepoInterface}<${master.masterEntity}> ${master.masterShort.charAt(0).toLowerCase()}${master.masterShort.slice(1)}Repository,`,
-    ctorParamDocs: `    /// <param name="${master.masterShort.charAt(0).toLowerCase()}${master.masterShort.slice(1)}Repository">${masterDesc}仓储</param>`,
-    ctorAssigns: `        ${master.masterRepoField} = ${master.masterShort.charAt(0).toLowerCase()}${master.masterShort.slice(1)}Repository;`,
-    privateMethods: `${buildMethodXmlDoc({
-      summary: `同步${desc}主表外键（ManyToOne → ${masterDesc}）`,
-      params: [
-        { name: 'entity', desc: '当前实体' },
-        { name: 'dto', desc: '创建 DTO' },
-      ],
-      returns: '任务',
-    }).trimEnd()}
-    private async Task Stamp${entityShort}${master.masterShort}Async(${entityName} entity, ${dtoInfo.create} dto)
+    ctorFields: stampParts
+      .map(
+        (part) =>
+          `    private readonly ${part.master.masterRepoInterface}<${part.master.masterEntity}> ${part.master.masterRepoField};`,
+      )
+      .join('\n'),
+    ctorParams: stampParts
+      .map(
+        (part) =>
+          `        ${part.master.masterRepoInterface}<${part.master.masterEntity}> ${part.repoParam},`,
+      )
+      .join('\n'),
+    ctorParamDocs: stampParts
+      .map(
+        (part) =>
+          `    /// <param name="${part.repoParam}">${part.masterDesc}仓储</param>`,
+      )
+      .join('\n'),
+    ctorAssigns: stampParts
+      .map((part) => `        ${part.master.masterRepoField} = ${part.repoParam};`)
+      .join('\n'),
+    privateMethods: stampParts
+      .map(
+        (part) => `${buildMethodXmlDoc({
+          summary: `同步${desc}主表外键（ManyToOne → ${part.masterDesc}）`,
+          params: [
+            { name: 'entity', desc: '当前实体' },
+            { name: 'dto', desc: '创建 DTO' },
+          ],
+          returns: '任务',
+        }).trimEnd()}
+    private async Task Stamp${entityShort}${part.master.masterShort}Async(${entityName} entity, ${dtoInfo.create} dto)
     {
-${stampBody}    }
+${part.stampBody}    }
 `,
-    createBeforeSave: `        await Stamp${entityShort}${master.masterShort}Async(entity, dto);`,
-    updateBeforeSave: `        await Stamp${entityShort}${master.masterShort}Async(entity, dto);`,
+      )
+      .join('\n'),
+    createBeforeSave: stampParts
+      .map((part) => `await Stamp${entityShort}${part.master.masterShort}Async(entity, dto);`)
+      .join('\n        '),
+    updateBeforeSave: stampParts
+      .map((part) => `await Stamp${entityShort}${part.master.masterShort}Async(entity, dto);`)
+      .join('\n        '),
+    importBeforeSave: stampParts
+      .map(
+        (part) => `await Stamp${entityShort}${part.master.masterShort}Async(entity, importDto);`,
+      )
+      .join('\n                '),
   };
 }
 
@@ -1876,7 +2001,10 @@ function omitDuplicateTransposedCtorExtras(manyToOneMaster, transposedGen, entit
     return transposedGen;
   }
   const cfg = getTransposableConfig(entityShort);
-  if (!cfg?.masterTable || cfg.masterTable.entity !== manyToOneMaster.masterEntity) {
+  const stampMasterEntities =
+    manyToOneMaster.masterEntities ??
+    (manyToOneMaster.masterEntity ? [manyToOneMaster.masterEntity] : []);
+  if (!cfg?.masterTable || !stampMasterEntities.includes(cfg.masterTable.entity)) {
     return transposedGen;
   }
   return {
@@ -2523,7 +2651,14 @@ function generateServiceImplementation(
   const uniqueIndexes = extractUniqueIndexes(entityFile, dtoBase);
   const manyToOneMasterEarly =
     crudType === 'Single'
-      ? generateManyToOneMasterStampExtras(entityFile, entityName, entityShort, dtoInfo, desc)
+      ? generateManyToOneMasterStampExtras(
+          entityFile,
+          entityName,
+          entityShort,
+          dtoInfo,
+          desc,
+          dtoContent,
+        )
       : null;
   const createUniqueBlock = buildUniqueValidationBlock(
     uniqueIndexes,
@@ -2639,7 +2774,7 @@ function generateServiceImplementation(
     ...(manyToOneMaster?.extraUsings ?? []),
   ].map((ns) => ns.replace(/^\s*using\s+/, '').replace(/;\s*$/, '').trim()).filter(Boolean));
   extraUsingNs.forEach((ns) => {
-    if (ns !== dtoNs && ns !== serviceNs) {
+    if (ns !== dtoNs && ns !== serviceNs && ns !== entityNs) {
       content += `using ${ns};\n`;
     }
   });
@@ -3090,7 +3225,7 @@ function generateServiceImplementation(
     }
     if (manyToOneMaster) {
       content += `                var importDto = rows[i].Adapt<${dtoInfo.create}>();\n`;
-      content += `                await Stamp${entityShort}${manyToOneMaster.masterShort}Async(entity, importDto);\n`;
+      content += `                ${manyToOneMaster.importBeforeSave}\n`;
     }
     if (importBatchGuard.check) {
       content += importBatchGuard.check;

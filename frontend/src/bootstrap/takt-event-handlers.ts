@@ -113,6 +113,13 @@ export function registerTaktEventHandlers(): void {
   EventBus.on('auth:session-expired', (payload) => {
     /** 会话失效提示；缺省为固定中文兜底 */
     const logoutMessage = payload?.message ?? '登录已过期，请重新登录';
+    const userStore = useUserStore();
+    if (!userStore.isLoggedIn && router.currentRoute.value.path === '/login') {
+      if (logoutMessage) {
+        message.error(logoutMessage);
+      }
+      return;
+    }
     // 执行统一登出清理
     performLogout(logoutMessage);
   });

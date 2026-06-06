@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Serial;
 
 namespace Takt.Application.Services.Logistics.Serial;
 
@@ -119,7 +118,7 @@ public class TaktProductSerialOutboundItemService : TaktServiceBase, ITaktProduc
     public async Task<TaktProductSerialOutboundItemDto> CreateProductSerialOutboundItemAsync(TaktProductSerialOutboundItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktProductSerialOutboundItem>();
-                await StampProductSerialOutboundItemProductSerialOutboundAsync(entity, dto);
+        await StampProductSerialOutboundItemProductSerialOutboundAsync(entity, dto);
         var isUnique_ix_takt_logistics_product_serial_outbound_item_outbound_serial_no_unique = await _uniqueValidator.IsUniqueAsync(
             _productSerialOutboundItemRepository,
             x => x.OutboundSerialNo == entity.OutboundSerialNo);
@@ -153,7 +152,7 @@ public class TaktProductSerialOutboundItemService : TaktServiceBase, ITaktProduc
             throw new TaktBusinessException("产品序列号出库明细不存在");
         }
         dto.Adapt(entity);
-                await StampProductSerialOutboundItemProductSerialOutboundAsync(entity, dto);
+        await StampProductSerialOutboundItemProductSerialOutboundAsync(entity, dto);
         var isUnique_ix_takt_logistics_product_serial_outbound_item_outbound_serial_no_unique = await _uniqueValidator.IsUniqueAsync(
             _productSerialOutboundItemRepository,
             x => x.OutboundSerialNo == entity.OutboundSerialNo,

@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Operation;
 
 namespace Takt.Application.Services.Logistics.Quality.Operation;
 
@@ -119,7 +118,7 @@ public class TaktIpqcDefectHandlingService : TaktServiceBase, ITaktIpqcDefectHan
     public async Task<TaktIpqcDefectHandlingDto> CreateIpqcDefectHandlingAsync(TaktIpqcDefectHandlingCreateDto dto)
     {
         var entity = dto.Adapt<TaktIpqcDefectHandling>();
-                await StampIpqcDefectHandlingIpqcOrderItemAsync(entity, dto);
+        await StampIpqcDefectHandlingIpqcOrderItemAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_ipqc_defect_handling_unique = await _uniqueValidator.IsUniqueAsync(
             _ipqcDefectHandlingRepository,
             x => x.IpqcOrderItemId == entity.IpqcOrderItemId
@@ -155,7 +154,7 @@ public class TaktIpqcDefectHandlingService : TaktServiceBase, ITaktIpqcDefectHan
             throw new TaktBusinessException("制程检验不良处理记录不存在");
         }
         dto.Adapt(entity);
-                await StampIpqcDefectHandlingIpqcOrderItemAsync(entity, dto);
+        await StampIpqcDefectHandlingIpqcOrderItemAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_ipqc_defect_handling_unique = await _uniqueValidator.IsUniqueAsync(
             _ipqcDefectHandlingRepository,
             x => x.IpqcOrderItemId == entity.IpqcOrderItemId

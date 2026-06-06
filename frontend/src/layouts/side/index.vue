@@ -41,9 +41,11 @@
           class="title-text collapsed"
         >{{ settingSafe.logoCollapsedText }}</span>
       </div>
-      <TaktSideMenu
-        :collapsed="collapsed"
-      />
+      <div class="sider-menu-scroll">
+        <TaktSideMenu
+          :collapsed="collapsed"
+        />
+      </div>
     </a-layout-sider>
     <a-layout :style="{ marginLeft: settingSafe.fixedSider ? (collapsed ? settingSafe.siderCollapsedWidth + 'px' : settingSafe.siderWidth + 'px') : 0 }">
       <TaktHeader
@@ -158,6 +160,20 @@ const contentMaxHeight = computed(() => {
 <style scoped lang="css">
 .side-layout {
   height: 100vh;
+
+  .layout-sider :deep(.ant-layout-sider-children) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .sider-menu-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
   .sider-header {
     display: flex;

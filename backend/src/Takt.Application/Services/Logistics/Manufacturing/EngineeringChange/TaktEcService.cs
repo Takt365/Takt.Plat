@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 

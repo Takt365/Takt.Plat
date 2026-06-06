@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -119,7 +118,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     public async Task<TaktEcAttachmentDto> CreateEcAttachmentAsync(TaktEcAttachmentCreateDto dto)
     {
         var entity = dto.Adapt<TaktEcAttachment>();
-                await StampEcAttachmentEcAsync(entity, dto);
+        await StampEcAttachmentEcAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
             x => x.EcId == entity.EcId
@@ -154,7 +153,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             throw new TaktBusinessException("设变附件不存在");
         }
         dto.Adapt(entity);
-                await StampEcAttachmentEcAsync(entity, dto);
+        await StampEcAttachmentEcAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
             x => x.EcId == entity.EcId

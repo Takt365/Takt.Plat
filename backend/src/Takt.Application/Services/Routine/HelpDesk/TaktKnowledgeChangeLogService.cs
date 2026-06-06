@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.HelpDesk;
 
 namespace Takt.Application.Services.Routine.HelpDesk;
 
@@ -115,7 +114,7 @@ public class TaktKnowledgeChangeLogService : TaktServiceBase, ITaktKnowledgeChan
     public async Task<TaktKnowledgeChangeLogDto> CreateKnowledgeChangeLogAsync(TaktKnowledgeChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktKnowledgeChangeLog>();
-                await StampKnowledgeChangeLogKnowledgeAsync(entity, dto);
+        await StampKnowledgeChangeLogKnowledgeAsync(entity, dto);
         entity = await _knowledgeChangeLogRepository.CreateAsync(entity);
         return await GetKnowledgeChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktKnowledgeChangeLogDto>();
     }
@@ -134,7 +133,7 @@ public class TaktKnowledgeChangeLogService : TaktServiceBase, ITaktKnowledgeChan
             throw new TaktBusinessException("知识库变更日志不存在");
         }
         dto.Adapt(entity);
-                await StampKnowledgeChangeLogKnowledgeAsync(entity, dto);
+        await StampKnowledgeChangeLogKnowledgeAsync(entity, dto);
         await _knowledgeChangeLogRepository.UpdateAsync(entity);
         return await GetKnowledgeChangeLogByIdAsync(id) ?? throw new TaktBusinessException("知识库变更日志不存在");
     }

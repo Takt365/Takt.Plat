@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Maintenance;
 
 namespace Takt.Application.Services.Logistics.Maintenance;
 
@@ -119,7 +118,7 @@ public class TaktMaintenanceService : TaktServiceBase, ITaktMaintenanceService
     public async Task<TaktMaintenanceDto> CreateMaintenanceAsync(TaktMaintenanceCreateDto dto)
     {
         var entity = dto.Adapt<TaktMaintenance>();
-                await StampMaintenanceEquipmentAsync(entity, dto);
+        await StampMaintenanceEquipmentAsync(entity, dto);
         var isUnique_ix_takt_logistics_maintenance_equipment_date_unique = await _uniqueValidator.IsUniqueAsync(
             _maintenanceRepository,
             x => x.EquipmentId == entity.EquipmentId
@@ -154,7 +153,7 @@ public class TaktMaintenanceService : TaktServiceBase, ITaktMaintenanceService
             throw new TaktBusinessException("设备维护记录不存在");
         }
         dto.Adapt(entity);
-                await StampMaintenanceEquipmentAsync(entity, dto);
+        await StampMaintenanceEquipmentAsync(entity, dto);
         var isUnique_ix_takt_logistics_maintenance_equipment_date_unique = await _uniqueValidator.IsUniqueAsync(
             _maintenanceRepository,
             x => x.EquipmentId == entity.EquipmentId

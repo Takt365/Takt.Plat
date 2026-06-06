@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Operation;
 
 namespace Takt.Application.Services.Logistics.Quality.Operation;
 
@@ -115,7 +114,7 @@ public class TaktIpqcOrderChangeLogService : TaktServiceBase, ITaktIpqcOrderChan
     public async Task<TaktIpqcOrderChangeLogDto> CreateIpqcOrderChangeLogAsync(TaktIpqcOrderChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktIpqcOrderChangeLog>();
-                await StampIpqcOrderChangeLogIpqcOrderAsync(entity, dto);
+        await StampIpqcOrderChangeLogIpqcOrderAsync(entity, dto);
         entity = await _ipqcOrderChangeLogRepository.CreateAsync(entity);
         return await GetIpqcOrderChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktIpqcOrderChangeLogDto>();
     }
@@ -134,7 +133,7 @@ public class TaktIpqcOrderChangeLogService : TaktServiceBase, ITaktIpqcOrderChan
             throw new TaktBusinessException("制程检验单变更日志不存在");
         }
         dto.Adapt(entity);
-                await StampIpqcOrderChangeLogIpqcOrderAsync(entity, dto);
+        await StampIpqcOrderChangeLogIpqcOrderAsync(entity, dto);
         await _ipqcOrderChangeLogRepository.UpdateAsync(entity);
         return await GetIpqcOrderChangeLogByIdAsync(id) ?? throw new TaktBusinessException("制程检验单变更日志不存在");
     }

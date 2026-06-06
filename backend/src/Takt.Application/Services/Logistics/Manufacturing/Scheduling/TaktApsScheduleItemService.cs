@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Scheduling;
 
@@ -119,7 +118,7 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
     public async Task<TaktApsScheduleItemDto> CreateApsScheduleItemAsync(TaktApsScheduleItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktApsScheduleItem>();
-                await StampApsScheduleItemApsScheduleAsync(entity, dto);
+        await StampApsScheduleItemApsScheduleAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _apsScheduleItemRepository,
             x => x.ApsScheduleId == entity.ApsScheduleId
@@ -154,7 +153,7 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
             throw new TaktBusinessException("APS排程明细不存在");
         }
         dto.Adapt(entity);
-                await StampApsScheduleItemApsScheduleAsync(entity, dto);
+        await StampApsScheduleItemApsScheduleAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _apsScheduleItemRepository,
             x => x.ApsScheduleId == entity.ApsScheduleId

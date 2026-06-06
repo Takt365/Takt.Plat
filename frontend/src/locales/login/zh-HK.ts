@@ -46,7 +46,7 @@ export default {
     },
     validate: {
       tenantRequired: '請輸入租戶編碼',
-      tenantInvalid: '租戶編碼格式不正確',
+      tenantInvalid: '租戶編碼須為 3 位數字',
       usernameRequired: '請輸入用戶名',
       usernameInvalid: '用戶名格式不正確',
       passwordRequired: '請輸入密碼',

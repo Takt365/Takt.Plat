@@ -47,6 +47,7 @@ export default {
       default: 'リクエストに失敗しました',
       defaultWithStatus: 'リクエストに失敗しました（HTTP {status}）',
       loginFailed: 'ログインに失敗しました。アカウント、パスワード、テナントを確認してください。',
+      tenantDatabaseHint: 'テナント業務 DB が利用できません。DB を作成するか InitDb を実行してください。',
       status: {
         400: 'リクエストパラメータが不正です',
         401: 'ログインの有効期限が切れました。再度ログインしてください。',

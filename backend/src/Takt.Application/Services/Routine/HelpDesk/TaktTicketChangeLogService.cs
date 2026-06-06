@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.HelpDesk;
 
 namespace Takt.Application.Services.Routine.HelpDesk;
 
@@ -115,7 +114,7 @@ public class TaktTicketChangeLogService : TaktServiceBase, ITaktTicketChangeLogS
     public async Task<TaktTicketChangeLogDto> CreateTicketChangeLogAsync(TaktTicketChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktTicketChangeLog>();
-                await StampTicketChangeLogTicketAsync(entity, dto);
+        await StampTicketChangeLogTicketAsync(entity, dto);
         entity = await _ticketChangeLogRepository.CreateAsync(entity);
         return await GetTicketChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktTicketChangeLogDto>();
     }
@@ -134,7 +133,7 @@ public class TaktTicketChangeLogService : TaktServiceBase, ITaktTicketChangeLogS
             throw new TaktBusinessException("工单变更日志不存在");
         }
         dto.Adapt(entity);
-                await StampTicketChangeLogTicketAsync(entity, dto);
+        await StampTicketChangeLogTicketAsync(entity, dto);
         await _ticketChangeLogRepository.UpdateAsync(entity);
         return await GetTicketChangeLogByIdAsync(id) ?? throw new TaktBusinessException("工单变更日志不存在");
     }

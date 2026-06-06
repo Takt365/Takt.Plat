@@ -18,6 +18,8 @@ import { resolveTaktCultureCode } from '@/utils/takt-locale-sync';
 import { useUserStore } from '@/stores/identity/user';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { createLogger } from '@/utils/logger';
+import { resolveHttpErrorMessage } from '@/utils/takt-http-error-message';
+import { emitNotification } from '@/utils/event-bus';
 
 const translationLogger = createLogger('translation');
 
@@ -121,11 +123,15 @@ export const useTranslationStore = defineStore('translation', () => {
         loadedLocales.value = { ...loadedLocales.value, [cacheKey]: true };
         bumpDynamicRevision();
       } catch (error) {
+        const errMsg = resolveHttpErrorMessage(error);
         translationLogger.warn(
           '加载动态翻译失败',
-          { action: 'loadTranslationMessages', cultureCode: locale, cacheKey },
+          { action: 'loadTranslationMessages', cultureCode: locale, cacheKey, message: errMsg },
           error
         );
+        if (userStore.isLoggedIn && errMsg) {
+          emitNotification('error', errMsg);
+        }
       } finally {
         loadingPromises.delete(cacheKey);
         loading.value = loadingPromises.size > 0;

@@ -24,6 +24,7 @@ import { resolveRequestLocale } from '@/stores/foundation/locale';
 import type { TaktApiResult } from '@/types/common';
 import { TaktResultCode } from '@/utils/common';
 import { createLogger } from '@/utils/logger';
+import { resolveHttpErrorMessage } from '@/utils/takt-http-error-message';
 import { EventBus, emitNotification } from '@/utils/event-bus';
 import { ensureValidAccessToken, refreshOAuthTokens } from '@/utils/oauth';
 
@@ -142,6 +143,29 @@ function emitSessionExpired(message?: string): void {
 }
 
 /**
+ * 是否为登录预检/会话接口（401 不触发全局会话过期）
+ * @param config Axios 请求配置
+ */
+function isSkipLoginAuthError(config?: InternalAxiosRequestConfig): boolean {
+  return Boolean(config?.skipLoginAuthError);
+}
+
+/**
+ * 从裸 HTTP 响应体提取 message 字段
+ * @param data 响应体
+ * @param fallback 缺省文案
+ */
+function extractResponseMessage(data: unknown, fallback: string): string {
+  if (typeof data === 'object' && data !== null && 'message' in data) {
+    const message = (data as { message?: unknown }).message;
+    if (typeof message === 'string' && message.trim()) {
+      return message.trim();
+    }
+  }
+  return fallback;
+}
+
+/**
  * 401 / 业务未授权：尝试 refresh_token 后重试原请求
  * @param {InternalAxiosRequestConfig} config 原请求配置
  * @param {string} [message] 失败时提示文案
@@ -151,6 +175,11 @@ async function retryRequestAfterTokenRefresh(
   config: InternalAxiosRequestConfig,
   message?: string
 ): Promise<AxiosResponse> {
+  if (isSkipLoginAuthError(config)) {
+    const errMsg = message || '登录失败';
+    return Promise.reject(new TaktApiError(errMsg, TaktResultCode.Unauthorized));
+  }
+
   if (config._retryAuth) {
     emitSessionExpired(message || '登录已过期，请重新登录');
     return Promise.reject(new TaktApiError(message || '登录已过期', TaktResultCode.Unauthorized));
@@ -169,6 +198,27 @@ async function retryRequestAfterTokenRefresh(
 }
 
 /**
+ * 判断是否为租户业务库不可用类错误文案（后端 error.tenant.database.* 默认中文）
+ * @param message 错误提示
+ */
+function isTenantDatabaseErrorMessage(message: string): boolean {
+  const text = message.trim();
+  if (!text) {
+    return false;
+  }
+  return (
+    text.includes('业务数据库不存在')
+    || text.includes('业务数据库无法连接')
+    || text.includes('缺少业务数据表')
+    || text.includes('无法登录 SQL Server')
+    || text.includes('database does not exist')
+    || text.includes('business database is unreachable')
+    || text.includes('business tables are missing')
+    || text.includes('Cannot log in to SQL Server')
+  );
+}
+
+/**
  * 统一处理 Axios 错误响应
  * @param {unknown} error 拦截器捕获的异常
  * @returns {Promise<unknown>} reject 或刷新成功后重试的响应
@@ -178,7 +228,7 @@ function rejectFromAxiosError(error: unknown): Promise<unknown> {
   if (!axiosError) {
     if (error instanceof Error) {
       requestLogger.warn('请求配置错误', { action: 'config' }, error);
-      emitNotification('error', error.message || '请求配置错误');
+      emitNotification('error', resolveHttpErrorMessage(error));
     }
     return Promise.reject(error);
   }
@@ -186,52 +236,75 @@ function rejectFromAxiosError(error: unknown): Promise<unknown> {
   if (!axiosError.response) {
     if (axiosError.request) {
       requestLogger.warn('网络连接失败', { action: 'network' }, axiosError);
-      emitNotification('error', '网络连接失败');
+      emitNotification('error', resolveHttpErrorMessage(axiosError));
     }
     return Promise.reject(axiosError);
   }
 
   const { status, data, config: axiosConfig } = axiosError.response;
+  const resolvedMessage = resolveHttpErrorMessage(axiosError);
 
   if (isTaktApiResult(data)) {
     if (data.code === TaktResultCode.Unauthorized && axiosError.config) {
+      if (isSkipLoginAuthError(axiosError.config)) {
+        return Promise.reject(new TaktApiError(data.message, data.code, data.data));
+      }
       return retryRequestAfterTokenRefresh(axiosError.config, data.message || '登录已过期，请重新登录');
     }
     if (data.code !== TaktResultCode.Unauthorized && !axiosConfig?.skipErrorNotification) {
-      emitNotification('error', data.message || '请求失败');
+      const errMsg = data.message?.trim() || resolvedMessage;
+      emitNotification('error', errMsg);
+      if (isTenantDatabaseErrorMessage(errMsg)) {
+        requestLogger.warn('租户业务库不可用', { action: 'tenantDatabase', url: axiosConfig?.url }, axiosError);
+      }
     }
-    return Promise.reject(new TaktApiError(data.message, data.code, data.data));
+    return Promise.reject(new TaktApiError(data.message || resolvedMessage, data.code, data.data));
   }
 
-  switch (status) {
-    case 401:
-      if (axiosError.config) {
-        return retryRequestAfterTokenRefresh(axiosError.config, '登录已过期，请重新登录');
-      }
-      emitSessionExpired('登录已过期，请重新登录');
-      break;
-    case 403:
-      emitNotification('error', '无权限访问');
-      break;
-    case 404:
-      emitNotification('error', '请求的资源不存在');
-      break;
-    case 500:
-      requestLogger.error('服务器错误', { action: 'http', status, url: axiosConfig?.url }, axiosError);
-      emitNotification('error', '服务器错误');
-      break;
-    default:
-      requestLogger.warn(
-        '请求失败',
-        { action: 'http', status, url: axiosConfig?.url },
-        axiosError
-      );
-      emitNotification(
-        'error',
-        typeof data === 'object' && data !== null && 'message' in data
-          ? String((data as { message?: string }).message)
-          : '请求失败'
-      );
+  if (!axiosConfig?.skipErrorNotification) {
+    switch (status) {
+      case 401:
+        if (!isSkipLoginAuthError(axiosConfig)) {
+          if (axiosError.config) {
+            return retryRequestAfterTokenRefresh(axiosError.config, resolvedMessage);
+          }
+          emitSessionExpired(resolvedMessage);
+        }
+        break;
+      case 403:
+        emitNotification('error', resolvedMessage);
+        break;
+      case 400:
+      case 404:
+      case 500:
+      default:
+        if (status === 500) {
+          requestLogger.error(
+            '请求失败',
+            { action: 'http', status, url: axiosConfig?.url, message: resolvedMessage },
+            axiosError
+          );
+        } else if (status !== 404) {
+          requestLogger.warn(
+            '请求失败',
+            { action: 'http', status, url: axiosConfig?.url },
+            axiosError
+          );
+        }
+        emitNotification('error', resolvedMessage);
+        if (isTenantDatabaseErrorMessage(resolvedMessage)) {
+          requestLogger.warn('租户业务库不可用', { action: 'tenantDatabase', url: axiosConfig?.url }, axiosError);
+        }
+        break;
+    }
+  }
+
+  if (status === 401 && isSkipLoginAuthError(axiosConfig)) {
+    return Promise.reject(new TaktApiError(resolvedMessage, TaktResultCode.Unauthorized));
+  }
+
+  if (status === 400 && isSkipLoginAuthError(axiosConfig)) {
+    return Promise.reject(new TaktApiError(resolvedMessage, TaktResultCode.BadRequest));
   }
 
   return Promise.reject(axiosError);
@@ -336,6 +409,9 @@ axiosInstance.interceptors.response.use(
         err.code === TaktResultCode.Unauthorized &&
         response.config
       ) {
+        if (isSkipLoginAuthError(response.config)) {
+          return Promise.reject(err);
+        }
         return retryRequestAfterTokenRefresh(response.config, err.message).then((retried) => {
           try {
             return unwrapTaktApiResult(retried);

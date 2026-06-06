@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
@@ -123,7 +122,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
     public async Task<TaktRoutingItemDto> CreateRoutingItemAsync(TaktRoutingItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktRoutingItem>();
-                await StampRoutingItemRoutingAsync(entity, dto);
+        await StampRoutingItemRoutingAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
             _routingItemRepository,
             x => x.RoutingId == entity.RoutingId
@@ -165,7 +164,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             throw new TaktBusinessException("工艺路线明细不存在");
         }
         dto.Adapt(entity);
-                await StampRoutingItemRoutingAsync(entity, dto);
+        await StampRoutingItemRoutingAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
             _routingItemRepository,
             x => x.RoutingId == entity.RoutingId

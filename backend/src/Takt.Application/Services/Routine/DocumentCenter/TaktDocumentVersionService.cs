@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.DocumentCenter;
 
 namespace Takt.Application.Services.Routine.DocumentCenter;
 
@@ -115,7 +114,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
     public async Task<TaktDocumentVersionDto> CreateDocumentVersionAsync(TaktDocumentVersionCreateDto dto)
     {
         var entity = dto.Adapt<TaktDocumentVersion>();
-                await StampDocumentVersionDocumentAsync(entity, dto);
+        await StampDocumentVersionDocumentAsync(entity, dto);
         var isUnique_ix_document_version_unique = await _uniqueValidator.IsUniqueAsync(
             _documentVersionRepository,
             x => x.DocumentId == entity.DocumentId
@@ -142,7 +141,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
             throw new TaktBusinessException("文管文档版本不存在");
         }
         dto.Adapt(entity);
-                await StampDocumentVersionDocumentAsync(entity, dto);
+        await StampDocumentVersionDocumentAsync(entity, dto);
         var isUnique_ix_document_version_unique = await _uniqueValidator.IsUniqueAsync(
             _documentVersionRepository,
             x => x.DocumentId == entity.DocumentId

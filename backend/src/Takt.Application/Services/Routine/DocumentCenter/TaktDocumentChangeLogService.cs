@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.DocumentCenter;
 
 namespace Takt.Application.Services.Routine.DocumentCenter;
 
@@ -115,7 +114,7 @@ public class TaktDocumentChangeLogService : TaktServiceBase, ITaktDocumentChange
     public async Task<TaktDocumentChangeLogDto> CreateDocumentChangeLogAsync(TaktDocumentChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktDocumentChangeLog>();
-                await StampDocumentChangeLogDocumentAsync(entity, dto);
+        await StampDocumentChangeLogDocumentAsync(entity, dto);
         entity = await _documentChangeLogRepository.CreateAsync(entity);
         return await GetDocumentChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktDocumentChangeLogDto>();
     }
@@ -134,7 +133,7 @@ public class TaktDocumentChangeLogService : TaktServiceBase, ITaktDocumentChange
             throw new TaktBusinessException("文管文档变更日志不存在");
         }
         dto.Adapt(entity);
-                await StampDocumentChangeLogDocumentAsync(entity, dto);
+        await StampDocumentChangeLogDocumentAsync(entity, dto);
         await _documentChangeLogRepository.UpdateAsync(entity);
         return await GetDocumentChangeLogByIdAsync(id) ?? throw new TaktBusinessException("文管文档变更日志不存在");
     }

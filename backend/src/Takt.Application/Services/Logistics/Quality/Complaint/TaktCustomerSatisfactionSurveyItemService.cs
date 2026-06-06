@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Complaint;
 
 namespace Takt.Application.Services.Logistics.Quality.Complaint;
 
@@ -119,7 +118,7 @@ public class TaktCustomerSatisfactionSurveyItemService : TaktServiceBase, ITaktC
     public async Task<TaktCustomerSatisfactionSurveyItemDto> CreateCustomerSatisfactionSurveyItemAsync(TaktCustomerSatisfactionSurveyItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktCustomerSatisfactionSurveyItem>();
-                await StampCustomerSatisfactionSurveyItemCustomerSatisfactionSurveyAsync(entity, dto);
+        await StampCustomerSatisfactionSurveyItemCustomerSatisfactionSurveyAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _customerSatisfactionSurveyItemRepository,
             x => x.SurveyId == entity.SurveyId
@@ -154,7 +153,7 @@ public class TaktCustomerSatisfactionSurveyItemService : TaktServiceBase, ITaktC
             throw new TaktBusinessException("客户满意度调查项目明细不存在");
         }
         dto.Adapt(entity);
-                await StampCustomerSatisfactionSurveyItemCustomerSatisfactionSurveyAsync(entity, dto);
+        await StampCustomerSatisfactionSurveyItemCustomerSatisfactionSurveyAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _customerSatisfactionSurveyItemRepository,
             x => x.SurveyId == entity.SurveyId

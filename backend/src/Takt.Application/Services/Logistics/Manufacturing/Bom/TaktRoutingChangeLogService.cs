@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
@@ -115,7 +114,7 @@ public class TaktRoutingChangeLogService : TaktServiceBase, ITaktRoutingChangeLo
     public async Task<TaktRoutingChangeLogDto> CreateRoutingChangeLogAsync(TaktRoutingChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktRoutingChangeLog>();
-                await StampRoutingChangeLogRoutingAsync(entity, dto);
+        await StampRoutingChangeLogRoutingAsync(entity, dto);
         entity = await _routingChangeLogRepository.CreateAsync(entity);
         return await GetRoutingChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktRoutingChangeLogDto>();
     }
@@ -134,7 +133,7 @@ public class TaktRoutingChangeLogService : TaktServiceBase, ITaktRoutingChangeLo
             throw new TaktBusinessException("工艺路线变更日志不存在");
         }
         dto.Adapt(entity);
-                await StampRoutingChangeLogRoutingAsync(entity, dto);
+        await StampRoutingChangeLogRoutingAsync(entity, dto);
         await _routingChangeLogRepository.UpdateAsync(entity);
         return await GetRoutingChangeLogByIdAsync(id) ?? throw new TaktBusinessException("工艺路线变更日志不存在");
     }

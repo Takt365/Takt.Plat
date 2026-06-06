@@ -244,9 +244,16 @@ public class TaktMenuButtonSeedData
     private static readonly string[] FoundationExtraNames = { "过滤", "替换" };
     private static readonly string[] FoundationExtraPerms = { "filter", "replace" };
 
-    /// <summary>人力资源模块扩展按钮。</summary>
-    private static readonly string[] HumanResourceExtraNames = { "核算" };
-    private static readonly string[] HumanResourceExtraPerms = { "calculate" };
+    /// <summary>人力资源模块扩展按钮（入职/转正/调动/晋升/离职/返聘等）。</summary>
+    private static readonly string[] HumanResourceExtraNames =
+    {
+        "入职", "转正", "调动", "晋升", "离职", "返聘"
+    };
+
+    private static readonly string[] HumanResourceExtraPerms =
+    {
+        "onboard", "regularize", "transfer", "promote", "terminate", "rehire"
+    };
 
     /// <summary>身份认证模块扩展按钮。</summary>
     private static readonly string[] IdentityExtraNames =
@@ -314,15 +321,17 @@ public class TaktMenuButtonSeedData
         "download", "sync", "calculate", "transpose", "reset", "run", "stop", "restart"
     };
 
-    /// <summary>后勤/物料模块扩展按钮（未列入主模块顺序，仍继承通用）。</summary>
+    /// <summary>后勤/物料模块扩展按钮（收货/发货/领用/借调/调拨/核销等，未列入主模块顺序，仍继承通用）。</summary>
     private static readonly string[] LogisticsExtraNames =
     {
-        "收货", "发货", "退货", "移库", "盘点", "调整", "报废"
+        "收货", "发货", "退货", "移库", "盘点", "调整", "报废",
+        "领用", "借调", "归还", "报损", "调拨", "核销"
     };
 
     private static readonly string[] LogisticsExtraPerms =
     {
-        "receive", "issue", "return", "relocate", "count", "adjust", "scrap"
+        "receive", "shipping", "returns", "transfer", "stocktake", "adjust", "scrap",
+        "requisition", "secondment", "restore", "lossreport", "allot", "writeoff"
     };
 
     /// <summary>

@@ -12,6 +12,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Takt.Domain.Interfaces;
 using Takt.WebApi.Filters;
 using Takt.Shared.Enums;
@@ -400,7 +401,25 @@ public abstract class TaktControllerBase : ControllerBase
                 TaktLogger.Error(ex, "[{ControllerType}] 控制器操作发生错误", GetType().Name);
             }
 
-            return Error(businessEx.Message, TaktResultCode.BadRequest);
+            return Error(
+                businessEx.ErrorCode?.StartsWith("error.tenant.database", StringComparison.Ordinal) == true
+                    ? ResolveTenantDatabaseMessage(businessEx)
+                    : GetLocalizedExceptionMessage(businessEx),
+                TaktResultCode.BadRequest);
+        }
+
+        if (TaktTenantDatabaseHelper.IsInfrastructureFailure(ex))
+        {
+            var configuration = HttpContext.RequestServices.GetService<IConfiguration>();
+            var tenantCode = CurrentTenantCode ?? "000";
+            var tenantDbEx = TaktTenantDatabaseHelper.CreateBusinessException(ex, configuration, tenantCode);
+            TaktLogger.Warning(
+                ex,
+                "[{ControllerType}] 租户业务库不可用: Tenant={TenantCode}, Message={Message}",
+                GetType().Name,
+                tenantCode,
+                tenantDbEx.Message);
+            return Error(ResolveTenantDatabaseMessage(tenantDbEx), TaktResultCode.BadRequest);
         }
 
         TaktLogger.Error(ex, "[{ControllerType}] 控制器操作发生错误", GetType().Name);
@@ -547,6 +566,40 @@ public abstract class TaktControllerBase : ControllerBase
         }
         
         return ex.Message;
+    }
+
+    /// <summary>
+    /// 解析租户业务库不可用文案（优先 i18n 键 error.tenant.database.*）
+    /// </summary>
+    /// <param name="businessEx">租户库业务异常</param>
+    /// <returns>面向用户的说明</returns>
+    protected string ResolveTenantDatabaseMessage(TaktBusinessException businessEx)
+    {
+        if (string.IsNullOrWhiteSpace(businessEx.ErrorCode) || _localizationService == null)
+        {
+            return businessEx.Message;
+        }
+
+        var tenantCode = CurrentTenantCode ?? string.Empty;
+        var configuration = HttpContext.RequestServices.GetService<IConfiguration>();
+        var databaseName = TaktTenantDatabaseHelper.ResolveDatabaseName(configuration, tenantCode);
+        try
+        {
+            var localized = _localizationService.Translate(
+                businessEx.ErrorCode,
+                args: new object[] { tenantCode, databaseName });
+            if (!string.IsNullOrWhiteSpace(localized)
+                && !string.Equals(localized, businessEx.ErrorCode, StringComparison.Ordinal))
+            {
+                return localized;
+            }
+        }
+        catch
+        {
+            // 回退默认中文说明
+        }
+
+        return businessEx.Message;
     }
 
     #endregion

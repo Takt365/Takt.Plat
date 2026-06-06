@@ -47,6 +47,7 @@ export default {
       default: '請求失敗',
       defaultWithStatus: '請求失敗（HTTP {status}）',
       loginFailed: '登錄失敗，請檢查賬號、密碼與租戶',
+      tenantDatabaseHint: '租戶業務庫不可用，請檢查資料庫是否已建立或聯繫管理員執行 InitDb。',
       status: {
         400: '請求參數錯誤',
         401: '登錄已過期，請重新登錄',

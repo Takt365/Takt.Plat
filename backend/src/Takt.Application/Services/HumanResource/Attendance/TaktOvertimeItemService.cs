@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.HumanResource.Attendance;
 
 namespace Takt.Application.Services.HumanResource.Attendance;
 
@@ -119,7 +118,7 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
     public async Task<TaktOvertimeItemDto> CreateOvertimeItemAsync(TaktOvertimeItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktOvertimeItem>();
-                await StampOvertimeItemOvertimeAsync(entity, dto);
+        await StampOvertimeItemOvertimeAsync(entity, dto);
         var isUnique_ix_overtime_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
             _overtimeItemRepository,
             x => x.OvertimeId == entity.OvertimeId
@@ -154,7 +153,7 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
             throw new TaktBusinessException("加班明细不存在");
         }
         dto.Adapt(entity);
-                await StampOvertimeItemOvertimeAsync(entity, dto);
+        await StampOvertimeItemOvertimeAsync(entity, dto);
         var isUnique_ix_overtime_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
             _overtimeItemRepository,
             x => x.OvertimeId == entity.OvertimeId

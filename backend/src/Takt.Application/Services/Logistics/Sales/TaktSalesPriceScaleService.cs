@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Sales;
 
 namespace Takt.Application.Services.Logistics.Sales;
 
@@ -119,7 +118,7 @@ public class TaktSalesPriceScaleService : TaktServiceBase, ITaktSalesPriceScaleS
     public async Task<TaktSalesPriceScaleDto> CreateSalesPriceScaleAsync(TaktSalesPriceScaleCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesPriceScale>();
-                await StampSalesPriceScaleSalesPriceItemAsync(entity, dto);
+        await StampSalesPriceScaleSalesPriceItemAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesPriceScaleRepository,
             x => x.ItemId == entity.ItemId
@@ -154,7 +153,7 @@ public class TaktSalesPriceScaleService : TaktServiceBase, ITaktSalesPriceScaleS
             throw new TaktBusinessException("销售价格阶梯不存在");
         }
         dto.Adapt(entity);
-                await StampSalesPriceScaleSalesPriceItemAsync(entity, dto);
+        await StampSalesPriceScaleSalesPriceItemAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesPriceScaleRepository,
             x => x.ItemId == entity.ItemId

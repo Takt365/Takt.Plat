@@ -180,6 +180,10 @@ function buildSpecialPermissionBase(pathParts, entityShort) {
     }
   }
 
+  if (domain === 'Logistics' && pathParts[1] === 'CustomerService') {
+    return `logistics:service:${entitySlug}`;
+  }
+
   return null;
 }
 

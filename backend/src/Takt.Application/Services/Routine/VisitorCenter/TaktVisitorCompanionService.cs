@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Routine.VisitorCenter;
 
 namespace Takt.Application.Services.Routine.VisitorCenter;
 
@@ -115,7 +114,7 @@ public class TaktVisitorCompanionService : TaktServiceBase, ITaktVisitorCompanio
     public async Task<TaktVisitorCompanionDto> CreateVisitorCompanionAsync(TaktVisitorCompanionCreateDto dto)
     {
         var entity = dto.Adapt<TaktVisitorCompanion>();
-                await StampVisitorCompanionVisitorAsync(entity, dto);
+        await StampVisitorCompanionVisitorAsync(entity, dto);
         entity = await _visitorCompanionRepository.CreateAsync(entity);
         return await GetVisitorCompanionByIdAsync(entity.Id) ?? entity.Adapt<TaktVisitorCompanionDto>();
     }
@@ -134,7 +133,7 @@ public class TaktVisitorCompanionService : TaktServiceBase, ITaktVisitorCompanio
             throw new TaktBusinessException("来访人员不存在");
         }
         dto.Adapt(entity);
-                await StampVisitorCompanionVisitorAsync(entity, dto);
+        await StampVisitorCompanionVisitorAsync(entity, dto);
         await _visitorCompanionRepository.UpdateAsync(entity);
         return await GetVisitorCompanionByIdAsync(id) ?? throw new TaktBusinessException("来访人员不存在");
     }

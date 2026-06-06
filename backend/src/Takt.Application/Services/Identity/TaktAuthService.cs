@@ -352,10 +352,15 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// <returns>用户 ID；用户不存在、密码错误或账号禁用时返回 null</returns>
     private async Task<long?> ValidateUserPasswordCoreAsync(string tenantCode, string username, string password)
     {
-        LogInformation("尝试验证用户密码: TenantCode={TenantCode}, Username={Username}", tenantCode, username);
+        var trimmedTenant = tenantCode.Trim();
+        var normalizedUsername = username.Trim().ToLowerInvariant();
+        LogInformation(
+            "尝试验证用户密码: TenantCode={TenantCode}, Username={Username}",
+            trimmedTenant,
+            normalizedUsername);
 
         var user = await _userRepository.FirstAsync(u =>
-            u.TenantCode == tenantCode && u.Username == username);
+            u.TenantCode == trimmedTenant && u.Username == normalizedUsername);
 
         if (user == null)
         {

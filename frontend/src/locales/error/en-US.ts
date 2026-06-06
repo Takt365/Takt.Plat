@@ -47,6 +47,7 @@ export default {
       default: 'Request failed',
       defaultWithStatus: 'Request failed (HTTP {status})',
       loginFailed: 'Sign-in failed. Check your account, password, and tenant.',
+      tenantDatabaseHint: 'Tenant business database is unavailable. Create the database or run InitDb.',
       status: {
         400: 'Invalid request parameters',
         401: 'Your session has expired. Please sign in again.',

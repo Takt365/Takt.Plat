@@ -114,9 +114,14 @@ export const useTenantStore = defineStore('tenant', () => {
       return;
     }
 
-    tenantCode.value = code;
-    localStorage.setItem(TAKT_TENANT_CODE_STORAGE_KEY, code);
-    EventBus.emit('tenant:change', { tenantCode: code });
+    const trimmed = code.trim();
+    if (tenantCode.value === trimmed) {
+      return;
+    }
+
+    tenantCode.value = trimmed;
+    localStorage.setItem(TAKT_TENANT_CODE_STORAGE_KEY, trimmed);
+    EventBus.emit('tenant:change', { tenantCode: trimmed });
 
     if (hasAccessToken()) {
       void loadCompanyOptionsAsync().catch(() => undefined);

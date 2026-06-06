@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="statistics:report:logistics:maintenance:query:create"
-      update-permission="statistics:report:logistics:maintenance:query:update"
-      delete-permission="statistics:report:logistics:maintenance:query:delete"
-      import-permission="statistics:report:logistics:maintenance:query:import"
-      export-permission="statistics:report:logistics:maintenance:query:export"
+      create-permission="statistics:report:logistics:maintenance:create"
+      update-permission="statistics:report:logistics:maintenance:update"
+      delete-permission="statistics:report:logistics:maintenance:delete"
+      import-permission="statistics:report:logistics:maintenance:import"
+      export-permission="statistics:report:logistics:maintenance:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -386,7 +386,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'statistics:report:logistics:maintenance:query:update',
+        permission: 'statistics:report:logistics:maintenance:update',
         onClick: (record: Maintenance) => handleEdit(record)
       },
       {
@@ -394,7 +394,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'statistics:report:logistics:maintenance:query:delete',
+        permission: 'statistics:report:logistics:maintenance:delete',
         onClick: (record: Maintenance) => handleDeleteOne(record)
       }
     ]

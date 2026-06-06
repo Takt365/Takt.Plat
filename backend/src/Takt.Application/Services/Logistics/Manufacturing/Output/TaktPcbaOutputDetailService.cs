@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 
@@ -119,7 +118,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     public async Task<TaktPcbaOutputDetailDto> CreatePcbaOutputDetailAsync(TaktPcbaOutputDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktPcbaOutputDetail>();
-                await StampPcbaOutputDetailPcbaOutputAsync(entity, dto);
+        await StampPcbaOutputDetailPcbaOutputAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaOutputDetailRepository,
             x => x.PcbaOutputId == entity.PcbaOutputId
@@ -154,7 +153,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             throw new TaktBusinessException("PCBA日报明细不存在");
         }
         dto.Adapt(entity);
-                await StampPcbaOutputDetailPcbaOutputAsync(entity, dto);
+        await StampPcbaOutputDetailPcbaOutputAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaOutputDetailRepository,
             x => x.PcbaOutputId == entity.PcbaOutputId

@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Complaint;
 
 namespace Takt.Application.Services.Logistics.Quality.Complaint;
 
@@ -115,7 +114,7 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
     public async Task<TaktCustomerComplaintHandlingDto> CreateCustomerComplaintHandlingAsync(TaktCustomerComplaintHandlingCreateDto dto)
     {
         var entity = dto.Adapt<TaktCustomerComplaintHandling>();
-                await StampCustomerComplaintHandlingCustomerComplaintAsync(entity, dto);
+        await StampCustomerComplaintHandlingCustomerComplaintAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_customer_complaint_handling_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerComplaintHandlingRepository,
             x => x.ComplaintHandlingCode == entity.ComplaintHandlingCode);
@@ -141,7 +140,7 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
             throw new TaktBusinessException("客诉处理记录不存在");
         }
         dto.Adapt(entity);
-                await StampCustomerComplaintHandlingCustomerComplaintAsync(entity, dto);
+        await StampCustomerComplaintHandlingCustomerComplaintAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_customer_complaint_handling_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerComplaintHandlingRepository,
             x => x.ComplaintHandlingCode == entity.ComplaintHandlingCode,

@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.HumanResource.Attendance;
 
 namespace Takt.Application.Services.HumanResource.Attendance;
 

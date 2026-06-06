@@ -46,7 +46,7 @@ export default {
     },
     validate: {
       tenantRequired: 'Please enter tenant code',
-      tenantInvalid: 'Invalid tenant code format',
+      tenantInvalid: 'Tenant code must be 3 digits',
       usernameRequired: 'Please enter username',
       usernameInvalid: 'Invalid username format',
       passwordRequired: 'Please enter password',

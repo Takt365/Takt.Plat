@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 为非日志实体补全缺失的唯一索引（名称以 _unique 结尾）
  */
 const fs = require('fs');
@@ -44,12 +44,12 @@ const UNIQUE_INDEX_ADDITIONS = {
     '[SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique", nameof(SurveyId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
   'Logistics/Quality/Complaint/TaktSupplierEvaluationItem.cs':
     '[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_item_line_unique", nameof(EvaluationId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
-  'Logistics/Quality/Cost/TaktQualityIssueAssyRework.cs':
-    '[SugarIndex("ix_takt_logistics_quality_issue_assy_rework_line_unique", nameof(QualityIssueId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
-  'Logistics/Quality/Cost/TaktQualityIssueMeeting.cs':
-    '[SugarIndex("ix_takt_logistics_quality_issue_meeting_line_unique", nameof(QualityIssueId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
-  'Logistics/Quality/Cost/TaktQualityIssuePcbaRework.cs':
-    '[SugarIndex("ix_takt_logistics_quality_issue_pcba_rework_line_unique", nameof(QualityIssueId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
+  'Logistics/Quality/Cost/TaktQualityFailureAssyRework.cs':
+    '[SugarIndex("ix_takt_logistics_quality_failure_assy_rework_line_unique", nameof(QualityFailureId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
+  'Logistics/Quality/Cost/TaktQualityFailureMeeting.cs':
+    '[SugarIndex("ix_takt_logistics_quality_failure_meeting_line_unique", nameof(QualityFailureId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
+  'Logistics/Quality/Cost/TaktQualityFailurePcbaRework.cs':
+    '[SugarIndex("ix_takt_logistics_quality_failure_pcba_rework_line_unique", nameof(QualityFailureId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
   'Logistics/Quality/Cost/TaktQualityOperationCalibration.cs':
     '[SugarIndex("ix_takt_logistics_quality_operation_calibration_line_unique", nameof(QualityOperationId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]',
   'Logistics/Quality/Cost/TaktQualityOperationCustomerResponse.cs':

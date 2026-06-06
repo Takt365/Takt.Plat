@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Domain.Entities.Logistics.Quality.Cost;
 
 namespace Takt.Application.Services.Logistics.Quality.Cost;
 
@@ -119,7 +118,7 @@ public class TaktQualityOperationOtherService : TaktServiceBase, ITaktQualityOpe
     public async Task<TaktQualityOperationOtherDto> CreateQualityOperationOtherAsync(TaktQualityOperationOtherCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityOperationOther>();
-                await StampQualityOperationOtherQualityOperationAsync(entity, dto);
+        await StampQualityOperationOtherQualityOperationAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_operation_other_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityOperationOtherRepository,
             x => x.QualityOperationId == entity.QualityOperationId
@@ -154,7 +153,7 @@ public class TaktQualityOperationOtherService : TaktServiceBase, ITaktQualityOpe
             throw new TaktBusinessException("品质业务其他通常业务费用明细不存在");
         }
         dto.Adapt(entity);
-                await StampQualityOperationOtherQualityOperationAsync(entity, dto);
+        await StampQualityOperationOtherQualityOperationAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_operation_other_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityOperationOtherRepository,
             x => x.QualityOperationId == entity.QualityOperationId

@@ -21,6 +21,8 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using Takt.Infrastructure.Data.Context;
 using Takt.Infrastructure.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 using Takt.Infrastructure.Extensions;
 using Takt.Shared.Helpers;
@@ -257,6 +259,27 @@ try
         Environment = app.Environment.EnvironmentName
     })
     .WithName("HealthCheck")
+    .WithOpenApi();
+
+    app.MapGet("/health/ready", (IConfiguration configuration, HttpContext httpContext) =>
+    {
+        var tenantCode = httpContext.Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim();
+        if (string.IsNullOrWhiteSpace(tenantCode))
+        {
+            tenantCode = configuration["Tenant:DefaultTenantCode"]?.Trim() ?? "000";
+        }
+
+        var databaseName = TaktTenantDatabaseHelper.ResolveDatabaseName(configuration, tenantCode);
+        var reachable = TaktTenantDatabaseHelper.TryPingTenantDatabase(configuration, tenantCode);
+        return Results.Json(new
+        {
+            Status = reachable ? "Healthy" : "Unhealthy",
+            TenantCode = tenantCode,
+            DatabaseName = databaseName,
+            Timestamp = DateTime.UtcNow,
+        }, statusCode: reachable ? StatusCodes.Status200OK : StatusCodes.Status503ServiceUnavailable);
+    })
+    .WithName("HealthCheckReady")
     .WithOpenApi();
 
     // ========================================

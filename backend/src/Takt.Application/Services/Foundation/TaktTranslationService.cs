@@ -22,7 +22,6 @@ using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
 using Takt.Shared.Enums;
-using Takt.Domain.Entities.Foundation;
 
 namespace Takt.Application.Services.Foundation;
 
@@ -115,7 +114,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     public async Task<TaktTranslationDto> CreateTranslationAsync(TaktTranslationCreateDto dto)
     {
         var entity = dto.Adapt<TaktTranslation>();
-                await StampTranslationCultureAsync(entity, dto);
+        await StampTranslationCultureAsync(entity, dto);
         var isUnique_ix_translation_key_culture_unique = await _uniqueValidator.IsUniqueAsync(
             _translationRepository,
             x => x.I18nKey == entity.I18nKey
@@ -142,7 +141,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
             throw new TaktBusinessException("翻译不存在");
         }
         dto.Adapt(entity);
-                await StampTranslationCultureAsync(entity, dto);
+        await StampTranslationCultureAsync(entity, dto);
         var isUnique_ix_translation_key_culture_unique = await _uniqueValidator.IsUniqueAsync(
             _translationRepository,
             x => x.I18nKey == entity.I18nKey

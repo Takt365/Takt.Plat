@@ -149,7 +149,13 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
     lastPreviewKey = '';
     userStore.invalidateLoginPreview();
     localeStore.clearSessionCultureOptions();
-    options.formRef.value?.clearValidate(['tenantCode']);
+  }
+
+  /**
+   * 租户格式不合法或未通过远程校验时，刷新表单项错误展示
+   */
+  async function showTenantFieldValidation(): Promise<void> {
+    await syncTenantFormField();
   }
 
   /**
@@ -283,10 +289,12 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
     const code = normalizeTenantCode(raw);
     if (code !== raw) {
       options.setTenantCode(code);
+      await showTenantFieldValidation();
       return false;
     }
     if (code.length !== TAKT_TENANT_CODE_LENGTH || !isValidTenantCode(code)) {
       invalidateTenantContext();
+      await showTenantFieldValidation();
       return false;
     }
     if (tenantValidated.value && tenantStore.tenantCode === code) {
@@ -307,6 +315,9 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
     }
     if (code.length !== TAKT_TENANT_CODE_LENGTH || !isValidTenantCode(code)) {
       invalidateTenantContext();
+      if (code.length > 0) {
+        void showTenantFieldValidation();
+      }
       return;
     }
     if (tenantValidated.value && tenantStore.tenantCode === code) {
