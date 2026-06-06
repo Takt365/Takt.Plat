@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktRoleService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：角色应用服务实现
 // 
@@ -361,7 +361,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
     public async Task<(string fileName, byte[] fileContent)> ExportRoleAsync(TaktRoleQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktRoleQueryDto());
-        var list = await _roleRepository.GetListForExportAsync(predicate);
+        var list = await _roleRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

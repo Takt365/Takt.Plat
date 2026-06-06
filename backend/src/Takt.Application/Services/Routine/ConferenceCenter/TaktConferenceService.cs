@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：TaktConferenceService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议中心应用服务实现
 // 
@@ -280,7 +280,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     public async Task<(string fileName, byte[] fileContent)> ExportConferenceAsync(TaktConferenceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktConferenceQueryDto());
-        var list = await _conferenceRepository.GetListForExportAsync(predicate);
+        var list = await _conferenceRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

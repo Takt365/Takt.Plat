@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA改修日报应用服务实现
 // 
@@ -299,7 +299,7 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
     public async Task<(string fileName, byte[] fileContent)> ExportPcbaRepairAsync(TaktPcbaRepairQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPcbaRepairQueryDto());
-        var list = await _pcbaRepairRepository.GetListForExportAsync(predicate);
+        var list = await _pcbaRepairRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

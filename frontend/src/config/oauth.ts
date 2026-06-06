@@ -15,6 +15,7 @@ import type { TaktOAuthConfig } from '@/types/common';
 
 export type { TaktOAuthConfig };
 
+/** OAuth 配置单例缓存，避免重复解析环境变量 */
 let oauthConfigCache: TaktOAuthConfig | null = null;
 
 /**
@@ -22,11 +23,14 @@ let oauthConfigCache: TaktOAuthConfig | null = null;
  * @returns {TaktOAuthConfig} OAuth 配置
  */
 export function getOAuthConfig(): TaktOAuthConfig {
+  // 已解析过则直接返回缓存
   if (oauthConfigCache) {
     return oauthConfigCache;
   }
 
+  /** 当前 SPA 站点 Origin（issuer 与端点拼接基准） */
   const appOrigin = getAppOrigin();
+  // 组装 PKCE 客户端配置并写入缓存
   oauthConfigCache = {
     issuer: appOrigin,
     clientId: requireViteEnv('VITE_OAUTH_CLIENT_ID'),

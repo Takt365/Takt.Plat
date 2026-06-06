@@ -14,17 +14,21 @@ import type { SessionVerifyPasswordResponse } from '@/types/identity/login';
 
 /**
  * 规范化 verify-password 响应（兼容后端 PascalCase 与前端 camelCase）
- * @param raw 接口原始 data
+ * @param {SessionVerifyPasswordResponse} raw 接口原始 data
  * @returns {SessionVerifyPasswordResponse} 规范化后的 DTO
  */
 export function normalizeSessionVerifyPasswordResponse(
   raw: SessionVerifyPasswordResponse,
 ): SessionVerifyPasswordResponse {
+  /** 宽类型记录，便于读取 PascalCase 遗留字段 */
   const record = raw as SessionVerifyPasswordResponse & Record<string, unknown>;
 
   return {
+    // 密码是否正确（优先 camelCase，回退 PascalCase）
     passwordValid: Boolean(record.passwordValid ?? record.PasswordValid),
+    // 是否需要验证码
     captchaRequired: Boolean(record.captchaRequired ?? record.CaptchaRequired),
+    // 登录票据（缺省为空串）
     loginTicket: String(record.loginTicket ?? record.LoginTicket ?? ''),
   };
 }

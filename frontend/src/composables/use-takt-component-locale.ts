@@ -16,15 +16,27 @@ import { getAntDesignVueLocale, getEchartsLocaleCode } from '@/utils/takt-locale
 
 /**
  * 组件库语言（随 vue-i18n locale 变化，供 ConfigProvider / ECharts 使用）
+ * @returns {object} antDesignVueLocale、echartsLocale 响应式引用
  */
 export function useTaktComponentLocale() {
+  /** vue-i18n 实例（含当前 locale） */
   const { locale } = useI18n();
 
   /** Ant Design Vue ConfigProvider 语言包 */
-  const antDesignVueLocale = computed(() => getAntDesignVueLocale(String(locale.value)));
+  const antDesignVueLocale = computed(() => {
+    /** 当前语言编码字符串 */
+    const localeCode = String(locale.value);
+    // 映射为 Ant Design Vue locale 对象
+    return getAntDesignVueLocale(localeCode);
+  });
 
   /** ECharts registerLocale 键（响应式，与 vue-i18n locale 同步） */
-  const echartsLocale = computed(() => getEchartsLocaleCode(String(locale.value)));
+  const echartsLocale = computed(() => {
+    /** 当前语言编码字符串 */
+    const localeCode = String(locale.value);
+    // 映射为 ECharts 注册用语言键
+    return getEchartsLocaleCode(localeCode);
+  });
 
   return {
     antDesignVueLocale,

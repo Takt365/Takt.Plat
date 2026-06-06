@@ -391,6 +391,12 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         }
     }
 
+    /// <summary>
+    /// 将诊断明细字段合并到 Serilog Extra 字典
+    /// </summary>
+    /// <param name="target">基础 Extra 字段</param>
+    /// <param name="detail">可选诊断明细</param>
+    /// <returns>合并后的字典</returns>
     private static Dictionary<string, object?> MergeExtra(
         Dictionary<string, object?> target,
         IReadOnlyDictionary<string, object?>? detail)
@@ -422,6 +428,11 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         return $"[{request.Phase}] {message}";
     }
 
+    /// <summary>
+    /// 解析客户端 IP（优先 X-Forwarded-For 首段，否则 RemoteIpAddress）
+    /// </summary>
+    /// <param name="context">HTTP 上下文</param>
+    /// <returns>IP 字符串；无法解析时为 unknown</returns>
     private static string GetClientIp(HttpContext context)
     {
         var forwarded = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
@@ -438,6 +449,11 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         return context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
     }
 
+    /// <summary>
+    /// 从 User-Agent 粗粒度解析浏览器与操作系统名称
+    /// </summary>
+    /// <param name="userAgent">请求头 User-Agent</param>
+    /// <returns>浏览器与操作系统；无法识别时为 null</returns>
     private static (string? Browser, string? Os) ParseUserAgent(string userAgent)
     {
         if (string.IsNullOrWhiteSpace(userAgent))
@@ -489,6 +505,12 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         return (browser, os);
     }
 
+    /// <summary>
+    /// 截断字符串至指定最大长度（用于 UserAgent 等落库字段）
+    /// </summary>
+    /// <param name="value">原始字符串</param>
+    /// <param name="maxLength">最大长度</param>
+    /// <returns>截断后的字符串；空值原样返回</returns>
     private static string? Truncate(string? value, int maxLength)
     {
         if (string.IsNullOrEmpty(value) || value.Length <= maxLength)

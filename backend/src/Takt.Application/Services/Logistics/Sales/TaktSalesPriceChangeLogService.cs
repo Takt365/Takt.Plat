@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceChangeLogService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格变更记录应用服务实现
 // 
@@ -174,7 +174,7 @@ public class TaktSalesPriceChangeLogService : TaktServiceBase, ITaktSalesPriceCh
     public async Task<(string fileName, byte[] fileContent)> ExportSalesPriceChangeLogAsync(TaktSalesPriceChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSalesPriceChangeLogQueryDto());
-        var list = await _salesPriceChangeLogRepository.GetListForExportAsync(predicate);
+        var list = await _salesPriceChangeLogRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderChangeLogService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单变更日志应用服务实现
 // 
@@ -181,7 +181,7 @@ public class TaktFqcOrderChangeLogService : TaktServiceBase, ITaktFqcOrderChange
     public async Task<(string fileName, byte[] fileContent)> ExportFqcOrderChangeLogAsync(TaktFqcOrderChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktFqcOrderChangeLogQueryDto());
-        var list = await _fqcOrderChangeLogRepository.GetListForExportAsync(predicate);
+        var list = await _fqcOrderChangeLogRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

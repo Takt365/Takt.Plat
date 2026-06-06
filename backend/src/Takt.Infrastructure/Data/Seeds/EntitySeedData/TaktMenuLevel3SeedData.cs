@@ -92,8 +92,8 @@ public class TaktMenuLevel3SeedData
         var hrPersonnelMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_PERSONNEL" && m.IsDeleted == 0)
             .FirstAsync();
-        var hrAttendanceLeaveMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_ATTENDANCE_LEAVE" && m.IsDeleted == 0)
+        var hrAttendanceMenu = await seedContext.Db.Queryable<TaktMenu>()
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_ATTENDANCE" && m.IsDeleted == 0)
             .FirstAsync();
         var hrCompensationBenefitsMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_COMPENSATION_BENEFITS" && m.IsDeleted == 0)
@@ -854,20 +854,20 @@ public class TaktMenuLevel3SeedData
             updateCount += updateHRP5;
         }
 
-        // ========== 考勤假期下的三级菜单 (HUMANRESOURCE_ATTENDANCE_LEAVE) ==========
-        if (hrAttendanceLeaveMenu != null)
+        // ========== 考勤管理下的三级菜单 (HUMANRESOURCE_ATTENDANCE，与 HumanResource/Attendance 实体及控制器对齐) ==========
+        if (hrAttendanceMenu != null)
         {
-            var (insertHRAL1, updateHRAL1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE_HOLIDAY", menu =>
+            var (insertHRAL1, updateHRAL1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_WORK_SHIFT", menu =>
             {
-                menu.MenuName = "假期管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE_HOLIDAY";
-                menu.I18nKey = "menu.humanresource.attendanceleave.holiday";
-                menu.Icon = "RiCalendarEventLine";
-                menu.ParentId = hrAttendanceLeaveMenu.Id;
+                menu.MenuName = "班次管理";
+                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_WORK_SHIFT";
+                menu.I18nKey = "menu.humanresource.attendance.workshift";
+                menu.Icon = "RiTimeZoneLine";
+                menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendanceleave:holiday:list";
-                menu.RoutePath = "/human-resource/attendance-leave/holiday";
-                menu.ComponentPath = "human-resource/attendance-leave/holiday/index";
+                menu.Permission = "humanresource:attendance:workshift:list";
+                menu.RoutePath = "/human-resource/attendance/work-shift";
+                menu.ComponentPath = "human-resource/attendance/work-shift/index";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -877,17 +877,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL1;
             updateCount += updateHRAL1;
 
-            var (insertHRAL2, updateHRAL2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE_LEAVE", menu =>
+            var (insertHRAL2, updateHRAL2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_CALENDAR", menu =>
             {
-                menu.MenuName = "请假管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE_LEAVE";
-                menu.I18nKey = "menu.humanresource.attendanceleave.leave";
-                menu.Icon = "RiCalendarCheckLine";
-                menu.ParentId = hrAttendanceLeaveMenu.Id;
+                menu.MenuName = "工厂日历";
+                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_CALENDAR";
+                menu.I18nKey = "menu.humanresource.attendance.calendar";
+                menu.Icon = "RiCalendarLine";
+                menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendanceleave:leave:list";
-                menu.RoutePath = "/human-resource/attendance-leave/leave";
-                menu.ComponentPath = "human-resource/attendance-leave/leave/index";
+                menu.Permission = "humanresource:attendance:calendar:list";
+                menu.RoutePath = "/human-resource/attendance/calendar";
+                menu.ComponentPath = "human-resource/attendance/calendar/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -897,17 +897,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL2;
             updateCount += updateHRAL2;
 
-            var (insertHRAL3, updateHRAL3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE_OVERTIME", menu =>
+            var (insertHRAL3, updateHRAL3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_SHIFT_SCHEDULE", menu =>
             {
-                menu.MenuName = "加班管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE_OVERTIME";
-                menu.I18nKey = "menu.humanresource.attendanceleave.overtime";
-                menu.Icon = "RiTimeLine";
-                menu.ParentId = hrAttendanceLeaveMenu.Id;
+                menu.MenuName = "排班计划";
+                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_SHIFT_SCHEDULE";
+                menu.I18nKey = "menu.humanresource.attendance.shiftschedule";
+                menu.Icon = "RiCalendarScheduleLine";
+                menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendanceleave:overtime:list";
-                menu.RoutePath = "/human-resource/attendance-leave/overtime";
-                menu.ComponentPath = "human-resource/attendance-leave/overtime/index";
+                menu.Permission = "humanresource:attendance:shiftschedule:list";
+                menu.RoutePath = "/human-resource/attendance/shift-schedule";
+                menu.ComponentPath = "human-resource/attendance/shift-schedule/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -917,17 +917,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL3;
             updateCount += updateHRAL3;
 
-            var (insertHRAL4, updateHRAL4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE_ATTENDANCE_CORRECTION", menu =>
+            var (insertHRAL4, updateHRAL4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_HOLIDAY", menu =>
             {
-                menu.MenuName = "补卡管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE_ATTENDANCE_CORRECTION";
-                menu.I18nKey = "menu.humanresource.attendanceleave.attendancecorrection";
-                menu.Icon = "RiEditLine";
-                menu.ParentId = hrAttendanceLeaveMenu.Id;
+                menu.MenuName = "假期管理";
+                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_HOLIDAY";
+                menu.I18nKey = "menu.humanresource.attendance.holiday";
+                menu.Icon = "RiCalendarEventLine";
+                menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendanceleave:attendancecorrection:list";
-                menu.RoutePath = "/human-resource/attendance-leave/attendance-correction";
-                menu.ComponentPath = "human-resource/attendance-leave/attendance-correction/index";
+                menu.Permission = "humanresource:attendance:holiday:list";
+                menu.RoutePath = "/human-resource/attendance/holiday";
+                menu.ComponentPath = "human-resource/attendance/holiday/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -937,17 +937,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL4;
             updateCount += updateHRAL4;
 
-            var (insertHRAL5, updateHRAL5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE_ATTENDANCE_SETTINGS", menu =>
+            var (insertHRAL5, updateHRAL5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE", menu =>
             {
-                menu.MenuName = "考勤设置";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE_ATTENDANCE_SETTINGS";
-                menu.I18nKey = "menu.humanresource.attendanceleave.attendancesettings";
-                menu.Icon = "RiSettings3Line";
-                menu.ParentId = hrAttendanceLeaveMenu.Id;
+                menu.MenuName = "请假管理";
+                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE";
+                menu.I18nKey = "menu.humanresource.attendance.leave";
+                menu.Icon = "RiCalendarCheckLine";
+                menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendanceleave:attendancesettings:list";
-                menu.RoutePath = "/human-resource/attendance-leave/attendance-settings";
-                menu.ComponentPath = "human-resource/attendance-leave/attendance-settings/index";
+                menu.Permission = "humanresource:attendance:leave:list";
+                menu.RoutePath = "/human-resource/attendance/leave";
+                menu.ComponentPath = "human-resource/attendance/leave/index";
                 menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -957,17 +957,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL5;
             updateCount += updateHRAL5;
 
-            var (insertHRAL6, updateHRAL6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE_SCHEDULE", menu =>
+            var (insertHRAL6, updateHRAL6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_OVERTIME", menu =>
             {
-                menu.MenuName = "排班管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE_SCHEDULE";
-                menu.I18nKey = "menu.humanresource.attendanceleave.schedule";
-                menu.Icon = "RiCalendarScheduleLine";
-                menu.ParentId = hrAttendanceLeaveMenu.Id;
+                menu.MenuName = "加班管理";
+                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_OVERTIME";
+                menu.I18nKey = "menu.humanresource.attendance.overtime";
+                menu.Icon = "RiTimeLine";
+                menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendanceleave:schedule:list";
-                menu.RoutePath = "/human-resource/attendance-leave/schedule";
-                menu.ComponentPath = "human-resource/attendance-leave/schedule/index";
+                menu.Permission = "humanresource:attendance:overtime:list";
+                menu.RoutePath = "/human-resource/attendance/overtime";
+                menu.ComponentPath = "human-resource/attendance/overtime/index";
                 menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -977,21 +977,20 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL6;
             updateCount += updateHRAL6;
         }
-
-        // ========== 薪酬福利下的三级菜单 (HUMANRESOURCE_COMPENSATION_BENEFITS) ==========
+        // ========== 薪酬福利下的三级菜单 (HUMANRESOURCE_COMPENSATION_BENEFITS，与 CompensationBenefits 实体对齐) ==========
         if (hrCompensationBenefitsMenu != null)
         {
-            var (insertHRCB1, updateHRCB1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_SALARY_CALC", menu =>
+            var (insertHRCB1, updateHRCB1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_BENEFIT_PLAN", menu =>
             {
-                menu.MenuName = "薪资核算";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_SALARY_CALC";
-                menu.I18nKey = "menu.humanresource.compensationbenefits.salarycalc";
-                menu.Icon = "RiCalculatorLine";
+                menu.MenuName = "福利方案";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_BENEFIT_PLAN";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.benefitplan";
+                menu.Icon = "RiGiftLine";
                 menu.ParentId = hrCompensationBenefitsMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensationbenefits:salarycalc:list";
-                menu.RoutePath = "/human-resource/compensation-benefits/salary-calc";
-                menu.ComponentPath = "human-resource/compensation-benefits/salary-calc/index";
+                menu.Permission = "humanresource:compensationbenefits:benefitplan:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/benefit-plan";
+                menu.ComponentPath = "human-resource/compensation-benefits/benefit-plan/index";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1001,17 +1000,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRCB1;
             updateCount += updateHRCB1;
 
-            var (insertHRCB2, updateHRCB2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_TAX_CALC", menu =>
+            var (insertHRCB2, updateHRCB2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_COMPENSATION_BENEFIT", menu =>
             {
-                menu.MenuName = "个税计算";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_TAX_CALC";
-                menu.I18nKey = "menu.humanresource.compensationbenefits.taxcalc";
-                menu.Icon = "RiPercentLine";
+                menu.MenuName = "薪酬福利";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_COMPENSATION_BENEFIT";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.compensationbenefit";
+                menu.Icon = "RiMoneyDollarCircleLine";
                 menu.ParentId = hrCompensationBenefitsMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensationbenefits:taxcalc:list";
-                menu.RoutePath = "/human-resource/compensation-benefits/tax-calc";
-                menu.ComponentPath = "human-resource/compensation-benefits/tax-calc/index";
+                menu.Permission = "humanresource:compensationbenefits:compensationbenefit:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/compensation-benefit";
+                menu.ComponentPath = "human-resource/compensation-benefits/compensation-benefit/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1021,17 +1020,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRCB2;
             updateCount += updateHRCB2;
 
-            var (insertHRCB3, updateHRCB3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_SOCIAL_SECURITY", menu =>
+            var (insertHRCB3, updateHRCB3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_COMPENSATION_PLAN", menu =>
             {
-                menu.MenuName = "社保缴纳";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_SOCIAL_SECURITY";
-                menu.I18nKey = "menu.humanresource.compensationbenefits.socialsecurity";
-                menu.Icon = "RiShieldLine";
+                menu.MenuName = "薪酬方案";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_COMPENSATION_PLAN";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.compensationplan";
+                menu.Icon = "RiFileList3Line";
                 menu.ParentId = hrCompensationBenefitsMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensationbenefits:socialsecurity:list";
-                menu.RoutePath = "/human-resource/compensation-benefits/social-security";
-                menu.ComponentPath = "human-resource/compensation-benefits/social-security/index";
+                menu.Permission = "humanresource:compensationbenefits:compensationplan:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/compensation-plan";
+                menu.ComponentPath = "human-resource/compensation-benefits/compensation-plan/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1041,17 +1040,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRCB3;
             updateCount += updateHRCB3;
 
-            var (insertHRCB4, updateHRCB4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_PAYSLIP", menu =>
+            var (insertHRCB4, updateHRCB4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_EMPLOYEE_BENEFIT", menu =>
             {
-                menu.MenuName = "薪资条发放";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_PAYSLIP";
-                menu.I18nKey = "menu.humanresource.compensationbenefits.payslip";
-                menu.Icon = "RiMailSendLine";
+                menu.MenuName = "员工福利";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_EMPLOYEE_BENEFIT";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.employeebenefit";
+                menu.Icon = "RiUserHeartLine";
                 menu.ParentId = hrCompensationBenefitsMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensationbenefits:payslip:list";
-                menu.RoutePath = "/human-resource/compensation-benefits/payslip";
-                menu.ComponentPath = "human-resource/compensation-benefits/payslip/index";
+                menu.Permission = "humanresource:compensationbenefits:employeebenefit:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/employee-benefit";
+                menu.ComponentPath = "human-resource/compensation-benefits/employee-benefit/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1060,22 +1059,102 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertHRCB4;
             updateCount += updateHRCB4;
+
+            var (insertHRCB5, updateHRCB5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_SALARY_ADJUSTMENT", menu =>
+            {
+                menu.MenuName = "调薪管理";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_SALARY_ADJUSTMENT";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.salaryadjustment";
+                menu.Icon = "RiExchangeFundsLine";
+                menu.ParentId = hrCompensationBenefitsMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "humanresource:compensationbenefits:salaryadjustment:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/salary-adjustment";
+                menu.ComponentPath = "human-resource/compensation-benefits/salary-adjustment/index";
+                menu.SortOrder = 5;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRCB5;
+            updateCount += updateHRCB5;
+
+            var (insertHRCB6, updateHRCB6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_SALARY_COMPONENT", menu =>
+            {
+                menu.MenuName = "薪资组成";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_SALARY_COMPONENT";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.salarycomponent";
+                menu.Icon = "RiPieChartLine";
+                menu.ParentId = hrCompensationBenefitsMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "humanresource:compensationbenefits:salarycomponent:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/salary-component";
+                menu.ComponentPath = "human-resource/compensation-benefits/salary-component/index";
+                menu.SortOrder = 6;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRCB6;
+            updateCount += updateHRCB6;
+
+            var (insertHRCB7, updateHRCB7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_SALARY_STRUCTURE", menu =>
+            {
+                menu.MenuName = "薪资结构";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_SALARY_STRUCTURE";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.salarystructure";
+                menu.Icon = "RiOrganizationChart";
+                menu.ParentId = hrCompensationBenefitsMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "humanresource:compensationbenefits:salarystructure:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/salary-structure";
+                menu.ComponentPath = "human-resource/compensation-benefits/salary-structure/index";
+                menu.SortOrder = 7;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRCB7;
+            updateCount += updateHRCB7;
+
+            var (insertHRCB8, updateHRCB8) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_TAX_RULE", menu =>
+            {
+                menu.MenuName = "税务规则";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_TAX_RULE";
+                menu.I18nKey = "menu.humanresource.compensationbenefits.taxrule";
+                menu.Icon = "RiPercentLine";
+                menu.ParentId = hrCompensationBenefitsMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "humanresource:compensationbenefits:taxrule:list";
+                menu.RoutePath = "/human-resource/compensation-benefits/tax-rule";
+                menu.ComponentPath = "human-resource/compensation-benefits/tax-rule/index";
+                menu.SortOrder = 8;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRCB8;
+            updateCount += updateHRCB8;
         }
 
-        // ========== 绩效管理下的三级菜单 (HUMANRESOURCE_PERFORMANCE) ==========
+        // ========== 绩效管理下的三级菜单 (HUMANRESOURCE_PERFORMANCE，与 Performance 实体对齐) ==========
         if (hrPerformanceMenu != null)
         {
-            var (insertHRP1, updateHRP1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_SCHEME_METRIC", menu =>
+            var (insertHRP1, updateHRP1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_IMPROVEMENT_PLAN", menu =>
             {
-                menu.MenuName = "方案指标";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_SCHEME_METRIC";
-                menu.I18nKey = "menu.humanresource.performance.schememetric";
-                menu.Icon = "RiListSettingsLine";
+                menu.MenuName = "改进计划";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_IMPROVEMENT_PLAN";
+                menu.I18nKey = "menu.humanresource.performance.improvementplan";
+                menu.Icon = "RiLightbulbLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:schememetric:list";
-                menu.RoutePath = "/human-resource/performance/scheme-metric";
-                menu.ComponentPath = "human-resource/performance/scheme-metric/index";
+                menu.Permission = "humanresource:performance:improvementplan:list";
+                menu.RoutePath = "/human-resource/performance/improvement-plan";
+                menu.ComponentPath = "human-resource/performance/improvement-plan/index";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1085,17 +1164,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP1;
             updateCount += updateHRP1;
 
-            var (insertHRP2, updateHRP2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_CYCLE_SCHEDULE", menu =>
+            var (insertHRP2, updateHRP2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERFORMANCE", menu =>
             {
-                menu.MenuName = "周期日程";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_CYCLE_SCHEDULE";
-                menu.I18nKey = "menu.humanresource.performance.cycleschedule";
-                menu.Icon = "RiCalendarLine";
+                menu.MenuName = "绩效记录";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERFORMANCE";
+                menu.I18nKey = "menu.humanresource.performance.performance";
+                menu.Icon = "RiBarChartBoxLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:cycleschedule:list";
-                menu.RoutePath = "/human-resource/performance/cycle-schedule";
-                menu.ComponentPath = "human-resource/performance/cycle-schedule/index";
+                menu.Permission = "humanresource:performance:performance:list";
+                menu.RoutePath = "/human-resource/performance/performance";
+                menu.ComponentPath = "human-resource/performance/performance/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1105,17 +1184,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP2;
             updateCount += updateHRP2;
 
-            var (insertHRP3, updateHRP3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_OBJECTIVE", menu =>
+            var (insertHRP3, updateHRP3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_GOAL", menu =>
             {
-                menu.MenuName = "目标管理";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_OBJECTIVE";
-                menu.I18nKey = "menu.humanresource.performance.objective";
+                menu.MenuName = "绩效目标";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_GOAL";
+                menu.I18nKey = "menu.humanresource.performance.performancegoal";
                 menu.Icon = "RiTargetLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:objective:list";
-                menu.RoutePath = "/human-resource/performance/objective";
-                menu.ComponentPath = "human-resource/performance/objective/index";
+                menu.Permission = "humanresource:performance:performancegoal:list";
+                menu.RoutePath = "/human-resource/performance/performance-goal";
+                menu.ComponentPath = "human-resource/performance/performance-goal/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1125,17 +1204,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP3;
             updateCount += updateHRP3;
 
-            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_ASSESSMENT", menu =>
+            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_INDICATOR", menu =>
             {
-                menu.MenuName = "考核评估";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_ASSESSMENT";
-                menu.I18nKey = "menu.humanresource.performance.assessment";
-                menu.Icon = "RiClipboardLine";
+                menu.MenuName = "绩效指标";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_INDICATOR";
+                menu.I18nKey = "menu.humanresource.performance.performanceindicator";
+                menu.Icon = "RiListSettingsLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:assessment:list";
-                menu.RoutePath = "/human-resource/performance/assessment";
-                menu.ComponentPath = "human-resource/performance/assessment/index";
+                menu.Permission = "humanresource:performance:performanceindicator:list";
+                menu.RoutePath = "/human-resource/performance/performance-indicator";
+                menu.ComponentPath = "human-resource/performance/performance-indicator/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1145,17 +1224,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP4;
             updateCount += updateHRP4;
 
-            var (insertHRP5, updateHRP5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_ANALYSIS_IMPROVEMENT", menu =>
+            var (insertHRP5, updateHRP5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_PLAN", menu =>
             {
-                menu.MenuName = "分析改进";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_ANALYSIS_IMPROVEMENT";
-                menu.I18nKey = "menu.humanresource.performance.analysisimprovement";
-                menu.Icon = "RiLineChartLine";
+                menu.MenuName = "绩效方案";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_PLAN";
+                menu.I18nKey = "menu.humanresource.performance.performanceplan";
+                menu.Icon = "RiFileChartLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:analysisimprovement:list";
-                menu.RoutePath = "/human-resource/performance/analysis-improvement";
-                menu.ComponentPath = "human-resource/performance/analysis-improvement/index";
+                menu.Permission = "humanresource:performance:performanceplan:list";
+                menu.RoutePath = "/human-resource/performance/performance-plan";
+                menu.ComponentPath = "human-resource/performance/performance-plan/index";
                 menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1164,22 +1243,62 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertHRP5;
             updateCount += updateHRP5;
+
+            var (insertHRP6, updateHRP6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_REVIEW", menu =>
+            {
+                menu.MenuName = "绩效评审";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERFORMANCE_REVIEW";
+                menu.I18nKey = "menu.humanresource.performance.performancereview";
+                menu.Icon = "RiClipboardLine";
+                menu.ParentId = hrPerformanceMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "humanresource:performance:performancereview:list";
+                menu.RoutePath = "/human-resource/performance/performance-review";
+                menu.ComponentPath = "human-resource/performance/performance-review/index";
+                menu.SortOrder = 6;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRP6;
+            updateCount += updateHRP6;
+
+            var (insertHRP7, updateHRP7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_REVIEW_CYCLE", menu =>
+            {
+                menu.MenuName = "评审周期";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_REVIEW_CYCLE";
+                menu.I18nKey = "menu.humanresource.performance.reviewcycle";
+                menu.Icon = "RiCalendarLine";
+                menu.ParentId = hrPerformanceMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "humanresource:performance:reviewcycle:list";
+                menu.RoutePath = "/human-resource/performance/review-cycle";
+                menu.ComponentPath = "human-resource/performance/review-cycle/index";
+                menu.SortOrder = 7;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRP7;
+            updateCount += updateHRP7;
         }
 
-        // ========== 培训发展下的三级菜单 (HUMANRESOURCE_TRAINING_DEVELOPMENT) ==========
+        // ========== 培训发展下的三级菜单 (HUMANRESOURCE_TRAINING_DEVELOPMENT，与 TrainingDevelopment 实体对齐) ==========
         if (hrTrainingDevelopmentMenu != null)
         {
-            var (insertHRTD1, updateHRTD1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_PLAN", menu =>
+            var (insertHRTD1, updateHRTD1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_SKILL_ASSESSMENT", menu =>
             {
-                menu.MenuName = "培训计划";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING_PLAN";
-                menu.I18nKey = "menu.humanresource.trainingdevelopment.plan";
-                menu.Icon = "RiCalendarPlanLine";
+                menu.MenuName = "技能评估";
+                menu.MenuCode = "HUMANRESOURCE_TRAINING_SKILL_ASSESSMENT";
+                menu.I18nKey = "menu.humanresource.trainingdevelopment.skillassessment";
+                menu.Icon = "RiAwardLine";
                 menu.ParentId = hrTrainingDevelopmentMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:trainingdevelopment:plan:list";
-                menu.RoutePath = "/human-resource/training-development/plan";
-                menu.ComponentPath = "human-resource/training-development/plan/index";
+                menu.Permission = "humanresource:trainingdevelopment:skillassessment:list";
+                menu.RoutePath = "/human-resource/training-development/skill-assessment";
+                menu.ComponentPath = "human-resource/training-development/skill-assessment/index";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1189,17 +1308,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRTD1;
             updateCount += updateHRTD1;
 
-            var (insertHRTD2, updateHRTD2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_COURSE", menu =>
+            var (insertHRTD2, updateHRTD2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_TRAINING_ACTIVITY", menu =>
             {
-                menu.MenuName = "培训课程";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING_COURSE";
-                menu.I18nKey = "menu.humanresource.trainingdevelopment.course";
-                menu.Icon = "RiBookOpenLine";
+                menu.MenuName = "培训活动";
+                menu.MenuCode = "HUMANRESOURCE_TRAINING_TRAINING_ACTIVITY";
+                menu.I18nKey = "menu.humanresource.trainingdevelopment.trainingactivity";
+                menu.Icon = "RiPresentationLine";
                 menu.ParentId = hrTrainingDevelopmentMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:trainingdevelopment:course:list";
-                menu.RoutePath = "/human-resource/training-development/course";
-                menu.ComponentPath = "human-resource/training-development/course/index";
+                menu.Permission = "humanresource:trainingdevelopment:trainingactivity:list";
+                menu.RoutePath = "/human-resource/training-development/training-activity";
+                menu.ComponentPath = "human-resource/training-development/training-activity/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1209,17 +1328,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRTD2;
             updateCount += updateHRTD2;
 
-            var (insertHRTD3, updateHRTD3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_RESULT", menu =>
+            var (insertHRTD3, updateHRTD3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_TRAINING_COURSE", menu =>
             {
-                menu.MenuName = "培训结果";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING_RESULT";
-                menu.I18nKey = "menu.humanresource.trainingdevelopment.result";
-                menu.Icon = "RiMedalLine";
+                menu.MenuName = "培训课程";
+                menu.MenuCode = "HUMANRESOURCE_TRAINING_TRAINING_COURSE";
+                menu.I18nKey = "menu.humanresource.trainingdevelopment.trainingcourse";
+                menu.Icon = "RiBookOpenLine";
                 menu.ParentId = hrTrainingDevelopmentMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:trainingdevelopment:result:list";
-                menu.RoutePath = "/human-resource/training-development/result";
-                menu.ComponentPath = "human-resource/training-development/result/index";
+                menu.Permission = "humanresource:trainingdevelopment:trainingcourse:list";
+                menu.RoutePath = "/human-resource/training-development/training-course";
+                menu.ComponentPath = "human-resource/training-development/training-course/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1229,17 +1348,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRTD3;
             updateCount += updateHRTD3;
 
-            var (insertHRTD4, updateHRTD4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_CAREER_DEVELOPMENT", menu =>
+            var (insertHRTD4, updateHRTD4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_TRAINING_DEVELOPMENT", menu =>
             {
-                menu.MenuName = "职业发展";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING_CAREER_DEVELOPMENT";
-                menu.I18nKey = "menu.humanresource.trainingdevelopment.career";
-                menu.Icon = "RiRocketLine";
+                menu.MenuName = "培训发展";
+                menu.MenuCode = "HUMANRESOURCE_TRAINING_TRAINING_DEVELOPMENT";
+                menu.I18nKey = "menu.humanresource.trainingdevelopment.trainingdevelopment";
+                menu.Icon = "RiGraduationCapLine";
                 menu.ParentId = hrTrainingDevelopmentMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:trainingdevelopment:career:list";
-                menu.RoutePath = "/human-resource/training-development/career";
-                menu.ComponentPath = "human-resource/training-development/career/index";
+                menu.Permission = "humanresource:trainingdevelopment:trainingdevelopment:list";
+                menu.RoutePath = "/human-resource/training-development/training-development";
+                menu.ComponentPath = "human-resource/training-development/training-development/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1248,6 +1367,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertHRTD4;
             updateCount += updateHRTD4;
+
+            var (insertHRTD5, updateHRTD5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_TRAINING_PLAN", menu =>
+            {
+                menu.MenuName = "培训计划";
+                menu.MenuCode = "HUMANRESOURCE_TRAINING_TRAINING_PLAN";
+                menu.I18nKey = "menu.humanresource.trainingdevelopment.trainingplan";
+                menu.Icon = "RiCalendarPlanLine";
+                menu.ParentId = hrTrainingDevelopmentMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "humanresource:trainingdevelopment:trainingplan:list";
+                menu.RoutePath = "/human-resource/training-development/training-plan";
+                menu.ComponentPath = "human-resource/training-development/training-plan/index";
+                menu.SortOrder = 5;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRTD5;
+            updateCount += updateHRTD5;
         }
 
         // ========== 人才管理下的三级菜单 (HUMANRESOURCE_TALENT) ==========

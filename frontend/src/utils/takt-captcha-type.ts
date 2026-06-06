@@ -16,7 +16,9 @@ import type { TaktCaptchaTypeValue } from '@/types/identity/captcha';
  * 验证码类型名称（运行时常量，用于与 API 返回 captchaType 比较）
  */
 export const TaktCaptchaType = {
+  /** 滑块拼图验证码 */
   Slider: 'Slider',
+  /** 行为拖动验证码 */
   Behavior: 'Behavior',
 } as const satisfies Record<string, TaktCaptchaTypeValue>;
 
@@ -26,6 +28,7 @@ export const TaktCaptchaType = {
  * @returns {boolean} 是否为 Slider
  */
 export function isTaktCaptchaSliderType(captchaType: string | undefined): boolean {
+  // 与后端 TaktCaptchaTypeNames.Slider 字符串比较
   return captchaType === TaktCaptchaType.Slider;
 }
 
@@ -35,5 +38,6 @@ export function isTaktCaptchaSliderType(captchaType: string | undefined): boolea
  * @returns {boolean} 是否为 Behavior
  */
 export function isTaktCaptchaBehaviorType(captchaType: string | undefined): boolean {
+  // 与后端 TaktCaptchaTypeNames.Behavior 字符串比较
   return captchaType === TaktCaptchaType.Behavior;
 }

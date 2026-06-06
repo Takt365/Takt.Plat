@@ -29,7 +29,7 @@ import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface'
 import { useThemeStore } from '@/stores/common/theme'
 import { useMenuStore } from '@/stores/identity/menu'
 import { useSettingStore } from '@/stores/common/setting'
-import { TAKT_MENU_INLINE_INDENT } from '@/constants/takt-navigation-menu'
+import { TAKT_MENU_INLINE_INDENT } from '@/utils/common'
 import { resolveMenuOpenKeysForPath } from '@/utils/takt-menu-open-keys'
 
 interface Props {

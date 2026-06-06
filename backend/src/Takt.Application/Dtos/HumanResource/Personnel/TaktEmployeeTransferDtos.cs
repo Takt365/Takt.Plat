@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeTransferDtos.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeTransfer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeTransfer 生成，请按需审阅）
 // 

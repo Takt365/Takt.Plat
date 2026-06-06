@@ -22,10 +22,14 @@ const DEV_LOG_PATH_PREFIXES = ['/api', '/connect', '/hubs'] as const;
 export function vitePluginLogger(): Plugin {
   return {
     name: 'takt-vite-dev-logger',
+    // 仅在 dev serve 模式生效，不影响 build
     apply: 'serve',
     configureServer(server: ViteDevServer) {
+      // 挂载中间件拦截代理请求
       server.middlewares.use((req, _res, next) => {
+        /** 请求 URL 路径（含 query） */
         const url = req.url ?? '';
+        // 仅记录走后端代理的前缀，过滤静态资源噪音
         const shouldLog = DEV_LOG_PATH_PREFIXES.some((prefix) => url.startsWith(prefix));
 
         if (shouldLog) {
@@ -33,6 +37,7 @@ export function vitePluginLogger(): Plugin {
           console.info(`[Vite Dev] ${req.method ?? 'GET'} ${url}`);
         }
 
+        // 继续 Vite 中间件链
         next();
       });
     },

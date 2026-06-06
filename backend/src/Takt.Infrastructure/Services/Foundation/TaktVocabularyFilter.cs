@@ -48,7 +48,14 @@ public class TaktVocabularyFilter : ITaktVocabularyFilter
         _userContext = userContext;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 检测文本是否包含敏感词
+    /// 从当前租户缓存词库加载启用词条，按 minFilterLevel 筛选后大小写不敏感子串匹配
+    /// </summary>
+    /// <param name="text">待检测文本；空或 null 视为未命中</param>
+    /// <param name="minFilterLevel">最低过滤等级（1=低，2=中，3=高）；为空时匹配全部启用词条</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>是否命中至少一个敏感词</returns>
     public async Task<bool> ContainsSensitiveWordAsync(
         string? text,
         int? minFilterLevel = null,
@@ -70,7 +77,14 @@ public class TaktVocabularyFilter : ITaktVocabularyFilter
         return false;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 过滤文本：命中敏感词时按词条 ReplaceText 替换，为空则用等长 * 替换
+    /// 优先匹配较长词（词库按词长降序），返回原文、替换后文本及命中词列表
+    /// </summary>
+    /// <param name="text">待过滤文本</param>
+    /// <param name="minFilterLevel">最低过滤等级；为空时匹配全部启用词条</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>过滤结果（含原文、替换后文本、是否命中及 MatchedWords）</returns>
     public async Task<TaktVocabularyFilterResult> FilterAsync(
         string? text,
         int? minFilterLevel = null,
@@ -110,7 +124,12 @@ public class TaktVocabularyFilter : ITaktVocabularyFilter
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 清除当前租户敏感词缓存（词库增删改后调用）
+    /// 缓存键格式 takt:vocabulary:filter:{tenantCode}；无租户上下文时直接返回
+    /// </summary>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>表示异步清除完成的任务</returns>
     public async Task InvalidateCacheAsync(CancellationToken cancellationToken = default)
     {
         var tenantCode = ResolveTenantCode();

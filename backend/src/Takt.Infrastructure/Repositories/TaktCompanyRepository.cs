@@ -214,7 +214,14 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
             : await query.OrderBy(orderBy).ToListAsync();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出用条件查询（带上限行数上限，防止全表加载 OOM）
+    /// 经 ApplyReadScope 过滤租户/公司与未删除记录，按 CreatedAt 降序后 Take 截断
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <param name="maxRows">最大行数；为空时使用 Excel:Export:MaxRowsPerRequest 配置</param>
+    /// <returns>不超过上限的实体列表</returns>
+    /// <exception cref="ArgumentOutOfRangeException">maxRows 小于等于 0 时抛出</exception>
     public virtual async Task<List<TEntity>> GetListForExportAsync(
         Expression<Func<TEntity, bool>> predicate,
         int? maxRows = null)

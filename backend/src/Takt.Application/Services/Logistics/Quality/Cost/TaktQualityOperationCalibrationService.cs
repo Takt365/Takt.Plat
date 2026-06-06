@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityOperationCalibrationService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务设备校正费用明细应用服务实现
 // 
@@ -281,7 +281,7 @@ public class TaktQualityOperationCalibrationService : TaktServiceBase, ITaktQual
     public async Task<(string fileName, byte[] fileContent)> ExportQualityOperationCalibrationAsync(TaktQualityOperationCalibrationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQualityOperationCalibrationQueryDto());
-        var list = await _qualityOperationCalibrationRepository.GetListForExportAsync(predicate);
+        var list = await _qualityOperationCalibrationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

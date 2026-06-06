@@ -22,7 +22,9 @@ using Takt.Shared.Models;
 namespace Takt.Application.Services.Workflow.FlowEngine;
 
 /// <summary>
-/// 流程引擎服务
+/// 流程引擎运行时服务（唯一流程推进编排入口）
+/// 负责发起/草稿/审批办结、待办与我发起/已办查询、撤回/转办/加签/减签/挂起/恢复/终止/撤销审批
+/// 流程定义以启动时 <see cref="TaktFlowInstance.ProcessContentSnapshot"/> 快照为准；节点路由见 <see cref="TaktFlowProcessNavigator"/>
 /// </summary>
 public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
 {
@@ -34,8 +36,16 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     private readonly TaktFlowApproverResolverService _approverResolver;
 
     /// <summary>
-    /// 构造函数
+    /// 初始化流程引擎服务
     /// </summary>
+    /// <param name="flowInstanceRepository">流程实例仓储</param>
+    /// <param name="flowSchemeRepository">流程方案仓储</param>
+    /// <param name="flowTaskRepository">流程任务仓储</param>
+    /// <param name="flowTransitionRepository">流程流转记录仓储</param>
+    /// <param name="flowAddSignRepository">加签记录仓储</param>
+    /// <param name="approverResolver">审批人解析服务</param>
+    /// <param name="userContext">用户上下文</param>
+    /// <param name="localizationService">本地化服务</param>
     public TaktFlowEngineService(
         ITaktCompanyRepository<TaktFlowInstance> flowInstanceRepository,
         ITaktCompanyRepository<TaktFlowScheme> flowSchemeRepository,
@@ -55,7 +65,13 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         _approverResolver = approverResolver;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 发起流程并立即进入运行态
+    /// 加载已发布方案、创建 Running 实例、记录「发起」流转并推进至首审批节点
+    /// </summary>
+    /// <param name="dto">发起参数（ProcessKey、BusinessType/BusinessKey、FrmData 等）</param>
+    /// <returns>创建后的实例详情（含任务与流转）</returns>
+    /// <exception cref="TaktBusinessException">三层上下文缺失、方案未发布或推进失败时抛出</exception>
     public async Task<TaktFlowInstanceDetailDto> StartFlowInstanceAsync(TaktFlowStartDto dto)
     {
         EnsureThreeLayerContext();
@@ -68,7 +84,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         return (await GetFlowInstanceDetailByIdAsync(instance.Id))!;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 保存流程草稿（Draft 状态，不创建待办、不推进节点）
+    /// </summary>
+    /// <param name="dto">与发起相同的表单与业务键参数</param>
+    /// <returns>草稿实例详情</returns>
+    /// <exception cref="TaktBusinessException">三层上下文缺失或方案未发布时抛出</exception>
     public async Task<TaktFlowInstanceDetailDto> CreateFlowInstanceDraftAsync(TaktFlowStartDto dto)
     {
         EnsureThreeLayerContext();
@@ -78,7 +99,13 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         return (await GetFlowInstanceDetailByIdAsync(instance.Id))!;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 从草稿提交并启动流程（仅发起人、仅 Draft 可提交）
+    /// 状态改为 Running 后记录「发起」并推进至首审批节点
+    /// </summary>
+    /// <param name="instanceId">草稿实例主键 ID</param>
+    /// <returns>启动后的实例详情</returns>
+    /// <exception cref="TaktBusinessException">非草稿、非发起人或推进失败时抛出</exception>
     public async Task<TaktFlowInstanceDetailDto> StartFlowInstanceFromDraftAsync(long instanceId)
     {
         EnsureThreeLayerContext();
@@ -100,7 +127,13 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         return (await GetFlowInstanceDetailByIdAsync(instance.Id))!;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 办结当前用户待办（通过或驳回）
+    /// 通过：处理会签/或签、加签组、并行网关聚合后解析下一节点并创建待办；驳回：按 nodeRejectStep 重入或实例 Rejected
+    /// </summary>
+    /// <param name="dto">办结参数（FlowInstanceId、Approved、Comment、FrmData、NodeRejectStep 等）</param>
+    /// <returns>表示异步办结完成的任务</returns>
+    /// <exception cref="TaktBusinessException">无待办、快照无效或状态不允许时抛出</exception>
     public async Task CompleteFlowInstanceTaskAsync(TaktFlowCompleteTaskDto dto)
     {
         EnsureThreeLayerContext();
@@ -195,7 +228,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await EnterExecutionNodesAsync(instance, root, nextNodes);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取当前用户待办列表（Pending 任务 + Running 实例，内存过滤后客户端分页）
+    /// </summary>
+    /// <param name="query">关键字/流程名等筛选与分页参数</param>
+    /// <returns>待办项分页结果</returns>
     public async Task<TaktPagedResult<TaktFlowTodoItemDto>> GetFlowInstanceTodoListAsync(TaktFlowTodoQueryDto query)
     {
         EnsureThreeLayerContext();
@@ -246,7 +283,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         return TaktPagedResult<TaktFlowTodoItemDto>.Create(page, items.Count, query.PageIndex, query.PageSize);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取当前用户发起的流程实例列表（服务端分页，按租户/公司隔离）
+    /// </summary>
+    /// <param name="query">状态/关键字等筛选与分页参数</param>
+    /// <returns>实例摘要分页结果</returns>
     public async Task<TaktPagedResult<TaktFlowInstanceListItemDto>> GetFlowInstanceMyListAsync(TaktFlowMyInstanceQueryDto query)
     {
         EnsureThreeLayerContext();
@@ -262,7 +303,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         return TaktPagedResult<TaktFlowInstanceListItemDto>.Create(list, total, query.PageIndex, query.PageSize);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取当前用户已办流程列表（Completed 任务关联实例，内存过滤后客户端分页）
+    /// </summary>
+    /// <param name="query">与待办共用的筛选与分页参数</param>
+    /// <returns>已办实例摘要分页结果</returns>
     public async Task<TaktPagedResult<TaktFlowInstanceListItemDto>> GetFlowInstanceProcessedListAsync(TaktFlowTodoQueryDto query)
     {
         EnsureThreeLayerContext();
@@ -287,7 +332,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         return TaktPagedResult<TaktFlowInstanceListItemDto>.Create(page, items.Count, query.PageIndex, query.PageSize);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 按 ID 获取流程实例详情（含任务、流转历史；须属于当前租户与公司）
+    /// </summary>
+    /// <param name="instanceId">实例主键 ID</param>
+    /// <returns>详情 DTO；不存在或越权时返回 null</returns>
     public async Task<TaktFlowInstanceDetailDto?> GetFlowInstanceDetailByIdAsync(long instanceId)
     {
         EnsureThreeLayerContext();
@@ -299,7 +348,13 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         return await MapDetailAsync(instance);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 撤回流程（仅发起人、仅 Running 可撤回）
+    /// 取消全部待办并将实例置为 Terminated，记录 Revoke 流转
+    /// </summary>
+    /// <param name="instanceCode">实例业务编码</param>
+    /// <returns>表示异步撤回完成的任务</returns>
+    /// <exception cref="TaktBusinessException">实例不存在、非发起人或状态不允许时抛出</exception>
     public async Task RevokeFlowInstanceAsync(string instanceCode)
     {
         EnsureThreeLayerContext();
@@ -332,7 +387,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, "撤回", userId, CurrentUserName, TaktFlowActionType.Revoke, null);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 转办当前用户待办至指定用户（原办理人写入 OwnerUserId）
+    /// </summary>
+    /// <param name="dto">转办参数（FlowInstanceId、ToUserId、ToUserName、Comment）</param>
+    /// <returns>表示异步转办完成的任务</returns>
+    /// <exception cref="TaktBusinessException">实例不可运行或无当前用户待办时抛出</exception>
     public async Task TransferFlowInstanceAsync(TaktFlowTransferDto dto)
     {
         EnsureThreeLayerContext();
@@ -354,7 +414,13 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Comment, userId, CurrentUserName, TaktFlowActionType.Transfer, dto.ToUserName);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 在当前节点加签审批人（sequential / all / one 模式）
+    /// 创建 TaktFlowAddSign 与加签待办任务，并记录 AddSign 流转
+    /// </summary>
+    /// <param name="dto">加签参数（审批人列表、ApproveType、ReturnToSignNode、Reason）</param>
+    /// <returns>表示异步加签完成的任务</returns>
+    /// <exception cref="TaktBusinessException">实例不可运行时抛出</exception>
     public async Task AddFlowInstanceApproversAsync(TaktFlowAddApproversDto dto)
     {
         EnsureThreeLayerContext();
@@ -401,7 +467,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await RecordTransitionAsync(instance, nodeId, instance.CurrentActivityName, dto.Reason, userId, CurrentUserName, TaktFlowActionType.AddSign, null);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 减签：取消指定加签记录及其 Pending 待办，标记加签已处理并记录 ReduceSign 流转
+    /// </summary>
+    /// <param name="dto">减签参数（FlowInstanceId、FlowAddSignId）</param>
+    /// <returns>表示异步减签完成的任务</returns>
+    /// <exception cref="TaktBusinessException">加签记录不存在或不属于该实例时抛出</exception>
     public async Task ReduceFlowInstanceApprovalAsync(TaktFlowReduceApprovalDto dto)
     {
         EnsureThreeLayerContext();
@@ -427,7 +498,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, "减签", userId, CurrentUserName, TaktFlowActionType.ReduceSign, addSign.SignUserName);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 挂起运行中流程（Running → Suspended，写入挂起原因）
+    /// </summary>
+    /// <param name="dto">操作参数（FlowInstanceId、Reason）</param>
+    /// <returns>表示异步挂起完成的任务</returns>
+    /// <exception cref="TaktBusinessException">非 Running 状态时抛出</exception>
     public async Task SuspendFlowInstanceAsync(TaktFlowInstanceOperateDto dto)
     {
         EnsureThreeLayerContext();
@@ -442,7 +518,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Suspend, null);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 恢复已挂起流程（Suspended → Running，清除挂起原因）
+    /// </summary>
+    /// <param name="dto">操作参数（FlowInstanceId、Reason）</param>
+    /// <returns>表示异步恢复完成的任务</returns>
+    /// <exception cref="TaktBusinessException">非 Suspended 状态时抛出</exception>
     public async Task ResumeFlowInstanceAsync(TaktFlowInstanceOperateDto dto)
     {
         EnsureThreeLayerContext();
@@ -457,7 +538,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Resume, null);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 终止流程（取消全部待办，实例置 Terminated 并计算耗时，记录 Terminate 流转）
+    /// </summary>
+    /// <param name="dto">操作参数（FlowInstanceId、Reason）</param>
+    /// <returns>表示异步终止完成的任务</returns>
     public async Task TerminateFlowInstanceAsync(TaktFlowInstanceOperateDto dto)
     {
         EnsureThreeLayerContext();
@@ -474,7 +559,12 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Terminate, null);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 撤销当前用户最近一次已办审批（Completed → Pending，回退实例当前节点并删除对应 Approve 流转）
+    /// </summary>
+    /// <param name="dto">操作参数（FlowInstanceId）</param>
+    /// <returns>表示异步撤销完成的任务</returns>
+    /// <exception cref="TaktBusinessException">非 Running 或无已办任务时抛出</exception>
     public async Task UndoFlowInstanceVerificationAsync(TaktFlowInstanceOperateDto dto)
     {
         EnsureThreeLayerContext();

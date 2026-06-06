@@ -65,7 +65,6 @@ import type { TaktSelectOption } from '@/types/common'
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { coerceSelectValue } from '@/utils/takt-id'
 import { useI18n } from 'vue-i18n'
 
 const selectLogger = createLogger('takt-select')
@@ -326,8 +325,9 @@ const options = computed(() => {
       ? (itemAny.extValue ?? itemAny.dictValue ?? '')
       : (itemAny.dictValue ?? '')
     
+    // apiUrl：后端 DTO 主键已为 string（ValueToStringConverter），统一转 string 选项值
     const convertedValue = props.apiUrl
-      ? coerceSelectValue(rawValue, { forceString: true })
+      ? convertValueType(normalizeValue(rawValue), 'string', 'api')
       : convertValueType(rawValue, expectedValueType, props.dictType || 'api')
     
     return {

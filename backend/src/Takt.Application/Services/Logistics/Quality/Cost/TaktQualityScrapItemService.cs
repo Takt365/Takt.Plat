@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityScrapItemService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质废弃明细应用服务实现
 // 
@@ -284,7 +284,7 @@ public class TaktQualityScrapItemService : TaktServiceBase, ITaktQualityScrapIte
     public async Task<(string fileName, byte[] fileContent)> ExportQualityScrapItemAsync(TaktQualityScrapItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQualityScrapItemQueryDto());
-        var list = await _qualityScrapItemRepository.GetListForExportAsync(predicate);
+        var list = await _qualityScrapItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

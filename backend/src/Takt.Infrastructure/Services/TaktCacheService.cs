@@ -23,7 +23,11 @@ namespace Takt.Infrastructure.Services;
 /// <see cref="ITaktCacheService"/> 实现
 /// 读取 <see cref="TaktCacheOptions"/>，内存层始终启用；Provider 为 Redis 时同步读写分布式层
 /// </summary>
-public class TaktCacheService : ITaktCacheService
+/// <remarks>
+/// 进程内有界 <see cref="MemoryCache"/> 与 DI 注册的 <see cref="IMemoryCache"/>（OpenIddict 等）分离，
+/// 避免对全局 IMemoryCache 设置 SizeLimit 导致框架缓存项未指定 Size 而启动失败。
+/// </remarks>
+public class TaktCacheService : ITaktCacheService, IDisposable
 {
     /// <summary>
     /// 分布式缓存 JSON 序列化选项（camelCase）
@@ -34,9 +38,9 @@ public class TaktCacheService : ITaktCacheService
     };
 
     /// <summary>
-    /// 进程内内存缓存
+    /// 业务专用有界内存缓存（<c>Cache:Memory</c> SizeLimit；与 OpenIddict 共用 DI IMemoryCache 分离）
     /// </summary>
-    private readonly IMemoryCache _memoryCache;
+    private readonly MemoryCache _memoryCache;
 
     /// <summary>
     /// 分布式缓存（Redis 时注入；Memory 提供者时为 null）
@@ -51,17 +55,30 @@ public class TaktCacheService : ITaktCacheService
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="memoryCache">应用统一 IMemoryCache（与 appsettings Cache:Memory 绑定，见 AddTaktCache）</param>
     /// <param name="options">缓存配置</param>
     /// <param name="distributedCache">分布式缓存（Redis 时注入）</param>
     public TaktCacheService(
-        IMemoryCache memoryCache,
         IOptions<TaktCacheOptions> options,
         IDistributedCache? distributedCache = null)
     {
-        _memoryCache = memoryCache;
         _options = options.Value;
         _distributedCache = distributedCache;
+        var memoryOptions = _options.Memory;
+        _memoryCache = new MemoryCache(new MemoryCacheOptions
+        {
+            SizeLimit = memoryOptions.SizeLimit,
+            CompactionPercentage = memoryOptions.CompactionPercentage,
+            ExpirationScanFrequency = TimeSpan.FromSeconds(
+                Math.Max(1, memoryOptions.ExpirationScanFrequency)),
+        });
+    }
+
+    /// <summary>
+    /// 释放业务有界内存缓存
+    /// </summary>
+    public void Dispose()
+    {
+        _memoryCache.Dispose();
     }
 
     /// <summary>

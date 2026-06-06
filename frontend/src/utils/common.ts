@@ -104,6 +104,9 @@ export const TAKT_MENU_STATUS_ENABLED = 1;
 /** 菜单可见（与后端可见标志 1 一致） */
 export const TAKT_MENU_VISIBLE_YES = 1;
 
+/** 内联侧栏/混合菜单每层级缩进（px），对应 a-menu inlineIndent */
+export const TAKT_MENU_INLINE_INDENT = 4;
+
 /** OAuth 访问令牌 localStorage 键 */
 export const TAKT_ACCESS_TOKEN_STORAGE_KEY = 'takt.access_token';
 

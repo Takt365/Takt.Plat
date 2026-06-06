@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核应用服务实现
 // 
@@ -319,7 +319,7 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
     public async Task<(string fileName, byte[] fileContent)> ExportSupplierEvaluationAsync(TaktSupplierEvaluationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktSupplierEvaluationQueryDto());
-        var list = await _supplierEvaluationRepository.GetListForExportAsync(predicate);
+        var list = await _supplierEvaluationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

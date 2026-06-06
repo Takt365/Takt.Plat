@@ -263,36 +263,36 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // 简体中文 (zh-CN)
             ("menu.humanresource.organization._self", "zh-CN", "组织管理", "二级菜单"),
             ("menu.humanresource.personnel._self", "zh-CN", "人事管理", "二级菜单"),
-            ("menu.humanresource.attendanceleave._self", "zh-CN", "考勤假期", "二级菜单"),
-            ("menu.humanresource.performance._self", "zh-CN", "绩效管理", "二级菜单"),
+            ("menu.humanresource.attendance._self", "zh-CN", "考勤管理", "二级菜单"),
             ("menu.humanresource.compensationbenefits._self", "zh-CN", "薪酬福利", "二级菜单"),
+            ("menu.humanresource.performance._self", "zh-CN", "绩效管理", "二级菜单"),
             ("menu.humanresource.trainingdevelopment._self", "zh-CN", "培训发展", "二级菜单"),
             ("menu.humanresource.talent._self", "zh-CN", "人才管理", "二级菜单"),
 
             // 英文 (en-US)
             ("menu.humanresource.organization._self", "en-US", "Organization", "Level 2 Menu"),
             ("menu.humanresource.personnel._self", "en-US", "Personnel", "Level 2 Menu"),
-            ("menu.humanresource.attendanceleave._self", "en-US", "Attendance & Leave", "Level 2 Menu"),
-            ("menu.humanresource.performance._self", "en-US", "Performance", "Level 2 Menu"),
+            ("menu.humanresource.attendance._self", "en-US", "Attendance", "Level 2 Menu"),
             ("menu.humanresource.compensationbenefits._self", "en-US", "Compensation & Benefits", "Level 2 Menu"),
+            ("menu.humanresource.performance._self", "en-US", "Performance", "Level 2 Menu"),
             ("menu.humanresource.trainingdevelopment._self", "en-US", "Training & Development", "Level 2 Menu"),
             ("menu.humanresource.talent._self", "en-US", "Talent Management", "Level 2 Menu"),
 
             // 日文 (ja-JP)
             ("menu.humanresource.organization._self", "ja-JP", "組織管理", "レベル2メニュー"),
             ("menu.humanresource.personnel._self", "ja-JP", "人事管理", "レベル2メニュー"),
-            ("menu.humanresource.attendanceleave._self", "ja-JP", "勤怠休暇", "レベル2メニュー"),
-            ("menu.humanresource.performance._self", "ja-JP", "绩效管理", "レベル2メニュー"),
+            ("menu.humanresource.attendance._self", "ja-JP", "勤怠管理", "レベル2メニュー"),
             ("menu.humanresource.compensationbenefits._self", "ja-JP", "給与福利", "レベル2メニュー"),
+            ("menu.humanresource.performance._self", "ja-JP", "绩效管理", "レベル2メニュー"),
             ("menu.humanresource.trainingdevelopment._self", "ja-JP", "研修開発", "レベル2メニュー"),
             ("menu.humanresource.talent._self", "ja-JP", "人材管理", "レベル2メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.humanresource.organization._self", "zh-HK", "組織管理", "二级菜单"),
             ("menu.humanresource.personnel._self", "zh-HK", "人事管理", "二级菜单"),
-            ("menu.humanresource.attendanceleave._self", "zh-HK", "考勤假期", "二级菜单"),
-            ("menu.humanresource.performance._self", "zh-HK", "績效管理", "二级菜单"),
+            ("menu.humanresource.attendance._self", "zh-HK", "考勤管理", "二级菜单"),
             ("menu.humanresource.compensationbenefits._self", "zh-HK", "薪酬福利", "二级菜单"),
+            ("menu.humanresource.performance._self", "zh-HK", "績效管理", "二级菜单"),
             ("menu.humanresource.trainingdevelopment._self", "zh-HK", "培訓發展", "二级菜单"),
             ("menu.humanresource.talent._self", "zh-HK", "人才管理", "二级菜单"),
 
@@ -901,128 +901,156 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.personnel.employeetransfer", "zh-HK", "員工調動", "三级菜单"),
 
             // ========================================
-            // 三级菜单（考勤假期）
+            // 三级菜单（考勤，与 HumanResource/Attendance 实体对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.humanresource.attendanceleave.holiday", "zh-CN", "假期管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.leave", "zh-CN", "请假管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.overtime", "zh-CN", "加班管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.attendancecorrection", "zh-CN", "补卡管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.attendancesettings", "zh-CN", "考勤设置", "三级菜单"),
-            ("menu.humanresource.attendanceleave.schedule", "zh-CN", "排班管理", "三级菜单"),
+            ("menu.humanresource.attendance.workshift", "zh-CN", "班次管理", "三级菜单"),
+            ("menu.humanresource.attendance.calendar", "zh-CN", "工厂日历", "三级菜单"),
+            ("menu.humanresource.attendance.shiftschedule", "zh-CN", "排班计划", "三级菜单"),
+            ("menu.humanresource.attendance.holiday", "zh-CN", "假期管理", "三级菜单"),
+            ("menu.humanresource.attendance.leave", "zh-CN", "请假管理", "三级菜单"),
+            ("menu.humanresource.attendance.overtime", "zh-CN", "加班管理", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.humanresource.attendanceleave.holiday", "en-US", "Holiday", "Level 3 Menu"),
-            ("menu.humanresource.attendanceleave.leave", "en-US", "Leave", "Level 3 Menu"),
-            ("menu.humanresource.attendanceleave.overtime", "en-US", "Overtime", "Level 3 Menu"),
-            ("menu.humanresource.attendanceleave.attendancecorrection", "en-US", "Attendance Correction", "Level 3 Menu"),
-            ("menu.humanresource.attendanceleave.attendancesettings", "en-US", "Attendance Settings", "Level 3 Menu"),
-            ("menu.humanresource.attendanceleave.schedule", "en-US", "Schedule", "Level 3 Menu"),
+            ("menu.humanresource.attendance.workshift", "en-US", "Work Shift", "Level 3 Menu"),
+            ("menu.humanresource.attendance.calendar", "en-US", "Factory Calendar", "Level 3 Menu"),
+            ("menu.humanresource.attendance.shiftschedule", "en-US", "Shift Schedule", "Level 3 Menu"),
+            ("menu.humanresource.attendance.holiday", "en-US", "Holiday", "Level 3 Menu"),
+            ("menu.humanresource.attendance.leave", "en-US", "Leave", "Level 3 Menu"),
+            ("menu.humanresource.attendance.overtime", "en-US", "Overtime", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.humanresource.attendanceleave.holiday", "ja-JP", "休暇管理", "レベル3メニュー"),
-            ("menu.humanresource.attendanceleave.leave", "ja-JP", "请假管理", "レベル3メニュー"),
-            ("menu.humanresource.attendanceleave.overtime", "ja-JP", "残業管理", "レベル3メニュー"),
-            ("menu.humanresource.attendanceleave.attendancecorrection", "ja-JP", "補卡管理", "レベル3メニュー"),
-            ("menu.humanresource.attendanceleave.attendancesettings", "ja-JP", "勤怠設定", "レベル3メニュー"),
-            ("menu.humanresource.attendanceleave.schedule", "ja-JP", "排班管理", "レベル3メニュー"),
+            ("menu.humanresource.attendance.workshift", "ja-JP", "シフト管理", "レベル3メニュー"),
+            ("menu.humanresource.attendance.calendar", "ja-JP", "工場カレンダー", "レベル3メニュー"),
+            ("menu.humanresource.attendance.shiftschedule", "ja-JP", "シフト計画", "レベル3メニュー"),
+            ("menu.humanresource.attendance.holiday", "ja-JP", "休暇管理", "レベル3メニュー"),
+            ("menu.humanresource.attendance.leave", "ja-JP", "休暇申請", "レベル3メニュー"),
+            ("menu.humanresource.attendance.overtime", "ja-JP", "残業管理", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.humanresource.attendanceleave.holiday", "zh-HK", "假期管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.leave", "zh-HK", "請假管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.overtime", "zh-HK", "加班管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.attendancecorrection", "zh-HK", "補卡管理", "三级菜单"),
-            ("menu.humanresource.attendanceleave.attendancesettings", "zh-HK", "考勤設置", "三级菜单"),
-            ("menu.humanresource.attendanceleave.schedule", "zh-HK", "排班管理", "三级菜单"),
+            ("menu.humanresource.attendance.workshift", "zh-HK", "班次管理", "三级菜单"),
+            ("menu.humanresource.attendance.calendar", "zh-HK", "工廠日曆", "三级菜单"),
+            ("menu.humanresource.attendance.shiftschedule", "zh-HK", "排班計劃", "三级菜单"),
+            ("menu.humanresource.attendance.holiday", "zh-HK", "假期管理", "三级菜单"),
+            ("menu.humanresource.attendance.leave", "zh-HK", "請假管理", "三级菜单"),
+            ("menu.humanresource.attendance.overtime", "zh-HK", "加班管理", "三级菜单"),
 
             // ========================================
-            // 三级菜单（薪酬福利）
+            // 三级菜单（薪酬福利，与 CompensationBenefits 实体对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.humanresource.compensationbenefits.salarycalc", "zh-CN", "薪资核算", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.taxcalc", "zh-CN", "个税计算", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.socialsecurity", "zh-CN", "社保缴纳", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.payslip", "zh-CN", "薪资条发放", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.benefitplan", "zh-CN", "福利方案", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.compensationbenefit", "zh-CN", "薪酬福利", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.compensationplan", "zh-CN", "薪酬方案", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.employeebenefit", "zh-CN", "员工福利", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.salaryadjustment", "zh-CN", "调薪管理", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.salarycomponent", "zh-CN", "薪资组成", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.salarystructure", "zh-CN", "薪资结构", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.taxrule", "zh-CN", "税务规则", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.humanresource.compensationbenefits.salarycalc", "en-US", "Salary Calculation", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.taxcalc", "en-US", "Tax Calculation", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.socialsecurity", "en-US", "Social Security", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.payslip", "en-US", "Payslip", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.benefitplan", "en-US", "Benefit Plan", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.compensationbenefit", "en-US", "Compensation Benefit", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.compensationplan", "en-US", "Compensation Plan", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.employeebenefit", "en-US", "Employee Benefit", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.salaryadjustment", "en-US", "Salary Adjustment", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.salarycomponent", "en-US", "Salary Component", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.salarystructure", "en-US", "Salary Structure", "Level 3 Menu"),
+            ("menu.humanresource.compensationbenefits.taxrule", "en-US", "Tax Rule", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.humanresource.compensationbenefits.salarycalc", "ja-JP", "給与計算", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.taxcalc", "ja-JP", "税額計算", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.socialsecurity", "ja-JP", "社会保険", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.payslip", "ja-JP", "給与明細", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.benefitplan", "ja-JP", "福利方案", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.compensationbenefit", "ja-JP", "給与福利", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.compensationplan", "ja-JP", "給与方案", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.employeebenefit", "ja-JP", "従業員福利", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.salaryadjustment", "ja-JP", "昇給管理", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.salarycomponent", "ja-JP", "給与構成", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.salarystructure", "ja-JP", "給与構造", "レベル3メニュー"),
+            ("menu.humanresource.compensationbenefits.taxrule", "ja-JP", "税務規則", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.humanresource.compensationbenefits.salarycalc", "zh-HK", "薪資核算", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.taxcalc", "zh-HK", "個税計算", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.socialsecurity", "zh-HK", "社保繳納", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.payslip", "zh-HK", "薪資條發放", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.benefitplan", "zh-HK", "福利方案", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.compensationbenefit", "zh-HK", "薪酬福利", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.compensationplan", "zh-HK", "薪酬方案", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.employeebenefit", "zh-HK", "員工福利", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.salaryadjustment", "zh-HK", "調薪管理", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.salarycomponent", "zh-HK", "薪資組成", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.salarystructure", "zh-HK", "薪資結構", "三级菜单"),
+            ("menu.humanresource.compensationbenefits.taxrule", "zh-HK", "稅務規則", "三级菜单"),
 
             // ========================================
-            // 三级菜单（绩效管理）
+            // 三级菜单（绩效管理，与 Performance 实体对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.humanresource.performance.schememetric", "zh-CN", "方案指标", "三级菜单"),
-            ("menu.humanresource.performance.cycleschedule", "zh-CN", "周期日程", "三级菜单"),
-            ("menu.humanresource.performance.objective", "zh-CN", "目标管理", "三级菜单"),
-            ("menu.humanresource.performance.assessment", "zh-CN", "考核评估", "三级菜单"),
-            ("menu.humanresource.performance.analysisimprovement", "zh-CN", "分析改进", "三级菜单"),
+            ("menu.humanresource.performance.improvementplan", "zh-CN", "改进计划", "三级菜单"),
+            ("menu.humanresource.performance.performance", "zh-CN", "绩效记录", "三级菜单"),
+            ("menu.humanresource.performance.performancegoal", "zh-CN", "绩效目标", "三级菜单"),
+            ("menu.humanresource.performance.performanceindicator", "zh-CN", "绩效指标", "三级菜单"),
+            ("menu.humanresource.performance.performanceplan", "zh-CN", "绩效方案", "三级菜单"),
+            ("menu.humanresource.performance.performancereview", "zh-CN", "绩效评审", "三级菜单"),
+            ("menu.humanresource.performance.reviewcycle", "zh-CN", "评审周期", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.humanresource.performance.schememetric", "en-US", "Scheme Metric", "Level 3 Menu"),
-            ("menu.humanresource.performance.cycleschedule", "en-US", "Cycle Schedule", "Level 3 Menu"),
-            ("menu.humanresource.performance.objective", "en-US", "Objective", "Level 3 Menu"),
-            ("menu.humanresource.performance.assessment", "en-US", "Assessment", "Level 3 Menu"),
-            ("menu.humanresource.performance.analysisimprovement", "en-US", "Analysis & Improvement", "Level 3 Menu"),
+            ("menu.humanresource.performance.improvementplan", "en-US", "Improvement Plan", "Level 3 Menu"),
+            ("menu.humanresource.performance.performance", "en-US", "Performance Record", "Level 3 Menu"),
+            ("menu.humanresource.performance.performancegoal", "en-US", "Performance Goal", "Level 3 Menu"),
+            ("menu.humanresource.performance.performanceindicator", "en-US", "Performance Indicator", "Level 3 Menu"),
+            ("menu.humanresource.performance.performanceplan", "en-US", "Performance Plan", "Level 3 Menu"),
+            ("menu.humanresource.performance.performancereview", "en-US", "Performance Review", "Level 3 Menu"),
+            ("menu.humanresource.performance.reviewcycle", "en-US", "Review Cycle", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.humanresource.performance.schememetric", "ja-JP", "方案指標", "レベル3メニュー"),
-            ("menu.humanresource.performance.cycleschedule", "ja-JP", "周期日程", "レベル3メニュー"),
-            ("menu.humanresource.performance.objective", "ja-JP", "目標管理", "レベル3メニュー"),
-            ("menu.humanresource.performance.assessment", "ja-JP", "考核評価", "レベル3メニュー"),
-            ("menu.humanresource.performance.analysisimprovement", "ja-JP", "分析改善", "レベル3メニュー"),
+            ("menu.humanresource.performance.improvementplan", "ja-JP", "改善計画", "レベル3メニュー"),
+            ("menu.humanresource.performance.performance", "ja-JP", "績效記録", "レベル3メニュー"),
+            ("menu.humanresource.performance.performancegoal", "ja-JP", "績效目標", "レベル3メニュー"),
+            ("menu.humanresource.performance.performanceindicator", "ja-JP", "績效指標", "レベル3メニュー"),
+            ("menu.humanresource.performance.performanceplan", "ja-JP", "績效方案", "レベル3メニュー"),
+            ("menu.humanresource.performance.performancereview", "ja-JP", "績效評価", "レベル3メニュー"),
+            ("menu.humanresource.performance.reviewcycle", "ja-JP", "評価周期", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.humanresource.performance.schememetric", "zh-HK", "方案指標", "三级菜单"),
-            ("menu.humanresource.performance.cycleschedule", "zh-HK", "週期日程", "三级菜单"),
-            ("menu.humanresource.performance.objective", "zh-HK", "目標管理", "三级菜单"),
-            ("menu.humanresource.performance.assessment", "zh-HK", "考核評估", "三级菜单"),
-            ("menu.humanresource.performance.analysisimprovement", "zh-HK", "分析改進", "三级菜单"),
+            ("menu.humanresource.performance.improvementplan", "zh-HK", "改進計劃", "三级菜单"),
+            ("menu.humanresource.performance.performance", "zh-HK", "績效記錄", "三级菜单"),
+            ("menu.humanresource.performance.performancegoal", "zh-HK", "績效目標", "三级菜单"),
+            ("menu.humanresource.performance.performanceindicator", "zh-HK", "績效指標", "三级菜单"),
+            ("menu.humanresource.performance.performanceplan", "zh-HK", "績效方案", "三级菜单"),
+            ("menu.humanresource.performance.performancereview", "zh-HK", "績效評審", "三级菜单"),
+            ("menu.humanresource.performance.reviewcycle", "zh-HK", "評審週期", "三级菜单"),
 
             // ========================================
-            // 三级菜单（培训发展）
+            // 三级菜单（培训发展，与 TrainingDevelopment 实体对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.humanresource.trainingdevelopment.plan", "zh-CN", "培训计划", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.course", "zh-CN", "培训课程", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.result", "zh-CN", "培训结果", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.career", "zh-CN", "职业发展", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.skillassessment", "zh-CN", "技能评估", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingactivity", "zh-CN", "培训活动", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingcourse", "zh-CN", "培训课程", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "zh-CN", "培训发展", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingplan", "zh-CN", "培训计划", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.humanresource.trainingdevelopment.plan", "en-US", "Training Plan", "Level 3 Menu"),
-            ("menu.humanresource.trainingdevelopment.course", "en-US", "Training Course", "Level 3 Menu"),
-            ("menu.humanresource.trainingdevelopment.result", "en-US", "Training Result", "Level 3 Menu"),
-            ("menu.humanresource.trainingdevelopment.career", "en-US", "Career Development", "Level 3 Menu"),
+            ("menu.humanresource.trainingdevelopment.skillassessment", "en-US", "Skill Assessment", "Level 3 Menu"),
+            ("menu.humanresource.trainingdevelopment.trainingactivity", "en-US", "Training Activity", "Level 3 Menu"),
+            ("menu.humanresource.trainingdevelopment.trainingcourse", "en-US", "Training Course", "Level 3 Menu"),
+            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "en-US", "Training Development", "Level 3 Menu"),
+            ("menu.humanresource.trainingdevelopment.trainingplan", "en-US", "Training Plan", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.humanresource.trainingdevelopment.plan", "ja-JP", "研修計画", "レベル3メニュー"),
-            ("menu.humanresource.trainingdevelopment.course", "ja-JP", "研修課程", "レベル3メニュー"),
-            ("menu.humanresource.trainingdevelopment.result", "ja-JP", "研修結果", "レベル3メニュー"),
-            ("menu.humanresource.trainingdevelopment.career", "ja-JP", "職業発展", "レベル3メニュー"),
+            ("menu.humanresource.trainingdevelopment.skillassessment", "ja-JP", "技能評価", "レベル3メニュー"),
+            ("menu.humanresource.trainingdevelopment.trainingactivity", "ja-JP", "研修活動", "レベル3メニュー"),
+            ("menu.humanresource.trainingdevelopment.trainingcourse", "ja-JP", "研修課程", "レベル3メニュー"),
+            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "ja-JP", "研修開発", "レベル3メニュー"),
+            ("menu.humanresource.trainingdevelopment.trainingplan", "ja-JP", "研修計画", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.humanresource.trainingdevelopment.plan", "zh-HK", "培訓計劃", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.course", "zh-HK", "培訓課程", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.result", "zh-HK", "培訓結果", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.career", "zh-HK", "職業發展", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.skillassessment", "zh-HK", "技能評估", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingactivity", "zh-HK", "培訓活動", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingcourse", "zh-HK", "培訓課程", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "zh-HK", "培訓發展", "三级菜单"),
+            ("menu.humanresource.trainingdevelopment.trainingplan", "zh-HK", "培訓計劃", "三级菜单"),
 
             // ========================================
             // 三级菜单（人才管理）

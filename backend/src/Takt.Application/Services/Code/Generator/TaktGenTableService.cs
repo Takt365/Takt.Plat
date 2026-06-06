@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Code.Generator
 // 文件名称：TaktGenTableService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表配置应用服务实现
 // 
@@ -273,7 +273,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     public async Task<(string fileName, byte[] fileContent)> ExportGenTableAsync(TaktGenTableQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktGenTableQueryDto());
-        var list = await _genTableRepository.GetListForExportAsync(predicate);
+        var list = await _genTableRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

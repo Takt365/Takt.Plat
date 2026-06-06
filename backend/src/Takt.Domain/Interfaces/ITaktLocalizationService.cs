@@ -46,7 +46,8 @@ public interface ITaktLocalizationService
     string TranslateValidation(string messageKey, string? culture = null, params object[] args);
 
     /// <summary>
-    /// 获取当前语言
+    /// 获取当前请求或线程上下文中的语言代码
     /// </summary>
+    /// <returns>语言代码（如 zh-CN、en-US）</returns>
     string GetCurrentCulture();
 }

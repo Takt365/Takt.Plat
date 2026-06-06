@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktQuartzTaskService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：定时任务应用服务实现
 // 
@@ -266,7 +266,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
     public async Task<(string fileName, byte[] fileContent)> ExportQuartzTaskAsync(TaktQuartzTaskQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktQuartzTaskQueryDto());
-        var list = await _quartzTaskRepository.GetListForExportAsync(predicate);
+        var list = await _quartzTaskRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

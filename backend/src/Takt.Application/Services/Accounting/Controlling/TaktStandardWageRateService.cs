@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktStandardWageRateService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工资率应用服务实现
 // 
@@ -252,7 +252,7 @@ public class TaktStandardWageRateService : TaktServiceBase, ITaktStandardWageRat
     public async Task<(string fileName, byte[] fileContent)> ExportStandardWageRateAsync(TaktStandardWageRateQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktStandardWageRateQueryDto());
-        var list = await _standardWageRateRepository.GetListForExportAsync(predicate);
+        var list = await _standardWageRateRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

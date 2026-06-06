@@ -124,6 +124,11 @@ public sealed class TaktPermissionAuthorizationFilter : IAsyncAuthorizationFilte
         }
     }
 
+    /// <summary>
+    /// 当前终结点是否标记 <see cref="IAllowAnonymous"/>（跳过功能权限校验）
+    /// </summary>
+    /// <param name="context">授权过滤器上下文</param>
+    /// <returns>允许匿名访问为 true</returns>
     private static bool HasAllowAnonymous(AuthorizationFilterContext context)
     {
         var endpoint = context.HttpContext.GetEndpoint();

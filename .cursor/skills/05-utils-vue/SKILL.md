@@ -25,7 +25,7 @@ description: >-
 - [ ] 2. kebab-case 文件名；领域工具用 takt- 前缀
 - [ ] 3. 八段文件头；功能描述注明与后端 Helper 对齐（如有）
 - [ ] 4. 优先 export function 或 XxxHelper 静态类 + 具名 re-export（参照 mask.ts）
-- [ ] 5. 实体主键/雪花 ID：string；用 takt-id.ts 的 coerceSelectValue / normalizeEntityId
+- [ ] 5. 实体主键：types/DTO 为 string（后端 ValueToStringConverter）；禁止 Number() 比较主键
 - [ ] 6. 大数组日志：sampleForLog（log-formatter.ts），禁止 JSON.stringify 全量
 - [ ] 7. 空行密度遵守 03-format-blank-lines
 ```
@@ -37,7 +37,6 @@ description: >-
 | `naming.ts` | 与 TaktNamingHelper 对齐 |
 | `mask.ts` | MaskHelper + 函数导出 |
 | `regex.ts` | RegexPatterns + isValid* |
-| `takt-id.ts` | 主键 string / 安全整数 |
 | `log-formatter.ts` | sampleForLog |
 | `logger.ts` | 运行时网关（非纯工具） |
 

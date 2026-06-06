@@ -18,29 +18,36 @@ import { TAKT_AUTH_IDLE_DEFAULT_TIMEOUT_MINUTES } from '@/utils/common';
  * @returns {number} 超时时长（毫秒），0 表示禁用
  */
 export function getAuthIdleTimeoutMs(): number {
+  /** 环境变量原始字符串（去首尾空白） */
   const raw = import.meta.env.VITE_AUTH_IDLE_TIMEOUT_MINUTES?.trim();
 
+  // 未配置时使用仓库默认分钟数
   if (!raw) {
     return TAKT_AUTH_IDLE_DEFAULT_TIMEOUT_MINUTES * 60 * 1000;
   }
 
+  // 显式 0 表示禁用空闲登出
   if (raw === '0') {
     return 0;
   }
 
+  /** 解析后的分钟数 */
   const minutes = Number(raw);
 
+  // 非正数或 NaN 视为禁用
   if (Number.isNaN(minutes) || minutes <= 0) {
     return 0;
   }
 
+  // 分钟转毫秒
   return minutes * 60 * 1000;
 }
 
 /**
  * 是否启用空闲自动登出
- * @returns {boolean} 是否启用
+ * @returns {boolean} 超时时长大于 0 时为 true
  */
 export function isAuthIdleLogoutEnabled(): boolean {
+  // 毫秒阈值为 0 即功能关闭
   return getAuthIdleTimeoutMs() > 0;
 }

@@ -14,15 +14,22 @@ import type { UserInfoResponse } from '@/types/identity/login';
 
 /**
  * 归一化 GET /me 用户资料（仅补齐可能为空的数组字段）
- * @param profile 接口响应（已与 UserInfoResponse / 后端 camelCase 对齐）
+ * @param {UserInfoResponse} profile 接口响应（已与 UserInfoResponse / 后端 camelCase 对齐）
+ * @returns {UserInfoResponse} 数组字段非 null 的用户资料
  */
 export function normalizeUserInfoProfile(profile: UserInfoResponse): UserInfoResponse {
+  // 展开原对象并兜底可能为 null/undefined 的集合字段
   return {
     ...profile,
+    // 角色列表缺省为空数组
     roles: profile.roles ?? [],
+    // 权限码列表缺省为空数组
     permissions: profile.permissions ?? [],
+    // 可访问路由路径缺省为空数组
     routePaths: profile.routePaths ?? [],
+    // 菜单树缺省为空数组
     menus: profile.menus ?? [],
+    // 可访问公司列表缺省为空数组
     accessibleCompanies: profile.accessibleCompanies ?? [],
   };
 }

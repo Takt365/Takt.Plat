@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDeptService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变部门应用服务实现
 // 
@@ -281,7 +281,7 @@ public class TaktEcDeptService : TaktServiceBase, ITaktEcDeptService
     public async Task<(string fileName, byte[] fileContent)> ExportEcDeptAsync(TaktEcDeptQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktEcDeptQueryDto());
-        var list = await _ecDeptRepository.GetListForExportAsync(predicate);
+        var list = await _ecDeptRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

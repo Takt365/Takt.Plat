@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立不良日报应用服务实现
 // 
@@ -299,7 +299,7 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
     public async Task<(string fileName, byte[] fileContent)> ExportAssyDefectAsync(TaktAssyDefectQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktAssyDefectQueryDto());
-        var list = await _assyDefectRepository.GetListForExportAsync(predicate);
+        var list = await _assyDefectRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

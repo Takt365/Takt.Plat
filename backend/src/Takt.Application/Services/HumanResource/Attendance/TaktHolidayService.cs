@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktHolidayService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：假日信息应用服务实现
 // 
@@ -255,7 +255,7 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
     public async Task<(string fileName, byte[] fileContent)> ExportHolidayAsync(TaktHolidayQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktHolidayQueryDto());
-        var list = await _holidayRepository.GetListForExportAsync(predicate);
+        var list = await _holidayRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

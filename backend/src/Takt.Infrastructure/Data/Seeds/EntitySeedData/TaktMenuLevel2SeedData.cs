@@ -459,15 +459,15 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR2;
             updateCount += updateHR2;
 
-            var (insertHR3, updateHR3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE", menu =>
+            var (insertHR3, updateHR3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_ATTENDANCE", menu =>
             {
-                menu.MenuName = "考勤假期";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE";
-                menu.I18nKey = "menu.humanresource.attendanceleave._self";
+                menu.MenuName = "考勤管理";
+                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE";
+                menu.I18nKey = "menu.humanresource.attendance._self";
                 menu.Icon = "RiCalendarCheckLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
-                menu.RoutePath = "/human-resource/attendance-leave";
+                menu.RoutePath = "/human-resource/attendance";
                 menu.ComponentPath = "";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
@@ -478,15 +478,15 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR3;
             updateCount += updateHR3;
 
-            var (insertHR4, updateHR4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_PERFORMANCE", menu =>
+            var (insertHR4, updateHR4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_COMPENSATION_BENEFITS", menu =>
             {
-                menu.MenuName = "绩效管理";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE";
-                menu.I18nKey = "menu.humanresource.performance._self";
-                menu.Icon = "RiTargetLine";
+                menu.MenuName = "薪酬福利";
+                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_BENEFITS";
+                menu.I18nKey = "menu.humanresource.compensationbenefits._self";
+                menu.Icon = "RiMoneyCnyCircleLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
-                menu.RoutePath = "/human-resource/performance";
+                menu.RoutePath = "/human-resource/compensation-benefits";
                 menu.ComponentPath = "";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
@@ -497,15 +497,15 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR4;
             updateCount += updateHR4;
 
-            var (insertHR5, updateHR5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_COMPENSATION_BENEFITS", menu =>
+            var (insertHR5, updateHR5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_PERFORMANCE", menu =>
             {
-                menu.MenuName = "薪酬福利";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_BENEFITS";
-                menu.I18nKey = "menu.humanresource.compensationbenefits._self";
-                menu.Icon = "RiMoneyCnyCircleLine";
+                menu.MenuName = "绩效管理";
+                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE";
+                menu.I18nKey = "menu.humanresource.performance._self";
+                menu.Icon = "RiTargetLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
-                menu.RoutePath = "/human-resource/compensation-benefits";
+                menu.RoutePath = "/human-resource/performance";
                 menu.ComponentPath = "";
                 menu.SortOrder = 5;
                 menu.MenuStatus = 1;

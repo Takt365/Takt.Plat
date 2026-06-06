@@ -24,7 +24,6 @@ alwaysApply: true
 - `@frontend/src/utils/naming.ts` — 纯函数、与后端 `TaktNamingHelper` 对齐
 - `@frontend/src/utils/mask.ts` — `XxxHelper` 静态类 + 具名函数 re-export
 - `@frontend/src/utils/regex.ts` — 编译期常量 `RegexPatterns` + `isValid*` 校验
-- `@frontend/src/utils/takt-id.ts` — 雪花 ID / 主键 string 安全处理
 - `@frontend/src/utils/log-formatter.ts` — `sampleForLog` 与后端采样对齐
 - `@frontend/src/utils/export-download-name.ts` — 无副作用 I/O 解析
 - `@frontend/src/utils/logger.ts` — **运行时网关**（模块级状态 + 文件头说明边界）
@@ -195,7 +194,6 @@ export function sampleForLog<T>(items: readonly T[], maxSample = 40): { sample: 
 | `regex.ts` | `TaktRegexHelper` | 模式名与校验语义一致 |
 | `mask.ts` | `TaktMaskHelper` | 脱敏规则一致 |
 | `takt-validation-i18n.ts` | `TaktValidationI18nKeys` | 校验 i18n 键 |
-| `takt-id.ts` | — | 主键 string / 安全整数（前端专用） |
 | `log-formatter.ts` | `TaktLogFormatter` | 日志条目、`sampleForLog` |
 
 修改任一侧时须**同步检查对侧**；禁止前端自创与种子/后端不一致的校验键或正则语义。

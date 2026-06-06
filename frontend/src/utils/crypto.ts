@@ -20,16 +20,21 @@ import { JSEncrypt } from 'jsencrypt';
  * @returns {string} Base64 密文；加密失败时返回空字符串
  */
 export function encryptLoginPassword(plainPassword: string, publicKeyPem: string): string {
+  // 明文或公钥缺失时无法加密，返回空串由调用方处理
   if (!plainPassword || !publicKeyPem) {
     return '';
   }
 
+  /** JSEncrypt 实例，用于 PKCS#1 加密 */
   const encryptor = new JSEncrypt();
+  // 注入服务端 RSA 公钥
   encryptor.setPublicKey(publicKeyPem);
 
-  const cipher = encryptor.encrypt(
-    CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Utf8.parse(plainPassword)),
-  );
+  /** UTF-8 规范化后的明文字符串 */
+  const utf8Plain = CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Utf8.parse(plainPassword));
+  // 执行 RSA 加密
+  const cipher = encryptor.encrypt(utf8Plain);
 
+  // JSEncrypt 失败时返回 false，统一转为空串
   return typeof cipher === 'string' ? cipher : '';
 }

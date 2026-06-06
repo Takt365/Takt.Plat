@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktMenuService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单应用服务实现
 // 
@@ -411,7 +411,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
     public async Task<(string fileName, byte[] fileContent)> ExportMenuAsync(TaktMenuQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktMenuQueryDto());
-        var list = await _menuRepository.GetListForExportAsync(predicate);
+        var list = await _menuRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

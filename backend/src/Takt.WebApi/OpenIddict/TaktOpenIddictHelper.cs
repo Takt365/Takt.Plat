@@ -45,11 +45,14 @@ public sealed class TaktOpenIddictHelper
 
     /// <summary>
     /// 创建 Cookie 会话与令牌签发用的用户主体
+    /// 写入 Subject/Name、角色、tenant_code、company_code 声明并设置 AccessToken 目的地
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="username">用户名</param>
+    /// <param name="tenantCode">租户编码（写入 tenant_code 声明）</param>
+    /// <param name="companyCode">公司编码（写入 company_code 声明）</param>
     /// <param name="scopes">请求的 scope（可为空）</param>
-    /// <returns>ClaimsPrincipal</returns>
+    /// <returns>含角色与租户/公司声明的 ClaimsPrincipal</returns>
     public async Task<ClaimsPrincipal> CreateUserPrincipalAsync(
         long userId,
         string username,

@@ -1,0 +1,97 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Domain.Entities.HumanResource.CompensationBenefits
+// 文件名称：TaktSocialSecurity.cs
+// 创建时间：2026-06-06
+// 创建人：Takt365(Cursor AI)
+// 功能描述：社保缴纳记录实体，对应菜单 compensation-benefits/social-security
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Takt.Domain.Entities;
+
+namespace Takt.Domain.Entities.HumanResource.CompensationBenefits;
+
+/// <summary>
+/// 员工社保缴纳记录
+/// </summary>
+[SugarTable("takt_human_resource_compensation_benefits_social_security", "社保缴纳表")]
+[SugarIndex("ix_social_security_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_social_security_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_social_security_employee_period", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EmployeeId), OrderByType.Asc, nameof(PayPeriod), OrderByType.Asc, false)]
+public class TaktSocialSecurity : TaktCompanyEntityBase
+{
+    /// <summary>
+    /// 员工 ID
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EmployeeId { get; set; }
+    /// <summary>
+    /// 员工姓名
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string EmployeeName { get; set; } = string.Empty;
+    /// <summary>
+    /// 缴纳期间（如 2026-06）
+    /// </summary>
+    [SugarColumn(ColumnName = "pay_period", ColumnDescription = "缴纳期间", ColumnDataType = "nvarchar", Length = 16, IsNullable = false)]
+    public string PayPeriod { get; set; } = string.Empty;
+    /// <summary>
+    /// 社保缴纳基数
+    /// </summary>
+    [SugarColumn(ColumnName = "social_security_base", ColumnDescription = "社保缴纳基数", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal SocialSecurityBase { get; set; }
+    /// <summary>
+    /// 养老保险（元）
+    /// </summary>
+    [SugarColumn(ColumnName = "pension_amount", ColumnDescription = "养老保险", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal PensionAmount { get; set; }
+    /// <summary>
+    /// 医疗保险（元）
+    /// </summary>
+    [SugarColumn(ColumnName = "medical_amount", ColumnDescription = "医疗保险", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal MedicalAmount { get; set; }
+    /// <summary>
+    /// 失业保险（元）
+    /// </summary>
+    [SugarColumn(ColumnName = "unemployment_amount", ColumnDescription = "失业保险", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal UnemploymentAmount { get; set; }
+    /// <summary>
+    /// 工伤保险（元）
+    /// </summary>
+    [SugarColumn(ColumnName = "injury_amount", ColumnDescription = "工伤保险", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal InjuryAmount { get; set; }
+    /// <summary>
+    /// 生育保险（元）
+    /// </summary>
+    [SugarColumn(ColumnName = "maternity_amount", ColumnDescription = "生育保险", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal MaternityAmount { get; set; }
+    /// <summary>
+    /// 公积金缴纳基数
+    /// </summary>
+    [SugarColumn(ColumnName = "housing_fund_base", ColumnDescription = "公积金缴纳基数", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal HousingFundBase { get; set; }
+    /// <summary>
+    /// 公积金（元）
+    /// </summary>
+    [SugarColumn(ColumnName = "housing_fund_amount", ColumnDescription = "公积金", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal HousingFundAmount { get; set; }
+    /// <summary>
+    /// 缴纳合计（元）
+    /// </summary>
+    [SugarColumn(ColumnName = "total_amount", ColumnDescription = "缴纳合计", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal TotalAmount { get; set; }
+    /// <summary>
+    /// 缴纳状态（0=待缴纳 1=已缴纳 2=已补缴）
+    /// </summary>
+    [SugarColumn(ColumnName = "pay_status", ColumnDescription = "缴纳状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int PayStatus { get; set; }
+    /// <summary>
+    /// 关联工厂
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? RelatedPlant { get; set; }
+}

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostElementChangeLogService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素变更记录应用服务实现
 // 
@@ -174,7 +174,7 @@ public class TaktCostElementChangeLogService : TaktServiceBase, ITaktCostElement
     public async Task<(string fileName, byte[] fileContent)> ExportCostElementChangeLogAsync(TaktCostElementChangeLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktCostElementChangeLogQueryDto());
-        var list = await _costElementChangeLogRepository.GetListForExportAsync(predicate);
+        var list = await _costElementChangeLogRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

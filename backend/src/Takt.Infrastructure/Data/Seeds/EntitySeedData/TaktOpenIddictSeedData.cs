@@ -19,14 +19,18 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
-/// OpenIddict种子数据初始化
+/// OpenIddict 种子数据初始化
+/// 幂等性操作：范围不存在则创建；SPA 客户端存在则更新、不存在则创建；API 机密客户端不存在则创建
+/// 由 <see cref="Takt.Infrastructure.Data.Context.TaktOpenIddictContext.InitializeAsync"/> 在认证库建表后调用
+/// 配置来源：<see cref="TaktOpenIddictOptions"/>（appsettings OpenIddict 节）
 /// </summary>
 public class TaktOpenIddictSeedData
 {
     /// <summary>
-    /// 初始化OpenIddict数据（应用、范围等）
+    /// 初始化 OpenIddict 数据（OAuth2/OIDC 范围与客户端应用）
     /// </summary>
-    /// <param name="serviceProvider">服务提供者</param>
+    /// <param name="serviceProvider">服务提供者（解析 OpenIddict 管理器与配置选项）</param>
+    /// <returns>表示异步初始化完成的任务</returns>
     public static async Task InitializeAsync(IServiceProvider serviceProvider)
     {
         var applicationManager = serviceProvider.GetRequiredService<IOpenIddictApplicationManager>();
@@ -37,6 +41,12 @@ public class TaktOpenIddictSeedData
         await CreateApplicationsAsync(applicationManager, openIddictOptions);
     }
 
+    /// <summary>
+    /// 创建标准 OIDC 范围（openid、profile、email、offline_access）
+    /// </summary>
+    /// <param name="scopeManager">OpenIddict 范围管理器</param>
+    /// <param name="apiAudience">API 资源标识（写入各范围的 Resources）</param>
+    /// <returns>表示异步创建完成的任务</returns>
     private static async Task CreateScopesAsync(IOpenIddictScopeManager scopeManager, string apiAudience)
     {
         await CreateScopeIfMissingAsync(scopeManager, Scopes.OpenId, "OpenID Connect", "OpenID Connect 标准范围", apiAudience);
@@ -45,6 +55,15 @@ public class TaktOpenIddictSeedData
         await CreateScopeIfMissingAsync(scopeManager, Scopes.OfflineAccess, "离线访问", "允许刷新令牌", apiAudience);
     }
 
+    /// <summary>
+    /// 按名称创建 OpenIddict 范围（已存在则跳过）
+    /// </summary>
+    /// <param name="scopeManager">OpenIddict 范围管理器</param>
+    /// <param name="name">范围名称（如 openid、profile）</param>
+    /// <param name="displayName">显示名称</param>
+    /// <param name="description">范围说明</param>
+    /// <param name="resource">关联 API 资源（audience）</param>
+    /// <returns>表示异步创建或跳过的任务</returns>
     private static async Task CreateScopeIfMissingAsync(
         IOpenIddictScopeManager scopeManager,
         string name,
@@ -66,6 +85,12 @@ public class TaktOpenIddictSeedData
         });
     }
 
+    /// <summary>
+    /// 创建或更新 OpenIddict 客户端应用（SPA 公共客户端与 API 机密客户端）
+    /// </summary>
+    /// <param name="applicationManager">OpenIddict 应用管理器</param>
+    /// <param name="options">OpenIddict 配置（客户端 ID、回调地址等）</param>
+    /// <returns>表示异步应用种子完成的任务</returns>
     private static async Task CreateApplicationsAsync(
         IOpenIddictApplicationManager applicationManager,
         TaktOpenIddictOptions options)
@@ -76,7 +101,11 @@ public class TaktOpenIddictSeedData
 
     /// <summary>
     /// SPA 公共客户端：Authorization Code + PKCE（强制）
+    /// 已存在则按当前配置更新重定向地址与权限；不存在则创建
     /// </summary>
+    /// <param name="applicationManager">OpenIddict 应用管理器</param>
+    /// <param name="options">OpenIddict 配置（SpaClientId、SpaRedirectUris、SpaPostLogoutRedirectUris）</param>
+    /// <returns>表示异步创建或更新 SPA 客户端的任务</returns>
     private static async Task CreateOrUpdateSpaClientAsync(
         IOpenIddictApplicationManager applicationManager,
         TaktOpenIddictOptions options)
@@ -129,7 +158,11 @@ public class TaktOpenIddictSeedData
 
     /// <summary>
     /// 机密客户端：Client Credentials（服务间调用）
+    /// 客户端 ID 固定为 takt-api-client；已存在则跳过
     /// </summary>
+    /// <param name="applicationManager">OpenIddict 应用管理器</param>
+    /// <param name="apiAudience">API 资源标识（audience）</param>
+    /// <returns>表示异步创建或跳过 API 客户端的任务</returns>
     private static async Task CreateApiClientIfMissingAsync(
         IOpenIddictApplicationManager applicationManager,
         string apiAudience)

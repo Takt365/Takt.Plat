@@ -25,35 +25,48 @@ import {
  * 主题色预设状态管理
  */
 export const useThemeColorStore = defineStore('theme-color', () => {
+  /** 当前主题色预设键（初始化自 localStorage） */
   const preset = ref<TaktThemeColorPreset>(readStoredThemeColorPreset());
 
   /**
    * 当前主色色值
    */
-  const colorPrimary = computed(() => getThemeColorValue(preset.value));
+  const colorPrimary = computed(() => {
+    // 由预设键映射为 hex 主色
+    return getThemeColorValue(preset.value);
+  });
 
   /**
    * 设置主题色预设
-   * @param next 预设键名
+   * @param {TaktThemeColorPreset} next 预设键名
+   * @returns {void}
    */
   function setColorPreset(next: TaktThemeColorPreset): void {
+    // 相同预设不重复写入与广播
     if (preset.value === next) {
       return;
     }
 
+    // 更新响应式预设
     preset.value = next;
+    // 持久化到 localStorage
     localStorage.setItem(TAKT_THEME_COLOR_STORAGE_KEY, next);
+    // 广播主题色变更，apply-settings 等可同步 CSS 变量
     EventBus.emit('theme-color:change', { preset: next, color: getThemeColorValue(next) });
   }
 
   /**
    * 循环切换到下一个预设
+   * @returns {void}
    */
   function toggleColorPreset(): void {
+    /** 当前预设在列表中的下标 */
     const currentIndex = themeColorPresetKeys.indexOf(preset.value);
+    /** 下一个预设（环状） */
     const next = themeColorPresetKeys[(currentIndex + 1) % themeColorPresetKeys.length];
 
     if (next) {
+      // 应用下一预设
       setColorPreset(next);
     }
   }

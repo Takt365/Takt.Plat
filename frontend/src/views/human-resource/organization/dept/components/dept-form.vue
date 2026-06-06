@@ -228,8 +228,12 @@ import { reactive, watch, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { Dept, DeptCreate } from '@/types/human-resource/organization/dept'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 const { t } = useI18n()
+const tenantStore = useTenantStore()
+const userStore = useUserStore()
 
 /** 费用类别（与后端 TaktCostCategory 一致：1=直接，2=间接） */
 const costCategoryOptions = computed(() => [
@@ -340,6 +344,9 @@ const getValues = (): DeptCreate => {
   const p = formState.parentId
   const parentId = p === '' || p === undefined || p === null ? '0' : String(p)
   return {
+    tenantCode: props.formData?.tenantCode ?? tenantStore.tenantCode,
+    companyCode: props.formData?.companyCode ?? tenantStore.companyCode,
+    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     deptName: formState.deptName,
     deptCode: formState.deptCode,
     parentId,

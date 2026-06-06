@@ -212,12 +212,14 @@ import {
   importDept,
   exportDept
 } from '@/api/human-resource/organization/dept'
-import type { Dept, DeptTree } from '@/types/human-resource/organization/dept'
+import type { Dept, DeptTree, DeptUpdate } from '@/types/human-resource/organization/dept'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { RiEditLine, RiDeleteBinLine, RiUserLine } from '@remixicon/vue'
+import { useUserStore } from '@/stores/identity/user'
 
 const { t } = useI18n()
+const userStore = useUserStore()
 const deptExcelNames = taktExcelEntityNames('TaktDept')
 
 const treeQueryKeyword = ref('')
@@ -439,6 +441,36 @@ const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   tableCurrentPage.value = 1
 }
 
+/**
+ * 将部门详情映射为更新 DTO（拖拽改父级/排序等场景）
+ * @param dept 部门详情
+ * @param overrides 需覆盖的 parentId、sortOrder
+ * @returns {DeptUpdate} 更新载荷
+ */
+function buildDeptUpdateDto(dept: Dept, overrides: Pick<DeptUpdate, 'parentId' | 'sortOrder'>): DeptUpdate {
+  return {
+    deptId: String(dept.deptId),
+    tenantCode: dept.tenantCode,
+    companyCode: dept.companyCode,
+    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    deptCode: dept.deptCode,
+    deptName: dept.deptName,
+    parentId: overrides.parentId,
+    costCenterCode: dept.costCenterCode,
+    costCategory: dept.costCategory,
+    headUserId: dept.headUserId,
+    phone: dept.phone,
+    email: dept.email,
+    location: dept.location,
+    deptStatus: dept.deptStatus,
+    isBuiltIn: dept.isBuiltIn,
+    sortOrder: overrides.sortOrder,
+    description: dept.description,
+    remark: dept.remark,
+    extFieldJson: dept.extFieldJson,
+  }
+}
+
 /** 从树结构中查找节点 key 的父级 key 与在同级中的序号（用于 parentId / sortOrder） */
 function findParentAndOrderNum(
   tree: Array<Record<string, unknown>>,
@@ -469,12 +501,10 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
     loading.value = true
     deptTreeData.value = newTreeData
     const full = await getDeptById(String(dragKey))
-    await updateDept(String(dragKey), {
-      ...full,
-      deptId: String(full.deptId ?? dragKey),
+    await updateDept(String(dragKey), buildDeptUpdateDto(full, {
       parentId: pos.parentId,
       sortOrder: pos.sortOrder,
-    })
+    }))
     message.success('排序/父级已更新')
     await loadData()
   } catch (error: unknown) {

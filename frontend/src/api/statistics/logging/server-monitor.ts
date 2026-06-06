@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/statistics/logging
 // 文件名称：server-monitor.ts
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -45,16 +45,5 @@ export function getAppStatus(): Promise<AppStatus> {
   return request<AppStatus>({
     url: `${SERVER_MONITOR_API_BASE}/app-status`,
     method: 'get',
-  });
-}
-
-/**
- * 刷新服务器硬件信息缓存
- * @returns {Promise<void>} 无业务 data
- */
-export function refreshHardwareCache(): Promise<void> {
-  return request<void>({
-    url: `${SERVER_MONITOR_API_BASE}/refresh-cache`,
-    method: 'post',
   });
 }

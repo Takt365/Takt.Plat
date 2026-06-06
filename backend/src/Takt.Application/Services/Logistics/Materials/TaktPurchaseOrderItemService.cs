@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktPurchaseOrderItemService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单明细应用服务实现
 // 
@@ -292,7 +292,7 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
     public async Task<(string fileName, byte[] fileContent)> ExportPurchaseOrderItemAsync(TaktPurchaseOrderItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktPurchaseOrderItemQueryDto());
-        var list = await _purchaseOrderItemRepository.GetListForExportAsync(predicate);
+        var list = await _purchaseOrderItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

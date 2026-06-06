@@ -52,7 +52,13 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
     /// </summary>
     public int Order => 66;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 初始化请假工作流种子数据（幂等：存在则更新，不存在则创建）
+    /// 写入 leave_form 表单、Leave 流程方案、演示实例（草稿/审批中/已完成）、任务、流转及 TaktLeave 业务单
+    /// </summary>
+    /// <param name="serviceProvider">服务提供者（解析仓储、配置与种子上下文）</param>
+    /// <param name="tenantCode">租户编码；为空时跳过</param>
+    /// <returns>插入与更新记录数（插入数, 更新数）</returns>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(
         IServiceProvider serviceProvider,
         string? tenantCode = null)

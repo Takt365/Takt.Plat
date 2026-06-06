@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Talent
 // 文件名称：TaktTalentInterviewService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：面试安排应用服务实现
 // 
@@ -252,7 +252,7 @@ public class TaktTalentInterviewService : TaktServiceBase, ITaktTalentInterviewS
     public async Task<(string fileName, byte[] fileContent)> ExportTalentInterviewAsync(TaktTalentInterviewQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTalentInterviewQueryDto());
-        var list = await _talentInterviewRepository.GetListForExportAsync(predicate);
+        var list = await _talentInterviewRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

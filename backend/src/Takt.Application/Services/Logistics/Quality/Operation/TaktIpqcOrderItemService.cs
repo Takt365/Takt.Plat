@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderItemService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制程检验单明细应用服务实现
 // 
@@ -303,7 +303,7 @@ public class TaktIpqcOrderItemService : TaktServiceBase, ITaktIpqcOrderItemServi
     public async Task<(string fileName, byte[] fileContent)> ExportIpqcOrderItemAsync(TaktIpqcOrderItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktIpqcOrderItemQueryDto());
-        var list = await _ipqcOrderItemRepository.GetListForExportAsync(predicate);
+        var list = await _ipqcOrderItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(

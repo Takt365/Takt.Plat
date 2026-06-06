@@ -18,25 +18,30 @@ export type { TaktLoginLayoutPosition };
 
 /**
  * 读取已保存的登录表单位置
- * @param fallback 默认值
- * @returns 位置
+ * @param {TaktLoginLayoutPosition} [fallback='center'] 无有效缓存时的默认值
+ * @returns {TaktLoginLayoutPosition} 左/中/右布局位置
  */
 export function readStoredLoginLayoutPosition(
   fallback: TaktLoginLayoutPosition = 'center'
 ): TaktLoginLayoutPosition {
+  /** localStorage 中持久化的布局值 */
   const stored = localStorage.getItem(TAKT_LOGIN_LAYOUT_STORAGE_KEY);
 
+  // 仅接受约定的三种枚举值
   if (stored === 'left' || stored === 'center' || stored === 'right') {
     return stored;
   }
 
+  // 非法或缺失时回退默认
   return fallback;
 }
 
 /**
  * 持久化登录表单位置
- * @param position 位置
+ * @param {TaktLoginLayoutPosition} position 左/中/右布局位置
+ * @returns {void}
  */
 export function saveLoginLayoutPosition(position: TaktLoginLayoutPosition): void {
+  // 写入 localStorage，下次进入登录页恢复
   localStorage.setItem(TAKT_LOGIN_LAYOUT_STORAGE_KEY, position);
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktTranslationService.cs
-// 创建时间：2026-06-05
+// 创建时间：2026-06-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：翻译应用服务实现
 // 
@@ -261,7 +261,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     public async Task<(string fileName, byte[] fileContent)> ExportTranslationAsync(TaktTranslationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var predicate = QueryExpression(query ?? new TaktTranslationQueryDto());
-        var list = await _translationRepository.GetListForExportAsync(predicate);
+        var list = await _translationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(
@@ -321,23 +321,18 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     /// </summary>
     public async Task<TaktTranslationTransposedResultDto> GetTranslationTransposedListAsync(TaktTranslationTransposedQueryDto queryDto)
     {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        var pageIndex = TaktPagedClamp.NormalizePageIndex(queryDto.PageIndex);
-        var pageSize = TaktPagedClamp.NormalizePageSize(queryDto.PageSize);
-
         var cultures = await GetTransposedMasterCulturesAsync();
         var cultureCodeOrder = cultures.Select(c => c.CultureCode).ToList();
 
-        // 转置分组须在内存完成；加载阶段受 Excel:Export:MaxRowsPerRequest 上限约束，防止全量翻译 OOM
-        var all = await _translationRepository.GetListForExportAsync(TransposedQueryExpression(queryDto));
+        var all = await _translationRepository.GetListAsync(TransposedQueryExpression(queryDto));
         var grouped = all
             .GroupBy(x => new { x.I18nKey, x.ResourceGroup, x.ResourceType })
             .OrderBy(g => g.First().I18nKey)
             .ToList();
         var total = grouped.Count;
         var pageGroups = grouped
-            .Skip(TaktPagedClamp.ComputeSkip(pageIndex, pageSize))
-            .Take(pageSize)
+            .Skip((queryDto.PageIndex - 1) * queryDto.PageSize)
+            .Take(queryDto.PageSize)
             .ToList();
 
         var rows = new List<TaktTranslationTransposedDto>();
@@ -363,7 +358,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
 
         return new TaktTranslationTransposedResultDto
         {
-            Paged = TaktPagedResult<TaktTranslationTransposedDto>.Create(rows, total, pageIndex, pageSize),
+            Paged = TaktPagedResult<TaktTranslationTransposedDto>.Create(rows, total, queryDto.PageIndex, queryDto.PageSize),
             CultureCodeOrder = cultureCodeOrder
         };
     }

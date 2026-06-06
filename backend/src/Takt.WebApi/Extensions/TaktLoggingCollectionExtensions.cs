@@ -75,6 +75,12 @@ public static class TaktLoggingCollectionExtensions
         return hostBuilder.UseSerilog();
     }
 
+    /// <summary>
+    /// 绑定并校验 Logging 配置节
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>已校验的日志选项</returns>
+    /// <exception cref="InvalidOperationException">配置缺失或校验失败时抛出</exception>
     private static TaktLoggingOptions BindLoggingOptions(IConfiguration configuration)
     {
         var options = configuration.RequireOptions<TaktLoggingOptions>(TaktLoggingOptions.SectionName);

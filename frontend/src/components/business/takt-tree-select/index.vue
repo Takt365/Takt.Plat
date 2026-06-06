@@ -58,8 +58,6 @@ import { Button } from 'ant-design-vue'
 import type { TaktTreeSelectOption } from '@/types/common'
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
-import { coerceSelectValue } from '@/utils/takt-id'
-
 const treeSelectLogger = createLogger('takt-tree-select')
 
 /** API 树节点最大数量（08-overflow-fullstack） */
@@ -306,8 +304,9 @@ function convertToTreeData(tree: TreeNodeLike[]): AntTreeSelectNode[] {
   function convertNode(node: TreeNodeLike): AntTreeSelectNode {
     const label = String(node.dictLabel ?? (node as { title?: string }).title ?? '')
     let value = (node.dictValue ?? (node as { value?: string | number }).value ?? '') as string | number
+    // apiUrl：后端树选项主键已为 string，与 TaktSelect 一致走 string 转换
     value = props.apiUrl
-      ? coerceSelectValue(value, { forceString: true })
+      ? convertValueType(value, 'string', `树节点 "${label}"`)
       : convertValueType(value, expectedValueType, `树节点 "${label}"`)
     
     const result: AntTreeSelectNode = {

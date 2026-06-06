@@ -36,22 +36,29 @@ export {
  * 全局应用偏好 Store
  */
 export const useSettingStore = defineStore('setting', () => {
+  /** 当前应用偏好（初始化自 localStorage） */
   const setting = ref<AppSetting>(readSettingFromStorage());
 
   /**
    * 更新并持久化设置
    * @param {AppSetting} next 完整或合并后的设置对象
+   * @returns {void}
    */
   function setSetting(next: AppSetting): void {
+    /** 校验并补齐缺省字段后的设置 */
     const normalized = normalizeSetting(next);
+    // 更新响应式状态
     setting.value = normalized;
+    // 写入 localStorage
     saveSettingToStorage(normalized);
   }
 
   /**
    * 恢复默认设置并持久化
+   * @returns {void}
    */
   function resetSetting(): void {
+    // 复用 setSetting 完成规范化与持久化
     setSetting(defaultSetting);
   }
 
