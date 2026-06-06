@@ -1,5 +1,5 @@
 ---
-description: Takt.Plat 项目通用约定（命名、注释、Git 提交）
+description: Takt.Plat 项目通用约定（命名、注释、Git 提交、溢出铁律索引、工作流索引）
 alwaysApply: true
 ---
 
@@ -16,7 +16,7 @@ alwaysApply: true
 | 范围 | 规则 | 示例 |
 |------|------|------|
 | **后端 C#** | PascalCase，文件名=类名，**必须以 `Takt` 为前缀** | ✅ `TaktUser.cs` ❌ `User.cs` |
-| **前端 TS/TSX / Vue** | **kebab-case**（页面、组件、API 均适用） | ✅ `user-api.ts`、`user-form.vue` ❌ `UserForm.vue` |
+| **前端 TS/TSX / Vue** | **kebab-case**（页面、组件、API 均适用） | ✅ `user.ts`、`user-form.vue` ❌ `UserForm.vue` |
 | **.NET 项目** | `Takt` 前缀 + PascalCase | `Takt.Domain` |
 | **命名空间** | `Takt.{Layer}.{SubNamespace}` | `Takt.Domain.Entities.Identity` |
 
@@ -236,12 +236,68 @@ fix(dept): 修复部门唯一索引冲突
 
 ---
 
-## 五、Agent 行为约束
+## 五、溢出与安全边界（强制）
+
+**四层规则（拆分详述）**：
+
+| 层次 | 文件 | 适用 |
+|------|------|------|
+| Vue 前端工具类 | `@.cursor/rules/05-utils-vue.mdc` | `frontend/src/utils/**` |
+| C# 算术/内存/缓冲 | `@.cursor/rules/06-overflow-csharp.mdc` | `backend/**` |
+| Vue 渲染/数据/数字 | `@.cursor/rules/07-overflow-vue.mdc` | `frontend/**` |
+| 前后端联动陷阱 | `@.cursor/rules/08-overflow-fullstack.mdc` | 全栈 |
+
+**一句话**：Vue 的溢出是「渲染和体验问题」，C# 的溢出是「资源和稳定性问题」；**真正的安全来自前后端共同设限**。
+
+**五条铁律（强制）**：
+
+| # | 原则 | 手段 |
+|---|------|------|
+| 1 | **算术溢出** | `checked` / 显式判断 / 用更大类型（`long`、`decimal`） |
+| 2 | **内存溢出** | 预防为主 / **不吞异常** / **优雅退出** |
+| 3 | **缓冲区溢出** | 边界检查 / `Span` / **不用裸数组** |
+| 4 | **输入不可信** | **永远不要假设输入是安全的** |
+| 5 | **溢出是 bug** | **不是异常流程**；禁止 catch 后当正常分支 |
+
+**项目级算术 checked（强烈推荐）**：`backend/src/Directory.Build.props` → `<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>`
+
+实现细节、代码示例、联调清单见 **05 / 06 / 07 / 08**；本节仅保留铁律与索引。
+
+---
+
+## 六、Agent 行为约束
+
+### 规则分层（避免重复阅读）
+
+| 层次 | 文件 | 职责 |
+|------|------|------|
+| 命名/权限/i18n 权威源 | `00-project` §1 | 方法名、翻译键、权限码 |
+| CRUD 全栈基线 | `12-crud` | 单表/主子表/树表均须；能力映射、页面壳、交付自检 |
+| 后端/前端专域 | `01-backend`、`02-frontend` | DDD 分层、UI 栈、i18n 落地 |
+| 表形态扩展 | `10-master-detail`、`11-tree-table` | 叠加在 `12-crud` 之上 |
+| Vue 视图/表单 | `13-vue-view`、`14-vue-form` | index.vue / *-form.vue 三种形态 |
+| 代码生成 | `15-codegen` | generate-all 流水线、排除、生成后审阅 |
+| 权限与翻译键 | `16-permission-i18n` | Permission 四处一致、I18nKey 动态/静态 |
+| 溢出 | `06`/`07`/`08` | 分页/虚拟列表/联调 |
+| 工具类 | `04`/`05` | Helper/utils 设计 |
+| 工作流 | `09-workflow` | 引擎与业务集成 |
+| 空行 | `03-format-blank-lines` | 写入格式 |
+
+§1.4/§1.5 与 `12-crud` §三能力表**同源**：命名以本章为准；CRUD 联调与页面壳以 `12-crud` 为准。`01`/`02` 内 CRUD 细节**引用** `12-crud`，不重复展开。权限验证与翻译键全栈细则见 `16-permission-i18n`。
 
 - 生成或修改代码时遵守本节及上文命名、注释、提交规范
 - **空行**：强制执行 `03-format-blank-lines.mdc`，参照 `TaktUser.cs`、`TaktCultureSeedData.cs` 等正常密度
 - **翻译键**：遵守 §1.6（动态键：小写点号、中间目录可多级；**静态 `locales/**`：`export default` 根键必须为 `page`**）；种子与前端 `t()` / 菜单 `I18nKey` 对齐
 - **权限码**：遵守 §1.7（`领域:目录[:子目录…]:实体:操作`，段数随菜单深度、末段为操作、冒号分隔、小写、无下划线）
+- **溢出与安全边界**：遵守 §五 五条铁律；详述见 `06-overflow-csharp`、`07-overflow-vue`、`08-overflow-fullstack`
+- **Vue 前端工具类**（`frontend/src/utils/`）：见 `@.cursor/rules/05-utils-vue.mdc`
+- **审批工作流**（`Workflow/`、`takt-flow-*`）：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`
+- **规则 Skill 索引**：`.cursor/skills/00-project/SKILL.md`（00~16 与规则同名）
+- **标准 CRUD 全栈基线**：见 `@.cursor/rules/12-crud.mdc`（**单表/主子表/树表均须遵守**）；清单 `12-crud`
+- **Vue 视图/表单**：`13-vue-view`（index.vue）、`14-vue-form`（*-form.vue）
+- **全栈代码生成**：`15-codegen`（`generate-all.cjs`）；清单 `15-codegen`
+- **权限与翻译键**：`16-permission-i18n`（Permission / I18nKey 四处一致）
+- **主子表 / 树表**：在 12-crud 之上叠加 `@.cursor/rules/10-master-detail.mdc`、`11-tree-table.mdc`
 - 新增后端接口/服务：对照 `@.cursor/rules/01-backend.mdc` 中的参照文件
 - 发现与规范冲突时，主动按规范修正，勿引入无 `Takt` 前缀的 C# 文件名或泛化方法名
 - 发现文件出现「隔行空行」或行数异常翻倍时，**只整理空行**，不改动业务逻辑

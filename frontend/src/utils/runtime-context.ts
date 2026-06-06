@@ -4,7 +4,7 @@
 // 文件名称：runtime-context.ts
 // 创建时间：2026-05-25
 // 创建人：Takt365(Cursor AI)
-// 功能描述：日志与事件共享的运行时上下文合并（Pinia / Router）
+// 功能描述：日志与事件共享的运行时上下文合并（运行时网关：Pinia / Router 注入；非纯工具）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

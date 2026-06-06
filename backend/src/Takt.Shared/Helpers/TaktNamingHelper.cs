@@ -26,6 +26,9 @@ public static class TaktNamingHelper
     /// <summary>
     /// 与实体翻译种子一致的 <c>entity.xxx._self</c> 键（<c>xxx</c> 为 <see cref="DefaultSheetNameEnglish"/> 结果的全小写）。
     /// </summary>
+    /// <param name="entityTypeName">领域实体类名，如 <c>TaktUser</c></param>
+    /// <returns>资源键，如 <c>entity.user._self</c></returns>
+    /// <exception cref="ArgumentException"><paramref name="entityTypeName"/> 为空</exception>
     public static string EntitySelfResourceKey(string entityTypeName)
     {
         var tail = DefaultSheetNameEnglish(entityTypeName);

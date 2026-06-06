@@ -19,6 +19,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// 数据脱敏工具类（与前端 <c>MaskHelper</c> / <c>mask.ts</c> 对齐）。
 /// </summary>
+/// <remarks>无状态；<c>DefaultSensitiveFields</c> 为编译期不可变常量数组。</remarks>
 public static class TaktMaskHelper
 {
     /// <summary>默认敏感字段列表（与前端 DEFAULT_SENSITIVE_FIELDS 一致）。</summary>

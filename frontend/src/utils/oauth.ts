@@ -4,7 +4,7 @@
 // 文件名称：oauth.ts
 // 创建时间：2026-05-29
 // 创建人：Takt365(Cursor AI)
-// 功能描述：OAuth2 PKCE、授权跳转、访问令牌无感刷新
+// 功能描述：OAuth2 PKCE、授权跳转、访问令牌无感刷新（运行时网关：Pinia / localStorage 副作用）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

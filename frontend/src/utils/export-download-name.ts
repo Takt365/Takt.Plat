@@ -7,6 +7,8 @@
 
 /**
  * 从 Content-Disposition 解析文件名（支持 filename、filename* RFC5987）。
+ * @param contentDisposition 响应头 Content-Disposition
+ * @returns 解析到的文件名；无法解析时返回 null
  */
 export function parseContentDispositionFileName(contentDisposition: string | undefined | null): string | null {
   if (!contentDisposition || typeof contentDisposition !== 'string') return null
@@ -19,6 +21,7 @@ export function parseContentDispositionFileName(contentDisposition: string | und
     try {
       return decodeURIComponent(raw)
     } catch {
+      // filename* 解码失败时回退原始片段（Try 语义，不抛异常）
       return raw
     }
   }
@@ -47,7 +50,11 @@ function ensureExt(base: string, ext: string): string {
 }
 
 /**
- * 优先使用服务端 Content-Disposition 中的文件名；无则按 Content-Type 为 fallbackBase 补扩展名（与后端返回一致，非用户选择）。
+ * 优先使用服务端 Content-Disposition 中的文件名；无则按 Content-Type 为 fallbackBase 补扩展名。
+ * @param options.contentDisposition Content-Disposition 响应头
+ * @param options.contentType Content-Type 响应头
+ * @param options.fallbackBase 无头时的文件基名（可含 .xlsx/.zip，方法内会规范化）
+ * @returns 最终下载文件名（含扩展名）
  */
 export function resolveExportDownloadFileName(options: {
   contentDisposition?: string | null

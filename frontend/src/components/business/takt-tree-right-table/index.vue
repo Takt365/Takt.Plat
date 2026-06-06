@@ -22,7 +22,7 @@
         :row-key="rowKey"
         :row-class-name="rowClassName"
         :scroll="scrollConfig"
-        :virtual="virtual"
+        :virtual="shouldUseVirtual"
         :size="size"
         :bordered="bordered"
         v-bind="{ ...$attrs, ...(effectiveRowSelection ? { 'row-selection': effectiveRowSelection } : {}), 'expanded-row-keys': expandedRowKeys }"
@@ -124,7 +124,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   rowKey: 'id',
   stripe: true,
-  virtual: false,
+  virtual: true,
   size: 'middle',
   bordered: false,
   showRowSelection: true,
@@ -140,6 +140,17 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { t } = useI18n()
+
+/** 超过此行数时自动启用虚拟滚动（07-overflow-vue） */
+const AUTO_VIRTUAL_ROW_THRESHOLD = 50
+
+/** 是否启用虚拟滚动 */
+const shouldUseVirtual = computed(() => {
+  if (props.virtual === true) return true
+  const len = props.dataSource?.length ?? 0
+  if (props.virtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD) return false
+  return len > AUTO_VIRTUAL_ROW_THRESHOLD
+})
 
 const emit = defineEmits<{
   'change': [pagination: TablePagination, filters: TableFilters, sorter: TableSorter]
@@ -210,7 +221,7 @@ const scrollConfig = computed(() => {
     }, 0)
     config.x = totalWidth > 0 && resolvedDisplayColumns.value.every((col) => !!(col as ResizableColumn).width) ? totalWidth : 'max-content'
   }
-  if (props.virtual && !config.y) config.y = 600
+  if (shouldUseVirtual.value && !config.y) config.y = 600
   if (props.showPagination && !config.y) {
     config.y = 'calc(100vh - 320px)'
   }

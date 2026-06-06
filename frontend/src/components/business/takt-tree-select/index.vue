@@ -58,8 +58,12 @@ import { Button } from 'ant-design-vue'
 import type { TaktTreeSelectOption } from '@/types/common'
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
+import { coerceSelectValue } from '@/utils/takt-id'
 
 const treeSelectLogger = createLogger('takt-tree-select')
+
+/** API 树节点最大数量（08-overflow-fullstack） */
+const MAX_TREE_NODES = 500
 
 const { t } = useI18n()
 type TreeValue = string | number
@@ -214,7 +218,7 @@ const totalNodeCount = computed(() => {
 
 // 根据数据量自动决定是否开启虚拟滚动（超过 100 个节点自动开启）
 const shouldUseVirtual = computed(() => {
-  return props.virtual ?? totalNodeCount.value > 100
+  return props.virtual === true || totalNodeCount.value > 100
 })
 
 // 多选时，maxTagCount 只在 multiple 为 true 时生效
@@ -297,12 +301,14 @@ function convertValueType(value: string | number, expectedType: 'number' | 'stri
 // 将后端树形数据转换为 TreeSelect 组件需要的格式
 function convertToTreeData(tree: TreeNodeLike[]): AntTreeSelectNode[] {
   const { label: labelField, value: valueField, children: childrenField } = treeFieldNames.value
-  const expectedValueType = inferValueType(props.modelValue)
+  const expectedValueType = props.apiUrl ? 'string' as const : inferValueType(props.modelValue)
   
   function convertNode(node: TreeNodeLike): AntTreeSelectNode {
     const label = String(node.dictLabel ?? (node as { title?: string }).title ?? '')
     let value = (node.dictValue ?? (node as { value?: string | number }).value ?? '') as string | number
-    value = convertValueType(value, expectedValueType, `树节点 "${label}"`)
+    value = props.apiUrl
+      ? coerceSelectValue(value, { forceString: true })
+      : convertValueType(value, expectedValueType, `树节点 "${label}"`)
     
     const result: AntTreeSelectNode = {
       ...node,
@@ -345,6 +351,14 @@ const loadData = async () => {
       method: 'get'
     })
     rawData.value = Array.isArray(data) ? data : []
+    if (totalNodeCount.value > MAX_TREE_NODES) {
+      treeSelectLogger.warn('树节点数超过上限', {
+        action: 'loadData',
+        apiUrl: props.apiUrl,
+        count: totalNodeCount.value,
+        max: MAX_TREE_NODES,
+      })
+    }
   } catch (error) {
     treeSelectLogger.error('加载树形数据失败', { action: 'loadData', apiUrl: props.apiUrl }, error)
     rawData.value = []
@@ -590,6 +604,14 @@ const tryUpdateTreeSelectValue = (values: (string | number)[]) => {
 const handleCheckAll = () => {
   if (!treeData.value?.length) {
     treeSelectLogger.warn('树数据为空，无法全选', { action: 'checkAll' })
+    return
+  }
+  if (totalNodeCount.value > MAX_TREE_NODES) {
+    treeSelectLogger.warn('树节点过多，禁止全选', {
+      action: 'checkAll',
+      count: totalNodeCount.value,
+      max: MAX_TREE_NODES,
+    })
     return
   }
   

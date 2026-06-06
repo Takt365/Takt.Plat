@@ -21,6 +21,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt FTP帮助类
 /// </summary>
+/// <remarks>网络/文件 I/O 网关；连接配置由调用方通过 <see cref="TaktFtpOptions"/> 或 <see cref="IConfiguration"/> 显式传入。</remarks>
 public static class TaktFtpHelper
 {
     /// <summary>
@@ -31,6 +32,8 @@ public static class TaktFtpHelper
     /// <returns>FTP 配置</returns>
     public static TaktFtpOptions GetFtpOptionsFromConfiguration(IConfiguration configuration, string provider)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentException.ThrowIfNullOrWhiteSpace(provider);
         return configuration.RequireFtpProvider(provider);
     }
 

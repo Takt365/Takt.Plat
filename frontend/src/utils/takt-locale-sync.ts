@@ -4,13 +4,12 @@
 // 文件名称：takt-locale-sync.ts
 // 创建时间：2026-05-29
 // 创建人：Takt365(Cursor AI)
-// 功能描述：第三方组件库语言同步（Ant Design Vue / dayjs / ECharts，与 vue-i18n 对齐）
+// 功能描述：第三方组件库语言同步（Ant Design Vue / dayjs / ECharts，与 vue-i18n 对齐；运行时网关：模块级 locale 状态）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import { ref } from 'vue';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 import 'dayjs/locale/zh-cn';
@@ -45,8 +44,16 @@ type TaktDayjsLocaleKey = `dayjs-${TaktCultureCode}`;
 /** ECharts locale 映射键（echarts-{CultureCode}） */
 type TaktEchartsLocaleKey = `echarts-${TaktCultureCode}`;
 
-/** 与 vue-i18n 同步的 ECharts registerLocale 键（与 TaktCultureCode 一致） */
-export const taktEchartsLocale = ref<TaktCultureCode>(TAKT_DEFAULT_LOCALE);
+/** 与 vue-i18n 同步的 ECharts registerLocale 键（模块级，由 syncTaktComponentLocales 更新） */
+let currentEchartsLocale: TaktCultureCode = TAKT_DEFAULT_LOCALE;
+
+/**
+ * 读取当前已同步的 ECharts locale 键
+ * @returns 区域文化编码
+ */
+export function getCurrentTaktEchartsLocale(): TaktCultureCode {
+  return currentEchartsLocale;
+}
 
 /** Ant Design Vue ConfigProvider locale（键：antd-{CultureCode}） */
 const antdLocaleMap: Record<TaktAntdLocaleKey, AntdLocale> = {
@@ -169,11 +176,11 @@ export function getEchartsLocaleCode(cultureCode: string): TaktCultureCode {
 
 /**
  * 获取 ECharts init 第三参数（与当前语言同步）
- * @param cultureCode 区域文化编码，默认取已同步的 taktEchartsLocale
+ * @param cultureCode 区域文化编码，默认取 getCurrentTaktEchartsLocale()
  * @returns ECharts init 选项片段
  */
 export function getEchartsInitLocaleOption(cultureCode?: string): { locale: TaktCultureCode } {
-  const code = cultureCode ? getEchartsLocaleCode(cultureCode) : taktEchartsLocale.value;
+  const code = cultureCode ? getEchartsLocaleCode(cultureCode) : currentEchartsLocale;
 
   return { locale: code };
 }
@@ -187,5 +194,5 @@ export function syncTaktComponentLocales(cultureCode: string): void {
 
   dayjs.locale(dayjsLocaleMap[toDayjsLocaleKey(normalized)]);
   registerEchartsLocalesOnce();
-  taktEchartsLocale.value = normalized;
+  currentEchartsLocale = normalized;
 }

@@ -11,13 +11,13 @@
 // ========================================
 
 using Takt.Shared.Constants;
-using Takt.Shared.Exceptions;
 
 namespace Takt.Shared.Helpers;
 
 /// <summary>
 /// 行号、排序号序列生成（无状态；currentMax 由 <c>ITaktTenantRepository</c> / <c>ITaktCompanyRepository</c> / <c>ITaktApprovalRepository</c> 的 <c>GetMaxIntAsync</c> 提供）
 /// </summary>
+/// <remarks>纯函数；最大值由调用方查询仓储后传入，本类不存储业务状态。</remarks>
 public static class TaktSequenceGenerator
 {
     /// <summary>
@@ -108,7 +108,7 @@ public static class TaktSequenceGenerator
         EnsureBusinessCode(businessCode);
         if (lineNumber <= 0)
         {
-            throw new TaktBusinessException("行号必须大于 0");
+            throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, "行号必须大于 0");
         }
 
         return $"{businessCode.Trim()}-{lineNumber}";
@@ -258,7 +258,7 @@ public static class TaktSequenceGenerator
     {
         if (string.IsNullOrWhiteSpace(businessCode))
         {
-            throw new TaktBusinessException("业务编码不能为空");
+            throw new ArgumentException("业务编码不能为空", nameof(businessCode));
         }
     }
 
@@ -266,7 +266,7 @@ public static class TaktSequenceGenerator
     {
         if (string.IsNullOrWhiteSpace(groupCode))
         {
-            throw new TaktBusinessException("分组代码不能为空");
+            throw new ArgumentException("分组代码不能为空", nameof(groupCode));
         }
     }
 
@@ -274,7 +274,7 @@ public static class TaktSequenceGenerator
     {
         if (id <= 0)
         {
-            throw new TaktBusinessException($"{paramName} 必须大于 0");
+            throw new ArgumentOutOfRangeException(paramName, id, $"{paramName} 必须大于 0");
         }
     }
 
@@ -282,7 +282,7 @@ public static class TaktSequenceGenerator
     {
         if (count <= 0)
         {
-            throw new TaktBusinessException("生成数量必须大于 0");
+            throw new ArgumentOutOfRangeException(nameof(count), count, "生成数量必须大于 0");
         }
     }
 }

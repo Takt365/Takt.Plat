@@ -21,6 +21,8 @@ alwaysApply: true
 
 **目标**：请求自动携带租户/公司、路由与按钮权限、实体翻译与后端种子对齐；视觉与主题 token 跟 Ant Design 同步。
 
+**标准 CRUD 页** 能力映射、页面壳与交付自检见 `@.cursor/rules/12-crud.mdc`；本章侧重 UI 栈、API 与 i18n 落地。
+
 ---
 
 ## 一、UI 与样式（Ant Design Vue 4 + Tailwind）
@@ -83,7 +85,7 @@ alwaysApply: true
 | `router/` | 路由（懒加载） |
 | `styles/` | `global.css`（入口）、`color-base.css`、`button-base.css`、`action-column-base.css`、`dict-tag-base.css` |
 
-文件名 **kebab-case**（`user-form.vue`、`user-api.ts`），见 `00-project` §1.1。
+文件名 **kebab-case**（`user-form.vue`、`user.ts`），见 `00-project` §1.1。
 
 ---
 
@@ -103,6 +105,8 @@ alwaysApply: true
 | 批删 | `deleteXxxBatch` | `deleteUserBatch` |
 | 状态 | `updateXxxStatus` | `updateUserStatus` |
 | 模板/导入/导出 | `getXxxTemplate` / `importXxxData` / `exportXxxData` | `getUserTemplate` |
+
+完整映射见 `@.cursor/rules/12-crud.mdc` §三；命名禁止项见 `00-project` §1.5。
 
 路径与后端 REST 一致：**API 路径前缀与控制器 `[controller]` 一致，使用复数**（如 `TaktHolidays`、`TaktUsers`，对应 `TaktHolidaysController`）。应用服务仍为单数命名，勿与路由混用。导入/导出：`responseType: 'blob'`；导入用 `FormData`。
 
@@ -135,7 +139,7 @@ alwaysApply: true
 - 模板标签 kebab-case：`<user-form />`
 - 用户可见文案 **必须** `t('...')`
 
-**标准 CRUD 页**：结构、逻辑映射、Tailwind 布局风格与参照模块一致。
+**标准 CRUD 页**：`index.vue` 见 `13-vue-view`（单表/主子表/树表）；`*-form.vue` 见 `14-vue-form`；能力映射见 `12-crud`。
 
 **权限按钮**（`领域:目录[:子目录…]:实体:操作`，段数随菜单深度，见 `00-project` §1.7）：
 
@@ -267,11 +271,21 @@ export default { title: '用户管理' };
 
 ## 十、Agent 约束
 
-- 新建页面：先确认 `api/`、`types/`、`views/` 与后端模块一致
+- 新建页面：先确认 `api/`、`types/`、`views/` 与后端模块一致；CRUD 全栈基线见 `@.cursor/rules/12-crud.mdc`（单表/主子表/树表均须）；清单 `.cursor/skills/12-crud/`
 - 导出 API、composable 须完整 JSDoc（见 `00-project`）
 - 新建 `.vue` 须 8 行 HTML 文件头
 - **所有新 UI 必须用 Ant Design Vue 4 组件 + Tailwind 工具类**；不得生成大块 scoped CSS
 - 前后端方法名对齐：`getUserList` ↔ `GetUserListAsync`
 - 有参照模块时复制结构再替换实体名；验证码/登录以 `takt-captcha-*`、`login/index.vue` 为参照
-- **静态 i18n**：新增/修改 `locales/**/*.ts` 时 **`export default` 根键必须为 `page`**（§6.2）；`t()` 使用 `{路径}.page.*`；参照 `locales/dashboard/workspace/zh-CN.ts`、`locales/error/zh-CN.ts`
-- **动态 i18n / 权限**：`t()` 键遵守 `00-project` §1.6；`v-permission` 遵守 §1.7（冒号分段、末段为操作、无下划线）
+- **静态 i18n**：新增/修改 `locales/**/*.ts` 时 **`export default` 根键必须为 `page`**（§6.2）；`t()` 使用 `{路径}.page.*`
+- **动态 i18n / 权限**：`t()` 键遵守 `00-project` §1.6；`v-permission` 遵守 §1.7
+- 列表/虚拟滚动/主键 string/禁止全量拉数：见 `@.cursor/rules/07-overflow-vue.mdc`；联调见 `08-overflow-fullstack`
+- **Vue 视图**：`index.vue` 见 `@.cursor/rules/13-vue-view.mdc`；清单 `13-vue-view`
+- **Vue 表单**：`*-form.vue` 见 `@.cursor/rules/14-vue-form.mdc`；清单 `14-vue-form`
+- **代码生成**：`generate-vue-from-api` 见 `15-codegen` §3.6；树表/排除实体须手工
+- 主子表 UI 扩展：见 `@.cursor/rules/10-master-detail.mdc`（叠加 12-crud）
+- 树表 UI 扩展：见 `@.cursor/rules/11-tree-table.mdc`（叠加 12-crud）
+- 新建/修改 `utils/` 纯工具：见 `@.cursor/rules/05-utils-vue.mdc`
+- 工作流页面/设计器：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`
+- 全栈代码生成：见 `@.cursor/rules/15-codegen.mdc`；清单 `15-codegen`
+- 本域实现清单：`.cursor/skills/02-frontend/SKILL.md`

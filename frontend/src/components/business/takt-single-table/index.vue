@@ -21,7 +21,7 @@
         :row-key="rowKey"
         :row-class-name="(_record, index) => (index % 2 === 1 ? 'table-striped' : '')"
         :scroll="scrollConfig"
-        :virtual="virtual"
+        :virtual="shouldUseVirtual"
         :size="size"
         :bordered="bordered"
         v-bind="{
@@ -177,6 +177,17 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
+/** 超过此行数时自动启用虚拟滚动（07-overflow-vue） */
+const AUTO_VIRTUAL_ROW_THRESHOLD = 50
+
+/** 是否启用虚拟滚动：显式 true 或数据量超阈值 */
+const shouldUseVirtual = computed(() => {
+  if (props.virtual === true) return true
+  const len = props.dataSource?.length ?? 0
+  if (props.virtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD) return false
+  return len > AUTO_VIRTUAL_ROW_THRESHOLD
+})
+
 const currentPage = computed({
   get: () => props.current ?? 1,
   set: (val) => emit('update:current', val),
@@ -291,7 +302,7 @@ const scrollConfig = computed(() => {
       config.x = 'max-content'
     }
   }
-  if (props.virtual) {
+  if (shouldUseVirtual.value) {
     if (!config.y) {
       config.y = 600
     }

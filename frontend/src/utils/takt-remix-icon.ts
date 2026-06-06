@@ -4,7 +4,7 @@
 // 文件名称：takt-remix-icon.ts
 // 创建时间：2026-05-27
 // 创建人：Takt365(Cursor AI)
-// 功能描述：将后端菜单 Icon 字段（如 RiGridLine）映射为 @remixicon/vue 组件
+// 功能描述：将后端菜单 Icon 字段（如 RiGridLine）映射为 @remixicon/vue 组件（运行时网关：模块懒加载与组件缓存）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -99,6 +99,9 @@ export function getRemixIconComponent(rawIconName: string | undefined | null): C
   return remixIconComponentCache.get(name);
 }
 
+/** 菜单树遍历最大深度（07-overflow-vue） */
+const TAKT_MAX_MENU_TREE_DEPTH = 10;
+
 /**
  * 收集菜单树中的 Icon 字段
  * @param menus 菜单树
@@ -107,19 +110,22 @@ export function getRemixIconComponent(rawIconName: string | undefined | null): C
 export function collectMenuIconNames(menus: MenuTree[]): string[] {
   const names: string[] = [];
 
-  const walk = (nodes: MenuTree[]): void => {
+  const walk = (nodes: MenuTree[], depth: number): void => {
+    if (depth > TAKT_MAX_MENU_TREE_DEPTH) {
+      return;
+    }
     nodes.forEach((menu) => {
       if (menu.icon?.trim()) {
         names.push(menu.icon.trim());
       }
 
       if (menu.children?.length) {
-        walk(menu.children);
+        walk(menu.children, depth + 1);
       }
     });
   };
 
-  walk(menus);
+  walk(menus, 0);
   return names;
 }
 

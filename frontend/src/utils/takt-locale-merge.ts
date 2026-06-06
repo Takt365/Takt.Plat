@@ -14,6 +14,9 @@ import type { TaktLocaleMessageTree } from '@/utils/takt-i18n-message';
 
 export type { TaktLocaleMessageTree };
 
+/** locale messages 树合并最大深度（07-overflow-vue） */
+const TAKT_MAX_LOCALE_MERGE_DEPTH = 32;
+
 /**
  * 从 glob 文件路径解析命名空间段（如 ./dashboard/workspace/zh-CN.ts → dashboard.workspace）
  * @param filePath import.meta.glob 相对路径
@@ -54,8 +57,12 @@ export function nestLocalePayloadUnderNamespace(
  */
 export function deepMergeLocaleMessages(
   target: TaktLocaleMessageTree,
-  source: TaktLocaleMessageTree
+  source: TaktLocaleMessageTree,
+  depth = 0
 ): TaktLocaleMessageTree {
+  if (depth > TAKT_MAX_LOCALE_MERGE_DEPTH) {
+    return target;
+  }
   const output: TaktLocaleMessageTree = { ...target };
 
   Object.entries(source).forEach(([key, value]) => {
@@ -71,7 +78,8 @@ export function deepMergeLocaleMessages(
     ) {
       output[key] = deepMergeLocaleMessages(
         existing as TaktLocaleMessageTree,
-        value as TaktLocaleMessageTree
+        value as TaktLocaleMessageTree,
+        depth + 1
       );
       return;
     }

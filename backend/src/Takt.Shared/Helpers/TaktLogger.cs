@@ -20,10 +20,8 @@ namespace Takt.Shared.Helpers;
 /// Takt 统一日志帮助类
 /// </summary>
 /// <remarks>
-/// 职责划分：
-/// - 采集：TaktLogContext + Serilog LogContext
-/// - 格式化：TaktLogFormatter（Serilog 模板 + 标准 TaktLogEntry）
-/// - 上报：Serilog Sink（Console/File）+ TaktLogReporter（可选远端 HTTP）
+/// 非纯工具网关：启动时 <see cref="Configure"/> 注入 <see cref="TaktLoggingOptions"/> 并委托远端上报；
+/// 写日志为 I/O 副作用，级别过滤依赖已配置选项。
 /// </remarks>
 public static class TaktLogger
 {
@@ -33,8 +31,10 @@ public static class TaktLogger
     /// 配置统一日志（应用启动时调用）
     /// </summary>
     /// <param name="options">日志配置</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> 为 null</exception>
     public static void Configure(TaktLoggingOptions options)
     {
+        ArgumentNullException.ThrowIfNull(options);
         _options = options;
         TaktLogReporter.Configure(options);
     }
@@ -47,6 +47,7 @@ public static class TaktLogger
     /// <returns>合并后的上下文</returns>
     public static TaktLogContext CreateModuleContext(string moduleName, TaktLogContext? context = null)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(moduleName);
         return new TaktLogContext
         {
             Module = moduleName,

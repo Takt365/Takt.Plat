@@ -24,11 +24,15 @@ using Takt.Shared.Options;
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// Excel导入导出帮助类
+/// Excel 导入导出帮助类（基于 EPPlus）。
 /// </summary>
-public class TaktExcelHelper
+/// <remarks>
+/// 非纯工具网关：工作簿元数据依赖启动时 <see cref="Configure"/> 注入的 <see cref="TaktExcelOptions"/>，
+/// 或通过各公开方法的 <c>excelOptions</c> 显式传入；导出文件名时间戳方法依赖当前时间（见 <see cref="GetTimestampString"/>）。
+/// </remarks>
+public static class TaktExcelHelper
 {
-    private static TaktExcelOptions? _options;
+    private static TaktExcelOptions? _configuredOptions;
     private const int MaxImportRowsPerFile = 1000;
     /// <summary>
     /// Excel（.xlsx）模板或单文件导出使用的 Content-Type。
@@ -59,7 +63,7 @@ public class TaktExcelHelper
     }
 
     /// <summary>
-    /// 获取当前时间戳字符串（yyyyMMddHHmmss），使用 InvariantCulture 保证格式一致
+    /// 获取当前时间戳字符串（yyyyMMddHHmmss）；输出随调用时刻变化。
     /// </summary>
     private static string GetTimestampString() =>
         DateTime.Now.ToString(TimestampFormat, CultureInfo.InvariantCulture);
@@ -104,6 +108,8 @@ public class TaktExcelHelper
     /// 根据服务端生成的最终文件名选择导出 Content-Type（<c>.zip</c> 为分批打包，否则为 Excel）。
     /// </summary>
     /// <param name="fileName">含扩展名的文件名</param>
+    /// <returns>HTTP Content-Type</returns>
+    /// <exception cref="ArgumentException"><paramref name="fileName"/> 为空</exception>
     public static string GetExportContentType(string fileName)
     {
         ArgumentException.ThrowIfNullOrEmpty(fileName);
@@ -113,47 +119,66 @@ public class TaktExcelHelper
     }
 
     /// <summary>
-    /// 设置Excel配置
+    /// 启动期注入 Excel 工作簿元数据（作者、公司等）；应用生命周期内调用一次。
     /// </summary>
-    /// <param name="options">Excel配置选项</param>
+    /// <param name="options">Excel 配置选项</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> 为 null</exception>
     public static void Configure(TaktExcelOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        _options = options;
+        _configuredOptions = options;
         TaktLogger.Information("[TaktExcelHelper] Excel配置已初始化，作者: {Author}, 标题: {Title}", options.Author, options.Title);
     }
 
     /// <summary>
-    /// 设置工作簿属性（确保所有导出的Excel文件都包含完整的TaktExcelOptions信息）
+    /// 解析工作簿元数据配置（显式参数优先，否则使用 <see cref="Configure"/> 结果）。
     /// </summary>
-    private static void SetWorkbookProperties(ExcelWorkbook workbook)
+    /// <param name="excelOptions">可选显式配置</param>
+    /// <returns>非 null 的 Excel 配置</returns>
+    /// <exception cref="TaktLocalizedException">未 Configure 且未传入 <paramref name="excelOptions"/></exception>
+    private static TaktExcelOptions ResolveExcelOptions(TaktExcelOptions? excelOptions)
     {
-        ArgumentNullException.ThrowIfNull(workbook);
-
-        // 配置必须存在，不允许硬编码默认值
-        if (_options == null)
+        if (excelOptions != null)
         {
-            TaktLogger.Error("[TaktExcelHelper] Excel配置未初始化，请在应用程序启动时调用 TaktExcelHelper.Configure() 方法");
-            throw new TaktLocalizedException(
-                ExcelHelperNotConfiguredKey,
-                "Frontend",
-                TaktValidationI18nKeys.FieldExcelHelper,
-                null,
-                null);
+            return excelOptions;
         }
 
+        if (_configuredOptions != null)
+        {
+            return _configuredOptions;
+        }
+
+        TaktLogger.Error("[TaktExcelHelper] Excel配置未初始化，请在应用程序启动时调用 TaktExcelHelper.Configure() 方法");
+        throw new TaktLocalizedException(
+            ExcelHelperNotConfiguredKey,
+            "Frontend",
+            TaktValidationI18nKeys.FieldExcelHelper,
+            null,
+            null);
+    }
+
+    /// <summary>
+    /// 设置工作簿属性（确保所有导出的 Excel 文件都包含完整的 <see cref="TaktExcelOptions"/> 信息）。
+    /// </summary>
+    /// <param name="workbook">目标工作簿</param>
+    /// <param name="options">工作簿元数据配置</param>
+    private static void SetWorkbookProperties(ExcelWorkbook workbook, TaktExcelOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(workbook);
+        ArgumentNullException.ThrowIfNull(options);
+
         var props = workbook.Properties;
-        props.Author = _options.Author;
-        props.Title = _options.Title;
-        props.Subject = _options.Subject;
-        props.Category = _options.Category;
-        props.Keywords = _options.Keywords;
-        props.Comments = _options.Comments;
-        props.Status = _options.Status;
-        props.Application = _options.Application;
-        props.Company = _options.Company;
-        props.Manager = _options.Manager;
-        props.LastModifiedBy = _options.Author;
+        props.Author = options.Author;
+        props.Title = options.Title;
+        props.Subject = options.Subject;
+        props.Category = options.Category;
+        props.Keywords = options.Keywords;
+        props.Comments = options.Comments;
+        props.Status = options.Status;
+        props.Application = options.Application;
+        props.Company = options.Company;
+        props.Manager = options.Manager;
+        props.LastModifiedBy = options.Author;
         props.Created = DateTime.Now;
         props.Modified = DateTime.Now;
     }
@@ -167,14 +192,17 @@ public class TaktExcelHelper
     /// <param name="data">数据集合</param>
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名（仅名称，不含 .xlsx；为空时用 sheetName；后端自动拼接 名称_yyyyMMddHHmmss.xlsx）</param>
+    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 <see cref="Configure"/> 注入的配置</param>
     /// <returns>最终文件名与内容（fileName 已含时间戳与 .xlsx）</returns>
     public static async Task<(string fileName, byte[] content)> ExportAsync<T>(
-        IEnumerable<T> data, 
-        string sheetName = "Data", 
-        string? fileName = null) where T : class
+        IEnumerable<T> data,
+        string sheetName = "Data",
+        string? fileName = null,
+        TaktExcelOptions? excelOptions = null) where T : class
     {
         ArgumentNullException.ThrowIfNull(data);
         ArgumentException.ThrowIfNullOrEmpty(sheetName);
+        var workbookOptions = ResolveExcelOptions(excelOptions);
 
         try
         {
@@ -186,7 +214,7 @@ public class TaktExcelHelper
             {
                 // 生成只有表头的空Excel
                 using var package = new ExcelPackage();
-                SetWorkbookProperties(package.Workbook);
+                SetWorkbookProperties(package.Workbook, workbookOptions);
                 await Task.Run(() => ExportToSheetAsync(package, dataList, sheetName));
                 var actualFileName = GenerateTimestampFileName(fileName ?? sheetName);
                 var content = await package.GetAsByteArrayAsync();
@@ -198,7 +226,7 @@ public class TaktExcelHelper
             {
                 // 只生成一个Excel
                 using var package = new ExcelPackage();
-                SetWorkbookProperties(package.Workbook);
+                SetWorkbookProperties(package.Workbook, workbookOptions);
                 await Task.Run(() => ExportToSheetAsync(package, dataList, sheetName));
                 var actualFileName = GenerateTimestampFileName(fileName ?? sheetName);
                 var content = await package.GetAsByteArrayAsync();
@@ -216,7 +244,7 @@ public class TaktExcelHelper
                 {
                     var batch = dataList.Skip(i * maxRows).Take(maxRows).ToList();
                     using var package = new ExcelPackage();
-                    SetWorkbookProperties(package.Workbook);
+                    SetWorkbookProperties(package.Workbook, workbookOptions);
                     await Task.Run(() => ExportToSheetAsync(package, batch, sheetName));
                     var batchFileName = GenerateTimestampFileName($"{exportBaseName}_{i + 1}");
                     var batchContent = await package.GetAsByteArrayAsync();
@@ -294,11 +322,14 @@ public class TaktExcelHelper
     /// 导出Excel(多个Sheet)
     /// </summary>
     /// <param name="sheets">Sheet数据字典，key为sheet名称，value为数据集合</param>
+    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 <see cref="Configure"/> 注入的配置</param>
     /// <returns>包含文件名和内容的元组</returns>
     public static async Task<(string fileName, byte[] content)> ExportMultiSheetAsync<T>(
-        Dictionary<string, IEnumerable<T>> sheets) where T : class
+        Dictionary<string, IEnumerable<T>> sheets,
+        TaktExcelOptions? excelOptions = null) where T : class
     {
         ArgumentNullException.ThrowIfNull(sheets);
+        var workbookOptions = ResolveExcelOptions(excelOptions);
         if (!sheets.Any())
         {
             throw new TaktLocalizedException(
@@ -312,7 +343,7 @@ public class TaktExcelHelper
         try
         {
             using var package = new ExcelPackage();
-            SetWorkbookProperties(package.Workbook);
+            SetWorkbookProperties(package.Workbook, workbookOptions);
 
             int totalRows = 0;
             foreach (var sheet in sheets)
@@ -377,6 +408,17 @@ public class TaktExcelHelper
             }
 
             var totalRows = result.Values.Sum(list => list.Count);
+            if (totalRows > MaxImportRowsPerFile)
+                throw new TaktLocalizedException(
+                    ImportRowLimitExceededKey,
+                    "Frontend",
+                    null,
+                    new Dictionary<string, string>(StringComparer.Ordinal)
+                    {
+                        ["count"] = totalRows.ToString(CultureInfo.InvariantCulture),
+                        ["max"] = MaxImportRowsPerFile.ToString(CultureInfo.InvariantCulture),
+                    },
+                    null);
             TaktLogger.Information("[TaktExcelHelper] 导入多Sheet Excel成功，Sheet数量: {SheetCount}, 数据类型: {TypeName}, 总数据行数: {RowCount}", result.Count, typeof(T).Name, totalRows);
             return Task.FromResult(result);
         }
@@ -397,15 +439,18 @@ public class TaktExcelHelper
     /// <typeparam name="T">模板类型</typeparam>
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名（仅名称，不含 .xlsx；为空时用 <paramref name="sheetName"/> + <c>Template</c> 作基础设施兜底，不含业务文案；业务下载应由应用层传入已本地化基名；后端自动拼接 名称_yyyyMMddHHmmss.xlsx）</param>
+    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 <see cref="Configure"/> 注入的配置</param>
     /// <returns>最终文件名与内容（fileName 已含时间戳与 .xlsx）</returns>
     public static async Task<(string fileName, byte[] content)> GenerateTemplateAsync<T>(
-        string sheetName = "Data", 
-        string? fileName = null) where T : class, new()
+        string sheetName = "Data",
+        string? fileName = null,
+        TaktExcelOptions? excelOptions = null) where T : class, new()
     {
         ArgumentException.ThrowIfNullOrEmpty(sheetName);
+        var workbookOptions = ResolveExcelOptions(excelOptions);
 
         using var package = new ExcelPackage();
-        SetWorkbookProperties(package.Workbook);
+        SetWorkbookProperties(package.Workbook, workbookOptions);
         var worksheet = package.Workbook.Worksheets.Add(sheetName);
 
         // 获取属性信息
@@ -423,7 +468,10 @@ public class TaktExcelHelper
             if (File.Exists(xmlPath))
                 xmlDoc.Load(xmlPath);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            TaktLogger.Debug(ex, "[TaktExcelHelper] 加载类型 XML 注释失败，回退属性名: {TypeName}", typeof(T).Name);
+        }
 
         // 两行表头
         var headers = new string[properties.Count];     // XML注释
@@ -562,7 +610,10 @@ public class TaktExcelHelper
             if (File.Exists(xmlPath))
                 xmlDoc.Load(xmlPath);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            TaktLogger.Debug(ex, "[TaktExcelHelper] 加载类型 XML 注释失败，回退属性名: {TypeName}", typeof(T).Name);
+        }
 
         // 优化：使用数组存储表头
         var headers = new string[properties.Count];
@@ -697,7 +748,7 @@ public class TaktExcelHelper
     }
 
     /// <summary>
-    /// 转换值
+    /// 转换值；无法转换时记录 Debug 并返回 null（调用方跳过该单元格）。
     /// </summary>
     private static object? ConvertValue(string value, Type targetType)
     {
@@ -740,11 +791,15 @@ public class TaktExcelHelper
     /// <param name="files">要打包的文件列表</param>
     /// <param name="zipFileName">zip 文件名（仅名称，不含 .zip；后端自动拼接 名称_yyyyMMddHHmmss.zip）</param>
     /// <returns>最终 zip 文件名与内容</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="files"/> 为 null</exception>
+    /// <exception cref="ArgumentException"><paramref name="files"/> 为空或 <paramref name="zipFileName"/> 为空</exception>
     public static async Task<(string fileName, byte[] content)> PackToZipAsync(
-        List<(string fileName, byte[] content)> files, 
+        List<(string fileName, byte[] content)> files,
         string zipFileName)
     {
-        if (files == null || files.Count == 0)
+        ArgumentNullException.ThrowIfNull(files);
+        ArgumentException.ThrowIfNullOrWhiteSpace(zipFileName);
+        if (files.Count == 0)
             throw new TaktLocalizedException(
                 ExcelZipNoFilesKey,
                 "Frontend",

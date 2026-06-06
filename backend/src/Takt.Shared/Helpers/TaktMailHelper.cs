@@ -23,6 +23,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt邮件帮助类
 /// </summary>
+/// <remarks>网络 I/O 网关；所有发送方法须显式传入 <see cref="IConfiguration"/> 与收件人参数。</remarks>
 public static class TaktMailHelper
 {
     /// <summary>
@@ -41,6 +42,10 @@ public static class TaktMailHelper
         string body,
         bool isHtml = true)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentException.ThrowIfNullOrWhiteSpace(to);
+        ArgumentException.ThrowIfNullOrWhiteSpace(subject);
+        ArgumentNullException.ThrowIfNull(body);
         await SendEmailAsync(configuration, new List<string> { to }, subject, body, null, null, isHtml);
     }
 
@@ -60,6 +65,14 @@ public static class TaktMailHelper
         string body,
         bool isHtml = true)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(to);
+        if (to.Count == 0)
+        {
+            throw new ArgumentException("收件人列表不能为空", nameof(to));
+        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(subject);
+        ArgumentNullException.ThrowIfNull(body);
         await SendEmailAsync(configuration, to, subject, body, null, null, isHtml);
     }
 

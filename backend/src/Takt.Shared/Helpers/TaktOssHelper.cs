@@ -19,6 +19,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// OSS 对象存储配置帮助类
 /// </summary>
+/// <remarks>无状态；从配置解析选项，不缓存连接。</remarks>
 public static class TaktOssHelper
 {
     /// <summary>
@@ -27,8 +28,12 @@ public static class TaktOssHelper
     /// <param name="configuration">配置</param>
     /// <param name="provider">OSS 提供商标识，对应 <c>Oss:{provider}</c> 节点</param>
     /// <returns>OSS 配置</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="configuration"/> 为 null</exception>
+    /// <exception cref="ArgumentException"><paramref name="provider"/> 为空</exception>
     public static TaktOssOptions GetOssOptionsFromConfiguration(IConfiguration configuration, string provider)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentException.ThrowIfNullOrWhiteSpace(provider);
         return configuration.RequireOssProvider(provider);
     }
 

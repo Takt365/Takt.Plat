@@ -22,6 +22,9 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// 统一日志远端上报器
 /// </summary>
+/// <remarks>
+/// 非纯工具网关：内存队列、定时器与 <see cref="HttpClient"/> 批量 HTTP 上报；由 <see cref="TaktLogger.Configure"/> 触发配置。
+/// </remarks>
 public static class TaktLogReporter
 {
     private static readonly ConcurrentQueue<TaktLogEntry> Queue = new();
@@ -36,8 +39,10 @@ public static class TaktLogReporter
     /// 配置上报器
     /// </summary>
     /// <param name="options">日志配置</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> 为 null</exception>
     public static void Configure(TaktLoggingOptions options)
     {
+        ArgumentNullException.ThrowIfNull(options);
         lock (SyncRoot)
         {
             _options = options;
@@ -49,8 +54,10 @@ public static class TaktLogReporter
     /// 入队待上报日志（Warn 及以上）
     /// </summary>
     /// <param name="entry">日志条目</param>
+    /// <exception cref="ArgumentNullException"><paramref name="entry"/> 为 null</exception>
     public static void Enqueue(TaktLogEntry entry)
     {
+        ArgumentNullException.ThrowIfNull(entry);
         if (!_options.EnableRemoteReport || string.IsNullOrWhiteSpace(_options.RemoteReportUrl))
         {
             return;

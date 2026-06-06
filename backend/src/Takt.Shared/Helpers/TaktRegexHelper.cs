@@ -1,4 +1,11 @@
-﻿using System.Globalization;
+﻿// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Shared.Helpers
+// 文件名称：TaktRegexHelper.cs
+// 功能描述：通用正则与格式验证（与前端 regex.ts 对齐）。
+// ========================================
+
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Takt.Shared.Constants;
 
@@ -10,6 +17,7 @@ namespace Takt.Shared.Helpers;
 /// </summary>
 /// <remarks>
 /// 正则校验失败统一使用 <c>common.validation.invalid.format</c>（{field}）；格式说明放 <c>common.tip.*</c>；字段名配合 <c>entity.*</c>。
+/// 仅含编译期不可变 <c>static readonly Regex</c> 常量，无运行时可变状态。
 /// </remarks>
 public static class TaktRegexHelper
 {
@@ -395,7 +403,11 @@ public static class TaktRegexHelper
     /// <summary>
     /// 通用匹配入口：空值返回 false，其它值按指定正则进行 Trim 后匹配。
     /// </summary>
-    public static bool IsMatch(Regex regex, string? value) => !string.IsNullOrWhiteSpace(value) && regex.IsMatch(value.Trim());
+    public static bool IsMatch(Regex regex, string? value)
+    {
+        ArgumentNullException.ThrowIfNull(regex);
+        return !string.IsNullOrWhiteSpace(value) && regex.IsMatch(value.Trim());
+    }
 
     /// <summary>
     /// 是否为有效邮箱（RFC 5322 常用子集，6–100 位）。

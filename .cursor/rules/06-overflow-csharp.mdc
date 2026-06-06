@@ -1,0 +1,115 @@
+---
+description: C# 后端溢出与安全边界（算术/内存/缓冲区）；与 00-project、01-backend 一并生效
+globs: backend/**/*.cs
+alwaysApply: true
+---
+
+# C# 溢出与安全边界
+
+通用五条铁律见 `@.cursor/rules/00-project.mdc` §五；前后端联动见 `@.cursor/rules/08-overflow-fullstack.mdc`。
+
+**一句话**：C# 的溢出是**资源与稳定性问题**——算术 wrap、OOM、越界读写须分别用专用手段处理。
+
+**项目级算术 checked（强烈推荐）**：`backend/src/Directory.Build.props` → `<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>`
+
+---
+
+## 一、三类溢出（C# 专用手段）
+
+| 类型 | 手段 |
+|------|------|
+| **算术溢出** | `checked` / 显式判断 / `long`·`decimal` 更大类型 |
+| **内存溢出** | 预防为主；不吞 `OutOfMemoryException`；优雅退出 |
+| **缓冲区溢出** | 边界检查 / `Span` / 不用裸数组裸下标 |
+
+| 场景 | 本质 | 典型表现 |
+|------|------|----------|
+| 算术溢出 | 运算结果超出类型范围 | `OverflowException`、金额/数量异常 |
+| 内存溢出 | 堆分配过大 | `OutOfMemoryException`、进程被 Kill |
+| 缓冲区溢出 | 读写越界 | 数据覆盖、潜在安全漏洞 |
+
+```text
+❌ 仅 clamp PageSize     → 不能替代算术 checked
+❌ 仅 checked            → 不能防全表 ToList() OOM
+❌ 仅 Span 边界          → 不能防 int 累加 wrap-around
+❌ catch 溢出后 return 0 → 溢出是 bug，不是异常流程
+```
+
+---
+
+## 二、分页参数溢出（超高频）
+
+❌ 不安全：
+
+```csharp
+return Ok(_db.Skip((page - 1) * pageSize).Take(pageSize));
+```
+
+✅ 安全版本（控制器/应用服务入口）：
+
+```csharp
+page = Math.Max(1, page);
+pageSize = Math.Min(maxPageSize, Math.Max(1, pageSize));
+var skip = checked((page - 1) * pageSize);
+```
+
+- `maxPageSize` 用常量或配置，禁止信任前端传入的 `pageSize`
+- 列表参照 `TaktPagedQuery` + `GetXxxListAsync` 分页模式
+
+---
+
+## 三、返回数据过大（JSON / 内存溢出）
+
+❌ 全表加载：
+
+```csharp
+return Ok(db.Table.ToList());
+```
+
+✅ 分页 + 投影 + `IQueryable`：
+
+```csharp
+var query = db.Table.AsQueryable().Select(x => new TaktXxxDto { Id = x.Id, Name = x.Name });
+return Ok(await query.Skip(skip).Take(pageSize).ToListAsync());
+```
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 集合接口必须有上限；导出参照 `TaktExcelHelper` 分批与 `MaxImportRowsPerFile` |
+| ✅ | 禁止 EF 全表 `ToList()` 再内存过滤；优先 DB 侧 `Where`/`Select` |
+| ✅ | OOM **不吞**；记录后终止当前请求/任务 |
+
+---
+
+## 四、数值类型与前后端一致
+
+| C# 类型 | JSON → JS 风险 | 本仓库约定 |
+|---------|----------------|------------|
+| `long` / Int64 | JS 精度丢失（`MAX_SAFE_INTEGER`） | 主键 DTO / 前端类型用 **`string`** |
+| `decimal` | 无原生 decimal | API 用 string 或约定小数位，禁止裸 `double` 传金额 |
+| `double` | 浮点误差 | 金额业务优先 `decimal` |
+
+```csharp
+// ✅ 与 frontend types 对齐（id: string）
+public string Id { get; set; }
+```
+
+---
+
+## 五、算术 / 缓冲区（后端底层）
+
+**算术**：项目级 checked + 显式上界；序列参照 `TaktSequenceGenerator`；`OverflowException` 当 **bug** 修。
+
+**缓冲区**：`Span`/`ReadOnlySpan`；`offset + count <= buffer.Length`；禁止用户长度 `stackalloc`。
+
+工具类参数校验见 `@.cursor/rules/04-utils-csharp.mdc` §六。
+
+---
+
+## 六、Agent 约束
+
+- 新增列表/导出/批处理：分页 + 上限 + DTO 字段裁剪
+- 分页参数入口 clamp；`Skip` 用 checked 或 `long` 中间量
+- 禁止全表 `ToList()`；禁止吞 `OverflowException`/`OutOfMemoryException`
+- 主键/长整型出 API 时与前端 `string` 对齐
+- 本域实现清单：`.cursor/skills/06-overflow-csharp/SKILL.md`

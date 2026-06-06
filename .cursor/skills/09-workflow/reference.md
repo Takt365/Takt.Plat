@@ -1,0 +1,27 @@
+# 工作流参照路径
+
+规则全文：`.cursor/rules/09-workflow.mdc`
+
+## 后端
+
+- `backend/src/Takt.Application/Services/Workflow/FlowEngine/TaktFlowEngineService.cs`
+- `TaktFlowProcessNavigator.cs`、`TaktFlowConditionEvaluator.cs`、`TaktFlowApproverResolver.cs`
+- `TaktFlowProcessModels.cs`
+- `backend/src/Takt.WebApi/Controllers/Workflow/TaktFlowEngineController.cs`
+- `backend/src/Takt.Shared/Enums/TaktFlowEnums.cs`
+- `backend/src/Takt.Domain/Entities/Workflow/`
+- `backend/src/Takt.Infrastructure/Data/Seeds/EntitySeedData/Workflow/TaktLeaveWorkflowSeedData.cs`
+
+## 前端
+
+- `frontend/src/components/business/takt-flow-antflow-designer/`
+- `frontend/src/components/business/takt-flow-antflow-designer/config/takt-flow-tree.ts`
+- `frontend/src/components/business/takt-flow-antflow-designer/config/takt-flow-design-validate.ts`
+- `frontend/src/views/workflow/scheme/components/scheme-form.vue`
+- `frontend/src/views/workflow/todo/index.vue`
+- `frontend/src/api/workflow/instance.ts`
+- `frontend/src/types/workflow/`
+
+## 权限示例
+
+`workflow:todo:list`、`workflow:todo:approve`、`workflow:instance:start`、`workflow:instance:revoke`、`workflow:scheme:design`

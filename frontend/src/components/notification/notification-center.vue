@@ -23,7 +23,11 @@
       placement="right"
       :width="400"
     >
-      <a-list :data-source="notifications" item-layout="horizontal">
+      <a-list
+        :data-source="notifications"
+        item-layout="horizontal"
+        :pagination="{ pageSize: 10, size: 'small' }"
+      >
         <template #renderItem="{ item }">
           <a-list-item>
             <a-list-item-meta
@@ -95,6 +99,9 @@ interface NotificationItem {
   read: boolean;
 }
 
+/** 通知历史最大条数（07-overflow-vue） */
+const MAX_NOTIFICATIONS = 100
+
 /** 抽屉是否打开 */
 const visible = ref(false);
 
@@ -120,8 +127,11 @@ function handleNotificationShow(payload: Events['notification:show']): void {
     read: false,
   };
 
-  notifications.value.unshift(item);
-  unreadCount.value += 1;
+  notifications.value.unshift(item)
+  if (notifications.value.length > MAX_NOTIFICATIONS) {
+    notifications.value.length = MAX_NOTIFICATIONS
+  }
+  unreadCount.value += 1
 
   notificationLogger.info('通知已入列', {
     action: 'enqueue',

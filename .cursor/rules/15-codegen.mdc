@@ -1,0 +1,166 @@
+---
+description: Takt 全栈代码生成（generate-all 流水线、脚本映射、三种 CRUD 形态、排除与生成后审阅）
+globs: scripts/generate*.cjs,backend/src/**/*.cs,frontend/src/**/*
+alwaysApply: false
+---
+
+# 全栈代码生成（generate-all）
+
+命名/CRUD 基线见 `00-project`、`12-crud`；后端分层见 `01-backend`；前端见 `02-frontend`；视图/表单见 `13-vue-view`、`14-vue-form`。
+
+**入口**：`node scripts/generate-all.cjs --all` 或 `--<实体短名>`（不带 `Takt` 前缀）。
+
+**写入策略**（各子脚本统一，见 `generate-script-common.cjs`）：目标文件**不存在则创建，已存在则整文件覆盖**；`--force` 仅对 `TaktAuth` / `TaktRbac` 等手工独立服务/控制器生效。
+
+---
+
+## 一、流水线（按依赖顺序）
+
+| 步 | 脚本 | 输出 |
+|----|------|------|
+| 0 | `generate-entity-rbac-navigations.cjs` | 主实体 `Takt.Domain/Entities` RBAC `[Navigate]` 导航区（`rbac-parent-config`） |
+| 1 | `generate-dtos-from-entity.cjs` | `Takt.Application/Dtos/**/TaktXxxDtos.cs` |
+| 2 | `generate-validators-from-entity.cjs` | `Takt.Application/Validators/**/TaktXxx*Validator.cs` |
+| 3 | `generate-services-from-dtos.cjs` | `ITaktXxxService` + `TaktXxxService` |
+| 4 | `generate-controllers-from-services.cjs` | `TaktXxxsController`（复数路由） |
+| 5 | `generate-from-backend.cjs` | `frontend/src/types/**`、`frontend/src/api/**` |
+| 6 | `generate-entity-i18n-seed.cjs` | `Takt.Infrastructure/.../I18nSeedData/TaktXxxI18nSeedData.cs` |
+| 7 | `generate-vue-from-api.cjs` | `views/**/index.vue` + `components/*-form.vue` |
+
+任一步非零退出码则中止。完成后须 **编译 backend** 并人工审阅（见 §五）。
+
+---
+
+## 二、三种 CRUD 形态（脚本识别）
+
+与 `TaktGenTable.GenTemplateCategory`、规则 `12-crud` / `10` / `11` 对齐。
+
+| 形态 | 模板 | 实体特征 | 后端生成 | 前端 Vue 生成 |
+|------|------|----------|----------|---------------|
+| **单表** | `crud` | 无 `OneToMany` 导航、无 `ParentId` | 标准 CRUD + Options | ✅ `generate-vue-from-api` |
+| **主子表** | `sub` | 实体含 `[Navigate(NavigateType.OneToMany…)]` | DTO 含 `List<子Dto>`；`Fill*DetailsAsync` / `Save*ChildrenAsync` | ✅ 展开行 + 表单子表 Tab |
+| **树表** | `tree` | 实体含 `ParentId` | `*TreeDto`、`Get*TreeAsync`、`Get*TreeOptionsAsync`；路由 `tree` / `tree-options` | ❌ **不生成**；手工 `13-vue-view` §四 |
+
+识别逻辑（`generate-services-from-dtos.cjs` → `identifyCrudType`）：
+
+1. 实体文件含 `NavigateType.OneToMany` → **MasterDetail**
+2. 否则含 `public … ParentId {` → **Tree**
+3. 否则 → **Single**
+
+---
+
+## 三、各脚本要点
+
+### 3.1 DTO（`generate-dtos-from-entity.cjs`）
+
+- 输入：`Takt.Domain/Entities/**/TaktXxx.cs`
+- 输出：`TaktXxxDto`、`QueryDto`、`Create`/`Update`、`Import`/`Export`/`Template`/`Status`/`Sort`
+- 树表：额外 `TaktXxxTreeDto`（`ParentId` 实体）
+- 主子表：响应 `List<子Dto>`；Create/Update `List<子CreateDto>`
+- **转置**（仅 `Translation` 等，见 `generate-transposed-support.cjs`）：`*TransposedDto` / `*TransposedQueryDto` / `*TransposedResultDto` / `*TransposedBatchDto`
+
+### 3.2 服务（`generate-services-from-dtos.cjs`）
+
+| 形态 | 增量方法 |
+|------|----------|
+| 单表 | 标准 `GetXxxListAsync` … `ExportXxxAsync`；`GetXxxOptionsAsync` |
+| 主子表 | `FillXxxDetailsAsync`、`SaveXxxChildrenAsync`（先删后插级联） |
+| 树表 | `GetXxxTreeAsync`、`GetXxxTreeOptionsAsync`、`BuildXxxTree`；**不**生成 `GetXxxOptionsAsync` |
+| 转置 | `GetXxxTransposedListAsync`、`SaveXxxTransposedBatchAsync` |
+
+- `SortOrder` / `LineNumber` ≤0 时经 `ITaktSortOrderGenerator` / `ITaktLineNumberGenerator` 自动生成
+
+### 3.3 控制器（`generate-controllers-from-services.cjs`）
+
+- 类名复数：`TaktHolidaysController`；路由 `api/TaktHolidays`
+- 树表增量：`GET tree`、`GET tree-options`
+- 转置增量：`GET transposed`、`POST transposed/batch`
+- 复数特例见 `generate-script-common.cjs` → `CONTROLLER_PLURAL_OVERRIDES`
+
+### 3.4 前端 types/api（`generate-from-backend.cjs`）
+
+- types：`frontend/src/types/{模块}/{entity}.d.ts`（去 `Takt` 前缀类型名）
+- api：`frontend/src/api/{模块}/{entity}.ts`；`*_API_BASE` = 控制器路由段（**复数**）
+- 导出函数：`getXxxList`、`createXxx`…（与 `12-crud` §三 对齐）
+- 转置：`getXxxTransposedList`、`saveXxxTransposedBatch`
+
+### 3.5 i18n 种子（`generate-entity-i18n-seed.cjs`）
+
+- 输出：`TaktXxxI18nSeedData.cs`；键 `entity.{slug}.*`（与 `00-project` §1.6 对齐）
+- 语言：`en-US`、`ja-JP`、`zh-CN`、`zh-HK`
+
+### 3.6 Vue（`generate-vue-from-api.cjs`）
+
+**输入**：`types/**/{entity}.d.ts` + `api/**/{entity}.ts`  
+**输出**：`views/{viewPath}/index.vue`、`components/{entity}-form.vue`
+
+| 能力 | 说明 |
+|------|------|
+| 单表壳 | `TaktQueryBar` → `TaktToolsBar` → `TaktSingleTable` → `TaktPagination` → `TaktModal` |
+| 主子表 | CreateDto 含 `List<ChildCreate>` → 展开行懒加载 `getById` + 表单子表 Tab 行编辑 |
+| 表单 Tabs | 每 Tab 最多 10 字段；`tenantCode`/`companyCode` 隔离字段只读（Tenant/Company 实体除外） |
+| 权限前缀 | 优先菜单 `ComponentPath`/`Permission`，其次控制器 `TaktPermission` |
+| `--view-path` | 覆盖 views 输出目录（相对 `src/views`） |
+
+**不生成 Vue**（须手工对照 `13-vue-view` / `14-vue-form`）：见 §四。
+
+---
+
+## 四、排除与跳过（`generate-entity-exclusions.cjs`）
+
+### 4.1 跳过后端 DTO/服务/控制器
+
+| 类别 | 实体短名 |
+|------|----------|
+| 手工 CRUD | `User`、`Online`、`Message`、`DictType`、`DictData` |
+| RBAC 关联表 | `UserRole`、`UserTenant`、`UserCompany`、`RoleMenu`、`RoleCompany`、`RoleDept`、`EmployeeDept`、`EmployeePost` |
+| 独立服务 | `TaktAuth`、`TaktRbac`、`TaktFlowEngine`、`TaktHolidayTheme`、`TaktTranslationMessage`、`TaktDataDictAll` |
+
+`--all` 时上述独立服务/控制器默认不覆盖（须 `--force`）。
+
+### 4.2 跳过前端 types/api
+
+- 与 `EXCLUDED_DTO_FILE_NAMES` 一致（含 RBAC、User、Dict 等）
+
+### 4.3 跳过 Vue 生成
+
+实体短名：`User`、`Menu`、`Dept`、`DictType`、`DictData`、`GenTable`、`GenTableColumn`、`Culture`、`Translation`、`Numbering`、`Online`、`Message`  
+目录：`frontend/src/api/workflow/**` 全部
+
+**树表**（如 `Dept`）后端可生成，**视图/表单须手工**（`dept/index.vue`、`dept-form.vue`）。
+
+---
+
+## 五、生成后人工必做
+
+```
+- [ ] dotnet build 通过
+- [ ] QueryExpression / 业务过滤（服务私有方法）
+- [ ] 菜单 Permission 与控制器 TaktPermission、前端 v-permission 一致（`16-permission-i18n`）
+- [ ] Mapster / 特殊字段映射（密码 hash、导航属性）
+- [ ] 树表 / 排除实体：按 13-vue-view、14-vue-form 手工补全或增强
+- [ ] 主子表：确认子表独立 API 是否需要（复杂子表参照 dict + DictDataWindow）
+- [ ] 03-format-blank-lines（生成文件若隔行空行须整理）
+```
+
+---
+
+## 六、命令示例
+
+```bash
+node scripts/generate-all.cjs --Holiday
+node scripts/generate-all.cjs --all
+node scripts/generate-all.cjs --Plant --dry-run
+node scripts/generate-vue-from-api.cjs --Holiday --view-path human-resource/attendance-leave/holiday
+```
+
+---
+
+## 七、Agent 约束
+
+- 新增实体模块：优先 `generate-all --<Entity>`，再对照 `12-crud` + 形态规则（`10`/`11`）+ `13`/`14` 补全/修正
+- **禁止**假设脚本已生成树表 Vue 或 User/Dept/Dict 等排除模块前端
+- 生成覆盖后：**必须**检查权限码与 QueryExpression，不可直接交付
+- 命名：服务单数、控制器复数、API 路由复数（`generate-script-common.cjs`）
+- 权限与翻译键：`16-permission-i18n`
+- 实现清单：`.cursor/skills/15-codegen/SKILL.md`

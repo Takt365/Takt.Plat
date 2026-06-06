@@ -19,6 +19,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt文件帮助类
 /// </summary>
+/// <remarks>文件系统 I/O 网关；读写/删除方法名与 XML 均明示副作用。</remarks>
 public static class TaktFileHelper
 {
     /// <summary>

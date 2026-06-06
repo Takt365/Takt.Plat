@@ -14,6 +14,7 @@ import type { LogContext, LogEntry, LogErrorInfo, LoggerConfig } from '@/types/l
 import {
   buildFormatterRuntimeMeta,
   formatEntriesBatchForReport,
+  safeStringifyForLog,
 } from '@/utils/takt-formatter-common';
 import { maskForLogging } from '@/utils/mask';
 
@@ -99,7 +100,7 @@ export function serializeLogError(error: unknown): LogErrorInfo | undefined {
     const maskedPayload = maskForLogging(error);
     return sanitizeLogErrorInfo({
       name: 'Error',
-      message: JSON.stringify(maskedPayload),
+      message: safeStringifyForLog(maskedPayload),
     });
   } catch {
     return sanitizeLogErrorInfo({
@@ -127,6 +128,12 @@ export function buildLogEntry(
   error?: unknown,
   tags?: string[]
 ): LogEntry {
+  if (!message?.trim()) {
+    throw new Error('buildLogEntry: message 不能为空')
+  }
+  if (!config) {
+    throw new Error('buildLogEntry: config 不能为空')
+  }
   const serializedError = serializeLogError(error);
   const runtimeMeta = buildFormatterRuntimeMeta(config);
 
@@ -201,6 +208,32 @@ export function parseLogLevelFromEnv(value: string | undefined, defaultLevel: Lo
  */
 export function shouldLogLevel(level: LogLevel, minLevel: LogLevel): boolean {
   return level >= minLevel;
+}
+
+/** 日志 Detail 默认最大采样条数（与后端 TaktLogFormatter.SampleForLog 默认 40 对齐） */
+export const LOG_SAMPLE_DEFAULT_MAX = 40
+
+/**
+ * 采样列表（用于结构化日志 Detail，避免 JSON 过长；与后端 SampleForLog 对齐）。
+ * @template T 元素类型
+ * @param items 原始列表
+ * @param maxSample 最大条数，默认 40
+ * @returns sample 与 total
+ */
+export function sampleForLog<T>(
+  items: readonly T[],
+  maxSample: number = LOG_SAMPLE_DEFAULT_MAX
+): { sample: T[]; total: number } {
+  if (items == null) {
+    throw new Error('sampleForLog: items 不能为空')
+  }
+  if (maxSample <= 0) {
+    throw new Error('sampleForLog: maxSample 必须大于 0')
+  }
+  if (items.length === 0) {
+    return { sample: [], total: 0 }
+  }
+  return { sample: items.slice(0, maxSample), total: items.length }
 }
 
 /**

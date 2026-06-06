@@ -33,6 +33,7 @@ public static class TaktEmailTemplateNames
 /// <summary>
 /// 邮件模板帮助类：纯文本 .txt 模板，从标准位置 wwwroot/Email/Templates 按变量填充后返回正文。
 /// </summary>
+/// <remarks>文件 I/O 网关；模板路径须由调用方显式传入 <paramref name="templatesBasePath"/>。</remarks>
 public static class TaktEmailTemplateHelper
 {
     private const string TemplateExtension = ".txt";
@@ -44,8 +45,12 @@ public static class TaktEmailTemplateHelper
     /// <param name="variables">变量字典，键为占位符名</param>
     /// <param name="templatesBasePath">模板目录绝对路径（必填，由 Program 设置 Email:TemplatesPath）</param>
     /// <returns>填充后的纯文本字符串，发送时请使用 isHtml: false</returns>
+    /// <exception cref="ArgumentException"><paramref name="templateName"/> 为空</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="variables"/> 为 null</exception>
     public static async Task<string> GetFilledBodyAsync(string templateName, IReadOnlyDictionary<string, string?> variables, string? templatesBasePath = null)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(templateName);
+        ArgumentNullException.ThrowIfNull(variables);
         var content = await LoadTemplateAsync(templateName, templatesBasePath);
         return FillTemplate(content, variables);
     }
@@ -86,11 +91,16 @@ public static class TaktEmailTemplateHelper
     /// <summary>
     /// 将模板内容中的 {{Key}} 替换为 variables 中对应键的值
     /// </summary>
+    /// <param name="content">模板正文</param>
+    /// <param name="variables">占位符变量</param>
+    /// <returns>替换后的正文</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="variables"/> 为 null</exception>
     public static string FillTemplate(string content, IReadOnlyDictionary<string, string?> variables)
     {
+        ArgumentNullException.ThrowIfNull(variables);
         if (string.IsNullOrEmpty(content))
             return content;
-        if (variables == null || variables.Count == 0)
+        if (variables.Count == 0)
             return content;
 
         var result = content;
@@ -109,8 +119,13 @@ public static class TaktEmailTemplateHelper
     /// <summary>
     /// 生成邮件称呼：尊敬的 邮箱(显示名)：
     /// </summary>
+    /// <param name="userEmail">用户邮箱</param>
+    /// <param name="displayName">显示名</param>
+    /// <returns>称呼行</returns>
+    /// <exception cref="ArgumentException"><paramref name="userEmail"/> 为空</exception>
     public static string BuildGreeting(string userEmail, string? displayName)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(userEmail);
         var name = string.IsNullOrWhiteSpace(displayName) ? "用户" : displayName;
         return $"尊敬的 {userEmail}({name})：";
     }

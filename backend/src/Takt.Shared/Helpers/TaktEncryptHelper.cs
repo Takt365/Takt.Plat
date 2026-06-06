@@ -15,6 +15,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt加密帮助类
 /// </summary>
+/// <remarks>无状态；<see cref="HashPassword"/> 使用随机盐，输出随调用变化；<see cref="VerifyPassword"/> 为 Try 语义，无效输入返回 false。</remarks>
 public static class TaktEncryptHelper
 {
     private const int SaltSize = 32; // 盐值长度（字节），增加到32字节以增强防彩虹表攻击
@@ -26,6 +27,7 @@ public static class TaktEncryptHelper
     /// </summary>
     /// <param name="password">原始密码</param>
     /// <returns>哈希后的密码（格式：salt+hash，Base64编码）</returns>
+    /// <exception cref="ArgumentException"><paramref name="password"/> 为空</exception>
     /// <remarks>
     /// 防彩虹表攻击原理：
     /// 1. 存储阶段：每个密码使用32字节随机盐值，确保每个密码都有唯一的盐值
@@ -41,8 +43,7 @@ public static class TaktEncryptHelper
     /// </remarks>
     public static string HashPassword(string password)
     {
-        if (string.IsNullOrEmpty(password))
-            throw new ArgumentNullException(nameof(password));
+        ArgumentException.ThrowIfNullOrEmpty(password);
 
         // 使用加密安全的随机数生成器生成随机盐值
         // 每个密码使用唯一的盐值，防止彩虹表攻击

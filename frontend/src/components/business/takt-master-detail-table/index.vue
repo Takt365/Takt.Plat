@@ -21,7 +21,7 @@
       :row-key="masterRowKey"
       :row-class-name="(_record: TableRecord, index: number) => (index % 2 === 1 ? 'table-striped' : '')"
       :scroll="masterScrollConfig"
-      :virtual="masterVirtual"
+      :virtual="masterShouldUseVirtual"
       :size="size"
       :bordered="bordered"
       :expanded-row-keys="expandedRowKeys"
@@ -92,7 +92,7 @@
         :row-key="detailRowKey"
         :row-class-name="(_record: TableRecord, index: number) => (index % 2 === 1 ? 'table-striped' : '')"
         :scroll="detailScrollConfig"
-        :virtual="detailVirtual"
+        :virtual="detailShouldUseVirtual"
         :size="size"
         :bordered="bordered"
         @change="handleDetailTableChange"
@@ -404,6 +404,30 @@ const masterCurrentPage = ref(props.masterCurrent)
 const masterPageSize = ref(props.masterPageSize)
 const detailCurrentPage = ref(props.detailCurrent)
 const detailPageSize = ref(props.detailPageSize)
+
+/** 超过此行数或页大小时自动启用虚拟滚动（07-overflow-vue） */
+const AUTO_VIRTUAL_ROW_THRESHOLD = 50
+
+/** 主表是否启用虚拟滚动 */
+const masterShouldUseVirtual = computed(() => {
+  if (props.masterVirtual === true) return true
+  const len = props.masterDataSource?.length ?? 0
+  if (props.masterVirtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD && masterPageSize.value <= AUTO_VIRTUAL_ROW_THRESHOLD) {
+    return false
+  }
+  return len > AUTO_VIRTUAL_ROW_THRESHOLD || masterPageSize.value > AUTO_VIRTUAL_ROW_THRESHOLD
+})
+
+/** 从表是否启用虚拟滚动 */
+const detailShouldUseVirtual = computed(() => {
+  if (props.detailVirtual === true) return true
+  const len = props.detailDataSource?.length ?? 0
+  if (props.detailVirtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD && detailPageSize.value <= AUTO_VIRTUAL_ROW_THRESHOLD) {
+    return false
+  }
+  return len > AUTO_VIRTUAL_ROW_THRESHOLD || detailPageSize.value > AUTO_VIRTUAL_ROW_THRESHOLD
+})
+
 const expandedRowKeys = ref<string[]>([])
 const detailDrawerVisible = ref(false)
 const currentMasterRecord = ref<TableRecord | null>(null)
@@ -782,7 +806,7 @@ const masterScrollConfig = computed(() => {
   }
   
   // 如果启用虚拟滚动，必须设置 y 轴滚动高度
-  if (props.masterVirtual && !config.y) {
+  if (masterShouldUseVirtual.value && !config.y) {
     config.y = 600 // 默认高度
   }
   return config
@@ -813,7 +837,7 @@ const detailScrollConfig = computed(() => {
   }
   
   // 如果启用虚拟滚动，必须设置 y 轴滚动高度
-  if (props.detailVirtual && !config.y) {
+  if (detailShouldUseVirtual.value && !config.y) {
     config.y = 400 // 默认高度（从表在抽屉中，高度较小）
   }
   return config

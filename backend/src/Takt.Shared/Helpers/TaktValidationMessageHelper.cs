@@ -30,6 +30,8 @@ public static class TaktValidationMessageHelper
     /// <param name="extraTokens">额外占位符</param>
     /// <param name="fieldExtras">拼在字段名后的附加值</param>
     /// <returns>完整本地化文案</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="translate"/> 为 null</exception>
+    /// <exception cref="ArgumentException"><paramref name="messageKey"/> 为空</exception>
     public static string Build(
         Func<string, string> translate,
         string messageKey,
@@ -39,6 +41,8 @@ public static class TaktValidationMessageHelper
         IReadOnlyDictionary<string, string>? extraTokens = null,
         object[]? fieldExtras = null)
     {
+        ArgumentNullException.ThrowIfNull(translate);
+        ArgumentException.ThrowIfNullOrWhiteSpace(messageKey);
         fieldExtras ??= [];
         var template = translate(messageKey);
         if (!string.IsNullOrEmpty(fieldKey))

@@ -20,6 +20,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt字符串帮助类
 /// </summary>
+/// <remarks>无状态纯函数集合；<see cref="GenerateRandomString"/> 使用密码学随机源，输出随调用变化。</remarks>
 public static class TaktStringHelper
 {
     /// <summary>
@@ -31,6 +32,7 @@ public static class TaktStringHelper
     /// <param name="includeUppercase">是否包含大写字母，默认为true</param>
     /// <param name="includeSpecialChars">是否包含特殊字符，默认为false</param>
     /// <returns>随机字符串</returns>
+    /// <remarks>每次调用输出不同（密码学随机源）。</remarks>
     public static string GenerateRandomString(int length, bool includeNumbers = true, bool includeLowercase = true, bool includeUppercase = true, bool includeSpecialChars = false)
     {
         if (length <= 0)
@@ -45,11 +47,13 @@ public static class TaktStringHelper
         if (chars.Length == 0)
             throw new ArgumentException("至少需要包含一种字符类型");
 
-        var random = new Random();
+        var charArray = chars.ToString().ToCharArray();
         var result = new StringBuilder(length);
+        var randomBytes = new byte[length];
+        RandomNumberGenerator.Fill(randomBytes);
         for (int i = 0; i < length; i++)
         {
-            result.Append(chars[random.Next(chars.Length)]);
+            result.Append(charArray[randomBytes[i] % charArray.Length]);
         }
 
         return result.ToString();

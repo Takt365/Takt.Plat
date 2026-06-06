@@ -13,6 +13,8 @@ alwaysApply: true
 - 控制器基类：`@backend/src/Takt.WebApi/Controllers/TaktControllerBase.cs`
 - 实体示例：`@backend/src/Takt.Domain/Entities/Identity/TaktUser.cs`
 
+**全栈 CRUD** 能力映射、路由、权限与交付自检见 `@.cursor/rules/12-crud.mdc`；本章侧重 DDD 分层与服务实现要点。
+
 ---
 
 ## 一、技术栈与目录
@@ -93,6 +95,8 @@ Takt.Domain → Takt.Shared
 | PUT | `{id}` | `UpdateUserAsync` |
 | DELETE | `{id}` | `DeleteUserByIdAsync` |
 
+完整能力映射（含 batch/status/import/export/options）见 `@.cursor/rules/12-crud.mdc` §三。
+
 **权限**（强制，详见 `00-project` §1.7）：
 - 需登录/鉴权：按 OpenIddict / `[Authorize]` 配置
 - 公开端点：`[AllowAnonymous]`
@@ -120,6 +124,8 @@ Takt.Domain → Takt.Shared
 | 导入 | `ImportXxxAsync` |
 | 导出 | `ExportXxxAsync` |
 | 状态 | `UpdateXxxStatusAsync` |
+
+HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.mdc` §三。
 
 **实现要点**：
 - 列表：`QueryExpression` + `_repository.GetPagedAsync` + `Adapt` + `TaktPagedResult.Create`
@@ -176,22 +182,36 @@ Takt.Domain → Takt.Shared
 
 ## 八、代码生成脚本（`scripts/`）
 
-| 脚本 | 输出命名 |
-|------|----------|
+**完整流水线**见 `@.cursor/rules/15-codegen.mdc`；入口 `node scripts/generate-all.cjs --<Entity>`。
+
+| 脚本 | 输出 |
+|------|------|
+| `generate-all.cjs` | 串联 §15-codegen 全部 8 步 |
+| `generate-dtos-from-entity.cjs` | `TaktXxxDtos.cs` |
+| `generate-validators-from-entity.cjs` | `TaktXxx*Validator.cs` |
 | `generate-services-from-dtos.cjs` | `ITakt{单数}Service` / `Takt{单数}Service` |
 | `generate-controllers-from-services.cjs` | `Takt{复数}Controller`（路由 `api/Takt{复数}`） |
-| `generate-from-backend.cjs` | 前端 `*_API_BASE` 与控制器路由段一致（**复数**）；types/api 文件名仍按实体**单数** kebab-case |
+| `generate-from-backend.cjs` | 前端 `types/`、`api/`（API_BASE **复数**） |
+| `generate-entity-i18n-seed.cjs` | `TaktXxxI18nSeedData.cs` |
+| `generate-vue-from-api.cjs` | `views/index.vue` + `components/*-form.vue`（**单表/主子表**；树表不生成） |
 
-复数规则见 `scripts/generate-script-common.cjs`（`pluralizeEntityShort` / `getControllerClassName`）。手工新增控制器勿使用单数类名（如 ❌ `TaktHolidayController`）。
+复数规则见 `generate-script-common.cjs`。生成后须编译并人工审阅 QueryExpression、权限码（`15-codegen` §五）。
 
 ---
 
 ## 九、Agent 约束
 
-- 新建控制器/服务：先读参照文件，再生成代码
+- 新建控制器/服务：先读参照文件；CRUD 全栈基线见 `@.cursor/rules/12-crud.mdc`（单表/主子表/树表均须）；清单 `.cursor/skills/12-crud/`
 - 禁止无 `Takt` 前缀的类/文件名
 - 禁止控制器内写 SqlSugar 查询
 - 私有方法（`QueryExpression`、`FillXxxDto`）也需完整 XML 注释
 - 控制器必须复数、应用服务必须单数（见 §三、§四、§八）
 - 新增 i18n 种子：强制执行 `00-project` §1.6；新增菜单/按钮权限：强制执行 §1.7
-- 新建/修改工具类（Helper/Utils）：见 `@.cursor/rules/04-csharp-utils.mdc`
+- 新建/修改工具类（Helper/Utils）：见 `@.cursor/rules/04-utils-csharp.mdc`
+- 列表/分页/导出/数值类型：见 `@.cursor/rules/06-overflow-csharp.mdc`；联调见 `08-overflow-fullstack`
+- 主子表级联扩展：见 `@.cursor/rules/10-master-detail.mdc`（**叠加**在 12-crud 之上）
+- 树表 ParentId 扩展：见 `@.cursor/rules/11-tree-table.mdc`（**叠加**在 12-crud 之上）
+- 前端 `utils/` 对齐：见 `@.cursor/rules/05-utils-vue.mdc` §十
+- 工作流运行时/引擎/实体：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`
+- 全栈代码生成：见 `@.cursor/rules/15-codegen.mdc`；清单 `15-codegen`
+- 本域实现清单：`.cursor/skills/01-backend/SKILL.md`

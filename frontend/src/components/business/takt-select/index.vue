@@ -65,9 +65,13 @@ import type { TaktSelectOption } from '@/types/common'
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { coerceSelectValue } from '@/utils/takt-id'
 import { useI18n } from 'vue-i18n'
 
 const selectLogger = createLogger('takt-select')
+
+/** API 选项最大条数（08-overflow-fullstack） */
+const MAX_SELECT_OPTIONS = 500
 
 const { t } = useI18n()
 type SelectOptionLike = { label?: string; value?: string | number; dictLabel?: string; dictValue?: string | number; extLabel?: string; extValue?: string | number } & Record<string, unknown>
@@ -191,7 +195,8 @@ function isNumericValue(value: string | number | (string | number)[] | undefined
 function isNumericString(str: string): boolean {
   if (!str || str.trim() === '') return false
   const trimmed = String(str).trim()
-  return /^-?\d+(\.\d+)?$/.test(trimmed) && !isNaN(Number(trimmed))
+  if (!/^-?\d+(\.\d+)?$/.test(trimmed) || Number.isNaN(Number(trimmed))) return false
+  return Number.isSafeInteger(Number(trimmed))
 }
 
 /**
@@ -250,7 +255,7 @@ function normalizeValue(value: unknown): string | number {
 
 // 将后端数据转换为 Select 组件需要的格式
 const options = computed(() => {
-  const expectedValueType = inferValueType(props.modelValue)
+  const expectedValueType = props.apiUrl ? 'string' as const : inferValueType(props.modelValue)
   
   // 如果直接提供了 options，需要转换字段名和值类型
   if (props.options?.length) {
@@ -321,7 +326,9 @@ const options = computed(() => {
       ? (itemAny.extValue ?? itemAny.dictValue ?? '')
       : (itemAny.dictValue ?? '')
     
-    const convertedValue = convertValueType(rawValue, expectedValueType, props.dictType || 'api')
+    const convertedValue = props.apiUrl
+      ? coerceSelectValue(rawValue, { forceString: true })
+      : convertValueType(rawValue, expectedValueType, props.dictType || 'api')
     
     return {
       ...item,
@@ -335,7 +342,7 @@ const options = computed(() => {
 
 // 根据数据量自动决定是否开启虚拟滚动（超过 100 条自动开启）
 const shouldUseVirtual = computed(() => {
-  return props.virtual ?? options.value.length > 100
+  return props.virtual === true || options.value.length > 100
 })
 
 // 判断是否应该使用 Radio 单选（字典数量 3 个及以下且非多选模式，且值必须是数值类型）
@@ -400,6 +407,15 @@ const loadData = async () => {
         method: 'get'
       })
       rawData.value = Array.isArray(data) ? data : []
+      if (rawData.value.length > MAX_SELECT_OPTIONS) {
+        selectLogger.warn('选项数超过上限，已截断', {
+          action: 'loadData',
+          apiUrl: props.apiUrl,
+          count: rawData.value.length,
+          max: MAX_SELECT_OPTIONS,
+        })
+        rawData.value = rawData.value.slice(0, MAX_SELECT_OPTIONS)
+      }
     } catch (error) {
       selectLogger.error('加载选项数据失败', { action: 'loadData', apiUrl: props.apiUrl }, error)
       rawData.value = []

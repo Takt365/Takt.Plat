@@ -1,0 +1,116 @@
+---
+description: Vue 前端溢出与安全边界（渲染/数据/递归/数字/样式）；与 00-project、02-frontend 一并生效
+globs: frontend/**/*.{ts,vue}
+alwaysApply: true
+---
+
+# Vue 溢出与安全边界
+
+通用五条铁律见 `@.cursor/rules/00-project.mdc` §五；前后端联动见 `@.cursor/rules/08-overflow-fullstack.mdc`。
+
+**一句话**：Vue 里没有 `OutOfMemoryException`，溢出主要是**渲染与体验问题**——DOM 过多、全量拉数、JS 数字精度、无限递归。
+
+Vue 中常见 **5 种**「溢出」（无 `OutOfMemoryException`，但会卡死/崩溃）：
+
+---
+
+## 1. 渲染溢出（最常见）
+
+❌ 几万条 DOM 直接 `v-for`：
+
+```vue
+<div v-for="item in hugeList" :key="item.id">{{ item }}</div>
+```
+
+✅ **不在页面上渲染全部数据**：
+
+- 大列表：**虚拟滚动**（`a-table` 虚拟列表、`el-table-v2` 或 viewport 切片）
+- 参照工程内 CRUD 分页表格，禁止把全量数组绑进表格
+
+📌 **原则**：可见区域外的不渲染。
+
+---
+
+## 2. 数据量溢出（前端内存暴涨）
+
+❌ 一次拉全量：
+
+```typescript
+await request.get('/api/get-all-data')
+```
+
+✅ 分页 + 懒加载：
+
+```typescript
+await getXxxList({ pageIndex: page, pageSize })
+```
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 所有列表 **必须分页**（与后端 `TaktPagedQuery` 对齐） |
+| ✅ | **禁止**一次性拉全量再在浏览器排序/过滤 |
+| ✅ | 不信任后端返回数组长度；超大 payload 应拒绝或告警 |
+| ❌ | 前端全量排序替代服务端分页 |
+
+---
+
+## 3. 递归 / 组件栈溢出
+
+❌ 无限递归：
+
+```typescript
+function loop() { loop() }
+```
+
+✅ 改迭代；树组件递归须：
+
+- **明确终止条件**
+- **限制层级**（建议 ≤ 10 层）
+
+---
+
+## 4. 数字溢出（JS 坑）
+
+```typescript
+Number.MAX_SAFE_INTEGER // 9007199254740991
+```
+
+❌ 后端 `long` 当 number 用：
+
+```json
+{ "id": 9223372036854775807 }
+```
+
+✅ 本仓库约定：
+
+- 主键 / 长整型 API 字段类型为 **`string`**（见 `types/` 与 `@.cursor/rules/02-frontend.mdc`）
+- 确需大整数运算用 `BigInt`，勿对 `long` 做 `Number()` 比较
+
+---
+
+## 5. 样式溢出（视觉层）
+
+文本截断用 Tailwind / Ant Design 内置能力（`truncate`、`ellipsis`），属 UI 层，不替代数据/渲染上限。
+
+---
+
+## 六、统一对照（Vue 侧）
+
+| 场景 | Vue 手段 |
+|------|----------|
+| 数据太多 | 虚拟列表 + 分页 |
+| 数字太大 | `string` / `BigInt` |
+| 内存暴涨 | 不拉全量、懒加载 |
+| 栈溢出 | 迭代、限制树深度 |
+| JSON 过大 | 字段裁剪、分页接口 |
+
+---
+
+## 七、Agent 约束
+
+- 新建列表页：分页 API + 表格分页；超大数据考虑虚拟滚动
+- `types/` 主键 `id: string`；禁止把 `long` 当 `number`
+- 禁止 `v-for` 绑定未分页的全量业务数组
+- 树/递归组件必须有深度上限与终止条件
+- 纯工具函数放 `utils/` 并遵守 `@.cursor/rules/05-utils-vue.mdc`；采样/截断见 §十一
+- 本域实现清单：`.cursor/skills/07-overflow-vue/SKILL.md`

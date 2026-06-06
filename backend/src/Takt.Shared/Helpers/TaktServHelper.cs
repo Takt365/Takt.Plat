@@ -16,8 +16,11 @@ using System.Reflection;
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 服务器硬件信息帮助类
+/// 服务器硬件信息帮助类（Hardware.Info）。
 /// </summary>
+/// <remarks>
+/// 非纯工具网关：内部缓存 <see cref="IHardwareInfo"/> 及 WMI 刷新结果以降低采集开销；方法含系统 I/O，失败时返回默认值或空集合。
+/// </remarks>
 public static class TaktServHelper
 {
     private static readonly IHardwareInfo _hardwareInfo = new HardwareInfo();
@@ -171,7 +174,10 @@ public static class TaktServHelper
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                TaktLogger.Debug(ex, "读取操作系统默认语言失败");
+            }
             
             return osLanguage;
         }
@@ -288,7 +294,10 @@ public static class TaktServHelper
                         speed = Convert.ToUInt64(speedProp.GetValue(adapter) ?? 0UL);
                     }
                 }
-                catch { }
+                catch (Exception ex)
+            {
+                TaktLogger.Debug(ex, "读取操作系统默认语言失败");
+            }
                 
                 var status = GetPropertyValueNullable<string>(adapter, "OperationalStatus") ?? 
                             (GetPropertyValueNullableStruct<bool>(adapter, "NetEnabled") == true ? "Enabled" : "Disabled") ?? 
@@ -458,6 +467,8 @@ public static class TaktServHelper
     /// </summary>
     private static T? GetPropertyValue<T>(object obj, string propertyName) where T : struct
     {
+        ArgumentNullException.ThrowIfNull(obj);
+        ArgumentException.ThrowIfNullOrWhiteSpace(propertyName);
         try
         {
             var prop = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
@@ -470,7 +481,10 @@ public static class TaktServHelper
                 }
             }
         }
-        catch { }
+        catch (Exception ex)
+        {
+            TaktLogger.Debug(ex, "反射读取属性失败: {PropertyName}", propertyName);
+        }
         return null;
     }
 
@@ -479,6 +493,8 @@ public static class TaktServHelper
     /// </summary>
     private static T? GetPropertyValueNullable<T>(object obj, string propertyName) where T : class
     {
+        ArgumentNullException.ThrowIfNull(obj);
+        ArgumentException.ThrowIfNullOrWhiteSpace(propertyName);
         try
         {
             var prop = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
@@ -488,7 +504,10 @@ public static class TaktServHelper
                 return value as T;
             }
         }
-        catch { }
+        catch (Exception ex)
+        {
+            TaktLogger.Debug(ex, "反射读取属性失败: {PropertyName}", propertyName);
+        }
         return null;
     }
 
@@ -497,6 +516,8 @@ public static class TaktServHelper
     /// </summary>
     private static T? GetPropertyValueNullableStruct<T>(object obj, string propertyName) where T : struct
     {
+        ArgumentNullException.ThrowIfNull(obj);
+        ArgumentException.ThrowIfNullOrWhiteSpace(propertyName);
         try
         {
             var prop = obj.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
@@ -509,7 +530,10 @@ public static class TaktServHelper
                 }
             }
         }
-        catch { }
+        catch (Exception ex)
+        {
+            TaktLogger.Debug(ex, "反射读取属性失败: {PropertyName}", propertyName);
+        }
         return null;
     }
 }

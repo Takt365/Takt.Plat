@@ -1,0 +1,191 @@
+---
+description: Takt 列表视图 index.vue 规范（单表/主子表/树表三种页面壳）；叠加 12-crud
+globs: frontend/src/views/**/index.vue
+alwaysApply: true
+---
+
+# Vue 列表视图（index.vue）
+
+通用 UI/i18n/权限见 `@.cursor/rules/02-frontend.mdc`；CRUD 能力/API 见 `12-crud`；表单弹窗内组件见 `14-vue-form`。
+
+**前置（强制）**：先满足 `@.cursor/rules/12-crud.mdc`（单表/主子表/树表均须）。
+
+| 表形态 | 模板 | 视图扩展 | 表单 |
+|--------|------|----------|------|
+| **单表** | `crud` | 本章 §二 | `14-vue-form` §二 |
+| **主子表** | `sub` | 本章 §三 + `10-master-detail` | `14-vue-form` §三 |
+| **树表** | `tree` | 本章 §四 + `11-tree-table` | `14-vue-form` §四 |
+
+---
+
+## 一、全栈参照
+
+| 形态 | index.vue |
+|------|-----------|
+| 单表 | `views/identity/user/index.vue` |
+| 主子表 | `views/foundation/dict/index.vue` |
+| 树表 | `views/human-resource/organization/dept/index.vue` |
+
+---
+
+## 二、单表视图（标准壳）
+
+### 2.1 文件与目录
+
+- 路径：`views/{领域}/{模块}/index.vue`
+- 顶部 **8 行 HTML 注释**（见 `00-project` §二）
+- 子组件：`components/{entity}-form.vue`（见 `14-vue-form`）
+
+### 2.2 模板分区（顺序固定）
+
+```text
+根 div（Tailwind p-4 等）
+  → TaktQueryBar
+  → TaktToolsBar（*-permission 与菜单一致）
+  → TaktSingleTable（:pagination="false"）
+  → TaktPagination（外置）
+  → TaktModal + <xxx-form ref="formRef" />
+  → TaktQueryDrawer（高级查询）
+  → TaktColumnDrawer（列设置）
+  → （可选）TaktImportFile 独立 Modal
+```
+
+### 2.3 脚本必备状态
+
+| 类别 | 变量（示例） |
+|------|----------------|
+| 列表 | `loading`、`dataSource`、`currentPage`、`pageSize`、`total` |
+| 查询 | `queryKeyword`、`advancedQueryVisible`、`advancedQueryForm` |
+| 选择 | `selectedRowKeys`、`selectedRows`、`rowSelection` |
+| 表单 | `formVisible`、`formLoading`、`formData`、`formRef` |
+| 列设置 | `columns`、`displayColumns`、`visibleColumnKeys`、`columnSettingVisible` |
+
+### 2.4 必备 handler（与 12-crud §六 对齐）
+
+- `loadData` / `handleSearch` / `handleReset`：重置 `pageIndex=1` → `getXxxList`
+- `handleCreate` / `handleUpdate`：`getXxxById` → 打开 `TaktModal`
+- `handleFormSubmit`：`formRef.validate()` → `getValues()` → `createXxx` / `updateXxx`
+- `handleDelete`：`Modal.confirm` → `deleteXxxById` / `deleteXxxBatch`
+- `handleImport` / `handleExport`：blob + FormData
+- `getXxxId(record)`：`row-key` 用，返回 **string**
+
+### 2.5 表格约束
+
+- `TaktSingleTable`：`:row-key="getXxxId"`；`:pagination="false"` + 外置 `TaktPagination`
+- 列标题：`entity.*`；行内字典 `TaktDictTag`；状态 `a-switch` → `updateXxxStatus`
+- 大列表：`virtual` 或分页（`07-overflow-vue`）
+
+❌ 硬编码中文；❌ 双层 `a-modal`；❌ `pageSize` 9999 全量拉数。
+
+---
+
+## 三、主子表视图（叠加 §二）
+
+业务级联见 `10-master-detail`；本节规定 **index.vue 视图层**差异。
+
+### 3.1 子表展示模式（三选一）
+
+| 模式 | 适用 | 实现 |
+|------|------|------|
+| **展开行** | 子表列少、行数少 | `TaktSingleTable` + `#expandedRowRender` + `@expand` 懒加载 |
+| **独立窗口** | 子表 CRUD 复杂 | `DictDataWindow` 等 + 子表独立 API |
+| **主从抽屉** | 从表列多、需分页 | `takt-master-detail-table` |
+
+**标准参照**：`dict/index.vue`（展开行 + `DictDataWindow`）。
+
+### 3.2 数据加载（强制）
+
+```text
+主表：getXxxList 分页（禁止 list 带全量子表）
+子表：展开/开窗时 getYyyList({ xxxId, pageIndex, pageSize })
+```
+
+- `handleExpand`：未缓存则 `await getYyyList`，写入当前行或 `expandedDictDataMap`
+- 外键参数 **string**（如 `dictTypeId`）
+
+### 3.3 模板增量
+
+- 主表 `:expanded-row-keys` + `#expandedRowRender`（展开模式）
+- 或 `<XxxDetailWindow v-model:visible />`（窗口模式）
+- 主表 `TaktToolsBar` 权限仍用 **主表实体** 权限码
+
+---
+
+## 四、树表视图（叠加 §二）
+
+树 API/拍平见 `11-tree-table`；本节规定 **index.vue 布局**。
+
+### 4.1 推荐布局：左树右表
+
+```text
+dept-query-row
+  → TaktTreeLeftQueryBar + TaktTreeRightQueryBar
+dept-toolbar-row
+  → TaktTreeLeftToolsBar + TaktTreeRightToolsBar
+dept-tree-table-wrap（flex）
+  → TaktTreeLeftTable（~20% 宽，可拖拽改父级）
+  → TaktTreeRightTable（拍平 + 客户端分页 + virtual）
+TaktModal + dept-form
+TaktQueryDrawer / TaktColumnDrawer / TaktImportFile（同单表）
+```
+
+**标准参照**：`dept/index.vue`。
+
+### 4.2 脚本必备（树表增量）
+
+| 类别 | 变量 |
+|------|------|
+| 树 | `fullDeptTree`、`filteredDeptTreeData`、`treeExpandedKeys`、`selectedTreeKeys` |
+| 拍平 | `paginatedFlatTableRows`、`tableFlatTotal`、`tableCurrentPage`、`tablePageSize` |
+| 选中 | 左侧树节点 → `getSubtree` → `flattenXxxRows` → slice 分页 |
+
+### 4.3 交互
+
+- 左侧 `@tree-select`：过滤右侧子树
+- 左侧 `@tree-drop`：`updateXxx({ parentId, sortOrder, … })` → 重载树
+- 新增：`parentId` 默认当前选中树节点（string）
+- 树深 ≤10；禁止万级 DOM（`07-overflow-vue`）
+
+### 4.4 小数据备选
+
+- 单 `TaktSingleTable` + `children` 列：仅行数极少时使用；仍须分页或 virtual
+
+---
+
+## 五、三种形态对照
+
+| 项 | 单表 | 主子表 | 树表 |
+|----|------|--------|------|
+| 查询栏 | `TaktQueryBar` | 同左 | 左/右双查询栏 |
+| 工具栏 | `TaktToolsBar` | 同左 | 左/右双工具栏 |
+| 主列表 | `TaktSingleTable` | + 展开/窗口 | `TaktTreeLeft/RightTable` |
+| 分页 | 服务端 | 主表服务端；子表独立 list | 右侧客户端 slice |
+| 弹窗表单 | `xxx-form` | 主表 form（可含子表 Tab） | `xxx-form` + `TaktTreeSelect` 父级 |
+
+---
+
+## 六、代码生成（generate-vue-from-api.cjs）
+
+详见 `15-codegen` §3.6。流水线第 8 步，在 `types` + `api` 就绪后执行。
+
+| 形态 | 脚本产出 | 生成后须人工 |
+|------|----------|--------------|
+| **单表** | 标准 QueryBar/ToolsBar/SingleTable/Pagination/Modal 壳 | 列渲染、业务按钮、QueryExpression 对齐 |
+| **主子表** | `:show-expand`、展开行、`handleExpand`+`getById`、子表预览列 | 复杂子表改 `DictDataWindow` / 独立 list API |
+| **树表** | **不生成** | 整页按 §四 手工；参照 `dept/index.vue` |
+
+**不生成 Vue 的实体**（须手工 §二~§四）：`User`、`Menu`、`Dept`、`DictType`、`DictData`、`Culture`、`Translation`、`Numbering`、`Online`、`Message`、`GenTable*`、`workflow/**`。
+
+生成文件头含「由 generate-vue-from-api 自动生成」——覆盖后须对照本章与 `12-crud` 审阅权限与分页。
+
+---
+
+## 七、Agent 约束
+
+- 新建/审查 `index.vue`：先 `12-crud`，再按形态读本章 §二/§三/§四 + `10`/`11`
+- 脚本生成页：先 `15-codegen`，生成后按本章修正；**禁止**把树表当单表交付
+- 单表：**禁止**省略 QueryBar/ToolsBar/Pagination/Modal 标准分区
+- 主子表：**禁止**主表 list 绑定全量子表；展开/窗口须 lazy + loading
+- 树表：**禁止**整树未拍平绑右表；须 `flatten` + 分页/virtual
+- 表单细节：**不**在 index 内堆字段 → 抽 `components/*-form.vue`（`14-vue-form`）
+- 实现清单：`.cursor/skills/13-vue-view/SKILL.md`

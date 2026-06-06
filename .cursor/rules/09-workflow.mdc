@@ -1,0 +1,234 @@
+---
+description: Takt 自研审批工作流规范（表单+节点+权限+条件+异常；AntFlow 树形引擎；与 00-project、01-backend、02-frontend 一并生效
+globs: backend/**/Workflow/**/*,frontend/**/workflow/**/*,frontend/**/takt-flow-*/**
+alwaysApply: true
+---
+
+# 审批工作流实现规范
+
+通用命名、权限码、i18n 见 `@.cursor/rules/00-project.mdc`；后端分层见 `01-backend`；前端见 `02-frontend`；设计器深度/溢出见 `07-overflow-vue` §3。
+
+**定位**：自研 **AntFlow 风格树形 JSON 引擎**（非 BPMN/Activiti/Flowable）。主流 BPM 的「表单 + 路由 + 参与者 + 网关 + 异常动作」五要素，在本仓库映射为下表。
+
+---
+
+## 一、核心公式（强制）
+
+```
+审批工作流 = 表单（数据） + 流程节点（路由） + 权限（谁审） + 条件分支 + 异常处理
+```
+
+| 要素 | 本仓库落点 | 说明 |
+|------|------------|------|
+| **表单（数据）** | `TaktFlowForm` + 实例 `FrmData` JSON | 发起/审批页绑定；条件分支读 `frmData` 扁平字段 |
+| **流程节点（路由）** | `TaktFlowScheme.ProcessContent` 树 + `ProcessContentSnapshot` | 启动时快照，在途不受定义变更影响 |
+| **权限（谁审）** | 节点 `setType` + `nodeApproveList` + 菜单/引擎 `workflow:*` | 解析见 `TaktFlowApproverResolver` |
+| **条件分支** | 网关 `nodeType=2` + `conditionList` + `TaktFlowConditionEvaluator` | 按 `priorityLevel`；`isDefault=1` 为默认分支 |
+| **异常处理** | `TaktFlowActionType` + 引擎 `TaktFlowEngineService` | 驳回/撤回/转办/加签/挂起/终止等 |
+
+**与主流对齐**：对标钉钉/飞书/Activiti 的 UserTask + Gateway + 会签/或签 + 驳回策略；**不引入** BPMN XML、`ACT_*` 表、JavaDelegate。
+
+---
+
+## 二、主链路（Happy Path）
+
+```text
+发起申请 → 表单填写 → 校验 → 逐级审批 → (会签/或签) → 终审 → 归档 / 回写业务系统
+```
+
+| 阶段 | 前端 | 后端 | 要点 |
+|------|------|------|------|
+| 发起申请 | `views/workflow/my`、业务页调 `startFlowInstance` | `POST api/TaktFlowEngine/start` | `ProcessKey` + `BusinessType`/`BusinessKey` |
+| 表单填写 | `TaktFlowForm` + `takt-form-designer` / 业务表单 | `FrmData` JSON 持久化 | 校验：FluentValidation + 前端表单 rules |
+| 校验 | 提交前 `validate` | 引擎入口 DTO Validator | 失败不创建/不推进实例 |
+| 逐级审批 | `views/workflow/todo` | `complete`（`approved=true`） | 待办 `TaktFlowTask` |
+| 会签/或签 | 审批抽屉展示 `signType` | `TaktFlowSignType`：`Any=1` / `All=2` | 或签一人通过即流转；会签全部完成 |
+| 终审 | 最后一审批节点 | 实例 → `Completed` | 写 `TaktFlowTransition` |
+| 归档/回写 | 业务单状态更新 | **业务层**回调（非引擎自动） | 见 §八 |
+
+**草稿**：`TaktFlowInstanceStatus.Draft` + `start-from-draft`，允许「保存草稿 → 再提交」。
+
+---
+
+## 三、异常分支（强制建模）
+
+```text
+                     ↓
+              驳回 / 撤回 / 加签 / 转办
+```
+
+| 动作 | 枚举 | API（引擎） | 权限码（引擎） | 规则 |
+|------|------|-------------|----------------|------|
+| **驳回** | `Reject=2` | `complete`，`approved=false`，可选 `nodeRejectStep` | `workflow:todo:approve` | 有目标节点 → 实例仍 `Running` 并重入；无 → `Rejected` |
+| **撤回** | `Revoke=3` | `revoke?instanceCode=` | `workflow:instance:revoke` | 仅发起人、仅 `Running` → `Terminated` |
+| **加签** | `AddSign=5` | `add-sign` | `workflow:todo:addsign` | `sequential`/`all`/`one`；可选 `returnToSignNode` |
+| **减签** | `ReduceSign=6` | `reduce-sign` | `workflow:todo:reducesign` | 取消加签任务 |
+| **转办** | `Transfer=4` | `transfer` | `workflow:todo:transfer` | 改 `AssigneeUserId`，原办理人 → `OwnerUserId` |
+| **挂起/恢复** | `Suspend`/`Resume` | `suspend` / `resume` | `workflow:instance:suspend` / `resume` | 实例级 |
+| **终止** | `Terminate=9` | `terminate` | `workflow:instance:terminate` | 管理员/授权人 |
+| **撤销审批** | — | `undo` | `workflow:todo:undo` | 最近已办改回 `Pending` |
+
+❌ **禁止**在种子/按钮增加 `delegate`（委托）、`urge`（催办）、`return`（退回）等权限或 UI，**除非**引擎已实现对应 API（当前未实现，见 §十）。
+
+菜单按钮「撤回」与 API `revoke` 语义一致；新增代码统一用 **revoke**（后端）/ **withdraw**（仅历史菜单键时保留兼容）。
+
+---
+
+## 四、流程节点（设计器 ↔ 引擎）
+
+**标准参照**：`frontend/.../takt-flow-antflow-designer/config/takt-flow-tree.ts` ↔ `TaktFlowProcessModels.cs`
+
+| nodeType | 含义 | 运行时 |
+|----------|------|--------|
+| **1** | 发起人 | 解析发起人范围 |
+| **2** | 网关（条件/动态/并行） | 条件求值 + 分支选择 |
+| **3** | 条件分支项 | 挂在 `conditionNodes` |
+| **4** | 审批人 | 创建 `TaktFlowTask` |
+| **6** | 抄送人 | 设计器可配；引擎当前**跳过**（无任务/无通知） |
+| **7** | 并行审核网关 | `parallelNodes` 同时激活，聚合后走 `childNode` |
+
+**审批人类型 `setType`**（`TaktFlowApproverResolver`）：
+
+| setType | 含义 |
+|---------|------|
+| 1 | 指定成员 |
+| 2 | 主管（单级） |
+| 3 | 角色 |
+| 4 | 部门 |
+| 5 | 发起人自己 |
+| 6 | 层层审批（多级主管） |
+
+**设计器约束**（`07-overflow-vue` §3）：递归深度 ≤ **10**；条件/并行分支数 ≤ **20**；发布前跑 `takt-flow-design-validate.ts`。
+
+---
+
+## 五、权限（强制一致）
+
+**结构**：`workflow:{页面}:{操作}`（与 `00-project` §1.7 一致，小写、冒号、末段为操作）。
+
+| 场景 | 权限示例 |
+|------|----------|
+| 待办列表 | `workflow:todo:list` |
+| 审批通过/驳回 | `workflow:todo:approve` |
+| 转办 | `workflow:todo:transfer` |
+| 加签/减签 | `workflow:todo:addsign` / `workflow:todo:reducesign` |
+| 发起 | `workflow:instance:start` |
+| 撤回 | `workflow:instance:revoke` |
+| 方案设计 | `workflow:scheme:design` / `workflow:scheme:publish` |
+
+⚠️ **已知不一致**（新增勿再复制）：CRUD 控制器部分使用 `workflow:flowscheme:*`、`workflow:flowform:*`，菜单/前端用 `workflow:scheme:*`、`workflow:form:*`。新接口与 `v-permission` **以菜单种子为准**；重构时对齐控制器特性。
+
+引擎运行时权限以 `TaktFlowEngineController` 特性为准；管理端 CRUD 以各 `TaktFlow*Controller` 为准。
+
+---
+
+## 六、分层与目录（强制）
+
+### 后端
+
+| 层 | 路径 | 职责 |
+|----|------|------|
+| Domain | `Takt.Domain/Entities/Workflow/` | 7 实体：`Scheme`、`Form`、`Instance`、`Task`、`Transition`、`Variable`、`AddSign` |
+| Application | `.../Services/Workflow/` + `FlowEngine/` | CRUD 服务 + **`TaktFlowEngineService`**（唯一运行时编排） |
+| WebApi | `Controllers/Workflow/` | **`TaktFlowEngineController`**（运行时）；其余 `TaktFlow*Controller`（管理 CRUD） |
+| Shared | `TaktFlowEnums.cs` | 状态/动作/会签枚举 |
+| Seeds | `EntitySeedData/Workflow/`、`I18nSeedData/Workflow/` | 演示流程（如 Leave）、菜单、实体翻译 |
+
+❌ 控制器内写流程推进逻辑  
+❌ 业务 Controller 直接改 `TaktFlowTask`  
+✅ 业务模块通过 `ITaktFlowEngineService` 发起/查询；回写在 Application 业务服务
+
+### 前端
+
+| 路径 | 职责 |
+|------|------|
+| `components/business/takt-flow-antflow-designer/` | **主设计器**（方案编辑） |
+| `components/business/takt-flow-logic-designer/` | LogicFlow 实验视图，**非**主路径 |
+| `views/workflow/` | todo / my / processed / instance / scheme / form |
+| `api/workflow/` | `instance.ts`（引擎 + 实例）、`flow-scheme.ts` 等 |
+| `types/workflow/` | 与 DTO 对齐；主键 **`string`** |
+
+---
+
+## 七、表单与条件数据
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 条件分支字段来自实例 **`FrmData` JSON** 扁平键（`formId` / `showName`） |
+| ✅ | 比较符：`optType` 1~5（`<` `>` `==` `>=` `<=`），见 `TaktFlowConditionEvaluator` |
+| ✅ | 表单定义存 `TaktFlowForm.FormContent`；与业务单据字段对齐由集成方保证 |
+| ❌ | 条件表达式依赖未在 `FrmData` 中的字段 |
+| ❌ | 前端 `Number()` 转换流程实例/任务 **long 型 Id**（用 `string`） |
+
+复杂业务校验在**业务 Application 服务**完成，引擎只做流程态推进。
+
+---
+
+## 八、业务集成（归档 / 回写）
+
+```text
+业务单据（TaktLeave / 采购 / ECN …）
+    BusinessType + BusinessKey
+         ↓ startFlowInstance
+    TaktFlowInstance（Running）
+         ↓ 审批完成 Completed / Rejected / Terminated
+    业务层更新 ApprovalStatus + 领域逻辑
+```
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 简单审批字段用 `TaktApprovalEntityBase.ApprovalStatus` |
+| ✅ | 多级/会签/条件/加签等 **必须**走 `TaktFlowEngine` |
+| ✅ | 实例完成/驳回/终止后，在**业务服务**中根据 `BusinessType`/`BusinessKey` 回写 |
+| ❌ | 仅在业务表改 `ApprovalStatus` 而不启动流程实例（当方案要求走引擎时） |
+| ❌ | 假设引擎完成时自动回写 ERP/MES（**无内置回调**，须显式实现） |
+
+参照：`TaktLeaveWorkflowSeedData.cs` + 请假业务服务。
+
+---
+
+## 九、标准参照文件
+
+| 用途 | 路径 |
+|------|------|
+| 引擎核心 | `@backend/src/Takt.Application/Services/Workflow/FlowEngine/TaktFlowEngineService.cs` |
+| 树解析/条件 | `TaktFlowProcessNavigator.cs`、`TaktFlowConditionEvaluator.cs` |
+| 审批人解析 | `TaktFlowApproverResolver.cs` |
+| 树模型 | `TaktFlowProcessModels.cs` |
+| 运行时 API | `TaktFlowEngineController.cs` |
+| 枚举 | `Takt.Shared/Enums/TaktFlowEnums.cs` |
+| 设计器类型 | `frontend/.../takt-flow-tree.ts` |
+| 方案表单页 | `frontend/src/views/workflow/scheme/components/scheme-form.vue` |
+| 待办审批 | `frontend/src/views/workflow/todo/index.vue` |
+
+新增 CRUD 模块对齐 `TaktLoginLogService`；**流程运行时**对齐 `TaktFlowEngineService` 方法命名与异常处理。
+
+---
+
+## 十、能力边界（与主流 BPM 差距，禁止假装已实现）
+
+| 能力 | 状态 | Agent 约束 |
+|------|------|------------|
+| 委托/代理 delegate | ❌ 未实现 | 勿加 API/按钮 |
+| 催办 urge | ❌ 未实现 | 勿加 API/按钮 |
+| 抄送通知 | ❌ 节点跳过 | 勿文档称「已抄送」 |
+| 退回 return（独立 API） | ❌ 未实现 | 用驳回 + `nodeRejectStep` |
+| BPMN / 子流程 | ❌ 未实现 | 勿引入 bpmn-js 作为主定义 |
+| 服务任务/定时器 | ❌ 未实现 | 用业务 Job + 引擎挂起/恢复 |
+| 流程图高亮 | ❌ 未实现 | 历史用 `TaktFlowTransition` 列表 |
+
+扩展上述能力时：先改引擎 + 枚举 + 种子权限 + 前端 todo/scheme，再更新本节。
+
+---
+
+## 十一、Agent 约束
+
+- 新业务流程：**先**方案（`ProcessKey`）+ 表单 + 设计器树，**再**业务页集成 `startFlowInstance`
+- 运行时变更只改 `FlowEngine/` 与 `TaktFlowEngineController`；定义管理走 `TaktFlowSchemeService`
+- 前后端 `nodeType`/`setType`/`signType` 与 `takt-flow-tree.ts`、`TaktFlowEnums` **必须一致**
+- 权限：`TaktFlowEngineController`、`v-permission`、菜单种子三者对齐
+- i18n：`entity.flow*`、`menu.workflow.*` 与种子一致；静态文案 `workflow.*.page.*`（`locales/workflow/`）
+- 设计器：仅用 `takt-flow-antflow-designer` 作方案编辑；样式仅 `workflow.css`
+- 溢出：设计器递归/分支上限；待办/实例列表 **分页**（`07-overflow-vue`、`08-overflow-fullstack`）
+- 未完成能力（§十）不得写进用户可见文案或种子按钮
+- 本域实现清单：`.cursor/skills/09-workflow/SKILL.md`

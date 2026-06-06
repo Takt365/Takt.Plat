@@ -7,6 +7,8 @@
 
 /**
  * 与后端 TaktNamingHelper.DefaultSheetNameEnglish 一致。
+ * @param entityTypeName 领域实体类名，如 TaktUser
+ * @returns 去掉 Takt 前缀后的工作表英文名；空输入返回 ''
  */
 export function taktDefaultExcelSheetName(entityTypeName: string): string {
   const n = (entityTypeName || '').trim()
@@ -18,8 +20,10 @@ export function taktDefaultExcelSheetName(entityTypeName: string): string {
 export type TaktExcelEntityNames = { sheet: string; fileBase: string }
 
 /**
- * 与后端 ResolveExcelImportExport 在「仅传实体类名」时的默认一致；
- * @param sheetEnglishOverride 非标准列表导出等工作表名（如 FlowTodo）。
+ * 与后端 ResolveExcelImportExport 在「仅传实体类名」时的默认一致。
+ * @param entityTypeName 领域实体类名
+ * @param sheetEnglishOverride 非标准列表导出等工作表名（如 FlowTodo）
+ * @returns sheet 与 fileBase（不含扩展名）
  */
 export function taktExcelEntityNames(
   entityTypeName: string,

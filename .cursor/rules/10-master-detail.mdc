@@ -1,0 +1,160 @@
+---
+description: Takt 主子表（OneToMany）前后端规范；与 00-project、01-backend、02-frontend、06~08-overflow 一并生效
+globs: backend/**/*Item*.cs,backend/**/*Detail*.cs,backend/**/TaktDictType*.cs,backend/**/TaktDictData*.cs,frontend/src/components/business/takt-master-detail-table/**/*,frontend/src/views/**/*
+alwaysApply: true
+---
+
+# 主子表（Master-Detail）规范
+
+**强制基线**：主表与子表实体均须遵守 `@.cursor/rules/12-crud.mdc`。本章规定 **OneToMany 级联与 UI 扩展**。
+
+**代码生成**：实体含 `[Navigate] OneToMany` 时，`generate-all` 自动生成 `Fill*DetailsAsync` / `Save*ChildrenAsync` 及 Vue 展开行/表单 Tab（`15-codegen` §二）；复杂 UI 仍参照 `dict/index.vue` 手工增强。
+
+通用命名、权限、i18n 见 `@.cursor/rules/00-project.mdc`；后端分层见 `01-backend`；前端 UI 见 `02-frontend`；**主表列表必须分页、子表按需分页**见 `06`/`07`/`08-overflow`。
+
+**代码生成模板类型**：`TaktGenTable.GenTemplateCategory = sub`（对应 `dict.gen.template.type.sub`）。
+
+---
+
+## 一、适用场景
+
+| 场景 | 示例 |
+|------|------|
+| 主从一对多 | 字典类型 ↔ 字典数据、采购订单 ↔ 订单行 |
+| 单据头 + 明细 | IQC/FQC 检验单 ↔ 检验明细 |
+| UI 主表 + 子表 | 主表分页列表，展开行/抽屉/弹窗展示子表 |
+
+❌ 树形父子（`ParentId` + `Children`）→ 见 `@.cursor/rules/11-tree-table.mdc`（树节点仍遵守 `12-crud`）
+
+---
+
+## 一·五、与 CRUD 基线的关系
+
+| 实体 | 须满足的 12-crud 能力 |
+|------|----------------------|
+| **主表** | 完整 `GetXxxListAsync`…`ExportXxxAsync`；标准页面壳（QueryBar/ToolsBar/Modal） |
+| **子表** | 独立 `GetYyyListAsync`（按主表 Id 过滤）+ Create/Update/Delete；或 Create/Update 主表 DTO 级联提交 |
+| **权限** | 主表、子表各自 `领域:…:实体:操作`（如 `foundation:dict:*` + 子表实体权限） |
+
+参照：`TaktDictTypesController` + `TaktDictDatasController` 均为完整 CRUD 控制器。
+
+---
+
+## 二、后端实体与 DTO
+
+### 2.1 实体
+
+- **主表**：独立实体，继承 `TaktTenantEntityBase` / `TaktCompanyEntityBase` 等
+- **子表**：独立实体 + **外键**指向主表（如 `DictTypeId`、`PurchaseOrderId`）
+- 外键列 XML 注释标明「主子表关系」；`long` 外键 DTO 出 API 用 `[JsonConverter(typeof(ValueToStringConverter))]` + 前端 `string`
+
+### 2.2 DTO 命名
+
+| 类型 | 命名 | 说明 |
+|------|------|------|
+| 主表响应 | `TaktXxxDto` | 详情可含 `List<TaktYyyDto>?` 导航集合 |
+| 子表响应 | `TaktYyyDto` | 含主表外键字段 |
+| 创建/更新 | `TaktXxxCreateDto` / `UpdateDto` | UpdateDto 可含 `List<TaktYyyDto>?` 级联提交 |
+| 子表独立查询 | `TaktYyyQueryDto : TaktPagedQuery` | **必须**含主表 Id 或业务键过滤 |
+
+### 2.3 方法命名
+
+| 能力 | 主表服务 | 子表服务（独立控制器时） |
+|------|----------|--------------------------|
+| 主表分页 | `GetXxxListAsync` | — |
+| 子表分页 | — | `GetYyyListAsync`（Query 带 `XxxId`） |
+| 主表详情 | `GetXxxByIdAsync`（可 Fill 子表） | — |
+
+子表控制器仍用**复数**：`TaktDictDatasController` → `api/TaktDictDatas/list?dictTypeId=…`
+
+---
+
+## 三、后端服务实现（强制）
+
+**标准参照**：`TaktDictTypeService.cs`（Fill + Save 级联）、`TaktDictDataService.cs`（子表独立分页）
+
+### 3.1 私有区域结构
+
+```csharp
+// ========================================
+// 主子表级联（OneToMany）
+// ========================================
+```
+
+### 3.2 Fill（详情/展开）
+
+- `FillXxxDetailsAsync(TaktXxxDto dto, TaktXxx entity)`：按主表 Id 查子表，`Adapt` 赋给 DTO 集合
+- **列表接口默认不加载全量子表**；仅 `GetXxxByIdAsync` 或显式需求时 Fill
+
+### 3.3 Save（Create/Update 级联）
+
+- `SaveXxxChildrenAsync(TaktXxx entity, TaktXxxCreateDto dto)`：Create/Update 主表成功后调用
+- 常见策略：**先删后插**（`DeleteAsync(x => x.XxxId == entity.Id)` + `CreateRangeAsync`）
+- 提交前：子表行内去重、唯一索引校验、`ThrowBusinessException` 明确行号
+- 空集合：删除全部子行后 return（见 DictType 实现）
+
+### 3.4 删除主表
+
+- 先查子表是否存在；有子行时禁止删或级联删（按业务定，须在服务注释说明）
+- 内置主表（`IsBuiltIn`）禁止删
+
+---
+
+## 四、前端实现
+
+**标准参照**：`views/foundation/dict/index.vue`（展开行 + 独立子表 API）、`components/business/takt-master-detail-table`（主表 + 抽屉从表）
+
+### 4.1 组件选型
+
+视图壳与分区见 `13-vue-view` §三；级联数据见下文。
+
+| 模式 | 组件 | 何时用 |
+|------|------|--------|
+| 展开行内嵌子表 | `TaktSingleTable` + `expandedRowRender` | 子表行数少、手风琴展开 |
+| 主表 + 抽屉从表 | `takt-master-detail-table` | 从表列多、需独立分页/列设置 |
+| 子表独立管理 | `DictDataWindow` 等弹窗 + 子表 CRUD API | 子表业务复杂、独立权限 |
+
+### 4.2 数据加载（强制）
+
+```
+主表：getXxxList 分页
+子表：展开/打开抽屉时 getYyyList({ xxxId, pageIndex, pageSize })
+      禁止主表 list 一次返回全量明细
+```
+
+- 展开行：**懒加载**（`handleExpand` / `loadDictData` 模式）；缓存到当前页 `dataSource` 项
+- 外键过滤：`dictTypeId` / `purchaseOrderId` 等 **string** 传参
+
+### 4.3 表单
+
+- 新建/编辑：`takt-modal` + 主表表单（`14-vue-form` §三）；子表 Tab 内嵌 `a-table` 或独立子表单
+- 级联保存：一次 `createXxx` / `updateXxx` 提交 `items` / `dictDataList` 数组（与 CreateDto 对齐）
+- 子表行 `row-key`：临时行用 `client-${uuid}`，已持久化用实体 Id **string**
+
+### 4.4 API / types
+
+- 主表 API 前缀复数：`TaktDictTypes`；子表：`TaktDictDatas`
+- types 中外键字段 JSDoc 注明「主子表关系」；Id 一律 `string`
+
+---
+
+## 五、溢出与性能
+
+| 层 | 规则 |
+|----|------|
+| 主表 | 必须分页（`TaktPagedQuery`） |
+| 子表 | 独立 `list` 分页；展开区禁止绑定未分页全量数组 |
+| 导出 | 主表导出不含子表全量；子表导出带 `XxxId` 条件 + 行数上限 |
+| 虚拟滚动 | 从表行数大时 `takt-master-detail-table` 开 `detailVirtual` 或分页 |
+
+---
+
+## 六、Agent 约束
+
+- 新建主子模块：**先通过 `12-crud` 自检（主表+子表）**，再读 `TaktDictTypeService` + `views/foundation/dict/index.vue`
+- 主表 list **禁止**默认 `Include` 全量子表
+- 子表必须有 **按主表 Id 过滤** 的分页查询（独立服务或 QueryDto 字段）
+- 级联 Save 与 Fill 成对出现；私有方法完整 XML
+- 前端展开/抽屉加载子表须 **async + loading**
+- 视图/表单：`13-vue-view`、`14-vue-form`；生成产物见 `15-codegen`
+- 实现清单：`.cursor/skills/10-master-detail/SKILL.md`

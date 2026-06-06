@@ -17,6 +17,8 @@
     <Copyright Condition=" '$(Language)' == 'zh-CN' ">Copyright (c) 2025-$([System.DateTime]::Now.ToString("yyyy")) 节拍技术有限公司。保留所有权利。</Copyright>
     <Copyright Condition=" '$(Language)' != 'zh-CN' ">Copyright (c) 2025-$([System.DateTime]::Now.ToString("yyyy")) Takt Technologies Co., Ltd. All rights reserved.</Copyright>
     <Product>Takt.Plat</Product>
+    <!-- 算术溢出：项目级 checked 语义（强烈推荐，与 00-project §五 对齐） -->
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <!-- Roslyn / .NET 代码分析器：由 .NET SDK 内置（与 SDK 版本同步的 CA 等规则），此处显式打开并在生成时执行代码样式。 -->

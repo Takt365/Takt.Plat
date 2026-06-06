@@ -67,7 +67,8 @@
         @update:child-node-p="(v) => (nodeConfig!.childNode = v)"
       />
       <TaktFlowNodeWrap
-        v-if="nodeConfig.childNode != null"
+        v-if="nodeConfig.childNode != null && depth < MAX_FLOW_DEPTH"
+        :depth="depth + 1"
         :node-config="nodeConfig.childNode ?? null"
         :drawer="drawer"
         :readonly="readonly"
@@ -138,7 +139,8 @@
               </div>
             </div>
             <TaktFlowNodeWrap
-              v-if="item.childNode != null"
+              v-if="item.childNode != null && depth < MAX_FLOW_DEPTH"
+              :depth="depth + 1"
               :node-config="item.childNode ?? null"
               :drawer="drawer"
               :readonly="readonly"
@@ -162,7 +164,8 @@
       </div>
     </div>
     <TaktFlowNodeWrap
-      v-if="nodeConfig?.childNode != null"
+      v-if="nodeConfig?.childNode != null && depth < MAX_FLOW_DEPTH"
+      :depth="depth + 1"
       :node-config="(nodeConfig?.childNode) ?? null"
       :drawer="drawer"
       :readonly="readonly"
@@ -233,7 +236,8 @@
               </div>
             </div>
             <TaktFlowNodeWrap
-              v-if="item.childNode != null"
+              v-if="item.childNode != null && depth < MAX_FLOW_DEPTH"
+              :depth="depth + 1"
               :node-config="item.childNode ?? null"
               :drawer="drawer"
               :readonly="readonly"
@@ -257,7 +261,8 @@
       </div>
     </div>
     <TaktFlowNodeWrap
-      v-if="nodeConfig?.childNode != null"
+      v-if="nodeConfig?.childNode != null && depth < MAX_FLOW_DEPTH"
+      :depth="depth + 1"
       :node-config="(nodeConfig?.childNode) ?? null"
       :drawer="drawer"
       :readonly="readonly"
@@ -287,9 +292,16 @@ const props = withDefaults(
     nodeConfig: FlowTreeNode | null
     drawer: { open: (type: 'promoter' | 'approver' | 'copyer' | 'condition', config: FlowTreeNode | null, conditionIndex: number | null, onSave: (u: FlowTreeNode) => void) => void }
     readonly?: boolean
+    /** 递归深度（根节点为 0，07-overflow-vue 建议 ≤10） */
+    depth?: number
   }>(),
-  { readonly: false }
+  { readonly: false, depth: 0 }
 )
+
+/** 流程树最大递归深度 */
+const MAX_FLOW_DEPTH = 10
+/** 条件/并行分支最大数量 */
+const MAX_BRANCH_COUNT = 20
 
 const emit = defineEmits<{ 'update:nodeConfig': [value: FlowTreeNode | null] }>()
 
@@ -393,12 +405,15 @@ function reData(data: FlowTreeNode, addData: FlowTreeNode): void {
 function addTerm() {
   const nc = props.nodeConfig
   if (!nc) return
+  if (props.depth >= MAX_FLOW_DEPTH) return
   if (nc.nodeType === 2 && nc.conditionNodes) {
+    if (nc.conditionNodes.length >= MAX_BRANCH_COUNT) return
     const len = nc.conditionNodes.length
     const n_name = resetConditionNodesTitle(nc, len)
     nc.conditionNodes.push(createConditionNode(n_name, null, len + 1, 0))
     emit('update:nodeConfig', { ...nc })
   } else if (nc.nodeType === 7 && nc.parallelNodes) {
+    if (nc.parallelNodes.length >= MAX_BRANCH_COUNT) return
     const len = nc.parallelNodes.length + 1
     const n_name = `并行审核人${len}`
     nc.parallelNodes.push(createParallelBranchApproverNode(n_name, null, len, 0))

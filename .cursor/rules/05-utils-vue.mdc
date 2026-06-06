@@ -1,0 +1,227 @@
+---
+description: Vue 前端工具类设计规范（无状态、单一职责、纯函数、参数校验、完整 JSDoc、与后端 Helper 对齐）；与 00-project、02-frontend、07-overflow-vue 一并生效
+globs: frontend/src/utils/**/*.ts
+alwaysApply: true
+---
+
+# Vue 前端工具类设计规范
+
+通用命名、文件头、JSDoc 见 `@.cursor/rules/00-project.mdc`；视图/composable 见 `@.cursor/rules/02-frontend.mdc`；溢出边界见 `@.cursor/rules/07-overflow-vue.mdc`。
+
+**设计核心（强制）**：无状态（纯工具）、单一职责、纯函数、高内聚、零副作用（默认）、异常安全。
+
+**五条硬约束（强制，写入/审查 `utils/` 必检）**：
+
+| # | 约束 | 详见 |
+|---|------|------|
+| 1 | **禁止在纯工具模块中存储可变状态** | §一 |
+| 2 | **`utils/` 与 `composables/` 不得混用** | §二 |
+| 3 | **禁止扩展原生原型 / 全局污染** | §八 |
+| 4 | **导出函数必填参数校验或文档化空值行为** | §六 |
+| 5 | **导出 API JSDoc 完整** | §九 |
+
+**标准参照**：
+- `@frontend/src/utils/naming.ts` — 纯函数、与后端 `TaktNamingHelper` 对齐
+- `@frontend/src/utils/mask.ts` — `XxxHelper` 静态类 + 具名函数 re-export
+- `@frontend/src/utils/regex.ts` — 编译期常量 `RegexPatterns` + `isValid*` 校验
+- `@frontend/src/utils/takt-id.ts` — 雪花 ID / 主键 string 安全处理
+- `@frontend/src/utils/log-formatter.ts` — `sampleForLog` 与后端采样对齐
+- `@frontend/src/utils/export-download-name.ts` — 无副作用 I/O 解析
+- `@frontend/src/utils/logger.ts` — **运行时网关**（模块级状态 + 文件头说明边界）
+
+---
+
+## 一、无状态（禁止在纯工具中存储可变状态）
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 优先**具名导出函数**（`export function taktXxx`）或 `export class XxxHelper { static ... }` |
+| ✅ | 模块内仅 `const` / `readonly` 不可变常量（如 `RegexPatterns`） |
+| ❌ | 纯工具模块内 `let` 缓存业务数据、上次结果、租户/用户上下文 |
+| ❌ | 在工具函数内读写 Pinia / `localStorage`（除非方法名与 JSDoc 明确为持久化网关） |
+| ⚠️ | **运行时网关**（`logger.ts`、`event-bus.ts`、`oauth.ts`、`runtime-context.ts`）允许模块级 `let`，须在**文件头功能描述**与模块顶注释标明「运行时网关 / 非纯工具」 |
+
+```typescript
+// ❌ 纯工具中缓存（禁止）
+let _lastParsed: Record<string, string> = {}
+
+// ✅ 网关：logger.ts / event-bus.ts 模式，文件头说明边界
+let loggerConfig: LoggerConfig | undefined
+```
+
+需要 Vue 响应式、生命周期、`ref`/`computed` 时 → **`composables/useXxx.ts`**，不得放进 `utils/`。
+
+---
+
+## 二、utils 与 composables 分工
+
+| 目录 | 职责 | 示例 |
+|------|------|------|
+| `utils/` | 与 UI 无关的纯转换、校验、格式化、常量；可同步 | `mask.ts`、`regex.ts`、`naming.ts` |
+| `composables/` | 组合式 API、响应式状态、副作用编排 | `useUserForm` |
+| `api/` | HTTP 请求 | `getUserList` |
+| `stores/` | 全局可复用状态 | Pinia |
+
+| ❌ 禁止 | ✅ 允许 |
+|---------|---------|
+| 在 `utils/` 使用 `ref`/`reactive`/`onMounted` | composable 内调用 `utils/` 纯函数 |
+| 在 `utils/` 直接 `import request from '@/api/request'` 发业务 CRUD | 网关类 utils 经显式 init/configure 后再 I/O |
+| 把页面编排逻辑塞进 `common.ts` 大杂烩 | 按域拆分 `takt-*.ts`、`mask.ts` |
+
+---
+
+## 三、单一职责
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 一文件一技术/语义域（命名、正则、脱敏、日期、导出文件名等） |
+| ✅ | 文件名 **kebab-case**；领域工具优先 `takt-` 前缀（`takt-locale-merge.ts`） |
+| ❌ | `common.ts` 持续堆叠无关函数（新能力应新建域文件） |
+| ❌ | 同一文件混合「格式化 + 权限 + 路由 + 上传」 |
+
+新增方法前：是否**仅**属于本文件职责域？是否与后端 `Takt.Shared/Helpers` 有对齐点（命名/正则/脱敏）？
+
+---
+
+## 四、纯函数
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 相同合法输入 → 相同输出（文档声明的随机/时间戳除外） |
+| ✅ | 不隐式读 `Date.now()`、`Math.random()`（除非函数名含 `generate`/`random`/`now`） |
+| ❌ | 依赖模块级可变全局（纯工具模块） |
+| ❌ | 依赖调用顺序才能正确工作 |
+
+```typescript
+// ✅ 输出由参数决定
+export function taktDefaultExcelSheetName(entityTypeName: string): string { ... }
+
+// ❌ 隐式当前时间
+export function buildFileName(base: string) {
+  return `${base}_${Date.now()}`
+}
+```
+
+---
+
+## 五、零副作用（默认）
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 默认：不改传入对象、不写 DOM、不发 HTTP、不写 console（日志走 `logger`） |
+| ✅ | 返回新值表达结果 |
+| ❌ | 「格式化」函数内顺带 `localStorage.setItem` |
+| ⚠️ | 下载/上报/SignalR 等 I/O：独立网关文件，方法名动词（`enqueue`/`flush`/`connect`），JSDoc 写清异常 |
+
+---
+
+## 六、参数校验与异常安全
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 必填字符串：`if (!value?.trim())` 抛 `Error` 或文档声明返回 `''`/`null`（与 `mask.ts` 一致） |
+| ✅ | 数组/对象必填：`if (items == null) throw new Error(...)` 或 `ArgumentNull` 语义 |
+| ✅ | 可选「尝试」语义：命名 `tryXxx`，返回 `{ ok: boolean; value?: T }` 或 `[ok, value]` |
+| ✅ | I/O 失败：`catch` 后 **rethrow** 或 **logger** 记录；禁止无声吞掉 |
+| ❌ | 空 `catch {}` 且 JSDoc 未声明 |
+| ❌ | `catch` 后返回与合法空值无法区分的 `''`/`0`/`[]`（纯工具） |
+
+```typescript
+// ✅ 文档化空值 → 空串（mask 域惯例）
+static maskPhone(phone: string | null | undefined): string {
+  if (!phone || typeof phone !== 'string') return ''
+  ...
+}
+
+// ✅ Try 语义
+export function tryParseContentDisposition(raw: string): { ok: true; name: string } | { ok: false } {
+  try { ... } catch { return { ok: false } }
+}
+```
+
+---
+
+## 七、TypeScript 泛型与类型
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | 泛型函数加约束：`T extends Record<string, unknown>`、`T extends string` |
+| ✅ | 输入优先 `ReadonlyArray<T>` / `readonly T[]` |
+| ✅ | 实体主键 / 雪花 ID：**`string`**，禁止对业务 ID 做 `Number()`（见 `07-overflow-vue` §4） |
+| ❌ | 无约束 `<T>` + 强转 `as T` |
+| ❌ | `Convert<T>(value: unknown): T` 万能转换 |
+
+```typescript
+// ✅
+export function sampleForLog<T>(items: readonly T[], maxSample = 40): { sample: T[]; total: number } {
+  if (!items?.length) return { sample: [], total: 0 }
+  return { sample: items.slice(0, maxSample), total: items.length }
+}
+```
+
+---
+
+## 八、禁止扩展原生 / 全局污染
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | `String.prototype.xxx = ...`、`Array.prototype.xxx = ...` **一律禁止** |
+| ✅ | 不往 `window` 挂业务函数（除 `main.ts` bootstrap 明确注册的诊断入口） |
+| ❌ | 为链式调用给 `Object`/`String` 打补丁 |
+
+工具调用：`MaskHelper.maskPhone(phone)` 或 `maskPhone(phone)`，不得 `phone.maskPhone()`。
+
+---
+
+## 九、JSDoc 与文件头
+
+| 规则 | 说明 |
+|------|------|
+| ✅ | **文件头**八段块注释（见 `00-project` §二）；功能描述含与后端对齐说明（如有） |
+| ✅ | **每个导出函数/类静态方法**：`/**` 摘要、`@param`、`@returns`；复杂类型用 `@template` |
+| ✅ | 网关模块：文件头注明「运行时网关」 |
+| ❌ | 无 JSDoc 的 export function |
+| ❌ | `locales/**` 纯数据、`*.d.ts` 不适用本节 |
+
+参照 `@frontend/src/utils/naming.ts`、`mask.ts` 的 `@param` / `@returns` 密度。
+
+---
+
+## 十、与后端 Helper 对齐
+
+| 前端 | 后端 | 说明 |
+|------|------|------|
+| `naming.ts` | `TaktNamingHelper` | Excel sheet/file 默认命名 |
+| `regex.ts` | `TaktRegexHelper` | 模式名与校验语义一致 |
+| `mask.ts` | `TaktMaskHelper` | 脱敏规则一致 |
+| `takt-validation-i18n.ts` | `TaktValidationI18nKeys` | 校验 i18n 键 |
+| `takt-id.ts` | — | 主键 string / 安全整数（前端专用） |
+| `log-formatter.ts` | `TaktLogFormatter` | 日志条目、`sampleForLog` |
+
+修改任一侧时须**同步检查对侧**；禁止前端自创与种子/后端不一致的校验键或正则语义。
+
+---
+
+## 十一、溢出相关（utils 层）
+
+| 场景 | utils 手段 |
+|------|------------|
+| 大数组日志/采样 | `slice(0, max)`，禁止 `JSON.stringify` 全量 |
+| 雪花 ID | 保持 `string`；比较用 `===`，不用 `Number()` |
+| 解析不可信 JSON | 限制深度/键数或交 Application 层 |
+| 递归树遍历 | 深度参数 + 默认上限 ≤ 10 |
+
+详见 `@.cursor/rules/07-overflow-vue.mdc`、`08-overflow-fullstack.mdc`。
+
+---
+
+## 十二、Agent 约束
+
+- 新建/修改 `utils/` 前对照 `naming.ts`、`mask.ts` 的结构与 JSDoc
+- 空行格式遵守 `@.cursor/rules/03-format-blank-lines.mdc`
+- 需响应式/生命周期 → `composables/`，不写进 `utils/`
+- 禁止 `utils.ts`、`helpers.ts` 等泛化文件名堆叠无关函数
+- 禁止纯工具模块内可变 `let` 缓存（§一）；禁止原型扩展（§八）
+- 导出函数须入口校验或文档化空值行为（§六）；JSDoc 完整（§九）
+- 与后端成对工具（regex/mask/naming）修改时须对读 `04-utils-csharp` 与对应 Helper
+- 本域实现清单：`.cursor/skills/05-utils-vue/SKILL.md`

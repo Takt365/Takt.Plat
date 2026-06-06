@@ -22,18 +22,23 @@ function isMenuItemNode(item: TaktMenuItem): item is { key: string | number; chi
   return !!item && typeof item === 'object' && 'key' in item;
 }
 
+/** 菜单树遍历最大深度（07-overflow-vue：栈溢出防护） */
+export const TAKT_MAX_MENU_TREE_DEPTH = 10;
+
 /**
  * 构建菜单 key → 父级 key 映射（目录节点 key 多为 menuCode，页面为 routePath）
  * @param items Ant Design Menu items
  * @param parentKey 父级 key
  * @param map 累积映射
+ * @param depth 当前深度
  */
 export function buildMenuParentKeyMap(
   items: MenuProps['items'] | undefined,
   parentKey: string | null = null,
-  map: Map<string, string | null> = new Map()
+  map: Map<string, string | null> = new Map(),
+  depth = 0
 ): Map<string, string | null> {
-  if (!items?.length) {
+  if (!items?.length || depth > TAKT_MAX_MENU_TREE_DEPTH) {
     return map;
   }
 
@@ -46,7 +51,7 @@ export function buildMenuParentKeyMap(
     map.set(key, parentKey);
 
     if (raw.children?.length) {
-      buildMenuParentKeyMap(raw.children, key, map);
+      buildMenuParentKeyMap(raw.children, key, map, depth + 1);
     }
   });
 
@@ -86,13 +91,15 @@ export function getMenuAccordionOpenKeys(keys: string[], parentByKey: Map<string
  * @param items Ant Design Menu items
  * @param path 当前路由 path
  * @param trail 祖先 key 链
+ * @param depth 当前深度
  */
 export function resolveMenuOpenKeysForPath(
   items: MenuProps['items'] | undefined,
   path: string,
-  trail: string[] = []
+  trail: string[] = [],
+  depth = 0
 ): string[] {
-  if (!items?.length) {
+  if (!items?.length || depth > TAKT_MAX_MENU_TREE_DEPTH) {
     return [];
   }
 
@@ -105,7 +112,7 @@ export function resolveMenuOpenKeysForPath(
     const children = raw.children;
 
     if (children?.length) {
-      const nested = resolveMenuOpenKeysForPath(children, path, [...trail, key]);
+      const nested = resolveMenuOpenKeysForPath(children, path, [...trail, key], depth + 1);
       if (nested.length > 0) {
         return nested;
       }

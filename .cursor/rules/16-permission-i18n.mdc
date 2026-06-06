@@ -1,0 +1,219 @@
+---
+description: Takt 前后端权限验证与翻译键（Permission / I18nKey）全栈对齐规范
+globs: backend/**/*.cs,frontend/src/**/*.{ts,vue},backend/src/Takt.Infrastructure/Data/Seeds/**/*
+alwaysApply: true
+---
+
+# 权限验证与翻译键
+
+**权限码**与**翻译键**是两套体系，禁止混用分隔符或语义。
+
+| 体系 | 分隔符 | 用途 | 权威定义 |
+|------|--------|------|----------|
+| **权限码 Permission** | **冒号** `:` | API 鉴权、按钮显隐、路由守卫 | 本章 §一；`00-project` §1.7 |
+| **翻译键 I18nKey** | **点号** `.` | 菜单/字段/文案 `t('…')` | 本章 §二；`00-project` §1.6 |
+
+CRUD 能力 ↔ 权限末段映射见 `12-crud` §三。
+
+---
+
+## 一、权限码（Permission）
+
+### 1.1 格式（强制）
+
+```text
+领域 : 目录 [ : 子目录 … ] : 实体 : 操作
+```
+
+| 规则 | 说明 |
+|------|------|
+| 小写 | 全段小写 |
+| 分隔符 | 仅 **冒号** `:`；❌ 禁止点号 |
+| 段数 | 不固定（3～5+ 段）；随菜单层级加深 |
+| 末段 | **操作**（`list`、`create`、`update`、`delete`、`export`、`import`、`query` 等） |
+| 段内 | 仅 `a-z`、`0-9`；❌ 禁止下划线（`list_view`） |
+
+```text
+✅ identity:user:list
+✅ humanresource:attendance:leave:create
+✅ logistics:material:purchasing:supplier:export
+❌ identity.user.list          （误用点号）
+❌ identity:user               （缺末段操作）
+❌ identity:user:list_view     （段内下划线）
+```
+
+### 1.2 四处一致（强制）
+
+新增/修改模块时，以下 **Permission 字符串必须完全相同**：
+
+| # | 落点 | 示例 |
+|---|------|------|
+| 1 | **菜单种子** `TaktMenu.Permission`（页面菜单，末段常为 `list`） | `identity:user:list` |
+| 2 | **按钮菜单种子** `TaktMenuButtonSeedData`（`MenuType=2`，末段为操作） | `identity:user:create` |
+| 3 | **后端** `[TaktPermission("…", "显示名")]` | 与对应 API 操作一致 |
+| 4 | **前端** `v-permission` / `TaktToolsBar` 的 `*-permission` | `create-permission="identity:user:create"` |
+
+**页面菜单**参照 `TaktMenuLevel2SeedData`（`I18nKey` 与 `Permission` 分列）：
+
+```csharp
+menu.I18nKey = "menu.identity.user";      // 翻译键（点号）
+menu.Permission = "identity:user:list";   // 权限码（冒号）
+menu.RoutePath = "/identity/user";
+```
+
+**按钮菜单**由 `TaktMenuButtonSeedData` 按页面 `Permission` 推导：`{模块}:{菜单段}:{操作}`；按钮文案键为 `common.button.{操作}`（翻译键，非权限码）。
+
+### 1.3 标准 CRUD 权限末段
+
+| 能力 | 权限末段 | 典型 `[TaktPermission]` 场景 |
+|------|----------|-------------------------------|
+| 分页列表 | `list` | `GET list` |
+| 详情 / 下拉 | `query` | `GET {id}`、`GET options` |
+| 新增 | `create` | `POST` |
+| 更新 / 状态 | `update` | `PUT {id}`、`PUT {id}/status` |
+| 删除 / 批删 | `delete` | `DELETE {id}`、`DELETE batch` |
+| 导入模板 / 导入 | `import` | `GET template`、`POST import` |
+| 导出 | `export` | `GET export` |
+
+完整映射见 `12-crud` §三。树表增量：`tree`、`tree-options` 等见 `11-tree-table`；工作流见 `09-workflow` §五。
+
+### 1.4 后端验证链路（代码事实）
+
+```text
+请求 → [Authorize]（TaktControllerBase）
+     → TaktPermissionAuthorizationFilter
+     → 读取 Action/Controller 上 [TaktPermission]
+     → ITaktAuthService.HasUserPermissionAsync(userId, tenantCode, code)
+     → 与用户权限码列表精确匹配（OrdinalIgnoreCase）
+```
+
+| 场景 | 行为 |
+|------|------|
+| 无 `[TaktPermission]` | 仅登录鉴权，不校验功能码 |
+| `[AllowAnonymous]` | 跳过权限过滤器 |
+| 未登录 | **401**，键 `common.permission.unauthorized` |
+| 无权限 | **403**，键 `validation.*`（含操作 DisplayName） |
+| 权限码为空 | `HasUserPermissionAsync` 视为通过 |
+
+实现：`TaktPermissionAuthorizationFilter.cs`、`TaktAuthService.HasUserPermissionAsync`。
+
+### 1.5 前端验证链路（代码事实）
+
+**权限数据来源**（登录后）：
+
+1. 用户资料中的 `permissions`（后端 `GetUserPermissionCodesAsync`：可访问菜单的 `Permission` 汇总）
+2. 菜单树递归提取的 `permission` 字段
+3. 合并写入 `usePermissionStore`（`permission.ts`）
+
+**使用方式**：
+
+| 机制 | 作用 |
+|------|------|
+| `v-permission="'domain:…:action'"` | 无权限则 `display:none`（`directives/permission.ts`） |
+| `TaktToolsBar` `create-permission` 等 | 工具栏按钮级控制 |
+| 路由 `meta.permission` | `canActivateRoute` 守卫（`utils/permission.ts`） |
+| `routePaths` | 菜单 `RoutePath` 前缀匹配，控制页面可达性 |
+
+前端校验 **仅隐藏 UI**，不能替代后端 `[TaktPermission]`；绕过前端仍须后端 403。
+
+### 1.6 代码生成
+
+`generate-controllers-from-services.cjs` 写入 `[TaktPermission]`；`generate-vue-from-api.cjs` 从菜单种子或控制器解析权限前缀。生成后 **必须人工核对** 与 `TaktMenuButtonSeedData` 一致（`15-codegen` §五）。
+
+---
+
+## 二、翻译键（I18nKey / ResourceKey）
+
+### 2.1 格式（强制）
+
+```text
+用途 . 目录 [ . 子目录 … ] . 末段
+```
+
+| 规则 | 说明 |
+|------|------|
+| 小写 | 全段小写 |
+| 分隔符 | 仅 **点号** `.`；❌ 禁止冒号 |
+| 段内 | 仅 `a-z`、`0-9`；❌ 禁止假一段下划线（`quote_a`） |
+
+**与 Permission 对照**（同一功能不同体系）：
+
+```text
+菜单标题  I18nKey:  menu.identity.user          Permission: identity:user:list
+实体字段  I18nKey:  entity.user.username         （无 Permission）
+按钮文案  I18nKey:  common.button.create        Permission: identity:user:create
+```
+
+### 2.2 动态翻译（后端种子 → 前端 `t()`）
+
+| 用途 | 键前缀 | 来源 |
+|------|--------|------|
+| 菜单标题 | `menu.*` | `TaktMenu*SeedData.I18nKey` |
+| 实体字段 | `entity.{slug}.*` | `TaktXxxI18nSeedData`（`generate-entity-i18n-seed.cjs`） |
+| 实体自称 | `entity.{slug}._self` | 同上 |
+| 部门名 | `org.dept.{编码小写}` | `TaktDeptI18nSeedData` |
+| 通用按钮/反馈 | `common.page.*` / `common.button.*` | `TaktCommonI18nSeedData` |
+| 校验/权限错误 | `validation.*` | 后端 `TaktValidationI18nKeys` |
+
+登录后由 `mergeDynamicLocaleMessages` 合并进 `vue-i18n`（`frontend/src/locales/index.ts`）。
+
+**禁止**：
+
+- 在 `frontend/src/locales` 重复写 `entity.*` / `menu.*`（应走后端种子）
+- 在 `TaktMenuI18nSeedData` 重复 `TaktCommonI18nSeedData` 已有键
+
+### 2.3 静态翻译（前端 `locales/**/*.ts`）
+
+| 规则 | 说明 |
+|------|------|
+| 路径 → 前缀 | `locales/identity/user/zh-CN.ts` → `identity.user` |
+| 文件根键 | **必须** `export default { page: { … } }` |
+| 引用 | `t('identity.user.page.title')`（**含 `.page.`**） |
+
+详见 `02-frontend` §6.2。仅用于页面壳、Tab、占位等 **非种子** 文案。
+
+### 2.4 列标题与表单标签
+
+| 场景 | 优先键 |
+|------|--------|
+| 表格列 / 表单字段 | `entity.{slug}.{field}` |
+| 页面标题 / 工具栏 | `common.page.*` 或 `{路径}.page.*` |
+| 菜单 | `menu.*`（动态） |
+
+---
+
+## 三、全栈对照（Permission ≠ I18nKey）
+
+| 项 | Permission | I18nKey |
+|----|------------|---------|
+| 分隔符 | `:` | `.` |
+| 用户管理列表页 | `identity:user:list` | 菜单 `menu.identity.user` |
+| 新增按钮 | `identity:user:create` | `common.button.create` |
+| 用户名字段 | — | `entity.user.username` |
+| 后端校验 | `[TaktPermission]` + Filter | — |
+| 前端显隐 | `v-permission` | — |
+| 文案展示 | — | `t('…')` |
+
+---
+
+## 四、交付自检
+
+```
+- [ ] 菜单页面 Permission（list）与 RoutePath、ComponentPath 对齐
+- [ ] 按钮种子 Permission（create/update/…）与控制器各 Action 一致
+- [ ] 前端 TaktToolsBar *-permission 与 v-permission 同码
+- [ ] 无 Permission 用点号、无 I18nKey 用冒号
+- [ ] 菜单 I18nKey 为 menu.*；实体字段为 entity.*
+- [ ] 静态 locales 仅 {路径}.page.*；根键为 page
+- [ ] 403/401 错误文案键已在 common/validation 种子存在
+```
+
+---
+
+## 五、Agent 约束
+
+- 新增模块：**先**定 Permission 四处清单，**再**定 I18nKey（菜单 + entity 种子）
+- 禁止把 `identity:user:create` 写入 `t()`；禁止把 `entity.user.name` 写入 `v-permission`
+- 改权限必查：菜单、按钮种子、控制器、前端工具栏/指令
+- 改翻译键必查：菜单 I18nKey、entity 种子、前端 `t()` / 静态 locales
+- 实现清单：`.cursor/skills/16-permission-i18n/SKILL.md`

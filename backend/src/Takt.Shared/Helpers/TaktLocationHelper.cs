@@ -105,8 +105,11 @@ public class IpLocationResult
 }
 
 /// <summary>
-/// Takt IP定位帮助类
+/// Takt IP 定位帮助类（IP2Region 离线库）。
 /// </summary>
+/// <remarks>
+/// 非纯工具网关：启动时 <see cref="Initialize"/> 加载 xdb 并缓存 <see cref="ISearcher"/> 实例；查询方法为 I/O 只读，失败返回 null 而非抛业务异常。
+/// </remarks>
 public static class TaktLocationHelper
 {
     private static readonly object _lockObject = new object();
@@ -287,6 +290,11 @@ public static class TaktLocationHelper
     /// <returns>地点文案；无法解析时为 null</returns>
     public static string? ResolveIpLocationForLog(string? ip, int maxLength = 200)
     {
+        if (maxLength <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, "maxLength 必须大于 0");
+        }
+
         if (string.IsNullOrWhiteSpace(ip))
         {
             return null;

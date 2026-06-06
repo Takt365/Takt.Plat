@@ -20,6 +20,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// 统一日志格式化器
 /// </summary>
+/// <remarks>无状态；<c>JsonOptions</c> 为只读序列化配置。</remarks>
 public static class TaktLogFormatter
 {
     /// <summary>
@@ -163,6 +164,8 @@ public static class TaktLogFormatter
         Exception? exception = null,
         IEnumerable<string>? tags = null)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(message);
+        ArgumentNullException.ThrowIfNull(options);
         return new TaktLogEntry
         {
             Level = level,
@@ -221,6 +224,7 @@ public static class TaktLogFormatter
     /// <returns>JSON 字符串</returns>
     public static string FormatReportPayload(IReadOnlyList<TaktLogEntry> entries)
     {
+        ArgumentNullException.ThrowIfNull(entries);
         var payload = new TaktLogReportPayload
         {
             BatchId = Guid.NewGuid().ToString("N"),
@@ -240,8 +244,13 @@ public static class TaktLogFormatter
     /// <returns>采样结果与总数</returns>
     public static (IReadOnlyList<T> Sample, int Total) SampleForLog<T>(
         IReadOnlyList<T> items,
-        int maxSample = 40)
+        int maxSample = 40) where T : notnull
     {
+        ArgumentNullException.ThrowIfNull(items);
+        if (maxSample <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxSample), maxSample, "maxSample 必须大于 0");
+        }
         if (items.Count == 0)
         {
             return (Array.Empty<T>(), 0);

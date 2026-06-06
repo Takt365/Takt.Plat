@@ -12,14 +12,10 @@
 
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import {
-  getAntDesignVueLocale,
-  getEchartsLocaleCode,
-  taktEchartsLocale,
-} from '@/utils/takt-locale-sync';
+import { getAntDesignVueLocale, getEchartsLocaleCode } from '@/utils/takt-locale-sync';
 
 /**
- * 组件库语言（随 vue-i18n locale 变化，供 ConfigProvider 等使用）
+ * 组件库语言（随 vue-i18n locale 变化，供 ConfigProvider / ECharts 使用）
  */
 export function useTaktComponentLocale() {
   const { locale } = useI18n();
@@ -27,12 +23,11 @@ export function useTaktComponentLocale() {
   /** Ant Design Vue ConfigProvider 语言包 */
   const antDesignVueLocale = computed(() => getAntDesignVueLocale(String(locale.value)));
 
-  /** ECharts registerLocale 键 */
+  /** ECharts registerLocale 键（响应式，与 vue-i18n locale 同步） */
   const echartsLocale = computed(() => getEchartsLocaleCode(String(locale.value)));
 
   return {
     antDesignVueLocale,
     echartsLocale,
-    taktEchartsLocale,
   };
 }

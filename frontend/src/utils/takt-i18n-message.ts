@@ -34,6 +34,12 @@ function readCurrentLocaleMessageTree(): TaktLocaleMessageTree | undefined {
   return global.messages.value[global.locale.value];
 }
 
+/** i18n 点分键最大段数（07-overflow-vue：防止异常深键导致栈溢出） */
+const TAKT_MAX_I18N_KEY_SEGMENTS = 32;
+
+/** locale messages 树合并最大深度 */
+const TAKT_MAX_LOCALE_MERGE_DEPTH = 32;
+
 /**
  * 在嵌套 messages 树中按点分键取值
  * @param tree vue-i18n messages 子树
@@ -45,7 +51,7 @@ export function resolveLocaleMessageFromTree(
   key: string
 ): string | undefined {
   const segments = key.split('.').filter(Boolean);
-  if (segments.length === 0) {
+  if (segments.length === 0 || segments.length > TAKT_MAX_I18N_KEY_SEGMENTS) {
     return undefined;
   }
 
@@ -119,7 +125,7 @@ export function buildNestedLocaleMessages(flatMessages: Record<string, string>):
 
     const segments = key.split('.').filter(Boolean);
 
-    if (segments.length === 0) {
+    if (segments.length === 0 || segments.length > TAKT_MAX_I18N_KEY_SEGMENTS) {
       return;
     }
 
