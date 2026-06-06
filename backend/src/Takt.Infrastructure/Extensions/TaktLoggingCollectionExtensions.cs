@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Extensions
+// 命名空间：Takt.Infrastructure.Extensions
 // 文件名称：TaktLoggingCollectionExtensions.cs
 // 创建时间：2026-05-25
 // 创建人：Takt365(Cursor AI)
@@ -17,7 +17,7 @@ using Serilog;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
-namespace Takt.WebApi.Extensions;
+namespace Takt.Infrastructure.Extensions;
 
 /// <summary>
 /// 统一日志 DI / Serilog 扩展

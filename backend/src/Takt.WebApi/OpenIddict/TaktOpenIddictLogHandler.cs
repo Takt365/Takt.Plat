@@ -1,11 +1,11 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.OpenIddict
-// 文件名称：TaktOpenIddictHelper.cs
+// 文件名称：TaktOpenIddictLogHandler.cs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：OpenIddict 辅助（声明目的地、用户主体、登录日志）
-// 
+// 功能描述：OpenIddict 运行时处理（声明目的地、用户主体、登录日志）
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -21,9 +21,9 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 namespace Takt.WebApi.OpenIddict;
 
 /// <summary>
-/// OpenIddict 辅助类（主体构建、声明目的地、登录日志）
+/// OpenIddict 运行时处理器（主体构建、声明目的地、登录日志）
 /// </summary>
-public sealed class TaktOpenIddictHelper
+public sealed class TaktOpenIddictLogHandler
 {
     private readonly ITaktAuthService _authService;
     private readonly ITaktAuthLoginLogHandler _authLoginLogHandler;
@@ -33,7 +33,7 @@ public sealed class TaktOpenIddictHelper
     /// </summary>
     /// <param name="authService">身份认证服务</param>
     /// <param name="authLoginLogHandler">认证登录统一日志处理器</param>
-    public TaktOpenIddictHelper(
+    public TaktOpenIddictLogHandler(
         ITaktAuthService authService,
         ITaktAuthLoginLogHandler authLoginLogHandler)
     {

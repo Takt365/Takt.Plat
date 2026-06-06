@@ -1,7 +1,7 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Filters
-// 文件名称：TaktPermissionAuthorizationFilter.cs
+// 文件名称：TaktPermissionFilter.cs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：API 功能权限过滤器（读取 TaktPermission 特性并校验 RBAC 权限码）
@@ -26,7 +26,7 @@ namespace Takt.WebApi.Filters;
 /// <summary>
 /// 功能权限授权过滤器
 /// </summary>
-public sealed class TaktPermissionAuthorizationFilter : IAsyncAuthorizationFilter
+public sealed class TaktPermissionFilter : IAsyncAuthorizationFilter
 {
     private readonly ITaktAuthService _authService;
     private readonly ITaktUserContext _userContext;
@@ -38,7 +38,7 @@ public sealed class TaktPermissionAuthorizationFilter : IAsyncAuthorizationFilte
     /// <param name="authService">身份认证服务</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
-    public TaktPermissionAuthorizationFilter(
+    public TaktPermissionFilter(
         ITaktAuthService authService,
         ITaktUserContext userContext,
         ITaktLocalizationService localizationService)

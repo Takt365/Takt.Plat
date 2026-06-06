@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Extensions
+// 命名空间：Takt.Infrastructure.Extensions
 // 文件名称：TaktIpLocationCollectionExtensions.cs
 // 创建时间：2026-05-28
 // 创建人：Takt365(Cursor AI)
@@ -10,9 +10,10 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Microsoft.AspNetCore.Builder;
 using Takt.Shared.Helpers;
 
-namespace Takt.WebApi.Extensions;
+namespace Takt.Infrastructure.Extensions;
 
 /// <summary>
 /// IP 定位数据库启动扩展

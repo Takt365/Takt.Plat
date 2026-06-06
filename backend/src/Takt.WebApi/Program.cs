@@ -25,8 +25,6 @@ using Microsoft.Extensions.Configuration;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 using Takt.Infrastructure.Extensions;
-using Takt.Shared.Helpers;
-using Takt.WebApi.Extensions;
 using Takt.WebApi.OpenIddict;
 
 // ========================================
@@ -174,7 +172,7 @@ try
     builder.Services.AddTaktCaptcha(builder.Configuration);
     builder.Services.AddTaktSecurity(builder.Configuration);
     builder.Services.AddControllers();
-    builder.Services.AddScoped<Takt.WebApi.Filters.TaktPermissionAuthorizationFilter>();
+    builder.Services.AddScoped<Takt.WebApi.Filters.TaktPermissionFilter>();
     builder.Services.AddTaktValidators();
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddTaktOpenApi();
@@ -190,7 +188,7 @@ try
 
     builder.Services.AddTaktOpenIddict(builder.Configuration, builder.Environment);
     builder.Services.AddScoped<Takt.WebApi.Logging.ITaktAuthLoginLogHandler, Takt.WebApi.Logging.TaktAuthLoginLogHandler>();
-    builder.Services.AddScoped<TaktOpenIddictHelper>();
+    builder.Services.AddScoped<TaktOpenIddictLogHandler>();
     builder.Services.AddTaktSignalR(builder.Configuration);
 
     var initOptions = builder.Configuration.RequireOptions<TaktInitOptions>(TaktInitOptions.SectionName);
@@ -212,9 +210,9 @@ try
     app.InitializeTaktIpLocationDatabase();
 
     // ========================================
-    // 6. 四步初始化：OpenIddict → SqlSugar 建表 → 业务种子 → 公司克隆
+    // 6. 三步初始化：OpenIddict → SqlSugar 建表 → 业务种子
     // ========================================
-    TaktLogger.Information("[5/6] 四步初始化（OpenIddict / SqlSugar / Seed / Clone）...");
+    TaktLogger.Information("[5/6] 三步初始化（OpenIddict / SqlSugar / Seed）...");
     TaktLogger.Information("  配置: InitDb={InitDb}, SeedData={SeedData}", initOptions.InitDb, initOptions.SeedData);
     await app.RunTaktInitializationAsync(initOptions);
 

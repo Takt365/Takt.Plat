@@ -28,7 +28,7 @@ namespace Takt.WebApi.Controllers;
 /// </summary>
 [ApiController]
 [Authorize]
-[ServiceFilter(typeof(TaktPermissionAuthorizationFilter))]
+[ServiceFilter(typeof(TaktPermissionFilter))]
 [Route("api/[controller]")]
 public abstract class TaktControllerBase : ControllerBase
 {

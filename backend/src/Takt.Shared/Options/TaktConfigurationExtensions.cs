@@ -59,7 +59,7 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
-    /// 绑定 <c>Init</c> 节（建表/种子/克隆开关，与 <see cref="TaktDatabaseOptions"/> 数据范围分离）
+    /// 绑定 <c>Init</c> 节（建表/种子开关，与 <see cref="TaktDatabaseOptions"/> 数据范围分离）
     /// </summary>
     /// <param name="configuration">应用配置</param>
     /// <returns>初始化开关配置</returns>
