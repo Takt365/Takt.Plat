@@ -33,8 +33,8 @@ public class TaktEmployeeJoined : TaktApprovalEntityBase
     /// <summary>
     /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
     /// </summary>
-    [SugarColumn(ColumnName = "onboarding_todo_id", ColumnDescription = "入职待办ID", ColumnDataType = "bigint", IsNullable = true)]
-    public long? OnboardingTodoId { get; set; }
+    [SugarColumn(ColumnName = "onboarding_id", ColumnDescription = "入职待办ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? OnboardingId { get; set; }
 
     /// <summary>
     /// 实际上岗日期（JoinedDate：我去上班）

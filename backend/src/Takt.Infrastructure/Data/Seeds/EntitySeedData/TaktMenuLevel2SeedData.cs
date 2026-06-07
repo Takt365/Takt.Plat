@@ -935,7 +935,7 @@ public class TaktMenuLevel2SeedData
                 menu.MenuName = "敏感词库";
                 menu.MenuCode = "FOUNDATION_VOCABULARY";
                 menu.I18nKey = "menu.foundation.vocabulary";
-                menu.Icon = "RiForbiddenLine";
+                menu.Icon = "RiProhibitedLine";
                 menu.ParentId = foundationMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "foundation:vocabulary:list";

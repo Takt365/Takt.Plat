@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktMenuLevel3SeedData.cs
@@ -914,17 +914,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP3;
             updateCount += updateHRP3;
 
-            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_EMPLOYEE_TRANSFER", menu =>
+            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_EMPLOYEE_REASSIGNMENT", menu =>
             {
                 menu.MenuName = "员工调动";
-                menu.MenuCode = "HUMANRESOURCE_EMPLOYEE_TRANSFER";
-                menu.I18nKey = "menu.humanresource.personnel.employeetransfer";
+                menu.MenuCode = "HUMANRESOURCE_EMPLOYEE_REASSIGNMENT";
+                menu.I18nKey = "menu.humanresource.personnel.employeereassignment";
                 menu.Icon = "RiExchangeLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:personnel:employeetransfer:list";
-                menu.RoutePath = "/human-resource/personnel/employee-transfer";
-                menu.ComponentPath = "human-resource/personnel/employee-transfer/index";
+                menu.Permission = "humanresource:personnel:employeereassignment:list";
+                menu.RoutePath = "/human-resource/personnel/employee-reassignment";
+                menu.ComponentPath = "human-resource/personnel/employee-reassignment/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -934,17 +934,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP4;
             updateCount += updateHRP4;
 
-            var (insertHRP5, updateHRP5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_EMPLOYEE_ONBOARDING_TODO", menu =>
+            var (insertHRP5, updateHRP5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_EMPLOYEE_ONBOARDING", menu =>
             {
                 menu.MenuName = "入职待办";
-                menu.MenuCode = "HUMANRESOURCE_EMPLOYEE_ONBOARDING_TODO";
-                menu.I18nKey = "menu.humanresource.personnel.employeeonboardingtodo";
+                menu.MenuCode = "HUMANRESOURCE_EMPLOYEE_ONBOARDING";
+                menu.I18nKey = "menu.humanresource.personnel.employeeonboarding";
                 menu.Icon = "RiClipboardLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:personnel:employeeonboardingtodo:list";
-                menu.RoutePath = "/human-resource/personnel/employee-onboarding-todo";
-                menu.ComponentPath = "human-resource/personnel/employee-onboarding-todo/index";
+                menu.Permission = "humanresource:personnel:employeeonboarding:list";
+                menu.RoutePath = "/human-resource/personnel/employee-onboarding";
+                menu.ComponentPath = "human-resource/personnel/employee-onboarding/index";
                 menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;

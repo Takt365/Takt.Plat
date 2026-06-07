@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Personnel
-// 文件名称：TaktEmployeeOnboardingTodoValidators.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeOnboardingValidators.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
-// 功能描述：EmployeeOnboardingTodo 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeOnboardingTodo 生成，请按需审阅）
+// 功能描述：EmployeeOnboarding 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeOnboarding 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,18 +16,18 @@ using Takt.Application.Dtos.HumanResource.Personnel;
 namespace Takt.Application.Validators.HumanResource.Personnel;
 
 // ========================================
-// 创建EmployeeOnboardingTodo 验证器
+// 创建EmployeeOnboarding 验证器
 // ========================================
 
 /// <summary>
-/// 创建EmployeeOnboardingTodo DTO 验证器
+/// 创建EmployeeOnboarding DTO 验证器
 /// </summary>
-public class TaktEmployeeOnboardingTodoCreateValidator : AbstractValidator<TaktEmployeeOnboardingTodoCreateDto>
+public class TaktEmployeeOnboardingCreateValidator : AbstractValidator<TaktEmployeeOnboardingCreateDto>
 {
     /// <summary>
-    /// 初始化 创建EmployeeOnboardingTodo 校验规则
+    /// 初始化 创建EmployeeOnboarding 校验规则
     /// </summary>
-    public TaktEmployeeOnboardingTodoCreateValidator()
+    public TaktEmployeeOnboardingCreateValidator()
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
@@ -59,37 +59,37 @@ public class TaktEmployeeOnboardingTodoCreateValidator : AbstractValidator<TaktE
 }
 
 // ========================================
-// 更新EmployeeOnboardingTodo 验证器
+// 更新EmployeeOnboarding 验证器
 // ========================================
 
 /// <summary>
-/// 更新EmployeeOnboardingTodo DTO 验证器
+/// 更新EmployeeOnboarding DTO 验证器
 /// </summary>
-public class TaktEmployeeOnboardingTodoUpdateValidator : AbstractValidator<TaktEmployeeOnboardingTodoUpdateDto>
+public class TaktEmployeeOnboardingUpdateValidator : AbstractValidator<TaktEmployeeOnboardingUpdateDto>
 {
     /// <summary>
-    /// 初始化 更新EmployeeOnboardingTodo 校验规则
+    /// 初始化 更新EmployeeOnboarding 校验规则
     /// </summary>
-    public TaktEmployeeOnboardingTodoUpdateValidator()
+    public TaktEmployeeOnboardingUpdateValidator()
     {
-        RuleFor(x => x.EmployeeOnboardingTodoId)
-            .GreaterThan(0).WithMessage("EmployeeOnboardingTodoID无效");
+        RuleFor(x => x.EmployeeOnboardingId)
+            .GreaterThan(0).WithMessage("EmployeeOnboardingID无效");
     }
 }
 
 // ========================================
-// 导入EmployeeOnboardingTodo 验证器
+// 导入EmployeeOnboarding 验证器
 // ========================================
 
 /// <summary>
-/// 导入EmployeeOnboardingTodo DTO 验证器
+/// 导入EmployeeOnboarding DTO 验证器
 /// </summary>
-public class TaktEmployeeOnboardingTodoImportValidator : AbstractValidator<TaktEmployeeOnboardingTodoImportDto>
+public class TaktEmployeeOnboardingImportValidator : AbstractValidator<TaktEmployeeOnboardingImportDto>
 {
     /// <summary>
-    /// 初始化 导入EmployeeOnboardingTodo 校验规则
+    /// 初始化 导入EmployeeOnboarding 校验规则
     /// </summary>
-    public TaktEmployeeOnboardingTodoImportValidator()
+    public TaktEmployeeOnboardingImportValidator()
     {
         RuleFor(x => x.TenantCode)
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));

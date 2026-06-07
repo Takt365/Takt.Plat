@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/talent
 // 文件名称：talent-offer.d.ts
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/talent 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,9 +16,9 @@ import type {
 } from '@/types/common';
 
 import type {
-  EmployeeOnboardingTodo,
-  EmployeeOnboardingTodoCreate
-} from '@/types/human-resource/personnel/employee-onboarding-todo';
+  EmployeeOnboarding,
+  EmployeeOnboardingCreate
+} from '@/types/human-resource/personnel/employee-onboarding';
 
 /**
  * 录用信息（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
@@ -94,9 +94,9 @@ export interface TalentOffer extends ApprovalDtoBase {
   interview?: TalentInterview;
 
   /**
-   * 入职待办 （子表：TaktEmployeeOnboardingTodo）
+   * 入职待办 （子表：TaktEmployeeOnboarding）
    */
-  employeeOnboardingTodos?: EmployeeOnboardingTodo[];
+  employeeOnboardings?: EmployeeOnboarding[];
 
 }
 
@@ -295,7 +295,7 @@ export interface TalentOfferCreate {
   /**
    * 入职待办（子表，级联保存）
    */
-  employeeOnboardingTodos?: EmployeeOnboardingTodoCreate[];
+  employeeOnboardings?: EmployeeOnboardingCreate[];
 
   /**
    * 扩展字段JSON

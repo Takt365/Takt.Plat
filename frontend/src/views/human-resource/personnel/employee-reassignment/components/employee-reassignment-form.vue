@@ -1,7 +1,7 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/human-resource/personnel/employee-transfer/components -->
-<!-- 文件名称：employee-transfer-form.vue -->
+<!-- 命名空间：@/views/human-resource/personnel/employee-reassignment/components -->
+<!-- 文件名称：employee-reassignment-form.vue -->
 <!-- 功能描述：员工调动记录维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
@@ -17,7 +17,7 @@
   >
     <a-tabs
       v-model:active-key="activeTab"
-      class="employee-transfer-form-tabs"
+      class="employee-reassignment-form-tabs"
     >
       <a-tab-pane
         key="tab-0"
@@ -67,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.employeeid')"
+                :label="t('entity.employeeReassignment.employeeid')"
                 name="employeeId"
               >
                 <a-input
                   v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.employeeid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.employeeid') })"
                   size="small"
                   allow-clear
                 />
@@ -80,12 +80,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.transfertype')"
-                name="transferType"
+                :label="t('entity.employeeReassignment.reassignmenttype')"
+                name="reassignmentType"
               >
                 <a-input-number
-                  v-model:value="formState.transferType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.transfertype') })"
+                  v-model:value="formState.reassignmentType"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.reassignmenttype') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -93,12 +93,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.fromdeptid')"
+                :label="t('entity.employeeReassignment.fromdeptid')"
                 name="fromDeptId"
               >
                 <a-input
                   v-model:value="formState.fromDeptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.fromdeptid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptid') })"
                   size="small"
                   allow-clear
                 />
@@ -106,12 +106,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.fromdeptname')"
+                :label="t('entity.employeeReassignment.fromdeptname')"
                 name="fromDeptName"
               >
                 <a-input
                   v-model:value="formState.fromDeptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.fromdeptname') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptname') })"
                   size="small"
                   allow-clear
                 />
@@ -119,12 +119,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.frompostid')"
+                :label="t('entity.employeeReassignment.frompostid')"
                 name="fromPostId"
               >
                 <a-input
                   v-model:value="formState.fromPostId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.frompostid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.frompostid') })"
                   size="small"
                   allow-clear
                 />
@@ -132,12 +132,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.frompostname')"
+                :label="t('entity.employeeReassignment.frompostname')"
                 name="fromPostName"
               >
                 <a-input
                   v-model:value="formState.fromPostName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.frompostname') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.frompostname') })"
                   size="small"
                   allow-clear
                 />
@@ -145,12 +145,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.todeptid')"
+                :label="t('entity.employeeReassignment.todeptid')"
                 name="toDeptId"
               >
                 <a-input
                   v-model:value="formState.toDeptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.todeptid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptid') })"
                   size="small"
                   allow-clear
                 />
@@ -168,12 +168,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.todeptname')"
+                :label="t('entity.employeeReassignment.todeptname')"
                 name="toDeptName"
               >
                 <a-input
                   v-model:value="formState.toDeptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.todeptname') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptname') })"
                   size="small"
                   allow-clear
                 />
@@ -181,12 +181,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.topostid')"
+                :label="t('entity.employeeReassignment.topostid')"
                 name="toPostId"
               >
                 <a-input
                   v-model:value="formState.toPostId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.topostid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.topostid') })"
                   size="small"
                   allow-clear
                 />
@@ -194,12 +194,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.topostname')"
+                :label="t('entity.employeeReassignment.topostname')"
                 name="toPostName"
               >
                 <a-input
                   v-model:value="formState.toPostName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.topostname') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.topostname') })"
                   size="small"
                   allow-clear
                 />
@@ -207,12 +207,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.effectivedate')"
+                :label="t('entity.employeeReassignment.effectivedate')"
                 name="effectiveDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeTransfer.effectivedate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeReassignment.effectivedate') })"
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
@@ -221,12 +221,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeTransfer.reason')"
+                :label="t('entity.employeeReassignment.reason')"
                 name="reason"
               >
                 <a-input
                   v-model:value="formState.reason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.reason') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.reason') })"
                   size="small"
                   allow-clear
                 />
@@ -269,12 +269,12 @@
 <script setup lang="ts">
 /**
  * 员工调动记录维护表单 · 由 generate-vue-from-api 根据 types/api 生成
- * @module views/human-resource/personnel/employee-transfer/components
+ * @module views/human-resource/personnel/employee-reassignment/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { EmployeeTransferCreate } from '@/types/human-resource/personnel/employee-transfer'
+import type { EmployeeReassignmentCreate } from '@/types/human-resource/personnel/employee-reassignment'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -301,11 +301,11 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
 }
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","transferType","fromDeptId","fromDeptName","fromPostId","fromPostName","toDeptId","toDeptName","toPostId","toPostName","effectiveDate","reason","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","reassignmentType","fromDeptId","fromDeptName","fromPostId","fromPostName","toDeptId","toDeptName","toPostId","toPostName","effectiveDate","reason","extFieldJson","remark"]
 
 
 interface Props {
-  formData?: Partial<EmployeeTransferCreate & { employeeTransferId?: string }> | null
+  formData?: Partial<EmployeeReassignmentCreate & { employeeReassignmentId?: string }> | null
   loading?: boolean
 }
 
@@ -332,7 +332,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.employeeTransferId
+    const isCreate = !props.formData?.employeeReassignmentId
     if (isCreate) {
       applyScopeDefaults(formState, true)
     }
@@ -343,42 +343,42 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   employeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.employeeid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.employeeid') }),
       trigger: 'blur'
     }
   ],
-  transferType: [
+  reassignmentType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employeeTransfer.transfertype') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.employeeReassignment.reassignmenttype') }),
       trigger: 'change'
     }
   ],
   fromDeptId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.fromdeptid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptid') }),
       trigger: 'blur'
     }
   ],
   fromDeptName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.fromdeptname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptname') }),
       trigger: 'blur'
     }
   ],
   toDeptId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.todeptid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptid') }),
       trigger: 'blur'
     }
   ],
   toDeptName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeeTransfer.todeptname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptname') }),
       trigger: 'blur'
     }
   ],

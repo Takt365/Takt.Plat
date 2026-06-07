@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedService.cs
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工入职上岗应用服务实现
 // 
@@ -254,7 +254,7 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EmployeeId).Contains(keywords)
-                || SqlFunc.ToString(x.OnboardingTodoId).Contains(keywords)
+                || SqlFunc.ToString(x.OnboardingId).Contains(keywords)
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || SqlFunc.ToString(x.PostId).Contains(keywords)
@@ -278,9 +278,9 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
         }
 
-        if (queryDto?.OnboardingTodoId.HasValue == true)
+        if (queryDto?.OnboardingId.HasValue == true)
         {
-            exp = exp.And(x => x.OnboardingTodoId == queryDto.OnboardingTodoId);
+            exp = exp.And(x => x.OnboardingId == queryDto.OnboardingId);
         }
 
         if (queryDto?.DeptId.HasValue == true)

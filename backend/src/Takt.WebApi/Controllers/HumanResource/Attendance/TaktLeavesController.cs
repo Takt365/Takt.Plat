@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Attendance
 // 文件名称：TaktLeavesController.cs
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：请假信息控制器
 // 

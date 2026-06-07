@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedI18nSeedData.cs
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeJoined 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,14 +100,14 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
             // entity.employeeJoined.employeeid
             new TranslationSeedItem("entity.employeeJoined.employeeid", "zh-HK", "员工ID", "员工ID"),
 
-            // entity.employeeJoined.onboardingtodoid
-            new TranslationSeedItem("entity.employeeJoined.onboardingtodoid", "en-US", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
-            // entity.employeeJoined.onboardingtodoid
-            new TranslationSeedItem("entity.employeeJoined.onboardingtodoid", "ja-JP", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
-            // entity.employeeJoined.onboardingtodoid
-            new TranslationSeedItem("entity.employeeJoined.onboardingtodoid", "zh-CN", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
-            // entity.employeeJoined.onboardingtodoid
-            new TranslationSeedItem("entity.employeeJoined.onboardingtodoid", "zh-HK", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
+            // entity.employeeJoined.onboardingid
+            new TranslationSeedItem("entity.employeeJoined.onboardingid", "en-US", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
+            // entity.employeeJoined.onboardingid
+            new TranslationSeedItem("entity.employeeJoined.onboardingid", "ja-JP", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
+            // entity.employeeJoined.onboardingid
+            new TranslationSeedItem("entity.employeeJoined.onboardingid", "zh-CN", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
+            // entity.employeeJoined.onboardingid
+            new TranslationSeedItem("entity.employeeJoined.onboardingid", "zh-HK", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
 
             // entity.employeeJoined.joineddate
             new TranslationSeedItem("entity.employeeJoined.joineddate", "en-US", "实际上岗日期", "实际上岗日期（JoinedDate：我去上班）"),

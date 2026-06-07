@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
-// 文件名称：TaktEmployeeOnboardingTodoService.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeOnboardingService.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：入职待办应用服务实现
 // 
@@ -28,9 +28,9 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 /// <summary>
 /// 入职待办应用服务
 /// </summary>
-public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeOnboardingTodoService
+public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboardingService
 {
-    private readonly ITaktCompanyRepository<TaktEmployeeOnboardingTodo> _employeeOnboardingTodoRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeOnboarding> _employeeOnboardingRepository;
     private readonly ITaktApprovalRepository<TaktTalentOffer> _talentOfferRepository;
     private readonly ITaktApprovalRepository<TaktEmployeeJoined> _employeeJoinedRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
@@ -38,14 +38,14 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="employeeOnboardingTodoRepository">入职待办仓储</param>
+    /// <param name="employeeOnboardingRepository">入职待办仓储</param>
     /// <param name="talentOfferRepository">录用信息仓储</param>
     /// <param name="employeeJoinedRepository">员工入职上岗仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
-    public TaktEmployeeOnboardingTodoService(
-        ITaktCompanyRepository<TaktEmployeeOnboardingTodo> employeeOnboardingTodoRepository,
+    public TaktEmployeeOnboardingService(
+        ITaktCompanyRepository<TaktEmployeeOnboarding> employeeOnboardingRepository,
         ITaktApprovalRepository<TaktTalentOffer> talentOfferRepository,
         ITaktApprovalRepository<TaktEmployeeJoined> employeeJoinedRepository,
         ITaktUniqueValidator uniqueValidator,
@@ -53,7 +53,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
-        _employeeOnboardingTodoRepository = employeeOnboardingTodoRepository;
+        _employeeOnboardingRepository = employeeOnboardingRepository;
         _talentOfferRepository = talentOfferRepository;
         _employeeJoinedRepository = employeeJoinedRepository;
         _uniqueValidator = uniqueValidator;
@@ -64,15 +64,15 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    public async Task<TaktPagedResult<TaktEmployeeOnboardingTodoDto>> GetEmployeeOnboardingTodoListAsync(TaktEmployeeOnboardingTodoQueryDto queryDto)
+    public async Task<TaktPagedResult<TaktEmployeeOnboardingDto>> GetEmployeeOnboardingListAsync(TaktEmployeeOnboardingQueryDto queryDto)
     {
         var predicate = QueryExpression(queryDto);
-        var (data, total) = await _employeeOnboardingTodoRepository.GetPagedAsync(
+        var (data, total) = await _employeeOnboardingRepository.GetPagedAsync(
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
-        return TaktPagedResult<TaktEmployeeOnboardingTodoDto>.Create(
-            data.Adapt<List<TaktEmployeeOnboardingTodoDto>>(),
+        return TaktPagedResult<TaktEmployeeOnboardingDto>.Create(
+            data.Adapt<List<TaktEmployeeOnboardingDto>>(),
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -83,24 +83,24 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="id">入职待办ID</param>
     /// <returns>DTO</returns>
-    public async Task<TaktEmployeeOnboardingTodoDto?> GetEmployeeOnboardingTodoByIdAsync(long id)
+    public async Task<TaktEmployeeOnboardingDto?> GetEmployeeOnboardingByIdAsync(long id)
     {
-        var entity = await _employeeOnboardingTodoRepository.GetByIdAsync(id);
+        var entity = await _employeeOnboardingRepository.GetByIdAsync(id);
         if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             return null;
         }
-        return entity.Adapt<TaktEmployeeOnboardingTodoDto>();
+        return entity.Adapt<TaktEmployeeOnboardingDto>();
     }
 
     /// <summary>
     /// 获取入职待办选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEmployeeOnboardingTodoOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEmployeeOnboardingOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _employeeOnboardingTodoRepository.GetListAsync(
+        var list = await _employeeOnboardingRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
             x => x.CandidateName,
             false);
@@ -116,13 +116,13 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktEmployeeOnboardingTodoDto> CreateEmployeeOnboardingTodoAsync(TaktEmployeeOnboardingTodoCreateDto dto)
+    public async Task<TaktEmployeeOnboardingDto> CreateEmployeeOnboardingAsync(TaktEmployeeOnboardingCreateDto dto)
     {
-        var entity = dto.Adapt<TaktEmployeeOnboardingTodo>();
-        await StampEmployeeOnboardingTodoTalentOfferAsync(entity, dto);
-        await StampEmployeeOnboardingTodoEmployeeJoinedAsync(entity, dto);
-        entity = await _employeeOnboardingTodoRepository.CreateAsync(entity);
-        return await GetEmployeeOnboardingTodoByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeOnboardingTodoDto>();
+        var entity = dto.Adapt<TaktEmployeeOnboarding>();
+        await StampEmployeeOnboardingTalentOfferAsync(entity, dto);
+        await StampEmployeeOnboardingEmployeeJoinedAsync(entity, dto);
+        entity = await _employeeOnboardingRepository.CreateAsync(entity);
+        return await GetEmployeeOnboardingByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeOnboardingDto>();
     }
 
     /// <summary>
@@ -131,18 +131,18 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// <param name="id">入职待办ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktEmployeeOnboardingTodoDto> UpdateEmployeeOnboardingTodoAsync(long id, TaktEmployeeOnboardingTodoUpdateDto dto)
+    public async Task<TaktEmployeeOnboardingDto> UpdateEmployeeOnboardingAsync(long id, TaktEmployeeOnboardingUpdateDto dto)
     {
-        var entity = await _employeeOnboardingTodoRepository.GetByIdAsync(id);
+        var entity = await _employeeOnboardingRepository.GetByIdAsync(id);
         if (entity == null)
         {
             throw new TaktBusinessException("入职待办不存在");
         }
         dto.Adapt(entity);
-        await StampEmployeeOnboardingTodoTalentOfferAsync(entity, dto);
-        await StampEmployeeOnboardingTodoEmployeeJoinedAsync(entity, dto);
-        await _employeeOnboardingTodoRepository.UpdateAsync(entity);
-        return await GetEmployeeOnboardingTodoByIdAsync(id) ?? throw new TaktBusinessException("入职待办不存在");
+        await StampEmployeeOnboardingTalentOfferAsync(entity, dto);
+        await StampEmployeeOnboardingEmployeeJoinedAsync(entity, dto);
+        await _employeeOnboardingRepository.UpdateAsync(entity);
+        return await GetEmployeeOnboardingByIdAsync(id) ?? throw new TaktBusinessException("入职待办不存在");
     }
 
     /// <summary>
@@ -150,9 +150,9 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="id">入职待办ID</param>
     /// <returns>任务</returns>
-    public async Task DeleteEmployeeOnboardingTodoByIdAsync(long id)
+    public async Task DeleteEmployeeOnboardingByIdAsync(long id)
     {
-        var deleted = await _employeeOnboardingTodoRepository.DeleteAsync(id);
+        var deleted = await _employeeOnboardingRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("入职待办不存在或已删除");
@@ -164,7 +164,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    public async Task DeleteEmployeeOnboardingTodoBatchAsync(IEnumerable<long> ids)
+    public async Task DeleteEmployeeOnboardingBatchAsync(IEnumerable<long> ids)
     {
         var idList = ids?.Distinct().ToList() ?? new List<long>();
         if (idList.Count == 0)
@@ -173,7 +173,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
         }
         foreach (var id in idList)
         {
-            await DeleteEmployeeOnboardingTodoByIdAsync(id);
+            await DeleteEmployeeOnboardingByIdAsync(id);
         }
     }
 
@@ -182,16 +182,16 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktEmployeeOnboardingTodoDto> UpdateEmployeeOnboardingTodoStatusAsync(TaktEmployeeOnboardingTodoStatusDto dto)
+    public async Task<TaktEmployeeOnboardingDto> UpdateEmployeeOnboardingStatusAsync(TaktEmployeeOnboardingStatusDto dto)
     {
-        var entity = await _employeeOnboardingTodoRepository.GetByIdAsync(dto.EmployeeOnboardingTodoId);
+        var entity = await _employeeOnboardingRepository.GetByIdAsync(dto.EmployeeOnboardingId);
         if (entity == null)
         {
             throw new TaktBusinessException("入职待办不存在");
         }
         entity.TodoStatus = dto.TodoStatus;
-        await _employeeOnboardingTodoRepository.UpdateAsync(entity);
-        return await GetEmployeeOnboardingTodoByIdAsync(dto.EmployeeOnboardingTodoId) ?? throw new TaktBusinessException("入职待办不存在");
+        await _employeeOnboardingRepository.UpdateAsync(entity);
+        return await GetEmployeeOnboardingByIdAsync(dto.EmployeeOnboardingId) ?? throw new TaktBusinessException("入职待办不存在");
     }
 
     /// <summary>
@@ -200,9 +200,9 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] content)> GetEmployeeOnboardingTodoTemplateAsync(string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] content)> GetEmployeeOnboardingTemplateAsync(string? sheetName = null, string? fileName = null)
     {
-        return await TaktExcelHelper.GenerateTemplateAsync<TaktEmployeeOnboardingTodoTemplateDto>(
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktEmployeeOnboardingTemplateDto>(
             sheetName ?? "入职待办导入模板",
             fileName ?? "入职待办导入模板.xlsx");
     }
@@ -213,12 +213,12 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    public async Task<(int success, int fail, List<string> errors)> ImportEmployeeOnboardingTodoAsync(Stream fileStream, string? sheetName = null)
+    public async Task<(int success, int fail, List<string> errors)> ImportEmployeeOnboardingAsync(Stream fileStream, string? sheetName = null)
     {
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktEmployeeOnboardingTodoImportDto>(fileStream, sheetName ?? "入职待办导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktEmployeeOnboardingImportDto>(fileStream, sheetName ?? "入职待办导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -228,11 +228,11 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
         {
             try
             {
-                var entity = rows[i].Adapt<TaktEmployeeOnboardingTodo>();
-                var importDto = rows[i].Adapt<TaktEmployeeOnboardingTodoCreateDto>();
-                await StampEmployeeOnboardingTodoTalentOfferAsync(entity, importDto);
-                await StampEmployeeOnboardingTodoEmployeeJoinedAsync(entity, importDto);
-                await _employeeOnboardingTodoRepository.CreateAsync(entity);
+                var entity = rows[i].Adapt<TaktEmployeeOnboarding>();
+                var importDto = rows[i].Adapt<TaktEmployeeOnboardingCreateDto>();
+                await StampEmployeeOnboardingTalentOfferAsync(entity, importDto);
+                await StampEmployeeOnboardingEmployeeJoinedAsync(entity, importDto);
+                await _employeeOnboardingRepository.CreateAsync(entity);
                 success += 1;
             }
             catch (Exception ex)
@@ -251,18 +251,18 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] fileContent)> ExportEmployeeOnboardingTodoAsync(TaktEmployeeOnboardingTodoQueryDto? query = null, string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] fileContent)> ExportEmployeeOnboardingAsync(TaktEmployeeOnboardingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmployeeOnboardingTodoQueryDto());
-        var list = await _employeeOnboardingTodoRepository.GetListAsync(predicate);
+        var predicate = QueryExpression(query ?? new TaktEmployeeOnboardingQueryDto());
+        var list = await _employeeOnboardingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(
-                new List<TaktEmployeeOnboardingTodoExportDto>(),
+                new List<TaktEmployeeOnboardingExportDto>(),
                 sheetName ?? "入职待办数据",
                 fileName ?? "入职待办导出.xlsx");
         }
-        var exportData = list.Adapt<List<TaktEmployeeOnboardingTodoExportDto>>();
+        var exportData = list.Adapt<List<TaktEmployeeOnboardingExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
             sheetName ?? "入职待办数据",
@@ -279,7 +279,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task StampEmployeeOnboardingTodoTalentOfferAsync(TaktEmployeeOnboardingTodo entity, TaktEmployeeOnboardingTodoCreateDto dto)
+    private async Task StampEmployeeOnboardingTalentOfferAsync(TaktEmployeeOnboarding entity, TaktEmployeeOnboardingCreateDto dto)
     {
         if (dto.OfferId <= 0)
         {
@@ -299,7 +299,7 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task StampEmployeeOnboardingTodoEmployeeJoinedAsync(TaktEmployeeOnboardingTodo entity, TaktEmployeeOnboardingTodoCreateDto dto)
+    private async Task StampEmployeeOnboardingEmployeeJoinedAsync(TaktEmployeeOnboarding entity, TaktEmployeeOnboardingCreateDto dto)
     {
         if (dto.EmployeeJoinedId is not > 0)
         {
@@ -321,9 +321,9 @@ public class TaktEmployeeOnboardingTodoService : TaktServiceBase, ITaktEmployeeO
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
-    private static Expression<Func<TaktEmployeeOnboardingTodo, bool>> QueryExpression(TaktEmployeeOnboardingTodoQueryDto? queryDto)
+    private static Expression<Func<TaktEmployeeOnboarding, bool>> QueryExpression(TaktEmployeeOnboardingQueryDto? queryDto)
     {
-        var exp = Expressionable.Create<TaktEmployeeOnboardingTodo>();
+        var exp = Expressionable.Create<TaktEmployeeOnboarding>();
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

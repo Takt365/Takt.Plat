@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
-// 文件名称：employee-transfer.d.ts
-// 创建时间：2026-06-06
+// 文件名称：employee-reassignment.d.ts
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -17,16 +17,16 @@ import type {
 
 /**
  * 员工调动记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
- * 对应前端 TaktEmployeeTransferDto
+ * 对应前端 TaktEmployeeReassignmentDto
  * 继承 TaktApprovalDtoBase
- * 对应前端 EmployeeTransfer
- * @description 对应后端 TaktEmployeeTransferDto
+ * 对应前端 EmployeeReassignment
+ * @description 对应后端 TaktEmployeeReassignmentDto
  */
-export interface EmployeeTransfer extends ApprovalDtoBase {
+export interface EmployeeReassignment extends ApprovalDtoBase {
   /**
-   * EmployeeTransferID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * EmployeeReassignmentID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
-  employeeTransferId: string;
+  employeeReassignmentId: string;
 
   /**
    * 员工ID
@@ -41,7 +41,7 @@ export interface EmployeeTransfer extends ApprovalDtoBase {
   /**
    * 调动类型（0=转岗，1=调岗）
    */
-  transferType: number;
+  reassignmentType: number;
 
   /**
    * 调出部门ID
@@ -97,12 +97,12 @@ export interface EmployeeTransfer extends ApprovalDtoBase {
 
 
 /**
- * EmployeeTransfer 分页查询 DTO
+ * EmployeeReassignment 分页查询 DTO
  * 继承 TaktPagedQuery
- * 对应前端 EmployeeTransferQuery
- * @description 对应后端 TaktEmployeeTransferQueryDto
+ * 对应前端 EmployeeReassignmentQuery
+ * @description 对应后端 TaktEmployeeReassignmentQueryDto
  */
-export interface EmployeeTransferQuery extends TaktPagedQuery {
+export interface EmployeeReassignmentQuery extends TaktPagedQuery {
   /**
    * 租户编码
    */
@@ -121,7 +121,7 @@ export interface EmployeeTransferQuery extends TaktPagedQuery {
   /**
    * 调动类型（0=转岗，1=调岗）
    */
-  transferType?: number;
+  reassignmentType?: number;
 
   /**
    * 调出部门ID
@@ -237,11 +237,11 @@ export interface EmployeeTransferQuery extends TaktPagedQuery {
 
 
 /**
- * 创建EmployeeTransfer DTO
- * 对应前端 EmployeeTransferCreate
- * @description 对应后端 TaktEmployeeTransferCreateDto
+ * 创建EmployeeReassignment DTO
+ * 对应前端 EmployeeReassignmentCreate
+ * @description 对应后端 TaktEmployeeReassignmentCreateDto
  */
-export interface EmployeeTransferCreate {
+export interface EmployeeReassignmentCreate {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -265,7 +265,7 @@ export interface EmployeeTransferCreate {
   /**
    * 调动类型（0=转岗，1=调岗）
    */
-  transferType: number;
+  reassignmentType: number;
 
   /**
    * 调出部门ID
@@ -331,26 +331,26 @@ export interface EmployeeTransferCreate {
 
 
 /**
- * 更新EmployeeTransfer DTO
- * 继承 TaktEmployeeTransferCreateDto，添加 EmployeeTransferId 字段
- * 对应前端 EmployeeTransferUpdate
- * @description 对应后端 TaktEmployeeTransferUpdateDto
+ * 更新EmployeeReassignment DTO
+ * 继承 TaktEmployeeReassignmentCreateDto，添加 EmployeeReassignmentId 字段
+ * 对应前端 EmployeeReassignmentUpdate
+ * @description 对应后端 TaktEmployeeReassignmentUpdateDto
  */
-export interface EmployeeTransferUpdate extends EmployeeTransferCreate {
+export interface EmployeeReassignmentUpdate extends EmployeeReassignmentCreate {
   /**
-   * EmployeeTransferID（标识要更新的实体）
+   * EmployeeReassignmentID（标识要更新的实体）
    */
-  employeeTransferId: string;
+  employeeReassignmentId: string;
 
 }
 
 
 /**
- * EmployeeTransfer 导入模板行 DTO
- * 对应前端 EmployeeTransferTemplate
- * @description 对应后端 TaktEmployeeTransferTemplateDto
+ * EmployeeReassignment 导入模板行 DTO
+ * 对应前端 EmployeeReassignmentTemplate
+ * @description 对应后端 TaktEmployeeReassignmentTemplateDto
  */
-export interface EmployeeTransferTemplate {
+export interface EmployeeReassignmentTemplate {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -369,7 +369,7 @@ export interface EmployeeTransferTemplate {
   /**
    * 调动类型（0=转岗，1=调岗）
    */
-  transferType?: number;
+  reassignmentType?: number;
 
   /**
    * 调出部门ID
@@ -430,11 +430,11 @@ export interface EmployeeTransferTemplate {
 
 
 /**
- * EmployeeTransfer 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 EmployeeTransferImport
- * @description 对应后端 TaktEmployeeTransferImportDto
+ * EmployeeReassignment 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 EmployeeReassignmentImport
+ * @description 对应后端 TaktEmployeeReassignmentImportDto
  */
-export interface EmployeeTransferImport {
+export interface EmployeeReassignmentImport {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -458,7 +458,7 @@ export interface EmployeeTransferImport {
   /**
    * 调动类型（0=转岗，1=调岗）
    */
-  transferType?: number;
+  reassignmentType?: number;
 
   /**
    * 调出部门ID
@@ -519,15 +519,15 @@ export interface EmployeeTransferImport {
 
 
 /**
- * EmployeeTransfer 导出 DTO（独立实现，不继承响应 Dto）
- * 对应前端 EmployeeTransferExport
- * @description 对应后端 TaktEmployeeTransferExportDto
+ * EmployeeReassignment 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 EmployeeReassignmentExport
+ * @description 对应后端 TaktEmployeeReassignmentExportDto
  */
-export interface EmployeeTransferExport {
+export interface EmployeeReassignmentExport {
   /**
-   * EmployeeTransferID
+   * EmployeeReassignmentID
    */
-  employeeTransferId: string;
+  employeeReassignmentId: string;
 
   /**
    * 员工ID
@@ -537,7 +537,7 @@ export interface EmployeeTransferExport {
   /**
    * 调动类型（0=转岗，1=调岗）
    */
-  transferType: number;
+  reassignmentType: number;
 
   /**
    * 调出部门ID

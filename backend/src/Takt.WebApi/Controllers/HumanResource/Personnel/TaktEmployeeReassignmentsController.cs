@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
-// 文件名称：TaktEmployeeTransfersController.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeReassignmentsController.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工调动控制器
 // 
@@ -23,17 +23,17 @@ namespace Takt.WebApi.Controllers.HumanResource.Personnel;
 /// </summary>
 [ApiModule(TaktModule.HumanResource, "人事管理")]
 [Route("api/[controller]", Name = "员工调动")]
-public class TaktEmployeeTransfersController : TaktControllerBase
+public class TaktEmployeeReassignmentsController : TaktControllerBase
 {
-    private readonly ITaktEmployeeTransferService _employeeTransferService;
+    private readonly ITaktEmployeeReassignmentService _employeeReassignmentService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="employeeTransferService">员工调动服务</param>
-    public TaktEmployeeTransfersController(ITaktEmployeeTransferService employeeTransferService)
+    /// <param name="employeeReassignmentService">员工调动服务</param>
+    public TaktEmployeeReassignmentsController(ITaktEmployeeReassignmentService employeeReassignmentService)
     {
-        _employeeTransferService = employeeTransferService;
+        _employeeReassignmentService = employeeReassignmentService;
     }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:list", "员工调动列表")]
+    [TaktPermission("humanresource:personnel:employeereassignment:list", "员工调动列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetEmployeeTransferListAsync([FromQuery] TaktEmployeeTransferQueryDto queryDto)
+    public async Task<IActionResult> GetEmployeeReassignmentListAsync([FromQuery] TaktEmployeeReassignmentQueryDto queryDto)
     {
         try
         {
-            var result = await _employeeTransferService.GetEmployeeTransferListAsync(queryDto);
+            var result = await _employeeReassignmentService.GetEmployeeReassignmentListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -61,13 +61,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工调动ID</param>
     /// <returns>员工调动DTO</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:query", "员工调动详情")]
+    [TaktPermission("humanresource:personnel:employeereassignment:query", "员工调动详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetEmployeeTransferByIdAsync(long id)
+    public async Task<IActionResult> GetEmployeeReassignmentByIdAsync(long id)
     {
         try
         {
-            var result = await _employeeTransferService.GetEmployeeTransferByIdAsync(id);
+            var result = await _employeeReassignmentService.GetEmployeeReassignmentByIdAsync(id);
             if (result == null)
             {
                 return NotFound("员工调动不存在");
@@ -84,13 +84,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// 获取员工调动选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:query", "员工调动选项")]
+    [TaktPermission("humanresource:personnel:employeereassignment:query", "员工调动选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeTransferOptionsAsync()
+    public async Task<IActionResult> GetEmployeeReassignmentOptionsAsync()
     {
         try
         {
-            var result = await _employeeTransferService.GetEmployeeTransferOptionsAsync();
+            var result = await _employeeReassignmentService.GetEmployeeReassignmentOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -104,13 +104,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工调动DTO</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:create", "创建员工调动")]
+    [TaktPermission("humanresource:personnel:employeereassignment:create", "创建员工调动")]
     [HttpPost]
-    public async Task<IActionResult> CreateEmployeeTransferAsync([FromBody] TaktEmployeeTransferCreateDto dto)
+    public async Task<IActionResult> CreateEmployeeReassignmentAsync([FromBody] TaktEmployeeReassignmentCreateDto dto)
     {
         try
         {
-            var result = await _employeeTransferService.CreateEmployeeTransferAsync(dto);
+            var result = await _employeeReassignmentService.CreateEmployeeReassignmentAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -125,13 +125,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// <param name="id">员工调动ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工调动DTO</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:update", "更新员工调动")]
+    [TaktPermission("humanresource:personnel:employeereassignment:update", "更新员工调动")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEmployeeTransferAsync(long id, [FromBody] TaktEmployeeTransferUpdateDto dto)
+    public async Task<IActionResult> UpdateEmployeeReassignmentAsync(long id, [FromBody] TaktEmployeeReassignmentUpdateDto dto)
     {
         try
         {
-            var result = await _employeeTransferService.UpdateEmployeeTransferAsync(id, dto);
+            var result = await _employeeReassignmentService.UpdateEmployeeReassignmentAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -145,13 +145,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工调动ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:delete", "删除员工调动")]
+    [TaktPermission("humanresource:personnel:employeereassignment:delete", "删除员工调动")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEmployeeTransferByIdAsync(long id)
+    public async Task<IActionResult> DeleteEmployeeReassignmentByIdAsync(long id)
     {
         try
         {
-            await _employeeTransferService.DeleteEmployeeTransferByIdAsync(id);
+            await _employeeReassignmentService.DeleteEmployeeReassignmentByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -165,13 +165,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:delete", "批量删除员工调动")]
+    [TaktPermission("humanresource:personnel:employeereassignment:delete", "批量删除员工调动")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteEmployeeTransferBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteEmployeeReassignmentBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _employeeTransferService.DeleteEmployeeTransferBatchAsync(ids);
+            await _employeeReassignmentService.DeleteEmployeeReassignmentBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -184,13 +184,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:import", "获取员工调动导入模板")]
+    [TaktPermission("humanresource:personnel:employeereassignment:import", "获取员工调动导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetEmployeeTransferTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetEmployeeReassignmentTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _employeeTransferService.GetEmployeeTransferTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _employeeReassignmentService.GetEmployeeReassignmentTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -204,9 +204,9 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:import", "导入员工调动")]
+    [TaktPermission("humanresource:personnel:employeereassignment:import", "导入员工调动")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportEmployeeTransferAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportEmployeeReassignmentAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -216,7 +216,7 @@ public class TaktEmployeeTransfersController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _employeeTransferService.ImportEmployeeTransferAsync(stream, sheetName);
+            var (success, fail, errors) = await _employeeReassignmentService.ImportEmployeeReassignmentAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -234,13 +234,13 @@ public class TaktEmployeeTransfersController : TaktControllerBase
     /// 导出员工调动
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeetransfer:export", "导出员工调动")]
+    [TaktPermission("humanresource:personnel:employeereassignment:export", "导出员工调动")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportEmployeeTransferAsync([FromQuery] TaktEmployeeTransferQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportEmployeeReassignmentAsync([FromQuery] TaktEmployeeReassignmentQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _employeeTransferService.ExportEmployeeTransferAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _employeeReassignmentService.ExportEmployeeReassignmentAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

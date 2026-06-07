@@ -109,10 +109,10 @@
           allow-clear
         />
       </a-form-item>
-      <a-form-item :label="t('entity.employeeJoined.onboardingtodoid')">
+      <a-form-item :label="t('entity.employeeJoined.onboardingid')">
         <a-input
-          v-model:value="advancedQueryForm.onboardingTodoId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.onboardingtodoid') })"
+          v-model:value="advancedQueryForm.onboardingId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeJoined.onboardingid') })"
           allow-clear
         />
       </a-form-item>
@@ -236,7 +236,7 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   employeeId: '',
-  onboardingTodoId: '',
+  onboardingId: '',
   deptId: '',
   deptName: '',
   postId: '',
@@ -290,22 +290,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'employeeName') ?? ''
   },
   {
-    title: t('entity.employeeJoined.onboardingtodoid'),
-    dataIndex: 'onboardingTodoId',
-    key: 'onboardingTodoId',
+    title: t('entity.employeeJoined.onboardingid'),
+    dataIndex: 'onboardingId',
+    key: 'onboardingId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'onboardingTodoId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'onboardingId') ?? ''
   },
   {
-    title: t('entity.employeeJoined.onboardingtodoname'),
-    dataIndex: 'onboardingTodoName',
-    key: 'onboardingTodoName',
+    title: t('entity.employeeJoined.onboardingname'),
+    dataIndex: 'onboardingName',
+    key: 'onboardingName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'onboardingTodoName') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeJoinedField(record, 'onboardingName') ?? ''
   },
   {
     title: t('entity.employeeJoined.joineddate'),
@@ -486,7 +486,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   employeeId: '',
-  onboardingTodoId: '',
+  onboardingId: '',
   deptId: '',
   deptName: '',
   postId: '',
@@ -649,7 +649,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   employeeId: '',
-  onboardingTodoId: '',
+  onboardingId: '',
   deptId: '',
   deptName: '',
   postId: '',

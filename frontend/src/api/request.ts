@@ -374,6 +374,10 @@ axiosInstance.interceptors.request.use(
     const userStore = useUserStore();
     const tenantStore = useTenantStore();
 
+    if (userStore.token && !tenantStore.tenantCode) {
+      tenantStore.restoreTenantCodeFromStorage();
+    }
+
     if (!config.skipTokenRefresh && userStore.token && userStore.refreshToken) {
       await ensureValidAccessToken();
     }

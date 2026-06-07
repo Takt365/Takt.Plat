@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktDictTypeSeedData.cs
@@ -131,8 +131,8 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
             ("hr_overtime_type","加班类型","加班类型（与 TaktOvertime.overtime_type 一致）。0=工作日加班，1=休息日加班，2=法定节假日加班",39),
             ("hr_political_status","政治面貌","政治面貌（国家标准十三类）。0=群众，1=共青团员，2=中共党员，3=中共预备党员，4=民革党员，5=民盟盟员，6=民建会员，7=民进会员，8=农工党党员，9=致公党党员，10=九三学社社员，11=台盟盟员，12=无党派民主人士",40),
             ("hr_schedule_type","排班类别","排班类别（与 TaktShiftSchedule.schedule_type 一致）。0=部门，1=人员",41),
-            ("hr_transfer_status","调动审批状态","调动审批状态（与 TaktEmployeeTransfer.ApprovalStatus / TaktApprovalStatus 一致）。0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回",42),
-            ("hr_transfer_type","调动类型","员工调动类型。0=转岗，1=调岗",43),
+            ("hr_reassignment_status","调动审批状态","调动审批状态（与 TaktEmployeeReassignment.ApprovalStatus / TaktApprovalStatus 一致）。0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回",42),
+            ("hr_reassignment_type","调动类型","员工调动类型。0=转岗，1=调岗",43),
             ("hr_talent_staffing_requirement_status","用人需求审批状态","用人需求审批状态（与 TaktTalentStaffingRequirement.ApprovalStatus 一致）。0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回",44),
             ("hr_talent_recruitment_plan_status","招聘计划审批状态","招聘计划审批状态（与 TaktTalentRecruitmentPlan.ApprovalStatus 一致）。0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回",45),
             ("hr_talent_job_posting_status","职位发布状态","职位发布状态（与 TaktTalentJobPosting.posting_status 一致）。0=草稿，1=招聘中，2=已暂停，3=已关闭",46),
@@ -140,7 +140,7 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
             ("hr_talent_interview_status","面试安排状态","面试安排状态（与 TaktTalentInterview.interview_status 一致）。0=草稿，1=已安排，2=已完成，3=未通过，4=已取消",48),
             ("hr_talent_interview_round","面试轮次","面试轮次（与 TaktTalentInterview.interview_round 一致）。1=初试，2=复试，3=终试",49),
             ("hr_talent_offer_status","录用审批状态","录用审批状态（与 TaktTalentOffer.ApprovalStatus 一致）。0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回",50),
-            ("hr_personnel_onboarding_todo_status","入职待办状态","入职待办状态（与 TaktEmployeeOnboardingTodo.todo_status 一致）。0=待办理，1=办理中，2=已完成，3=已取消",51),
+            ("hr_personnel_onboarding_status","入职待办状态","入职待办状态（与 TaktEmployeeOnboarding.todo_status 一致）。0=待办理，1=办理中，2=已完成，3=已取消",51),
             ("hr_joined_status","入职上岗审批状态","入职上岗审批状态（与 TaktEmployeeJoined.ApprovalStatus 一致）。0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回",52),
             ("hr_resignation_status","离职审批状态","离职审批状态（与 TaktEmployeeResignation.ApprovalStatus 一致）。0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回",53),
             ("hr_resignation_type","离职类型","离职类型（与 TaktEmployeeResignation.resignation_type 一致）。0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他",54),

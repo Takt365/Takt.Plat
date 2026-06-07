@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Talent
 // 文件名称：TaktTalentOfferService.cs
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：录用信息应用服务实现
 // 
@@ -32,27 +32,27 @@ namespace Takt.Application.Services.HumanResource.Talent;
 public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
 {
     private readonly ITaktApprovalRepository<TaktTalentOffer> _talentOfferRepository;
-    private readonly ITaktCompanyRepository<TaktEmployeeOnboardingTodo> _employeeOnboardingTodoRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeOnboarding> _employeeOnboardingRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="talentOfferRepository">录用信息仓储</param>
-    /// <param name="employeeOnboardingTodoRepository">EmployeeOnboardingTodo仓储</param>
+    /// <param name="employeeOnboardingRepository">EmployeeOnboarding仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktTalentOfferService(
         ITaktApprovalRepository<TaktTalentOffer> talentOfferRepository,
-        ITaktCompanyRepository<TaktEmployeeOnboardingTodo> employeeOnboardingTodoRepository,
+        ITaktCompanyRepository<TaktEmployeeOnboarding> employeeOnboardingRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _talentOfferRepository = talentOfferRepository;
-        _employeeOnboardingTodoRepository = employeeOnboardingTodoRepository;
+        _employeeOnboardingRepository = employeeOnboardingRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -153,7 +153,7 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
         {
             throw new TaktBusinessException("录用信息不存在或已删除");
         }
-        await _employeeOnboardingTodoRepository.DeleteAsync(x => x.OfferId == entity.Id);
+        await _employeeOnboardingRepository.DeleteAsync(x => x.OfferId == entity.Id);
         var deleted = await _talentOfferRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -267,9 +267,9 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
         {
             return;
         }
-        // 入职待办 → dto.EmployeeOnboardingTodos
-        var employeeonboardingtodos = await _employeeOnboardingTodoRepository.GetListAsync(x => x.OfferId == entity.Id);
-        dto.EmployeeOnboardingTodos = employeeonboardingtodos.Adapt<List<TaktEmployeeOnboardingTodoDto>>();
+        // 入职待办 → dto.EmployeeOnboardings
+        var employeeonboardings = await _employeeOnboardingRepository.GetListAsync(x => x.OfferId == entity.Id);
+        dto.EmployeeOnboardings = employeeonboardings.Adapt<List<TaktEmployeeOnboardingDto>>();
     }
 
     /// <summary>
@@ -280,23 +280,23 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
     /// <returns>任务</returns>
     private async Task SaveTalentOfferChildrenAsync(TaktTalentOffer entity, TaktTalentOfferCreateDto dto)
     {
-        // 入职待办（EmployeeOnboardingTodos）
-        if (dto.EmployeeOnboardingTodos is not { Count: > 0 })
+        // 入职待办（EmployeeOnboardings）
+        if (dto.EmployeeOnboardings is not { Count: > 0 })
         {
-            await _employeeOnboardingTodoRepository.DeleteAsync(x => x.OfferId == entity.Id);
+            await _employeeOnboardingRepository.DeleteAsync(x => x.OfferId == entity.Id);
         }
         else
         {
-            var employeeonboardingtodos = dto.EmployeeOnboardingTodos.Adapt<List<TaktEmployeeOnboardingTodo>>();
-            foreach (var child in employeeonboardingtodos)
+            var employeeonboardings = dto.EmployeeOnboardings.Adapt<List<TaktEmployeeOnboarding>>();
+            foreach (var child in employeeonboardings)
             {
                 child.OfferId = entity.Id;
             }
-            await _employeeOnboardingTodoRepository.DeleteAsync(x => x.OfferId == entity.Id);
-            foreach (var child in employeeonboardingtodos)
+            await _employeeOnboardingRepository.DeleteAsync(x => x.OfferId == entity.Id);
+            foreach (var child in employeeonboardings)
             {
             }
-            await _employeeOnboardingTodoRepository.CreateRangeAsync(employeeonboardingtodos);
+            await _employeeOnboardingRepository.CreateRangeAsync(employeeonboardings);
         }
     }
     // ========================================

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.HelpDesk
 // 文件名称：ITaktTicketChangeLogService.cs
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工单变更日志应用服务接口
 // 

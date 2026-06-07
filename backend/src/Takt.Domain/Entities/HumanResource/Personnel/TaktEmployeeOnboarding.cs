@@ -1,7 +1,7 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.HumanResource.Personnel
-// 文件名称：TaktEmployeeOnboardingTodo.cs
+// 文件名称：TaktEmployeeOnboarding.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
 // 功能描述：入职待办（人事链路第6步：录用通过后办理入职，完成后关联上岗单）
@@ -19,10 +19,10 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 /// <summary>
 /// 入职待办（办理待办单，非审批单；状态见 todo_status）
 /// </summary>
-[SugarTable("takt_human_resource_personnel_employee_onboarding_todo", "入职待办表")]
-[SugarIndex("ix_employee_onboarding_todo_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_employee_onboarding_todo_offer", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OfferId), OrderByType.Asc, false)]
-public class TaktEmployeeOnboardingTodo : TaktCompanyEntityBase
+[SugarTable("takt_human_resource_personnel_employee_onboarding", "入职待办表")]
+[SugarIndex("ix_employee_onboarding_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_employee_onboarding_offer", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OfferId), OrderByType.Asc, false)]
+public class TaktEmployeeOnboarding : TaktCompanyEntityBase
 {
     /// <summary>
     /// 录用信息ID（人才管理 TaktTalentOffer）

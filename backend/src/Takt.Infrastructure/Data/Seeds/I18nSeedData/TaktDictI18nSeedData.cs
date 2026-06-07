@@ -3615,68 +3615,68 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.hr.schedule.type.1
             ("dict.hr.schedule.type.1", "zh-HK", "人员", "排班类别.人员"),
 
-            // dict.hr.transfer.status.0
-            ("dict.hr.transfer.status.0", "en-US", "草稿", "调动状态.草稿"),
-            // dict.hr.transfer.status.0
-            ("dict.hr.transfer.status.0", "ja-JP", "草稿", "调动状态.草稿"),
-            // dict.hr.transfer.status.0
-            ("dict.hr.transfer.status.0", "zh-CN", "草稿", "调动状态.草稿"),
-            // dict.hr.transfer.status.0
-            ("dict.hr.transfer.status.0", "zh-HK", "草稿", "调动状态.草稿"),
+            // dict.hr.reassignment.status.0
+            ("dict.hr.reassignment.status.0", "en-US", "草稿", "调动状态.草稿"),
+            // dict.hr.reassignment.status.0
+            ("dict.hr.reassignment.status.0", "ja-JP", "草稿", "调动状态.草稿"),
+            // dict.hr.reassignment.status.0
+            ("dict.hr.reassignment.status.0", "zh-CN", "草稿", "调动状态.草稿"),
+            // dict.hr.reassignment.status.0
+            ("dict.hr.reassignment.status.0", "zh-HK", "草稿", "调动状态.草稿"),
 
-            // dict.hr.transfer.status.1
-            ("dict.hr.transfer.status.1", "en-US", "审批中", "调动状态.审批中"),
-            // dict.hr.transfer.status.1
-            ("dict.hr.transfer.status.1", "ja-JP", "审批中", "调动状态.审批中"),
-            // dict.hr.transfer.status.1
-            ("dict.hr.transfer.status.1", "zh-CN", "审批中", "调动状态.审批中"),
-            // dict.hr.transfer.status.1
-            ("dict.hr.transfer.status.1", "zh-HK", "审批中", "调动状态.审批中"),
+            // dict.hr.reassignment.status.1
+            ("dict.hr.reassignment.status.1", "en-US", "审批中", "调动状态.审批中"),
+            // dict.hr.reassignment.status.1
+            ("dict.hr.reassignment.status.1", "ja-JP", "审批中", "调动状态.审批中"),
+            // dict.hr.reassignment.status.1
+            ("dict.hr.reassignment.status.1", "zh-CN", "审批中", "调动状态.审批中"),
+            // dict.hr.reassignment.status.1
+            ("dict.hr.reassignment.status.1", "zh-HK", "审批中", "调动状态.审批中"),
 
-            // dict.hr.transfer.status.2
-            ("dict.hr.transfer.status.2", "en-US", "已通过", "调动状态.已通过"),
-            // dict.hr.transfer.status.2
-            ("dict.hr.transfer.status.2", "ja-JP", "已通过", "调动状态.已通过"),
-            // dict.hr.transfer.status.2
-            ("dict.hr.transfer.status.2", "zh-CN", "已通过", "调动状态.已通过"),
-            // dict.hr.transfer.status.2
-            ("dict.hr.transfer.status.2", "zh-HK", "已通过", "调动状态.已通过"),
+            // dict.hr.reassignment.status.2
+            ("dict.hr.reassignment.status.2", "en-US", "已通过", "调动状态.已通过"),
+            // dict.hr.reassignment.status.2
+            ("dict.hr.reassignment.status.2", "ja-JP", "已通过", "调动状态.已通过"),
+            // dict.hr.reassignment.status.2
+            ("dict.hr.reassignment.status.2", "zh-CN", "已通过", "调动状态.已通过"),
+            // dict.hr.reassignment.status.2
+            ("dict.hr.reassignment.status.2", "zh-HK", "已通过", "调动状态.已通过"),
 
-            // dict.hr.transfer.status.3
-            ("dict.hr.transfer.status.3", "en-US", "已驳回", "调动状态.已驳回"),
-            // dict.hr.transfer.status.3
-            ("dict.hr.transfer.status.3", "ja-JP", "已驳回", "调动状态.已驳回"),
-            // dict.hr.transfer.status.3
-            ("dict.hr.transfer.status.3", "zh-CN", "已驳回", "调动状态.已驳回"),
-            // dict.hr.transfer.status.3
-            ("dict.hr.transfer.status.3", "zh-HK", "已驳回", "调动状态.已驳回"),
+            // dict.hr.reassignment.status.3
+            ("dict.hr.reassignment.status.3", "en-US", "已驳回", "调动状态.已驳回"),
+            // dict.hr.reassignment.status.3
+            ("dict.hr.reassignment.status.3", "ja-JP", "已驳回", "调动状态.已驳回"),
+            // dict.hr.reassignment.status.3
+            ("dict.hr.reassignment.status.3", "zh-CN", "已驳回", "调动状态.已驳回"),
+            // dict.hr.reassignment.status.3
+            ("dict.hr.reassignment.status.3", "zh-HK", "已驳回", "调动状态.已驳回"),
 
-            // dict.hr.transfer.status.4
-            ("dict.hr.transfer.status.4", "en-US", "已撤回", "调动状态.已撤回"),
-            // dict.hr.transfer.status.4
-            ("dict.hr.transfer.status.4", "ja-JP", "已撤回", "调动状态.已撤回"),
-            // dict.hr.transfer.status.4
-            ("dict.hr.transfer.status.4", "zh-CN", "已撤回", "调动状态.已撤回"),
-            // dict.hr.transfer.status.4
-            ("dict.hr.transfer.status.4", "zh-HK", "已撤回", "调动状态.已撤回"),
+            // dict.hr.reassignment.status.4
+            ("dict.hr.reassignment.status.4", "en-US", "已撤回", "调动状态.已撤回"),
+            // dict.hr.reassignment.status.4
+            ("dict.hr.reassignment.status.4", "ja-JP", "已撤回", "调动状态.已撤回"),
+            // dict.hr.reassignment.status.4
+            ("dict.hr.reassignment.status.4", "zh-CN", "已撤回", "调动状态.已撤回"),
+            // dict.hr.reassignment.status.4
+            ("dict.hr.reassignment.status.4", "zh-HK", "已撤回", "调动状态.已撤回"),
 
-            // dict.hr.transfer.type.0
-            ("dict.hr.transfer.type.0", "en-US", "转岗", "调动类型.转岗"),
-            // dict.hr.transfer.type.0
-            ("dict.hr.transfer.type.0", "ja-JP", "转岗", "调动类型.转岗"),
-            // dict.hr.transfer.type.0
-            ("dict.hr.transfer.type.0", "zh-CN", "转岗", "调动类型.转岗"),
-            // dict.hr.transfer.type.0
-            ("dict.hr.transfer.type.0", "zh-HK", "转岗", "调动类型.转岗"),
+            // dict.hr.reassignment.type.0
+            ("dict.hr.reassignment.type.0", "en-US", "转岗", "调动类型.转岗"),
+            // dict.hr.reassignment.type.0
+            ("dict.hr.reassignment.type.0", "ja-JP", "转岗", "调动类型.转岗"),
+            // dict.hr.reassignment.type.0
+            ("dict.hr.reassignment.type.0", "zh-CN", "转岗", "调动类型.转岗"),
+            // dict.hr.reassignment.type.0
+            ("dict.hr.reassignment.type.0", "zh-HK", "转岗", "调动类型.转岗"),
 
-            // dict.hr.transfer.type.1
-            ("dict.hr.transfer.type.1", "en-US", "调岗", "调动类型.调岗"),
-            // dict.hr.transfer.type.1
-            ("dict.hr.transfer.type.1", "ja-JP", "调岗", "调动类型.调岗"),
-            // dict.hr.transfer.type.1
-            ("dict.hr.transfer.type.1", "zh-CN", "调岗", "调动类型.调岗"),
-            // dict.hr.transfer.type.1
-            ("dict.hr.transfer.type.1", "zh-HK", "调岗", "调动类型.调岗"),
+            // dict.hr.reassignment.type.1
+            ("dict.hr.reassignment.type.1", "en-US", "调岗", "调动类型.调岗"),
+            // dict.hr.reassignment.type.1
+            ("dict.hr.reassignment.type.1", "ja-JP", "调岗", "调动类型.调岗"),
+            // dict.hr.reassignment.type.1
+            ("dict.hr.reassignment.type.1", "zh-CN", "调岗", "调动类型.调岗"),
+            // dict.hr.reassignment.type.1
+            ("dict.hr.reassignment.type.1", "zh-HK", "调岗", "调动类型.调岗"),
 
             // dict.logistics.batch.management.0
             ("dict.logistics.batch.management.0", "en-US", "否", "批次管理标识.否"),

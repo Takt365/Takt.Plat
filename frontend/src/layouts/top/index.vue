@@ -56,7 +56,7 @@
         maxHeight: contentMaxHeight
       }"
     >
-      <RouterView />
+      <RouterView :key="businessScopeRouteKey" />
     </a-layout-content>
     <TaktFooter :height="40" />
   </a-layout>
@@ -68,11 +68,14 @@ import { defaultSetting, useSettingStore } from '@/stores/common/setting'
 import { useUserStore } from '@/stores/identity/user'
 import { useMenuStore } from '@/stores/identity/menu'
 import { ensureMenuAndRoutesLoaded } from '@/router'
+import { useBusinessScopeRouteKey } from '@/composables/use-business-scope-route-key'
 type HeaderHeight = 32 | 40 | 48
 
 const { setting } = storeToRefs(useSettingStore())
 const userStore = useUserStore()
 const menuStore = useMenuStore()
+/** 租户/公司切换时重建 RouterView，触发各业务页重新拉数 */
+const businessScopeRouteKey = useBusinessScopeRouteKey()
 
 onMounted(async () => {
   if (userStore.token && (!menuStore.menuList || menuStore.menuList.length === 0)) {

@@ -551,7 +551,7 @@ public class TaktMenuLevel4SeedData
                 menu.MenuName = "制造二课";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZONIKA";
                 menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.seizonika";
-                menu.Icon = "RiFactoryLine";
+                menu.Icon = "RiSeedlingLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:manufacturing:engineeringchange:seizonika:list";

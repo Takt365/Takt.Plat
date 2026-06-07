@@ -252,7 +252,7 @@ public class TaktMenuButtonSeedData
 
     private static readonly string[] HumanResourceExtraPerms =
     {
-        "onboard", "regularize", "transfer", "promote", "terminate", "rehire"
+        "onboard", "regularize", "reassignment", "promote", "terminate", "rehire"
     };
 
     /// <summary>身份认证模块扩展按钮。</summary>

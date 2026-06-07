@@ -1,7 +1,7 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.HumanResource.Personnel
-// 文件名称：TaktEmployeeTransfer.cs
+// 文件名称：TaktEmployeeReassignment.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工调动记录实体（人事-调动管理）
@@ -18,11 +18,11 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 /// <summary>
 /// 员工调动记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
 /// </summary>
-[SugarTable("takt_human_resource_personnel_employee_transfer", "员工调动表")]
-[SugarIndex("ix_employee_transfer_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_employee_transfer_employee", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EmployeeId), OrderByType.Asc, false)]
-[SugarIndex("ix_employee_transfer_approval", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApprovalStatus), OrderByType.Asc, false)]
-public class TaktEmployeeTransfer : TaktApprovalEntityBase
+[SugarTable("takt_human_resource_personnel_employee_reassignment", "员工调动表")]
+[SugarIndex("ix_employee_reassignment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_employee_reassignment_employee", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EmployeeId), OrderByType.Asc, false)]
+[SugarIndex("ix_employee_reassignment_approval", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApprovalStatus), OrderByType.Asc, false)]
+public class TaktEmployeeReassignment : TaktApprovalEntityBase
 {
     /// <summary>
     /// 员工ID
@@ -33,8 +33,8 @@ public class TaktEmployeeTransfer : TaktApprovalEntityBase
     /// <summary>
     /// 调动类型（0=转岗，1=调岗）
     /// </summary>
-    [SugarColumn(ColumnName = "transfer_type", ColumnDescription = "调动类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int TransferType { get; set; }
+    [SugarColumn(ColumnName = "reassignment_type", ColumnDescription = "调动类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ReassignmentType { get; set; }
 
     /// <summary>
     /// 调出部门ID

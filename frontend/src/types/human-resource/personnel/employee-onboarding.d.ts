@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
-// 文件名称：employee-onboarding-todo.d.ts
-// 创建时间：2026-06-06
+// 文件名称：employee-onboarding.d.ts
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -21,16 +21,16 @@ import type {
 
 /**
  * 入职待办（办理待办单，非审批单；状态见 todo_status）
- * 对应前端 TaktEmployeeOnboardingTodoDto
+ * 对应前端 TaktEmployeeOnboardingDto
  * 继承 TaktCompanyDtoBase
- * 对应前端 EmployeeOnboardingTodo
- * @description 对应后端 TaktEmployeeOnboardingTodoDto
+ * 对应前端 EmployeeOnboarding
+ * @description 对应后端 TaktEmployeeOnboardingDto
  */
-export interface EmployeeOnboardingTodo extends CompanyDtoBase {
+export interface EmployeeOnboarding extends CompanyDtoBase {
   /**
-   * EmployeeOnboardingTodoID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * EmployeeOnboardingID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
-  employeeOnboardingTodoId: string;
+  employeeOnboardingId: string;
 
   /**
    * 录用信息ID（人才管理 TaktTalentOffer）
@@ -106,12 +106,12 @@ export interface EmployeeOnboardingTodo extends CompanyDtoBase {
 
 
 /**
- * EmployeeOnboardingTodo 分页查询 DTO
+ * EmployeeOnboarding 分页查询 DTO
  * 继承 TaktPagedQuery
- * 对应前端 EmployeeOnboardingTodoQuery
- * @description 对应后端 TaktEmployeeOnboardingTodoQueryDto
+ * 对应前端 EmployeeOnboardingQuery
+ * @description 对应后端 TaktEmployeeOnboardingQueryDto
  */
-export interface EmployeeOnboardingTodoQuery extends TaktPagedQuery {
+export interface EmployeeOnboardingQuery extends TaktPagedQuery {
   /**
    * 租户编码
    */
@@ -196,11 +196,11 @@ export interface EmployeeOnboardingTodoQuery extends TaktPagedQuery {
 
 
 /**
- * 创建EmployeeOnboardingTodo DTO
- * 对应前端 EmployeeOnboardingTodoCreate
- * @description 对应后端 TaktEmployeeOnboardingTodoCreateDto
+ * 创建EmployeeOnboarding DTO
+ * 对应前端 EmployeeOnboardingCreate
+ * @description 对应后端 TaktEmployeeOnboardingCreateDto
  */
-export interface EmployeeOnboardingTodoCreate {
+export interface EmployeeOnboardingCreate {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -275,30 +275,30 @@ export interface EmployeeOnboardingTodoCreate {
 
 
 /**
- * 更新EmployeeOnboardingTodo DTO
- * 继承 TaktEmployeeOnboardingTodoCreateDto，添加 EmployeeOnboardingTodoId 字段
- * 对应前端 EmployeeOnboardingTodoUpdate
- * @description 对应后端 TaktEmployeeOnboardingTodoUpdateDto
+ * 更新EmployeeOnboarding DTO
+ * 继承 TaktEmployeeOnboardingCreateDto，添加 EmployeeOnboardingId 字段
+ * 对应前端 EmployeeOnboardingUpdate
+ * @description 对应后端 TaktEmployeeOnboardingUpdateDto
  */
-export interface EmployeeOnboardingTodoUpdate extends EmployeeOnboardingTodoCreate {
+export interface EmployeeOnboardingUpdate extends EmployeeOnboardingCreate {
   /**
-   * EmployeeOnboardingTodoID（标识要更新的实体）
+   * EmployeeOnboardingID（标识要更新的实体）
    */
-  employeeOnboardingTodoId: string;
+  employeeOnboardingId: string;
 
 }
 
 
 /**
- * EmployeeOnboardingTodo 状态更新 DTO
- * 对应前端 EmployeeOnboardingTodoStatus
- * @description 对应后端 TaktEmployeeOnboardingTodoStatusDto
+ * EmployeeOnboarding 状态更新 DTO
+ * 对应前端 EmployeeOnboardingStatus
+ * @description 对应后端 TaktEmployeeOnboardingStatusDto
  */
-export interface EmployeeOnboardingTodoStatus {
+export interface EmployeeOnboardingStatus {
   /**
-   * EmployeeOnboardingTodoID
+   * EmployeeOnboardingID
    */
-  employeeOnboardingTodoId: string;
+  employeeOnboardingId: string;
 
   /**
    * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
@@ -309,11 +309,11 @@ export interface EmployeeOnboardingTodoStatus {
 
 
 /**
- * EmployeeOnboardingTodo 导入模板行 DTO
- * 对应前端 EmployeeOnboardingTodoTemplate
- * @description 对应后端 TaktEmployeeOnboardingTodoTemplateDto
+ * EmployeeOnboarding 导入模板行 DTO
+ * 对应前端 EmployeeOnboardingTemplate
+ * @description 对应后端 TaktEmployeeOnboardingTemplateDto
  */
-export interface EmployeeOnboardingTodoTemplate {
+export interface EmployeeOnboardingTemplate {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -378,11 +378,11 @@ export interface EmployeeOnboardingTodoTemplate {
 
 
 /**
- * EmployeeOnboardingTodo 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 EmployeeOnboardingTodoImport
- * @description 对应后端 TaktEmployeeOnboardingTodoImportDto
+ * EmployeeOnboarding 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 EmployeeOnboardingImport
+ * @description 对应后端 TaktEmployeeOnboardingImportDto
  */
-export interface EmployeeOnboardingTodoImport {
+export interface EmployeeOnboardingImport {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -452,15 +452,15 @@ export interface EmployeeOnboardingTodoImport {
 
 
 /**
- * EmployeeOnboardingTodo 导出 DTO（独立实现，不继承响应 Dto）
- * 对应前端 EmployeeOnboardingTodoExport
- * @description 对应后端 TaktEmployeeOnboardingTodoExportDto
+ * EmployeeOnboarding 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 EmployeeOnboardingExport
+ * @description 对应后端 TaktEmployeeOnboardingExportDto
  */
-export interface EmployeeOnboardingTodoExport {
+export interface EmployeeOnboardingExport {
   /**
-   * EmployeeOnboardingTodoID
+   * EmployeeOnboardingID
    */
-  employeeOnboardingTodoId: string;
+  employeeOnboardingId: string;
 
   /**
    * 公司代码

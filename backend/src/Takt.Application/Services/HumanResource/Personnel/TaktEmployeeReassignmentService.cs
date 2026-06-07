@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
-// 文件名称：TaktEmployeeTransferService.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeReassignmentService.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工调动应用服务实现
 // 
@@ -27,26 +27,26 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 /// <summary>
 /// 员工调动应用服务
 /// </summary>
-public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransferService
+public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeReassignmentService
 {
-    private readonly ITaktApprovalRepository<TaktEmployeeTransfer> _employeeTransferRepository;
+    private readonly ITaktApprovalRepository<TaktEmployeeReassignment> _employeeReassignmentRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="employeeTransferRepository">员工调动仓储</param>
+    /// <param name="employeeReassignmentRepository">员工调动仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
-    public TaktEmployeeTransferService(
-        ITaktApprovalRepository<TaktEmployeeTransfer> employeeTransferRepository,
+    public TaktEmployeeReassignmentService(
+        ITaktApprovalRepository<TaktEmployeeReassignment> employeeReassignmentRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
-        _employeeTransferRepository = employeeTransferRepository;
+        _employeeReassignmentRepository = employeeReassignmentRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -55,15 +55,15 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    public async Task<TaktPagedResult<TaktEmployeeTransferDto>> GetEmployeeTransferListAsync(TaktEmployeeTransferQueryDto queryDto)
+    public async Task<TaktPagedResult<TaktEmployeeReassignmentDto>> GetEmployeeReassignmentListAsync(TaktEmployeeReassignmentQueryDto queryDto)
     {
         var predicate = QueryExpression(queryDto);
-        var (data, total) = await _employeeTransferRepository.GetPagedAsync(
+        var (data, total) = await _employeeReassignmentRepository.GetPagedAsync(
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
-        return TaktPagedResult<TaktEmployeeTransferDto>.Create(
-            data.Adapt<List<TaktEmployeeTransferDto>>(),
+        return TaktPagedResult<TaktEmployeeReassignmentDto>.Create(
+            data.Adapt<List<TaktEmployeeReassignmentDto>>(),
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -74,24 +74,24 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// </summary>
     /// <param name="id">员工调动ID</param>
     /// <returns>DTO</returns>
-    public async Task<TaktEmployeeTransferDto?> GetEmployeeTransferByIdAsync(long id)
+    public async Task<TaktEmployeeReassignmentDto?> GetEmployeeReassignmentByIdAsync(long id)
     {
-        var entity = await _employeeTransferRepository.GetByIdAsync(id);
+        var entity = await _employeeReassignmentRepository.GetByIdAsync(id);
         if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             return null;
         }
-        return entity.Adapt<TaktEmployeeTransferDto>();
+        return entity.Adapt<TaktEmployeeReassignmentDto>();
     }
 
     /// <summary>
     /// 获取员工调动选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEmployeeTransferOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEmployeeReassignmentOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _employeeTransferRepository.GetListAsync(
+        var list = await _employeeReassignmentRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
             x => x.FromDeptName,
             false);
@@ -107,11 +107,11 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktEmployeeTransferDto> CreateEmployeeTransferAsync(TaktEmployeeTransferCreateDto dto)
+    public async Task<TaktEmployeeReassignmentDto> CreateEmployeeReassignmentAsync(TaktEmployeeReassignmentCreateDto dto)
     {
-        var entity = dto.Adapt<TaktEmployeeTransfer>();
-        entity = await _employeeTransferRepository.CreateAsync(entity);
-        return await GetEmployeeTransferByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeTransferDto>();
+        var entity = dto.Adapt<TaktEmployeeReassignment>();
+        entity = await _employeeReassignmentRepository.CreateAsync(entity);
+        return await GetEmployeeReassignmentByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeReassignmentDto>();
     }
 
     /// <summary>
@@ -120,16 +120,16 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// <param name="id">员工调动ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktEmployeeTransferDto> UpdateEmployeeTransferAsync(long id, TaktEmployeeTransferUpdateDto dto)
+    public async Task<TaktEmployeeReassignmentDto> UpdateEmployeeReassignmentAsync(long id, TaktEmployeeReassignmentUpdateDto dto)
     {
-        var entity = await _employeeTransferRepository.GetByIdAsync(id);
+        var entity = await _employeeReassignmentRepository.GetByIdAsync(id);
         if (entity == null)
         {
             throw new TaktBusinessException("员工调动不存在");
         }
         dto.Adapt(entity);
-        await _employeeTransferRepository.UpdateAsync(entity);
-        return await GetEmployeeTransferByIdAsync(id) ?? throw new TaktBusinessException("员工调动不存在");
+        await _employeeReassignmentRepository.UpdateAsync(entity);
+        return await GetEmployeeReassignmentByIdAsync(id) ?? throw new TaktBusinessException("员工调动不存在");
     }
 
     /// <summary>
@@ -137,9 +137,9 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// </summary>
     /// <param name="id">员工调动ID</param>
     /// <returns>任务</returns>
-    public async Task DeleteEmployeeTransferByIdAsync(long id)
+    public async Task DeleteEmployeeReassignmentByIdAsync(long id)
     {
-        var deleted = await _employeeTransferRepository.DeleteAsync(id);
+        var deleted = await _employeeReassignmentRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("员工调动不存在或已删除");
@@ -151,7 +151,7 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    public async Task DeleteEmployeeTransferBatchAsync(IEnumerable<long> ids)
+    public async Task DeleteEmployeeReassignmentBatchAsync(IEnumerable<long> ids)
     {
         var idList = ids?.Distinct().ToList() ?? new List<long>();
         if (idList.Count == 0)
@@ -160,7 +160,7 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
         }
         foreach (var id in idList)
         {
-            await DeleteEmployeeTransferByIdAsync(id);
+            await DeleteEmployeeReassignmentByIdAsync(id);
         }
     }
 
@@ -170,9 +170,9 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] content)> GetEmployeeTransferTemplateAsync(string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] content)> GetEmployeeReassignmentTemplateAsync(string? sheetName = null, string? fileName = null)
     {
-        return await TaktExcelHelper.GenerateTemplateAsync<TaktEmployeeTransferTemplateDto>(
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktEmployeeReassignmentTemplateDto>(
             sheetName ?? "员工调动导入模板",
             fileName ?? "员工调动导入模板.xlsx");
     }
@@ -183,12 +183,12 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    public async Task<(int success, int fail, List<string> errors)> ImportEmployeeTransferAsync(Stream fileStream, string? sheetName = null)
+    public async Task<(int success, int fail, List<string> errors)> ImportEmployeeReassignmentAsync(Stream fileStream, string? sheetName = null)
     {
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktEmployeeTransferImportDto>(fileStream, sheetName ?? "员工调动导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktEmployeeReassignmentImportDto>(fileStream, sheetName ?? "员工调动导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -198,8 +198,8 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
         {
             try
             {
-                var entity = rows[i].Adapt<TaktEmployeeTransfer>();
-                await _employeeTransferRepository.CreateAsync(entity);
+                var entity = rows[i].Adapt<TaktEmployeeReassignment>();
+                await _employeeReassignmentRepository.CreateAsync(entity);
                 success += 1;
             }
             catch (Exception ex)
@@ -218,18 +218,18 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] fileContent)> ExportEmployeeTransferAsync(TaktEmployeeTransferQueryDto? query = null, string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] fileContent)> ExportEmployeeReassignmentAsync(TaktEmployeeReassignmentQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmployeeTransferQueryDto());
-        var list = await _employeeTransferRepository.GetListAsync(predicate);
+        var predicate = QueryExpression(query ?? new TaktEmployeeReassignmentQueryDto());
+        var list = await _employeeReassignmentRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(
-                new List<TaktEmployeeTransferExportDto>(),
+                new List<TaktEmployeeReassignmentExportDto>(),
                 sheetName ?? "员工调动数据",
                 fileName ?? "员工调动导出.xlsx");
         }
-        var exportData = list.Adapt<List<TaktEmployeeTransferExportDto>>();
+        var exportData = list.Adapt<List<TaktEmployeeReassignmentExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
             sheetName ?? "员工调动数据",
@@ -245,16 +245,16 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
-    private static Expression<Func<TaktEmployeeTransfer, bool>> QueryExpression(TaktEmployeeTransferQueryDto? queryDto)
+    private static Expression<Func<TaktEmployeeReassignment, bool>> QueryExpression(TaktEmployeeReassignmentQueryDto? queryDto)
     {
-        var exp = Expressionable.Create<TaktEmployeeTransfer>();
+        var exp = Expressionable.Create<TaktEmployeeReassignment>();
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EmployeeId).Contains(keywords)
-                || SqlFunc.ToString(x.TransferType).Contains(keywords)
+                || SqlFunc.ToString(x.ReassignmentType).Contains(keywords)
                 || SqlFunc.ToString(x.FromDeptId).Contains(keywords)
                 || (x.FromDeptName != null && x.FromDeptName.Contains(keywords))
                 || SqlFunc.ToString(x.FromPostId).Contains(keywords)
@@ -276,9 +276,9 @@ public class TaktEmployeeTransferService : TaktServiceBase, ITaktEmployeeTransfe
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
         }
 
-        if (queryDto?.TransferType.HasValue == true)
+        if (queryDto?.ReassignmentType.HasValue == true)
         {
-            exp = exp.And(x => x.TransferType == queryDto.TransferType);
+            exp = exp.And(x => x.ReassignmentType == queryDto.ReassignmentType);
         }
 
         if (queryDto?.FromDeptId.HasValue == true)

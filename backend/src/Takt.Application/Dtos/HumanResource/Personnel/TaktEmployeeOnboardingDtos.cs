@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
-// 文件名称：TaktEmployeeOnboardingTodoDtos.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeOnboardingDtos.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
-// 功能描述：EmployeeOnboardingTodo 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeOnboardingTodo 生成，请按需审阅）
+// 功能描述：EmployeeOnboarding 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeOnboarding 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -19,22 +19,22 @@ using Takt.Application.Dtos.HumanResource.Talent;
 namespace Takt.Application.Dtos.HumanResource.Personnel;
 
 // ========================================
-// EmployeeOnboardingTodo 响应 DTO
+// EmployeeOnboarding 响应 DTO
 // ========================================
 
 /// <summary>
 /// 入职待办（办理待办单，非审批单；状态见 todo_status）
-/// 对应前端 TaktEmployeeOnboardingTodoDto
+/// 对应前端 TaktEmployeeOnboardingDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktEmployeeOnboardingTodoDto : TaktCompanyDtoBase
+public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// EmployeeOnboardingTodoID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// EmployeeOnboardingID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeOnboardingTodoId { get; set; }
+    public long EmployeeOnboardingId { get; set; }
 
     /// <summary>
     /// 录用信息ID（人才管理 TaktTalentOffer）
@@ -114,14 +114,14 @@ public class TaktEmployeeOnboardingTodoDto : TaktCompanyDtoBase
 }
 
 // ========================================
-// EmployeeOnboardingTodo 查询 DTO
+// EmployeeOnboarding 查询 DTO
 // ========================================
 
 /// <summary>
-/// EmployeeOnboardingTodo 分页查询 DTO
+/// EmployeeOnboarding 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktEmployeeOnboardingTodoQueryDto : TaktPagedQuery
+public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -208,13 +208,13 @@ public class TaktEmployeeOnboardingTodoQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建EmployeeOnboardingTodo DTO
+// 创建EmployeeOnboarding DTO
 // ========================================
 
 /// <summary>
-/// 创建EmployeeOnboardingTodo DTO
+/// 创建EmployeeOnboarding DTO
 /// </summary>
-public class TaktEmployeeOnboardingTodoCreateDto
+public class TaktEmployeeOnboardingCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -294,41 +294,41 @@ public class TaktEmployeeOnboardingTodoCreateDto
 }
 
 // ========================================
-// 更新EmployeeOnboardingTodo DTO
+// 更新EmployeeOnboarding DTO
 // ========================================
 
 /// <summary>
-/// 更新EmployeeOnboardingTodo DTO
-/// 继承 TaktEmployeeOnboardingTodoCreateDto，添加 EmployeeOnboardingTodoId 字段
+/// 更新EmployeeOnboarding DTO
+/// 继承 TaktEmployeeOnboardingCreateDto，添加 EmployeeOnboardingId 字段
 /// </summary>
-public class TaktEmployeeOnboardingTodoUpdateDto : TaktEmployeeOnboardingTodoCreateDto
+public class TaktEmployeeOnboardingUpdateDto : TaktEmployeeOnboardingCreateDto
 {
     /// <summary>
-    /// EmployeeOnboardingTodoID（标识要更新的实体）
+    /// EmployeeOnboardingID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeOnboardingTodoId { get; set; }
+    public long EmployeeOnboardingId { get; set; }
 
 }
 
 // ========================================
-// EmployeeOnboardingTodo 状态 DTO
+// EmployeeOnboarding 状态 DTO
 // ========================================
 
 /// <summary>
-/// EmployeeOnboardingTodo 状态更新 DTO
+/// EmployeeOnboarding 状态更新 DTO
 /// </summary>
-public class TaktEmployeeOnboardingTodoStatusDto
+public class TaktEmployeeOnboardingStatusDto
 {
     /// <summary>
-    /// EmployeeOnboardingTodoID
+    /// EmployeeOnboardingID
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeOnboardingTodoId { get; set; }
+    public long EmployeeOnboardingId { get; set; }
 
     /// <summary>
     /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
@@ -342,9 +342,9 @@ public class TaktEmployeeOnboardingTodoStatusDto
 // ========================================
 
 /// <summary>
-/// EmployeeOnboardingTodo 导入模板行 DTO
+/// EmployeeOnboarding 导入模板行 DTO
 /// </summary>
-public class TaktEmployeeOnboardingTodoTemplateDto
+public class TaktEmployeeOnboardingTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -412,9 +412,9 @@ public class TaktEmployeeOnboardingTodoTemplateDto
 }
 
 /// <summary>
-/// EmployeeOnboardingTodo 导入 DTO（独立实现，不继承 TemplateDto）
+/// EmployeeOnboarding 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktEmployeeOnboardingTodoImportDto
+public class TaktEmployeeOnboardingImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -491,16 +491,16 @@ public class TaktEmployeeOnboardingTodoImportDto
 // ========================================
 
 /// <summary>
-/// EmployeeOnboardingTodo 导出 DTO（独立实现，不继承响应 Dto）
+/// EmployeeOnboarding 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktEmployeeOnboardingTodoExportDto
+public class TaktEmployeeOnboardingExportDto
 {
     /// <summary>
-    /// EmployeeOnboardingTodoID
+    /// EmployeeOnboardingID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeOnboardingTodoId { get; set; }
+    public long EmployeeOnboardingId { get; set; }
 
     /// <summary>
     /// 公司代码

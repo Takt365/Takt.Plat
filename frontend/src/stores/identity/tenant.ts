@@ -227,24 +227,27 @@ export const useTenantStore = defineStore('tenant', () => {
   }
 
   /**
-   * 从 sessionStorage / localStorage 恢复租户到 Pinia（内存为空时）
+   * 从 sessionStorage / localStorage 恢复租户与公司到 Pinia（内存为空时；刷新页面后 /me 前须调用）
    */
   function restoreTenantCodeFromStorage(): void {
-    if (tenantCode.value.trim()) {
-      return;
+    if (!tenantCode.value.trim()) {
+      const saved =
+        sessionStorage.getItem(TAKT_OAUTH_PENDING_TENANT_STORAGE_KEY)?.trim() ||
+        localStorage.getItem(TAKT_TENANT_CODE_STORAGE_KEY)?.trim() ||
+        '';
+
+      if (saved) {
+        tenantCode.value = saved;
+        localStorage.setItem(TAKT_TENANT_CODE_STORAGE_KEY, saved);
+      }
     }
 
-    const saved =
-      sessionStorage.getItem(TAKT_OAUTH_PENDING_TENANT_STORAGE_KEY)?.trim() ||
-      localStorage.getItem(TAKT_TENANT_CODE_STORAGE_KEY)?.trim() ||
-      '';
-
-    if (!saved) {
-      return;
+    if (!companyCode.value.trim()) {
+      const savedCompany = localStorage.getItem(TAKT_COMPANY_CODE_STORAGE_KEY)?.trim() ?? '';
+      if (savedCompany) {
+        companyCode.value = savedCompany;
+      }
     }
-
-    tenantCode.value = saved;
-    localStorage.setItem(TAKT_TENANT_CODE_STORAGE_KEY, saved);
   }
 
   /**

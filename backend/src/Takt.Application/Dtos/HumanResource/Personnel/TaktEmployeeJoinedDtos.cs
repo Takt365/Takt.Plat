@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedDtos.cs
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeJoined 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeJoined 生成，请按需审阅）
 // 
@@ -50,12 +50,12 @@ public class TaktEmployeeJoinedDto : TaktApprovalDtoBase
     /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OnboardingTodoId { get; set; }
+    public long? OnboardingId { get; set; }
 
     /// <summary>
     /// 入职待办名称（填充字段）
     /// </summary>
-    public string? OnboardingTodoName { get; set; }
+    public string? OnboardingName { get; set; }
 
     /// <summary>
     /// 实际上岗日期（JoinedDate：我去上班）
@@ -152,7 +152,7 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OnboardingTodoId { get; set; }
+    public long? OnboardingId { get; set; }
 
     /// <summary>
     /// 实际上岗日期（JoinedDate：我去上班）（范围查询-开始）
@@ -324,7 +324,7 @@ public class TaktEmployeeJoinedCreateDto
     /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OnboardingTodoId { get; set; }
+    public long? OnboardingId { get; set; }
 
     /// <summary>
     /// 实际上岗日期（JoinedDate：我去上班）
@@ -451,7 +451,7 @@ public class TaktEmployeeJoinedTemplateDto
     /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OnboardingTodoId { get; set; }
+    public long? OnboardingId { get; set; }
 
     /// <summary>
     /// 上岗部门ID
@@ -543,7 +543,7 @@ public class TaktEmployeeJoinedImportDto
     /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OnboardingTodoId { get; set; }
+    public long? OnboardingId { get; set; }
 
     /// <summary>
     /// 上岗部门ID
@@ -631,7 +631,7 @@ public class TaktEmployeeJoinedExportDto
     /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OnboardingTodoId { get; set; }
+    public long? OnboardingId { get; set; }
 
     /// <summary>
     /// 实际上岗日期（JoinedDate：我去上班）

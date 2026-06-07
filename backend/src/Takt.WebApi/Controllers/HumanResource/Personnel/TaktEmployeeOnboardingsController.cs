@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
-// 文件名称：TaktEmployeeOnboardingTodosController.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeOnboardingsController.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
 // 功能描述：入职待办控制器
 // 
@@ -23,17 +23,17 @@ namespace Takt.WebApi.Controllers.HumanResource.Personnel;
 /// </summary>
 [ApiModule(TaktModule.HumanResource, "人事管理")]
 [Route("api/[controller]", Name = "入职待办")]
-public class TaktEmployeeOnboardingTodosController : TaktControllerBase
+public class TaktEmployeeOnboardingsController : TaktControllerBase
 {
-    private readonly ITaktEmployeeOnboardingTodoService _employeeOnboardingTodoService;
+    private readonly ITaktEmployeeOnboardingService _employeeOnboardingService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="employeeOnboardingTodoService">入职待办服务</param>
-    public TaktEmployeeOnboardingTodosController(ITaktEmployeeOnboardingTodoService employeeOnboardingTodoService)
+    /// <param name="employeeOnboardingService">入职待办服务</param>
+    public TaktEmployeeOnboardingsController(ITaktEmployeeOnboardingService employeeOnboardingService)
     {
-        _employeeOnboardingTodoService = employeeOnboardingTodoService;
+        _employeeOnboardingService = employeeOnboardingService;
     }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:list", "入职待办列表")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:list", "入职待办列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetEmployeeOnboardingTodoListAsync([FromQuery] TaktEmployeeOnboardingTodoQueryDto queryDto)
+    public async Task<IActionResult> GetEmployeeOnboardingListAsync([FromQuery] TaktEmployeeOnboardingQueryDto queryDto)
     {
         try
         {
-            var result = await _employeeOnboardingTodoService.GetEmployeeOnboardingTodoListAsync(queryDto);
+            var result = await _employeeOnboardingService.GetEmployeeOnboardingListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -61,13 +61,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// </summary>
     /// <param name="id">入职待办ID</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:query", "入职待办详情")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:query", "入职待办详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetEmployeeOnboardingTodoByIdAsync(long id)
+    public async Task<IActionResult> GetEmployeeOnboardingByIdAsync(long id)
     {
         try
         {
-            var result = await _employeeOnboardingTodoService.GetEmployeeOnboardingTodoByIdAsync(id);
+            var result = await _employeeOnboardingService.GetEmployeeOnboardingByIdAsync(id);
             if (result == null)
             {
                 return NotFound("入职待办不存在");
@@ -84,13 +84,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// 获取入职待办选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:query", "入职待办选项")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:query", "入职待办选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeOnboardingTodoOptionsAsync()
+    public async Task<IActionResult> GetEmployeeOnboardingOptionsAsync()
     {
         try
         {
-            var result = await _employeeOnboardingTodoService.GetEmployeeOnboardingTodoOptionsAsync();
+            var result = await _employeeOnboardingService.GetEmployeeOnboardingOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -104,13 +104,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:create", "创建入职待办")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:create", "创建入职待办")]
     [HttpPost]
-    public async Task<IActionResult> CreateEmployeeOnboardingTodoAsync([FromBody] TaktEmployeeOnboardingTodoCreateDto dto)
+    public async Task<IActionResult> CreateEmployeeOnboardingAsync([FromBody] TaktEmployeeOnboardingCreateDto dto)
     {
         try
         {
-            var result = await _employeeOnboardingTodoService.CreateEmployeeOnboardingTodoAsync(dto);
+            var result = await _employeeOnboardingService.CreateEmployeeOnboardingAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -125,13 +125,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// <param name="id">入职待办ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:update", "更新入职待办")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:update", "更新入职待办")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEmployeeOnboardingTodoAsync(long id, [FromBody] TaktEmployeeOnboardingTodoUpdateDto dto)
+    public async Task<IActionResult> UpdateEmployeeOnboardingAsync(long id, [FromBody] TaktEmployeeOnboardingUpdateDto dto)
     {
         try
         {
-            var result = await _employeeOnboardingTodoService.UpdateEmployeeOnboardingTodoAsync(id, dto);
+            var result = await _employeeOnboardingService.UpdateEmployeeOnboardingAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -145,13 +145,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// </summary>
     /// <param name="id">入职待办ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:delete", "删除入职待办")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:delete", "删除入职待办")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEmployeeOnboardingTodoByIdAsync(long id)
+    public async Task<IActionResult> DeleteEmployeeOnboardingByIdAsync(long id)
     {
         try
         {
-            await _employeeOnboardingTodoService.DeleteEmployeeOnboardingTodoByIdAsync(id);
+            await _employeeOnboardingService.DeleteEmployeeOnboardingByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -165,13 +165,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:delete", "批量删除入职待办")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:delete", "批量删除入职待办")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteEmployeeOnboardingTodoBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteEmployeeOnboardingBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _employeeOnboardingTodoService.DeleteEmployeeOnboardingTodoBatchAsync(ids);
+            await _employeeOnboardingService.DeleteEmployeeOnboardingBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -185,13 +185,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:update", "更新入职待办状态")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:update", "更新入职待办状态")]
     [HttpPut("status")]
-    public async Task<IActionResult> UpdateEmployeeOnboardingTodoStatusAsync([FromBody] TaktEmployeeOnboardingTodoStatusDto dto)
+    public async Task<IActionResult> UpdateEmployeeOnboardingStatusAsync([FromBody] TaktEmployeeOnboardingStatusDto dto)
     {
         try
         {
-            var result = await _employeeOnboardingTodoService.UpdateEmployeeOnboardingTodoStatusAsync(dto);
+            var result = await _employeeOnboardingService.UpdateEmployeeOnboardingStatusAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -204,13 +204,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:import", "获取入职待办导入模板")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:import", "获取入职待办导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetEmployeeOnboardingTodoTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetEmployeeOnboardingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _employeeOnboardingTodoService.GetEmployeeOnboardingTodoTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _employeeOnboardingService.GetEmployeeOnboardingTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -224,9 +224,9 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:import", "导入入职待办")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:import", "导入入职待办")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportEmployeeOnboardingTodoAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportEmployeeOnboardingAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -236,7 +236,7 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _employeeOnboardingTodoService.ImportEmployeeOnboardingTodoAsync(stream, sheetName);
+            var (success, fail, errors) = await _employeeOnboardingService.ImportEmployeeOnboardingAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -254,13 +254,13 @@ public class TaktEmployeeOnboardingTodosController : TaktControllerBase
     /// 导出入职待办
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeeonboardingtodo:export", "导出入职待办")]
+    [TaktPermission("humanresource:personnel:employeeonboarding:export", "导出入职待办")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportEmployeeOnboardingTodoAsync([FromQuery] TaktEmployeeOnboardingTodoQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportEmployeeOnboardingAsync([FromQuery] TaktEmployeeOnboardingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _employeeOnboardingTodoService.ExportEmployeeOnboardingTodoAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _employeeOnboardingService.ExportEmployeeOnboardingAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

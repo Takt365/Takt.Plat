@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktWorkShiftDtos.cs
-// 创建时间：2026-06-06
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：WorkShift 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWorkShift 生成，请按需审阅）
 // 

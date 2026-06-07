@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
-// 文件名称：TaktEmployeeTransferDtos.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeReassignmentDtos.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
-// 功能描述：EmployeeTransfer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeTransfer 生成，请按需审阅）
+// 功能描述：EmployeeReassignment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeReassignment 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,22 +18,22 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.HumanResource.Personnel;
 
 // ========================================
-// EmployeeTransfer 响应 DTO
+// EmployeeReassignment 响应 DTO
 // ========================================
 
 /// <summary>
 /// 员工调动记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
-/// 对应前端 TaktEmployeeTransferDto
+/// 对应前端 TaktEmployeeReassignmentDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
-public class TaktEmployeeTransferDto : TaktApprovalDtoBase
+public class TaktEmployeeReassignmentDto : TaktApprovalDtoBase
 {
     /// <summary>
-    /// EmployeeTransferID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// EmployeeReassignmentID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeTransferId { get; set; }
+    public long EmployeeReassignmentId { get; set; }
 
     /// <summary>
     /// 员工ID
@@ -49,7 +49,7 @@ public class TaktEmployeeTransferDto : TaktApprovalDtoBase
     /// <summary>
     /// 调动类型（0=转岗，1=调岗）
     /// </summary>
-    public int TransferType { get; set; } = 0;
+    public int ReassignmentType { get; set; } = 0;
 
     /// <summary>
     /// 调出部门ID
@@ -108,14 +108,14 @@ public class TaktEmployeeTransferDto : TaktApprovalDtoBase
 }
 
 // ========================================
-// EmployeeTransfer 查询 DTO
+// EmployeeReassignment 查询 DTO
 // ========================================
 
 /// <summary>
-/// EmployeeTransfer 分页查询 DTO
+/// EmployeeReassignment 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktEmployeeTransferQueryDto : TaktPagedQuery
+public class TaktEmployeeReassignmentQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -136,7 +136,7 @@ public class TaktEmployeeTransferQueryDto : TaktPagedQuery
     /// <summary>
     /// 调动类型（0=转岗，1=调岗）
     /// </summary>
-    public int? TransferType { get; set; }
+    public int? ReassignmentType { get; set; }
 
     /// <summary>
     /// 调出部门ID
@@ -256,13 +256,13 @@ public class TaktEmployeeTransferQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建EmployeeTransfer DTO
+// 创建EmployeeReassignment DTO
 // ========================================
 
 /// <summary>
-/// 创建EmployeeTransfer DTO
+/// 创建EmployeeReassignment DTO
 /// </summary>
-public class TaktEmployeeTransferCreateDto
+public class TaktEmployeeReassignmentCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -288,7 +288,7 @@ public class TaktEmployeeTransferCreateDto
     /// <summary>
     /// 调动类型（0=转岗，1=调岗）
     /// </summary>
-    public int TransferType { get; set; } = 0;
+    public int ReassignmentType { get; set; } = 0;
 
     /// <summary>
     /// 调出部门ID
@@ -359,22 +359,22 @@ public class TaktEmployeeTransferCreateDto
 }
 
 // ========================================
-// 更新EmployeeTransfer DTO
+// 更新EmployeeReassignment DTO
 // ========================================
 
 /// <summary>
-/// 更新EmployeeTransfer DTO
-/// 继承 TaktEmployeeTransferCreateDto，添加 EmployeeTransferId 字段
+/// 更新EmployeeReassignment DTO
+/// 继承 TaktEmployeeReassignmentCreateDto，添加 EmployeeReassignmentId 字段
 /// </summary>
-public class TaktEmployeeTransferUpdateDto : TaktEmployeeTransferCreateDto
+public class TaktEmployeeReassignmentUpdateDto : TaktEmployeeReassignmentCreateDto
 {
     /// <summary>
-    /// EmployeeTransferID（标识要更新的实体）
+    /// EmployeeReassignmentID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeTransferId { get; set; }
+    public long EmployeeReassignmentId { get; set; }
 
 }
 
@@ -383,9 +383,9 @@ public class TaktEmployeeTransferUpdateDto : TaktEmployeeTransferCreateDto
 // ========================================
 
 /// <summary>
-/// EmployeeTransfer 导入模板行 DTO
+/// EmployeeReassignment 导入模板行 DTO
 /// </summary>
-public class TaktEmployeeTransferTemplateDto
+public class TaktEmployeeReassignmentTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -406,7 +406,7 @@ public class TaktEmployeeTransferTemplateDto
     /// <summary>
     /// 调动类型（0=转岗，1=调岗）
     /// </summary>
-    public int? TransferType { get; set; }
+    public int? ReassignmentType { get; set; }
 
     /// <summary>
     /// 调出部门ID
@@ -470,9 +470,9 @@ public class TaktEmployeeTransferTemplateDto
 }
 
 /// <summary>
-/// EmployeeTransfer 导入 DTO（独立实现，不继承 TemplateDto）
+/// EmployeeReassignment 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktEmployeeTransferImportDto
+public class TaktEmployeeReassignmentImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -498,7 +498,7 @@ public class TaktEmployeeTransferImportDto
     /// <summary>
     /// 调动类型（0=转岗，1=调岗）
     /// </summary>
-    public int? TransferType { get; set; }
+    public int? ReassignmentType { get; set; }
 
     /// <summary>
     /// 调出部门ID
@@ -566,16 +566,16 @@ public class TaktEmployeeTransferImportDto
 // ========================================
 
 /// <summary>
-/// EmployeeTransfer 导出 DTO（独立实现，不继承响应 Dto）
+/// EmployeeReassignment 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktEmployeeTransferExportDto
+public class TaktEmployeeReassignmentExportDto
 {
     /// <summary>
-    /// EmployeeTransferID
+    /// EmployeeReassignmentID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeTransferId { get; set; }
+    public long EmployeeReassignmentId { get; set; }
 
     /// <summary>
     /// 员工ID
@@ -586,7 +586,7 @@ public class TaktEmployeeTransferExportDto
     /// <summary>
     /// 调动类型（0=转岗，1=调岗）
     /// </summary>
-    public int TransferType { get; set; } = 0;
+    public int ReassignmentType { get; set; } = 0;
 
     /// <summary>
     /// 调出部门ID

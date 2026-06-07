@@ -53,6 +53,7 @@ declare module 'vue' {
     AntdvCode: typeof import('./components/business/takt-form-designer/sfc/antdv/antdvCode.vue')['default']
     AntdvForm: typeof import('./components/business/takt-form-designer/sfc/antdv/antdvForm.vue')['default']
     APagination: typeof import('ant-design-vue/es')['Pagination']
+    AProgress: typeof import('ant-design-vue/es')['Progress']
     ARadio: typeof import('ant-design-vue/es')['Radio']
     ARadioButton: typeof import('ant-design-vue/es')['RadioButton']
     ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']

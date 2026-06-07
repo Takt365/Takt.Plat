@@ -1,14 +1,14 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/human-resource/personnel/employee-onboarding-todo -->
+<!-- 命名空间：@/views/human-resource/personnel/employee-reassignment -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：入职待办管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->
+<!-- 功能描述：员工调动记录管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-personnel-employee-onboarding-todo">
+  <div class="human-resource-personnel-employee-reassignment">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:personnel:employeeonboardingtodo:create"
-      update-permission="humanresource:personnel:employeeonboardingtodo:update"
-      delete-permission="humanresource:personnel:employeeonboardingtodo:delete"
-      import-permission="humanresource:personnel:employeeonboardingtodo:import"
-      export-permission="humanresource:personnel:employeeonboardingtodo:export"
+      create-permission="humanresource:personnel:employeereassignment:create"
+      update-permission="humanresource:personnel:employeereassignment:update"
+      delete-permission="humanresource:personnel:employeereassignment:delete"
+      import-permission="humanresource:personnel:employeereassignment:import"
+      export-permission="humanresource:personnel:employeereassignment:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -58,7 +58,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
-      :row-key="getEmployeeOnboardingTodoId"
+      :row-key="getEmployeeReassignmentId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
       :large-screen-column-count="9"
@@ -89,7 +89,7 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <EmployeeOnboardingTodoForm
+      <EmployeeReassignmentForm
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -102,59 +102,59 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.employeeOnboardingTodo.offerid')">
-        <a-input
-          v-model:value="advancedQueryForm.offerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.offerid') })"
-          allow-clear
-        />
-      </a-form-item>
-      <a-form-item :label="t('entity.employeeOnboardingTodo.todono')">
-        <a-input
-          v-model:value="advancedQueryForm.todoNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.todono') })"
-          allow-clear
-        />
-      </a-form-item>
-      <a-form-item :label="t('entity.employeeOnboardingTodo.todostatus')">
-        <a-input
-          v-model:value="advancedQueryForm.todoStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.todostatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      <a-form-item :label="t('entity.employeeOnboardingTodo.candidatename')">
-        <a-input
-          v-model:value="advancedQueryForm.candidateName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.candidatename') })"
-          allow-clear
-        />
-      </a-form-item>
-      <a-form-item :label="t('entity.employeeOnboardingTodo.mobile')">
-        <a-input
-          v-model:value="advancedQueryForm.mobile"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.mobile') })"
-          allow-clear
-        />
-      </a-form-item>
-      <a-form-item :label="t('entity.employeeOnboardingTodo.employeeid')">
+      <a-form-item :label="t('entity.employeeReassignment.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.employeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.employeeid') })"
           allow-clear
         />
       </a-form-item>
-      <a-form-item :label="t('entity.employeeOnboardingTodo.employeejoinedid')">
+      <a-form-item :label="t('entity.employeeReassignment.reassignmenttype')">
         <a-input
-          v-model:value="advancedQueryForm.employeeJoinedId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.employeejoinedid') })"
+          v-model:value="advancedQueryForm.reassignmentType"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.reassignmenttype') })"
           allow-clear
         />
       </a-form-item>
-      <a-form-item :label="t('entity.employeeOnboardingTodo.reason')">
+      <a-form-item :label="t('entity.employeeReassignment.fromdeptid')">
         <a-input
-          v-model:value="advancedQueryForm.reason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboardingTodo.reason') })"
+          v-model:value="advancedQueryForm.fromDeptId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptid') })"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item :label="t('entity.employeeReassignment.fromdeptname')">
+        <a-input
+          v-model:value="advancedQueryForm.fromDeptName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.fromdeptname') })"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item :label="t('entity.employeeReassignment.frompostid')">
+        <a-input
+          v-model:value="advancedQueryForm.fromPostId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.frompostid') })"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item :label="t('entity.employeeReassignment.frompostname')">
+        <a-input
+          v-model:value="advancedQueryForm.fromPostName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.frompostname') })"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item :label="t('entity.employeeReassignment.todeptid')">
+        <a-input
+          v-model:value="advancedQueryForm.toDeptId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptid') })"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item :label="t('entity.employeeReassignment.todeptname')">
+        <a-input
+          v-model:value="advancedQueryForm.toDeptName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeReassignment.todeptname') })"
           allow-clear
         />
       </a-form-item>
@@ -163,14 +163,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.employeeOnboardingTodo._self')"
+      :title="t('common.page.button.import') + t('entity.employeeReassignment._self')"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeOnboardingTodo._self"
+        entity-i18n-key="entity.employeeReassignment._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -186,7 +186,7 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'employeeOnboardingTodoId'"
+      :id-column-key="'employeeReassignmentId'"
       :action-column-key="'action'"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
@@ -196,8 +196,8 @@
 
 <script setup lang="ts">
 /**
- * 入职待办管理页 · 由 generate-vue-from-api 根据 types/api 生成
- * @module views/human-resource/personnel/employee-onboarding-todo
+ * 员工调动记录管理页 · 由 generate-vue-from-api 根据 types/api 生成
+ * @module views/human-resource/personnel/employee-reassignment
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
@@ -205,49 +205,49 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
-import EmployeeOnboardingTodoForm from './components/employee-onboarding-todo-form.vue'
-import { getEmployeeOnboardingTodoList, getEmployeeOnboardingTodoById, createEmployeeOnboardingTodo, updateEmployeeOnboardingTodo, deleteEmployeeOnboardingTodoById, deleteEmployeeOnboardingTodoBatch, getEmployeeOnboardingTodoTemplate, importEmployeeOnboardingTodo, exportEmployeeOnboardingTodo } from '@/api/human-resource/personnel/employee-onboarding-todo'
-import type { EmployeeOnboardingTodo, EmployeeOnboardingTodoQuery, EmployeeOnboardingTodoCreate, EmployeeOnboardingTodoUpdate } from '@/types/human-resource/personnel/employee-onboarding-todo'
+import EmployeeReassignmentForm from './components/employee-reassignment-form.vue'
+import { getEmployeeReassignmentList, getEmployeeReassignmentById, createEmployeeReassignment, updateEmployeeReassignment, deleteEmployeeReassignmentById, deleteEmployeeReassignmentBatch, getEmployeeReassignmentTemplate, importEmployeeReassignment, exportEmployeeReassignment } from '@/api/human-resource/personnel/employee-reassignment'
+import type { EmployeeReassignment, EmployeeReassignmentQuery, EmployeeReassignmentCreate, EmployeeReassignmentUpdate } from '@/types/human-resource/personnel/employee-reassignment'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 const { t } = useI18n()
-const excelNames = taktExcelEntityNames('TaktEmployeeOnboardingTodo')
+const excelNames = taktExcelEntityNames('TaktEmployeeReassignment')
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeOnboardingTodo._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeReassignment._self') })
 )
 
 const queryKeyword = ref('')
 const loading = ref(false)
-const dataSource = ref<EmployeeOnboardingTodo[]>([])
+const dataSource = ref<EmployeeReassignment[]>([])
 const currentPage = ref(1)
 const pageSize = ref(20)
 const total = ref(0)
-const selectedRow = ref<EmployeeOnboardingTodo | null>(null)
-const selectedRows = ref<EmployeeOnboardingTodo[]>([])
+const selectedRow = ref<EmployeeReassignment | null>(null)
+const selectedRows = ref<EmployeeReassignment[]>([])
 const selectedRowKeys = ref<(string | number)[]>([])
 
 const formVisible = ref(false)
 const formTitle = ref('')
-const formData = ref<Partial<EmployeeOnboardingTodo>>({})
+const formData = ref<Partial<EmployeeReassignment>>({})
 const formLoading = ref(false)
 const formRef = ref()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  offerId: '',
-  todoNo: '',
-  todoStatus: undefined as number | undefined,
-  candidateName: '',
-  mobile: '',
   employeeId: '',
-  employeeJoinedId: '',
-  reason: '',
+  reassignmentType: undefined as number | undefined,
+  fromDeptId: '',
+  fromDeptName: '',
+  fromPostId: '',
+  fromPostName: '',
+  toDeptId: '',
+  toDeptName: '',
 })
 const columnSettingVisible = ref(false)
 const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
-const entityIdName = 'employeeOnboardingTodoId'
+const entityIdName = 'employeeReassignmentId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
@@ -263,121 +263,121 @@ onMounted(() => {
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'employeeOnboardingTodoId',
-    key: 'employeeOnboardingTodoId',
+    dataIndex: 'employeeReassignmentId',
+    key: 'employeeReassignmentId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'employeeOnboardingTodoId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'employeeReassignmentId') ?? ''
   },
   {
-    title: t('entity.employeeOnboardingTodo.offerid'),
-    dataIndex: 'offerId',
-    key: 'offerId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'offerId') ?? ''
-  },
-  {
-    title: t('entity.employeeOnboardingTodo.offername'),
-    dataIndex: 'offerName',
-    key: 'offerName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'offerName') ?? ''
-  },
-  {
-    title: t('entity.employeeOnboardingTodo.todono'),
-    dataIndex: 'todoNo',
-    key: 'todoNo',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'todoNo') ?? ''
-  },
-  {
-    title: t('entity.employeeOnboardingTodo.todostatus'),
-    dataIndex: 'todoStatus',
-    key: 'todoStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'todoStatus') ?? ''
-  },
-  {
-    title: t('entity.employeeOnboardingTodo.plannedjoineddate'),
-    dataIndex: 'plannedJoinedDate',
-    key: 'plannedJoinedDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'plannedJoinedDate') ?? ''
-  },
-  {
-    title: t('entity.employeeOnboardingTodo.candidatename'),
-    dataIndex: 'candidateName',
-    key: 'candidateName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'candidateName') ?? ''
-  },
-  {
-    title: t('entity.employeeOnboardingTodo.mobile'),
-    dataIndex: 'mobile',
-    key: 'mobile',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'mobile') ?? ''
-  },
-  {
-    title: t('entity.employeeOnboardingTodo.employeeid'),
+    title: t('entity.employeeReassignment.employeeid'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'employeeId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.employeeOnboardingTodo.employeename'),
+    title: t('entity.employeeReassignment.employeename'),
     dataIndex: 'employeeName',
     key: 'employeeName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'employeeName') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'employeeName') ?? ''
   },
   {
-    title: t('entity.employeeOnboardingTodo.employeejoinedid'),
-    dataIndex: 'employeeJoinedId',
-    key: 'employeeJoinedId',
+    title: t('entity.employeeReassignment.reassignmenttype'),
+    dataIndex: 'reassignmentType',
+    key: 'reassignmentType',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'employeeJoinedId') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'reassignmentType') ?? ''
   },
   {
-    title: t('entity.employeeOnboardingTodo.employeejoinedname'),
-    dataIndex: 'employeeJoinedName',
-    key: 'employeeJoinedName',
+    title: t('entity.employeeReassignment.fromdeptid'),
+    dataIndex: 'fromDeptId',
+    key: 'fromDeptId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'employeeJoinedName') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromDeptId') ?? ''
   },
   {
-    title: t('entity.employeeOnboardingTodo.reason'),
-    dataIndex: 'reason',
-    key: 'reason',
+    title: t('entity.employeeReassignment.fromdeptname'),
+    dataIndex: 'fromDeptName',
+    key: 'fromDeptName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingTodoField(record, 'reason') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromDeptName') ?? ''
+  },
+  {
+    title: t('entity.employeeReassignment.frompostid'),
+    dataIndex: 'fromPostId',
+    key: 'fromPostId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromPostId') ?? ''
+  },
+  {
+    title: t('entity.employeeReassignment.frompostname'),
+    dataIndex: 'fromPostName',
+    key: 'fromPostName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'fromPostName') ?? ''
+  },
+  {
+    title: t('entity.employeeReassignment.todeptid'),
+    dataIndex: 'toDeptId',
+    key: 'toDeptId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toDeptId') ?? ''
+  },
+  {
+    title: t('entity.employeeReassignment.todeptname'),
+    dataIndex: 'toDeptName',
+    key: 'toDeptName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toDeptName') ?? ''
+  },
+  {
+    title: t('entity.employeeReassignment.topostid'),
+    dataIndex: 'toPostId',
+    key: 'toPostId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toPostId') ?? ''
+  },
+  {
+    title: t('entity.employeeReassignment.topostname'),
+    dataIndex: 'toPostName',
+    key: 'toPostName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'toPostName') ?? ''
+  },
+  {
+    title: t('entity.employeeReassignment.effectivedate'),
+    dataIndex: 'effectiveDate',
+    key: 'effectiveDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeReassignmentField(record, 'effectiveDate') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -386,23 +386,23 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:personnel:employeeonboardingtodo:update',
-        onClick: (record: EmployeeOnboardingTodo) => handleEdit(record)
+        permission: 'humanresource:personnel:employeereassignment:update',
+        onClick: (record: EmployeeReassignment) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:personnel:employeeonboardingtodo:delete',
-        onClick: (record: EmployeeOnboardingTodo) => handleDeleteOne(record)
+        permission: 'humanresource:personnel:employeereassignment:delete',
+        onClick: (record: EmployeeReassignment) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
-const getEmployeeOnboardingTodoId = (record: any): string => record?.[entityIdName] ?? ''
-const getEmployeeOnboardingTodoField = (record: any, field: string): any => record?.[field]
+const getEmployeeReassignmentId = (record: any): string => record?.[entityIdName] ?? ''
+const getEmployeeReassignmentField = (record: any, field: string): any => record?.[field]
 
 const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
 const displayColumns = computed(() => {
@@ -418,33 +418,33 @@ const displayColumns = computed(() => {
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: EmployeeOnboardingTodo[]) => {
+  onChange: (keys: (string | number)[], rows: EmployeeReassignment[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: EmployeeOnboardingTodo, selected: boolean) => {
+  onSelect: (record: EmployeeReassignment, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getEmployeeOnboardingTodoId(selectedRow.value) === getEmployeeOnboardingTodoId(record)) {
+    } else if (getEmployeeReassignmentId(selectedRow.value) === getEmployeeReassignmentId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: EmployeeOnboardingTodo[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EmployeeReassignment[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
-const onClickRow = (record: EmployeeOnboardingTodo) => ({
+const onClickRow = (record: EmployeeReassignment) => ({
   onClick: () => {
-    const key = getEmployeeOnboardingTodoId(record)
+    const key = getEmployeeReassignmentId(record)
     const index = selectedRowKeys.value.indexOf(key)
     if (index > -1) {
       selectedRowKeys.value.splice(index, 1)
     } else {
       selectedRowKeys.value.push(key)
     }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getEmployeeOnboardingTodoId(item)))
+    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getEmployeeReassignmentId(item)))
     selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
     if (rowSelection.value.onChange) {
       rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
@@ -456,7 +456,7 @@ async function loadData() {
   loading.value = true
   try {
     const kw = (queryKeyword.value ?? '').trim()
-    const params: EmployeeOnboardingTodoQuery = {
+    const params: EmployeeReassignmentQuery = {
       pageIndex: currentPage.value,
       pageSize: pageSize.value,
       ...advancedQueryForm.value
@@ -464,11 +464,11 @@ async function loadData() {
     if (kw.length > 0) {
       params.keyWords = kw
     }
-    const res = await getEmployeeOnboardingTodoList(params)
+    const res = await getEmployeeReassignmentList(params)
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[EmployeeOnboardingTodo] 加载数据失败', { error })
+    logger.error('[EmployeeReassignment] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -485,26 +485,26 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  offerId: '',
-  todoNo: '',
-  todoStatus: undefined as number | undefined,
-  candidateName: '',
-  mobile: '',
   employeeId: '',
-  employeeJoinedId: '',
-  reason: '',
+  reassignmentType: undefined as number | undefined,
+  fromDeptId: '',
+  fromDeptName: '',
+  fromPostId: '',
+  fromPostName: '',
+  toDeptId: '',
+  toDeptName: '',
   }
   currentPage.value = 1
   loadData()
 }
 
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.employeeOnboardingTodo._self')
+  formTitle.value = t('common.page.button.create') + t('entity.employeeReassignment._self')
   formData.value = {}
   formVisible.value = true
 }
-function handleEdit(record: EmployeeOnboardingTodo) {
-  formTitle.value = t('common.page.button.edit') + t('entity.employeeOnboardingTodo._self')
+function handleEdit(record: EmployeeReassignment) {
+  formTitle.value = t('common.page.button.edit') + t('entity.employeeReassignment._self')
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -513,7 +513,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeOnboardingTodo._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeReassignment._self') }))
   }
 }
 async function handleFormSubmit() {
@@ -529,11 +529,11 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateEmployeeOnboardingTodo(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeOnboardingTodo._self') }))
+      await updateEmployeeReassignment(id, payload as any)
+      message.success(t('common.feedback.updated', { target: t('entity.employeeReassignment._self') }))
     } else {
-      await createEmployeeOnboardingTodo(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeOnboardingTodo._self') }))
+      await createEmployeeReassignment(payload as any)
+      message.success(t('common.feedback.created', { target: t('entity.employeeReassignment._self') }))
     }
     formVisible.value = false
     loadData()
@@ -550,12 +550,12 @@ function handleImport() {
 }
 
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getEmployeeOnboardingTodoTemplate(sheetName, fileName)
+  const res = await getEmployeeReassignmentTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
 async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEmployeeOnboardingTodo(file, sheetName)
+  return await importEmployeeReassignment(file, sheetName)
 }
 
 function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
@@ -570,7 +570,7 @@ async function handleExport() {
   try {
     loading.value = true
     const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EmployeeOnboardingTodoQuery = {
+    const exportQuery: EmployeeReassignmentQuery = {
       pageIndex: 1,
       pageSize: 100000,
       ...advancedQueryForm.value
@@ -578,7 +578,7 @@ async function handleExport() {
     if (kw.length > 0) {
       exportQuery.keyWords = kw
     }
-    const exportMeta = await exportEmployeeOnboardingTodo(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEmployeeReassignment(exportQuery, excelNames.sheet, excelNames.fileBase)
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -597,41 +597,41 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeOnboardingTodo._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.employeeReassignment._self') }))
   } catch (error: any) {
-    logger.error('[EmployeeOnboardingTodo] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeOnboardingTodo._self') }))
+    logger.error('[EmployeeReassignment] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeReassignment._self') }))
   } finally {
     loading.value = false
   }
 }
-async function handleDeleteOne(record: EmployeeOnboardingTodo) {
+async function handleDeleteOne(record: EmployeeReassignment) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeOnboardingTodo._self'), name: t('common.tip.this.target', { target: t('entity.employeeOnboardingTodo._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeReassignment._self'), name: t('common.tip.this.target', { target: t('entity.employeeReassignment._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteEmployeeOnboardingTodoById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeOnboardingTodo._self') }))
+      await deleteEmployeeReassignmentById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: t('entity.employeeReassignment._self') }))
       loadData()
     }
   })
 }
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeOnboardingTodo._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeReassignment._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeOnboardingTodo._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeReassignment._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteEmployeeOnboardingTodoBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeOnboardingTodo._self') }))
+      await deleteEmployeeReassignmentBatch(ids)
+      message.success(t('common.feedback.deleted', { target: t('entity.employeeReassignment._self') }))
       loadData()
     }
   })
@@ -648,14 +648,14 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  offerId: '',
-  todoNo: '',
-  todoStatus: undefined as number | undefined,
-  candidateName: '',
-  mobile: '',
   employeeId: '',
-  employeeJoinedId: '',
-  reason: '',
+  reassignmentType: undefined as number | undefined,
+  fromDeptId: '',
+  fromDeptName: '',
+  fromPostId: '',
+  fromPostName: '',
+  toDeptId: '',
+  toDeptName: '',
   }
 }
 
@@ -689,7 +689,7 @@ function handlePaginationSizeChange(_current: number, size: number) {
 </script>
 
 <style scoped lang="css">
-.human-resource-personnel-employee-onboarding-todo {
+.human-resource-personnel-employee-reassignment {
   padding: 16px;
   display: flex;
   flex-direction: column;

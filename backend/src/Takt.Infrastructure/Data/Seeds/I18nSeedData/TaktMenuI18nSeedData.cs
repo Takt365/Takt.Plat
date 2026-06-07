@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktMenuI18nSeedData.cs
@@ -128,7 +128,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.code._self", "ja-JP", "コード", "レベル1メニュー"),
             ("menu.foundation._self", "ja-JP", "基本設定", "レベル1メニュー"),
             ("menu.statistics._self", "ja-JP", "統計", "レベル1メニュー"),
-            ("menu.about._self", "ja-JP", "について", "レベル1メニュー"),
+            ("menu.about._self", "ja-JP", "概要", "レベル1メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.home._self", "zh-HK", "主頁", "一级菜单"),
@@ -187,7 +187,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // 日文 (ja-JP)
             ("menu.routine.announcement", "ja-JP", "お知らせ", "レベル2メニュー"),
             ("menu.routine.conferencecenter", "ja-JP", "会議センター", "レベル2メニュー"),
-            ("menu.routine.documentcenter", "ja-JP", "文書管理センター", "レベル2メニュー"),
+            ("menu.routine.documentcenter", "ja-JP", "文書センター", "レベル2メニュー"),
             ("menu.routine.newscenter", "ja-JP", "ニュースセンター", "レベル2メニュー"),
             ("menu.routine.helpdesk", "ja-JP", "ヘルプデスク", "レベル2メニュー"),
             ("menu.routine.visitorcenter", "ja-JP", "来訪者センター", "レベル2メニュー"),
@@ -209,11 +209,11 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.accounting.controlling._self", "zh-CN", "控制会计", "二级菜单"),
 
             // 英文 (en-US)
-            ("menu.accounting.financial._self", "en-US", "Financial Accounting", "Level 2 Menu"),
+            ("menu.accounting.financial._self", "en-US", "Financial", "Level 2 Menu"),
             ("menu.accounting.controlling._self", "en-US", "Controlling", "Level 2 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.accounting.financial._self", "ja-JP", "管理会計", "レベル2メニュー"),
+            ("menu.accounting.financial._self", "ja-JP", "財務会計", "レベル2メニュー"),
             ("menu.accounting.controlling._self", "ja-JP", "管理会計", "レベル2メニュー"),
 
             // 香港繁体 (zh-HK)
@@ -410,7 +410,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
 
             // 日文 (ja-JP)
             ("menu.foundation.numbering", "ja-JP", "番号規則", "レベル2メニュー"),
-            ("menu.foundation.dict", "ja-JP", "データディクショナリ", "レベル2メニュー"),
+            ("menu.foundation.dict", "ja-JP", "ディクショナリ", "レベル2メニュー"),
             ("menu.foundation.i18n", "ja-JP", "国際化", "レベル2メニュー"),
             ("menu.foundation.file", "ja-JP", "ファイル", "レベル2メニュー"),
             ("menu.foundation.device", "ja-JP", "デバイス", "レベル2メニュー"),
@@ -469,10 +469,10 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.accounting.financial.company", "en-US", "Company", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.accounting.financial.accounttitle", "ja-JP", "会計科目", "レベル3メニュー"),
+            ("menu.accounting.financial.accounttitle", "ja-JP", "勘定科目", "レベル3メニュー"),
             ("menu.accounting.financial.asset", "ja-JP", "固定資産", "レベル3メニュー"),
-            ("menu.accounting.financial.countersign", "ja-JP", "会签管理", "レベル3メニュー"),
-            ("menu.accounting.financial.company", "ja-JP", "会社管理", "レベル3メニュー"),
+            ("menu.accounting.financial.countersign", "ja-JP", "稟議", "レベル3メニュー"),
+            ("menu.accounting.financial.company", "ja-JP", "会社", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.accounting.financial.accounttitle", "zh-HK", "會計科目", "三级菜单"),
@@ -513,7 +513,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.logistics.materials.plant", "zh-CN", "工厂信息", "三级菜单"),
+            ("menu.logistics.materials.plant", "zh-CN", "工厂", "三级菜单"),
             ("menu.logistics.materials.material", "zh-CN", "物料", "三级菜单"),
 
             // 英文 (en-US)
@@ -521,11 +521,11 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.materials.material", "en-US", "Material", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.logistics.materials.plant", "ja-JP", "工場情報", "レベル3メニュー"),
+            ("menu.logistics.materials.plant", "ja-JP", "工場", "レベル3メニュー"),
             ("menu.logistics.materials.material", "ja-JP", "資材", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.logistics.materials.plant", "zh-HK", "工廠信息", "三级菜单"),
+            ("menu.logistics.materials.plant", "zh-HK", "工廠", "三级菜单"),
             ("menu.logistics.materials.material", "zh-HK", "物料", "三级菜单"),
 
             // ========================================
@@ -629,32 +629,68 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.scheduling.weekly", "zh-HK", "周排程", "三级菜单"),
 
             // ========================================
-            // 三级菜单（生产执行-设变）
+            // 四级菜单（生产执行-设变，与 TaktMenuLevel4SeedData 对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "zh-CN", "设变看板", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "zh-CN", "物料确认", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "zh-CN", "品管部门", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "zh-CN", "旧品管制", "三级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.kanban", "zh-CN", "设变看板", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.batch", "zh-CN", "投入批次", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.kakunin", "zh-CN", "物料确认", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "zh-CN", "设变通知", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "zh-CN", "技术部门", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.koubai", "zh-CN", "采购部门", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.seikan", "zh-CN", "生管部门", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.ukeken", "zh-CN", "受检部门", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.bukan", "zh-CN", "部管部门", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.seizonika", "zh-CN", "制造二课", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "zh-CN", "制造一课", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.hinkan", "zh-CN", "品管部门", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "zh-CN", "旧品管制", "四级菜单"),
 
             // 英文 (en-US)
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "en-US", "ECN Board", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "en-US", "Material Confirm", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "en-US", "Quality Dept", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "en-US", "Old Product", "Level 3 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.kanban", "en-US", "EC Kanban", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.batch", "en-US", "Input Batch", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.kakunin", "en-US", "Material Confirm", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "en-US", "EC Notice", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "en-US", "Technical Dept", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.koubai", "en-US", "Purchasing Dept", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.seikan", "en-US", "Mfg Control Dept", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.ukeken", "en-US", "Inspection Dept", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.bukan", "en-US", "Dept Management", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.seizonika", "en-US", "Mfg Section 2", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "en-US", "Mfg Section 1", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.hinkan", "en-US", "Quality Dept", "Level 4 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "en-US", "Legacy Product", "Level 4 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "ja-JP", "変更看板", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "ja-JP", "物料確認", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "ja-JP", "品管部門", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "ja-JP", "旧品管制", "レベル3メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.kanban", "ja-JP", "変更看板", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.batch", "ja-JP", "投入ロット", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.kakunin", "ja-JP", "物料確認", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "ja-JP", "設変通知", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "ja-JP", "技術部門", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.koubai", "ja-JP", "購買部門", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.seikan", "ja-JP", "生管部門", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.ukeken", "ja-JP", "受検部門", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.bukan", "ja-JP", "部管部門", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.seizonika", "ja-JP", "製造二課", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "ja-JP", "製造一課", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.hinkan", "ja-JP", "品管部門", "レベル4メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "ja-JP", "旧製品管理", "レベル4メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "zh-HK", "設變看板", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "zh-HK", "物料確認", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "zh-HK", "品管部門", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "zh-HK", "舊品管制", "三级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.kanban", "zh-HK", "設變看板", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.batch", "zh-HK", "投入批次", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.kakunin", "zh-HK", "物料確認", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "zh-HK", "設變通知", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "zh-HK", "技術部門", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.koubai", "zh-HK", "採購部門", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.seikan", "zh-HK", "生管部門", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.ukeken", "zh-HK", "受檢部門", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.bukan", "zh-HK", "部管部門", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.seizonika", "zh-HK", "製造二課", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "zh-HK", "製造一課", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.hinkan", "zh-HK", "品管部門", "四级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "zh-HK", "舊品管制", "四级菜单"),
 
             // ========================================
             // 三级菜单（生产执行-产出-PCBA）
@@ -833,10 +869,10 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.quality.complaint.supplierevaluation", "en-US", "Supplier Evaluation", "Level 4 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.logistics.quality.complaint.registration", "ja-JP", "客訴登録", "レベル4メニュー"),
-            ("menu.logistics.quality.complaint.customercomplainthandling", "ja-JP", "客訴処理", "レベル4メニュー"),
-            ("menu.logistics.quality.complaint.customersatisfactionsurvey", "ja-JP", "顧客満足度調査", "レベル4メニュー"),
-            ("menu.logistics.quality.complaint.supplierevaluation", "ja-JP", "サプライヤー評価", "レベル4メニュー"),
+            ("menu.logistics.quality.complaint.registration", "ja-JP", "クレーム登録", "レベル4メニュー"),
+            ("menu.logistics.quality.complaint.customercomplainthandling", "ja-JP", "クレーム処理", "レベル4メニュー"),
+            ("menu.logistics.quality.complaint.customersatisfactionsurvey", "ja-JP", "顧客満足度", "レベル4メニュー"),
+            ("menu.logistics.quality.complaint.supplierevaluation", "ja-JP", "取引先評価", "レベル4メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.logistics.quality.complaint.registration", "zh-HK", "客訴登記", "四级菜单"),
@@ -908,25 +944,25 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.personnel.employee", "zh-CN", "员工档案", "三级菜单"),
             ("menu.humanresource.personnel.employeecontract", "zh-CN", "员工合同", "三级菜单"),
             ("menu.humanresource.personnel.employeedelegate", "zh-CN", "员工代理", "三级菜单"),
-            ("menu.humanresource.personnel.employeetransfer", "zh-CN", "员工调动", "三级菜单"),
+            ("menu.humanresource.personnel.employeereassignment", "zh-CN", "员工调动", "三级菜单"),
 
             // 英文 (en-US)
             ("menu.humanresource.personnel.employee", "en-US", "Employee", "Level 3 Menu"),
             ("menu.humanresource.personnel.employeecontract", "en-US", "Employee Contract", "Level 3 Menu"),
             ("menu.humanresource.personnel.employeedelegate", "en-US", "Employee Delegate", "Level 3 Menu"),
-            ("menu.humanresource.personnel.employeetransfer", "en-US", "Employee Transfer", "Level 3 Menu"),
+            ("menu.humanresource.personnel.employeereassignment", "en-US", "Employee Reassignment", "Level 3 Menu"),
 
             // 日文 (ja-JP)
             ("menu.humanresource.personnel.employee", "ja-JP", "従業員档案", "レベル3メニュー"),
             ("menu.humanresource.personnel.employeecontract", "ja-JP", "従業員契約", "レベル3メニュー"),
             ("menu.humanresource.personnel.employeedelegate", "ja-JP", "従業員代理", "レベル3メニュー"),
-            ("menu.humanresource.personnel.employeetransfer", "ja-JP", "従業員異動", "レベル3メニュー"),
+            ("menu.humanresource.personnel.employeereassignment", "ja-JP", "従業員異動", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.humanresource.personnel.employee", "zh-HK", "員工檔案", "三级菜单"),
             ("menu.humanresource.personnel.employeecontract", "zh-HK", "員工合同", "三级菜单"),
             ("menu.humanresource.personnel.employeedelegate", "zh-HK", "員工代理", "三级菜单"),
-            ("menu.humanresource.personnel.employeetransfer", "zh-HK", "員工調動", "三级菜单"),
+            ("menu.humanresource.personnel.employeereassignment", "zh-HK", "員工調動", "三级菜单"),
 
             // ========================================
             // 三级菜单（考勤，与 HumanResource/Attendance 实体对齐）
@@ -1091,7 +1127,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.talent.resumefilter", "zh-CN", "简历筛选", "三级菜单"),
             ("menu.humanresource.talent.interview", "zh-CN", "面试安排", "三级菜单"),
             ("menu.humanresource.talent.offer", "zh-CN", "录用", "三级菜单"),
-            ("menu.humanresource.personnel.employeeonboardingtodo", "zh-CN", "入职待办", "三级菜单"),
+            ("menu.humanresource.personnel.employeeonboarding", "zh-CN", "入职待办", "三级菜单"),
 
             // 英文 (en-US)
             ("menu.humanresource.talent.staffingrequirement", "en-US", "Staffing Requirement", "Level 3 Menu"),
@@ -1100,7 +1136,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.talent.resumefilter", "en-US", "Resume Filter", "Level 3 Menu"),
             ("menu.humanresource.talent.interview", "en-US", "Interview", "Level 3 Menu"),
             ("menu.humanresource.talent.offer", "en-US", "Offer", "Level 3 Menu"),
-            ("menu.humanresource.personnel.employeeonboardingtodo", "en-US", "Onboarding Todo", "Level 3 Menu"),
+            ("menu.humanresource.personnel.employeeonboarding", "en-US", "Onboarding", "Level 3 Menu"),
 
             // 日文 (ja-JP)
             ("menu.humanresource.talent.staffingrequirement", "ja-JP", "用人需求", "レベル3メニュー"),
@@ -1109,7 +1145,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.talent.resumefilter", "ja-JP", "履歴書筛选", "レベル3メニュー"),
             ("menu.humanresource.talent.interview", "ja-JP", "面接安排", "レベル3メニュー"),
             ("menu.humanresource.talent.offer", "ja-JP", "採用", "レベル3メニュー"),
-            ("menu.humanresource.personnel.employeeonboardingtodo", "ja-JP", "入社待办", "レベル3メニュー"),
+            ("menu.humanresource.personnel.employeeonboarding", "ja-JP", "入社待办", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.humanresource.talent.staffingrequirement", "zh-HK", "用人需求", "三级菜单"),
@@ -1118,7 +1154,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.talent.resumefilter", "zh-HK", "簡歷篩選", "三级菜单"),
             ("menu.humanresource.talent.interview", "zh-HK", "面試安排", "三级菜单"),
             ("menu.humanresource.talent.offer", "zh-HK", "錄用", "三级菜单"),
-            ("menu.humanresource.personnel.employeeonboardingtodo", "zh-HK", "入職待辦", "三级菜单"),
+            ("menu.humanresource.personnel.employeeonboarding", "zh-HK", "入職待辦", "三级菜单"),
 
             // ========================================
             // 三级菜单（统计看板-报表管理）
@@ -1297,21 +1333,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.serial.productserialoutbound", "zh-HK", "序列號出庫", "三级菜单"),
 
             // ========================================
-            // 三级目录与设变子项（与菜单种子 I18nKey 对齐）
+            // 三级目录（与菜单种子 I18nKey 对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
             ("menu.logistics.materials.purchasing._self", "zh-CN", "采购管理", "三级目录"),
             ("menu.logistics.manufacturing.bom._self", "zh-CN", "BOM管理", "三级目录"),
             ("menu.logistics.manufacturing.scheduling._self", "zh-CN", "生产排程", "三级目录"),
-            ("menu.logistics.manufacturing.engineeringchange.batch", "zh-CN", "投入批次", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "zh-CN", "技术部门", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "zh-CN", "采购部门", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "zh-CN", "生管部门", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "zh-CN", "受检部门", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "zh-CN", "部管部门", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.seizonika", "zh-CN", "制造二课", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "zh-CN", "制造一课", "三级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange._self", "zh-CN", "设变", "三级目录"),
             ("menu.logistics.manufacturing.output._self", "zh-CN", "产出管理", "三级目录"),
             ("menu.logistics.manufacturing.output.pcba._self", "zh-CN", "PCB生产", "三级目录"),
             ("menu.logistics.manufacturing.output.assembly._self", "zh-CN", "组立生产", "三级目录"),
@@ -1326,14 +1355,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.materials.purchasing._self", "en-US", "Purchasing", "Level 3 Directory"),
             ("menu.logistics.manufacturing.bom._self", "en-US", "BOM", "Level 3 Directory"),
             ("menu.logistics.manufacturing.scheduling._self", "en-US", "Scheduling", "Level 3 Directory"),
-            ("menu.logistics.manufacturing.engineeringchange.batch", "en-US", "Input Batch", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "en-US", "Technical Dept", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "en-US", "Purchasing Dept", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "en-US", "Mfg Control Dept", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "en-US", "Inspection Dept", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "en-US", "Dept Management", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.seizonika", "en-US", "Mfg Section 2", "Level 3 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "en-US", "Mfg Section 1", "Level 3 Menu"),
+            ("menu.logistics.manufacturing.engineeringchange._self", "en-US", "Engineering Change", "Level 3 Directory"),
             ("menu.logistics.manufacturing.output._self", "en-US", "OPH", "Level 3 Directory"),
             ("menu.logistics.manufacturing.output.pcba._self", "en-US", "PCB Output", "Level 3 Directory"),
             ("menu.logistics.manufacturing.output.assembly._self", "en-US", "Assembly Output", "Level 3 Directory"),
@@ -1348,14 +1370,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.materials.purchasing._self", "ja-JP", "購買管理", "レベル3ディレクトリ"),
             ("menu.logistics.manufacturing.bom._self", "ja-JP", "BOM管理", "レベル3ディレクトリ"),
             ("menu.logistics.manufacturing.scheduling._self", "ja-JP", "生産スケジュール", "レベル3ディレクトリ"),
-            ("menu.logistics.manufacturing.engineeringchange.batch", "ja-JP", "投入ロット", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "ja-JP", "技術部門", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "ja-JP", "購買部門", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "ja-JP", "生管部門", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "ja-JP", "受検部門", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "ja-JP", "部管部門", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.seizonika", "ja-JP", "製造二課", "レベル3メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "ja-JP", "製造一課", "レベル3メニュー"),
+            ("menu.logistics.manufacturing.engineeringchange._self", "ja-JP", "設変", "レベル3ディレクトリ"),
             ("menu.logistics.manufacturing.output._self", "ja-JP", "OPH管理", "レベル3ディレクトリ"),
             ("menu.logistics.manufacturing.output.pcba._self", "ja-JP", "PCB生産", "レベル3ディレクトリ"),
             ("menu.logistics.manufacturing.output.assembly._self", "ja-JP", "組立生産", "レベル3ディレクトリ"),
@@ -1370,14 +1385,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.materials.purchasing._self", "zh-HK", "採購管理", "三级目录"),
             ("menu.logistics.manufacturing.bom._self", "zh-HK", "BOM管理", "三级目录"),
             ("menu.logistics.manufacturing.scheduling._self", "zh-HK", "生產排程", "三级目录"),
-            ("menu.logistics.manufacturing.engineeringchange.batch", "zh-HK", "投入批次", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "zh-HK", "技術部門", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "zh-HK", "採購部門", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "zh-HK", "生管部門", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "zh-HK", "受檢部門", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "zh-HK", "部管部門", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.seizonika", "zh-HK", "製造二課", "三级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.seizoikka", "zh-HK", "製造一課", "三级菜单"),
+            ("menu.logistics.manufacturing.engineeringchange._self", "zh-HK", "設變", "三级目录"),
             ("menu.logistics.manufacturing.output._self", "zh-HK", "OPH管理", "三级目录"),
             ("menu.logistics.manufacturing.output.pcba._self", "zh-HK", "PCB生產", "三级目录"),
             ("menu.logistics.manufacturing.output.assembly._self", "zh-HK", "組立生產", "三级目录"),
@@ -1391,7 +1399,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // ========================================
             // 生产执行 CRUD 页面（与控制器/视图对齐）
             // ========================================
-            ("menu.logistics.manufacturing.engineeringchange._self", "zh-CN", "设变", "三级目录"),
             ("menu.logistics.manufacturing.bom.billofmaterial", "zh-CN", "物料清单", "四级菜单"),
             ("menu.logistics.manufacturing.bom.billofmaterialitem", "zh-CN", "物料清单明细", "四级菜单"),
             ("menu.logistics.manufacturing.bom.billofmaterialchangelog", "zh-CN", "BOM变更记录", "四级菜单"),
@@ -1403,11 +1410,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.scheduling.apsschedule", "zh-CN", "APS排程", "四级菜单"),
             ("menu.logistics.manufacturing.scheduling.apsscheduleitem", "zh-CN", "APS排程明细", "四级菜单"),
             ("menu.logistics.manufacturing.scheduling.apsschedulechangelog", "zh-CN", "APS排程变更日志", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ec", "zh-CN", "设变主", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdetail", "zh-CN", "设变明细", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdept", "zh-CN", "设变部门", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecattachment", "zh-CN", "设变附件", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "zh-CN", "设变通知", "四级菜单"),
             ("menu.logistics.manufacturing.output.productionorder", "zh-CN", "生产工单", "四级菜单"),
             ("menu.logistics.manufacturing.output.pcbaoutput", "zh-CN", "PCBA日报", "四级菜单"),
             ("menu.logistics.manufacturing.output.pcbaoutputdetail", "zh-CN", "PCBA日报明细", "四级菜单"),
@@ -1425,7 +1427,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.defect.assydefect", "zh-CN", "组立不良", "四级菜单"),
             ("menu.logistics.manufacturing.defect.assydefectdetail", "zh-CN", "组立不良明细", "四级菜单"),
 
-            ("menu.logistics.manufacturing.engineeringchange._self", "en-US", "Engineering Change", "Level 3 Directory"),
             ("menu.logistics.manufacturing.bom.billofmaterial", "en-US", "Bill of Material", "Level 4 Menu"),
             ("menu.logistics.manufacturing.bom.billofmaterialitem", "en-US", "BOM Item", "Level 4 Menu"),
             ("menu.logistics.manufacturing.bom.billofmaterialchangelog", "en-US", "BOM Change Log", "Level 4 Menu"),
@@ -1437,11 +1438,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.scheduling.apsschedule", "en-US", "APS Schedule", "Level 4 Menu"),
             ("menu.logistics.manufacturing.scheduling.apsscheduleitem", "en-US", "APS Schedule Item", "Level 4 Menu"),
             ("menu.logistics.manufacturing.scheduling.apsschedulechangelog", "en-US", "APS Schedule Change Log", "Level 4 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.ec", "en-US", "EC Master", "Level 4 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdetail", "en-US", "EC Detail", "Level 4 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdept", "en-US", "EC Department", "Level 4 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.ecattachment", "en-US", "EC Attachment", "Level 4 Menu"),
-            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "en-US", "EC Notice", "Level 4 Menu"),
             ("menu.logistics.manufacturing.output.productionorder", "en-US", "Production Order", "Level 4 Menu"),
             ("menu.logistics.manufacturing.output.pcbaoutput", "en-US", "PCBA Output", "Level 4 Menu"),
             ("menu.logistics.manufacturing.output.pcbaoutputdetail", "en-US", "PCBA Output Detail", "Level 4 Menu"),
@@ -1459,7 +1455,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.defect.assydefect", "en-US", "Assembly Defect", "Level 4 Menu"),
             ("menu.logistics.manufacturing.defect.assydefectdetail", "en-US", "Assembly Defect Detail", "Level 4 Menu"),
 
-            ("menu.logistics.manufacturing.engineeringchange._self", "ja-JP", "設変", "レベル3ディレクトリ"),
             ("menu.logistics.manufacturing.bom.billofmaterial", "ja-JP", "部品表", "レベル4メニュー"),
             ("menu.logistics.manufacturing.bom.billofmaterialitem", "ja-JP", "部品表明細", "レベル4メニュー"),
             ("menu.logistics.manufacturing.bom.billofmaterialchangelog", "ja-JP", "BOM変更履歴", "レベル4メニュー"),
@@ -1471,11 +1466,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.scheduling.apsschedule", "ja-JP", "APSスケジュール", "レベル4メニュー"),
             ("menu.logistics.manufacturing.scheduling.apsscheduleitem", "ja-JP", "APSスケジュール明細", "レベル4メニュー"),
             ("menu.logistics.manufacturing.scheduling.apsschedulechangelog", "ja-JP", "APSスケジュール変更履歴", "レベル4メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.ec", "ja-JP", "設変主", "レベル4メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdetail", "ja-JP", "設変明細", "レベル4メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdept", "ja-JP", "設変部門", "レベル4メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.ecattachment", "ja-JP", "設変添付", "レベル4メニュー"),
-            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "ja-JP", "設変通知", "レベル4メニュー"),
             ("menu.logistics.manufacturing.output.productionorder", "ja-JP", "生産指図", "レベル4メニュー"),
             ("menu.logistics.manufacturing.output.pcbaoutput", "ja-JP", "PCBA日報", "レベル4メニュー"),
             ("menu.logistics.manufacturing.output.pcbaoutputdetail", "ja-JP", "PCBA日報明細", "レベル4メニュー"),
@@ -1493,7 +1483,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.defect.assydefect", "ja-JP", "組立不良", "レベル4メニュー"),
             ("menu.logistics.manufacturing.defect.assydefectdetail", "ja-JP", "組立不良明細", "レベル4メニュー"),
 
-            ("menu.logistics.manufacturing.engineeringchange._self", "zh-HK", "設變", "三级目录"),
             ("menu.logistics.manufacturing.bom.billofmaterial", "zh-HK", "物料清單", "四级菜单"),
             ("menu.logistics.manufacturing.bom.billofmaterialitem", "zh-HK", "物料清單明細", "四级菜单"),
             ("menu.logistics.manufacturing.bom.billofmaterialchangelog", "zh-HK", "BOM變更記錄", "四级菜单"),
@@ -1505,11 +1494,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.scheduling.apsschedule", "zh-HK", "APS排程", "四级菜单"),
             ("menu.logistics.manufacturing.scheduling.apsscheduleitem", "zh-HK", "APS排程明細", "四级菜单"),
             ("menu.logistics.manufacturing.scheduling.apsschedulechangelog", "zh-HK", "APS排程變更日誌", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ec", "zh-HK", "設變主", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdetail", "zh-HK", "設變明細", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecdept", "zh-HK", "設變部門", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecattachment", "zh-HK", "設變附件", "四级菜单"),
-            ("menu.logistics.manufacturing.engineeringchange.ecnotice", "zh-HK", "設變通知", "四级菜单"),
             ("menu.logistics.manufacturing.output.productionorder", "zh-HK", "生產工單", "四级菜单"),
             ("menu.logistics.manufacturing.output.pcbaoutput", "zh-HK", "PCBA日報", "四级菜单"),
             ("menu.logistics.manufacturing.output.pcbaoutputdetail", "zh-HK", "PCBA日報明細", "四级菜单"),

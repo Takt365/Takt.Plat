@@ -92,6 +92,6 @@ public class TaktTalentOffer : TaktApprovalEntityBase
     /// <summary>
     /// 入职待办
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktEmployeeOnboardingTodo.OfferId))]
-    public List<TaktEmployeeOnboardingTodo>? EmployeeOnboardingTodos { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktEmployeeOnboarding.OfferId))]
+    public List<TaktEmployeeOnboarding>? EmployeeOnboardings { get; set; }
 }

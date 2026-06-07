@@ -82,7 +82,7 @@
         }"
       >
         <div class="layout-content-inner">
-          <RouterView />
+          <RouterView :key="businessScopeRouteKey" />
         </div>
       </a-layout-content>
       <TaktFooter :height="40" />
@@ -97,12 +97,15 @@ import { defaultSetting, useSettingStore } from '@/stores/common/setting'
 import { useUserStore } from '@/stores/identity/user'
 import { useMenuStore } from '@/stores/identity/menu'
 import { ensureMenuAndRoutesLoaded } from '@/router'
+import { useBusinessScopeRouteKey } from '@/composables/use-business-scope-route-key'
 type HeaderHeight = 32 | 40 | 48
 
 const themeStore = useThemeStore()
 const { setting } = storeToRefs(useSettingStore())
 const userStore = useUserStore()
 const menuStore = useMenuStore()
+/** 租户/公司切换时重建 RouterView，触发各业务页重新拉数 */
+const businessScopeRouteKey = useBusinessScopeRouteKey()
 
 // 首次登录后若布局先于守卫完成挂载，可能出现左侧菜单为空；挂载时补救一次
 onMounted(async () => {

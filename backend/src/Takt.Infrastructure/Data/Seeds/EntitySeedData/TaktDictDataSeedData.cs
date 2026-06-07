@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktDictDataSeedData.cs
@@ -563,13 +563,13 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("hr_political_status","无党派民主人士","12","dict.hr.political.status.12",13,13,TaktYesNo.No,"政治面貌.无党派民主人士",13),
             ("hr_schedule_type","部门","0","dict.hr.schedule.type.0",1,1,TaktYesNo.No,"排班类别.部门",1),
             ("hr_schedule_type","人员","1","dict.hr.schedule.type.1",2,2,TaktYesNo.No,"排班类别.人员",2),
-            ("hr_transfer_status","待审批","0","dict.hr.transfer.status.0",1,1,TaktYesNo.No,"调动审批状态.待审批",1),
-            ("hr_transfer_status","审批中","1","dict.hr.transfer.status.1",2,2,TaktYesNo.No,"调动状态.审批中",2),
-            ("hr_transfer_status","已通过","2","dict.hr.transfer.status.2",3,3,TaktYesNo.No,"调动状态.已通过",3),
-            ("hr_transfer_status","已驳回","3","dict.hr.transfer.status.3",4,4,TaktYesNo.No,"调动状态.已驳回",4),
-            ("hr_transfer_status","已撤回","4","dict.hr.transfer.status.4",5,5,TaktYesNo.No,"调动状态.已撤回",5),
-            ("hr_transfer_type","转岗","0","dict.hr.transfer.type.0",1,1,TaktYesNo.No,"调动类型.转岗",1),
-            ("hr_transfer_type","调岗","1","dict.hr.transfer.type.1",2,2,TaktYesNo.No,"调动类型.调岗",2),
+            ("hr_reassignment_status","待审批","0","dict.hr.reassignment.status.0",1,1,TaktYesNo.No,"调动审批状态.待审批",1),
+            ("hr_reassignment_status","审批中","1","dict.hr.reassignment.status.1",2,2,TaktYesNo.No,"调动状态.审批中",2),
+            ("hr_reassignment_status","已通过","2","dict.hr.reassignment.status.2",3,3,TaktYesNo.No,"调动状态.已通过",3),
+            ("hr_reassignment_status","已驳回","3","dict.hr.reassignment.status.3",4,4,TaktYesNo.No,"调动状态.已驳回",4),
+            ("hr_reassignment_status","已撤回","4","dict.hr.reassignment.status.4",5,5,TaktYesNo.No,"调动状态.已撤回",5),
+            ("hr_reassignment_type","转岗","0","dict.hr.reassignment.type.0",1,1,TaktYesNo.No,"调动类型.转岗",1),
+            ("hr_reassignment_type","调岗","1","dict.hr.reassignment.type.1",2,2,TaktYesNo.No,"调动类型.调岗",2),
             ("hr_talent_staffing_requirement_status","待审批","0","dict.hr.talent.staffingrequirement.status.0",1,1,TaktYesNo.No,"用人需求审批状态.待审批",1),
             ("hr_talent_staffing_requirement_status","审批中","1","dict.hr.talent.staffingrequirement.status.1",2,2,TaktYesNo.No,"用人需求审批状态.审批中",2),
             ("hr_talent_staffing_requirement_status","已通过","2","dict.hr.talent.staffingrequirement.status.2",3,3,TaktYesNo.No,"用人需求审批状态.已通过",3),
@@ -602,10 +602,10 @@ public class TaktDictDataSeedData : ITaktSeedDataCoordinator
             ("hr_talent_offer_status","已通过","2","dict.hr.talent.offer.status.2",3,3,TaktYesNo.No,"录用审批状态.已通过",3),
             ("hr_talent_offer_status","已驳回","3","dict.hr.talent.offer.status.3",4,4,TaktYesNo.No,"录用审批状态.已驳回",4),
             ("hr_talent_offer_status","已撤回","4","dict.hr.talent.offer.status.4",5,5,TaktYesNo.No,"录用审批状态.已撤回",5),
-            ("hr_personnel_onboarding_todo_status","待办理","0","dict.hr.personnel.onboardingtodo.status.0",1,1,TaktYesNo.No,"入职待办状态.待办理",1),
-            ("hr_personnel_onboarding_todo_status","办理中","1","dict.hr.personnel.onboardingtodo.status.1",2,2,TaktYesNo.No,"入职待办状态.办理中",2),
-            ("hr_personnel_onboarding_todo_status","已完成","2","dict.hr.personnel.onboardingtodo.status.2",3,3,TaktYesNo.No,"入职待办状态.已完成",3),
-            ("hr_personnel_onboarding_todo_status","已取消","3","dict.hr.personnel.onboardingtodo.status.3",4,4,TaktYesNo.No,"入职待办状态.已取消",4),
+            ("hr_personnel_onboarding_status","待办理","0","dict.hr.personnel.onboarding.status.0",1,1,TaktYesNo.No,"入职待办状态.待办理",1),
+            ("hr_personnel_onboarding_status","办理中","1","dict.hr.personnel.onboarding.status.1",2,2,TaktYesNo.No,"入职待办状态.办理中",2),
+            ("hr_personnel_onboarding_status","已完成","2","dict.hr.personnel.onboarding.status.2",3,3,TaktYesNo.No,"入职待办状态.已完成",3),
+            ("hr_personnel_onboarding_status","已取消","3","dict.hr.personnel.onboarding.status.3",4,4,TaktYesNo.No,"入职待办状态.已取消",4),
             ("hr_joined_status","待审批","0","dict.hr.joined.status.0",1,1,TaktYesNo.No,"入职上岗审批状态.待审批",1),
             ("hr_joined_status","审批中","1","dict.hr.joined.status.1",2,2,TaktYesNo.No,"入职上岗办理状态.审批中",2),
             ("hr_joined_status","已通过","2","dict.hr.joined.status.2",3,3,TaktYesNo.No,"入职上岗办理状态.已通过",3),

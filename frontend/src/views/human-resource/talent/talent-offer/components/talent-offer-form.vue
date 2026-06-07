@@ -195,12 +195,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.talentOffer.employeeonboardingtodos')"
-                name="employeeOnboardingTodos"
+                :label="t('entity.talentOffer.employeeonboardings')"
+                name="employeeOnboardings"
               >
                 <a-input
-                  v-model:value="formState.employeeOnboardingTodos"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentOffer.employeeonboardingtodos') })"
+                  v-model:value="formState.employeeOnboardings"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentOffer.employeeonboardings') })"
                   size="small"
                   allow-clear
                 />
@@ -275,7 +275,7 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
 }
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","interviewId","offerNo","hireDate","employeeId","deptId","deptName","postId","postName","reason","employeeOnboardingTodos","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","interviewId","offerNo","hireDate","employeeId","deptId","deptName","postId","postName","reason","employeeOnboardings","extFieldJson","remark"]
 
 
 interface Props {

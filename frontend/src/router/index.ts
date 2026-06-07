@@ -17,6 +17,7 @@ import { useTranslationStore } from '@/stores/foundation/translation';
 import { useMenuStore } from '@/stores/identity/menu';
 import { usePermissionStore } from '@/stores/identity/permission';
 import { useSignalRStore } from '@/stores/foundation/signalr';
+import { useTenantStore } from '@/stores/identity/tenant';
 import i18n from '@/locales';
 import {
   LAYOUT_ROUTE_NAME,
@@ -116,6 +117,8 @@ router.beforeEach(async (to) => {
   if (!userStore.isLoggedIn) {
     return { name: 'Login', query: { redirect: to.fullPath } };
   }
+
+  useTenantStore().restoreTenantCodeFromStorage();
 
   try {
     await userStore.loadUserProfile();

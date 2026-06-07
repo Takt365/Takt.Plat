@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Personnel
-// 文件名称：TaktEmployeeTransferValidators.cs
-// 创建时间：2026-06-06
+// 文件名称：TaktEmployeeReassignmentValidators.cs
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
-// 功能描述：EmployeeTransfer 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeTransfer 生成，请按需审阅）
+// 功能描述：EmployeeReassignment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeReassignment 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,18 +16,18 @@ using Takt.Application.Dtos.HumanResource.Personnel;
 namespace Takt.Application.Validators.HumanResource.Personnel;
 
 // ========================================
-// 创建EmployeeTransfer 验证器
+// 创建EmployeeReassignment 验证器
 // ========================================
 
 /// <summary>
-/// 创建EmployeeTransfer DTO 验证器
+/// 创建EmployeeReassignment DTO 验证器
 /// </summary>
-public class TaktEmployeeTransferCreateValidator : AbstractValidator<TaktEmployeeTransferCreateDto>
+public class TaktEmployeeReassignmentCreateValidator : AbstractValidator<TaktEmployeeReassignmentCreateDto>
 {
     /// <summary>
-    /// 初始化 创建EmployeeTransfer 校验规则
+    /// 初始化 创建EmployeeReassignment 校验规则
     /// </summary>
-    public TaktEmployeeTransferCreateValidator()
+    public TaktEmployeeReassignmentCreateValidator()
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
@@ -65,37 +65,37 @@ public class TaktEmployeeTransferCreateValidator : AbstractValidator<TaktEmploye
 }
 
 // ========================================
-// 更新EmployeeTransfer 验证器
+// 更新EmployeeReassignment 验证器
 // ========================================
 
 /// <summary>
-/// 更新EmployeeTransfer DTO 验证器
+/// 更新EmployeeReassignment DTO 验证器
 /// </summary>
-public class TaktEmployeeTransferUpdateValidator : AbstractValidator<TaktEmployeeTransferUpdateDto>
+public class TaktEmployeeReassignmentUpdateValidator : AbstractValidator<TaktEmployeeReassignmentUpdateDto>
 {
     /// <summary>
-    /// 初始化 更新EmployeeTransfer 校验规则
+    /// 初始化 更新EmployeeReassignment 校验规则
     /// </summary>
-    public TaktEmployeeTransferUpdateValidator()
+    public TaktEmployeeReassignmentUpdateValidator()
     {
-        RuleFor(x => x.EmployeeTransferId)
-            .GreaterThan(0).WithMessage("EmployeeTransferID无效");
+        RuleFor(x => x.EmployeeReassignmentId)
+            .GreaterThan(0).WithMessage("EmployeeReassignmentID无效");
     }
 }
 
 // ========================================
-// 导入EmployeeTransfer 验证器
+// 导入EmployeeReassignment 验证器
 // ========================================
 
 /// <summary>
-/// 导入EmployeeTransfer DTO 验证器
+/// 导入EmployeeReassignment DTO 验证器
 /// </summary>
-public class TaktEmployeeTransferImportValidator : AbstractValidator<TaktEmployeeTransferImportDto>
+public class TaktEmployeeReassignmentImportValidator : AbstractValidator<TaktEmployeeReassignmentImportDto>
 {
     /// <summary>
-    /// 初始化 导入EmployeeTransfer 校验规则
+    /// 初始化 导入EmployeeReassignment 校验规则
     /// </summary>
-    public TaktEmployeeTransferImportValidator()
+    public TaktEmployeeReassignmentImportValidator()
     {
         RuleFor(x => x.TenantCode)
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));

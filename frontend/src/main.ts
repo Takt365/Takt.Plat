@@ -17,6 +17,8 @@ import App from './App.vue';
 import router from './router';
 import { setRuntimeRouter } from '@/utils/runtime-context';
 import i18n from './locales';
+import { useUserStore } from '@/stores/identity/user';
+import { useTenantStore } from '@/stores/identity/tenant';
 
 setRuntimeRouter(router);
 import { registerTaktEventHandlers } from '@/bootstrap/takt-event-handlers';
@@ -67,6 +69,10 @@ const pinia = createPinia();
 app.use(pinia);
 useSettingStore();
 applySettings();
+const userStore = useUserStore();
+if (userStore.isLoggedIn) {
+  useTenantStore().restoreTenantCodeFromStorage();
+}
 const isLoginEntryPath =
   typeof window !== 'undefined'
   && (window.location.pathname === '/login' || window.location.pathname.startsWith('/login/'));

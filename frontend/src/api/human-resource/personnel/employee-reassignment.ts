@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/personnel
-// 文件名称：employee-transfer.ts
-// 创建时间：2026-06-06
+// 文件名称：employee-reassignment.ts
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -16,16 +16,16 @@ import type {
   TaktSelectOption
 } from '@/types/common';
 import type {
-  EmployeeTransfer,
-  EmployeeTransferCreate,
-  EmployeeTransferUpdate
-} from '@/types/human-resource/personnel/employee-transfer';
+  EmployeeReassignment,
+  EmployeeReassignmentCreate,
+  EmployeeReassignmentUpdate
+} from '@/types/human-resource/personnel/employee-reassignment';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
- * @description TaktEmployeeTransfers
+ * @description TaktEmployeeReassignments
  */
-const EMPLOYEE_TRANSFER_API_BASE = 'TaktEmployeeTransfers';
+const EMPLOYEE_REASSIGNMENT_API_BASE = 'TaktEmployeeReassignments';
 
 // ========================================
 // 基础 CRUD
@@ -34,11 +34,11 @@ const EMPLOYEE_TRANSFER_API_BASE = 'TaktEmployeeTransfers';
 /**
  * 获取员工调动列表（分页）
  * @param {any} queryDto 查询DTO
- * @returns {Promise<TaktPagedResult<EmployeeTransfer>>} 分页结果
+ * @returns {Promise<TaktPagedResult<EmployeeReassignment>>} 分页结果
  */
-export function getEmployeeTransferList(queryDto: any): Promise<TaktPagedResult<EmployeeTransfer>> {
-  return request<TaktPagedResult<EmployeeTransfer>>({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/list`,
+export function getEmployeeReassignmentList(queryDto: any): Promise<TaktPagedResult<EmployeeReassignment>> {
+  return request<TaktPagedResult<EmployeeReassignment>>({
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/list`,
     method: 'get',
     params: {
       queryDto
@@ -49,23 +49,23 @@ export function getEmployeeTransferList(queryDto: any): Promise<TaktPagedResult<
 /**
  * 根据ID获取员工调动
  * @param {string} id 员工调动ID
- * @returns {Promise<EmployeeTransfer>} 员工调动DTO
+ * @returns {Promise<EmployeeReassignment>} 员工调动DTO
  */
-export function getEmployeeTransferById(id: string): Promise<EmployeeTransfer> {
-  return request<EmployeeTransfer>({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/${id}`,
+export function getEmployeeReassignmentById(id: string): Promise<EmployeeReassignment> {
+  return request<EmployeeReassignment>({
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/${id}`,
     method: 'get',
   });
 }
 
 /**
  * 创建员工调动
- * @param {EmployeeTransferCreate} dto 创建DTO
- * @returns {Promise<EmployeeTransfer>} 员工调动DTO
+ * @param {EmployeeReassignmentCreate} dto 创建DTO
+ * @returns {Promise<EmployeeReassignment>} 员工调动DTO
  */
-export function createEmployeeTransfer(dto: EmployeeTransferCreate): Promise<EmployeeTransfer> {
-  return request<EmployeeTransfer>({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}`,
+export function createEmployeeReassignment(dto: EmployeeReassignmentCreate): Promise<EmployeeReassignment> {
+  return request<EmployeeReassignment>({
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}`,
     method: 'post',
     data: dto,
   });
@@ -74,12 +74,12 @@ export function createEmployeeTransfer(dto: EmployeeTransferCreate): Promise<Emp
 /**
  * 更新员工调动
  * @param {string} id 员工调动ID
- * @param {EmployeeTransferUpdate} dto 更新DTO
- * @returns {Promise<EmployeeTransfer>} 员工调动DTO
+ * @param {EmployeeReassignmentUpdate} dto 更新DTO
+ * @returns {Promise<EmployeeReassignment>} 员工调动DTO
  */
-export function updateEmployeeTransfer(id: string, dto: EmployeeTransferUpdate): Promise<EmployeeTransfer> {
-  return request<EmployeeTransfer>({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/${id}`,
+export function updateEmployeeReassignment(id: string, dto: EmployeeReassignmentUpdate): Promise<EmployeeReassignment> {
+  return request<EmployeeReassignment>({
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/${id}`,
     method: 'put',
     data: dto,
   });
@@ -90,9 +90,9 @@ export function updateEmployeeTransfer(id: string, dto: EmployeeTransferUpdate):
  * @param {string} id 员工调动ID
  * @returns {Promise<void>} 操作结果
  */
-export function deleteEmployeeTransferById(id: string): Promise<void> {
+export function deleteEmployeeReassignmentById(id: string): Promise<void> {
   return request({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/${id}`,
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/${id}`,
     method: 'delete',
   });
 }
@@ -102,9 +102,9 @@ export function deleteEmployeeTransferById(id: string): Promise<void> {
  * @param {string[]} ids ID列表
  * @returns {Promise<void>} 操作结果
  */
-export function deleteEmployeeTransferBatch(ids: string[]): Promise<void> {
+export function deleteEmployeeReassignmentBatch(ids: string[]): Promise<void> {
   return request({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/batch`,
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/batch`,
     method: 'delete',
     data: ids,
   });
@@ -118,9 +118,9 @@ export function deleteEmployeeTransferBatch(ids: string[]): Promise<void> {
  * 获取员工调动选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getEmployeeTransferOptions(): Promise<TaktSelectOption[]> {
+export function getEmployeeReassignmentOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/options`,
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/options`,
     method: 'get',
   });
 }
@@ -135,9 +135,9 @@ export function getEmployeeTransferOptions(): Promise<TaktSelectOption[]> {
  * @param {string} templateName templateName
  * @returns {Promise<Blob>} Excel文件
  */
-export function getEmployeeTransferTemplate(sheetName?: string, templateName?: string): Promise<Blob> {
+export function getEmployeeReassignmentTemplate(sheetName?: string, templateName?: string): Promise<Blob> {
   return request<Blob>({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/template`,
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/template`,
     method: 'get',
     params: {
       sheetName,
@@ -153,12 +153,12 @@ export function getEmployeeTransferTemplate(sheetName?: string, templateName?: s
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importEmployeeTransfer(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importEmployeeReassignment(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   
   return request({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/import`,
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/import`,
     method: 'post',
     data: formData,
     headers: {
@@ -177,13 +177,13 @@ export function importEmployeeTransfer(file: File, sheetName?: string): Promise<
  * @param {string} exportName exportName
  * @returns {Promise<Blob>} Excel文件
  */
-export function exportEmployeeTransfer(
+export function exportEmployeeReassignment(
   query?: any,
   sheetName?: string,
   exportName?: string
 ): Promise<Blob> {
   return request<Blob>({
-    url: `${EMPLOYEE_TRANSFER_API_BASE}/export`,
+    url: `${EMPLOYEE_REASSIGNMENT_API_BASE}/export`,
     method: 'get',
     params: {
       query,

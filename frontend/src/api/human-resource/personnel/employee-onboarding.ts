@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/personnel
-// 文件名称：employee-onboarding-todo.ts
-// 创建时间：2026-06-06
+// 文件名称：employee-onboarding.ts
+// 创建时间：2026-06-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -16,17 +16,17 @@ import type {
   TaktSelectOption
 } from '@/types/common';
 import type {
-  EmployeeOnboardingTodo,
-  EmployeeOnboardingTodoCreate,
-  EmployeeOnboardingTodoStatus,
-  EmployeeOnboardingTodoUpdate
-} from '@/types/human-resource/personnel/employee-onboarding-todo';
+  EmployeeOnboarding,
+  EmployeeOnboardingCreate,
+  EmployeeOnboardingStatus,
+  EmployeeOnboardingUpdate
+} from '@/types/human-resource/personnel/employee-onboarding';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
- * @description TaktEmployeeOnboardingTodos
+ * @description TaktEmployeeOnboardings
  */
-const EMPLOYEE_ONBOARDING_TODO_API_BASE = 'TaktEmployeeOnboardingTodos';
+const EMPLOYEE_ONBOARDING_API_BASE = 'TaktEmployeeOnboardings';
 
 // ========================================
 // 基础 CRUD
@@ -35,11 +35,11 @@ const EMPLOYEE_ONBOARDING_TODO_API_BASE = 'TaktEmployeeOnboardingTodos';
 /**
  * 获取入职待办列表（分页）
  * @param {any} queryDto 查询DTO
- * @returns {Promise<TaktPagedResult<EmployeeOnboardingTodo>>} 分页结果
+ * @returns {Promise<TaktPagedResult<EmployeeOnboarding>>} 分页结果
  */
-export function getEmployeeOnboardingTodoList(queryDto: any): Promise<TaktPagedResult<EmployeeOnboardingTodo>> {
-  return request<TaktPagedResult<EmployeeOnboardingTodo>>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/list`,
+export function getEmployeeOnboardingList(queryDto: any): Promise<TaktPagedResult<EmployeeOnboarding>> {
+  return request<TaktPagedResult<EmployeeOnboarding>>({
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/list`,
     method: 'get',
     params: {
       queryDto
@@ -50,23 +50,23 @@ export function getEmployeeOnboardingTodoList(queryDto: any): Promise<TaktPagedR
 /**
  * 根据ID获取入职待办
  * @param {string} id 入职待办ID
- * @returns {Promise<EmployeeOnboardingTodo>} 入职待办DTO
+ * @returns {Promise<EmployeeOnboarding>} 入职待办DTO
  */
-export function getEmployeeOnboardingTodoById(id: string): Promise<EmployeeOnboardingTodo> {
-  return request<EmployeeOnboardingTodo>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/${id}`,
+export function getEmployeeOnboardingById(id: string): Promise<EmployeeOnboarding> {
+  return request<EmployeeOnboarding>({
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/${id}`,
     method: 'get',
   });
 }
 
 /**
  * 创建入职待办
- * @param {EmployeeOnboardingTodoCreate} dto 创建DTO
- * @returns {Promise<EmployeeOnboardingTodo>} 入职待办DTO
+ * @param {EmployeeOnboardingCreate} dto 创建DTO
+ * @returns {Promise<EmployeeOnboarding>} 入职待办DTO
  */
-export function createEmployeeOnboardingTodo(dto: EmployeeOnboardingTodoCreate): Promise<EmployeeOnboardingTodo> {
-  return request<EmployeeOnboardingTodo>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}`,
+export function createEmployeeOnboarding(dto: EmployeeOnboardingCreate): Promise<EmployeeOnboarding> {
+  return request<EmployeeOnboarding>({
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}`,
     method: 'post',
     data: dto,
   });
@@ -75,12 +75,12 @@ export function createEmployeeOnboardingTodo(dto: EmployeeOnboardingTodoCreate):
 /**
  * 更新入职待办
  * @param {string} id 入职待办ID
- * @param {EmployeeOnboardingTodoUpdate} dto 更新DTO
- * @returns {Promise<EmployeeOnboardingTodo>} 入职待办DTO
+ * @param {EmployeeOnboardingUpdate} dto 更新DTO
+ * @returns {Promise<EmployeeOnboarding>} 入职待办DTO
  */
-export function updateEmployeeOnboardingTodo(id: string, dto: EmployeeOnboardingTodoUpdate): Promise<EmployeeOnboardingTodo> {
-  return request<EmployeeOnboardingTodo>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/${id}`,
+export function updateEmployeeOnboarding(id: string, dto: EmployeeOnboardingUpdate): Promise<EmployeeOnboarding> {
+  return request<EmployeeOnboarding>({
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/${id}`,
     method: 'put',
     data: dto,
   });
@@ -91,9 +91,9 @@ export function updateEmployeeOnboardingTodo(id: string, dto: EmployeeOnboarding
  * @param {string} id 入职待办ID
  * @returns {Promise<void>} 操作结果
  */
-export function deleteEmployeeOnboardingTodoById(id: string): Promise<void> {
+export function deleteEmployeeOnboardingById(id: string): Promise<void> {
   return request({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/${id}`,
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/${id}`,
     method: 'delete',
   });
 }
@@ -103,9 +103,9 @@ export function deleteEmployeeOnboardingTodoById(id: string): Promise<void> {
  * @param {string[]} ids ID列表
  * @returns {Promise<void>} 操作结果
  */
-export function deleteEmployeeOnboardingTodoBatch(ids: string[]): Promise<void> {
+export function deleteEmployeeOnboardingBatch(ids: string[]): Promise<void> {
   return request({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/batch`,
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/batch`,
     method: 'delete',
     data: ids,
   });
@@ -113,12 +113,12 @@ export function deleteEmployeeOnboardingTodoBatch(ids: string[]): Promise<void> 
 
 /**
  * 更新入职待办状态
- * @param {EmployeeOnboardingTodoStatus} dto 状态DTO
- * @returns {Promise<EmployeeOnboardingTodo>} 入职待办DTO
+ * @param {EmployeeOnboardingStatus} dto 状态DTO
+ * @returns {Promise<EmployeeOnboarding>} 入职待办DTO
  */
-export function updateEmployeeOnboardingTodoStatus(dto: EmployeeOnboardingTodoStatus): Promise<EmployeeOnboardingTodo> {
-  return request<EmployeeOnboardingTodo>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/status`,
+export function updateEmployeeOnboardingStatus(dto: EmployeeOnboardingStatus): Promise<EmployeeOnboarding> {
+  return request<EmployeeOnboarding>({
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/status`,
     method: 'put',
     data: dto,
   });
@@ -132,9 +132,9 @@ export function updateEmployeeOnboardingTodoStatus(dto: EmployeeOnboardingTodoSt
  * 获取入职待办选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getEmployeeOnboardingTodoOptions(): Promise<TaktSelectOption[]> {
+export function getEmployeeOnboardingOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/options`,
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/options`,
     method: 'get',
   });
 }
@@ -149,9 +149,9 @@ export function getEmployeeOnboardingTodoOptions(): Promise<TaktSelectOption[]> 
  * @param {string} templateName templateName
  * @returns {Promise<Blob>} Excel文件
  */
-export function getEmployeeOnboardingTodoTemplate(sheetName?: string, templateName?: string): Promise<Blob> {
+export function getEmployeeOnboardingTemplate(sheetName?: string, templateName?: string): Promise<Blob> {
   return request<Blob>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/template`,
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/template`,
     method: 'get',
     params: {
       sheetName,
@@ -167,12 +167,12 @@ export function getEmployeeOnboardingTodoTemplate(sheetName?: string, templateNa
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importEmployeeOnboardingTodo(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importEmployeeOnboarding(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   
   return request({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/import`,
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/import`,
     method: 'post',
     data: formData,
     headers: {
@@ -191,13 +191,13 @@ export function importEmployeeOnboardingTodo(file: File, sheetName?: string): Pr
  * @param {string} exportName exportName
  * @returns {Promise<Blob>} Excel文件
  */
-export function exportEmployeeOnboardingTodo(
+export function exportEmployeeOnboarding(
   query?: any,
   sheetName?: string,
   exportName?: string
 ): Promise<Blob> {
   return request<Blob>({
-    url: `${EMPLOYEE_ONBOARDING_TODO_API_BASE}/export`,
+    url: `${EMPLOYEE_ONBOARDING_API_BASE}/export`,
     method: 'get',
     params: {
       query,
