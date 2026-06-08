@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNoticeService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工程变更通知单应用服务实现
 // 
@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -29,7 +30,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 /// </summary>
 public class TaktEcNoticeService : TaktServiceBase, ITaktEcNoticeService
 {
-    private readonly ITaktCompanyRepository<TaktEcNotice> _ecNoticeRepository;
+    private readonly ITaktApprovalRepository<TaktEcNotice> _ecNoticeRepository;
     private readonly ITaktCompanyRepository<TaktEc> _ecRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -42,7 +43,7 @@ public class TaktEcNoticeService : TaktServiceBase, ITaktEcNoticeService
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcNoticeService(
-        ITaktCompanyRepository<TaktEcNotice> ecNoticeRepository,
+        ITaktApprovalRepository<TaktEcNotice> ecNoticeRepository,
         ITaktCompanyRepository<TaktEc> ecRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -340,15 +341,10 @@ public class TaktEcNoticeService : TaktServiceBase, ITaktEcNoticeService
                 || (x.EcNoticeNotifierName != null && x.EcNoticeNotifierName.Contains(keywords))
                 || SqlFunc.ToString(x.EcNoticeMethod).Contains(keywords)
                 || SqlFunc.ToString(x.EcNoticeStatus).Contains(keywords)
-                || SqlFunc.ToString(x.EcNoticeConfirmerId).Contains(keywords)
-                || (x.EcNoticeConfirmerName != null && x.EcNoticeConfirmerName.Contains(keywords))
-                || (x.EcNoticeConfirmComment != null && x.EcNoticeConfirmComment.Contains(keywords))
                 || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
                 || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EcNoticeDate).Contains(keywords)
-                || SqlFunc.ToString(x.EcNoticeConfirmDate).Contains(keywords)
-                || SqlFunc.ToString(x.EcNoticeRequireFeedbackDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -408,21 +404,6 @@ public class TaktEcNoticeService : TaktServiceBase, ITaktEcNoticeService
             exp = exp.And(x => x.EcNoticeStatus == queryDto.EcNoticeStatus);
         }
 
-        if (queryDto?.EcNoticeConfirmerId.HasValue == true)
-        {
-            exp = exp.And(x => x.EcNoticeConfirmerId == queryDto.EcNoticeConfirmerId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcNoticeConfirmerName))
-        {
-            exp = exp.And(x => x.EcNoticeConfirmerName != null && x.EcNoticeConfirmerName.Contains(queryDto.EcNoticeConfirmerName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EcNoticeConfirmComment))
-        {
-            exp = exp.And(x => x.EcNoticeConfirmComment != null && x.EcNoticeConfirmComment.Contains(queryDto.EcNoticeConfirmComment));
-        }
-
         if (queryDto?.FlowInstanceId.HasValue == true)
         {
             exp = exp.And(x => x.FlowInstanceId == queryDto.FlowInstanceId);
@@ -446,26 +427,6 @@ public class TaktEcNoticeService : TaktServiceBase, ITaktEcNoticeService
         if (queryDto?.EcNoticeDateEnd.HasValue == true)
         {
             exp = exp.And(x => x.EcNoticeDate <= queryDto.EcNoticeDateEnd);
-        }
-
-        if (queryDto?.EcNoticeConfirmDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EcNoticeConfirmDate >= queryDto.EcNoticeConfirmDateStart);
-        }
-
-        if (queryDto?.EcNoticeConfirmDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EcNoticeConfirmDate <= queryDto.EcNoticeConfirmDateEnd);
-        }
-
-        if (queryDto?.EcNoticeRequireFeedbackDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.EcNoticeRequireFeedbackDate >= queryDto.EcNoticeRequireFeedbackDateStart);
-        }
-
-        if (queryDto?.EcNoticeRequireFeedbackDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.EcNoticeRequireFeedbackDate <= queryDto.EcNoticeRequireFeedbackDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPlantI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,6 +153,33 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.relatedcompany", "zh-CN", "关联公司代码", "关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）"),
             // entity.plant.relatedcompany
             new TranslationSeedItem("entity.plant.relatedcompany", "zh-HK", "关联公司代码", "关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）"),
+
+            // entity.plant.enterprisenature
+            new TranslationSeedItem("entity.plant.enterprisenature", "en-US", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            // entity.plant.enterprisenature
+            new TranslationSeedItem("entity.plant.enterprisenature", "ja-JP", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            // entity.plant.enterprisenature
+            new TranslationSeedItem("entity.plant.enterprisenature", "zh-CN", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            // entity.plant.enterprisenature
+            new TranslationSeedItem("entity.plant.enterprisenature", "zh-HK", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+
+            // entity.plant.industryattribute
+            new TranslationSeedItem("entity.plant.industryattribute", "en-US", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            // entity.plant.industryattribute
+            new TranslationSeedItem("entity.plant.industryattribute", "ja-JP", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            // entity.plant.industryattribute
+            new TranslationSeedItem("entity.plant.industryattribute", "zh-CN", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            // entity.plant.industryattribute
+            new TranslationSeedItem("entity.plant.industryattribute", "zh-HK", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+
+            // entity.plant.enterprisescale
+            new TranslationSeedItem("entity.plant.enterprisescale", "en-US", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
+            // entity.plant.enterprisescale
+            new TranslationSeedItem("entity.plant.enterprisescale", "ja-JP", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
+            // entity.plant.enterprisescale
+            new TranslationSeedItem("entity.plant.enterprisescale", "zh-CN", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
+            // entity.plant.enterprisescale
+            new TranslationSeedItem("entity.plant.enterprisescale", "zh-HK", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
 
             // entity.plant.businessscope
             new TranslationSeedItem("entity.plant.businessscope", "en-US", "经营范围", "经营范围"),

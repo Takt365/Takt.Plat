@@ -199,15 +199,16 @@ public class TaktMenuButtonSeedData
     /// </summary>
     private static readonly string[] GenericButtonNames =
     {
-        "查询", "新增", "修改", "删除", "详情", "预览", "打印", "导入", "导出", "模板", "审批", "撤销", "树", "选项", "主题",
+        "查询", "新增", "修改", "删除", "详情", "预览", "打印", "导入", "导出", "模板", "审批", "撤销", "树", "选项", "主题设置",
         "展开", "收缩", "新增根", "新增下级", "同级新增", "插入", "编辑节点", "复制节点",
         "删除当前", "删除本级及子级", "移动", "上移", "下移", "置顶", "置底", "提升层级", "降级层级",
         "新增行", "插入行", "编辑行", "修改行", "删除行", "复制行", "克隆行",
         "行上移", "行下移", "清空明细", "导入明细", "导出明细", "明细批量",
+        "复制", "克隆",
         "批量"
     };
 
-    /// <summary>通用 CRUD 按钮权限后缀（与 <see cref="GenericButtonNames"/> 一一对应）。</summary>
+    /// <summary>通用 CRUD 按钮权限后缀（与 <see cref="GenericButtonNames"/> 一一对应；I18nKey 为 common.button.*）。</summary>
     private static readonly string[] GenericButtonPerms =
     {
         "query", "create", "update", "delete", "detail", "preview", "print", "import", "export", "template", "approve", "revoke", "tree", "options", "theme",
@@ -215,6 +216,7 @@ public class TaktMenuButtonSeedData
         "deletecurrent", "deletesubtree", "move", "moveup", "movedown", "movetop", "movebottom", "promote", "demote",
         "createrow", "insertrow", "editrow", "updaterow", "deleterow", "copyrow", "clonerow",
         "moverowup", "moverowdown", "cleardetail", "importdetail", "exportdetail", "detailbatch",
+        "copy", "clone",
         "batch"
     };
 
@@ -287,24 +289,26 @@ public class TaktMenuButtonSeedData
         "transpose"
     };
 
-    /// <summary>工作流模块扩展按钮（流程定义/实例/表单等）。</summary>
+    /// <summary>
+    /// 工作流模块扩展按钮（继承 <see cref="GenericButtonNames"/>，仅追加流程特有操作；
+    /// 显示名与 I18nKey（common.button.{perm}）与项目标准按钮表一致）。
+    /// </summary>
     private static readonly string[] WorkflowExtraNames =
     {
-        "复制", "克隆",
         "暂停", "恢复", "提交", "撤回", "转办", "委托", "退回", "催办", "加签", "减签", "进度", "历史",
         "发布", "停用", "启用", "版本", "设计", "配置", "验证",
         "启动", "终止",
-        "字段管理", "权限设置", "数据源配置", "主题设置", "表单数据",
+        "字段管理", "权限设置", "数据源配置", "表单数据",
         "流转归档", "流转清理"
     };
 
+    /// <summary>工作流模块扩展按钮权限后缀（与 <see cref="WorkflowExtraNames"/> 一一对应）。</summary>
     private static readonly string[] WorkflowExtraPerms =
     {
-        "copy", "clone",
         "suspend", "resume", "submit", "withdraw", "transfer", "delegate", "return", "urge", "addsign", "reducesign", "progress", "history",
         "publish", "disable", "enable", "version", "design", "config", "validate",
         "start", "terminate",
-        "field", "permission", "datasource", "theme", "data",
+        "field", "permission", "datasource", "data",
         "archive", "clean"
     };
 
@@ -444,7 +448,7 @@ public class TaktMenuButtonSeedData
                 ParentId = parentId,
                 MenuType = 2,  // Button
                 Permission = permission,
-                MenuStatus = 1,
+                MenuStatus = TaktCommonStatus.Enabled,
                 IsVisible = 1,
                 SortOrder = sortOrder,
                 IsCached = 0,
@@ -489,7 +493,7 @@ public class TaktMenuButtonSeedData
             button.MenuName = buttonName;
             button.I18nKey = menuL10nKey;
             button.Permission = permission;
-            button.MenuStatus = 1;
+            button.MenuStatus = TaktCommonStatus.Enabled;
             button.IsVisible = 1;
             button.SortOrder = sortOrder;
             button.IsBuiltIn = TaktYesNo.Yes;

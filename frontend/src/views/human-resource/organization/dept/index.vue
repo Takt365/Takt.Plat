@@ -10,12 +10,11 @@
     <div class="dept-query-row">
       <TaktTreeLeftQueryBar
         v-model="treeQueryKeyword"
-        placeholder="树关键字"
         @search="handleTreeQuerySearch"
       />
       <TaktTreeRightQueryBar
         v-model="queryKeyword"
-        placeholder="请输入部门名称或编码"
+        :placeholder="tableSearchPlaceholder"
         :loading="loading"
         @search="handleSearch"
         @reset="handleReset"
@@ -77,12 +76,15 @@
         @tree-drop="handleTreeDrop"
       />
       <TaktTreeRightTable
+      entity-scope="company"
         v-model:current="tableCurrentPage"
         v-model:page-size="tablePageSize"
         :columns="columns"
-        entity-scope="company"
-        :visible-column-keys="visibleColumnKeys"
-        :data-source="paginatedFlatTableRows"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'id'"
+      :action-column-key="'action'"
+      table-mode="tree"
+      :data-source="paginatedFlatTableRows"
         :loading="loading"
         :row-key="getDeptId"
         :stripe="true"
@@ -145,10 +147,9 @@
       <a-form-item :label="t('entity.dept.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.deptStatus"
-          api-url="/api/TaktDictDatas/options?dictTypeCode=sys_normal_disable"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.status') })"
           allow-clear
-          :field-names="{ label: 'dictLabel', value: 'extLabel' }"
         />
       </a-form-item>
     </TaktQueryDrawer>
@@ -181,12 +182,15 @@
     />
 
     <TaktColumnDrawer
+      entity-scope="company"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       :id-column-key="'id'"
       :action-column-key="'action'"
-      entity-scope="company"
+      :id-column-key="'id'"
+      :action-column-key="'action'"
+      table-mode="tree"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -221,6 +225,13 @@ import { useUserStore } from '@/stores/identity/user'
 const { t } = useI18n()
 const userStore = useUserStore()
 const deptExcelNames = taktExcelEntityNames('TaktDept')
+
+/** 右侧树表查询占位（common.page.form.placeholder.search + entity.dept.*） */
+const tableSearchPlaceholder = computed(() =>
+  t('common.page.form.placeholder.search', {
+    keyword: [t('entity.dept.name'), t('entity.dept.code')].join(' / '),
+  })
+)
 
 const treeQueryKeyword = ref('')
 const queryKeyword = ref('')
@@ -750,14 +761,26 @@ const handleTableChange = (_pagination: unknown, _filters: unknown, sorter: { fi
   if (sorter?.order) logger.debug('[Dept] 排序', { field: sorter.field, order: sorter.order })
 }
 
-const handleResizeColumn = (w: number, col: { width?: number | string }) => {
-  const colMeta = col as { key?: unknown; dataIndex?: unknown; title?: unknown }
-  const column = columns.value.find((c: { key?: unknown; dataIndex?: unknown; title?: unknown }) => {
-    const colKey = colMeta.key || colMeta.dataIndex || colMeta.title
-    const cKey = c.key || c.dataIndex || c.title
-    return colKey && cKey && String(colKey) === String(cKey)
-  })
-  if (column) (column as { width?: number }).width = w
+/** 列宽拖拽匹配用（避免 TableColumnsType.find 触发类型实例化过深） */
+type DeptColumnWidthMeta = {
+  key?: string | number
+  dataIndex?: string | number
+  title?: string | number
+  width?: number | string
+}
+
+const handleResizeColumn = (w: number, col: DeptColumnWidthMeta) => {
+  const colKey = col.key ?? col.dataIndex ?? col.title
+  if (colKey == null) return
+  const keyStr = String(colKey)
+  const cols = columns.value as DeptColumnWidthMeta[]
+  for (const column of cols) {
+    const cKey = column.key ?? column.dataIndex ?? column.title
+    if (cKey != null && String(cKey) === keyStr) {
+      column.width = w
+      return
+    }
+  }
 }
 
 const handleCreate = () => {

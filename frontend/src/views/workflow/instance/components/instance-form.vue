@@ -30,7 +30,7 @@
         {{ statusText(detail.instanceStatus) }}
       </a-descriptions-item>
       <a-descriptions-item :label="t('entity.flowinstance.currentnodename')">
-        {{ detail.currentNodeName || '-' }}
+        {{ detail.currentNodeName ?? detail.currentActivityName ?? '-' }}
       </a-descriptions-item>
       <a-descriptions-item :label="t('entity.flowinstance.startusername')">
         {{ detail.startUserName }}
@@ -67,29 +67,32 @@
  */
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { FlowHistoryItem, FlowInstanceDetail } from '@/types/workflow/flow-instance'
-import FlowPendingAddApproversPanel from '@/views/workflow/components/flow-pending-add-approvers-panel.vue'
+import type { FlowHistoryItem, FlowInstanceDetailView } from '@/types/workflow/flow-engine'
+import FlowPendingAddApproversPanel from '../../components/flow-pending-add-approvers-panel.vue'
 
 const { t } = useI18n()
 defineEmits<{ refresh: [] }>()
 
 /** 父组件传入的实例详情，为 null 时显示“无数据” */
 interface Props {
-  detail: FlowInstanceDetail | null
+  detail: FlowInstanceDetailView | null
 }
 
 const props = defineProps<Props>()
+/** 校验流转历史项结构（兼容 API 偶发脏数据） */
+function isFlowHistoryItem(item: unknown): item is FlowHistoryItem {
+  if (item == null || typeof item !== 'object') return false
+  const row = item as Partial<FlowHistoryItem>
+  return typeof row.fromNodeName === 'string'
+    && typeof row.toNodeName === 'string'
+    && typeof row.transitionUserName === 'string'
+    && typeof row.transitionTime === 'string'
+}
+
 const historyItems = computed<FlowHistoryItem[]>(() => {
   const list = props.detail?.history
   if (!Array.isArray(list)) return []
-  return list.filter((item): item is FlowHistoryItem => {
-    if (!item || typeof item !== 'object') return false
-    const row = item as Record<string, unknown>
-    return typeof row.fromNodeName === 'string'
-      && typeof row.toNodeName === 'string'
-      && typeof row.transitionUserName === 'string'
-      && typeof row.transitionTime === 'string'
-  })
+  return list.filter(isFlowHistoryItem)
 })
 
 /** 实例状态码转展示文案（走 i18n workflow.instance.status.*） */

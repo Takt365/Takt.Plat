@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Logistics.Materials;
@@ -68,7 +69,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "price_status", ColumnDescription = "价格状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int PriceStatus { get; set; } = 1;
+    public TaktCommonStatus PriceStatus { get; set; } = TaktCommonStatus.Enabled;
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）

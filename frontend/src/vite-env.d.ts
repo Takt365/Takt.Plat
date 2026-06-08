@@ -101,6 +101,9 @@ interface ImportMetaEnv {
   /** 空闲自动登出超时时长（分钟）；0 表示禁用 */
   readonly VITE_AUTH_IDLE_TIMEOUT_MINUTES?: string;
 
+  /** 空闲登出预警时长（分钟）；到期前弹窗，须小于总超时；0 表示不预警 */
+  readonly VITE_AUTH_IDLE_WARNING_MINUTES?: string;
+
   readonly VITE_OAUTH_CLIENT_ID: string;
 
 

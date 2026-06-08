@@ -62,7 +62,7 @@ public class TaktRole : TaktTenantEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "role_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int RoleStatus { get; set; } = 1;
+    public TaktCommonStatus RoleStatus { get; set; } = TaktCommonStatus.Enabled;
 
     /// <summary>
     /// 角色描述

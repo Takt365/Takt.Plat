@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/packaging -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt物料包装信息实体管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt物料包装信息实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -54,15 +54,17 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      :columns="columns"
+      entity-scope="company"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'packagingId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
       :row-key="getPackagingId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
@@ -98,10 +100,15 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-logistics-manufacturing-bom-packaging'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.packaging.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
@@ -109,6 +116,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialCode')">
       <a-form-item :label="t('entity.packaging.materialcode')">
         <a-input
           v-model:value="advancedQueryForm.materialCode"
@@ -116,6 +125,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('hsCode')">
       <a-form-item :label="t('entity.packaging.hscode')">
         <a-input
           v-model:value="advancedQueryForm.hsCode"
@@ -123,6 +134,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('hsName')">
       <a-form-item :label="t('entity.packaging.hsname')">
         <a-input
           v-model:value="advancedQueryForm.hsName"
@@ -130,6 +143,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('additionalCode')">
       <a-form-item :label="t('entity.packaging.additionalcode')">
         <a-input
           v-model:value="advancedQueryForm.additionalCode"
@@ -137,6 +152,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('originCountryRegionCode')">
       <a-form-item :label="t('entity.packaging.origincountryregioncode')">
         <a-input
           v-model:value="advancedQueryForm.originCountryRegionCode"
@@ -144,6 +161,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('originCountryRegionName')">
       <a-form-item :label="t('entity.packaging.origincountryregionname')">
         <a-input
           v-model:value="advancedQueryForm.originCountryRegionName"
@@ -151,6 +170,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('destinationCountryRegionCode')">
       <a-form-item :label="t('entity.packaging.destinationcountryregioncode')">
         <a-input
           v-model:value="advancedQueryForm.destinationCountryRegionCode"
@@ -158,12 +179,191 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('destinationCountryRegionName')">
+      <a-form-item :label="t('entity.packaging.destinationcountryregionname')">
+        <a-input
+          v-model:value="advancedQueryForm.destinationCountryRegionName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.destinationcountryregionname') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('regulatoryConditionCode')">
+      <a-form-item :label="t('entity.packaging.regulatoryconditioncode')">
+        <a-input
+          v-model:value="advancedQueryForm.regulatoryConditionCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.regulatoryconditioncode') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('tariffRateType')">
+      <a-form-item :label="t('entity.packaging.tariffratetype')">
+        <a-input
+          v-model:value="advancedQueryForm.tariffRateType"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.tariffratetype') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('grossWeight')">
+      <a-form-item :label="t('entity.packaging.grossweight')">
+        <a-input-number
+          v-model:value="advancedQueryForm.grossWeight"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.grossweight') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('netWeight')">
+      <a-form-item :label="t('entity.packaging.netweight')">
+        <a-input-number
+          v-model:value="advancedQueryForm.netWeight"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.netweight') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('weightUnit')">
+      <a-form-item :label="t('entity.packaging.weightunit')">
+        <a-input
+          v-model:value="advancedQueryForm.weightUnit"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.weightunit') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('businessVolume')">
+      <a-form-item :label="t('entity.packaging.businessvolume')">
+        <a-input-number
+          v-model:value="advancedQueryForm.businessVolume"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.businessvolume') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('volumeUnit')">
+      <a-form-item :label="t('entity.packaging.volumeunit')">
+        <a-input
+          v-model:value="advancedQueryForm.volumeUnit"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.volumeunit') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('sizeDimension')">
+      <a-form-item :label="t('entity.packaging.sizedimension')">
+        <a-input
+          v-model:value="advancedQueryForm.sizeDimension"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.sizedimension') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('packagingType')">
+      <a-form-item :label="t('entity.packaging.type')">
+        <a-input
+          v-model:value="advancedQueryForm.packagingType"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.type') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('packingUnit')">
+      <a-form-item :label="t('entity.packaging.packingunit')">
+        <a-input
+          v-model:value="advancedQueryForm.packingUnit"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.packingunit') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('quantityPerPacking')">
+      <a-form-item :label="t('entity.packaging.quantityperpacking')">
+        <a-input-number
+          v-model:value="advancedQueryForm.quantityPerPacking"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.quantityperpacking') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('packagingSpec')">
+      <a-form-item :label="t('entity.packaging.spec')">
+        <a-input
+          v-model:value="advancedQueryForm.packagingSpec"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.spec') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('packagingDescription')">
+      <a-form-item :label="t('entity.packaging.description')">
+        <a-textarea
+          v-model:value="advancedQueryForm.packagingDescription"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.packaging.description') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('sortOrder')">
+      <a-form-item :label="t('entity.packaging.sortorder')">
+        <a-input-number
+          v-model:value="advancedQueryForm.sortOrder"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.sortorder') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extFieldJson')">
+      <a-form-item :label="t('common.page.entity.extfieldjson')">
+        <a-input
+          v-model:value="advancedQueryForm.extFieldJson"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.packaging._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.packaging._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -188,6 +388,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'packagingId'"
       :action-column-key="'action'"
+      entity-scope="company"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -196,14 +398,13 @@
 
 <script setup lang="ts">
 /**
- * Takt物料包装信息实体管理页 · 由 generate-vue-from-api 根据 types/api 生成
+ * Takt物料包装信息实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/bom/packaging
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import PackagingForm from './components/packaging-form.vue'
 import { getPackagingList, getPackagingById, createPackaging, updatePackaging, deletePackagingById, deletePackagingBatch, getPackagingTemplate, importPackaging, exportPackaging } from '@/api/logistics/manufacturing/bom/packaging'
@@ -212,28 +413,46 @@ import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktPackaging')
+/** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.packaging._self') })
 )
 
+/** 快捷查询关键字 */
 const queryKeyword = ref('')
+/** 列表 loading */
 const loading = ref(false)
+/** 分页列表数据 */
 const dataSource = ref<Packaging[]>([])
+/** 当前页码 */
 const currentPage = ref(1)
+/** 每页条数 */
 const pageSize = ref(20)
+/** 分页 total */
 const total = ref(0)
+/** 工具栏单选时当前行 */
 const selectedRow = ref<Packaging | null>(null)
+/** 表格多选行 */
 const selectedRows = ref<Packaging[]>([])
+/** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
+/** 新增/编辑弹窗是否打开 */
 const formVisible = ref(false)
+/** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
+/** 传入内嵌表单的编辑数据 */
 const formData = ref<Partial<Packaging>>({})
+/** 表单提交 loading */
 const formLoading = ref(false)
-const formRef = ref()
+/** 内嵌表单组件 ref（validate / getValues / resetFields） */
+const formRef = ref()/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/** 高级查询表单模型 */
 const advancedQueryForm = ref({
   plantCode: '',
   materialCode: '',
@@ -243,14 +462,73 @@ const advancedQueryForm = ref({
   originCountryRegionCode: '',
   originCountryRegionName: '',
   destinationCountryRegionCode: '',
+  destinationCountryRegionName: '',
+  regulatoryConditionCode: '',
+  tariffRateType: '',
+  grossWeight: undefined as number | undefined,
+  netWeight: undefined as number | undefined,
+  weightUnit: '',
+  businessVolume: undefined as number | undefined,
+  volumeUnit: '',
+  sizeDimension: '',
+  packagingType: '',
+  packingUnit: '',
+  quantityPerPacking: undefined as number | undefined,
+  packagingSpec: '',
+  packagingDescription: '',
+  sortOrder: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
 })
+/** 高级查询字段元数据（列显隐配置） */
+const queryFieldsMeta = computed(() => [
+  { key: 'plantCode', label: t('entity.packaging.plantcode') },
+  { key: 'materialCode', label: t('entity.packaging.materialcode') },
+  { key: 'hsCode', label: t('entity.packaging.hscode') },
+  { key: 'hsName', label: t('entity.packaging.hsname') },
+  { key: 'additionalCode', label: t('entity.packaging.additionalcode') },
+  { key: 'originCountryRegionCode', label: t('entity.packaging.origincountryregioncode') },
+  { key: 'originCountryRegionName', label: t('entity.packaging.origincountryregionname') },
+  { key: 'destinationCountryRegionCode', label: t('entity.packaging.destinationcountryregioncode') },
+  { key: 'destinationCountryRegionName', label: t('entity.packaging.destinationcountryregionname') },
+  { key: 'regulatoryConditionCode', label: t('entity.packaging.regulatoryconditioncode') },
+  { key: 'tariffRateType', label: t('entity.packaging.tariffratetype') },
+  { key: 'grossWeight', label: t('entity.packaging.grossweight') },
+  { key: 'netWeight', label: t('entity.packaging.netweight') },
+  { key: 'weightUnit', label: t('entity.packaging.weightunit') },
+  { key: 'businessVolume', label: t('entity.packaging.businessvolume') },
+  { key: 'volumeUnit', label: t('entity.packaging.volumeunit') },
+  { key: 'sizeDimension', label: t('entity.packaging.sizedimension') },
+  { key: 'packagingType', label: t('entity.packaging.type') },
+  { key: 'packingUnit', label: t('entity.packaging.packingunit') },
+  { key: 'quantityPerPacking', label: t('entity.packaging.quantityperpacking') },
+  { key: 'packagingSpec', label: t('entity.packaging.spec') },
+  { key: 'packagingDescription', label: t('entity.packaging.description') },
+  { key: 'sortOrder', label: t('entity.packaging.sortorder') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+/** 高级查询当前可见字段 key */
+const visibleQueryFieldKeys = ref<string[]>([])
+/** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
+/** 导入对话框是否打开 */
 const importVisible = ref(false)
+/** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
+/** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'packagingId'
+/** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
+/** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+
+/** 页面挂载后加载分页列表 */
 onMounted(() => {
   loadData()
 })
@@ -260,6 +538,7 @@ onMounted(() => {
 
 
 
+/** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
@@ -379,6 +658,96 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getPackagingField(record, 'grossWeight') ?? ''
   },
+  {
+    title: t('entity.packaging.netweight'),
+    dataIndex: 'netWeight',
+    key: 'netWeight',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'netWeight') ?? ''
+  },
+  {
+    title: t('entity.packaging.weightunit'),
+    dataIndex: 'weightUnit',
+    key: 'weightUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'weightUnit') ?? ''
+  },
+  {
+    title: t('entity.packaging.businessvolume'),
+    dataIndex: 'businessVolume',
+    key: 'businessVolume',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'businessVolume') ?? ''
+  },
+  {
+    title: t('entity.packaging.volumeunit'),
+    dataIndex: 'volumeUnit',
+    key: 'volumeUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'volumeUnit') ?? ''
+  },
+  {
+    title: t('entity.packaging.sizedimension'),
+    dataIndex: 'sizeDimension',
+    key: 'sizeDimension',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'sizeDimension') ?? ''
+  },
+  {
+    title: t('entity.packaging.type'),
+    dataIndex: 'packagingType',
+    key: 'packagingType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'packagingType') ?? ''
+  },
+  {
+    title: t('entity.packaging.packingunit'),
+    dataIndex: 'packingUnit',
+    key: 'packingUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'packingUnit') ?? ''
+  },
+  {
+    title: t('entity.packaging.quantityperpacking'),
+    dataIndex: 'quantityPerPacking',
+    key: 'quantityPerPacking',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'quantityPerPacking') ?? ''
+  },
+  {
+    title: t('entity.packaging.spec'),
+    dataIndex: 'packagingSpec',
+    key: 'packagingSpec',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'packagingSpec') ?? ''
+  },
+  {
+    title: t('entity.packaging.description'),
+    dataIndex: 'packagingDescription',
+    key: 'packagingDescription',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPackagingField(record, 'packagingDescription') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -401,21 +770,16 @@ const columns = computed<TableColumnsType>(() => [
   })
 ])
 
+/** 表格 row-key（优先实体主键字段） */
 const getPackagingId = (record: any): string => record?.[entityIdName] ?? ''
+/**
+ * 读取行字段值
+ * @param record 行数据
+ * @param field 字段名
+ */
 const getPackagingField = (record: any, field: string): any => record?.[field]
 
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
-})
-
+/** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: Packaging[]) => {
@@ -435,6 +799,7 @@ const rowSelection = computed(() => ({
   }
 }))
 
+/** 行点击切换选中（与 rowSelection 联动） */
 const onClickRow = (record: Packaging) => ({
   onClick: () => {
     const key = getPackagingId(record)
@@ -452,6 +817,7 @@ const onClickRow = (record: Packaging) => ({
   }
 })
 
+/** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
@@ -477,11 +843,13 @@ async function loadData() {
   }
 }
 
+/** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
   loadData()
 }
 
+/** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
@@ -493,22 +861,44 @@ function handleReset() {
   originCountryRegionCode: '',
   originCountryRegionName: '',
   destinationCountryRegionCode: '',
+  destinationCountryRegionName: '',
+  regulatoryConditionCode: '',
+  tariffRateType: '',
+  grossWeight: undefined as number | undefined,
+  netWeight: undefined as number | undefined,
+  weightUnit: '',
+  businessVolume: undefined as number | undefined,
+  volumeUnit: '',
+  sizeDimension: '',
+  packagingType: '',
+  packingUnit: '',
+  quantityPerPacking: undefined as number | undefined,
+  packagingSpec: '',
+  packagingDescription: '',
+  sortOrder: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
   currentPage.value = 1
   loadData()
 }
 
+/** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.packaging._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.packaging._self') })
   formData.value = {}
   formVisible.value = true
 }
+/** 打开编辑弹窗 */
 function handleEdit(record: Packaging) {
-  formTitle.value = t('common.page.button.edit') + t('entity.packaging._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.packaging._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
 
+/** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
@@ -516,6 +906,7 @@ function handleUpdate() {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.packaging._self') }))
   }
 }
+/** 提交新增/编辑表单 */
 async function handleFormSubmit() {
   const refInst = formRef.value
   if (!refInst?.validate) return
@@ -542,30 +933,37 @@ async function handleFormSubmit() {
   }
 }
 
+/** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
 }
+/** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getPackagingTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
+/** 上传并导入 Excel 文件 */
 async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   return await importPackaging(file, sheetName)
 }
 
+/** 导入完成回调：刷新列表并可选关闭对话框 */
 function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
   loadData()
   if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }
+/** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
     loading.value = true
@@ -605,6 +1003,7 @@ async function handleExport() {
     loading.value = false
   }
 }
+/** 删除单行 */
 async function handleDeleteOne(record: Packaging) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
@@ -618,6 +1017,7 @@ async function handleDeleteOne(record: Packaging) {
     }
   })
 }
+/** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.packaging._self') }))
@@ -636,10 +1036,12 @@ async function handleDelete() {
     }
   })
 }
+/** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
+/** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
   currentPage.value = 1
@@ -656,31 +1058,58 @@ function handleAdvancedQueryReset() {
   originCountryRegionCode: '',
   originCountryRegionName: '',
   destinationCountryRegionCode: '',
+  destinationCountryRegionName: '',
+  regulatoryConditionCode: '',
+  tariffRateType: '',
+  grossWeight: undefined as number | undefined,
+  netWeight: undefined as number | undefined,
+  weightUnit: '',
+  businessVolume: undefined as number | undefined,
+  volumeUnit: '',
+  sizeDimension: '',
+  packagingType: '',
+  packingUnit: '',
+  quantityPerPacking: undefined as number | undefined,
+  packagingSpec: '',
+  packagingDescription: '',
+  sortOrder: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
 }
 
+/** 打开列设置抽屉 */
 function handleColumnSetting() {
   columnSettingVisible.value = true
 }
 
+/** 列设置：更新可见列 key */
 function handleColumnKeysChange(keys: string[]) {
   visibleColumnKeys.value = keys
 }
 
+/** 列设置：恢复默认可见列 */
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
+/** 刷新列表 */
 function handleRefresh() {
   loadData()
 }
 
+/** 表格 change 占位 */
 function handleTableChange() {}
+/** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
+/** 分页页码变更 */
 function handlePaginationChange(page: number) {
   currentPage.value = page
   loadData()
 }
+/** 分页每页条数变更 */
 function handlePaginationSizeChange(_current: number, size: number) {
   pageSize.value = size
   currentPage.value = 1

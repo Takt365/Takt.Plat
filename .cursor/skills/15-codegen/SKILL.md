@@ -2,7 +2,7 @@
 name: 15-codegen
 description: >-
   Takt 全栈代码生成（generate-all 流水线、单表/主子表/树表脚本识别、排除列表、生成后审阅）。
-  用于 node scripts/generate-all、generate-vue-from-api、新建实体后生成代码，
+  用于 node scripts/generate-all、generate-vue-all-from-api、新建实体后生成代码，
   或用户提到 15-codegen、代码生成、generate-all 时。
 ---
 
@@ -33,7 +33,7 @@ description: >-
 | 4 | `generate-controllers-from-services.cjs` | `TaktXxxsController` |
 | 5 | `generate-from-backend.cjs` | `types/` + `api/` |
 | 6 | `generate-entity-i18n-seed.cjs` | `TaktXxxI18nSeedData.cs` |
-| 7 | `generate-vue-from-api.cjs` | `index.vue` + `*-form.vue` |
+| 7 | `generate-vue-all-from-api.cjs` | `index.vue` + `*-form.vue`（CRUD / TREE / Master-Detail） |
 
 **写入策略**：不存在则创建，已存在则覆盖；`TaktAuth`/`TaktRbac`/`TaktFlowEngine` 等须 `--force` 才覆盖。
 
@@ -53,7 +53,8 @@ description: >-
 node scripts/generate-dtos-from-entity.cjs --Holiday
 node scripts/generate-services-from-dtos.cjs --Holiday
 node scripts/generate-from-backend.cjs --Holiday
-node scripts/generate-vue-from-api.cjs --Holiday --view-path human-resource/attendance-leave/holiday
+node scripts/generate-vue-crud-from-api.cjs --Holiday --view-path human-resource/attendance-leave/holiday
+node scripts/generate-vue-all-from-api.cjs --CostCenter
 node scripts/generate-all.cjs --Holiday --dry-run
 ```
 

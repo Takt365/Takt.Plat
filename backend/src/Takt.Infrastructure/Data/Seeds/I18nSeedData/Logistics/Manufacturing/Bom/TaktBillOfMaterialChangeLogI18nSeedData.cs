@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialChangeLogI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -144,6 +144,15 @@ public class TaktBillOfMaterialChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billOfMaterialChangeLog.changereason", "zh-CN", "变更原因", "变更原因"),
             // entity.billOfMaterialChangeLog.changereason
             new TranslationSeedItem("entity.billOfMaterialChangeLog.changereason", "zh-HK", "变更原因", "变更原因"),
+
+            // entity.billOfMaterialChangeLog.bom
+            new TranslationSeedItem("entity.billOfMaterialChangeLog.bom", "en-US", "BOM", "BOM（主表）"),
+            // entity.billOfMaterialChangeLog.bom
+            new TranslationSeedItem("entity.billOfMaterialChangeLog.bom", "ja-JP", "BOM", "BOM（主表）"),
+            // entity.billOfMaterialChangeLog.bom
+            new TranslationSeedItem("entity.billOfMaterialChangeLog.bom", "zh-CN", "BOM", "BOM（主表）"),
+            // entity.billOfMaterialChangeLog.bom
+            new TranslationSeedItem("entity.billOfMaterialChangeLog.bom", "zh-HK", "BOM", "BOM（主表）"),
         };
     }
 

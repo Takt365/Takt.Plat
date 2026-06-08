@@ -4,13 +4,16 @@
 // 文件名称：auth-idle.ts
 // 创建时间：2026-05-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：认证空闲超时配置（VITE_AUTH_IDLE_TIMEOUT_MINUTES）
+// 功能描述：认证空闲超时配置（VITE_AUTH_IDLE_TIMEOUT_MINUTES / VITE_AUTH_IDLE_WARNING_MINUTES）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import { TAKT_AUTH_IDLE_DEFAULT_TIMEOUT_MINUTES } from '@/utils/common';
+import {
+  TAKT_AUTH_IDLE_DEFAULT_TIMEOUT_MINUTES,
+  TAKT_AUTH_IDLE_DEFAULT_WARNING_MINUTES,
+} from '@/utils/common';
 
 /**
  * 解析空闲自动登出超时时长（毫秒）
@@ -41,6 +44,44 @@ export function getAuthIdleTimeoutMs(): number {
 
   // 分钟转毫秒
   return minutes * 60 * 1000;
+}
+
+/**
+ * 解析空闲登出预警时长（分钟）
+ * @description VITE_AUTH_IDLE_WARNING_MINUTES：0 禁用预警；须小于总超时时长
+ * @returns {number} 预警分钟数，0 表示到期前不弹窗
+ */
+export function getAuthIdleWarningMinutes(): number {
+  const totalMs = getAuthIdleTimeoutMs();
+  if (totalMs <= 0) {
+    return 0;
+  }
+
+  const totalMinutes = totalMs / 60_000;
+  const raw = import.meta.env.VITE_AUTH_IDLE_WARNING_MINUTES?.trim();
+
+  if (raw === '0') {
+    return 0;
+  }
+
+  const minutes = raw ? Number(raw) : TAKT_AUTH_IDLE_DEFAULT_WARNING_MINUTES;
+  if (Number.isNaN(minutes) || minutes <= 0) {
+    return 0;
+  }
+
+  if (minutes >= totalMinutes) {
+    return 0;
+  }
+
+  return minutes;
+}
+
+/**
+ * 空闲登出预警时长（毫秒）
+ * @returns {number} 毫秒，0 表示不预警
+ */
+export function getAuthIdleWarningMs(): number {
+  return getAuthIdleWarningMinutes() * 60_000;
 }
 
 /**

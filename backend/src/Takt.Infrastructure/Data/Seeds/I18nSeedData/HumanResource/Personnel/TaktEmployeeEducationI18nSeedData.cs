@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeEducation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -162,6 +162,15 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeEducation.enddate", "zh-CN", "结束日期", "结束日期"),
             // entity.employeeEducation.enddate
             new TranslationSeedItem("entity.employeeEducation.enddate", "zh-HK", "结束日期", "结束日期"),
+
+            // entity.employeeEducation.ishighest
+            new TranslationSeedItem("entity.employeeEducation.ishighest", "en-US", "是否最高学历", "是否最高学历（1=是，0=否）"),
+            // entity.employeeEducation.ishighest
+            new TranslationSeedItem("entity.employeeEducation.ishighest", "ja-JP", "是否最高学历", "是否最高学历（1=是，0=否）"),
+            // entity.employeeEducation.ishighest
+            new TranslationSeedItem("entity.employeeEducation.ishighest", "zh-CN", "是否最高学历", "是否最高学历（1=是，0=否）"),
+            // entity.employeeEducation.ishighest
+            new TranslationSeedItem("entity.employeeEducation.ishighest", "zh-HK", "是否最高学历", "是否最高学历（1=是，0=否）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInspectionStandardItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -225,6 +225,15 @@ public class TaktInspectionStandardItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionStandardItem.isqualifiedbasis", "zh-CN", "是否合格判定项目", "是否合格判定项目（0=否，1=是）"),
             // entity.inspectionStandardItem.isqualifiedbasis
             new TranslationSeedItem("entity.inspectionStandardItem.isqualifiedbasis", "zh-HK", "是否合格判定项目", "是否合格判定项目（0=否，1=是）"),
+
+            // entity.inspectionStandardItem.standard
+            new TranslationSeedItem("entity.inspectionStandardItem.standard", "en-US", "检验标准", "检验标准（主表）"),
+            // entity.inspectionStandardItem.standard
+            new TranslationSeedItem("entity.inspectionStandardItem.standard", "ja-JP", "检验标准", "检验标准（主表）"),
+            // entity.inspectionStandardItem.standard
+            new TranslationSeedItem("entity.inspectionStandardItem.standard", "zh-CN", "检验标准", "检验标准（主表）"),
+            // entity.inspectionStandardItem.standard
+            new TranslationSeedItem("entity.inspectionStandardItem.standard", "zh-HK", "检验标准", "检验标准（主表）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工应用服务实现
 // 
@@ -243,7 +243,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             throw new TaktBusinessException("员工不存在");
         }
-        entity.PoliticalStatus = dto.PoliticalStatus;
+        entity.MaritalStatus = dto.MaritalStatus;
         await _employeeRepository.UpdateAsync(entity);
         return await GetEmployeeByIdAsync(dto.EmployeeId) ?? throw new TaktBusinessException("员工不存在");
     }

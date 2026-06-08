@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：quartz-task.d.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -14,6 +14,11 @@ import type {
   CompanyDtoBase,
   TaktPagedQuery
 } from '@/types/common';
+
+import type {
+  QuartzLog,
+  QuartzLogCreate
+} from '@/types/statistics/logging/quartz-log';
 
 /**
  * Quartz 定时任务实体
@@ -49,19 +54,54 @@ export interface QuartzTask extends CompanyDtoBase {
   jobGroup: string;
 
   /**
-   * Cron 表达式
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   */
+  taskType: number;
+
+  /**
+   * 程序集名称（任务类型为程序集时使用）
+   */
+  assemblyName: string;
+
+  /**
+   * 任务类名（任务类型为程序集时使用）
+   */
+  className: string;
+
+  /**
+   * API 执行地址（任务类型为网络请求时使用）
+   */
+  apiUrl?: string;
+
+  /**
+   * 网络请求方式（GET/POST 等）
+   */
+  requestMethod?: string;
+
+  /**
+   * SQL 语句（任务类型为 SQL 时使用）
+   */
+  sqlScript?: string;
+
+  /**
+   * 触发器类型（0=Simple 1=Cron）
+   */
+  triggerType: number;
+
+  /**
+   * Cron 表达式（触发器类型为 Cron 时使用）
    */
   cronExpression: string;
 
   /**
-   * 任务处理器类型（DI 注册键或完整类型名）
+   * 执行间隔时间（秒，触发器类型为 Simple 时使用）
    */
-  jobType: string;
+  intervalSeconds: number;
 
   /**
-   * 任务参数 JSON
+   * 执行参数
    */
-  jobParams?: string;
+  executeParams?: string;
 
   /**
    * 任务状态
@@ -79,6 +119,16 @@ export interface QuartzTask extends CompanyDtoBase {
   misfirePolicy: number;
 
   /**
+   * 首次执行时间（调度生效开始时间）
+   */
+  firstRunAt?: string;
+
+  /**
+   * 执行次数
+   */
+  executeCount: number;
+
+  /**
    * 上次执行时间
    */
   lastRunAt?: string;
@@ -92,6 +142,11 @@ export interface QuartzTask extends CompanyDtoBase {
    * 任务描述
    */
   description?: string;
+
+  /**
+   * 关联的任务执行日志列表（主子表关系：QuartzTaskId） （子表：TaktQuartzLog）
+   */
+  quartzLogs?: QuartzLog[];
 
 }
 
@@ -134,19 +189,54 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   jobGroup?: string;
 
   /**
-   * Cron 表达式
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   */
+  taskType?: number;
+
+  /**
+   * 程序集名称（任务类型为程序集时使用）
+   */
+  assemblyName?: string;
+
+  /**
+   * 任务类名（任务类型为程序集时使用）
+   */
+  className?: string;
+
+  /**
+   * API 执行地址（任务类型为网络请求时使用）
+   */
+  apiUrl?: string;
+
+  /**
+   * 网络请求方式（GET/POST 等）
+   */
+  requestMethod?: string;
+
+  /**
+   * SQL 语句（任务类型为 SQL 时使用）
+   */
+  sqlScript?: string;
+
+  /**
+   * 触发器类型（0=Simple 1=Cron）
+   */
+  triggerType?: number;
+
+  /**
+   * Cron 表达式（触发器类型为 Cron 时使用）
    */
   cronExpression?: string;
 
   /**
-   * 任务处理器类型（DI 注册键或完整类型名）
+   * 执行间隔时间（秒，触发器类型为 Simple 时使用）
    */
-  jobType?: string;
+  intervalSeconds?: number;
 
   /**
-   * 任务参数 JSON
+   * 执行参数
    */
-  jobParams?: string;
+  executeParams?: string;
 
   /**
    * 任务状态
@@ -162,6 +252,21 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
    * Misfire 策略
    */
   misfirePolicy?: number;
+
+  /**
+   * 首次执行时间（调度生效开始时间）（范围查询-开始）
+   */
+  firstRunAtStart?: string;
+
+  /**
+   * 首次执行时间（调度生效开始时间）（范围查询-结束）
+   */
+  firstRunAtEnd?: string;
+
+  /**
+   * 执行次数
+   */
+  executeCount?: number;
 
   /**
    * 上次执行时间（范围查询-开始）
@@ -253,19 +358,54 @@ export interface QuartzTaskCreate {
   jobGroup: string;
 
   /**
-   * Cron 表达式
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   */
+  taskType: number;
+
+  /**
+   * 程序集名称（任务类型为程序集时使用）
+   */
+  assemblyName: string;
+
+  /**
+   * 任务类名（任务类型为程序集时使用）
+   */
+  className: string;
+
+  /**
+   * API 执行地址（任务类型为网络请求时使用）
+   */
+  apiUrl?: string;
+
+  /**
+   * 网络请求方式（GET/POST 等）
+   */
+  requestMethod?: string;
+
+  /**
+   * SQL 语句（任务类型为 SQL 时使用）
+   */
+  sqlScript?: string;
+
+  /**
+   * 触发器类型（0=Simple 1=Cron）
+   */
+  triggerType: number;
+
+  /**
+   * Cron 表达式（触发器类型为 Cron 时使用）
    */
   cronExpression: string;
 
   /**
-   * 任务处理器类型（DI 注册键或完整类型名）
+   * 执行间隔时间（秒，触发器类型为 Simple 时使用）
    */
-  jobType: string;
+  intervalSeconds: number;
 
   /**
-   * 任务参数 JSON
+   * 执行参数
    */
-  jobParams?: string;
+  executeParams?: string;
 
   /**
    * 任务状态
@@ -283,6 +423,16 @@ export interface QuartzTaskCreate {
   misfirePolicy: number;
 
   /**
+   * 首次执行时间（调度生效开始时间）
+   */
+  firstRunAt?: string;
+
+  /**
+   * 执行次数
+   */
+  executeCount: number;
+
+  /**
    * 上次执行时间
    */
   lastRunAt?: string;
@@ -296,6 +446,11 @@ export interface QuartzTaskCreate {
    * 任务描述
    */
   description?: string;
+
+  /**
+   * 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
+   */
+  quartzLogs?: QuartzLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -381,39 +536,44 @@ export interface QuartzTaskTemplate {
   jobGroup?: string;
 
   /**
-   * Cron 表达式
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   */
+  taskType?: number;
+
+  /**
+   * 程序集名称（任务类型为程序集时使用）
+   */
+  assemblyName?: string;
+
+  /**
+   * 任务类名（任务类型为程序集时使用）
+   */
+  className?: string;
+
+  /**
+   * API 执行地址（任务类型为网络请求时使用）
+   */
+  apiUrl?: string;
+
+  /**
+   * 网络请求方式（GET/POST 等）
+   */
+  requestMethod?: string;
+
+  /**
+   * SQL 语句（任务类型为 SQL 时使用）
+   */
+  sqlScript?: string;
+
+  /**
+   * 触发器类型（0=Simple 1=Cron）
+   */
+  triggerType?: number;
+
+  /**
+   * Cron 表达式（触发器类型为 Cron 时使用）
    */
   cronExpression?: string;
-
-  /**
-   * 任务处理器类型（DI 注册键或完整类型名）
-   */
-  jobType?: string;
-
-  /**
-   * 任务参数 JSON
-   */
-  jobParams?: string;
-
-  /**
-   * 任务状态
-   */
-  taskStatus?: number;
-
-  /**
-   * 是否允许并发执行（0=禁止，1=允许）
-   */
-  concurrent?: number;
-
-  /**
-   * Misfire 策略
-   */
-  misfirePolicy?: number;
-
-  /**
-   * 任务描述
-   */
-  description?: string;
 
   /**
    * 扩展字段JSON
@@ -470,39 +630,44 @@ export interface QuartzTaskImport {
   jobGroup?: string;
 
   /**
-   * Cron 表达式
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   */
+  taskType?: number;
+
+  /**
+   * 程序集名称（任务类型为程序集时使用）
+   */
+  assemblyName?: string;
+
+  /**
+   * 任务类名（任务类型为程序集时使用）
+   */
+  className?: string;
+
+  /**
+   * API 执行地址（任务类型为网络请求时使用）
+   */
+  apiUrl?: string;
+
+  /**
+   * 网络请求方式（GET/POST 等）
+   */
+  requestMethod?: string;
+
+  /**
+   * SQL 语句（任务类型为 SQL 时使用）
+   */
+  sqlScript?: string;
+
+  /**
+   * 触发器类型（0=Simple 1=Cron）
+   */
+  triggerType?: number;
+
+  /**
+   * Cron 表达式（触发器类型为 Cron 时使用）
    */
   cronExpression?: string;
-
-  /**
-   * 任务处理器类型（DI 注册键或完整类型名）
-   */
-  jobType?: string;
-
-  /**
-   * 任务参数 JSON
-   */
-  jobParams?: string;
-
-  /**
-   * 任务状态
-   */
-  taskStatus?: number;
-
-  /**
-   * 是否允许并发执行（0=禁止，1=允许）
-   */
-  concurrent?: number;
-
-  /**
-   * Misfire 策略
-   */
-  misfirePolicy?: number;
-
-  /**
-   * 任务描述
-   */
-  description?: string;
 
   /**
    * 扩展字段JSON
@@ -554,19 +719,54 @@ export interface QuartzTaskExport {
   jobGroup: string;
 
   /**
-   * Cron 表达式
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
+   */
+  taskType: number;
+
+  /**
+   * 程序集名称（任务类型为程序集时使用）
+   */
+  assemblyName: string;
+
+  /**
+   * 任务类名（任务类型为程序集时使用）
+   */
+  className: string;
+
+  /**
+   * API 执行地址（任务类型为网络请求时使用）
+   */
+  apiUrl?: string;
+
+  /**
+   * 网络请求方式（GET/POST 等）
+   */
+  requestMethod?: string;
+
+  /**
+   * SQL 语句（任务类型为 SQL 时使用）
+   */
+  sqlScript?: string;
+
+  /**
+   * 触发器类型（0=Simple 1=Cron）
+   */
+  triggerType: number;
+
+  /**
+   * Cron 表达式（触发器类型为 Cron 时使用）
    */
   cronExpression: string;
 
   /**
-   * 任务处理器类型（DI 注册键或完整类型名）
+   * 执行间隔时间（秒，触发器类型为 Simple 时使用）
    */
-  jobType: string;
+  intervalSeconds: number;
 
   /**
-   * 任务参数 JSON
+   * 执行参数
    */
-  jobParams?: string;
+  executeParams?: string;
 
   /**
    * 任务状态
@@ -582,6 +782,16 @@ export interface QuartzTaskExport {
    * Misfire 策略
    */
   misfirePolicy: number;
+
+  /**
+   * 首次执行时间（调度生效开始时间）
+   */
+  firstRunAt?: string;
+
+  /**
+   * 执行次数
+   */
+  executeCount: number;
 
   /**
    * 上次执行时间

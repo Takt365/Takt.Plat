@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostElementService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素应用服务实现
 // 
@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Accounting.Controlling;
 
@@ -95,7 +96,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     public async Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostElementStatus == 1);
+        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostElementStatus == TaktCommonStatus.Enabled);
         return BuildCostElementTreeOptions(list, 0);
     }
 
@@ -135,7 +136,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.CostElementStatus == 1).ToList();
+            : list.Where(x => x.CostElementStatus == TaktCommonStatus.Enabled).ToList();
         return BuildCostElementTree(filtered, parentId);
     }
 

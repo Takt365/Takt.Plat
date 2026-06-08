@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/personnel
 // 文件名称：employee.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteEmployeeBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新员工状态
- * @param {EmployeeStatus} dto 状态DTO
+ * @param {EmployeeStatus} dto 状态 DTO
  * @returns {Promise<Employee>} 员工DTO
  */
 export function updateEmployeeStatus(dto: EmployeeStatus): Promise<Employee> {
@@ -163,11 +163,11 @@ export function getEmployeeTemplate(sheetName?: string, templateName?: string): 
 
 /**
  * 导入员工
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importEmployee(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importEmployee(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

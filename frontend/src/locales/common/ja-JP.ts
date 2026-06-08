@@ -59,6 +59,7 @@ export default {
       'prussian-blue': 'プルシアンブルー',
       'senelier-yellow': 'サネリエイエロー',
       'memorial-gray': 'メモリアルグレー',
+      custom: 'カスタム',
     },
     layout: {
       switch: 'ログインレイアウトを切り替え',
@@ -66,6 +67,46 @@ export default {
         left: '左寄せ',
         center: '中央',
         right: '右寄せ',
+      },
+    },
+    entity: {
+      culturelist: '言語リスト',
+      menulist: 'メニュー',
+      tenantlist: 'テナントリスト',
+    },
+    button: {
+      ok: 'OK',
+      cancel: 'キャンセル',
+      logout: 'ログアウト',
+      profile: 'プロフィール',
+    },
+  },
+  feedback: {
+    load: {
+      empty: '利用可能な{target}がありません',
+      failed: '{target}の読み込みに失敗しました',
+    },
+    connect: {
+      success: '接続しました',
+    },
+    signalr: {
+      error: 'リアルタイム接続でエラーが発生しました',
+    },
+  },
+  tip: {
+    session: {
+      expired: 'ログインの有効期限が切れました。再度ログインしてください。',
+      idle: {
+        logout: '長時間操作がなかったため、自動的にログアウトしました。',
+      },
+    },
+    force: {
+      logout: '管理者により強制ログアウトされました。',
+    },
+    confirm: {
+      action: {
+        title: '{action}を確認',
+        question: '{action}しますか？',
       },
     },
   },

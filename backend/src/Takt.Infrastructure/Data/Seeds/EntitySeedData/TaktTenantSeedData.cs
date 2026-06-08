@@ -104,7 +104,7 @@ public class TaktTenantSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 TenantName = tenantName,
                 IsBuiltIn = TaktYesNo.Yes,
-                TenantStatus = 1,
+                TenantStatus = TaktCommonStatus.Enabled,
                 SubscriptionStartTime = DateTime.Now,
                 SubscriptionEndTime = new DateTime(9999, 12, 31, 23, 59, 59),
                 ContactName = contactName,
@@ -119,7 +119,7 @@ public class TaktTenantSeedData : ITaktSeedDataCoordinator
             // 存在：更新记录
             tenant.TenantName = tenantName;
             tenant.IsBuiltIn = TaktYesNo.Yes;
-            tenant.TenantStatus = 1;
+            tenant.TenantStatus = TaktCommonStatus.Enabled;
             tenant.SubscriptionStartTime = DateTime.Now;
             tenant.SubscriptionEndTime = new DateTime(9999, 12, 31, 23, 59, 59);
             tenant.ContactName = contactName;

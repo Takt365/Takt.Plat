@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Employee 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployee 生成，请按需审阅）
 // 
@@ -658,10 +658,10 @@ public class TaktEmployeeStatusDto
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
     /// </summary>
-    [Required(ErrorMessage = "政治面貌（字典 hr_political_status 编码或文本）不能为空")]
-    public string PoliticalStatus { get; set; } = string.Empty;
+    [Required(ErrorMessage = "婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）不能为空")]
+    public int MaritalStatus { get; set; } = 0;
 }
 
 // ========================================

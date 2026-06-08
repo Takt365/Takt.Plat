@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/accounting/controlling/cost-element/components -->
 <!-- 文件名称：cost-element-form.vue -->
-<!-- 功能描述：成本要素实体维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：成本要素实体树表维护表单（ParentId + TaktTreeSelect），由 generate-vue-tree-from-api.cjs 自动生成.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -25,6 +25,25 @@
         force-render
       >
         <div :class="formContentClass">
+
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.costElement.parentid')"
+                name="parentId"
+                :label-col="{ span: 4 }"
+                :wrapper-col="{ span: 20 }"
+              >
+                <TaktTreeSelect
+                  v-model:value="formState.parentId"
+                  api-url="/api/TaktCostElements/tree-options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costElement.parentid') })"
+                  allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
@@ -36,6 +55,8 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
                   size="small"
                   readonly
+                
+                :disabled="!!formData?.costElementId"
                 />
               </a-form-item>
             </a-col>
@@ -49,6 +70,8 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
                   size="small"
                   readonly
+                
+                :disabled="!!formData?.costElementId"
                 />
               </a-form-item>
             </a-col>
@@ -62,6 +85,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
                   size="small"
                   readonly
+                
                 />
               </a-form-item>
             </a-col>
@@ -75,6 +99,8 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.code') })"
                   size="small"
                   allow-clear
+                
+                :disabled="!!formData?.costElementId"
                 />
               </a-form-item>
             </a-col>
@@ -88,6 +114,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.name') })"
                   size="small"
                   allow-clear
+                
                 />
               </a-form-item>
             </a-col>
@@ -101,6 +128,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.type') })"
                   size="small"
                   style="width: 100%"
+                
                 />
               </a-form-item>
             </a-col>
@@ -114,19 +142,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.category') })"
                   size="small"
                   style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.costElement.parentid')"
-                name="parentId"
-              >
-                <a-input
-                  v-model:value="formState.parentId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.parentid') })"
-                  size="small"
-                  allow-clear
+                
                 />
               </a-form-item>
             </a-col>
@@ -140,6 +156,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.level') })"
                   size="small"
                   style="width: 100%"
+                
                 />
               </a-form-item>
             </a-col>
@@ -148,11 +165,26 @@
                 :label="t('entity.costElement.status')"
                 name="costElementStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.costElementStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.status') })"
+                  dict-type="sys_normal_disable"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costElement.status') })"
                   size="small"
-                  style="width: 100%"
+                
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.costElement.validfrom')"
+                name="validFrom"
+              >
+                <a-input
+                  v-model:value="formState.validFrom"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.validfrom') })"
+                  size="small"
+                  allow-clear
+                
                 />
               </a-form-item>
             </a-col>
@@ -168,19 +200,6 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.costElement.validfrom')"
-                name="validFrom"
-              >
-                <a-input
-                  v-model:value="formState.validFrom"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.validfrom') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.costElement.validto')"
                 name="validTo"
               >
@@ -189,6 +208,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.validto') })"
                   size="small"
                   allow-clear
+                
                 />
               </a-form-item>
             </a-col>
@@ -199,9 +219,11 @@
               >
                 <a-input-number
                   v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.sortorder') })"
+                  :placeholder="t('common.page.form.placeholder.ordernumhint', { field: t('entity.costElement.sortorder') })"
+                  :min="0"
                   size="small"
                   style="width: 100%"
+                
                 />
               </a-form-item>
             </a-col>
@@ -215,6 +237,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
                   size="small"
                   allow-clear
+                
                 />
               </a-form-item>
             </a-col>
@@ -228,32 +251,37 @@
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
                   :rows="2"
                   size="small"
+                
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 成本要素实体维护表单 · 由 generate-vue-from-api 根据 types/api 生成
+ * 成本要素实体维护表单 · 由 generate-vue-tree-from-api.cjs 根据 types/api 生成
  * @module views/accounting/controlling/cost-element/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { CostElementCreate } from '@/types/accounting/controlling/cost-element'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
 
+/** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
 const userStore = useUserStore()
 
 /**
@@ -272,24 +300,32 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
+/** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+/** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","costElementCode","costElementName","costElementType","costElementCategory","parentId","costElementLevel","costElementStatus","validFrom","validTo","sortOrder","extFieldJson","remark"]
 
 
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<CostElementCreate & { costElementId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: () => ({}),
-  loading: false
+  loading: false,
 })
 
+/** a-form 实例 ref */
 const formRef = ref()
+/** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
 
+/** 编辑态灌入 formData；新增态 reset */
 watch(
   () => props.formData,
   (val) => {
@@ -302,6 +338,7 @@ watch(
   { immediate: true, deep: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
@@ -312,7 +349,15 @@ watch(
   },
 )
 
+/** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  parentId: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.costElement.parentid') }),
+      trigger: 'change'
+    }
+  ],
   costElementCode: [
     {
       required: true,
@@ -385,15 +430,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ],
 }))
 
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
   return formState
 }
 
+/** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   return { ...formState }
 }
 
+/** 重置表单与子表行 */
 function resetFields() {
   formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])

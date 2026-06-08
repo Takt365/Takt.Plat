@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉明细控制器
 // 
@@ -183,7 +183,7 @@ public class TaktCustomerComplaintItemsController : TaktControllerBase
     /// <summary>
     /// 更新客诉明细状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>客诉明细DTO</returns>
     [TaktPermission("logistics:quality:complaint:customercomplaintitem:update", "更新客诉明细状态")]
     [HttpPut("status")]

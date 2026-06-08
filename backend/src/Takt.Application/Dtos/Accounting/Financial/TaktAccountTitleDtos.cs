@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktAccountTitleDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AccountTitle 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAccountTitle 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Accounting.Financial;
 
@@ -109,7 +110,7 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     /// <summary>
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
-    public int TitleStatus { get; set; } = 0;
+    public TaktCommonStatus TitleStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -238,7 +239,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     /// <summary>
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
-    public int? TitleStatus { get; set; }
+    public TaktCommonStatus? TitleStatus { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -381,7 +382,7 @@ public class TaktAccountTitleCreateDto
     /// <summary>
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
-    public int TitleStatus { get; set; } = 0;
+    public TaktCommonStatus TitleStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -451,7 +452,7 @@ public class TaktAccountTitleStatusDto
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "科目状态（1=启用，0=禁用）不能为空")]
-    public int TitleStatus { get; set; } = 0;
+    public TaktCommonStatus TitleStatus { get; set; }
 }
 
 // ========================================
@@ -758,7 +759,7 @@ public class TaktAccountTitleExportDto
     /// <summary>
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
-    public int TitleStatus { get; set; } = 0;
+    public TaktCommonStatus TitleStatus { get; set; }
 
     /// <summary>
     /// 生效日期

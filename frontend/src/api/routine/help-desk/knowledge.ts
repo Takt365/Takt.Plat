@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/help-desk
 // 文件名称：knowledge.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -114,7 +114,7 @@ export function deleteKnowledgeBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新知识库状态
- * @param {KnowledgeStatus} dto 状态DTO
+ * @param {KnowledgeStatus} dto 状态 DTO
  * @returns {Promise<Knowledge>} 知识库DTO
  */
 export function updateKnowledgeStatus(dto: KnowledgeStatus): Promise<Knowledge> {
@@ -177,11 +177,11 @@ export function getKnowledgeTemplate(sheetName?: string, templateName?: string):
 
 /**
  * 导入知识库
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importKnowledge(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importKnowledge(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

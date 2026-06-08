@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：vocabulary.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteVocabularyBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新敏感词状态
- * @param {VocabularyStatus} dto 状态DTO
+ * @param {VocabularyStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<Vocabulary>} 敏感词DTO
  */
 export function updateVocabularyStatus(dto: VocabularyStatus): Promise<Vocabulary> {
@@ -163,11 +163,11 @@ export function getVocabularyTemplate(sheetName?: string, templateName?: string)
 
 /**
  * 导入敏感词
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importVocabulary(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importVocabulary(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

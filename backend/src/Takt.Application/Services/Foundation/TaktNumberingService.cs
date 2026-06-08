@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktNumberingService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：编号规则应用服务实现
 // 
@@ -207,6 +207,10 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         if (entity == null)
         {
             throw new TaktBusinessException("编号规则不存在");
+        }
+        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.Status != TaktCommonStatus.Enabled)
+        {
+            throw new TaktBusinessException("不允许禁用内置编号规则");
         }
         entity.Status = dto.Status;
         await _numberingRepository.UpdateAsync(entity);

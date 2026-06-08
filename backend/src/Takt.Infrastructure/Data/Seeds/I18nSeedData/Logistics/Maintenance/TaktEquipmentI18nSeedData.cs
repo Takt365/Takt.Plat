@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktEquipmentI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -353,13 +353,13 @@ public class TaktEquipmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.equipment.status", "zh-HK", "设备状态", "设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）"),
 
             // entity.equipment.maintenancerecords
-            new TranslationSeedItem("entity.equipment.maintenancerecords", "en-US", "maintenanceRecords", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
+            new TranslationSeedItem("entity.equipment.maintenancerecords", "en-US", "维护记录列表", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
             // entity.equipment.maintenancerecords
-            new TranslationSeedItem("entity.equipment.maintenancerecords", "ja-JP", "maintenanceRecords", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
+            new TranslationSeedItem("entity.equipment.maintenancerecords", "ja-JP", "维护记录列表", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
             // entity.equipment.maintenancerecords
-            new TranslationSeedItem("entity.equipment.maintenancerecords", "zh-CN", "maintenanceRecords", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
+            new TranslationSeedItem("entity.equipment.maintenancerecords", "zh-CN", "维护记录列表", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
             // entity.equipment.maintenancerecords
-            new TranslationSeedItem("entity.equipment.maintenancerecords", "zh-HK", "maintenanceRecords", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
+            new TranslationSeedItem("entity.equipment.maintenancerecords", "zh-HK", "维护记录列表", "维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）"),
         };
     }
 

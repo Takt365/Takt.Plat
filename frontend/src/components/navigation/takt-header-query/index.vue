@@ -33,7 +33,7 @@
   >
     <template #title>
       <div class="takt-query-header">
-        <span class="takt-query-title">添加快捷入口</span>
+        <span class="takt-query-title">{{ $t('components.navigation.page.headerquery.title') }}</span>
         <a-button
           type="text"
           class="takt-query-close"
@@ -49,7 +49,7 @@
       <TaktSelect
         v-model="selectedPath"
         :options="selectOptions"
-        placeholder="输入关键词搜索，选择菜单添加到工作台快捷入口"
+        :placeholder="$t('components.navigation.page.headerquery.placeholder')"
         show-search
         allow-clear
         size="large"
@@ -74,9 +74,9 @@ const selectedPath = ref<string | undefined>(undefined)
 
 // 仅 menuType=1 的扁平列表，转为 TaktSelect 的 options（label / value）
 const selectOptions = computed(() =>
-  (menuStore.leafMenuItems || []).map((x: { path: string; title: string }) => ({
+  menuStore.leafMenus.map((x) => ({
     label: x.title,
-    value: x.path
+    value: x.path,
   }))
 )
 

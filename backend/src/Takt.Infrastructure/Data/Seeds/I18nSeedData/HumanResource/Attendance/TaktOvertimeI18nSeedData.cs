@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktOvertimeI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOvertime 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -236,13 +236,13 @@ public class TaktOvertimeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.overtime.status", "zh-HK", "加班状态", "加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）"),
 
             // entity.overtime.items
-            new TranslationSeedItem("entity.overtime.items", "en-US", "items", "加班明细列表"),
+            new TranslationSeedItem("entity.overtime.items", "en-US", "加班明细列表", "加班明细列表"),
             // entity.overtime.items
-            new TranslationSeedItem("entity.overtime.items", "ja-JP", "items", "加班明细列表"),
+            new TranslationSeedItem("entity.overtime.items", "ja-JP", "加班明细列表", "加班明细列表"),
             // entity.overtime.items
-            new TranslationSeedItem("entity.overtime.items", "zh-CN", "items", "加班明细列表"),
+            new TranslationSeedItem("entity.overtime.items", "zh-CN", "加班明细列表", "加班明细列表"),
             // entity.overtime.items
-            new TranslationSeedItem("entity.overtime.items", "zh-HK", "items", "加班明细列表"),
+            new TranslationSeedItem("entity.overtime.items", "zh-HK", "加班明细列表", "加班明细列表"),
         };
     }
 

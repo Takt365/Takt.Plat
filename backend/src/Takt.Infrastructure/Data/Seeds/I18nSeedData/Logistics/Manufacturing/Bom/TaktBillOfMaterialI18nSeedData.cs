@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -245,13 +245,22 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billOfMaterial.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
             // entity.billOfMaterial.items
-            new TranslationSeedItem("entity.billOfMaterial.items", "en-US", "items", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+            new TranslationSeedItem("entity.billOfMaterial.items", "en-US", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
             // entity.billOfMaterial.items
-            new TranslationSeedItem("entity.billOfMaterial.items", "ja-JP", "items", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+            new TranslationSeedItem("entity.billOfMaterial.items", "ja-JP", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
             // entity.billOfMaterial.items
-            new TranslationSeedItem("entity.billOfMaterial.items", "zh-CN", "items", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+            new TranslationSeedItem("entity.billOfMaterial.items", "zh-CN", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
             // entity.billOfMaterial.items
-            new TranslationSeedItem("entity.billOfMaterial.items", "zh-HK", "items", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+            new TranslationSeedItem("entity.billOfMaterial.items", "zh-HK", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+
+            // entity.billOfMaterial.changelogs
+            new TranslationSeedItem("entity.billOfMaterial.changelogs", "en-US", "BOM变更记录列表", "BOM变更记录列表（外键在子表 <see cref=\"TaktBillOfMaterialChangeLog.BillOfMaterialId\"/>）"),
+            // entity.billOfMaterial.changelogs
+            new TranslationSeedItem("entity.billOfMaterial.changelogs", "ja-JP", "BOM变更记录列表", "BOM变更记录列表（外键在子表 <see cref=\"TaktBillOfMaterialChangeLog.BillOfMaterialId\"/>）"),
+            // entity.billOfMaterial.changelogs
+            new TranslationSeedItem("entity.billOfMaterial.changelogs", "zh-CN", "BOM变更记录列表", "BOM变更记录列表（外键在子表 <see cref=\"TaktBillOfMaterialChangeLog.BillOfMaterialId\"/>）"),
+            // entity.billOfMaterial.changelogs
+            new TranslationSeedItem("entity.billOfMaterial.changelogs", "zh-HK", "BOM变更记录列表", "BOM变更记录列表（外键在子表 <see cref=\"TaktBillOfMaterialChangeLog.BillOfMaterialId\"/>）"),
         };
     }
 

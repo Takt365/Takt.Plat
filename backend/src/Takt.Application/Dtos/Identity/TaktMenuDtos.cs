@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Identity
 // 文件名称：TaktMenuDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Menu 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMenu 生成，请按需审阅）
 // 
@@ -125,7 +125,7 @@ public class TaktMenuDto : TaktTenantDtoBase
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public int MenuStatus { get; set; } = 0;
+    public TaktCommonStatus MenuStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子菜单为内置，不允许删除
@@ -265,7 +265,7 @@ public class TaktMenuQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public int? MenuStatus { get; set; }
+    public TaktCommonStatus? MenuStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子菜单为内置，不允许删除
@@ -400,7 +400,7 @@ public class TaktMenuCreateDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public int MenuStatus { get; set; } = 0;
+    public TaktCommonStatus MenuStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子菜单为内置，不允许删除
@@ -471,7 +471,7 @@ public class TaktMenuStatusDto
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public int MenuStatus { get; set; } = 0;
+    public TaktCommonStatus MenuStatus { get; set; }
 }
 
 // ========================================
@@ -773,7 +773,7 @@ public class TaktMenuExportDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public int MenuStatus { get; set; } = 0;
+    public TaktCommonStatus MenuStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子菜单为内置，不允许删除

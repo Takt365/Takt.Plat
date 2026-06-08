@@ -1,5 +1,6 @@
 /**
  * Navigation components · 日本語
+ * 引用键 components.navigation.page.*
  */
 export default {
   page: {
@@ -13,19 +14,19 @@ export default {
         refreshcurrent: '現在を更新',
         unnamed: '名前なし'
       },
+      headerquery: {
+        title: 'ショートカットを追加',
+        placeholder: 'キーワードで検索し、メニューをワークスペースのショートカットに追加',
+      },
       systemsetting: {
         borderradius: '角丸',
         card: 'カード',
         collapsetitle: '折りたたみタイトル',
         collapsetitlehint: '折りたたみ時のタイトル（常に表示）',
         colorweak: '色弱モード',
-        confirmlogout: 'ログアウト確認',
         contentnav: 'コンテンツ',
         contentwidth: 'コンテンツ幅',
-        copyfail: 'コピーに失敗しました',
         copyright: '著作権',
-        custom: 'カスタム',
-        dark: 'ダーク',
         defaultlanguage: '既定言語',
         demoswitch: 'デモ',
         enablemultitab: '複数タブ',
@@ -38,10 +39,8 @@ export default {
         graymode: 'グレースケール',
         layout: 'レイアウト',
         layoutmode: 'レイアウト',
-        light: 'ライト',
         logopath: 'ロゴパス',
         logopathhint: '例: assets/images/takt.svg',
-        logoutcontent: 'ログアウトしますか？',
         maxtabs: '最大タブ数',
         menuaccordion: 'メニューアコーディオン',
         menustyle: 'メニュースタイル',
@@ -51,8 +50,6 @@ export default {
         other: 'その他',
         persisttabs: 'タブ永続化',
         plain: 'シンプル',
-        preferencescopied: '設定をコピーしました',
-        resettodefault: '既定に戻しました',
         rounded: '角丸',
         showbreadcrumb: 'パンくず表示',
         showbreadcrumbicon: 'パンくずアイコン',
@@ -75,7 +72,6 @@ export default {
         titlehint: '展開時のタイトル（常に表示）',
         titlelabel: 'タイトル',
         topnav: 'トップ',
-        totalcount: '合計 {total} 件',
         watermark: '透かし',
         watermarkcontent: '透かし内容'
       }

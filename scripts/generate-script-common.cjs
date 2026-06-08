@@ -151,6 +151,144 @@ function writeGeneratedFile(filePath, content) {
   return { created: !existed, updated: existed };
 }
 
+const DEFAULT_BACKEND_ROOT = path.resolve(__dirname, '../backend/src');
+
+/**
+ * 将 DtoBase / EntityBase 名称映射为表格 entityScope
+ * @param {string} baseName
+ * @returns {'tenant'|'company'|'approval'}
+ */
+function entityBaseNameToScope(baseName) {
+  if (!baseName) {
+    return 'company';
+  }
+  if (baseName.includes('Approval')) {
+    return 'approval';
+  }
+  if (baseName.includes('Company')) {
+    return 'company';
+  }
+  if (baseName.includes('Tenant')) {
+    return 'tenant';
+  }
+  return 'company';
+}
+
+/**
+ * 查找 Domain 实体文件
+ * @param {string} entityPascal 如 CostCenter
+ * @param {string} [backendRoot]
+ * @returns {string|null}
+ */
+function findDomainEntityFile(entityPascal, backendRoot = DEFAULT_BACKEND_ROOT) {
+  const entityFileName = `Takt${entityPascal}.cs`;
+  const entitiesRoot = path.join(backendRoot, 'Takt.Domain', 'Entities');
+  if (!fs.existsSync(entitiesRoot)) {
+    return null;
+  }
+  /** @param {string} dir */
+  function search(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        const found = search(full);
+        if (found) {
+          return found;
+        }
+      } else if (entry.name === entityFileName) {
+        return full;
+      }
+    }
+    return null;
+  }
+  return search(entitiesRoot);
+}
+
+/**
+ * 从 C# 实体文件解析 EntityBase
+ * @param {string} entityFilePath
+ * @returns {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'}
+ */
+function parseEntityBaseFromCsFile(entityFilePath) {
+  const content = fs.readFileSync(entityFilePath, 'utf-8');
+  const match = content.match(/public\s+(?:sealed\s+|abstract\s+)?class\s+Takt\w+\s*:\s*(Takt(?:Approval|Company|Tenant)EntityBase)/);
+  if (match) {
+    return match[1];
+  }
+  if (content.includes(': TaktApprovalEntityBase')) {
+    return 'TaktApprovalEntityBase';
+  }
+  if (content.includes(': TaktCompanyEntityBase')) {
+    return 'TaktCompanyEntityBase';
+  }
+  if (content.includes(': TaktTenantEntityBase')) {
+    return 'TaktTenantEntityBase';
+  }
+  return 'TaktCompanyEntityBase';
+}
+
+/**
+ * 从 types 主实体 interface 块解析 entityScope
+ * @param {string} typesContent
+ * @param {string} entityPascal
+ * @returns {'tenant'|'company'|'approval'|null}
+ */
+function resolveEntityScopeFromTypesInterface(typesContent, entityPascal) {
+  const ifaceRe = new RegExp(
+    `/\\*\\*[\\s\\S]*?\\*/\\s*export interface ${entityPascal}\\b(?:\\s+extends\\s+(\\w+))?`,
+  );
+  const match = typesContent.match(ifaceRe);
+  if (!match) {
+    return null;
+  }
+  const jsdocBase = match[0].match(/继承\s+Takt(\w+DtoBase)/);
+  if (jsdocBase) {
+    return entityBaseNameToScope(`Takt${jsdocBase[1]}`);
+  }
+  if (match[1]) {
+    return entityBaseNameToScope(match[1]);
+  }
+  return null;
+}
+
+/**
+ * 解析实体基类作用域（优先 Domain 实体，其次 types JSDoc / extends）
+ * @param {string} entityPascal
+ * @param {string} [typesContent]
+ * @param {string} [backendRoot]
+ * @returns {'tenant'|'company'|'approval'}
+ */
+function resolveEntityScope(entityPascal, typesContent = '', backendRoot = DEFAULT_BACKEND_ROOT) {
+  const entityFile = findDomainEntityFile(entityPascal, backendRoot);
+  if (entityFile) {
+    return entityBaseNameToScope(parseEntityBaseFromCsFile(entityFile));
+  }
+  const fromTypes = resolveEntityScopeFromTypesInterface(typesContent, entityPascal);
+  if (fromTypes) {
+    return fromTypes;
+  }
+  return 'company';
+}
+
+/**
+ * 三个实体基类字段（与 frontend/src/utils/table-columns.ts ENTITY_BASE_FIELDS 保持同步，不含 id）
+ */
+const ENTITY_BASE_FIELDS = {
+  tenant: [
+    'tenantCode', 'extFieldJson', 'remark',
+    'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
+  ],
+  company: [
+    'tenantCode', 'companyCode', 'extFieldJson', 'remark',
+    'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
+  ],
+  approval: [
+    'tenantCode', 'companyCode', 'extFieldJson', 'remark',
+    'approvalStatus', 'initiatorId', 'initiatedAt', 'approvalOpinion', 'approvedBy', 'approvedAt',
+    'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
+  ],
+};
+
 module.exports = {
   GENERATED_FILE_WRITE_POLICY,
   logGeneratedFileWritePolicy,
@@ -162,4 +300,11 @@ module.exports = {
   getControllerRouteSegment,
   entityShortFromControllerClassName,
   matchControllerForEntityPrefix,
+  entityBaseNameToScope,
+  findDomainEntityFile,
+  parseEntityBaseFromCsFile,
+  resolveEntityScopeFromTypesInterface,
+  resolveEntityScope,
+  ENTITY_BASE_FIELDS,
+  DEFAULT_BACKEND_ROOT,
 };

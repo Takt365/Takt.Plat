@@ -60,7 +60,10 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      entity-scope="tenant"
+      :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'id'"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
@@ -165,10 +168,9 @@
       <a-form-item :label="t('entity.dictType.dictstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.dictStatus"
-          api-url="/api/TaktDictDatas/options?dictTypeCode=sys_status"
+          dict-type="sys_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.dictstatus') })"
           allow-clear
-          :field-names="{ label: 'dictLabel', value: 'extLabel' }"
         />
       </a-form-item>
     </TaktQueryDrawer>
@@ -176,11 +178,13 @@
     <!-- 列设置抽屉 -->
     <!-- 审计字段统一在 TaktColumnDrawer 中处理 -->
     <TaktColumnDrawer
+      entity-scope="tenant"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       :id-column-key="'id'"
       :action-column-key="'action'"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -199,7 +203,6 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import type { FilterValue } from 'ant-design-vue/es/table/interface'
 import { useI18n } from 'vue-i18n'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import DictTypeForm from './components/dict-type-form.vue'
 import DictDataWindow from './components/dict-data-window.vue'
 import * as dictTypeApi from '@/api/foundation/dict-type'
@@ -217,14 +220,6 @@ const getDictTypeField = (record: unknown, field: string): any =>
 
 const getDictTypeId = (record: unknown): string =>
   String(getDictTypeField(record, 'dictTypeId') ?? '')
-
-/** 高级查询中字典状态（下拉 `extLabel` 可能为 string）转为 `DictTypeQuery.dictStatus`。 */
-function coerceAdvancedDictStatus(value: string | number | undefined): number | undefined {
-  if (value === undefined || value === null || value === '') return undefined
-  if (typeof value === 'number' && Number.isFinite(value)) return value
-  const n = Number(value)
-  return Number.isFinite(n) ? n : undefined
-}
 
 /** 与 `TaktSingleTable` 的 `@change` 签名一致（见 `takt-single-table/index.vue`） */
 type TaktTableChangeSorter = {
@@ -288,7 +283,7 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref<{
   dictTypeCode: string
   dictTypeName: string
-  dictStatus?: string | number
+  dictStatus?: number
 }>({
   dictTypeCode: '',
   dictTypeName: ''
@@ -460,45 +455,6 @@ const columns = computed<TableColumnsType<DictType>>(() => [
   })
 ])
 
-// 审计字段统一在 TaktColumnDrawer 中处理
-
-// 合并列配置（包含审计字段）- 参照 file/index.vue 的实现
-// 注意：CreateActionColumn 内部使用 h 函数返回 VNode，导致 TypeScript 类型推断过深
-// 这是 TypeScript 在处理复杂递归类型时的已知限制，使用类型断言是合理的解决方案
-const mergedColumns = computed((): any => {
-  return mergeDefaultColumns(columns.value as any, t, true)
-})
-
-// 根据可见列过滤显示的列 - 保持原始列的顺序
-// 注意：由于 mergedColumns 包含 VNode 返回类型，需要类型断言避免类型推断过深
-// 使用 any 类型避免 TypeScript 类型推断过深的问题
-const displayColumns = computed((): any => {
-  const keys = visibleColumnKeys.value || []
-  // 直接对 mergedColumns.value 进行类型断言，避免类型推断
-  const merged: any = mergedColumns.value || []
-  
-  // 如果 keys 为空，返回原始列配置（等待 TaktColumnDrawer 初始化）
-  if (keys.length === 0) {
-    const cols: any = columns.value
-    return cols
-  }
-  
-  // 根据选中的 keys 过滤列，但保持原始列的顺序
-  const getColumnKey = (col: any): string => {
-    const key = col.key || col.dataIndex || col.title
-    return key ? String(key) : ''
-  }
-  
-  // 将 keys 转换为 Set 以便快速查找
-  const keysSet = new Set(keys.map(k => String(k)))
-  
-  // 按照 merged 的原始顺序过滤，只保留选中的列
-  return merged.filter((col: any) => {
-    const colKey = getColumnKey(col)
-    return colKey && keysSet.has(colKey)
-  })
-})
-
 // ========================================
 // 方法定义
 // ========================================
@@ -515,8 +471,7 @@ const loadData = async () => {
     const adv = advancedQueryForm.value
     if (adv.dictTypeCode) query.dictTypeCode = adv.dictTypeCode
     if (adv.dictTypeName) query.dictTypeName = adv.dictTypeName
-    const advStatus = coerceAdvancedDictStatus(adv.dictStatus)
-    if (advStatus !== undefined) query.dictStatus = advStatus
+    if (adv.dictStatus !== undefined && adv.dictStatus !== null) query.dictStatus = adv.dictStatus
 
     const result = await dictTypeApi.getDictTypeList(query)
     dataSource.value = result.data || []
@@ -666,8 +621,7 @@ const handleExport = async () => {
     const adv = advancedQueryForm.value
     if (adv.dictTypeCode) query.dictTypeCode = adv.dictTypeCode
     if (adv.dictTypeName) query.dictTypeName = adv.dictTypeName
-    const advStatus = coerceAdvancedDictStatus(adv.dictStatus)
-    if (advStatus !== undefined) query.dictStatus = advStatus
+    if (adv.dictStatus !== undefined && adv.dictStatus !== null) query.dictStatus = adv.dictStatus
 
     const blob = await dictTypeApi.exportDictType(query, undefined, t('entity.dictType._self'))
     const ts = new Date()

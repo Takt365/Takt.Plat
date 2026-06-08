@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -307,6 +307,15 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             // entity.employee.primarypostid
             new TranslationSeedItem("entity.employee.primarypostid", "zh-HK", "当前主岗位ID", "当前主岗位ID（任职快照）"),
 
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "en-US", "是否内置", "是否内置（种子员工不可删）"),
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "ja-JP", "是否内置", "是否内置（种子员工不可删）"),
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "zh-CN", "是否内置", "是否内置（种子员工不可删）"),
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "zh-HK", "是否内置", "是否内置（种子员工不可删）"),
+
             // entity.employee.emergencycontactname
             new TranslationSeedItem("entity.employee.emergencycontactname", "en-US", "紧急联系人姓名", "紧急联系人姓名"),
             // entity.employee.emergencycontactname
@@ -344,13 +353,22 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employee.photourl", "zh-HK", "照片URL", "照片URL"),
 
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "en-US", "employeeDepts", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.employee.depts", "en-US", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "ja-JP", "employeeDepts", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.employee.depts", "ja-JP", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "zh-CN", "employeeDepts", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.employee.depts", "zh-CN", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "zh-HK", "employeeDepts", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+            new TranslationSeedItem("entity.employee.depts", "zh-HK", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
+
+            // entity.employee.posts
+            new TranslationSeedItem("entity.employee.posts", "en-US", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+            // entity.employee.posts
+            new TranslationSeedItem("entity.employee.posts", "ja-JP", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+            // entity.employee.posts
+            new TranslationSeedItem("entity.employee.posts", "zh-CN", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+            // entity.employee.posts
+            new TranslationSeedItem("entity.employee.posts", "zh-HK", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
         };
     }
 

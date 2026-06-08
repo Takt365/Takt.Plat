@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktVendorDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Vendor 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktVendor 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Materials;
 
@@ -173,7 +174,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     /// <summary>
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
-    public int VendorStatus { get; set; } = 0;
+    public TaktCommonStatus VendorStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -340,7 +341,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     /// <summary>
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
-    public int? VendorStatus { get; set; }
+    public TaktCommonStatus? VendorStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -534,7 +535,7 @@ public class TaktVendorCreateDto
     /// <summary>
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
-    public int VendorStatus { get; set; } = 0;
+    public TaktCommonStatus VendorStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -594,7 +595,7 @@ public class TaktVendorStatusDto
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "经销商状态（1=启用，0=禁用）不能为空")]
-    public int VendorStatus { get; set; } = 0;
+    public TaktCommonStatus VendorStatus { get; set; }
 }
 
 // ========================================
@@ -963,7 +964,7 @@ public class TaktVendorExportDto
     /// <summary>
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
-    public int VendorStatus { get; set; } = 0;
+    public TaktCommonStatus VendorStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）

@@ -14,16 +14,17 @@
     </div>
     <div
       v-for="p in pendingAddApproverItems"
-      :key="p.addApproverId"
+      :key="p.flowAddSignId"
       class="flow-pending-add__row"
     >
       <span class="flow-pending-add__name">{{ p.approverUserName }}</span>
       <a-button
         v-if="allowReduce"
+        v-permission="'workflow:todo:reducesign'"
         type="link"
         size="small"
-        :loading="loadingId === p.addApproverId"
-        @click="onReduce(p.addApproverId)"
+        :loading="loadingId === p.flowAddSignId"
+        @click="onReduce(p.flowAddSignId)"
       >
         {{ t('workflow.instance.reduceSign') }}
       </a-button>
@@ -38,41 +39,46 @@
 import { computed, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { reduceFlowInstanceApproval } from '@/api/workflow/instance'
-import type { FlowInstanceDetail } from '@/types/workflow/flow-instance'
+import { reduceFlowEngineSign } from '@/api/workflow/flow-engine'
+import type { FlowInstanceDetailView, FlowPendingAddApprover } from '@/types/workflow/flow-engine'
 
 const { t } = useI18n()
 
 const props = withDefaults(
-  defineProps<{ detail: FlowInstanceDetail | null; allowReduce?: boolean }>(),
+  defineProps<{ detail: FlowInstanceDetailView | null; allowReduce?: boolean }>(),
   { allowReduce: false }
 )
 const emit = defineEmits<{ refresh: [] }>()
 
 const loadingId = ref<string | null>(null)
-type PendingAddApproverItem = {
-  addApproverId: string
-  approverUserName: string
+
+/** 校验未处理加签项结构（兼容 API 偶发脏数据） */
+function isFlowPendingAddApprover(item: unknown): item is FlowPendingAddApprover {
+  if (item == null || typeof item !== 'object') return false
+  const row = item as Partial<FlowPendingAddApprover>
+  return typeof row.flowAddSignId === 'string' && typeof row.approverUserName === 'string'
 }
-const pendingAddApproverItems = computed(() => {
+
+const pendingAddApproverItems = computed<FlowPendingAddApprover[]>(() => {
   const list = props.detail?.pendingAddApprovers
-  if (!Array.isArray(list)) return [] as PendingAddApproverItem[]
-  return list.filter((item): item is PendingAddApproverItem => {
-    if (!item || typeof item !== 'object') return false
-    const row = item as { addApproverId?: unknown; approverUserName?: unknown }
-    return typeof row.addApproverId === 'string' && typeof row.approverUserName === 'string'
-  })
+  if (!Array.isArray(list)) return []
+  return list.filter(isFlowPendingAddApprover)
 })
 
-async function onReduce(addApproverId: string) {
+/**
+ * 减签
+ * @param flowAddSignId 加签记录 ID
+ */
+async function onReduce(flowAddSignId: string) {
   const d = props.detail
-  if (!d?.instanceId) return
-  loadingId.value = addApproverId
+  const flowInstanceId = d?.instanceId ?? d?.flowInstanceId
+  if (!flowInstanceId) return
+  loadingId.value = flowAddSignId
   try {
-    await reduceFlowInstanceApproval({
-      flowInstanceId: d.instanceId,
-      instanceCode: d.instanceCode,
-      addApproverId
+    await reduceFlowEngineSign({
+      flowInstanceId,
+      instanceCode: d?.instanceCode,
+      flowAddSignId
     })
     message.success(t('workflow.instance.reduceSignSuccess'))
     emit('refresh')

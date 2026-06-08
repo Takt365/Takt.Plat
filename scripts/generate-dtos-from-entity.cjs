@@ -24,6 +24,11 @@ const {
   appendInverseRbacCreateFields,
 } = require('./rbac-parent-config.cjs');
 const { syncAllRbacParentEntityNavigations } = require('./generate-entity-rbac-navigations.cjs');
+const {
+  isSharedEnumType,
+  entityUsesSharedEnumsFromProperties,
+  findEntityStatusProperty,
+} = require('./generate-enum-common.cjs');
 
 // ========================================
 // 配置
@@ -217,7 +222,7 @@ function shouldGenerateTemplateImport(entity) {
  * @param {object} entity
  */
 function findStatusProperty(entity) {
-  return entity.properties.find((p) => /Status$/i.test(p.name));
+  return findEntityStatusProperty(entity.properties);
 }
 
 /**
@@ -234,7 +239,7 @@ function findSortOrderProperty(entity) {
  */
 function getTemplateImportProps(createProps) {
   return createProps
-    .filter((p) => p.bareType === 'string' || p.bareType.startsWith('Takt') || p.bareType === 'int' || p.bareType === 'long')
+    .filter((p) => p.bareType === 'string' || isSharedEnumType(p.bareType) || p.bareType === 'int' || p.bareType === 'long')
     .slice(0, 12);
 }
 
@@ -334,7 +339,7 @@ function isTreeEntity(entity) {
  * @param {object} entity
  */
 function entityUsesSharedEnums(entity) {
-  return entity.properties.some((p) => /^Takt[A-Z]/.test(p.bareType));
+  return entityUsesSharedEnumsFromProperties(entity.properties);
 }
 
 /**
@@ -896,7 +901,11 @@ function emitProperty(prop, options = {}) {
     lines.push(`${indent}${jsonAttr.trim()}`);
   }
 
-  const defaultValue = prop.csharpType.includes('string') ? ' = string.Empty;' : prop.csharpType.includes('int') && !nullableSuffix ? ' = 0;' : ';';
+  const defaultValue = prop.csharpType.includes('string')
+    ? ' = string.Empty;'
+    : prop.csharpType.includes('int') && !nullableSuffix && !isSharedEnumType(bare)
+      ? ' = 0;'
+      : ';';
   lines.push(`${indent}public ${typeStr} ${prop.name} { get; set; }${defaultValue === ';' ? '' : defaultValue}`);
   if (defaultValue === ';') {
     lines[lines.length - 1] = `${indent}public ${typeStr} ${prop.name} { get; set; }`;

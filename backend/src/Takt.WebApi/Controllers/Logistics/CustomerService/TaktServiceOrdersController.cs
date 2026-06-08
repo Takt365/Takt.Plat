@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.CustomerService
 // 文件名称：TaktServiceOrdersController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务订单控制器
 // 
@@ -183,7 +183,7 @@ public class TaktServiceOrdersController : TaktControllerBase
     /// <summary>
     /// 更新服务订单状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>服务订单DTO</returns>
     [TaktPermission("logistics:service:serviceorder:update", "更新服务订单状态")]
     [HttpPut("status")]

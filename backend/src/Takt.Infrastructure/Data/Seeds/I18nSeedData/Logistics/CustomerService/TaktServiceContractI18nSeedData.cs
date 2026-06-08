@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktServiceContractI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktServiceContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -263,13 +263,22 @@ public class TaktServiceContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serviceContract.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
             // entity.serviceContract.serviceorders
-            new TranslationSeedItem("entity.serviceContract.serviceorders", "en-US", "serviceOrders", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
+            new TranslationSeedItem("entity.serviceContract.serviceorders", "en-US", "服务订单列表", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
             // entity.serviceContract.serviceorders
-            new TranslationSeedItem("entity.serviceContract.serviceorders", "ja-JP", "serviceOrders", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
+            new TranslationSeedItem("entity.serviceContract.serviceorders", "ja-JP", "服务订单列表", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
             // entity.serviceContract.serviceorders
-            new TranslationSeedItem("entity.serviceContract.serviceorders", "zh-CN", "serviceOrders", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
+            new TranslationSeedItem("entity.serviceContract.serviceorders", "zh-CN", "服务订单列表", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
             // entity.serviceContract.serviceorders
-            new TranslationSeedItem("entity.serviceContract.serviceorders", "zh-HK", "serviceOrders", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
+            new TranslationSeedItem("entity.serviceContract.serviceorders", "zh-HK", "服务订单列表", "服务订单列表（外键在子表 <see cref=\"TaktServiceOrder.ServiceContractId\"/>）"),
+
+            // entity.serviceContract.servicerequests
+            new TranslationSeedItem("entity.serviceContract.servicerequests", "en-US", "服务请求列表", "服务请求列表（外键在子表 <see cref=\"TaktServiceRequest.ServiceContractId\"/>）"),
+            // entity.serviceContract.servicerequests
+            new TranslationSeedItem("entity.serviceContract.servicerequests", "ja-JP", "服务请求列表", "服务请求列表（外键在子表 <see cref=\"TaktServiceRequest.ServiceContractId\"/>）"),
+            // entity.serviceContract.servicerequests
+            new TranslationSeedItem("entity.serviceContract.servicerequests", "zh-CN", "服务请求列表", "服务请求列表（外键在子表 <see cref=\"TaktServiceRequest.ServiceContractId\"/>）"),
+            // entity.serviceContract.servicerequests
+            new TranslationSeedItem("entity.serviceContract.servicerequests", "zh-HK", "服务请求列表", "服务请求列表（外键在子表 <see cref=\"TaktServiceRequest.ServiceContractId\"/>）"),
         };
     }
 

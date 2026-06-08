@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Workflow
 // 文件名称：TaktFlowTasksController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程用户任务控制器
 // 
@@ -183,7 +183,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// <summary>
     /// 更新流程用户任务状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktFlowTaskStatus 枚举）</param>
     /// <returns>流程用户任务DTO</returns>
     [TaktPermission("workflow:flowtask:update", "更新流程用户任务状态")]
     [HttpPut("status")]

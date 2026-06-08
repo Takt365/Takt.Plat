@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIncident 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -173,13 +173,13 @@ public class TaktQualityIncidentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityIncident.costcurrency", "zh-HK", "成本币种", "成本币种(CNY/USD/JPY等)"),
 
             // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "en-US", "incidentItems", "事故明细列表"),
+            new TranslationSeedItem("entity.qualityIncident.incidentitems", "en-US", "事故明细列表", "事故明细列表"),
             // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "ja-JP", "incidentItems", "事故明细列表"),
+            new TranslationSeedItem("entity.qualityIncident.incidentitems", "ja-JP", "事故明细列表", "事故明细列表"),
             // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "zh-CN", "incidentItems", "事故明细列表"),
+            new TranslationSeedItem("entity.qualityIncident.incidentitems", "zh-CN", "事故明细列表", "事故明细列表"),
             // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "zh-HK", "incidentItems", "事故明细列表"),
+            new TranslationSeedItem("entity.qualityIncident.incidentitems", "zh-HK", "事故明细列表", "事故明细列表"),
         };
     }
 

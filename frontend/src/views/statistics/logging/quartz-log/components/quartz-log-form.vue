@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/statistics/logging/quartz-log/components -->
 <!-- 文件名称：quartz-log-form.vue -->
-<!-- 功能描述：Quartz 任务执行日志实体维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Quartz 任务执行日志实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -80,25 +80,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.username')"
-                name="userName"
+                :label="t('entity.quartzLog.taskname')"
+                name="taskName"
               >
                 <a-input
-                  v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.username') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.quartzLog.jobname')"
-                name="jobName"
-              >
-                <a-input
-                  v-model:value="formState.jobName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.jobname') })"
+                  v-model:value="formState.taskName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.taskname') })"
                   size="small"
                   allow-clear
                 />
@@ -119,12 +106,27 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.triggername')"
-                name="triggerName"
+                :label="t('entity.quartzLog.tasktype')"
+                name="taskType"
+              >
+                <a-input-number
+                  v-model:value="formState.taskType"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.tasktype') })"
+                  size="small"
+                  :min="1"
+                  :max="3"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.quartzLog.executetime')"
+                name="executeTime"
               >
                 <a-input
-                  v-model:value="formState.triggerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.triggername') })"
+                  v-model:value="formState.executeTime"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executetime') })"
                   size="small"
                   allow-clear
                 />
@@ -132,25 +134,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executestatus')"
-                name="executeStatus"
+                :label="t('entity.quartzLog.executeduration')"
+                name="executeDuration"
               >
                 <a-input-number
-                  v-model:value="formState.executeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executestatus') })"
+                  v-model:value="formState.executeDuration"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeduration') })"
                   size="small"
+                  :min="0"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.errormsg')"
-                name="errorMsg"
+                :label="t('entity.quartzLog.executeparams')"
+                name="executeParams"
               >
                 <a-input
-                  v-model:value="formState.errorMsg"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.errormsg') })"
+                  v-model:value="formState.executeParams"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeparams') })"
                   size="small"
                   allow-clear
                 />
@@ -168,12 +171,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executetime')"
-                name="executeTime"
+                :label="t('entity.quartzLog.executemessage')"
+                name="executeMessage"
               >
                 <a-input
-                  v-model:value="formState.executeTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executetime') })"
+                  v-model:value="formState.executeMessage"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executemessage') })"
                   size="small"
                   allow-clear
                 />
@@ -181,13 +184,54 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.costtime')"
-                name="costTime"
+                :label="t('entity.quartzLog.errorinfo')"
+                name="errorInfo"
+              >
+                <a-input
+                  v-model:value="formState.errorInfo"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.errorinfo') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.quartzLog.executeip')"
+                name="executeIp"
+              >
+                <a-input
+                  v-model:value="formState.executeIp"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeip') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.quartzLog.executehost')"
+                name="executeHost"
+              >
+                <a-input
+                  v-model:value="formState.executeHost"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executehost') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.quartzLog.executestatus')"
+                name="executeStatus"
               >
                 <a-input-number
-                  v-model:value="formState.costTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.costtime') })"
+                  v-model:value="formState.executeStatus"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executestatus') })"
                   size="small"
+                  :min="0"
+                  :max="1"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -228,7 +272,7 @@
 
 <script setup lang="ts">
 /**
- * Quartz 任务执行日志实体维护表单 · 由 generate-vue-from-api 根据 types/api 生成
+ * Quartz 任务执行日志实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/statistics/logging/quartz-log/components
  */
 import { reactive, watch, computed, ref } from 'vue'
@@ -238,9 +282,12 @@ import type { QuartzLogCreate } from '@/types/statistics/logging/quartz-log'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
 
+/** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
 const userStore = useUserStore()
 
 /**
@@ -259,24 +306,32 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
+/** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","quartzTaskId","userName","jobName","jobGroup","triggerName","executeStatus","errorMsg","executeTime","costTime","extFieldJson","remark"]
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","quartzTaskId","taskName","jobGroup","taskType","executeTime","executeDuration","executeParams","executeMessage","errorInfo","executeIp","executeHost","executeStatus","extFieldJson","remark"]
 
 
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<QuartzLogCreate & { quartzLogId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: () => ({}),
-  loading: false
+  loading: false,
 })
 
+/** a-form 实例 ref */
 const formRef = ref()
+/** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
 
+/** 编辑态灌入 formData；新增态 reset */
 watch(
   () => props.formData,
   (val) => {
@@ -289,6 +344,7 @@ watch(
   { immediate: true, deep: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
@@ -299,11 +355,19 @@ watch(
   },
 )
 
+/** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  jobName: [
+  quartzTaskId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.jobname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.quartztaskid') }),
+      trigger: 'blur'
+    }
+  ],
+  taskName: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.taskname') }),
       trigger: 'blur'
     }
   ],
@@ -312,6 +376,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.jobgroup') }),
       trigger: 'blur'
+    }
+  ],
+  taskType: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.quartzLog.tasktype') }),
+      trigger: 'change'
     }
   ],
   executeStatus: [
@@ -328,24 +399,29 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  costTime: [
+  executeDuration: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzLog.costtime') }),
+      type: 'number',
+      min: 0,
+      message: t('common.page.form.placeholder.select', { field: t('entity.quartzLog.executeduration') }),
       trigger: 'change'
     }
   ],
 }))
 
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
   return formState
 }
 
+/** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   return { ...formState }
 }
 
+/** 重置表单与子表行 */
 function resetFields() {
   formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])

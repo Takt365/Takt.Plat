@@ -46,7 +46,9 @@
     />
 
     <TaktSingleTable
-      :columns="displayColumns"
+      entity-scope="company"
+      :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
@@ -134,6 +136,7 @@
 
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
+      entity-scope="company"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
@@ -154,7 +157,6 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import TaktQueryBar from '@/components/business/takt-query-bar/index.vue'
 import FormForm from './components/form-form.vue'
 import {
@@ -164,7 +166,7 @@ import {
   updateFlowForm,
   deleteFlowFormById,
   deleteFlowFormBatch
-} from '@/api/workflow/form'
+} from '@/api/workflow/flow-form'
 import type {
   FlowForm,
   FlowFormQuery,
@@ -230,7 +232,7 @@ function getSorterInfo(sorter: unknown): TableSorterInfo {
   return result
 }
 
-const form = reactive<FlowFormCreate & { formId?: string }>({
+const form = reactive<FlowFormCreate & { flowFormId?: string }>({
   formCode: '',
   formName: '',
   formCategory: 0,
@@ -247,16 +249,16 @@ const form = reactive<FlowFormCreate & { formId?: string }>({
 })
 
 const getFormId = (record: unknown): string => {
-  if (!record || typeof record !== 'object' || !('formId' in record)) return ''
-  const formId = (record as { formId?: unknown }).formId
-  return formId != null ? String(formId) : ''
+  if (!record || typeof record !== 'object' || !('flowFormId' in record)) return ''
+  const flowFormId = (record as { flowFormId?: unknown }).flowFormId
+  return flowFormId != null ? String(flowFormId) : ''
 }
 
 /** 表格列：与 @/types/workflow/form FlowForm 字段一致（列表展示用，不含 formConfig/formTemplate 等大字段） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: 'ID',
-    dataIndex: 'formId',
+    dataIndex: 'flowFormId',
     key: 'id',
     width: 80,
     resizable: true,
@@ -330,7 +332,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.design'),
         shape: 'plain',
         icon: RiBrushLine,
-        permission: 'workflow:form:update',
+        permission: 'workflow:form:design',
         onClick: (_record: FlowForm, _index: number) => handleDesign(_record)
       },
       {
@@ -345,17 +347,6 @@ const columns = computed<TableColumnsType>(() => [
   })
 ])
 
-const mergedColumns = computed<TableColumnsType>(() => mergeDefaultColumns(columns.value, t, true))
-const displayColumns = computed<TableColumnsType>(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return columns.value
-  const keysSet = new Set(keys.map(k => String(k)))
-  return merged.filter((col) => {
-    const colKey = getColumnKey(col as FlowFormColumn)
-    return colKey && keysSet.has(colKey)
-  })
-})
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -512,7 +503,7 @@ function handleResizeColumn(w: number, col: FlowFormColumn) {
 
 /** 重置表单对象为初始值。仅用于「打开新增」前，不在关闭弹窗时调用。 */
 function resetForm() {
-  delete form.formId
+  delete form.flowFormId
   form.formCode = ''
   form.formName = ''
   form.formCategory = 0
@@ -530,7 +521,7 @@ function resetForm() {
 
 /** 新增：仅此时重置表单数据；打开弹窗后 nextTick 再重置子组件步骤与内部状态。 */
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.flowform._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.flowform._self') })
   resetForm()
   formVisible.value = true
   nextTick(() => formFormRef.value?.resetSteps?.())
@@ -538,11 +529,11 @@ function handleCreate() {
 
 /** 编辑：拉取详情回填 form，再打开弹窗，nextTick 后重置子组件步骤与内部状态（子组件会按 form 重新拉取数据源/表/列）。 */
 async function handleEdit(record: FlowForm) {
-  formTitle.value = t('common.page.button.edit') + t('entity.flowform._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.flowform._self') })
   formLoading.value = true
   try {
-    const detail = await getFlowFormById(String(record.formId))
-    form.formId = detail.formId
+    const detail = await getFlowFormById(String(record.flowFormId))
+    form.flowFormId = detail.flowFormId
     form.formCode = detail.formCode
     form.formName = detail.formName
     form.formCategory = detail.formCategory
@@ -588,7 +579,7 @@ function handleDeleteOne(record: FlowForm) {
     onOk: async () => {
       try {
         loading.value = true
-        await deleteFlowFormById(record.formId)
+        await deleteFlowFormById(record.flowFormId)
         message.success(t('common.page.msg.deleteSuccess'))
         loadData()
       } catch (error: unknown) {
@@ -660,9 +651,9 @@ async function handleFormSubmit() {
       sortOrder: form.sortOrder ?? 0,
       formStatus: form.formStatus
     } as FlowFormCreate | FlowFormUpdate
-    if (form.formId) {
-      (payload as FlowFormUpdate).formId = form.formId
-      await updateFlowForm(form.formId, payload as FlowFormUpdate)
+    if (form.flowFormId) {
+      (payload as FlowFormUpdate).flowFormId = form.flowFormId
+      await updateFlowForm(form.flowFormId, payload as FlowFormUpdate)
       message.success(t('common.page.msg.updateSuccess'))
     } else {
       await createFlowForm(payload as FlowFormCreate)

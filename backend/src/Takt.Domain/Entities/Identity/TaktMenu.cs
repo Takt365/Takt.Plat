@@ -133,7 +133,7 @@ public class TaktMenu : TaktTenantEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "menu_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int MenuStatus { get; set; } = 1;
+    public TaktCommonStatus MenuStatus { get; set; } = TaktCommonStatus.Enabled;
 
     /// <summary>
     /// 是否内置（1=是，0=否）

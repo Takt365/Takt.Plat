@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCompanyI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -117,6 +117,33 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.company.type", "zh-CN", "公司类型", "公司类型"),
             // entity.company.type
             new TranslationSeedItem("entity.company.type", "zh-HK", "公司类型", "公司类型"),
+
+            // entity.company.enterprisenature
+            new TranslationSeedItem("entity.company.enterprisenature", "en-US", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            // entity.company.enterprisenature
+            new TranslationSeedItem("entity.company.enterprisenature", "ja-JP", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            // entity.company.enterprisenature
+            new TranslationSeedItem("entity.company.enterprisenature", "zh-CN", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+            // entity.company.enterprisenature
+            new TranslationSeedItem("entity.company.enterprisenature", "zh-HK", "企业性质（登记注册类型代码）", "企业性质（统计用登记注册类型代码，国统字〔1998〕200号）"),
+
+            // entity.company.industryattribute
+            new TranslationSeedItem("entity.company.industryattribute", "en-US", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            // entity.company.industryattribute
+            new TranslationSeedItem("entity.company.industryattribute", "ja-JP", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            // entity.company.industryattribute
+            new TranslationSeedItem("entity.company.industryattribute", "zh-CN", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+            // entity.company.industryattribute
+            new TranslationSeedItem("entity.company.industryattribute", "zh-HK", "行业属性（国民经济行业门类）", "行业属性（GB/T 4754-2017 国民经济行业分类门类）"),
+
+            // entity.company.enterprisescale
+            new TranslationSeedItem("entity.company.enterprisescale", "en-US", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
+            // entity.company.enterprisescale
+            new TranslationSeedItem("entity.company.enterprisescale", "ja-JP", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
+            // entity.company.enterprisescale
+            new TranslationSeedItem("entity.company.enterprisescale", "zh-CN", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
+            // entity.company.enterprisescale
+            new TranslationSeedItem("entity.company.enterprisescale", "zh-HK", "企业规模（大中小微型代码）", "企业规模（统计上大中小微型划分代码 1–4）"),
 
             // entity.company.businessscope
             new TranslationSeedItem("entity.company.businessscope", "en-US", "经营范围", "经营范围"),
@@ -389,13 +416,22 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.company.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
             // entity.company.rolecompanies
-            new TranslationSeedItem("entity.company.rolecompanies", "en-US", "roleCompanies", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
+            new TranslationSeedItem("entity.company.rolecompanies", "en-US", "可访问该公司的角色关联", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
             // entity.company.rolecompanies
-            new TranslationSeedItem("entity.company.rolecompanies", "ja-JP", "roleCompanies", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
+            new TranslationSeedItem("entity.company.rolecompanies", "ja-JP", "可访问该公司的角色关联", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
             // entity.company.rolecompanies
-            new TranslationSeedItem("entity.company.rolecompanies", "zh-CN", "roleCompanies", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
+            new TranslationSeedItem("entity.company.rolecompanies", "zh-CN", "可访问该公司的角色关联", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
             // entity.company.rolecompanies
-            new TranslationSeedItem("entity.company.rolecompanies", "zh-HK", "roleCompanies", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
+            new TranslationSeedItem("entity.company.rolecompanies", "zh-HK", "可访问该公司的角色关联", "可访问该公司的角色关联（RBAC，表 takt_identity_role_company）"),
+
+            // entity.company.usercompanies
+            new TranslationSeedItem("entity.company.usercompanies", "en-US", "可访问该公司的用户关联", "可访问该公司的用户关联（RBAC，表 takt_identity_user_company）"),
+            // entity.company.usercompanies
+            new TranslationSeedItem("entity.company.usercompanies", "ja-JP", "可访问该公司的用户关联", "可访问该公司的用户关联（RBAC，表 takt_identity_user_company）"),
+            // entity.company.usercompanies
+            new TranslationSeedItem("entity.company.usercompanies", "zh-CN", "可访问该公司的用户关联", "可访问该公司的用户关联（RBAC，表 takt_identity_user_company）"),
+            // entity.company.usercompanies
+            new TranslationSeedItem("entity.company.usercompanies", "zh-HK", "可访问该公司的用户关联", "可访问该公司的用户关联（RBAC，表 takt_identity_user_company）"),
         };
     }
 

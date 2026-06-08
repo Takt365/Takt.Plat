@@ -701,7 +701,7 @@ function csharpServiceReturnToTsType(csharpReturn) {
   return csharpToTsType(type);
 }
 
-function buildGroupedTypeImports(dtoTypeNames, moduleName, fallbackImportPath) {
+function buildGroupedTypeImports(dtoTypeNames, moduleName, fallbackImportPath, aliasEntityFile = false) {
   const groups = new Map();
   dtoTypeNames.forEach((typeName) => {
     if (FRAMEWORK_TS_TYPE_NAMES.has(typeName)) {
@@ -725,7 +725,7 @@ function buildGroupedTypeImports(dtoTypeNames, moduleName, fallbackImportPath) {
   });
   const lines = [];
   [...groups.keys()].sort().forEach((importPath) => {
-    formatTypeImportLines([...groups.get(importPath)].sort(), importPath).forEach((l) => lines.push(l));
+    formatTypeImportLines([...groups.get(importPath)].sort(), importPath, aliasEntityFile).forEach((l) => lines.push(l));
   });
   return lines;
 }
@@ -734,7 +734,7 @@ function buildGroupedTypeImports(dtoTypeNames, moduleName, fallbackImportPath) {
  * C# 参数类型转 TS（含 DTO）
  */
 function csharpParamToTsType(csharpType) {
-  if (csharpType === 'IFormFile') return 'File';
+  if (csharpType === 'IFormFile') return 'globalThis.File';
   if (csharpType === 'IEnumerable<long>' || csharpType === 'long[]') return 'string[]';
   if (csharpType.startsWith('Takt') && csharpType.includes('Dto')) {
     return dtoClassToFrontendTypeName(csharpType);
@@ -817,7 +817,7 @@ function parseControllerFile(filePath, controllerClassName) {
     });
 
     const routeSuffix = routeTemplate || '';
-    const isBlob = /template|export/i.test(methodName) && httpMethod === 'get';
+    const isBlob = /template|export|download/i.test(methodName) && httpMethod === 'get';
     const isFormData = params.some((p) => p.csharpType === 'IFormFile');
 
     const methodNameAsync = `${methodName}Async`;
@@ -1154,16 +1154,61 @@ function buildHttpCallLines(method, apiBaseVar) {
 
 /**
  * 多行格式化 import type
+ * @param {string[]} types
+ * @param {string} fromPath
+ * @param {boolean} [aliasEntityFile] 实体 File DTO 与 DOM File 冲突时 import 为 TaktFile
  */
-function formatTypeImportLines(types, fromPath) {
+function formatTypeImportLines(types, fromPath, aliasEntityFile = false) {
   if (types.length === 0) return [];
   const lines = ['import type {'];
   types.forEach((typeName, index) => {
     const suffix = index < types.length - 1 ? ',' : '';
-    lines.push(`  ${typeName}${suffix}`);
+    const entry = aliasEntityFile && typeName === 'File' ? 'File as TaktFile' : typeName;
+    lines.push(`  ${entry}${suffix}`);
   });
   lines.push(`} from '${fromPath}';`);
   return lines;
+}
+
+/**
+ * API 是否含 IFormFile 参数（浏览器 File）
+ * @param {object[]} methods
+ */
+function apiMethodsUseDomFile(methods) {
+  return methods.some((m) => m.params.some((p) => p.csharpType === 'IFormFile'));
+}
+
+/**
+ * API 返回类型是否引用实体 File DTO
+ * @param {object[]} methods
+ * @param {string[]} dtoTypes
+ */
+function apiMethodsUseEntityFileType(methods, dtoTypes) {
+  return methods.some((m) => {
+    const ret = inferReturnTsType(m, dtoTypes);
+    return ret === 'File' || ret.includes('<File>') || ret === 'File[]';
+  });
+}
+
+/**
+ * 实体 File DTO 在 API 层映射为 TaktFile，避免与 globalThis.File 冲突
+ * @param {string} tsType
+ * @param {boolean} aliasEntityFile
+ */
+function mapEntityFileTsType(tsType, aliasEntityFile) {
+  if (!aliasEntityFile || !tsType) {
+    return tsType;
+  }
+  if (tsType === 'File') {
+    return 'TaktFile';
+  }
+  if (tsType === 'TaktPagedResult<File>') {
+    return 'TaktPagedResult<TaktFile>';
+  }
+  if (tsType === 'File[]') {
+    return 'TaktFile[]';
+  }
+  return tsType;
 }
 
 /**
@@ -1320,10 +1365,10 @@ function inferReturnTsType(method, dtoTypes) {
 /**
  * 生成API方法
  */
-function generateApiMethod(method, dtoTypes, apiBaseVar) {
+function generateApiMethod(method, dtoTypes, apiBaseVar, aliasEntityFile = false) {
   const lines = [];
   const summaryLines = formatSummaryLines(method.summary);
-  const returnType = inferReturnTsType(method, dtoTypes);
+  const returnType = mapEntityFileTsType(inferReturnTsType(method, dtoTypes), aliasEntityFile);
 
   lines.push('/**');
   if (summaryLines.length > 0) {
@@ -1373,6 +1418,7 @@ function generateApiFile(methods, moduleName, fileName, typesImportPath, meta, c
   const lines = [];
   const dtoTypes = collectDtoTypes(methods);
   const apiBaseVar = getApiBaseConstantName(controllerName);
+  const aliasEntityFile = apiMethodsUseDomFile(methods) && apiMethodsUseEntityFileType(methods, dtoTypes);
 
   lines.push('// ========================================');
   lines.push('// 项目名称：节拍工厂·Takt Plat');
@@ -1403,7 +1449,7 @@ function generateApiFile(methods, moduleName, fileName, typesImportPath, meta, c
 
   formatTypeImportLines([...commonImports].sort(), '@/types/common').forEach((l) => lines.push(l));
   if (entityDtoTypes.size > 0) {
-    buildGroupedTypeImports(entityDtoTypes, moduleName, typesImportPath).forEach((l) => lines.push(l));
+    buildGroupedTypeImports(entityDtoTypes, moduleName, typesImportPath, aliasEntityFile).forEach((l) => lines.push(l));
   }
   lines.push('');
 
@@ -1431,7 +1477,7 @@ function generateApiFile(methods, moduleName, fileName, typesImportPath, meta, c
       lines.push('');
       lastSection = section;
     }
-    lines.push(generateApiMethod(method, dtoTypes, apiBaseVar));
+    lines.push(generateApiMethod(method, dtoTypes, apiBaseVar, aliasEntityFile));
   });
 
   return lines.join('\n');

@@ -1,0 +1,681 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/types/statistics/report
+// 文件名称：configurable.d.ts
+// 创建时间：2026-06-08
+// 创建人：Takt365(Auto Generated)
+// 功能描述：statistics/report 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type {
+  CompanyDtoBase,
+  TaktPagedQuery
+} from '@/types/common';
+
+/**
+ * 自定义报表主实体（对标 SAP QuickViewer / SQVI 查询定义）
+ * 对应前端 TaktConfigurableDto
+ * 继承 TaktCompanyDtoBase
+ * 对应前端 Configurable
+ * @description 对应后端 TaktConfigurableDto
+ */
+export interface Configurable extends CompanyDtoBase {
+  /**
+   * ConfigurableID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  configurableId: string;
+
+  /**
+   * 报表编码（租户+公司内唯一）
+   */
+  reportCode: string;
+
+  /**
+   * 报表名称
+   */
+  reportName: string;
+
+  /**
+   * 报表业务域（财务/人力/后勤等）
+   */
+  reportDomain: number;
+
+  /**
+   * 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
+   */
+  reportSubCategory?: string;
+
+  /**
+   * 是否去重行（SELECT DISTINCT）
+   */
+  distinctRows: number;
+
+  /**
+   * 单次导出最大行数（Excel 上限，防止 OOM）
+   */
+  maxExportRows: number;
+
+  /**
+   * 单次查询最大行数（预览/分页上限）
+   */
+  maxQueryRows: number;
+
+  /**
+   * 归属用户 ID（为空表示公司级共享报表）
+   */
+  ownerUserId?: string;
+
+  /**
+   * 归属用户 名称（填充字段）
+   */
+  ownerUserName?: string;
+
+  /**
+   * 是否内置（内置报表禁止删除）
+   */
+  isBuiltIn: number;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 报表状态（0=禁用 1=启用）
+   */
+  reportStatus: number;
+
+  /**
+   * 报表描述
+   */
+  description?: string;
+
+  /**
+   * 数据源表列表（FROM） （子表：TaktConfigurableSource）
+   */
+  sources?: ConfigurableSource[];
+
+  /**
+   * 多表关联列表（JOIN） （子表：TaktConfigurableJoin）
+   */
+  joins?: ConfigurableJoin[];
+
+  /**
+   * 输出字段列表（SELECT） （子表：TaktConfigurableField）
+   */
+  fields?: ConfigurableField[];
+
+  /**
+   * 筛选条件列表（Selection Screen / WHERE） （子表：TaktConfigurableSelection）
+   */
+  selections?: ConfigurableSelection[];
+
+  /**
+   * 分组字段列表（GROUP BY） （子表：TaktConfigurableGroupBy）
+   */
+  groupBys?: ConfigurableGroupBy[];
+
+  /**
+   * 排序字段列表（ORDER BY） （子表：TaktConfigurableOrderBy）
+   */
+  orderBys?: ConfigurableOrderBy[];
+
+}
+
+
+/**
+ * Configurable 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 ConfigurableQuery
+ * @description 对应后端 TaktConfigurableQueryDto
+ */
+export interface ConfigurableQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode?: string;
+
+  /**
+   * 报表编码（租户+公司内唯一）
+   */
+  reportCode?: string;
+
+  /**
+   * 报表名称
+   */
+  reportName?: string;
+
+  /**
+   * 报表业务域（财务/人力/后勤等）
+   */
+  reportDomain?: number;
+
+  /**
+   * 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
+   */
+  reportSubCategory?: string;
+
+  /**
+   * 是否去重行（SELECT DISTINCT）
+   */
+  distinctRows?: number;
+
+  /**
+   * 单次导出最大行数（Excel 上限，防止 OOM）
+   */
+  maxExportRows?: number;
+
+  /**
+   * 单次查询最大行数（预览/分页上限）
+   */
+  maxQueryRows?: number;
+
+  /**
+   * 归属用户 ID（为空表示公司级共享报表）
+   */
+  ownerUserId?: string;
+
+  /**
+   * 是否内置（内置报表禁止删除）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 报表状态（0=禁用 1=启用）
+   */
+  reportStatus?: number;
+
+  /**
+   * 报表描述
+   */
+  description?: string;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建Configurable DTO
+ * 对应前端 ConfigurableCreate
+ * @description 对应后端 TaktConfigurableCreateDto
+ */
+export interface ConfigurableCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode: string;
+
+  /**
+   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture: string;
+
+  /**
+   * 报表编码（租户+公司内唯一）
+   */
+  reportCode: string;
+
+  /**
+   * 报表名称
+   */
+  reportName: string;
+
+  /**
+   * 报表业务域（财务/人力/后勤等）
+   */
+  reportDomain: number;
+
+  /**
+   * 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
+   */
+  reportSubCategory?: string;
+
+  /**
+   * 是否去重行（SELECT DISTINCT）
+   */
+  distinctRows: number;
+
+  /**
+   * 单次导出最大行数（Excel 上限，防止 OOM）
+   */
+  maxExportRows: number;
+
+  /**
+   * 单次查询最大行数（预览/分页上限）
+   */
+  maxQueryRows: number;
+
+  /**
+   * 归属用户 ID（为空表示公司级共享报表）
+   */
+  ownerUserId?: string;
+
+  /**
+   * 是否内置（内置报表禁止删除）
+   */
+  isBuiltIn: number;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 报表状态（0=禁用 1=启用）
+   */
+  reportStatus: number;
+
+  /**
+   * 报表描述
+   */
+  description?: string;
+
+  /**
+   * 数据源表列表（FROM）（子表，级联保存）
+   */
+  sources?: ConfigurableSourceCreate[];
+
+  /**
+   * 多表关联列表（JOIN）（子表，级联保存）
+   */
+  joins?: ConfigurableJoinCreate[];
+
+  /**
+   * 输出字段列表（SELECT）（子表，级联保存）
+   */
+  fields?: ConfigurableFieldCreate[];
+
+  /**
+   * 筛选条件列表（Selection Screen / WHERE）（子表，级联保存）
+   */
+  selections?: ConfigurableSelectionCreate[];
+
+  /**
+   * 分组字段列表（GROUP BY）（子表，级联保存）
+   */
+  groupBys?: ConfigurableGroupByCreate[];
+
+  /**
+   * 排序字段列表（ORDER BY）（子表，级联保存）
+   */
+  orderBys?: ConfigurableOrderByCreate[];
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新Configurable DTO
+ * 继承 TaktConfigurableCreateDto，添加 ConfigurableId 字段
+ * 对应前端 ConfigurableUpdate
+ * @description 对应后端 TaktConfigurableUpdateDto
+ */
+export interface ConfigurableUpdate extends ConfigurableCreate {
+  /**
+   * ConfigurableID（标识要更新的实体）
+   */
+  configurableId: string;
+
+}
+
+
+/**
+ * Configurable 状态更新 DTO
+ * 对应前端 ConfigurableStatus
+ * @description 对应后端 TaktConfigurableStatusDto
+ */
+export interface ConfigurableStatus {
+  /**
+   * ConfigurableID
+   */
+  configurableId: string;
+
+  /**
+   * 报表状态（0=禁用 1=启用）
+   */
+  reportStatus: number;
+
+}
+
+
+/**
+ * Configurable 排序更新 DTO
+ * 对应前端 ConfigurableSort
+ * @description 对应后端 TaktConfigurableSortDto
+ */
+export interface ConfigurableSort {
+  /**
+   * ConfigurableID
+   */
+  configurableId: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+}
+
+
+/**
+ * Configurable 导入模板行 DTO
+ * 对应前端 ConfigurableTemplate
+ * @description 对应后端 TaktConfigurableTemplateDto
+ */
+export interface ConfigurableTemplate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 报表编码（租户+公司内唯一）
+   */
+  reportCode?: string;
+
+  /**
+   * 报表名称
+   */
+  reportName?: string;
+
+  /**
+   * 报表业务域（财务/人力/后勤等）
+   */
+  reportDomain?: number;
+
+  /**
+   * 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
+   */
+  reportSubCategory?: string;
+
+  /**
+   * 是否去重行（SELECT DISTINCT）
+   */
+  distinctRows?: number;
+
+  /**
+   * 单次导出最大行数（Excel 上限，防止 OOM）
+   */
+  maxExportRows?: number;
+
+  /**
+   * 单次查询最大行数（预览/分页上限）
+   */
+  maxQueryRows?: number;
+
+  /**
+   * 归属用户 ID（为空表示公司级共享报表）
+   */
+  ownerUserId?: string;
+
+  /**
+   * 是否内置（内置报表禁止删除）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 报表状态（0=禁用 1=启用）
+   */
+  reportStatus?: number;
+
+  /**
+   * 报表描述
+   */
+  description?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * Configurable 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 ConfigurableImport
+ * @description 对应后端 TaktConfigurableImportDto
+ */
+export interface ConfigurableImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture?: string;
+
+  /**
+   * 报表编码（租户+公司内唯一）
+   */
+  reportCode?: string;
+
+  /**
+   * 报表名称
+   */
+  reportName?: string;
+
+  /**
+   * 报表业务域（财务/人力/后勤等）
+   */
+  reportDomain?: number;
+
+  /**
+   * 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
+   */
+  reportSubCategory?: string;
+
+  /**
+   * 是否去重行（SELECT DISTINCT）
+   */
+  distinctRows?: number;
+
+  /**
+   * 单次导出最大行数（Excel 上限，防止 OOM）
+   */
+  maxExportRows?: number;
+
+  /**
+   * 单次查询最大行数（预览/分页上限）
+   */
+  maxQueryRows?: number;
+
+  /**
+   * 归属用户 ID（为空表示公司级共享报表）
+   */
+  ownerUserId?: string;
+
+  /**
+   * 是否内置（内置报表禁止删除）
+   */
+  isBuiltIn?: number;
+
+  /**
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 报表状态（0=禁用 1=启用）
+   */
+  reportStatus?: number;
+
+  /**
+   * 报表描述
+   */
+  description?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * Configurable 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 ConfigurableExport
+ * @description 对应后端 TaktConfigurableExportDto
+ */
+export interface ConfigurableExport {
+  /**
+   * ConfigurableID
+   */
+  configurableId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 报表编码（租户+公司内唯一）
+   */
+  reportCode: string;
+
+  /**
+   * 报表名称
+   */
+  reportName: string;
+
+  /**
+   * 报表业务域（财务/人力/后勤等）
+   */
+  reportDomain: number;
+
+  /**
+   * 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
+   */
+  reportSubCategory?: string;
+
+  /**
+   * 是否去重行（SELECT DISTINCT）
+   */
+  distinctRows: number;
+
+  /**
+   * 单次导出最大行数（Excel 上限，防止 OOM）
+   */
+  maxExportRows: number;
+
+  /**
+   * 单次查询最大行数（预览/分页上限）
+   */
+  maxQueryRows: number;
+
+  /**
+   * 归属用户 ID（为空表示公司级共享报表）
+   */
+  ownerUserId?: string;
+
+  /**
+   * 是否内置（内置报表禁止删除）
+   */
+  isBuiltIn: number;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 报表状态（0=禁用 1=启用）
+   */
+  reportStatus: number;
+
+  /**
+   * 报表描述
+   */
+  description?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+  /**
+   * 创建时间
+   */
+  createdAt: string;
+
+}
+

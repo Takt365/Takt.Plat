@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/defect/assy-defect/components -->
 <!-- 文件名称：assy-defect-form.vue -->
-<!-- 功能描述：组立不良日报实体维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：组立不良日报实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -19,6 +19,7 @@
       v-model:active-key="activeTab"
       class="assy-defect-form-tabs"
     >
+      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -247,19 +248,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.details')"
-                name="assyDefectDetails"
-              >
-                <a-input
-                  v-model:value="formState.assyDefectDetails"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.details') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('common.page.entity.extfieldjson')"
                 name="extFieldJson"
               >
@@ -287,26 +275,144 @@
           </a-row>
         </div>
       </a-tab-pane>
-
+      <!-- 子表：assyDefectDetail -->
+      <a-tab-pane
+        key="child-assyDefectDetails"
+        :tab="t('entity.assyDefectDetail._self')"
+        force-render
+      >
+        <div class="mb-2">
+          <a-button type="primary" size="small" @click="handleAddAssyDefectDetailRow">
+            {{ t('common.page.button.create') }}{{ t('entity.assyDefectDetail._self') }}
+          </a-button>
+        </div>
+        <a-table
+          :columns="assyDefectDetailFormColumns"
+          :data-source="childAssyDefectDetailRows"
+          :pagination="false"
+          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
+          size="small"
+          bordered
+        >
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.key === 'tenantCode'">
+              <a-input
+                v-model:value="record.tenantCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyCode'">
+              <a-input
+                v-model:value="record.companyCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyDefaultCulture'">
+              <a-input
+                v-model:value="record.companyDefaultCulture"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'prodOrderCode'">
+              <a-input
+                v-model:value="record.prodOrderCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.prodordercode') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'lineNumber'">
+              <a-input-number
+                v-model:value="record.lineNumber"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.linenumber') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'defectCategory'">
+              <a-input
+                v-model:value="record.defectCategory"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.defectcategory') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'defectQty'">
+              <a-input-number
+                v-model:value="record.defectQty"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.defectqty') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'cumulativeDefectQty'">
+              <a-input-number
+                v-model:value="record.cumulativeDefectQty"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.cumulativedefectqty') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'randomCardNo'">
+              <a-input
+                v-model:value="record.randomCardNo"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.randomcardno') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'occurrenceEngineering'">
+              <a-input
+                v-model:value="record.occurrenceEngineering"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.occurrenceengineering') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'testStep'">
+              <a-input
+                v-model:value="record.testStep"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.teststep') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === '__action'">
+              <a-button type="link" danger size="small" @click="handleRemoveAssyDefectDetailRow(index)">
+                {{ t('common.page.button.delete') }}
+              </a-button>
+            </template>
+          </template>
+        </a-table>
+      </a-tab-pane>
     </a-tabs>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 组立不良日报实体维护表单 · 由 generate-vue-from-api 根据 types/api 生成
+ * 组立不良日报实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/defect/assy-defect/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { AssyDefectCreate } from '@/types/logistics/manufacturing/defect/assy-defect'
+import type { AssyDefectCreate, AssyDefectDetailCreate, AssyDefectDetail } from '@/types/logistics/manufacturing/defect/assy-defect'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
 
+/** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
 const userStore = useUserStore()
 
 /**
@@ -325,36 +431,163 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
+/** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","shiftNo","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","prodActualQty","goodQuantity","status","assyDefectDetails","extFieldJson","remark"]
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","shiftNo","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","prodActualQty","goodQuantity","status","extFieldJson","remark"]
 
+/** assyDefectDetail 子表行（表单 Tab 内嵌） */
+const childAssyDefectDetailRows = ref<Record<string, unknown>[]>([])
 
+/** 子表 assyDefectDetail 表单列定义 */
+const assyDefectDetailFormColumns = computed(() => [
+  {
+    title: t('common.page.entity.tenantcode'),
+    dataIndex: 'tenantCode',
+    key: 'tenantCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companycode'),
+    dataIndex: 'companyCode',
+    key: 'companyCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companydefaultculture'),
+    dataIndex: 'companyDefaultCulture',
+    key: 'companyDefaultCulture',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.prodordercode'),
+    dataIndex: 'prodOrderCode',
+    key: 'prodOrderCode',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.linenumber'),
+    dataIndex: 'lineNumber',
+    key: 'lineNumber',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.defectcategory'),
+    dataIndex: 'defectCategory',
+    key: 'defectCategory',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.defectqty'),
+    dataIndex: 'defectQty',
+    key: 'defectQty',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.cumulativedefectqty'),
+    dataIndex: 'cumulativeDefectQty',
+    key: 'cumulativeDefectQty',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.randomcardno'),
+    dataIndex: 'randomCardNo',
+    key: 'randomCardNo',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.occurrenceengineering'),
+    dataIndex: 'occurrenceEngineering',
+    key: 'occurrenceEngineering',
+    width: 140,
+  },
+  {
+    title: t('entity.assyDefectDetail.teststep'),
+    dataIndex: 'testStep',
+    key: 'testStep',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.action'),
+    key: '__action',
+    width: 80,
+    fixed: 'right',
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<AssyDefectCreate & { assyDefectId?: string }> | null | undefined) {
+  childAssyDefectDetailRows.value = ((val as any)?.assyDefectDetails ?? []).map((item: Record<string, unknown>, index: number) => ({
+    ...item,
+    __rowKey: item.assyDefectDetailId ?? `new-${index}`,
+  }))
+}
+
+/** 表单 Tab 内新增 assyDefectDetail 行 */
+function handleAddAssyDefectDetailRow() {
+  childAssyDefectDetailRows.value.push({
+    __rowKey: `new-${Date.now()}`,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      prodOrderCode: '',
+      lineNumber: 0,
+      defectCategory: '',
+      defectQty: 0,
+      cumulativeDefectQty: 0,
+      randomCardNo: '',
+      occurrenceEngineering: '',
+      testStep: '',
+  })
+}
+
+/** 表单 Tab 内删除 assyDefectDetail 行 */
+function handleRemoveAssyDefectDetailRow(index: number) {
+  childAssyDefectDetailRows.value.splice(index, 1)
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  return {
+    ...formState,
+    assyDefectDetails: childAssyDefectDetailRows.value.map(({ __rowKey, ...rest }) => rest),
+  }
+}
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<AssyDefectCreate & { assyDefectId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: () => ({}),
-  loading: false
+  loading: false,
 })
 
+/** a-form 实例 ref */
 const formRef = ref()
+/** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
 
+/** 编辑态灌入 formData；新增态 reset */
 watch(
   () => props.formData,
   (val) => {
     const next = val ? { ...val } : {}
     Object.keys(formState).forEach((k) => delete formState[k])
-
+    delete (next as any).assyDefectDetails
     applyScopeDefaults(next)
     Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
   },
   { immediate: true, deep: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
@@ -365,6 +598,7 @@ watch(
   },
 )
 
+/** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
@@ -452,19 +686,22 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ],
 }))
 
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
   return formState
 }
 
+/** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  return buildSubmitPayload()
 }
 
+/** 重置表单与子表行 */
 function resetFields() {
   formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-
+  childAssyDefectDetailRows.value = []
   activeTab.value = 'tab-0'
 }
 

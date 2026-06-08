@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktMaterialValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Material 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMaterial 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Logistics.Materials;
 
@@ -80,6 +81,8 @@ public class TaktMaterialCreateValidator : AbstractValidator<TaktMaterialCreateD
             .MaximumLength(50).WithMessage("生产地点长度不能超过50个字符");
         RuleFor(x => x.PurchasingLocation)
             .MaximumLength(50).WithMessage("采购地点长度不能超过50个字符");
+        RuleFor(x => x.MaterialStatus)
+            .IsInEnum().WithMessage("物料状态无效");
         RuleFor(x => x.MaterialAttributes)
             .MaximumLength(4000).WithMessage("物料属性长度不能超过4000个字符");
         RuleFor(x => x.IsEndOfLife)

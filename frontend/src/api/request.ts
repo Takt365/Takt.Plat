@@ -25,6 +25,8 @@ import type { TaktApiResult } from '@/types/common';
 import { TaktResultCode } from '@/utils/common';
 import { createLogger } from '@/utils/logger';
 import { resolveHttpErrorMessage } from '@/utils/takt-http-error-message';
+import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import { STORE_I18N_TIP_SESSION_EXPIRED } from '@/utils/takt-store-i18n';
 import { EventBus, emitNotification } from '@/utils/event-bus';
 import { ensureValidAccessToken, refreshOAuthTokens } from '@/utils/oauth';
 
@@ -136,10 +138,18 @@ function toAxiosError(error: unknown): AxiosError | null {
 }
 
 /**
+ * 解析会话过期提示（缺省 common.tip.session.expired）
+ * @param message 业务或 HTTP 附带文案
+ */
+function resolveSessionExpiredMessage(message?: string): string {
+  return message?.trim() || translateLocaleMessage(STORE_I18N_TIP_SESSION_EXPIRED);
+}
+
+/**
  * 未授权：仅广播事件，由 bootstrap 订阅方清状态并跳转
  */
 function emitSessionExpired(message?: string): void {
-  EventBus.emit('auth:session-expired', { message });
+  EventBus.emit('auth:session-expired', { message: resolveSessionExpiredMessage(message) });
 }
 
 /**
@@ -181,14 +191,14 @@ async function retryRequestAfterTokenRefresh(
   }
 
   if (config._retryAuth) {
-    emitSessionExpired(message || '登录已过期，请重新登录');
-    return Promise.reject(new TaktApiError(message || '登录已过期', TaktResultCode.Unauthorized));
+    emitSessionExpired(message);
+    return Promise.reject(new TaktApiError(resolveSessionExpiredMessage(message), TaktResultCode.Unauthorized));
   }
 
   const refreshed = await refreshOAuthTokens();
   if (!refreshed) {
-    emitSessionExpired(message || '登录已过期，请重新登录');
-    return Promise.reject(new TaktApiError(message || '登录已过期', TaktResultCode.Unauthorized));
+    emitSessionExpired(message);
+    return Promise.reject(new TaktApiError(resolveSessionExpiredMessage(message), TaktResultCode.Unauthorized));
   }
 
   const userStore = useUserStore();
@@ -249,7 +259,7 @@ function rejectFromAxiosError(error: unknown): Promise<unknown> {
       if (isSkipLoginAuthError(axiosError.config)) {
         return Promise.reject(new TaktApiError(data.message, data.code, data.data));
       }
-      return retryRequestAfterTokenRefresh(axiosError.config, data.message || '登录已过期，请重新登录');
+      return retryRequestAfterTokenRefresh(axiosError.config, data.message || undefined);
     }
     if (data.code !== TaktResultCode.Unauthorized && !axiosConfig?.skipErrorNotification) {
       const errMsg = data.message?.trim() || resolvedMessage;

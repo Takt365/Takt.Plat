@@ -193,7 +193,7 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 | `generate-controllers-from-services.cjs` | `Takt{复数}Controller`（路由 `api/Takt{复数}`） |
 | `generate-from-backend.cjs` | 前端 `types/`、`api/`（API_BASE **复数**） |
 | `generate-entity-i18n-seed.cjs` | `TaktXxxI18nSeedData.cs` |
-| `generate-vue-from-api.cjs` | `views/index.vue` + `components/*-form.vue`（**单表/主子表**；树表不生成） |
+| `generate-vue-all-from-api.cjs` | `views/index.vue` + `components/*-form.vue`（**单表/主子表/树表** 三模板串联；排除实体见 `generate-entity-exclusions.cjs`） |
 
 复数规则见 `generate-script-common.cjs`。生成后须编译并人工审阅 QueryExpression、权限码（`15-codegen` §五）。
 

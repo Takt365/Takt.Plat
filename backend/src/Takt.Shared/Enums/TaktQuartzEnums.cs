@@ -33,24 +33,6 @@ public enum TaktQuartzTaskStatus
 }
 
 /// <summary>
-/// 定时任务执行结果
-/// </summary>
-public enum TaktQuartzExecuteStatus
-{
-    /// <summary>
-    /// 成功
-    /// </summary>
-    [Display(Name = "成功")]
-    Success = 0,
-
-    /// <summary>
-    /// 失败
-    /// </summary>
-    [Display(Name = "失败")]
-    Failed = 1,
-}
-
-/// <summary>
 /// Quartz Misfire 策略
 /// </summary>
 public enum TaktQuartzMisfirePolicy
@@ -78,4 +60,46 @@ public enum TaktQuartzMisfirePolicy
     /// </summary>
     [Display(Name = "等待下次")]
     DoNothing = 3,
+}
+
+/// <summary>
+/// 定时任务类型
+/// </summary>
+public enum TaktQuartzTaskType
+{
+    /// <summary>
+    /// 程序集
+    /// </summary>
+    [Display(Name = "程序集")]
+    Assembly = 1,
+
+    /// <summary>
+    /// 网络请求
+    /// </summary>
+    [Display(Name = "网络请求")]
+    HttpRequest = 2,
+
+    /// <summary>
+    /// SQL 语句
+    /// </summary>
+    [Display(Name = "SQL语句")]
+    SqlScript = 3,
+}
+
+/// <summary>
+/// 定时任务触发器类型
+/// </summary>
+public enum TaktQuartzTriggerType
+{
+    /// <summary>
+    /// Simple（按间隔秒数）
+    /// </summary>
+    [Display(Name = "Simple")]
+    Simple = 0,
+
+    /// <summary>
+    /// Cron 表达式
+    /// </summary>
+    [Display(Name = "Cron")]
+    Cron = 1,
 }

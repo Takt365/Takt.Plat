@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicket 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -299,13 +299,31 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticket.applicantby", "zh-HK", "申请人", "申请人（实际申请人；代理人代提时填被代理人）"),
 
             // entity.ticket.childtickets
-            new TranslationSeedItem("entity.ticket.childtickets", "en-US", "childTickets", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
+            new TranslationSeedItem("entity.ticket.childtickets", "en-US", "子工单列表", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
             // entity.ticket.childtickets
-            new TranslationSeedItem("entity.ticket.childtickets", "ja-JP", "childTickets", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
+            new TranslationSeedItem("entity.ticket.childtickets", "ja-JP", "子工单列表", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
             // entity.ticket.childtickets
-            new TranslationSeedItem("entity.ticket.childtickets", "zh-CN", "childTickets", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
+            new TranslationSeedItem("entity.ticket.childtickets", "zh-CN", "子工单列表", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
             // entity.ticket.childtickets
-            new TranslationSeedItem("entity.ticket.childtickets", "zh-HK", "childTickets", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
+            new TranslationSeedItem("entity.ticket.childtickets", "zh-HK", "子工单列表", "子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）"),
+
+            // entity.ticket.evaluation
+            new TranslationSeedItem("entity.ticket.evaluation", "en-US", "服务评价", "服务评价（工单关闭后的评价，一对一）"),
+            // entity.ticket.evaluation
+            new TranslationSeedItem("entity.ticket.evaluation", "ja-JP", "服务评价", "服务评价（工单关闭后的评价，一对一）"),
+            // entity.ticket.evaluation
+            new TranslationSeedItem("entity.ticket.evaluation", "zh-CN", "服务评价", "服务评价（工单关闭后的评价，一对一）"),
+            // entity.ticket.evaluation
+            new TranslationSeedItem("entity.ticket.evaluation", "zh-HK", "服务评价", "服务评价（工单关闭后的评价，一对一）"),
+
+            // entity.ticket.changelogs
+            new TranslationSeedItem("entity.ticket.changelogs", "en-US", "工单变更日志列表", "工单变更日志列表（主子表关系）"),
+            // entity.ticket.changelogs
+            new TranslationSeedItem("entity.ticket.changelogs", "ja-JP", "工单变更日志列表", "工单变更日志列表（主子表关系）"),
+            // entity.ticket.changelogs
+            new TranslationSeedItem("entity.ticket.changelogs", "zh-CN", "工单变更日志列表", "工单变更日志列表（主子表关系）"),
+            // entity.ticket.changelogs
+            new TranslationSeedItem("entity.ticket.changelogs", "zh-HK", "工单变更日志列表", "工单变更日志列表（主子表关系）"),
         };
     }
 

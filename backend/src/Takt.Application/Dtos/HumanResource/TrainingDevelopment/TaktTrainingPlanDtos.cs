@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.TrainingDevelopment
 // 文件名称：TaktTrainingPlanDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingPlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTrainingPlan 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.HumanResource.TrainingDevelopment;
 
@@ -93,7 +94,7 @@ public class TaktTrainingPlanDto : TaktApprovalDtoBase
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
-    public int TrainingPlanStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -190,7 +191,7 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
-    public int? TrainingPlanStatus { get; set; }
+    public TaktCommonStatus? TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -343,7 +344,7 @@ public class TaktTrainingPlanCreateDto
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
-    public int TrainingPlanStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -403,7 +404,7 @@ public class TaktTrainingPlanStatusDto
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
     [Required(ErrorMessage = "业务状态（1=启用 0=禁用）不能为空")]
-    public int TrainingPlanStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingPlanStatus { get; set; }
 }
 
 // ========================================
@@ -468,7 +469,7 @@ public class TaktTrainingPlanTemplateDto
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
-    public int? TrainingPlanStatus { get; set; }
+    public TaktCommonStatus? TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -550,7 +551,7 @@ public class TaktTrainingPlanImportDto
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
-    public int? TrainingPlanStatus { get; set; }
+    public TaktCommonStatus? TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -643,7 +644,7 @@ public class TaktTrainingPlanExportDto
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
     /// </summary>
-    public int TrainingPlanStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingPlanStatus { get; set; }
 
     /// <summary>
     /// 关联工厂

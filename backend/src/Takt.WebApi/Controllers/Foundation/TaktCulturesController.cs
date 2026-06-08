@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktCulturesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：区域控制器
 // 
@@ -184,7 +184,7 @@ public class TaktCulturesController : TaktControllerBase
     /// <summary>
     /// 更新区域状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>区域DTO</returns>
     [TaktPermission("foundation:i18n:update", "更新区域状态")]
     [HttpPut("status")]

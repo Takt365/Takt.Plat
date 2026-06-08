@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserTenantI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUserTenant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,6 +99,33 @@ public class TaktUserTenantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.userTenant.userid", "zh-CN", "用户ID", "用户ID"),
             // entity.userTenant.userid
             new TranslationSeedItem("entity.userTenant.userid", "zh-HK", "用户ID", "用户ID"),
+
+            // entity.userTenant.isdefault
+            new TranslationSeedItem("entity.userTenant.isdefault", "en-US", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
+            // entity.userTenant.isdefault
+            new TranslationSeedItem("entity.userTenant.isdefault", "ja-JP", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
+            // entity.userTenant.isdefault
+            new TranslationSeedItem("entity.userTenant.isdefault", "zh-CN", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
+            // entity.userTenant.isdefault
+            new TranslationSeedItem("entity.userTenant.isdefault", "zh-HK", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
+
+            // entity.userTenant.user
+            new TranslationSeedItem("entity.userTenant.user", "en-US", "用户", "用户（多对一）"),
+            // entity.userTenant.user
+            new TranslationSeedItem("entity.userTenant.user", "ja-JP", "用户", "用户（多对一）"),
+            // entity.userTenant.user
+            new TranslationSeedItem("entity.userTenant.user", "zh-CN", "用户", "用户（多对一）"),
+            // entity.userTenant.user
+            new TranslationSeedItem("entity.userTenant.user", "zh-HK", "用户", "用户（多对一）"),
+
+            // entity.userTenant.tenant
+            new TranslationSeedItem("entity.userTenant.tenant", "en-US", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
+            // entity.userTenant.tenant
+            new TranslationSeedItem("entity.userTenant.tenant", "ja-JP", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
+            // entity.userTenant.tenant
+            new TranslationSeedItem("entity.userTenant.tenant", "zh-CN", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
+            // entity.userTenant.tenant
+            new TranslationSeedItem("entity.userTenant.tenant", "zh-HK", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktAccountTitleValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AccountTitle 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktAccountTitle 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Accounting.Financial;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Accounting.Financial;
 
@@ -45,6 +46,8 @@ public class TaktAccountTitleCreateValidator : AbstractValidator<TaktAccountTitl
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.TitleStatus)
+            .IsInEnum().WithMessage("科目状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)

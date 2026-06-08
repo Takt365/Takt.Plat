@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRouting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -191,13 +191,22 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routing.description", "zh-HK", "工艺路线说明", "工艺路线说明"),
 
             // entity.routing.items
-            new TranslationSeedItem("entity.routing.items", "en-US", "items", "工艺路线明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.items", "en-US", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
             // entity.routing.items
-            new TranslationSeedItem("entity.routing.items", "ja-JP", "items", "工艺路线明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.items", "ja-JP", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
             // entity.routing.items
-            new TranslationSeedItem("entity.routing.items", "zh-CN", "items", "工艺路线明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.items", "zh-CN", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
             // entity.routing.items
-            new TranslationSeedItem("entity.routing.items", "zh-HK", "items", "工艺路线明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.items", "zh-HK", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
+
+            // entity.routing.changelogs
+            new TranslationSeedItem("entity.routing.changelogs", "en-US", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.routing.changelogs
+            new TranslationSeedItem("entity.routing.changelogs", "ja-JP", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.routing.changelogs
+            new TranslationSeedItem("entity.routing.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.routing.changelogs
+            new TranslationSeedItem("entity.routing.changelogs", "zh-HK", "变更日志列表", "变更日志列表（主子表关系）"),
         };
     }
 

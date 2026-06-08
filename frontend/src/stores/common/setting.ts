@@ -29,6 +29,7 @@ export {
   normalizeSetting,
   STORAGE_KEY,
   themeColorMap,
+  themeColorI18nKeyMap,
   validateFontSize,
 } from '@/setting';
 

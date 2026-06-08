@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktQuartzTasksController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：定时任务控制器
 // 
@@ -183,7 +183,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// <summary>
     /// 更新定时任务状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktQuartzTaskStatus 枚举）</param>
     /// <returns>定时任务DTO</returns>
     [TaktPermission("foundation:quartztask:update", "更新定时任务状态")]
     [HttpPut("status")]

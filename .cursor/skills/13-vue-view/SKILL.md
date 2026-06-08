@@ -59,13 +59,13 @@ description: >-
 - [ ] 树深 ≤10；11-tree-table 细则
 ```
 
-## 代码生成（generate-vue-from-api）
+## 代码生成（generate-vue-*-from-api）
 
 | 形态 | 脚本 | 说明 |
 |------|------|------|
-| 单表 | ✅ | 标准壳，文件头标注自动生成 |
-| 主子表 | ✅ | 展开行 + `:show-expand` |
-| 树表 | ❌ | 须手工 §树表增量；`Dept` 等在排除列表 |
+| 单表 | `generate-vue-crud-from-api.cjs` | 标准壳 |
+| 主子表 | `generate-vue-master-detail-from-api.cjs` | 展开行 + `:show-expand` |
+| 树表 | `generate-vue-tree-from-api.cjs` | 左树右表；`Dept` 等在排除列表须手工 |
 
 排除实体 / `workflow/**`：见 [15-codegen](../15-codegen/SKILL.md) §4.3。
 

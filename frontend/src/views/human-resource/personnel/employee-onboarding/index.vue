@@ -54,15 +54,17 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      :columns="columns"
+      entity-scope="company"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'employeeOnboardingId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
       :row-key="getEmployeeOnboardingId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
@@ -98,10 +100,15 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-human-resource-personnel-employee-onboarding'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('offerId')">
       <a-form-item :label="t('entity.employeeOnboarding.offerid')">
         <a-input
           v-model:value="advancedQueryForm.offerId"
@@ -109,6 +116,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('todoNo')">
       <a-form-item :label="t('entity.employeeOnboarding.todono')">
         <a-input
           v-model:value="advancedQueryForm.todoNo"
@@ -116,20 +125,47 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('todoStatus')">
       <a-form-item :label="t('entity.employeeOnboarding.todostatus')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.todoStatus"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboarding.todostatus') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedJoinedDateStart')">
+      <a-form-item :label="t('entity.employeeOnboarding.plannedjoineddatestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.plannedJoinedDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeOnboarding.plannedjoineddatestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedJoinedDateEnd')">
+      <a-form-item :label="t('entity.employeeOnboarding.plannedjoineddateend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.plannedJoinedDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeOnboarding.plannedjoineddateend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('candidateName')">
       <a-form-item :label="t('entity.employeeOnboarding.candidatename')">
-        <a-input
+        <a-date-picker
           v-model:value="advancedQueryForm.candidateName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeOnboarding.candidatename') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeOnboarding.candidatename') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('mobile')">
       <a-form-item :label="t('entity.employeeOnboarding.mobile')">
         <a-input
           v-model:value="advancedQueryForm.mobile"
@@ -137,6 +173,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeId')">
       <a-form-item :label="t('entity.employeeOnboarding.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
@@ -144,6 +182,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeJoinedId')">
       <a-form-item :label="t('entity.employeeOnboarding.employeejoinedid')">
         <a-input
           v-model:value="advancedQueryForm.employeeJoinedId"
@@ -151,6 +191,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('reason')">
       <a-form-item :label="t('entity.employeeOnboarding.reason')">
         <a-input
           v-model:value="advancedQueryForm.reason"
@@ -158,12 +200,55 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extFieldJson')">
+      <a-form-item :label="t('common.page.entity.extfieldjson')">
+        <a-input
+          v-model:value="advancedQueryForm.extFieldJson"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.employeeOnboarding._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.employeeOnboarding._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -188,6 +273,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'employeeOnboardingId'"
       :action-column-key="'action'"
+      entity-scope="company"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -203,7 +290,6 @@ import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import EmployeeOnboardingForm from './components/employee-onboarding-form.vue'
 import { getEmployeeOnboardingList, getEmployeeOnboardingById, createEmployeeOnboarding, updateEmployeeOnboarding, deleteEmployeeOnboardingById, deleteEmployeeOnboardingBatch, getEmployeeOnboardingTemplate, importEmployeeOnboarding, exportEmployeeOnboarding } from '@/api/human-resource/personnel/employee-onboarding'
@@ -238,12 +324,36 @@ const advancedQueryForm = ref({
   offerId: '',
   todoNo: '',
   todoStatus: undefined as number | undefined,
+  plannedJoinedDateStart: '',
+  plannedJoinedDateEnd: '',
   candidateName: '',
   mobile: '',
   employeeId: '',
   employeeJoinedId: '',
   reason: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
 })
+/** 高级查询字段元数据（显隐配置） */
+const queryFieldsMeta = computed(() => [
+  { key: 'offerId', label: t('entity.employeeOnboarding.offerid') },
+  { key: 'todoNo', label: t('entity.employeeOnboarding.todono') },
+  { key: 'todoStatus', label: t('entity.employeeOnboarding.todostatus') },
+  { key: 'plannedJoinedDateStart', label: t('entity.employeeOnboarding.plannedjoineddatestart') },
+  { key: 'plannedJoinedDateEnd', label: t('entity.employeeOnboarding.plannedjoineddateend') },
+  { key: 'candidateName', label: t('entity.employeeOnboarding.candidatename') },
+  { key: 'mobile', label: t('entity.employeeOnboarding.mobile') },
+  { key: 'employeeId', label: t('entity.employeeOnboarding.employeeid') },
+  { key: 'employeeJoinedId', label: t('entity.employeeOnboarding.employeejoinedid') },
+  { key: 'reason', label: t('entity.employeeOnboarding.reason') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+const visibleQueryFieldKeys = ref<string[]>([])
 const columnSettingVisible = ref(false)
 const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
@@ -379,6 +489,24 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'reason') ?? ''
   },
+  {
+    title: t('entity.employeeOnboarding.offer'),
+    dataIndex: 'offer',
+    key: 'offer',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'offer') ?? ''
+  },
+  {
+    title: t('entity.employeeOnboarding.employeejoined'),
+    dataIndex: 'employeeJoined',
+    key: 'employeeJoined',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'employeeJoined') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -403,18 +531,6 @@ const columns = computed<TableColumnsType>(() => [
 
 const getEmployeeOnboardingId = (record: any): string => record?.[entityIdName] ?? ''
 const getEmployeeOnboardingField = (record: any, field: string): any => record?.[field]
-
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
-})
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -488,23 +604,29 @@ function handleReset() {
   offerId: '',
   todoNo: '',
   todoStatus: undefined as number | undefined,
+  plannedJoinedDateStart: '',
+  plannedJoinedDateEnd: '',
   candidateName: '',
   mobile: '',
   employeeId: '',
   employeeJoinedId: '',
   reason: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
   currentPage.value = 1
   loadData()
 }
 
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.employeeOnboarding._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeOnboarding._self') })
   formData.value = {}
   formVisible.value = true
 }
 function handleEdit(record: EmployeeOnboarding) {
-  formTitle.value = t('common.page.button.edit') + t('entity.employeeOnboarding._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeOnboarding._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -651,11 +773,17 @@ function handleAdvancedQueryReset() {
   offerId: '',
   todoNo: '',
   todoStatus: undefined as number | undefined,
+  plannedJoinedDateStart: '',
+  plannedJoinedDateEnd: '',
   candidateName: '',
   mobile: '',
   employeeId: '',
   employeeJoinedId: '',
   reason: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
 }
 
@@ -668,7 +796,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
 function handleRefresh() {

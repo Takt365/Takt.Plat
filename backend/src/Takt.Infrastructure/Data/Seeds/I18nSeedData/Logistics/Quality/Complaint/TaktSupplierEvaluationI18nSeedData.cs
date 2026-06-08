@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -317,13 +317,13 @@ public class TaktSupplierEvaluationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierEvaluation.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
             // entity.supplierEvaluation.items
-            new TranslationSeedItem("entity.supplierEvaluation.items", "en-US", "items", "评价项目明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.supplierEvaluation.items", "en-US", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
             // entity.supplierEvaluation.items
-            new TranslationSeedItem("entity.supplierEvaluation.items", "ja-JP", "items", "评价项目明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.supplierEvaluation.items", "ja-JP", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
             // entity.supplierEvaluation.items
-            new TranslationSeedItem("entity.supplierEvaluation.items", "zh-CN", "items", "评价项目明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.supplierEvaluation.items", "zh-CN", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
             // entity.supplierEvaluation.items
-            new TranslationSeedItem("entity.supplierEvaluation.items", "zh-HK", "items", "评价项目明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.supplierEvaluation.items", "zh-HK", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
         };
     }
 

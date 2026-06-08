@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,6 +153,15 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecAttachment.accessurl", "zh-CN", "访问地址", "访问地址（URL）"),
             // entity.ecAttachment.accessurl
             new TranslationSeedItem("entity.ecAttachment.accessurl", "zh-HK", "访问地址", "访问地址（URL）"),
+
+            // entity.ecAttachment.ec
+            new TranslationSeedItem("entity.ecAttachment.ec", "en-US", "设变主表", "设变主表（多对一）"),
+            // entity.ecAttachment.ec
+            new TranslationSeedItem("entity.ecAttachment.ec", "ja-JP", "设变主表", "设变主表（多对一）"),
+            // entity.ecAttachment.ec
+            new TranslationSeedItem("entity.ecAttachment.ec", "zh-CN", "设变主表", "设变主表（多对一）"),
+            // entity.ecAttachment.ec
+            new TranslationSeedItem("entity.ecAttachment.ec", "zh-HK", "设变主表", "设变主表（多对一）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Controlling
 // 文件名称：TaktProfitCenterValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProfitCenter 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktProfitCenter 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Accounting.Controlling;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Accounting.Controlling;
 
@@ -53,6 +54,8 @@ public class TaktProfitCenterCreateValidator : AbstractValidator<TaktProfitCente
             .MaximumLength(100).WithMessage("所属部门名称长度不能超过100个字符");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
+        RuleFor(x => x.ProfitCenterStatus)
+            .IsInEnum().WithMessage("利润中心状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)
@@ -117,6 +120,8 @@ public class TaktProfitCenterImportValidator : AbstractValidator<TaktProfitCente
             .MaximumLength(100).WithMessage("所属部门名称长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.DeptName));
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
+        RuleFor(x => x.ProfitCenterStatus)
+            .IsInEnum().WithMessage("利润中心状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)

@@ -181,7 +181,7 @@ async function handleFormSubmit() {
 
 ---
 
-## 七、代码生成（generate-vue-from-api.cjs）
+## 七、代码生成（generate-vue-*-from-api.cjs）
 
 详见 `15-codegen` §3.6。与 `index.vue` 同步生成 `components/{entity}-form.vue`（有 Create/Update API 时）。
 

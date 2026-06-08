@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Identity
 // 文件名称：TaktTenantsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：租户控制器
 // 
@@ -184,7 +184,7 @@ public class TaktTenantsController : TaktControllerBase
     /// <summary>
     /// 更新租户状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>租户DTO</returns>
     [TaktPermission("identity:tenant:update", "更新租户状态")]
     [HttpPut("status")]

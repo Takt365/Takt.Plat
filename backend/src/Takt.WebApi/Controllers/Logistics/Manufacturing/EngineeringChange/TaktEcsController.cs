@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变主控制器
 // 
@@ -183,7 +183,7 @@ public class TaktEcsController : TaktControllerBase
     /// <summary>
     /// 更新设变主状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>设变主DTO</returns>
     [TaktPermission("logistics:manufacturing:engineeringchange:ec:update", "更新设变主状态")]
     [HttpPut("status")]

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNews 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,6 +154,24 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             // entity.news.coverimage
             new TranslationSeedItem("entity.news.coverimage", "zh-HK", "新闻封面图片URL", "新闻封面图片 URL"),
 
+            // entity.news.istop
+            new TranslationSeedItem("entity.news.istop", "en-US", "是否置顶", "是否置顶"),
+            // entity.news.istop
+            new TranslationSeedItem("entity.news.istop", "ja-JP", "是否置顶", "是否置顶"),
+            // entity.news.istop
+            new TranslationSeedItem("entity.news.istop", "zh-CN", "是否置顶", "是否置顶"),
+            // entity.news.istop
+            new TranslationSeedItem("entity.news.istop", "zh-HK", "是否置顶", "是否置顶"),
+
+            // entity.news.isrecommended
+            new TranslationSeedItem("entity.news.isrecommended", "en-US", "是否推荐", "是否推荐"),
+            // entity.news.isrecommended
+            new TranslationSeedItem("entity.news.isrecommended", "ja-JP", "是否推荐", "是否推荐"),
+            // entity.news.isrecommended
+            new TranslationSeedItem("entity.news.isrecommended", "zh-CN", "是否推荐", "是否推荐"),
+            // entity.news.isrecommended
+            new TranslationSeedItem("entity.news.isrecommended", "zh-HK", "是否推荐", "是否推荐"),
+
             // entity.news.effectivetime
             new TranslationSeedItem("entity.news.effectivetime", "en-US", "生效时间", "生效时间"),
             // entity.news.effectivetime
@@ -299,13 +317,58 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.status", "zh-HK", "新闻状态", "新闻状态"),
 
             // entity.news.attachments
-            new TranslationSeedItem("entity.news.attachments", "en-US", "attachments", "新闻附件列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.attachments", "en-US", "新闻附件列表", "新闻附件列表（主子表关系）"),
             // entity.news.attachments
-            new TranslationSeedItem("entity.news.attachments", "ja-JP", "attachments", "新闻附件列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.attachments", "ja-JP", "新闻附件列表", "新闻附件列表（主子表关系）"),
             // entity.news.attachments
-            new TranslationSeedItem("entity.news.attachments", "zh-CN", "attachments", "新闻附件列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.attachments", "zh-CN", "新闻附件列表", "新闻附件列表（主子表关系）"),
             // entity.news.attachments
-            new TranslationSeedItem("entity.news.attachments", "zh-HK", "attachments", "新闻附件列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.attachments", "zh-HK", "新闻附件列表", "新闻附件列表（主子表关系）"),
+
+            // entity.news.comments
+            new TranslationSeedItem("entity.news.comments", "en-US", "新闻评论列表", "新闻评论列表（主子表关系）"),
+            // entity.news.comments
+            new TranslationSeedItem("entity.news.comments", "ja-JP", "新闻评论列表", "新闻评论列表（主子表关系）"),
+            // entity.news.comments
+            new TranslationSeedItem("entity.news.comments", "zh-CN", "新闻评论列表", "新闻评论列表（主子表关系）"),
+            // entity.news.comments
+            new TranslationSeedItem("entity.news.comments", "zh-HK", "新闻评论列表", "新闻评论列表（主子表关系）"),
+
+            // entity.news.likes
+            new TranslationSeedItem("entity.news.likes", "en-US", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
+            // entity.news.likes
+            new TranslationSeedItem("entity.news.likes", "ja-JP", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
+            // entity.news.likes
+            new TranslationSeedItem("entity.news.likes", "zh-CN", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
+            // entity.news.likes
+            new TranslationSeedItem("entity.news.likes", "zh-HK", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
+
+            // entity.news.reads
+            new TranslationSeedItem("entity.news.reads", "en-US", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
+            // entity.news.reads
+            new TranslationSeedItem("entity.news.reads", "ja-JP", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
+            // entity.news.reads
+            new TranslationSeedItem("entity.news.reads", "zh-CN", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
+            // entity.news.reads
+            new TranslationSeedItem("entity.news.reads", "zh-HK", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
+
+            // entity.news.favorites
+            new TranslationSeedItem("entity.news.favorites", "en-US", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
+            // entity.news.favorites
+            new TranslationSeedItem("entity.news.favorites", "ja-JP", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
+            // entity.news.favorites
+            new TranslationSeedItem("entity.news.favorites", "zh-CN", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
+            // entity.news.favorites
+            new TranslationSeedItem("entity.news.favorites", "zh-HK", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
+
+            // entity.news.shares
+            new TranslationSeedItem("entity.news.shares", "en-US", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
+            // entity.news.shares
+            new TranslationSeedItem("entity.news.shares", "ja-JP", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
+            // entity.news.shares
+            new TranslationSeedItem("entity.news.shares", "zh-CN", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
+            // entity.news.shares
+            new TranslationSeedItem("entity.news.shares", "zh-HK", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
         };
     }
 

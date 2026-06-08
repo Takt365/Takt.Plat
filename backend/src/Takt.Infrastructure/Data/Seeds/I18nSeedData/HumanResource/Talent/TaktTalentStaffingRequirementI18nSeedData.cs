@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentStaffingRequirement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -216,6 +216,42 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentStaffingRequirement.budgetyear", "zh-CN", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
             // entity.talentStaffingRequirement.budgetyear
             new TranslationSeedItem("entity.talentStaffingRequirement.budgetyear", "zh-HK", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
+
+            // entity.talentStaffingRequirement.dept
+            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "en-US", "申请部门", "申请部门"),
+            // entity.talentStaffingRequirement.dept
+            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "ja-JP", "申请部门", "申请部门"),
+            // entity.talentStaffingRequirement.dept
+            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "zh-CN", "申请部门", "申请部门"),
+            // entity.talentStaffingRequirement.dept
+            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "zh-HK", "申请部门", "申请部门"),
+
+            // entity.talentStaffingRequirement.post
+            new TranslationSeedItem("entity.talentStaffingRequirement.post", "en-US", "申请岗位", "申请岗位"),
+            // entity.talentStaffingRequirement.post
+            new TranslationSeedItem("entity.talentStaffingRequirement.post", "ja-JP", "申请岗位", "申请岗位"),
+            // entity.talentStaffingRequirement.post
+            new TranslationSeedItem("entity.talentStaffingRequirement.post", "zh-CN", "申请岗位", "申请岗位"),
+            // entity.talentStaffingRequirement.post
+            new TranslationSeedItem("entity.talentStaffingRequirement.post", "zh-HK", "申请岗位", "申请岗位"),
+
+            // entity.talentStaffingRequirement.replaceemployee
+            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "en-US", "替补员工", "替补员工"),
+            // entity.talentStaffingRequirement.replaceemployee
+            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "ja-JP", "替补员工", "替补员工"),
+            // entity.talentStaffingRequirement.replaceemployee
+            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "zh-CN", "替补员工", "替补员工"),
+            // entity.talentStaffingRequirement.replaceemployee
+            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "zh-HK", "替补员工", "替补员工"),
+
+            // entity.talentStaffingRequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "en-US", "招聘计划", "招聘计划"),
+            // entity.talentStaffingRequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "ja-JP", "招聘计划", "招聘计划"),
+            // entity.talentStaffingRequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "zh-CN", "招聘计划", "招聘计划"),
+            // entity.talentStaffingRequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "zh-HK", "招聘计划", "招聘计划"),
         };
     }
 

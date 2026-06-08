@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.TrainingDevelopment
 // 文件名称：TaktCareerDevelopmentsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：职业发展控制器
 // 
@@ -183,7 +183,7 @@ public class TaktCareerDevelopmentsController : TaktControllerBase
     /// <summary>
     /// 更新职业发展状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>职业发展DTO</returns>
     [TaktPermission("humanresource:trainingdevelopment:careerdevelopment:update", "更新职业发展状态")]
     [HttpPut("status")]

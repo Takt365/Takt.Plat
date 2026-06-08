@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktNumberingsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：编号规则控制器
 // 
@@ -183,7 +183,7 @@ public class TaktNumberingsController : TaktControllerBase
     /// <summary>
     /// 更新编号规则状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>编号规则DTO</returns>
     [TaktPermission("foundation:numbering:update", "更新编号规则状态")]
     [HttpPut("status")]

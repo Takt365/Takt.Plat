@@ -6,5 +6,8 @@ export default {
     columndrawer: {
       fixed: 'Fixed',
     },
-  }
+    querydrawer: {
+      fieldsetting: 'Query Fields',
+    },
+  },
 }

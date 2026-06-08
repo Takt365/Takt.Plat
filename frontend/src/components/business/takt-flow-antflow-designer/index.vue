@@ -97,7 +97,7 @@
 <script setup lang="ts">
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { useThemeStore } from '@/stores/theme'
+import { useThemeStore } from '@/stores/common/theme'
 import type { TaktFlowErrorRow } from './dialog/takt-flow-error-dialog.vue'
 import { collectFlowDesignErrors } from './config/takt-flow-design-validate'
 import { useFlowDrawer } from './config/takt-flow-use-flow-drawer'
@@ -114,7 +114,7 @@ function cloneFlowTree(tree: FlowTreeNode): FlowTreeNode {
 
 const { t } = useI18n()
 const themeStore = useThemeStore()
-const isDark = computed(() => themeStore.themeMode === 'dark')
+const isDark = computed(() => themeStore.resolvedTheme === 'dark')
 const { state: drawerState, open: openDrawer, close: closeDrawer, save: saveDrawer } = useFlowDrawer()
 
 const props = withDefaults(
@@ -213,6 +213,9 @@ function parseProcessContent(val: string): { nodes: GraphNode[]; edges: GraphEdg
       if (inner != null) parsed = inner
     }
     if (parsed == null || typeof parsed !== 'object') return { nodes: [], edges: [] }
+    if (isDesignerFlowTreeRoot(parsed)) {
+      return { nodes: [], edges: [], flowTree: parsed as FlowTreeNode }
+    }
     const obj = parsed as { nodes?: unknown[]; edges?: unknown[]; flowTree?: unknown; FlowTree?: unknown }
     const nodes = (Array.isArray(obj.nodes) ? obj.nodes : []) as GraphNode[]
     const edges = (Array.isArray(obj.edges) ? obj.edges : []) as GraphEdge[]

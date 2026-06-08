@@ -59,6 +59,7 @@ export default {
       'prussian-blue': 'Prussian Blue',
       'senelier-yellow': 'Sennelier Yellow',
       'memorial-gray': 'Memorial Gray',
+      custom: 'Custom',
     },
     layout: {
       switch: 'Switch login layout',
@@ -66,6 +67,46 @@ export default {
         left: 'Align left',
         center: 'Center',
         right: 'Align right',
+      },
+    },
+    entity: {
+      culturelist: 'language list',
+      menulist: 'menu',
+      tenantlist: 'tenant list',
+    },
+    button: {
+      ok: 'OK',
+      cancel: 'Cancel',
+      logout: 'Logout',
+      profile: 'Profile',
+    },
+  },
+  feedback: {
+    load: {
+      empty: 'No available {target}',
+      failed: 'Failed to load {target}',
+    },
+    connect: {
+      success: 'Connected successfully',
+    },
+    signalr: {
+      error: 'Real-time connection error',
+    },
+  },
+  tip: {
+    session: {
+      expired: 'Your session has expired. Please sign in again.',
+      idle: {
+        logout: 'You have been signed out due to inactivity.',
+      },
+    },
+    force: {
+      logout: 'You have been signed out by an administrator.',
+    },
+    confirm: {
+      action: {
+        title: 'Confirm {action}',
+        question: 'Are you sure you want to {action}?',
       },
     },
   },

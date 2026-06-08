@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEc 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -209,13 +209,22 @@ public class TaktEcI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ec.status", "zh-HK", "设变状态", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
 
             // entity.ec.details
-            new TranslationSeedItem("entity.ec.details", "en-US", "ecDetails", "设变明细列表"),
+            new TranslationSeedItem("entity.ec.details", "en-US", "设变明细列表", "设变明细列表"),
             // entity.ec.details
-            new TranslationSeedItem("entity.ec.details", "ja-JP", "ecDetails", "设变明细列表"),
+            new TranslationSeedItem("entity.ec.details", "ja-JP", "设变明细列表", "设变明细列表"),
             // entity.ec.details
-            new TranslationSeedItem("entity.ec.details", "zh-CN", "ecDetails", "设变明细列表"),
+            new TranslationSeedItem("entity.ec.details", "zh-CN", "设变明细列表", "设变明细列表"),
             // entity.ec.details
-            new TranslationSeedItem("entity.ec.details", "zh-HK", "ecDetails", "设变明细列表"),
+            new TranslationSeedItem("entity.ec.details", "zh-HK", "设变明细列表", "设变明细列表"),
+
+            // entity.ec.attachments
+            new TranslationSeedItem("entity.ec.attachments", "en-US", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
+            // entity.ec.attachments
+            new TranslationSeedItem("entity.ec.attachments", "ja-JP", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
+            // entity.ec.attachments
+            new TranslationSeedItem("entity.ec.attachments", "zh-CN", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
+            // entity.ec.attachments
+            new TranslationSeedItem("entity.ec.attachments", "zh-HK", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
         };
     }
 

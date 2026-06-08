@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.VisitorCenter
 // 文件名称：TaktVisitorCompanionI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVisitorCompanion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,6 +126,15 @@ public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.visitorCompanion.companionname", "zh-CN", "来访人员姓名", "来访人员姓名"),
             // entity.visitorCompanion.companionname
             new TranslationSeedItem("entity.visitorCompanion.companionname", "zh-HK", "来访人员姓名", "来访人员姓名"),
+
+            // entity.visitorCompanion.visitor
+            new TranslationSeedItem("entity.visitorCompanion.visitor", "en-US", "来访记录", "来访记录（主表）"),
+            // entity.visitorCompanion.visitor
+            new TranslationSeedItem("entity.visitorCompanion.visitor", "ja-JP", "来访记录", "来访记录（主表）"),
+            // entity.visitorCompanion.visitor
+            new TranslationSeedItem("entity.visitorCompanion.visitor", "zh-CN", "来访记录", "来访记录（主表）"),
+            // entity.visitorCompanion.visitor
+            new TranslationSeedItem("entity.visitorCompanion.visitor", "zh-HK", "来访记录", "来访记录（主表）"),
         };
     }
 

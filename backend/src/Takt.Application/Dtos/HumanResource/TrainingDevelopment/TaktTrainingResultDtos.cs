@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.TrainingDevelopment
 // 文件名称：TaktTrainingResultDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingResult 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTrainingResult 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.HumanResource.TrainingDevelopment;
 
@@ -115,7 +116,7 @@ public class TaktTrainingResultDto : TaktCompanyDtoBase
     /// <summary>
     /// 状态（1=有效 0=无效）
     /// </summary>
-    public int TrainingResultStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingResultStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -234,7 +235,7 @@ public class TaktTrainingResultQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态（1=有效 0=无效）
     /// </summary>
-    public int? TrainingResultStatus { get; set; }
+    public TaktCommonStatus? TrainingResultStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -367,7 +368,7 @@ public class TaktTrainingResultCreateDto
     /// <summary>
     /// 状态（1=有效 0=无效）
     /// </summary>
-    public int TrainingResultStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingResultStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -427,7 +428,7 @@ public class TaktTrainingResultStatusDto
     /// 状态（1=有效 0=无效）
     /// </summary>
     [Required(ErrorMessage = "状态（1=有效 0=无效）不能为空")]
-    public int TrainingResultStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingResultStatus { get; set; }
 }
 
 // ========================================
@@ -499,7 +500,7 @@ public class TaktTrainingResultTemplateDto
     /// <summary>
     /// 状态（1=有效 0=无效）
     /// </summary>
-    public int? TrainingResultStatus { get; set; }
+    public TaktCommonStatus? TrainingResultStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -588,7 +589,7 @@ public class TaktTrainingResultImportDto
     /// <summary>
     /// 状态（1=有效 0=无效）
     /// </summary>
-    public int? TrainingResultStatus { get; set; }
+    public TaktCommonStatus? TrainingResultStatus { get; set; }
 
     /// <summary>
     /// 关联工厂
@@ -703,7 +704,7 @@ public class TaktTrainingResultExportDto
     /// <summary>
     /// 状态（1=有效 0=无效）
     /// </summary>
-    public int TrainingResultStatus { get; set; } = 0;
+    public TaktCommonStatus TrainingResultStatus { get; set; }
 
     /// <summary>
     /// 关联工厂

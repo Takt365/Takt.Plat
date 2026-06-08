@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:用户菜单组件,显示头像和个人信息下拉菜单
+功能描述:用户菜单组件,显示头像和个人信息下拉菜单;引用键 common.page.button.* 与 common.tip.confirm.*
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -89,9 +89,10 @@ const handleSettings = () => {
 
 const { t } = useI18n()
 const handleLogout = () => {
+  const logoutAction = t('common.page.button.logout')
   Modal.confirm({
-    title: t('components.navigation.page.systemsetting.confirmlogout'),
-    content: t('components.navigation.page.systemsetting.logoutcontent'),
+    title: t('common.tip.confirm.action.title', { action: logoutAction }),
+    content: t('common.tip.confirm.action.question', { action: logoutAction }),
     centered: true,
     okText: t('common.page.button.ok'),
     cancelText: t('common.page.button.cancel'),

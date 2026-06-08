@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesOrderValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesOrder 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Logistics.Sales;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Logistics.Sales;
 
@@ -48,6 +49,8 @@ public class TaktSalesOrderCreateValidator : AbstractValidator<TaktSalesOrderCre
             .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
         RuleFor(x => x.SalesBy)
             .MaximumLength(50).WithMessage("销售员长度不能超过50个字符");
+        RuleFor(x => x.OrderStatus)
+            .IsInEnum().WithMessage("订单状态无效");
         RuleFor(x => x.DeliveryAddress)
             .MaximumLength(500).WithMessage("交货地址长度不能超过500个字符");
         RuleFor(x => x.ExtFieldJson)
@@ -107,6 +110,8 @@ public class TaktSalesOrderImportValidator : AbstractValidator<TaktSalesOrderImp
             .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
         RuleFor(x => x.SalesBy)
             .MaximumLength(50).WithMessage("销售员长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.SalesBy));
+        RuleFor(x => x.OrderStatus)
+            .IsInEnum().WithMessage("订单状态无效");
         RuleFor(x => x.DeliveryAddress)
             .MaximumLength(500).WithMessage("交货地址长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.DeliveryAddress));
         RuleFor(x => x.ExtFieldJson)

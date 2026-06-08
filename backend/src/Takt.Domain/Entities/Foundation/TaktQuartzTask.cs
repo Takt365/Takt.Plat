@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
@@ -49,22 +50,64 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     public string JobGroup { get; set; } = "DEFAULT";
 
     /// <summary>
-    /// Cron 表达式
+    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    [SugarColumn(ColumnName = "cron_expression", ColumnDescription = "Cron表达式", ColumnDataType = "varchar", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnName = "task_type", ColumnDescription = "任务类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public TaktQuartzTaskType TaskType { get; set; } = TaktQuartzTaskType.Assembly;
+
+    /// <summary>
+    /// 程序集名称（任务类型为程序集时使用）
+    /// </summary>
+    [SugarColumn(ColumnName = "assembly_name", ColumnDescription = "程序集名称", ColumnDataType = "nvarchar", Length = 255, IsNullable = false, DefaultValue = "''")]
+    public string AssemblyName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 任务类名（任务类型为程序集时使用）
+    /// </summary>
+    [SugarColumn(ColumnName = "class_name", ColumnDescription = "任务类名", ColumnDataType = "nvarchar", Length = 255, IsNullable = false, DefaultValue = "''")]
+    public string ClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// API 执行地址（任务类型为网络请求时使用）
+    /// </summary>
+    [SugarColumn(ColumnName = "api_url", ColumnDescription = "API执行地址", ColumnDataType = "nvarchar", Length = 255, IsNullable = true)]
+    public string? ApiUrl { get; set; }
+
+    /// <summary>
+    /// 网络请求方式（GET/POST 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "request_method", ColumnDescription = "网络请求方式", ColumnDataType = "varchar", Length = 10, IsNullable = true)]
+    public string? RequestMethod { get; set; }
+
+    /// <summary>
+    /// SQL 语句（任务类型为 SQL 时使用）
+    /// </summary>
+    [SugarColumn(ColumnName = "sql_script", ColumnDescription = "SQL语句", ColumnDataType = "text", IsNullable = true)]
+    public string? SqlScript { get; set; }
+
+    /// <summary>
+    /// 触发器类型（0=Simple 1=Cron）
+    /// </summary>
+    [SugarColumn(ColumnName = "trigger_type", ColumnDescription = "触发器类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public TaktQuartzTriggerType TriggerType { get; set; } = TaktQuartzTriggerType.Cron;
+
+    /// <summary>
+    /// Cron 表达式（触发器类型为 Cron 时使用）
+    /// </summary>
+    [SugarColumn(ColumnName = "cron_expression", ColumnDescription = "Cron表达式", ColumnDataType = "varchar", Length = 100, IsNullable = false, DefaultValue = "''")]
     public string CronExpression { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务处理器类型（DI 注册键或完整类型名）
+    /// 执行间隔时间（秒，触发器类型为 Simple 时使用）
     /// </summary>
-    [SugarColumn(ColumnName = "job_type", ColumnDescription = "任务处理器", ColumnDataType = "varchar", Length = 200, IsNullable = false)]
-    public string JobType { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "interval_seconds", ColumnDescription = "执行间隔时间（秒）", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IntervalSeconds { get; set; }
 
     /// <summary>
-    /// 任务参数 JSON
+    /// 执行参数
     /// </summary>
-    [SugarColumn(ColumnName = "job_params", ColumnDescription = "任务参数JSON", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
-    public string? JobParams { get; set; }
+    [SugarColumn(ColumnName = "execute_params", ColumnDescription = "执行参数", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    public string? ExecuteParams { get; set; }
 
     /// <summary>
     /// 任务状态
@@ -85,6 +128,18 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     public TaktQuartzMisfirePolicy MisfirePolicy { get; set; } = TaktQuartzMisfirePolicy.Default;
 
     /// <summary>
+    /// 首次执行时间（调度生效开始时间）
+    /// </summary>
+    [SugarColumn(ColumnName = "first_run_at", ColumnDescription = "首次执行时间", ColumnDataType = "datetime", IsNullable = true)]
+    public DateTime? FirstRunAt { get; set; }
+
+    /// <summary>
+    /// 执行次数
+    /// </summary>
+    [SugarColumn(ColumnName = "execute_count", ColumnDescription = "执行次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int ExecuteCount { get; set; }
+
+    /// <summary>
     /// 上次执行时间
     /// </summary>
     [SugarColumn(ColumnName = "last_run_at", ColumnDescription = "上次执行时间", ColumnDataType = "datetime", IsNullable = true)]
@@ -101,4 +156,15 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "description", ColumnDescription = "任务描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? Description { get; set; }
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 关联的任务执行日志列表（主子表关系：QuartzTaskId）
+    /// </summary>
+    [SugarColumn(IsIgnore = true)]
+    [Navigate(NavigateType.OneToMany, nameof(TaktQuartzLog.QuartzTaskId))]
+    public List<TaktQuartzLog>? QuartzLogs { get; set; }
 }

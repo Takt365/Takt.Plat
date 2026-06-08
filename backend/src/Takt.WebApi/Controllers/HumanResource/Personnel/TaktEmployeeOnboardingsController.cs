@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：入职待办控制器
 // 
@@ -183,7 +183,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// <summary>
     /// 更新入职待办状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>入职待办DTO</returns>
     [TaktPermission("humanresource:personnel:employeeonboarding:update", "更新入职待办状态")]
     [HttpPut("status")]

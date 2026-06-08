@@ -16,7 +16,7 @@
   >
     <a-input
       v-model:value="keyword"
-      :placeholder="placeholder ?? t('common.page.form.placeholder.searchkeyword')"
+      :placeholder="placeholder ?? defaultPlaceholder"
       :size="size"
       :allow-clear="allowClear"
       :max-length="maxLength"
@@ -56,6 +56,11 @@ import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+
+/** 默认占位：search + common.page.form.keyword */
+const defaultPlaceholder = computed(() =>
+  t('common.page.form.placeholder.search', { keyword: t('common.page.form.keyword') }),
+)
 
 interface Props {
   /** 是否显示 */

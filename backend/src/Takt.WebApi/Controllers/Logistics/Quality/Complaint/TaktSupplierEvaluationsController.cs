@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核控制器
 // 
@@ -183,7 +183,7 @@ public class TaktSupplierEvaluationsController : TaktControllerBase
     /// <summary>
     /// 更新供应商评价考核状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>供应商评价考核DTO</returns>
     [TaktPermission("logistics:quality:complaint:supplierevaluation:update", "更新供应商评价考核状态")]
     [HttpPut("status")]

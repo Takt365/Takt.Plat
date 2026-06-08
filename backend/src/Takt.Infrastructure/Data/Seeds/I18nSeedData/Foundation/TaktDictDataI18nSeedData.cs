@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictDataI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictData 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -172,6 +172,15 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
             // entity.dictData.cssclass
             new TranslationSeedItem("entity.dictData.cssclass", "zh-HK", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
 
+            // entity.dictData.isdefault
+            new TranslationSeedItem("entity.dictData.isdefault", "en-US", "是否默认项", "是否默认项（1=是，0=否）"),
+            // entity.dictData.isdefault
+            new TranslationSeedItem("entity.dictData.isdefault", "ja-JP", "是否默认项", "是否默认项（1=是，0=否）"),
+            // entity.dictData.isdefault
+            new TranslationSeedItem("entity.dictData.isdefault", "zh-CN", "是否默认项", "是否默认项（1=是，0=否）"),
+            // entity.dictData.isdefault
+            new TranslationSeedItem("entity.dictData.isdefault", "zh-HK", "是否默认项", "是否默认项（1=是，0=否）"),
+
             // entity.dictData.sortorder
             new TranslationSeedItem("entity.dictData.sortorder", "en-US", "排序号", "排序号"),
             // entity.dictData.sortorder
@@ -182,13 +191,13 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dictData.sortorder", "zh-HK", "排序号", "排序号"),
 
             // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "en-US", "dictType", "字典类型（多对一关联）"),
+            new TranslationSeedItem("entity.dictData.dicttype", "en-US", "字典类型", "字典类型（多对一关联）"),
             // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "ja-JP", "dictType", "字典类型（多对一关联）"),
+            new TranslationSeedItem("entity.dictData.dicttype", "ja-JP", "字典类型", "字典类型（多对一关联）"),
             // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "zh-CN", "dictType", "字典类型（多对一关联）"),
+            new TranslationSeedItem("entity.dictData.dicttype", "zh-CN", "字典类型", "字典类型（多对一关联）"),
             // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "zh-HK", "dictType", "字典类型（多对一关联）"),
+            new TranslationSeedItem("entity.dictData.dicttype", "zh-HK", "字典类型", "字典类型（多对一关联）"),
         };
     }
 

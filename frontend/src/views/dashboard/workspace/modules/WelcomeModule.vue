@@ -90,14 +90,12 @@ const displayName = ref('')
 /** 时钟定时器句柄 */
 let timer: number | null = null
 
-/** 区域与时区映射 */
+/** 区域与时区映射（与 TAKT_SUPPORTED_LOCALES 一致） */
 const localeTimeZoneMap: Record<string, string> = {
   'zh-CN': 'Asia/Shanghai',
-  'zh-TW': 'Asia/Taipei',
   'zh-HK': 'Asia/Hong_Kong',
   'en-US': 'America/New_York',
   'ja-JP': 'Asia/Tokyo',
-  'ko-KR': 'Asia/Seoul',
 }
 
 /**

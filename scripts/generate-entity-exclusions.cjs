@@ -4,7 +4,7 @@
 // 文件名称：generate-entity-exclusions.cjs
 // 创建时间：2026-05-25
 // 创建人：Takt365(Cursor AI)
-// 功能描述：代码生成脚本共享排除规则（User/Online/Message 手工 CRUD；RBAC 八表；独立服务；Vue 视图排除）
+// 功能描述：代码生成脚本共享排除规则（User/Online/Message 手工 CRUD；RBAC 八表；独立服务；Vue 视图排除；*ChangeLog 无独立视图）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -65,12 +65,13 @@ const MANUAL_STANDALONE_SERVICE_ENTITY_NAMES = new Set([
   'TaktAuth',
   'TaktRbac',
   'TaktFlowEngine',
+  'TaktFileUploadEngine',
   'TaktHolidayTheme',
   'TaktTranslationMessage',
   'TaktDataDictAll',
 ]);
 
-/** Vue 视图/表单生成排除的实体短名（手工 CRUD 或专用 UI，见 generate-vue-from-api.cjs） */
+/** Vue 视图/表单生成排除的实体短名（手工 CRUD 或专用 UI，见 generate-vue-*-from-api.cjs） */
 const EXCLUDED_VUE_ENTITY_SHORT_NAMES = new Set([
   'User',
   'Users',
@@ -204,6 +205,15 @@ function shouldExcludeStandaloneService(entityName) {
 }
 
 /**
+ * 是否为变更日志从属实体（*ChangeLog：无独立 index.vue / *-form.vue，由主实体页承载）
+ * @param {string} entityShort 实体短名（如 CostCenterChangeLog）
+ * @returns {boolean}
+ */
+function isChangeLogEntity(entityShort) {
+  return Boolean(entityShort && entityShort.endsWith('ChangeLog'));
+}
+
+/**
  * Vue 视图/表单生成脚本：是否跳过该 API 模块
  * @param {string} apiRelPath 相对 frontend/src/api 的路径（如 identity/menu.ts）
  * @param {string} entityShort 实体短名（如 Menu、FlowScheme）
@@ -212,6 +222,9 @@ function shouldExcludeStandaloneService(entityName) {
 function shouldExcludeVueGeneration(apiRelPath, entityShort) {
   const normalized = apiRelPath.replace(/\\/g, '/');
   if (EXCLUDED_VUE_ENTITY_SHORT_NAMES.has(entityShort)) {
+    return true;
+  }
+  if (isChangeLogEntity(entityShort)) {
     return true;
   }
   return EXCLUDED_VUE_API_PATH_PREFIXES.some((prefix) => normalized.startsWith(prefix));
@@ -243,4 +256,5 @@ module.exports = {
   shouldExcludeController,
   shouldExcludeStandaloneService,
   shouldExcludeVueGeneration,
+  isChangeLogEntity,
 };

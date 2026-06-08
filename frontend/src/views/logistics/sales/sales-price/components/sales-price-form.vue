@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/sales-price/components -->
 <!-- 文件名称：sales-price-form.vue -->
-<!-- 功能描述：Takt销售价格实体维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt销售价格实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -19,6 +19,7 @@
       v-model:active-key="activeTab"
       class="sales-price-form-tabs"
     >
+      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -150,11 +151,11 @@
                 :label="t('entity.salesPrice.pricestatus')"
                 name="priceStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.priceStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPrice.pricestatus') })"
+                  dict-type="sys_normal_disable"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesPrice.pricestatus') })"
                   size="small"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -168,32 +169,6 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.salesPrice.items')"
-                name="items"
-              >
-                <a-input
-                  v-model:value="formState.items"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPrice.items') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.salesPrice.changelogs')"
-                name="changeLogs"
-              >
-                <a-input
-                  v-model:value="formState.changeLogs"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPrice.changelogs') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="t('common.page.entity.extfieldjson')"
@@ -223,26 +198,245 @@
           </a-row>
         </div>
       </a-tab-pane>
-
+      <!-- 子表：salesPriceItem -->
+      <a-tab-pane
+        key="child-items"
+        :tab="t('entity.salesPriceItem._self')"
+        force-render
+      >
+        <div class="mb-2">
+          <a-button type="primary" size="small" @click="handleAddSalesPriceItemRow">
+            {{ t('common.page.button.create') }}{{ t('entity.salesPriceItem._self') }}
+          </a-button>
+        </div>
+        <a-table
+          :columns="salesPriceItemFormColumns"
+          :data-source="childSalesPriceItemRows"
+          :pagination="false"
+          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
+          size="small"
+          bordered
+        >
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.key === 'tenantCode'">
+              <a-input
+                v-model:value="record.tenantCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyCode'">
+              <a-input
+                v-model:value="record.companyCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyDefaultCulture'">
+              <a-input
+                v-model:value="record.companyDefaultCulture"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'lineNumber'">
+              <a-input-number
+                v-model:value="record.lineNumber"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceItem.linenumber') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'materialCode'">
+              <a-input
+                v-model:value="record.materialCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceItem.materialcode') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'salesUnit'">
+              <a-input
+                v-model:value="record.salesUnit"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceItem.salesunit') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'salesPrice'">
+              <a-input-number
+                v-model:value="record.salesPrice"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceItem.salesprice') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'minOrderQuantity'">
+              <a-input-number
+                v-model:value="record.minOrderQuantity"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceItem.minorderquantity') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'maxOrderQuantity'">
+              <a-input-number
+                v-model:value="record.maxOrderQuantity"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceItem.maxorderquantity') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'scales'">
+              <a-input
+                v-model:value="record.scales"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceItem.scales') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'extFieldJson'">
+              <a-input
+                v-model:value="record.extFieldJson"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === '__action'">
+              <a-button type="link" danger size="small" @click="handleRemoveSalesPriceItemRow(index)">
+                {{ t('common.page.button.delete') }}
+              </a-button>
+            </template>
+          </template>
+        </a-table>
+      </a-tab-pane>
+      <!-- 子表：salesPriceChangeLog -->
+      <a-tab-pane
+        key="child-changeLogs"
+        :tab="t('entity.salesPriceChangeLog._self')"
+        force-render
+      >
+        <div class="mb-2">
+          <a-button type="primary" size="small" @click="handleAddSalesPriceChangeLogRow">
+            {{ t('common.page.button.create') }}{{ t('entity.salesPriceChangeLog._self') }}
+          </a-button>
+        </div>
+        <a-table
+          :columns="salesPriceChangeLogFormColumns"
+          :data-source="childSalesPriceChangeLogRows"
+          :pagination="false"
+          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
+          size="small"
+          bordered
+        >
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.key === 'tenantCode'">
+              <a-input
+                v-model:value="record.tenantCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyCode'">
+              <a-input
+                v-model:value="record.companyCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyDefaultCulture'">
+              <a-input
+                v-model:value="record.companyDefaultCulture"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'changeFields'">
+              <a-input
+                v-model:value="record.changeFields"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceChangeLog.changefields') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'changeTime'">
+              <a-input
+                v-model:value="record.changeTime"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceChangeLog.changetime') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'changeBy'">
+              <a-input
+                v-model:value="record.changeBy"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceChangeLog.changeby') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'changeReason'">
+              <a-input
+                v-model:value="record.changeReason"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPriceChangeLog.changereason') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'extFieldJson'">
+              <a-input
+                v-model:value="record.extFieldJson"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'remark'">
+              <a-textarea
+                v-model:value="record.remark"
+                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                :rows="2"
+                size="small"
+              />
+            </template>
+            <template v-else-if="column.key === '__action'">
+              <a-button type="link" danger size="small" @click="handleRemoveSalesPriceChangeLogRow(index)">
+                {{ t('common.page.button.delete') }}
+              </a-button>
+            </template>
+          </template>
+        </a-table>
+      </a-tab-pane>
     </a-tabs>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * Takt销售价格实体维护表单 · 由 generate-vue-from-api 根据 types/api 生成
+ * Takt销售价格实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/sales-price/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { SalesPriceCreate } from '@/types/logistics/sales/sales-price'
+import type { SalesPriceCreate, SalesPriceItemCreate, SalesPriceItem, SalesPriceChangeLogCreate, SalesPriceChangeLog } from '@/types/logistics/sales/sales-price'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
 
+/** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
 const userStore = useUserStore()
 
 /**
@@ -261,36 +455,256 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
+/** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesPriceCode","customerCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","items","changeLogs","extFieldJson","remark"]
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesPriceCode","customerCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","extFieldJson","remark"]
 
+/** salesPriceItem 子表行（表单 Tab 内嵌） */
+const childSalesPriceItemRows = ref<Record<string, unknown>[]>([])
+/** salesPriceChangeLog 子表行（表单 Tab 内嵌） */
+const childSalesPriceChangeLogRows = ref<Record<string, unknown>[]>([])
 
+/** 子表 salesPriceItem 表单列定义 */
+const salesPriceItemFormColumns = computed(() => [
+  {
+    title: t('common.page.entity.tenantcode'),
+    dataIndex: 'tenantCode',
+    key: 'tenantCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companycode'),
+    dataIndex: 'companyCode',
+    key: 'companyCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companydefaultculture'),
+    dataIndex: 'companyDefaultCulture',
+    key: 'companyDefaultCulture',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceItem.linenumber'),
+    dataIndex: 'lineNumber',
+    key: 'lineNumber',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceItem.materialcode'),
+    dataIndex: 'materialCode',
+    key: 'materialCode',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceItem.salesunit'),
+    dataIndex: 'salesUnit',
+    key: 'salesUnit',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceItem.salesprice'),
+    dataIndex: 'salesPrice',
+    key: 'salesPrice',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceItem.minorderquantity'),
+    dataIndex: 'minOrderQuantity',
+    key: 'minOrderQuantity',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceItem.maxorderquantity'),
+    dataIndex: 'maxOrderQuantity',
+    key: 'maxOrderQuantity',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceItem.scales'),
+    dataIndex: 'scales',
+    key: 'scales',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.extfieldjson'),
+    dataIndex: 'extFieldJson',
+    key: 'extFieldJson',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.action'),
+    key: '__action',
+    width: 80,
+    fixed: 'right',
+  },
+])
+
+/** 子表 salesPriceChangeLog 表单列定义 */
+const salesPriceChangeLogFormColumns = computed(() => [
+  {
+    title: t('common.page.entity.tenantcode'),
+    dataIndex: 'tenantCode',
+    key: 'tenantCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companycode'),
+    dataIndex: 'companyCode',
+    key: 'companyCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companydefaultculture'),
+    dataIndex: 'companyDefaultCulture',
+    key: 'companyDefaultCulture',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceChangeLog.changefields'),
+    dataIndex: 'changeFields',
+    key: 'changeFields',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceChangeLog.changetime'),
+    dataIndex: 'changeTime',
+    key: 'changeTime',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceChangeLog.changeby'),
+    dataIndex: 'changeBy',
+    key: 'changeBy',
+    width: 140,
+  },
+  {
+    title: t('entity.salesPriceChangeLog.changereason'),
+    dataIndex: 'changeReason',
+    key: 'changeReason',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.extfieldjson'),
+    dataIndex: 'extFieldJson',
+    key: 'extFieldJson',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.remark'),
+    dataIndex: 'remark',
+    key: 'remark',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.action'),
+    key: '__action',
+    width: 80,
+    fixed: 'right',
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<SalesPriceCreate & { salesPriceId?: string }> | null | undefined) {
+  childSalesPriceItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
+    ...item,
+    __rowKey: item.salesPriceItemId ?? `new-${index}`,
+  }))
+  childSalesPriceChangeLogRows.value = ((val as any)?.changeLogs ?? []).map((item: Record<string, unknown>, index: number) => ({
+    ...item,
+    __rowKey: item.salesPriceChangeLogId ?? `new-${index}`,
+  }))
+}
+
+/** 表单 Tab 内新增 salesPriceItem 行 */
+function handleAddSalesPriceItemRow() {
+  childSalesPriceItemRows.value.push({
+    __rowKey: `new-${Date.now()}`,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      lineNumber: 0,
+      materialCode: '',
+      salesUnit: '',
+      salesPrice: 0,
+      minOrderQuantity: 0,
+      maxOrderQuantity: 0,
+      scales: '',
+      extFieldJson: '',
+  })
+}
+
+/** 表单 Tab 内删除 salesPriceItem 行 */
+function handleRemoveSalesPriceItemRow(index: number) {
+  childSalesPriceItemRows.value.splice(index, 1)
+}
+
+/** 表单 Tab 内新增 salesPriceChangeLog 行 */
+function handleAddSalesPriceChangeLogRow() {
+  childSalesPriceChangeLogRows.value.push({
+    __rowKey: `new-${Date.now()}`,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      changeFields: '',
+      changeTime: '',
+      changeBy: '',
+      changeReason: '',
+      extFieldJson: '',
+      remark: '',
+  })
+}
+
+/** 表单 Tab 内删除 salesPriceChangeLog 行 */
+function handleRemoveSalesPriceChangeLogRow(index: number) {
+  childSalesPriceChangeLogRows.value.splice(index, 1)
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  return {
+    ...formState,
+    items: childSalesPriceItemRows.value.map(({ __rowKey, ...rest }) => rest),
+    changeLogs: childSalesPriceChangeLogRows.value.map(({ __rowKey, ...rest }) => rest),
+  }
+}
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<SalesPriceCreate & { salesPriceId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: () => ({}),
-  loading: false
+  loading: false,
 })
 
+/** a-form 实例 ref */
 const formRef = ref()
+/** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
 
+/** 编辑态灌入 formData；新增态 reset */
 watch(
   () => props.formData,
   (val) => {
     const next = val ? { ...val } : {}
     Object.keys(formState).forEach((k) => delete formState[k])
-
+    delete (next as any).items
+    delete (next as any).changeLogs
     applyScopeDefaults(next)
     Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
   },
   { immediate: true, deep: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
@@ -301,6 +715,7 @@ watch(
   },
 )
 
+/** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   salesPriceCode: [
     {
@@ -332,19 +747,23 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ],
 }))
 
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
   return formState
 }
 
+/** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  return buildSubmitPayload()
 }
 
+/** 重置表单与子表行 */
 function resetFields() {
   formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-
+  childSalesPriceItemRows.value = []
+  childSalesPriceChangeLogRows.value = []
   activeTab.value = 'tab-0'
 }
 

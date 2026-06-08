@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictTypeI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictType 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,6 +109,15 @@ public class TaktDictTypeI18nSeedData : ITaktSeedDataCoordinator
             // entity.dictType.name
             new TranslationSeedItem("entity.dictType.name", "zh-HK", "字典类型名称", "字典类型名称（如：订单状态、用户类型）"),
 
+            // entity.dictType.datasource
+            new TranslationSeedItem("entity.dictType.datasource", "en-US", "数据源", "数据源（0=表数据，1=SQL脚本）"),
+            // entity.dictType.datasource
+            new TranslationSeedItem("entity.dictType.datasource", "ja-JP", "数据源", "数据源（0=表数据，1=SQL脚本）"),
+            // entity.dictType.datasource
+            new TranslationSeedItem("entity.dictType.datasource", "zh-CN", "数据源", "数据源（0=表数据，1=SQL脚本）"),
+            // entity.dictType.datasource
+            new TranslationSeedItem("entity.dictType.datasource", "zh-HK", "数据源", "数据源（0=表数据，1=SQL脚本）"),
+
             // entity.dictType.dictscript
             new TranslationSeedItem("entity.dictType.dictscript", "en-US", "动态字典SQL脚本", "动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder"),
             // entity.dictType.dictscript
@@ -127,6 +136,15 @@ public class TaktDictTypeI18nSeedData : ITaktSeedDataCoordinator
             // entity.dictType.sortorder
             new TranslationSeedItem("entity.dictType.sortorder", "zh-HK", "排序号", "排序号"),
 
+            // entity.dictType.isbuiltin
+            new TranslationSeedItem("entity.dictType.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段"),
+            // entity.dictType.isbuiltin
+            new TranslationSeedItem("entity.dictType.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段"),
+            // entity.dictType.isbuiltin
+            new TranslationSeedItem("entity.dictType.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段"),
+            // entity.dictType.isbuiltin
+            new TranslationSeedItem("entity.dictType.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段"),
+
             // entity.dictType.dictstatus
             new TranslationSeedItem("entity.dictType.dictstatus", "en-US", "状态", "状态（1=启用，0=禁用）"),
             // entity.dictType.dictstatus
@@ -137,13 +155,13 @@ public class TaktDictTypeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dictType.dictstatus", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
 
             // entity.dictType.dictdatalist
-            new TranslationSeedItem("entity.dictType.dictdatalist", "en-US", "dictDataList", "字典数据列表（一对多关联）"),
+            new TranslationSeedItem("entity.dictType.dictdatalist", "en-US", "字典数据列表", "字典数据列表（一对多关联）"),
             // entity.dictType.dictdatalist
-            new TranslationSeedItem("entity.dictType.dictdatalist", "ja-JP", "dictDataList", "字典数据列表（一对多关联）"),
+            new TranslationSeedItem("entity.dictType.dictdatalist", "ja-JP", "字典数据列表", "字典数据列表（一对多关联）"),
             // entity.dictType.dictdatalist
-            new TranslationSeedItem("entity.dictType.dictdatalist", "zh-CN", "dictDataList", "字典数据列表（一对多关联）"),
+            new TranslationSeedItem("entity.dictType.dictdatalist", "zh-CN", "字典数据列表", "字典数据列表（一对多关联）"),
             // entity.dictType.dictdatalist
-            new TranslationSeedItem("entity.dictType.dictdatalist", "zh-HK", "dictDataList", "字典数据列表（一对多关联）"),
+            new TranslationSeedItem("entity.dictType.dictdatalist", "zh-HK", "字典数据列表", "字典数据列表（一对多关联）"),
         };
     }
 

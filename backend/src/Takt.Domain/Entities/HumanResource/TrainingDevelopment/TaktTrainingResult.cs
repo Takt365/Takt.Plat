@@ -11,6 +11,7 @@
 // ========================================
 
 using Takt.Domain.Entities;
+using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.TrainingDevelopment;
 
@@ -99,7 +100,7 @@ public class TaktTrainingResult : TaktCompanyEntityBase
     /// 状态（1=有效 0=无效）
     /// </summary>
     [SugarColumn(ColumnName = "training_result_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int TrainingResultStatus { get; set; } = 1;
+    public TaktCommonStatus TrainingResultStatus { get; set; } = TaktCommonStatus.Enabled;
     /// <summary>
     /// 关联工厂
     /// </summary>

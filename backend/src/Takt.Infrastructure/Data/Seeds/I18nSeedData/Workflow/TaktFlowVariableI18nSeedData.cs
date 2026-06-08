@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowVariableI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowVariable 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,6 +153,15 @@ public class TaktFlowVariableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowVariable.doublevalue", "zh-CN", "双精度值", "双精度值"),
             // entity.flowVariable.doublevalue
             new TranslationSeedItem("entity.flowVariable.doublevalue", "zh-HK", "双精度值", "双精度值"),
+
+            // entity.flowVariable.instance
+            new TranslationSeedItem("entity.flowVariable.instance", "en-US", "所属流程实例", "所属流程实例"),
+            // entity.flowVariable.instance
+            new TranslationSeedItem("entity.flowVariable.instance", "ja-JP", "所属流程实例", "所属流程实例"),
+            // entity.flowVariable.instance
+            new TranslationSeedItem("entity.flowVariable.instance", "zh-CN", "所属流程实例", "所属流程实例"),
+            // entity.flowVariable.instance
+            new TranslationSeedItem("entity.flowVariable.instance", "zh-HK", "所属流程实例", "所属流程实例"),
         };
     }
 

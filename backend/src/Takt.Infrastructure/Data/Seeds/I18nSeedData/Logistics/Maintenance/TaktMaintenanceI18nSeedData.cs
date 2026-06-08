@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktMaintenanceI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaintenance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -297,6 +297,15 @@ public class TaktMaintenanceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.maintenance.acceptedat", "zh-CN", "验收时间", "验收时间"),
             // entity.maintenance.acceptedat
             new TranslationSeedItem("entity.maintenance.acceptedat", "zh-HK", "验收时间", "验收时间"),
+
+            // entity.maintenance.equipment
+            new TranslationSeedItem("entity.maintenance.equipment", "en-US", "设备", "设备（主表）"),
+            // entity.maintenance.equipment
+            new TranslationSeedItem("entity.maintenance.equipment", "ja-JP", "设备", "设备（主表）"),
+            // entity.maintenance.equipment
+            new TranslationSeedItem("entity.maintenance.equipment", "zh-CN", "设备", "设备（主表）"),
+            // entity.maintenance.equipment
+            new TranslationSeedItem("entity.maintenance.equipment", "zh-HK", "设备", "设备（主表）"),
         };
     }
 

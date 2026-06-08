@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/performance
 // 文件名称：scheme-metric.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/performance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -114,7 +114,7 @@ export function deleteSchemeMetricBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新绩效方案指标状态
- * @param {SchemeMetricStatus} dto 状态DTO
+ * @param {SchemeMetricStatus} dto 状态 DTO
  * @returns {Promise<SchemeMetric>} 绩效方案指标DTO
  */
 export function updateSchemeMetricStatus(dto: SchemeMetricStatus): Promise<SchemeMetric> {
@@ -177,11 +177,11 @@ export function getSchemeMetricTemplate(sheetName?: string, templateName?: strin
 
 /**
  * 导入绩效方案指标
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importSchemeMetric(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importSchemeMetric(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

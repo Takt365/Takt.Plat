@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsSchedulesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程主控制器
 // 
@@ -183,7 +183,7 @@ public class TaktApsSchedulesController : TaktControllerBase
     /// <summary>
     /// 更新APS排程主状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>APS排程主DTO</returns>
     [TaktPermission("logistics:manufacturing:scheduling:apsschedule:update", "更新APS排程主状态")]
     [HttpPut("status")]

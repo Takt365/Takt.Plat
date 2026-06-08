@@ -7,5 +7,8 @@ export default {
     columndrawer: {
       fixed: '固定',
     },
-  }
+    querydrawer: {
+      fieldsetting: '查询字段',
+    },
+  },
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketChangeLogI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -144,6 +144,15 @@ public class TaktTicketChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketChangeLog.changereason", "zh-CN", "变更原因", "变更原因或备注"),
             // entity.ticketChangeLog.changereason
             new TranslationSeedItem("entity.ticketChangeLog.changereason", "zh-HK", "变更原因", "变更原因或备注"),
+
+            // entity.ticketChangeLog.ticket
+            new TranslationSeedItem("entity.ticketChangeLog.ticket", "en-US", "工单", "工单（主表）"),
+            // entity.ticketChangeLog.ticket
+            new TranslationSeedItem("entity.ticketChangeLog.ticket", "ja-JP", "工单", "工单（主表）"),
+            // entity.ticketChangeLog.ticket
+            new TranslationSeedItem("entity.ticketChangeLog.ticket", "zh-CN", "工单", "工单（主表）"),
+            // entity.ticketChangeLog.ticket
+            new TranslationSeedItem("entity.ticketChangeLog.ticket", "zh-HK", "工单", "工单（主表）"),
         };
     }
 

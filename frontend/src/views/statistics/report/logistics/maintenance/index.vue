@@ -54,15 +54,17 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      :columns="columns"
+      entity-scope="company"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'maintenanceId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
       :row-key="getMaintenanceId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
@@ -98,10 +100,15 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-statistics-report-logistics-maintenance'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('equipmentId')">
       <a-form-item :label="t('entity.maintenance.equipmentid')">
         <a-input
           v-model:value="advancedQueryForm.equipmentId"
@@ -109,6 +116,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('equipmentCode')">
       <a-form-item :label="t('entity.maintenance.equipmentcode')">
         <a-input
           v-model:value="advancedQueryForm.equipmentCode"
@@ -116,20 +125,26 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('lineNumber')">
       <a-form-item :label="t('entity.maintenance.linenumber')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.linenumber') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceType')">
       <a-form-item :label="t('entity.maintenance.type')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.maintenanceType"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.type') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceCompany')">
       <a-form-item :label="t('entity.maintenance.company')">
         <a-input
           v-model:value="advancedQueryForm.maintenanceCompany"
@@ -137,6 +152,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceTechnician')">
       <a-form-item :label="t('entity.maintenance.technician')">
         <a-input
           v-model:value="advancedQueryForm.maintenanceTechnician"
@@ -144,26 +161,268 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceDateStart')">
+      <a-form-item :label="t('entity.maintenance.datestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.maintenanceDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.datestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceDateEnd')">
+      <a-form-item :label="t('entity.maintenance.dateend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.maintenanceDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.dateend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceStartTimeStart')">
+      <a-form-item :label="t('entity.maintenance.starttimestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.maintenanceStartTimeStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.starttimestart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceStartTimeEnd')">
+      <a-form-item :label="t('entity.maintenance.starttimeend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.maintenanceStartTimeEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.starttimeend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceEndTimeStart')">
+      <a-form-item :label="t('entity.maintenance.endtimestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.maintenanceEndTimeStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.endtimestart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceEndTimeEnd')">
+      <a-form-item :label="t('entity.maintenance.endtimeend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.maintenanceEndTimeEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.endtimeend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceContent')">
       <a-form-item :label="t('entity.maintenance.content')">
-        <a-input
+        <a-textarea
           v-model:value="advancedQueryForm.maintenanceContent"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.content') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.maintenance.content') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('faultDescription')">
       <a-form-item :label="t('entity.maintenance.faultdescription')">
-        <a-input
+        <a-textarea
           v-model:value="advancedQueryForm.faultDescription"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.faultdescription') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.maintenance.faultdescription') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('solution')">
+      <a-form-item :label="t('entity.maintenance.solution')">
+        <a-input
+          v-model:value="advancedQueryForm.solution"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.solution') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('usedParts')">
+      <a-form-item :label="t('entity.maintenance.usedparts')">
+        <a-input
+          v-model:value="advancedQueryForm.usedParts"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.usedparts') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceCost')">
+      <a-form-item :label="t('entity.maintenance.cost')">
+        <a-input-number
+          v-model:value="advancedQueryForm.maintenanceCost"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.cost') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceResult')">
+      <a-form-item :label="t('entity.maintenance.result')">
+        <a-input-number
+          v-model:value="advancedQueryForm.maintenanceResult"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.result') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceStatus')">
+      <a-form-item :label="t('entity.maintenance.status')">
+        <a-input-number
+          v-model:value="advancedQueryForm.maintenanceStatus"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.status') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('nextMaintenanceDateStart')">
+      <a-form-item :label="t('entity.maintenance.nextmaintenancedatestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.nextMaintenanceDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.nextmaintenancedatestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('nextMaintenanceDateEnd')">
+      <a-form-item :label="t('entity.maintenance.nextmaintenancedateend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.nextMaintenanceDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.nextmaintenancedateend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceCycleDays')">
+      <a-form-item :label="t('entity.maintenance.cycledays')">
+        <a-input-number
+          v-model:value="advancedQueryForm.maintenanceCycleDays"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.cycledays') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceDocuments')">
+      <a-form-item :label="t('entity.maintenance.documents')">
+        <a-input
+          v-model:value="advancedQueryForm.maintenanceDocuments"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.documents') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maintenanceImages')">
+      <a-form-item :label="t('entity.maintenance.images')">
+        <a-input
+          v-model:value="advancedQueryForm.maintenanceImages"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.images') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('acceptedSummary')">
+      <a-form-item :label="t('entity.maintenance.acceptedsummary')">
+        <a-input
+          v-model:value="advancedQueryForm.acceptedSummary"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.acceptedsummary') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('acceptedBy')">
+      <a-form-item :label="t('entity.maintenance.acceptedby')">
+        <a-input
+          v-model:value="advancedQueryForm.acceptedBy"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.acceptedby') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('acceptedAtStart')">
+      <a-form-item :label="t('entity.maintenance.acceptedatstart')">
+        <a-input
+          v-model:value="advancedQueryForm.acceptedAtStart"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.acceptedatstart') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('acceptedAtEnd')">
+      <a-form-item :label="t('entity.maintenance.acceptedatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.acceptedAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.acceptedatend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extFieldJson')">
+      <a-form-item :label="t('common.page.entity.extfieldjson')">
+        <a-input
+          v-model:value="advancedQueryForm.extFieldJson"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.maintenance._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.maintenance._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -188,6 +447,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'maintenanceId'"
       :action-column-key="'action'"
+      entity-scope="company"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -203,7 +464,6 @@ import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import MaintenanceForm from './components/maintenance-form.vue'
 import { getMaintenanceList, getMaintenanceById, createMaintenance, updateMaintenance, deleteMaintenanceById, deleteMaintenanceBatch, getMaintenanceTemplate, importMaintenance, exportMaintenance } from '@/api/logistics/maintenance/maintenance'
@@ -241,9 +501,69 @@ const advancedQueryForm = ref({
   maintenanceType: undefined as number | undefined,
   maintenanceCompany: '',
   maintenanceTechnician: '',
+  maintenanceDateStart: '',
+  maintenanceDateEnd: '',
+  maintenanceStartTimeStart: '',
+  maintenanceStartTimeEnd: '',
+  maintenanceEndTimeStart: '',
+  maintenanceEndTimeEnd: '',
   maintenanceContent: '',
   faultDescription: '',
+  solution: '',
+  usedParts: '',
+  maintenanceCost: undefined as number | undefined,
+  maintenanceResult: undefined as number | undefined,
+  maintenanceStatus: undefined as number | undefined,
+  nextMaintenanceDateStart: '',
+  nextMaintenanceDateEnd: '',
+  maintenanceCycleDays: undefined as number | undefined,
+  maintenanceDocuments: '',
+  maintenanceImages: '',
+  acceptedSummary: '',
+  acceptedBy: '',
+  acceptedAtStart: '',
+  acceptedAtEnd: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
 })
+/** 高级查询字段元数据（显隐配置） */
+const queryFieldsMeta = computed(() => [
+  { key: 'equipmentId', label: t('entity.maintenance.equipmentid') },
+  { key: 'equipmentCode', label: t('entity.maintenance.equipmentcode') },
+  { key: 'lineNumber', label: t('entity.maintenance.linenumber') },
+  { key: 'maintenanceType', label: t('entity.maintenance.type') },
+  { key: 'maintenanceCompany', label: t('entity.maintenance.company') },
+  { key: 'maintenanceTechnician', label: t('entity.maintenance.technician') },
+  { key: 'maintenanceDateStart', label: t('entity.maintenance.datestart') },
+  { key: 'maintenanceDateEnd', label: t('entity.maintenance.dateend') },
+  { key: 'maintenanceStartTimeStart', label: t('entity.maintenance.starttimestart') },
+  { key: 'maintenanceStartTimeEnd', label: t('entity.maintenance.starttimeend') },
+  { key: 'maintenanceEndTimeStart', label: t('entity.maintenance.endtimestart') },
+  { key: 'maintenanceEndTimeEnd', label: t('entity.maintenance.endtimeend') },
+  { key: 'maintenanceContent', label: t('entity.maintenance.content') },
+  { key: 'faultDescription', label: t('entity.maintenance.faultdescription') },
+  { key: 'solution', label: t('entity.maintenance.solution') },
+  { key: 'usedParts', label: t('entity.maintenance.usedparts') },
+  { key: 'maintenanceCost', label: t('entity.maintenance.cost') },
+  { key: 'maintenanceResult', label: t('entity.maintenance.result') },
+  { key: 'maintenanceStatus', label: t('entity.maintenance.status') },
+  { key: 'nextMaintenanceDateStart', label: t('entity.maintenance.nextmaintenancedatestart') },
+  { key: 'nextMaintenanceDateEnd', label: t('entity.maintenance.nextmaintenancedateend') },
+  { key: 'maintenanceCycleDays', label: t('entity.maintenance.cycledays') },
+  { key: 'maintenanceDocuments', label: t('entity.maintenance.documents') },
+  { key: 'maintenanceImages', label: t('entity.maintenance.images') },
+  { key: 'acceptedSummary', label: t('entity.maintenance.acceptedsummary') },
+  { key: 'acceptedBy', label: t('entity.maintenance.acceptedby') },
+  { key: 'acceptedAtStart', label: t('entity.maintenance.acceptedatstart') },
+  { key: 'acceptedAtEnd', label: t('entity.maintenance.acceptedatend') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+const visibleQueryFieldKeys = ref<string[]>([])
 const columnSettingVisible = ref(false)
 const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
@@ -379,6 +699,123 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'faultDescription') ?? ''
   },
+  {
+    title: t('entity.maintenance.solution'),
+    dataIndex: 'solution',
+    key: 'solution',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'solution') ?? ''
+  },
+  {
+    title: t('entity.maintenance.usedparts'),
+    dataIndex: 'usedParts',
+    key: 'usedParts',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'usedParts') ?? ''
+  },
+  {
+    title: t('entity.maintenance.cost'),
+    dataIndex: 'maintenanceCost',
+    key: 'maintenanceCost',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'maintenanceCost') ?? ''
+  },
+  {
+    title: t('entity.maintenance.result'),
+    dataIndex: 'maintenanceResult',
+    key: 'maintenanceResult',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'maintenanceResult') ?? ''
+  },
+  {
+    title: t('entity.maintenance.status'),
+    dataIndex: 'maintenanceStatus',
+    key: 'maintenanceStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'maintenanceStatus') ?? ''
+  },
+  {
+    title: t('entity.maintenance.nextmaintenancedate'),
+    dataIndex: 'nextMaintenanceDate',
+    key: 'nextMaintenanceDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'nextMaintenanceDate') ?? ''
+  },
+  {
+    title: t('entity.maintenance.cycledays'),
+    dataIndex: 'maintenanceCycleDays',
+    key: 'maintenanceCycleDays',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'maintenanceCycleDays') ?? ''
+  },
+  {
+    title: t('entity.maintenance.documents'),
+    dataIndex: 'maintenanceDocuments',
+    key: 'maintenanceDocuments',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'maintenanceDocuments') ?? ''
+  },
+  {
+    title: t('entity.maintenance.images'),
+    dataIndex: 'maintenanceImages',
+    key: 'maintenanceImages',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'maintenanceImages') ?? ''
+  },
+  {
+    title: t('entity.maintenance.acceptedsummary'),
+    dataIndex: 'acceptedSummary',
+    key: 'acceptedSummary',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'acceptedSummary') ?? ''
+  },
+  {
+    title: t('entity.maintenance.acceptedby'),
+    dataIndex: 'acceptedBy',
+    key: 'acceptedBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'acceptedBy') ?? ''
+  },
+  {
+    title: t('entity.maintenance.acceptedat'),
+    dataIndex: 'acceptedAt',
+    key: 'acceptedAt',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'acceptedAt') ?? ''
+  },
+  {
+    title: t('entity.maintenance.equipment'),
+    dataIndex: 'equipment',
+    key: 'equipment',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaintenanceField(record, 'equipment') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -403,18 +840,6 @@ const columns = computed<TableColumnsType>(() => [
 
 const getMaintenanceId = (record: any): string => record?.[entityIdName] ?? ''
 const getMaintenanceField = (record: any, field: string): any => record?.[field]
-
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
-})
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -491,20 +916,44 @@ function handleReset() {
   maintenanceType: undefined as number | undefined,
   maintenanceCompany: '',
   maintenanceTechnician: '',
+  maintenanceDateStart: '',
+  maintenanceDateEnd: '',
+  maintenanceStartTimeStart: '',
+  maintenanceStartTimeEnd: '',
+  maintenanceEndTimeStart: '',
+  maintenanceEndTimeEnd: '',
   maintenanceContent: '',
   faultDescription: '',
+  solution: '',
+  usedParts: '',
+  maintenanceCost: undefined as number | undefined,
+  maintenanceResult: undefined as number | undefined,
+  maintenanceStatus: undefined as number | undefined,
+  nextMaintenanceDateStart: '',
+  nextMaintenanceDateEnd: '',
+  maintenanceCycleDays: undefined as number | undefined,
+  maintenanceDocuments: '',
+  maintenanceImages: '',
+  acceptedSummary: '',
+  acceptedBy: '',
+  acceptedAtStart: '',
+  acceptedAtEnd: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
   currentPage.value = 1
   loadData()
 }
 
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.maintenance._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.maintenance._self') })
   formData.value = {}
   formVisible.value = true
 }
 function handleEdit(record: Maintenance) {
-  formTitle.value = t('common.page.button.edit') + t('entity.maintenance._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.maintenance._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -654,8 +1103,32 @@ function handleAdvancedQueryReset() {
   maintenanceType: undefined as number | undefined,
   maintenanceCompany: '',
   maintenanceTechnician: '',
+  maintenanceDateStart: '',
+  maintenanceDateEnd: '',
+  maintenanceStartTimeStart: '',
+  maintenanceStartTimeEnd: '',
+  maintenanceEndTimeStart: '',
+  maintenanceEndTimeEnd: '',
   maintenanceContent: '',
   faultDescription: '',
+  solution: '',
+  usedParts: '',
+  maintenanceCost: undefined as number | undefined,
+  maintenanceResult: undefined as number | undefined,
+  maintenanceStatus: undefined as number | undefined,
+  nextMaintenanceDateStart: '',
+  nextMaintenanceDateEnd: '',
+  maintenanceCycleDays: undefined as number | undefined,
+  maintenanceDocuments: '',
+  maintenanceImages: '',
+  acceptedSummary: '',
+  acceptedBy: '',
+  acceptedAtStart: '',
+  acceptedAtEnd: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
 }
 
@@ -668,7 +1141,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
 function handleRefresh() {

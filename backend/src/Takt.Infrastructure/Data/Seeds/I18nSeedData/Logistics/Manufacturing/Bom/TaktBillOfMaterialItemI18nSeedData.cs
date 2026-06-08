@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -234,6 +234,24 @@ public class TaktBillOfMaterialItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billOfMaterialItem.isphantom", "zh-CN", "是否虚拟件", "是否虚拟件（0=否，1=是，phantom_flag）"),
             // entity.billOfMaterialItem.isphantom
             new TranslationSeedItem("entity.billOfMaterialItem.isphantom", "zh-HK", "是否虚拟件", "是否虚拟件（0=否，1=是，phantom_flag）"),
+
+            // entity.billOfMaterialItem.bom
+            new TranslationSeedItem("entity.billOfMaterialItem.bom", "en-US", "物料清单", "物料清单（BOM头）"),
+            // entity.billOfMaterialItem.bom
+            new TranslationSeedItem("entity.billOfMaterialItem.bom", "ja-JP", "物料清单", "物料清单（BOM头）"),
+            // entity.billOfMaterialItem.bom
+            new TranslationSeedItem("entity.billOfMaterialItem.bom", "zh-CN", "物料清单", "物料清单（BOM头）"),
+            // entity.billOfMaterialItem.bom
+            new TranslationSeedItem("entity.billOfMaterialItem.bom", "zh-HK", "物料清单", "物料清单（BOM头）"),
+
+            // entity.billOfMaterialItem.material
+            new TranslationSeedItem("entity.billOfMaterialItem.material", "en-US", "子项物料", "子项物料（工厂物料主数据）"),
+            // entity.billOfMaterialItem.material
+            new TranslationSeedItem("entity.billOfMaterialItem.material", "ja-JP", "子项物料", "子项物料（工厂物料主数据）"),
+            // entity.billOfMaterialItem.material
+            new TranslationSeedItem("entity.billOfMaterialItem.material", "zh-CN", "子项物料", "子项物料（工厂物料主数据）"),
+            // entity.billOfMaterialItem.material
+            new TranslationSeedItem("entity.billOfMaterialItem.material", "zh-HK", "子项物料", "子项物料（工厂物料主数据）"),
         };
     }
 

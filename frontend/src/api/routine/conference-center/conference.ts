@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/conference-center
 // 文件名称：conference.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteConferenceBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新会议中心状态
- * @param {ConferenceStatus} dto 状态DTO
+ * @param {ConferenceStatus} dto 状态 DTO（TaktConferenceStatus 枚举）
  * @returns {Promise<Conference>} 会议中心DTO
  */
 export function updateConferenceStatus(dto: ConferenceStatus): Promise<Conference> {
@@ -163,11 +163,11 @@ export function getConferenceTemplate(sheetName?: string, templateName?: string)
 
 /**
  * 导入会议中心
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importConference(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importConference(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

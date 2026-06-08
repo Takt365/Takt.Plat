@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Accounting.Controlling;
@@ -79,7 +80,7 @@ public class TaktCostCenter : TaktCompanyEntityBase
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "cost_center_status", ColumnDescription = "成本中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int CostCenterStatus { get; set; } = 1;
+    public TaktCommonStatus CostCenterStatus { get; set; } = TaktCommonStatus.Enabled;
     /// <summary>
     /// 生效日期
     /// </summary>

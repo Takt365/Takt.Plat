@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNoticeDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcNotice 生成，请按需审阅）
 // 
@@ -22,11 +22,11 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 // ========================================
 
 /// <summary>
-/// 工程变更通知单实体（EC Notice），用于将设变（ECN）通知到相关部门和人员，追踪通知状态和反馈
+/// 工程变更通知单实体（EC Notice）。FlowInstanceId 由业务在发起流程后写入；流程引擎通过 BusinessKey/BusinessType 与本模块对接。
 /// 对应前端 TaktEcNoticeDto
-/// 继承 TaktCompanyDtoBase
+/// 继承 TaktApprovalDtoBase
 /// </summary>
-public class TaktEcNoticeDto : TaktCompanyDtoBase
+public class TaktEcNoticeDto : TaktApprovalDtoBase
 {
     /// <summary>
     /// EcNoticeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -103,39 +103,13 @@ public class TaktEcNoticeDto : TaktCompanyDtoBase
     public int EcNoticeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 确认人ID（序列化为string以避免Javascript精度问题）
+    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcNoticeConfirmerId { get; set; }
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
-    /// 确认人姓名
-    /// </summary>
-    public string? EcNoticeConfirmerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 确认日期
-    /// </summary>
-    public DateTime? EcNoticeConfirmDate { get; set; }
-
-    /// <summary>
-    /// 确认意见/反馈
-    /// </summary>
-    public string? EcNoticeConfirmComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 要求反馈截止日期
-    /// </summary>
-    public DateTime? EcNoticeRequireFeedbackDate { get; set; }
-
-    /// <summary>
-    /// 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; }
-
-    /// <summary>
-    /// 流程实例名称（填充字段）
+    /// 流程实例 名称（填充字段）
     /// </summary>
     public string? FlowInstanceName { get; set; }
 
@@ -235,46 +209,47 @@ public class TaktEcNoticeQueryDto : TaktPagedQuery
     public int? EcNoticeStatus { get; set; }
 
     /// <summary>
-    /// 确认人ID（序列化为string以避免Javascript精度问题）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcNoticeConfirmerId { get; set; }
-
-    /// <summary>
-    /// 确认人姓名
-    /// </summary>
-    public string? EcNoticeConfirmerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 确认日期（范围查询-开始）
-    /// </summary>
-    public DateTime? EcNoticeConfirmDateStart { get; set; }
-
-    /// <summary>
-    /// 确认日期（范围查询-结束）
-    /// </summary>
-    public DateTime? EcNoticeConfirmDateEnd { get; set; }
-
-    /// <summary>
-    /// 确认意见/反馈
-    /// </summary>
-    public string? EcNoticeConfirmComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 要求反馈截止日期（范围查询-开始）
-    /// </summary>
-    public DateTime? EcNoticeRequireFeedbackDateStart { get; set; }
-
-    /// <summary>
-    /// 要求反馈截止日期（范围查询-结束）
-    /// </summary>
-    public DateTime? EcNoticeRequireFeedbackDateEnd { get; set; }
-
-    /// <summary>
-    /// 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
+    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
+
+    /// <summary>
+    /// 审批状态（TaktApprovalStatus）
+    /// </summary>
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
+
+    /// <summary>
+    /// 发起人ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? InitiatorId { get; set; }
+
+    /// <summary>
+    /// 发起时间（范围查询-开始）
+    /// </summary>
+    public DateTime? InitiatedAtStart { get; set; }
+
+    /// <summary>
+    /// 发起时间（范围查询-结束）
+    /// </summary>
+    public DateTime? InitiatedAtEnd { get; set; }
+
+    /// <summary>
+    /// 最终审批人ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApprovedBy { get; set; }
+
+    /// <summary>
+    /// 最终审批时间（范围查询-开始）
+    /// </summary>
+    public DateTime? ApprovedAtStart { get; set; }
+
+    /// <summary>
+    /// 最终审批时间（范围查询-结束）
+    /// </summary>
+    public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -387,36 +362,10 @@ public class TaktEcNoticeCreateDto
     public int EcNoticeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 确认人ID（序列化为string以避免Javascript精度问题）
+    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcNoticeConfirmerId { get; set; }
-
-    /// <summary>
-    /// 确认人姓名
-    /// </summary>
-    public string? EcNoticeConfirmerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 确认日期
-    /// </summary>
-    public DateTime? EcNoticeConfirmDate { get; set; }
-
-    /// <summary>
-    /// 确认意见/反馈
-    /// </summary>
-    public string? EcNoticeConfirmComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 要求反馈截止日期
-    /// </summary>
-    public DateTime? EcNoticeRequireFeedbackDate { get; set; }
-
-    /// <summary>
-    /// 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; }
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -551,10 +500,10 @@ public class TaktEcNoticeTemplateDto
     public int? EcNoticeStatus { get; set; }
 
     /// <summary>
-    /// 确认人ID（序列化为string以避免Javascript精度问题）
+    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcNoticeConfirmerId { get; set; }
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -646,10 +595,10 @@ public class TaktEcNoticeImportDto
     public int? EcNoticeStatus { get; set; }
 
     /// <summary>
-    /// 确认人ID（序列化为string以避免Javascript精度问题）
+    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcNoticeConfirmerId { get; set; }
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -678,11 +627,6 @@ public class TaktEcNoticeExportDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcNoticeId { get; set; }
-
-    /// <summary>
-    /// 公司代码
-    /// </summary>
-    public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -747,36 +691,10 @@ public class TaktEcNoticeExportDto
     public int EcNoticeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 确认人ID（序列化为string以避免Javascript精度问题）
+    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcNoticeConfirmerId { get; set; }
-
-    /// <summary>
-    /// 确认人姓名
-    /// </summary>
-    public string? EcNoticeConfirmerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 确认日期
-    /// </summary>
-    public DateTime? EcNoticeConfirmDate { get; set; }
-
-    /// <summary>
-    /// 确认意见/反馈
-    /// </summary>
-    public string? EcNoticeConfirmComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 要求反馈截止日期
-    /// </summary>
-    public DateTime? EcNoticeRequireFeedbackDate { get; set; }
-
-    /// <summary>
-    /// 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; }
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

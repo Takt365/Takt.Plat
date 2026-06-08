@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/training-development
 // 文件名称：training-plan.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/training-development 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteTrainingPlanBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新培训计划状态
- * @param {TrainingPlanStatus} dto 状态DTO
+ * @param {TrainingPlanStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<TrainingPlan>} 培训计划DTO
  */
 export function updateTrainingPlanStatus(dto: TrainingPlanStatus): Promise<TrainingPlan> {
@@ -163,11 +163,11 @@ export function getTrainingPlanTemplate(sheetName?: string, templateName?: strin
 
 /**
  * 导入培训计划
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importTrainingPlan(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importTrainingPlan(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

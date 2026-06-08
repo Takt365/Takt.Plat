@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Operation
 // 文件名称：TaktSamplingSchemesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：抽样方案控制器
 // 
@@ -183,7 +183,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// <summary>
     /// 更新抽样方案状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>抽样方案DTO</returns>
     [TaktPermission("logistics:quality:operation:samplingscheme:update", "更新抽样方案状态")]
     [HttpPut("status")]

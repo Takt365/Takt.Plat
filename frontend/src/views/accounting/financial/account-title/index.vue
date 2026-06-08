@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/accounting/financial/account-title -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：会计科目实体管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->
+<!-- 功能描述：会计科目实体树表管理页（左树右表），由 generate-vue-tree-from-api.cjs 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,74 +10,114 @@
 <template>
   <div class="accounting-financial-account-title">
     <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
+    <div class="accounting-financial-account-title-query-row">
+      <TaktTreeLeftQueryBar
+        v-model="treeQueryKeyword"
+        @search="handleTreeQuerySearch"
+      />
+      <TaktTreeRightQueryBar
+        v-model="queryKeyword"
+        :placeholder="tableSearchPlaceholder"
+        :loading="loading"
+        @search="handleSearch"
+        @reset="handleReset"
+      />
+    </div>
 
     <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="accounting:financial:accounttitle:create"
-      update-permission="accounting:financial:accounttitle:update"
-      delete-permission="accounting:financial:accounttitle:delete"
-      import-permission="accounting:financial:accounttitle:import"
-      export-permission="accounting:financial:accounttitle:export"
-      :show-create="true"
-      :show-update="true"
-      :show-delete="true"
-      :show-import="true"
-      :show-export="true"
-      :show-expand="false"
-      :show-advanced-query="true"
-      :show-column-setting="true"
-      :show-fullscreen="true"
-      :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
-      :update-disabled="updateDisabled"
-      :update-loading="loading"
-      :delete-disabled="deleteDisabled"
-      :delete-loading="loading"
-      :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
-      @delete="handleDelete"
-      @import="handleImport"
-      @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
-      @column-setting="handleColumnSetting"
-      @refresh="handleRefresh"
-    />
+    <div class="accounting-financial-account-title-toolbar-row">
+      <TaktTreeLeftToolsBar
+        v-model:expanded="treeExpanded"
+        :loading="loading"
+        @search="loadFullAccountTitleTree"
+      />
+      <TaktTreeRightToolsBar
+        create-permission="accounting:financial:accounttitle:create"
+        update-permission="accounting:financial:accounttitle:update"
+        delete-permission="accounting:financial:accounttitle:delete"
+        import-permission="accounting:financial:accounttitle:import"
+        export-permission="accounting:financial:accounttitle:export"
+        :show-create="true"
+        :show-update="true"
+        :show-delete="true"
+        :show-import="true"
+        :show-export="true"
+        :show-advanced-query="true"
+        :show-column-setting="true"
+        :show-fullscreen="true"
+        :show-refresh="true"
+        :show-expand="true"
+        :update-disabled="!selectedRow"
+        :delete-disabled="!selectedRow && selectedRows.length === 0"
+        :create-loading="loading"
+        :update-loading="loading"
+        :delete-loading="loading"
+        :refresh-loading="loading"
+        :expanded="tableExpanded"
+        @create="handleCreate"
+        @update="handleUpdate"
+        @delete="handleDelete"
+        @import="handleImport"
+        @export="handleExport"
+        @advanced-query="handleAdvancedQuery"
+        @column-setting="handleColumnSetting"
+        @refresh="handleRefresh"
+        @update:expanded="(v: boolean) => (tableExpanded = v)"
+      />
+    </div>
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="displayColumns"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getAccountTitleId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
-
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
-    >
-
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    <!-- 左树右表 -->
+    <div class="accounting-financial-account-title-tree-table-wrap">
+      <TaktTreeLeftTable
+        v-model:expanded-keys="treeExpandedKeys"
+        v-model:selected-keys="selectedTreeKeys"
+        :tree-data="filteredTreeData"
+        :tree-field-names="{ title: 'title', key: 'key', children: 'children' }"
+        :tree-width-ratio="0.2"
+        :loading="loading"
+        :virtual="false"
+        :draggable="true"
+        @tree-select="handleTreeSelect"
+        @tree-drop="handleTreeDrop"
+      />
+      <TaktTreeRightTable
+        entity-scope="company"
+        v-model:current="tableCurrentPage"
+        v-model:page-size="tablePageSize"
+        :columns="columns"
+        :visible-column-keys="visibleColumnKeys"
+        :id-column-key="'accountTitleId'"
+        :action-column-key="'action'"
+        table-mode="tree"
+        :data-source="paginatedFlatTableRows"
+        :loading="loading"
+        :row-key="getAccountTitleId"
+        :stripe="true"
+        :row-selection="rowSelection"
+        :show-pagination="true"
+        :total="tableFlatTotal"
+        @change="handleTableChange"
+        @resize-column="handleResizeColumn"
+      >
+        <!-- 自定义列渲染 -->
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'accountTitleId'">
+            <span
+              class="inline-block"
+              :style="{ paddingLeft: `${(record._treeDepth ?? 0) * 16}px` }"
+            >
+              {{ getAccountTitleField(record, 'accountTitleId') }}
+            </span>
+          </template>
+          <template v-if="column.key === 'titleStatus'">
+            <TaktDictTag
+              :value="getAccountTitleDictValue(record, 'titleStatus')"
+              dict-type="sys_normal_disable"
+            />
+          </template>
+        </template>
+      </TaktTreeRightTable>
+    </div>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
@@ -98,10 +138,15 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-accounting-financial-account-title'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('titleCode')">
       <a-form-item :label="t('entity.accountTitle.titlecode')">
         <a-input
           v-model:value="advancedQueryForm.titleCode"
@@ -109,6 +154,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('titleName')">
       <a-form-item :label="t('entity.accountTitle.titlename')">
         <a-input
           v-model:value="advancedQueryForm.titleName"
@@ -116,6 +163,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('parentId')">
       <a-form-item :label="t('entity.accountTitle.parentid')">
         <a-input
           v-model:value="advancedQueryForm.parentId"
@@ -123,47 +172,213 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('titleType')">
       <a-form-item :label="t('entity.accountTitle.titletype')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.titleType"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titletype') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('balanceDirection')">
       <a-form-item :label="t('entity.accountTitle.balancedirection')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.balanceDirection"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.balancedirection') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('titleLevel')">
       <a-form-item :label="t('entity.accountTitle.titlelevel')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.titleLevel"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlelevel') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isLeaf')">
       <a-form-item :label="t('entity.accountTitle.isleaf')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.isLeaf"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isleaf') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isAuxiliary')">
       <a-form-item :label="t('entity.accountTitle.isauxiliary')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.isAuxiliary"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isauxiliary') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('auxiliaryType')">
+      <a-form-item :label="t('entity.accountTitle.auxiliarytype')">
+        <a-input-number
+          v-model:value="advancedQueryForm.auxiliaryType"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.auxiliarytype') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isQuantity')">
+      <a-form-item :label="t('entity.accountTitle.isquantity')">
+        <a-input-number
+          v-model:value="advancedQueryForm.isQuantity"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isquantity') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isCurrency')">
+      <a-form-item :label="t('entity.accountTitle.iscurrency')">
+        <a-input-number
+          v-model:value="advancedQueryForm.isCurrency"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.iscurrency') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isCash')">
+      <a-form-item :label="t('entity.accountTitle.iscash')">
+        <a-input-number
+          v-model:value="advancedQueryForm.isCash"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.iscash') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isBank')">
+      <a-form-item :label="t('entity.accountTitle.isbank')">
+        <a-input-number
+          v-model:value="advancedQueryForm.isBank"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isbank') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('relatedPlant')">
+      <a-form-item :label="t('entity.accountTitle.relatedplant')">
+        <a-input
+          v-model:value="advancedQueryForm.relatedPlant"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.relatedplant') })"
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('titleStatus')">
+      <a-form-item :label="t('entity.accountTitle.titlestatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.titleStatus"
+          dict-type="sys_normal_disable"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.titlestatus') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validFromStart')">
+      <a-form-item :label="t('entity.accountTitle.validfromstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validFromStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validfromstart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validFromEnd')">
+      <a-form-item :label="t('entity.accountTitle.validfromend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validFromEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validfromend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validToStart')">
+      <a-form-item :label="t('entity.accountTitle.validtostart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validToStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validtostart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validToEnd')">
+      <a-form-item :label="t('entity.accountTitle.validtoend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validToEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validtoend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('sortOrder')">
+      <a-form-item :label="t('entity.accountTitle.sortorder')">
+        <a-input-number
+          v-model:value="advancedQueryForm.sortOrder"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.sortorder') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extFieldJson')">
+      <a-form-item :label="t('common.page.entity.extfieldjson')">
+        <a-input
+          v-model:value="advancedQueryForm.extFieldJson"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.accountTitle._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.accountTitle._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -183,11 +398,13 @@
     </TaktModal>
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
+      entity-scope="company"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       :id-column-key="'accountTitleId'"
       :action-column-key="'action'"
+      table-mode="tree"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -196,44 +413,79 @@
 
 <script setup lang="ts">
 /**
- * 会计科目实体管理页 · 由 generate-vue-from-api 根据 types/api 生成
+ * 会计科目实体树表管理页 · ParentId 左树右表（参照 dept/index.vue）
  * @module views/accounting/financial/account-title
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, watchEffect, onMounted } from 'vue'
+import type { TreeDataItem } from 'ant-design-vue/es/tree'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import AccountTitleForm from './components/account-title-form.vue'
-import { getAccountTitleList, getAccountTitleById, createAccountTitle, updateAccountTitle, deleteAccountTitleById, deleteAccountTitleBatch, getAccountTitleTemplate, importAccountTitle, exportAccountTitle } from '@/api/accounting/financial/account-title'
-import type { AccountTitle, AccountTitleQuery, AccountTitleCreate, AccountTitleUpdate } from '@/types/accounting/financial/account-title'
+import { getAccountTitleTree, getAccountTitleById, createAccountTitle, updateAccountTitle, deleteAccountTitleById, deleteAccountTitleBatch, getAccountTitleTemplate, importAccountTitle, exportAccountTitle } from '@/api/accounting/financial/account-title'
+import type { AccountTitle, AccountTitleTree, AccountTitleUpdate } from '@/types/accounting/financial/account-title'
+import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { useUserStore } from '@/stores/identity/user'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
+/** 用户上下文（companyDefaultCulture 等） */
+const userStore = useUserStore()
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktAccountTitle')
-const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.accountTitle._self') })
+/** 右侧树表快捷查询占位文案 */
+const tableSearchPlaceholder = computed(() =>
+  t('common.page.form.placeholder.search', {
+    keyword: [t('entity.accountTitle.id')].join(' / '),
+  })
 )
 
+/** 左侧树关键字（客户端过滤，不重复请求 API） */
+const treeQueryKeyword = ref('')
+/** 右侧树表快捷查询关键字 */
 const queryKeyword = ref('')
+/** 左侧树工具栏「展开/收缩」状态 */
+const treeExpanded = ref(false)
+/** 左侧树当前展开的节点 key 列表 */
+const treeExpandedKeys = ref<(string | number)[]>([])
+/** 右侧表格展开状态（预留） */
+const tableExpanded = ref(false)
+/** 右侧拍平列表当前页码 */
+const tableCurrentPage = ref(1)
+/** 右侧拍平列表每页条数 */
+const tablePageSize = ref(20)
+/** 页面 loading（树加载、提交、导出等） */
 const loading = ref(false)
-const dataSource = ref<AccountTitle[]>([])
-const currentPage = ref(1)
-const pageSize = ref(20)
-const total = ref(0)
+/** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
+const fullTableTree = ref<Record<string, unknown>[]>([])
+/** 左侧 a-tree 绑定数据（由 fullTableTree 映射 title/key） */
+const entityTreeData = ref<TreeDataItem[]>([])
+/** 左侧树当前选中的节点 key 列表 */
+const selectedTreeKeys = ref<(string | number)[]>([])
+/** 工具栏单选时当前行（编辑/删除） */
 const selectedRow = ref<AccountTitle | null>(null)
+/** 表格多选行 */
 const selectedRows = ref<AccountTitle[]>([])
+/** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
+/** 新增/编辑弹窗是否打开 */
 const formVisible = ref(false)
+/** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
+/** 传入内嵌表单的编辑数据 */
 const formData = ref<Partial<AccountTitle>>({})
+/** 表单提交 loading */
 const formLoading = ref(false)
+/** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/** 高级查询表单模型 */
 const advancedQueryForm = ref({
   titleCode: '',
   titleName: '',
@@ -243,24 +495,417 @@ const advancedQueryForm = ref({
   titleLevel: undefined as number | undefined,
   isLeaf: undefined as number | undefined,
   isAuxiliary: undefined as number | undefined,
+  auxiliaryType: undefined as number | undefined,
+  isQuantity: undefined as number | undefined,
+  isCurrency: undefined as number | undefined,
+  isCash: undefined as number | undefined,
+  isBank: undefined as number | undefined,
+  relatedPlant: '',
+  titleStatus: undefined as number | undefined,
+  validFromStart: '',
+  validFromEnd: '',
+  validToStart: '',
+  validToEnd: '',
+  sortOrder: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
 })
-const columnSettingVisible = ref(false)
+/** 高级查询字段元数据（列显隐配置） */
+const queryFieldsMeta = computed(() => [
+  { key: 'titleCode', label: t('entity.accountTitle.titlecode') },
+  { key: 'titleName', label: t('entity.accountTitle.titlename') },
+  { key: 'parentId', label: t('entity.accountTitle.parentid') },
+  { key: 'titleType', label: t('entity.accountTitle.titletype') },
+  { key: 'balanceDirection', label: t('entity.accountTitle.balancedirection') },
+  { key: 'titleLevel', label: t('entity.accountTitle.titlelevel') },
+  { key: 'isLeaf', label: t('entity.accountTitle.isleaf') },
+  { key: 'isAuxiliary', label: t('entity.accountTitle.isauxiliary') },
+  { key: 'auxiliaryType', label: t('entity.accountTitle.auxiliarytype') },
+  { key: 'isQuantity', label: t('entity.accountTitle.isquantity') },
+  { key: 'isCurrency', label: t('entity.accountTitle.iscurrency') },
+  { key: 'isCash', label: t('entity.accountTitle.iscash') },
+  { key: 'isBank', label: t('entity.accountTitle.isbank') },
+  { key: 'relatedPlant', label: t('entity.accountTitle.relatedplant') },
+  { key: 'titleStatus', label: t('entity.accountTitle.titlestatus') },
+  { key: 'validFromStart', label: t('entity.accountTitle.validfromstart') },
+  { key: 'validFromEnd', label: t('entity.accountTitle.validfromend') },
+  { key: 'validToStart', label: t('entity.accountTitle.validtostart') },
+  { key: 'validToEnd', label: t('entity.accountTitle.validtoend') },
+  { key: 'sortOrder', label: t('entity.accountTitle.sortorder') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+/** 高级查询当前可见字段 key */
+const visibleQueryFieldKeys = ref<string[]>([])
+/** 导入对话框是否打开 */
 const importVisible = ref(false)
+/** 列设置抽屉是否打开 */
+const columnSettingVisible = ref(false)
+/** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
+/** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'accountTitleId'
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
+/** 树节点标题字段名（左侧树 title 与缩进列） */
+const treeTitleField = 'accountTitleId'
 
-onMounted(() => {
-  loadData()
+/** 解析树节点 key（与列表 accountTitleId、左侧树 key 一致） */
+function resolveAccountTitleNodeKey(node: Record<string, unknown>): string {
+  const raw = node.key ?? node.accountTitleId ?? node.id
+  return raw == null ? '' : String(raw)
+}
+
+/**
+ * 将接口树转为树表节点（保留 children，供 getSubtree 与左侧树共用 key）
+ * @param nodes 实体树 DTO 列表
+ */
+function accountTitleTreeToTableNodes(nodes: AccountTitleTree[]): Array<Record<string, unknown>> {
+  if (!nodes?.length) return []
+  return nodes.map((node) => {
+    const childNodes = node.children?.length ? accountTitleTreeToTableNodes(node.children) : []
+    return {
+      ...node,
+      key: String(node.accountTitleId ?? ''),
+      children: childNodes.length > 0 ? childNodes : undefined,
+    }
+  })
+}
+
+/** 将 fullTableTree 转为左侧 a-tree（与右侧表共用 key，保证点选联动） */
+function mapFullTableTreeToTreeData(nodes: Array<Record<string, unknown>>): TreeDataItem[] {
+  if (!nodes?.length) return []
+  return nodes.map((n) => {
+    const title = String(n[treeTitleField] ?? n.title ?? '')
+    const key = resolveAccountTitleNodeKey(n)
+    const children = n.children as Array<Record<string, unknown>> | undefined
+    if (!children?.length) return { title, key }
+    const mapped = mapFullTableTreeToTreeData(children)
+    return mapped.length > 0 ? { title, key, children: mapped } : { title, key }
+  })
+}
+
+/**
+ * 按 key 查找树节点（左侧树与右侧表共用 fullTableTree）
+ * @param nodes 树节点列表
+ * @param key 节点 key
+ */
+function findTreeNodeByKey(
+  nodes: Array<Record<string, unknown>>,
+  key: string | number,
+): Record<string, unknown> | null {
+  const k = String(key)
+  for (const node of nodes) {
+    if (resolveAccountTitleNodeKey(node) === k) return node
+    const children = node.children as Array<Record<string, unknown>> | undefined
+    if (children?.length) {
+      const found = findTreeNodeByKey(children, key)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+/** 从树中取以某 key 为根的子树（返回单元素数组，便于作为表格根） */
+function getSubtree(nodes: Array<Record<string, unknown>>, key: string | number): Array<Record<string, unknown>> {
+  const node = findTreeNodeByKey(nodes, key)
+  return node ? [node] : []
+}
+
+/**
+ * 按关键字过滤左侧树：保留 title 匹配的节点及其祖先、子孙
+ * @param nodes 树节点
+ * @param keyword 关键字
+ */
+function filterTreeByKeyword(nodes: TreeDataItem[], keyword: string): TreeDataItem[] {
+  const k = (keyword ?? '').trim().toLowerCase()
+  if (!k) return nodes
+  /** 递归过滤子树 */
+  function filter(nodes: TreeDataItem[]): TreeDataItem[] {
+    if (!nodes?.length) return []
+    return nodes
+      .map((node) => {
+        const title = String(node.title ?? '').toLowerCase()
+        const matched = title.includes(k)
+        const filteredChildren = node.children?.length ? filter(node.children) : undefined
+        const hasMatchInChildren = filteredChildren != null && filteredChildren.length > 0
+        if (matched || hasMatchInChildren) {
+          if (filteredChildren != null && filteredChildren.length > 0) {
+            return { ...node, children: filteredChildren } as TreeDataItem
+          }
+          const { children: _omitChildren, ...rest } = node
+          return rest as TreeDataItem
+        }
+        return null
+      })
+      .filter(Boolean) as TreeDataItem[]
+  }
+  return filter(nodes)
+}
+
+/** 左侧树绑定数据（按 treeQueryKeyword 客户端过滤） */
+const filteredTreeData = computed(() =>
+  filterTreeByKeyword(entityTreeData.value, treeQueryKeyword.value)
+)
+
+/** 从树数据中收集所有有子节点的 key（用于左侧树展开全部） */
+function collectTreeExpandableKeys(nodes: Array<Record<string, unknown>>): (string | number)[] {
+  if (!nodes?.length) return []
+  const keys: (string | number)[] = []
+  for (const node of nodes) {
+    const rawKey = node.key ?? node.accountTitleId ?? node.id
+    if (rawKey == null) continue
+    const key: string | number =
+      typeof rawKey === 'string' || typeof rawKey === 'number' ? rawKey : String(rawKey)
+    const children = (node.children as Array<Record<string, unknown>> | undefined) ?? []
+    if (children.length > 0) {
+      keys.push(key)
+      keys.push(...collectTreeExpandableKeys(children))
+    }
+  }
+  return keys
+}
+
+/**
+ * 深度优先拍平树表行（附带 _treeDepth 供缩进列渲染）
+ * @param nodes 树表节点
+ * @param depth 当前层级
+ */
+function flattenAccountTitleTableRows(nodes: Array<Record<string, unknown>>, depth = 0): Array<Record<string, unknown>> {
+  if (!nodes?.length) return []
+  const rows: Array<Record<string, unknown>> = []
+  for (const node of nodes) {
+    const childList = node.children as Array<Record<string, unknown>> | undefined
+    const { children: _children, ...rest } = node
+    rows.push({ ...rest, _treeDepth: depth })
+    if (childList?.length) {
+      rows.push(...flattenAccountTitleTableRows(childList, depth + 1))
+    }
+  }
+  return rows
+}
+
+/** 右侧树表数据：选中左侧节点时显示该节点（含子级）；未选中时显示整棵树 */
+const tableTreeData = computed(() => {
+  const tree = fullTableTree.value
+  if (!tree?.length) return []
+  const keys = selectedTreeKeys.value
+  if (keys.length > 0) {
+    const activeKey = keys[keys.length - 1]
+    if (activeKey === undefined) return tree
+    const sub = getSubtree(tree, activeKey)
+    if (sub.length > 0) return sub
+  }
+  return tree
 })
 
+/** 右侧查询条件过滤（仅影响表格展示，不重建左侧树） */
+function matchesAccountTitleRightQuery(record: Record<string, unknown>): boolean {
+  const kw = queryKeyword.value.trim()
+  if (kw) {
+    const k = kw.toLowerCase()
+    if (!String(record.accountTitleId ?? '').toLowerCase().includes(k)) return false
+  }
+  if (advancedQueryForm.value.titleCode && !String(record.titleCode ?? '').includes(String(advancedQueryForm.value.titleCode))) return false
+  if (advancedQueryForm.value.titleName && !String(record.titleName ?? '').includes(String(advancedQueryForm.value.titleName))) return false
+  if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
+  if (advancedQueryForm.value.titleType !== undefined && record.titleType !== advancedQueryForm.value.titleType) return false
+  if (advancedQueryForm.value.balanceDirection !== undefined && record.balanceDirection !== advancedQueryForm.value.balanceDirection) return false
+  if (advancedQueryForm.value.titleLevel !== undefined && record.titleLevel !== advancedQueryForm.value.titleLevel) return false
+  if (advancedQueryForm.value.isLeaf !== undefined && record.isLeaf !== advancedQueryForm.value.isLeaf) return false
+  if (advancedQueryForm.value.isAuxiliary !== undefined && record.isAuxiliary !== advancedQueryForm.value.isAuxiliary) return false
+  if (advancedQueryForm.value.auxiliaryType !== undefined && record.auxiliaryType !== advancedQueryForm.value.auxiliaryType) return false
+  if (advancedQueryForm.value.isQuantity !== undefined && record.isQuantity !== advancedQueryForm.value.isQuantity) return false
+  if (advancedQueryForm.value.isCurrency !== undefined && record.isCurrency !== advancedQueryForm.value.isCurrency) return false
+  if (advancedQueryForm.value.isCash !== undefined && record.isCash !== advancedQueryForm.value.isCash) return false
+  if (advancedQueryForm.value.isBank !== undefined && record.isBank !== advancedQueryForm.value.isBank) return false
+  if (advancedQueryForm.value.relatedPlant && !String(record.relatedPlant ?? '').includes(String(advancedQueryForm.value.relatedPlant))) return false
+  if (advancedQueryForm.value.titleStatus !== undefined && record.titleStatus !== advancedQueryForm.value.titleStatus) return false
+  if (advancedQueryForm.value.validFromStart && !String(record.validFromStart ?? '').includes(String(advancedQueryForm.value.validFromStart))) return false
+  if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
+  if (advancedQueryForm.value.validToStart && !String(record.validToStart ?? '').includes(String(advancedQueryForm.value.validToStart))) return false
+  if (advancedQueryForm.value.validToEnd && !String(record.validToEnd ?? '').includes(String(advancedQueryForm.value.validToEnd))) return false
+  if (advancedQueryForm.value.sortOrder !== undefined && record.sortOrder !== advancedQueryForm.value.sortOrder) return false
+  if (advancedQueryForm.value.createdAtStart && !String(record.createdAtStart ?? '').includes(String(advancedQueryForm.value.createdAtStart))) return false
+  if (advancedQueryForm.value.createdAtEnd && !String(record.createdAtEnd ?? '').includes(String(advancedQueryForm.value.createdAtEnd))) return false
+  if (advancedQueryForm.value.extFieldJson && !String(record.extFieldJson ?? '').includes(String(advancedQueryForm.value.extFieldJson))) return false
+  if (advancedQueryForm.value.remark && !String(record.remark ?? '').includes(String(advancedQueryForm.value.remark))) return false
+  return true
+}
 
+/** 右侧拍平后的全部行（先左侧子树，再右侧查询过滤） */
+const tableFlatRows = computed(() =>
+  flattenAccountTitleTableRows(tableTreeData.value).filter(matchesAccountTitleRightQuery)
+)
+/** 右侧拍平总行数（分页 total） */
+const tableFlatTotal = computed(() => tableFlatRows.value.length)
+/** 当前页行数据 */
+const paginatedFlatTableRows = computed(() => {
+  const start = (tableCurrentPage.value - 1) * tablePageSize.value
+  return tableFlatRows.value.slice(start, start + tablePageSize.value)
+})
 
+/** 左侧选中节点或查询变化时，右侧拍平列表重置到第一页 */
+watch(tableTreeData, () => {
+  tableCurrentPage.value = 1
+})
 
+/** 左侧树选中：重置右侧分页到第一页 */
+const handleTreeSelect = (selectedKeys: (string | number)[]) => {
+  selectedTreeKeys.value = selectedKeys
+  tableCurrentPage.value = 1
+}
 
+/**
+ * 将详情 DTO 映射为更新载荷（树拖拽改 parentId/sortOrder 等场景）
+ * @param accountTitle 实体详情
+ * @param overrides 需覆盖的 parentId、sortOrder
+ * @returns {AccountTitleUpdate} 更新载荷
+ */
+function buildAccountTitleUpdateDto(
+  accountTitle: AccountTitle,
+  overrides: Pick<AccountTitleUpdate, 'parentId' | 'sortOrder'>,
+): AccountTitleUpdate {
+  return {
+    accountTitleId: String(accountTitle.accountTitleId),
+    tenantCode: accountTitle.tenantCode,
+    companyCode: accountTitle.companyCode,
+    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    titleCode: accountTitle.titleCode,
+    titleName: accountTitle.titleName,
+    parentId: overrides.parentId,
+    titleType: accountTitle.titleType,
+    balanceDirection: accountTitle.balanceDirection,
+    titleLevel: accountTitle.titleLevel,
+    isAuxiliary: accountTitle.isAuxiliary,
+    auxiliaryType: accountTitle.auxiliaryType,
+    isQuantity: accountTitle.isQuantity,
+    isCurrency: accountTitle.isCurrency,
+    isCash: accountTitle.isCash,
+    isBank: accountTitle.isBank,
+    relatedPlant: accountTitle.relatedPlant,
+    titleStatus: accountTitle.titleStatus,
+    validFrom: accountTitle.validFrom,
+    validTo: accountTitle.validTo,
+    sortOrder: overrides.sortOrder,
+    extFieldJson: accountTitle.extFieldJson,
+    remark: accountTitle.remark,
+  }
+}
 
-const columns = computed<TableColumnsType>(() => [
+/** 从树结构中查找节点 key 的父级 key 与在同级中的序号（用于 parentId / sortOrder） */
+function findParentAndOrderNum(
+  tree: Array<Record<string, unknown>>,
+  targetKey: string | number,
+  parentKey: string = '0',
+): { parentId: string; sortOrder: number } | null {
+  const keyStr = String(targetKey)
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i]
+    const k = String(node?.key ?? node?.accountTitleId ?? '')
+    if (k === keyStr) {
+      return { parentId: parentKey, sortOrder: i }
+    }
+    const children = (node?.children as Array<Record<string, unknown>> | undefined) ?? []
+    if (children.length) {
+      const found = findParentAndOrderNum(children, targetKey, k)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+/**
+ * 左侧树拖拽完成后更新 parentId 与 sortOrder
+ * @param payload 新树数据与被拖拽节点 key
+ */
+const handleTreeDrop = async (payload: TreeDropPayload) => {
+  const { newTreeData, dragKey } = payload
+  const pos = findParentAndOrderNum(newTreeData, dragKey)
+  if (!pos) return
+  try {
+    loading.value = true
+    entityTreeData.value = newTreeData
+    const full = await getAccountTitleById(String(dragKey))
+    await updateAccountTitle(String(dragKey), buildAccountTitleUpdateDto(full, {
+      parentId: pos.parentId,
+      sortOrder: pos.sortOrder,
+    }))
+    message.success(t('common.feedback.updated', { target: t('entity.accountTitle._self') }))
+    await loadData()
+  } catch (error: unknown) {
+    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.accountTitle._self') })))
+    await loadFullAccountTitleTree().catch(() => undefined)
+  } finally {
+    loading.value = false
+  }
+}
+
+/** 左侧树关键字搜索（客户端过滤，不重复请求接口） */
+const handleTreeQuerySearch = () => {
+  if (treeExpanded.value) {
+    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
+  }
+}
+
+/** 左侧展开/收缩：工具栏展开状态与树展开 key 联动 */
+watch(treeExpanded, (expanded) => {
+  if (expanded) {
+    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
+  } else {
+    treeExpandedKeys.value = []
+  }
+})
+
+/** 过滤后的左侧树变化且处于展开态时，同步 expandable keys */
+watch(filteredTreeData, () => {
+  if (treeExpanded.value) {
+    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
+  }
+})
+
+/** 表格行记录（实体 DTO 或 ant-design-vue 模板 loose record） */
+type AccountTitleRowRecord = AccountTitle | Record<string, unknown>
+
+/** 表格 row-key（优先实体主键字段） */
+const getAccountTitleId = (record: AccountTitleRowRecord): string => {
+  if (record != null && 'accountTitleId' in record && (record as Record<string, unknown>).accountTitleId != null) {
+    return String((record as Record<string, unknown>).accountTitleId)
+  }
+  if (record != null && 'id' in record && (record as Record<string, unknown>).id != null) {
+    return String((record as Record<string, unknown>).id)
+  }
+  return ''
+}
+/** 读取行字段值 */
+const getAccountTitleField = (record: AccountTitleRowRecord, field: string): unknown =>
+  (record as Record<string, unknown>)?.[field]
+/** 供 TaktDictTag 等组件使用的标量字典值 */
+const getAccountTitleDictValue = (
+  record: AccountTitleRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 从异常对象提取用户可见消息 */
+const getErrorMessage = (error: unknown, fallback: string): string => {
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    const messageText = (error as { message?: unknown }).message
+    if (typeof messageText === 'string' && messageText.trim()) return messageText
+  }
+  return fallback
+}
+
+/** 表格列定义（i18n 随 locale 变化） */
+const columns = ref<TableColumnsType>([])
+watchEffect(() => {
+  columns.value = [
   {
     title: t('common.page.entity.id'),
     dataIndex: 'accountTitleId',
@@ -269,7 +914,8 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'accountTitleId') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) =>
+      getAccountTitleField(record, 'accountTitleId') ?? getAccountTitleField(record, 'id') ?? '',
   },
   {
     title: t('entity.accountTitle.titlecode'),
@@ -278,7 +924,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'titleCode') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleCode') ?? ''
   },
   {
     title: t('entity.accountTitle.titlename'),
@@ -287,7 +933,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'titleName') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleName') ?? ''
   },
   {
     title: t('entity.accountTitle.parentid'),
@@ -296,7 +942,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'parentId') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'parentId') ?? ''
   },
   {
     title: t('entity.accountTitle.titletype'),
@@ -305,7 +951,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'titleType') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleType') ?? ''
   },
   {
     title: t('entity.accountTitle.balancedirection'),
@@ -314,7 +960,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'balanceDirection') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'balanceDirection') ?? ''
   },
   {
     title: t('entity.accountTitle.titlelevel'),
@@ -323,7 +969,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'titleLevel') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleLevel') ?? ''
   },
   {
     title: t('entity.accountTitle.isleaf'),
@@ -332,7 +978,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'isLeaf') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isLeaf') ?? ''
   },
   {
     title: t('entity.accountTitle.isauxiliary'),
@@ -341,7 +987,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'isAuxiliary') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isAuxiliary') ?? ''
   },
   {
     title: t('entity.accountTitle.auxiliarytype'),
@@ -350,7 +996,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'auxiliaryType') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'auxiliaryType') ?? ''
   },
   {
     title: t('entity.accountTitle.isquantity'),
@@ -359,7 +1005,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'isQuantity') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isQuantity') ?? ''
   },
   {
     title: t('entity.accountTitle.iscurrency'),
@@ -368,7 +1014,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'isCurrency') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isCurrency') ?? ''
   },
   {
     title: t('entity.accountTitle.iscash'),
@@ -377,9 +1023,53 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAccountTitleField(record, 'isCash') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isCash') ?? ''
   },
-  CreateActionColumn({
+  {
+    title: t('entity.accountTitle.isbank'),
+    dataIndex: 'isBank',
+    key: 'isBank',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isBank') ?? ''
+  },
+  {
+    title: t('entity.accountTitle.relatedplant'),
+    dataIndex: 'relatedPlant',
+    key: 'relatedPlant',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'relatedPlant') ?? ''
+  },
+  {
+    title: t('entity.accountTitle.titlestatus'),
+    dataIndex: 'titleStatus',
+    key: 'titleStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.accountTitle.validfrom'),
+    dataIndex: 'validFrom',
+    key: 'validFrom',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'validFrom') ?? ''
+  },
+  {
+    title: t('entity.accountTitle.validto'),
+    dataIndex: 'validTo',
+    key: 'validTo',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'validTo') ?? ''
+  },
+  CreateActionColumn<AccountTitle>({
     actions: [
       {
         key: 'update',
@@ -397,92 +1087,63 @@ const columns = computed<TableColumnsType>(() => [
         permission: 'accounting:financial:accounttitle:delete',
         onClick: (record: AccountTitle) => handleDeleteOne(record)
       }
-    ]
-  })
-])
-
-const getAccountTitleId = (record: any): string => record?.[entityIdName] ?? ''
-const getAccountTitleField = (record: any, field: string): any => record?.[field]
-
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
+    ],
+  }),
+  ]
 })
 
+/** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: AccountTitle[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
-    selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    selectedRow.value = rows.length === 1 ? rows[0] : null
   },
   onSelect: (record: AccountTitle, selected: boolean) => {
-    if (selected) {
-      selectedRow.value = record
-    } else if (getAccountTitleId(selectedRow.value) === getAccountTitleId(record)) {
-      selectedRow.value = null
-    }
+    if (selected) selectedRow.value = record
+    else if (selectedRow.value && getAccountTitleId(selectedRow.value) === getAccountTitleId(record)) selectedRow.value = null
   },
   onSelectAll: (selected: boolean, selectedRowsData: AccountTitle[]) => {
-    selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
-  }
+    selectedRow.value = selected && selectedRowsData.length === 1 ? selectedRowsData[0] : null
+  },
 }))
 
-const onClickRow = (record: AccountTitle) => ({
-  onClick: () => {
-    const key = getAccountTitleId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getAccountTitleId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
+/** 加载全量树（左侧树 + 右侧树表共用数据源） */
+async function loadFullAccountTitleTree() {
+  const res = await getAccountTitleTree('0', true)
+  const resAny = res as { data?: AccountTitleTree[]; Data?: AccountTitleTree[] }
+  const trees: AccountTitleTree[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
+  const tableNodes = accountTitleTreeToTableNodes(trees)
+  fullTableTree.value = tableNodes
+  entityTreeData.value = mapFullTableTreeToTreeData(tableNodes)
+  if (treeExpanded.value) {
+    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
   }
-})
+}
 
+/** 初始化或增删改后刷新全量树 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: AccountTitleQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getAccountTitleList(params)
-    dataSource.value = res.data ?? []
-    total.value = res.total ?? 0
-  } catch (error: any) {
-    logger.error('[AccountTitle] 加载数据失败', { error })
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    dataSource.value = []
-    total.value = 0
+    await loadFullAccountTitleTree()
+  } catch (error: unknown) {
+    logger.error('[AccountTitle] 加载树数据失败', undefined, error)
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
+    fullTableTree.value = []
+    entityTreeData.value = []
   } finally {
     loading.value = false
   }
 }
 
-function handleSearch() {
-  currentPage.value = 1
-  loadData()
+/** 右侧查询（客户端过滤，不请求接口） */
+const handleSearch = () => {
+  tableCurrentPage.value = 1
 }
 
-function handleReset() {
+/** 右侧重置（不影响左侧树与 fullTableTree） */
+const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   titleCode: '',
@@ -493,22 +1154,44 @@ function handleReset() {
   titleLevel: undefined as number | undefined,
   isLeaf: undefined as number | undefined,
   isAuxiliary: undefined as number | undefined,
+  auxiliaryType: undefined as number | undefined,
+  isQuantity: undefined as number | undefined,
+  isCurrency: undefined as number | undefined,
+  isCash: undefined as number | undefined,
+  isBank: undefined as number | undefined,
+  relatedPlant: '',
+  titleStatus: undefined as number | undefined,
+  validFromStart: '',
+  validFromEnd: '',
+  validToStart: '',
+  validToEnd: '',
+  sortOrder: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
-  currentPage.value = 1
-  loadData()
+  tableCurrentPage.value = 1
 }
 
+/** 新增：默认 parentId 为当前左侧选中节点 */
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.accountTitle._self')
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.accountTitle._self') })
+  const keys = selectedTreeKeys.value
+  formData.value = {
+    parentId: keys.length > 0 ? String(keys[keys.length - 1]) : '0',
+  }
   formVisible.value = true
 }
+
+/** 打开编辑弹窗 */
 function handleEdit(record: AccountTitle) {
-  formTitle.value = t('common.page.button.edit') + t('entity.accountTitle._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.accountTitle._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
 
+/** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
@@ -516,6 +1199,8 @@ function handleUpdate() {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.accountTitle._self') }))
   }
 }
+
+/** 提交新增/编辑表单 */
 async function handleFormSubmit() {
   const refInst = formRef.value
   if (!refInst?.validate) return
@@ -536,49 +1221,84 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.accountTitle._self') }))
     }
     formVisible.value = false
-    loadData()
+    await loadData()
   } finally {
     formLoading.value = false
   }
 }
 
+/** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
 }
+
+/** 删除单行 */
+async function handleDeleteOne(record: AccountTitle) {
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.accountTitle._self'), name: t('common.tip.this.target', { target: t('entity.accountTitle._self') }) }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      await deleteAccountTitleById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: t('entity.accountTitle._self') }))
+      await loadData()
+    }
+  })
+}
+
+/** 批量删除选中行 */
+async function handleDelete() {
+  if (selectedRows.value.length === 0) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.accountTitle._self') }))
+    return
+  }
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.accountTitle._self'), count: selectedRows.value.length }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
+      await deleteAccountTitleBatch(ids)
+      message.success(t('common.feedback.deleted', { target: t('entity.accountTitle._self') }))
+      await loadData()
+    }
+  })
+}
+
+/** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getAccountTitleTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
+/** 上传并导入 Excel 文件 */
 async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   return await importAccountTitle(file, sheetName)
 }
 
+/** 导入完成回调：刷新树并可选关闭对话框 */
 function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
-  loadData()
+  void loadData()
   if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }
+
+/** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: AccountTitleQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportAccountTitle(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportAccountTitle({ pageIndex: 1, pageSize: 100000 }, excelNames.sheet, excelNames.fileBase)
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -598,54 +1318,26 @@ async function handleExport() {
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
     message.success(t('common.feedback.export.success', { target: t('entity.accountTitle._self') }))
-  } catch (error: any) {
-    logger.error('[AccountTitle] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.accountTitle._self') }))
+  } catch (error: unknown) {
+    logger.error('[AccountTitle] 导出失败', undefined, error)
+    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.accountTitle._self') })))
   } finally {
     loading.value = false
   }
 }
-async function handleDeleteOne(record: AccountTitle) {
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.accountTitle._self'), name: t('common.tip.this.target', { target: t('entity.accountTitle._self') }) }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      await deleteAccountTitleById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.accountTitle._self') }))
-      loadData()
-    }
-  })
-}
-async function handleDelete() {
-  if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.accountTitle._self') }))
-    return
-  }
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.accountTitle._self'), count: selectedRows.value.length }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteAccountTitleBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.accountTitle._self') }))
-      loadData()
-    }
-  })
-}
+
+/** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
+/** 高级查询提交：关闭抽屉并重置右侧分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
-  loadData()
+  tableCurrentPage.value = 1
 }
 
+/** 重置高级查询表单（不自动查询） */
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   titleCode: '',
@@ -656,36 +1348,54 @@ function handleAdvancedQueryReset() {
   titleLevel: undefined as number | undefined,
   isLeaf: undefined as number | undefined,
   isAuxiliary: undefined as number | undefined,
+  auxiliaryType: undefined as number | undefined,
+  isQuantity: undefined as number | undefined,
+  isCurrency: undefined as number | undefined,
+  isCash: undefined as number | undefined,
+  isBank: undefined as number | undefined,
+  relatedPlant: '',
+  titleStatus: undefined as number | undefined,
+  validFromStart: '',
+  validFromEnd: '',
+  validToStart: '',
+  validToEnd: '',
+  sortOrder: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
 }
 
+/** 打开列设置抽屉 */
 function handleColumnSetting() {
   columnSettingVisible.value = true
 }
 
+/** 列设置：更新可见列 key */
 function handleColumnKeysChange(keys: string[]) {
   visibleColumnKeys.value = keys
 }
 
+/** 列设置：恢复默认可见列 */
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
+/** 刷新树数据 */
 function handleRefresh() {
-  loadData()
+  void loadData()
 }
 
+/** 表格 change / 列宽拖拽占位（树表分页在 TaktTreeRightTable 内） */
 function handleTableChange() {}
+/** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+
+/** 页面挂载后加载树数据 */
+onMounted(() => {
+  void loadData()
+})
 </script>
 
 <style scoped lang="css">
@@ -694,5 +1404,21 @@ function handlePaginationSizeChange(_current: number, size: number) {
   display: flex;
   flex-direction: column;
   min-height: 0;
+}
+.accounting-financial-account-title-query-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.accounting-financial-account-title-toolbar-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.accounting-financial-account-title-tree-table-wrap {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 8px;
 }
 </style>

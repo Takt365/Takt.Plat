@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/materials
 // 文件名称：supplier.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -114,7 +114,7 @@ export function deleteSupplierBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新供货商信息状态
- * @param {SupplierStatus} dto 状态DTO
+ * @param {SupplierStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<Supplier>} 供货商信息DTO
  */
 export function updateSupplierStatus(dto: SupplierStatus): Promise<Supplier> {
@@ -177,11 +177,11 @@ export function getSupplierTemplate(sheetName?: string, templateName?: string): 
 
 /**
  * 导入供货商信息
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importSupplier(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importSupplier(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

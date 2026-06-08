@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktProfitCentersController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：利润中心控制器
 // 
@@ -102,6 +102,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// <summary>
     /// 获取利润中心树形列表
     /// </summary>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
     /// <returns>树形数据</returns>
     [TaktPermission("accounting:controlling:profitcenter:query", "利润中心树")]
     [HttpGet("tree")]
@@ -202,7 +203,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// <summary>
     /// 更新利润中心状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>利润中心DTO</returns>
     [TaktPermission("accounting:controlling:profitcenter:update", "更新利润中心状态")]
     [HttpPut("status")]

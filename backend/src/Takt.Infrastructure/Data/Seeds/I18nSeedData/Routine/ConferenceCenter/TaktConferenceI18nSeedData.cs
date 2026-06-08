@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConference 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -263,13 +263,13 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conference.flowinstanceid", "zh-HK", "流程实例ID", "流程实例 ID（会议审批工作流）"),
 
             // entity.conference.participants
-            new TranslationSeedItem("entity.conference.participants", "en-US", "participants", "参与人列表（主子表关系）"),
+            new TranslationSeedItem("entity.conference.participants", "en-US", "参与人列表", "参与人列表（主子表关系）"),
             // entity.conference.participants
-            new TranslationSeedItem("entity.conference.participants", "ja-JP", "participants", "参与人列表（主子表关系）"),
+            new TranslationSeedItem("entity.conference.participants", "ja-JP", "参与人列表", "参与人列表（主子表关系）"),
             // entity.conference.participants
-            new TranslationSeedItem("entity.conference.participants", "zh-CN", "participants", "参与人列表（主子表关系）"),
+            new TranslationSeedItem("entity.conference.participants", "zh-CN", "参与人列表", "参与人列表（主子表关系）"),
             // entity.conference.participants
-            new TranslationSeedItem("entity.conference.participants", "zh-HK", "participants", "参与人列表（主子表关系）"),
+            new TranslationSeedItem("entity.conference.participants", "zh-HK", "参与人列表", "参与人列表（主子表关系）"),
         };
     }
 

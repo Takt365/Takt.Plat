@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.Announcement
 // 文件名称：TaktAnnouncementI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAnnouncement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,6 +153,24 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.announcement.publishtime", "zh-CN", "发布时间", "发布时间（定时发布时使用）"),
             // entity.announcement.publishtime
             new TranslationSeedItem("entity.announcement.publishtime", "zh-HK", "发布时间", "发布时间（定时发布时使用）"),
+
+            // entity.announcement.isscheduled
+            new TranslationSeedItem("entity.announcement.isscheduled", "en-US", "是否定时发布", "是否定时发布（1=是，0=否）"),
+            // entity.announcement.isscheduled
+            new TranslationSeedItem("entity.announcement.isscheduled", "ja-JP", "是否定时发布", "是否定时发布（1=是，0=否）"),
+            // entity.announcement.isscheduled
+            new TranslationSeedItem("entity.announcement.isscheduled", "zh-CN", "是否定时发布", "是否定时发布（1=是，0=否）"),
+            // entity.announcement.isscheduled
+            new TranslationSeedItem("entity.announcement.isscheduled", "zh-HK", "是否定时发布", "是否定时发布（1=是，0=否）"),
+
+            // entity.announcement.istop
+            new TranslationSeedItem("entity.announcement.istop", "en-US", "是否置顶", "是否置顶（1=是，0=否）"),
+            // entity.announcement.istop
+            new TranslationSeedItem("entity.announcement.istop", "ja-JP", "是否置顶", "是否置顶（1=是，0=否）"),
+            // entity.announcement.istop
+            new TranslationSeedItem("entity.announcement.istop", "zh-CN", "是否置顶", "是否置顶（1=是，0=否）"),
+            // entity.announcement.istop
+            new TranslationSeedItem("entity.announcement.istop", "zh-HK", "是否置顶", "是否置顶（1=是，0=否）"),
 
             // entity.announcement.toppriority
             new TranslationSeedItem("entity.announcement.toppriority", "en-US", "置顶优先级", "置顶优先级（数字越大越靠前）"),

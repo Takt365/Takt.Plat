@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowInstanceI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowInstance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -288,6 +288,51 @@ public class TaktFlowInstanceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowInstance.processcontentsnapshot", "zh-CN", "流程设计快照", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
             // entity.flowInstance.processcontentsnapshot
             new TranslationSeedItem("entity.flowInstance.processcontentsnapshot", "zh-HK", "流程设计快照", "流程设计快照（启动时复制，避免定义变更影响在途实例）"),
+
+            // entity.flowInstance.processdefinition
+            new TranslationSeedItem("entity.flowInstance.processdefinition", "en-US", "流程定义", "流程定义"),
+            // entity.flowInstance.processdefinition
+            new TranslationSeedItem("entity.flowInstance.processdefinition", "ja-JP", "流程定义", "流程定义"),
+            // entity.flowInstance.processdefinition
+            new TranslationSeedItem("entity.flowInstance.processdefinition", "zh-CN", "流程定义", "流程定义"),
+            // entity.flowInstance.processdefinition
+            new TranslationSeedItem("entity.flowInstance.processdefinition", "zh-HK", "流程定义", "流程定义"),
+
+            // entity.flowInstance.tasks
+            new TranslationSeedItem("entity.flowInstance.tasks", "en-US", "待办任务", "待办任务"),
+            // entity.flowInstance.tasks
+            new TranslationSeedItem("entity.flowInstance.tasks", "ja-JP", "待办任务", "待办任务"),
+            // entity.flowInstance.tasks
+            new TranslationSeedItem("entity.flowInstance.tasks", "zh-CN", "待办任务", "待办任务"),
+            // entity.flowInstance.tasks
+            new TranslationSeedItem("entity.flowInstance.tasks", "zh-HK", "待办任务", "待办任务"),
+
+            // entity.flowInstance.historicactivities
+            new TranslationSeedItem("entity.flowInstance.historicactivities", "en-US", "流转历史", "流转历史"),
+            // entity.flowInstance.historicactivities
+            new TranslationSeedItem("entity.flowInstance.historicactivities", "ja-JP", "流转历史", "流转历史"),
+            // entity.flowInstance.historicactivities
+            new TranslationSeedItem("entity.flowInstance.historicactivities", "zh-CN", "流转历史", "流转历史"),
+            // entity.flowInstance.historicactivities
+            new TranslationSeedItem("entity.flowInstance.historicactivities", "zh-HK", "流转历史", "流转历史"),
+
+            // entity.flowInstance.variables
+            new TranslationSeedItem("entity.flowInstance.variables", "en-US", "流程变量", "流程变量"),
+            // entity.flowInstance.variables
+            new TranslationSeedItem("entity.flowInstance.variables", "ja-JP", "流程变量", "流程变量"),
+            // entity.flowInstance.variables
+            new TranslationSeedItem("entity.flowInstance.variables", "zh-CN", "流程变量", "流程变量"),
+            // entity.flowInstance.variables
+            new TranslationSeedItem("entity.flowInstance.variables", "zh-HK", "流程变量", "流程变量"),
+
+            // entity.flowInstance.addsigns
+            new TranslationSeedItem("entity.flowInstance.addsigns", "en-US", "加签记录", "加签记录"),
+            // entity.flowInstance.addsigns
+            new TranslationSeedItem("entity.flowInstance.addsigns", "ja-JP", "加签记录", "加签记录"),
+            // entity.flowInstance.addsigns
+            new TranslationSeedItem("entity.flowInstance.addsigns", "zh-CN", "加签记录", "加签记录"),
+            // entity.flowInstance.addsigns
+            new TranslationSeedItem("entity.flowInstance.addsigns", "zh-HK", "加签记录", "加签记录"),
         };
     }
 

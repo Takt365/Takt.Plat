@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktServiceRequestI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktServiceRequest 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -308,13 +308,13 @@ public class TaktServiceRequestI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serviceRequest.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
             // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "en-US", "tickets", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
+            new TranslationSeedItem("entity.serviceRequest.tickets", "en-US", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
             // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "ja-JP", "tickets", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
+            new TranslationSeedItem("entity.serviceRequest.tickets", "ja-JP", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
             // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "zh-CN", "tickets", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
+            new TranslationSeedItem("entity.serviceRequest.tickets", "zh-CN", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
             // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "zh-HK", "tickets", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
+            new TranslationSeedItem("entity.serviceRequest.tickets", "zh-HK", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
         };
     }
 

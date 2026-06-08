@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIncidentItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -225,6 +225,15 @@ public class TaktQualityIncidentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityIncidentItem.scrapnote", "zh-CN", "废弃备注", "废弃备注"),
             // entity.qualityIncidentItem.scrapnote
             new TranslationSeedItem("entity.qualityIncidentItem.scrapnote", "zh-HK", "废弃备注", "废弃备注"),
+
+            // entity.qualityIncidentItem.incident
+            new TranslationSeedItem("entity.qualityIncidentItem.incident", "en-US", "品质事故主表", "品质事故主表(导航属性)"),
+            // entity.qualityIncidentItem.incident
+            new TranslationSeedItem("entity.qualityIncidentItem.incident", "ja-JP", "品质事故主表", "品质事故主表(导航属性)"),
+            // entity.qualityIncidentItem.incident
+            new TranslationSeedItem("entity.qualityIncidentItem.incident", "zh-CN", "品质事故主表", "品质事故主表(导航属性)"),
+            // entity.qualityIncidentItem.incident
+            new TranslationSeedItem("entity.qualityIncidentItem.incident", "zh-HK", "品质事故主表", "品质事故主表(导航属性)"),
         };
     }
 

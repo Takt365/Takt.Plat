@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktQuartzLogService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：任务执行日志应用服务实现
 // 
@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Statistics.Logging;
 
@@ -93,12 +94,12 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
         EnsureThreeLayerContext();
         var list = await _quartzLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.JobName,
+            x => x.TaskName,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.JobName ?? e.Id.ToString(),
+            DictLabel = e.TaskName ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -224,13 +225,16 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.QuartzTaskId).Contains(keywords)
-                || (x.UserName != null && x.UserName.Contains(keywords))
-                || (x.JobName != null && x.JobName.Contains(keywords))
+                || (x.TaskName != null && x.TaskName.Contains(keywords))
                 || (x.JobGroup != null && x.JobGroup.Contains(keywords))
-                || (x.TriggerName != null && x.TriggerName.Contains(keywords))
+                || SqlFunc.ToString(x.TaskType).Contains(keywords)
+                || SqlFunc.ToString(x.ExecuteDuration).Contains(keywords)
+                || (x.ExecuteParams != null && x.ExecuteParams.Contains(keywords))
+                || (x.ExecuteMessage != null && x.ExecuteMessage.Contains(keywords))
+                || (x.ErrorInfo != null && x.ErrorInfo.Contains(keywords))
+                || (x.ExecuteIp != null && x.ExecuteIp.Contains(keywords))
+                || (x.ExecuteHost != null && x.ExecuteHost.Contains(keywords))
                 || SqlFunc.ToString(x.ExecuteStatus).Contains(keywords)
-                || (x.ErrorMsg != null && x.ErrorMsg.Contains(keywords))
-                || SqlFunc.ToString(x.CostTime).Contains(keywords)
                 || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ExecuteTime).Contains(keywords)
@@ -243,14 +247,9 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             exp = exp.And(x => x.QuartzTaskId == queryDto.QuartzTaskId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.UserName))
+        if (!string.IsNullOrEmpty(queryDto?.TaskName))
         {
-            exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.JobName))
-        {
-            exp = exp.And(x => x.JobName != null && x.JobName.Contains(queryDto.JobName));
+            exp = exp.And(x => x.TaskName != null && x.TaskName.Contains(queryDto.TaskName));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.JobGroup))
@@ -258,24 +257,44 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             exp = exp.And(x => x.JobGroup != null && x.JobGroup.Contains(queryDto.JobGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TriggerName))
+        if (queryDto?.TaskType.HasValue == true)
         {
-            exp = exp.And(x => x.TriggerName != null && x.TriggerName.Contains(queryDto.TriggerName));
+            exp = exp.And(x => x.TaskType == queryDto.TaskType);
+        }
+
+        if (queryDto?.ExecuteDuration.HasValue == true)
+        {
+            exp = exp.And(x => x.ExecuteDuration == queryDto.ExecuteDuration);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExecuteParams))
+        {
+            exp = exp.And(x => x.ExecuteParams != null && x.ExecuteParams.Contains(queryDto.ExecuteParams));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExecuteMessage))
+        {
+            exp = exp.And(x => x.ExecuteMessage != null && x.ExecuteMessage.Contains(queryDto.ExecuteMessage));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ErrorInfo))
+        {
+            exp = exp.And(x => x.ErrorInfo != null && x.ErrorInfo.Contains(queryDto.ErrorInfo));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExecuteIp))
+        {
+            exp = exp.And(x => x.ExecuteIp != null && x.ExecuteIp.Contains(queryDto.ExecuteIp));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExecuteHost))
+        {
+            exp = exp.And(x => x.ExecuteHost != null && x.ExecuteHost.Contains(queryDto.ExecuteHost));
         }
 
         if (queryDto?.ExecuteStatus.HasValue == true)
         {
             exp = exp.And(x => x.ExecuteStatus == queryDto.ExecuteStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ErrorMsg))
-        {
-            exp = exp.And(x => x.ErrorMsg != null && x.ErrorMsg.Contains(queryDto.ErrorMsg));
-        }
-
-        if (queryDto?.CostTime.HasValue == true)
-        {
-            exp = exp.And(x => x.CostTime == queryDto.CostTime);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))

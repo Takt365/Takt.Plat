@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议参与人控制器
 // 
@@ -183,7 +183,7 @@ public class TaktConferenceParticipantsController : TaktControllerBase
     /// <summary>
     /// 更新会议参与人状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktConferenceAttendanceStatus 枚举）</param>
     /// <returns>会议参与人DTO</returns>
     [TaktPermission("routine:conferencecenter:conferenceparticipant:update", "更新会议参与人状态")]
     [HttpPut("status")]

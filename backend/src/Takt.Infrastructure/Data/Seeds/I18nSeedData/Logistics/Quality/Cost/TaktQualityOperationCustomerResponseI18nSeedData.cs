@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityOperationCustomerResponseI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityOperationCustomerResponse 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,6 +153,15 @@ public class TaktQualityOperationCustomerResponseI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.qualityOperationCustomerResponse.customerresponsenote", "zh-CN", "顾客应对备注", "顾客应对备注"),
             // entity.qualityOperationCustomerResponse.customerresponsenote
             new TranslationSeedItem("entity.qualityOperationCustomerResponse.customerresponsenote", "zh-HK", "顾客应对备注", "顾客应对备注"),
+
+            // entity.qualityOperationCustomerResponse.operation
+            new TranslationSeedItem("entity.qualityOperationCustomerResponse.operation", "en-US", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityOperationCustomerResponse.operation
+            new TranslationSeedItem("entity.qualityOperationCustomerResponse.operation", "ja-JP", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityOperationCustomerResponse.operation
+            new TranslationSeedItem("entity.qualityOperationCustomerResponse.operation", "zh-CN", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityOperationCustomerResponse.operation
+            new TranslationSeedItem("entity.qualityOperationCustomerResponse.operation", "zh-HK", "品质业务主表", "品质业务主表(导航属性)"),
         };
     }
 

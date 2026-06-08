@@ -33,7 +33,7 @@ alwaysApply: true
 - **Tailwind**：布局（`flex`、`grid`）、间距（`p-*`、`gap-*`）、尺寸（`w-full`、`h-10`）、排版（`text-sm`）、圆角、显隐；颜色优先用 `global.css` 映射的语义色（见下表）。
 - **主题色（Ant Design 主色）**：使用 `bg-primary`、`text-primary`、`border-primary` 等（对应 `--ant-color-primary`，由 `takt-theme-sync` 写入），禁止在业务组件写死 `#1890ff` 等主色 hex（渐变背景等装饰除外）。
 - **标准色板**：`frontend/src/styles/color-base.css`（全局 `@import`）；使用 `var(--takt-cn-*)` / `var(--takt-jp-*)` / `var(--takt-*)`、`bg-feicui` 等。
-- **自定义按钮**：`frontend/src/styles/button-base.css`（唯一入口；增删 action 配色运行 `scripts/gen-button-variants.mjs` 刷新标记段）；类名 `takt-button-{action}`，禁止再引用 `button.less`。
+- **自定义按钮**：`frontend/src/styles/button-base.css`（唯一入口；增删 action 配色直接编辑 `@takt-generated variants-begin/end` 段）；类名 `takt-button-{action}`，禁止再引用 `button.less`。
 - ❌ **禁止**新增 `color-base.less`、`button.less` 或全局 `*.less` 样式；流程设计器样式为 `workflow.css`。
 
 | Tailwind 语义类 | 来源（Ant Design token） |
@@ -282,7 +282,7 @@ export default { title: '用户管理' };
 - 列表/虚拟滚动/主键 string/禁止全量拉数：见 `@.cursor/rules/07-overflow-vue.mdc`；联调见 `08-overflow-fullstack`
 - **Vue 视图**：`index.vue` 见 `@.cursor/rules/13-vue-view.mdc`；清单 `13-vue-view`
 - **Vue 表单**：`*-form.vue` 见 `@.cursor/rules/14-vue-form.mdc`；清单 `14-vue-form`
-- **代码生成**：`generate-vue-from-api` 见 `15-codegen` §3.6；树表/排除实体须手工
+- **代码生成**：`generate-vue-*-from-api` 见 `15-codegen` §3.6；排除实体须手工
 - 主子表 UI 扩展：见 `@.cursor/rules/10-master-detail.mdc`（叠加 12-crud）
 - 树表 UI 扩展：见 `@.cursor/rules/11-tree-table.mdc`（叠加 12-crud）
 - 新建/修改 `utils/` 纯工具：见 `@.cursor/rules/05-utils-vue.mdc`

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线主控制器
 // 
@@ -183,7 +183,7 @@ public class TaktRoutingsController : TaktControllerBase
     /// <summary>
     /// 更新工艺路线主状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>工艺路线主DTO</returns>
     [TaktPermission("logistics:manufacturing:bom:routing:update", "更新工艺路线主状态")]
     [HttpPut("status")]

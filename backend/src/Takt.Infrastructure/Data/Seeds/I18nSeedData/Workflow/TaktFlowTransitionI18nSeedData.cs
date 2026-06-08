@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowTransitionI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowTransition 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -225,6 +225,15 @@ public class TaktFlowTransitionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowTransition.actiontype", "zh-CN", "动作类型", "动作类型"),
             // entity.flowTransition.actiontype
             new TranslationSeedItem("entity.flowTransition.actiontype", "zh-HK", "动作类型", "动作类型"),
+
+            // entity.flowTransition.instance
+            new TranslationSeedItem("entity.flowTransition.instance", "en-US", "所属流程实例", "所属流程实例"),
+            // entity.flowTransition.instance
+            new TranslationSeedItem("entity.flowTransition.instance", "ja-JP", "所属流程实例", "所属流程实例"),
+            // entity.flowTransition.instance
+            new TranslationSeedItem("entity.flowTransition.instance", "zh-CN", "所属流程实例", "所属流程实例"),
+            // entity.flowTransition.instance
+            new TranslationSeedItem("entity.flowTransition.instance", "zh-HK", "所属流程实例", "所属流程实例"),
         };
     }
 

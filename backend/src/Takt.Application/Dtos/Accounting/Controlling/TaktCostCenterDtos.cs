@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostCenterDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostCenter 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Accounting.Controlling;
 
@@ -91,7 +92,7 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public int CostCenterStatus { get; set; } = 0;
+    public TaktCommonStatus CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -202,7 +203,7 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public int? CostCenterStatus { get; set; }
+    public TaktCommonStatus? CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -332,7 +333,7 @@ public class TaktCostCenterCreateDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public int CostCenterStatus { get; set; } = 0;
+    public TaktCommonStatus CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -402,7 +403,7 @@ public class TaktCostCenterStatusDto
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "成本中心状态（1=启用，0=禁用）不能为空")]
-    public int CostCenterStatus { get; set; } = 0;
+    public TaktCommonStatus CostCenterStatus { get; set; }
 }
 
 // ========================================
@@ -504,7 +505,7 @@ public class TaktCostCenterTemplateDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public int? CostCenterStatus { get; set; }
+    public TaktCommonStatus? CostCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -599,7 +600,7 @@ public class TaktCostCenterImportDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public int? CostCenterStatus { get; set; }
+    public TaktCommonStatus? CostCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -695,7 +696,7 @@ public class TaktCostCenterExportDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public int CostCenterStatus { get; set; } = 0;
+    public TaktCommonStatus CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期

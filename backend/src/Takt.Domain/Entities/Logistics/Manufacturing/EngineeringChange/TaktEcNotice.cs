@@ -17,7 +17,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 工程变更通知单实体（EC Notice），用于将设变（ECN）通知到相关部门和人员，追踪通知状态和反馈
+/// 工程变更通知单实体（EC Notice）。FlowInstanceId 由业务在发起流程后写入；流程引擎通过 BusinessKey/BusinessType 与本模块对接。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_notice", "工程变更通知单表")]
 [SugarIndex("ix_ec_notice_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -26,7 +26,8 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notice_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notice_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNoticeDate), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notice_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNoticeStatus), OrderByType.Asc, false)]
-public class TaktEcNotice : TaktCompanyEntityBase
+[SugarIndex("ix_takt_logistics_manufacturing_ec_notice_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
+public class TaktEcNotice : TaktApprovalEntityBase
 {
     /// <summary>
     /// 工厂代码
@@ -93,8 +94,8 @@ public class TaktEcNotice : TaktCompanyEntityBase
     /// <summary>
     /// 通知方式（1=系统通知 2=邮件 3=纸质 4=会议）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_notice_method", ColumnDescription = "通知方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int EcNoticeMethod { get; set; } = 1;
+    [SugarColumn(ColumnName = "ec_notice_method", ColumnDescription = "通知方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
+    public int EcNoticeMethod { get; set; } = 2;
 
     /// <summary>
     /// 通知状态（0=待通知 1=已通知 2=已确认 3=已驳回 4=已过期）
@@ -103,42 +104,11 @@ public class TaktEcNotice : TaktCompanyEntityBase
     public int EcNoticeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 确认人ID（序列化为string以避免Javascript精度问题）
+    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_notice_confirmer_id", ColumnDescription = "确认人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcNoticeConfirmerId { get; set; }
-
-    /// <summary>
-    /// 确认人姓名
-    /// </summary>
-    [SugarColumn(ColumnName = "ec_notice_confirmer_name", ColumnDescription = "确认人姓名", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcNoticeConfirmerName { get; set; }
-
-    /// <summary>
-    /// 确认日期
-    /// </summary>
-    [SugarColumn(ColumnName = "ec_notice_confirm_date", ColumnDescription = "确认日期", ColumnDataType = "datetime", IsNullable = true)]
-    public DateTime? EcNoticeConfirmDate { get; set; }
-
-    /// <summary>
-    /// 确认意见/反馈
-    /// </summary>
-    [SugarColumn(ColumnName = "ec_notice_confirm_comment", ColumnDescription = "确认意见", Length = 1000, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcNoticeConfirmComment { get; set; }
-
-    /// <summary>
-    /// 要求反馈截止日期
-    /// </summary>
-    [SugarColumn(ColumnName = "ec_notice_require_feedback_date", ColumnDescription = "要求反馈截止日期", ColumnDataType = "date", IsNullable = true)]
-    public DateTime? EcNoticeRequireFeedbackDate { get; set; }
-
-    /// <summary>
-    /// 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; } = 0;
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 关联的设变主表

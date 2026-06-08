@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPurchasePriceI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePrice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -155,13 +155,22 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasePrice.pricestatus", "zh-HK", "价格状态", "价格状态（1=启用，0=禁用）"),
 
             // entity.purchasePrice.items
-            new TranslationSeedItem("entity.purchasePrice.items", "en-US", "items", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchasePrice.items", "en-US", "物料价格明细列表", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
             // entity.purchasePrice.items
-            new TranslationSeedItem("entity.purchasePrice.items", "ja-JP", "items", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchasePrice.items", "ja-JP", "物料价格明细列表", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
             // entity.purchasePrice.items
-            new TranslationSeedItem("entity.purchasePrice.items", "zh-CN", "items", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchasePrice.items", "zh-CN", "物料价格明细列表", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
             // entity.purchasePrice.items
-            new TranslationSeedItem("entity.purchasePrice.items", "zh-HK", "items", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchasePrice.items", "zh-HK", "物料价格明细列表", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+
+            // entity.purchasePrice.changelogs
+            new TranslationSeedItem("entity.purchasePrice.changelogs", "en-US", "采购价格变更记录列表", "采购价格变更记录列表（外键在子表 <see cref=\"TaktPurchasePriceChangeLog.PriceId\"/>）"),
+            // entity.purchasePrice.changelogs
+            new TranslationSeedItem("entity.purchasePrice.changelogs", "ja-JP", "采购价格变更记录列表", "采购价格变更记录列表（外键在子表 <see cref=\"TaktPurchasePriceChangeLog.PriceId\"/>）"),
+            // entity.purchasePrice.changelogs
+            new TranslationSeedItem("entity.purchasePrice.changelogs", "zh-CN", "采购价格变更记录列表", "采购价格变更记录列表（外键在子表 <see cref=\"TaktPurchasePriceChangeLog.PriceId\"/>）"),
+            // entity.purchasePrice.changelogs
+            new TranslationSeedItem("entity.purchasePrice.changelogs", "zh-HK", "采购价格变更记录列表", "采购价格变更记录列表（外键在子表 <see cref=\"TaktPurchasePriceChangeLog.PriceId\"/>）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/complaint
 // 文件名称：supplier-evaluation.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -114,7 +114,7 @@ export function deleteSupplierEvaluationBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新供应商评价考核状态
- * @param {SupplierEvaluationStatus} dto 状态DTO
+ * @param {SupplierEvaluationStatus} dto 状态 DTO
  * @returns {Promise<SupplierEvaluation>} 供应商评价考核DTO
  */
 export function updateSupplierEvaluationStatus(dto: SupplierEvaluationStatus): Promise<SupplierEvaluation> {
@@ -177,11 +177,11 @@ export function getSupplierEvaluationTemplate(sheetName?: string, templateName?:
 
 /**
  * 导入供应商评价考核
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importSupplierEvaluation(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importSupplierEvaluation(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

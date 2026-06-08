@@ -319,6 +319,66 @@ public static class TaktExcelHelper
     }
 
     /// <summary>
+    /// 导出动态字典行（自定义报表/SQVI 查询结果）
+    /// </summary>
+    /// <param name="rows">数据行</param>
+    /// <param name="columnKeys">列键（与行字典键一致）</param>
+    /// <param name="columnLabels">列标题（与 columnKeys 一一对应）</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名（不含扩展名）</param>
+    /// <param name="excelOptions">工作簿元数据</param>
+    /// <returns>文件名与内容</returns>
+    public static async Task<(string fileName, byte[] content)> ExportDictionaryRowsAsync(
+        IReadOnlyList<IReadOnlyDictionary<string, object?>> rows,
+        IReadOnlyList<string> columnKeys,
+        IReadOnlyList<string> columnLabels,
+        string sheetName = "Data",
+        string? fileName = null,
+        TaktExcelOptions? excelOptions = null)
+    {
+        ArgumentNullException.ThrowIfNull(rows);
+        ArgumentNullException.ThrowIfNull(columnKeys);
+        ArgumentNullException.ThrowIfNull(columnLabels);
+        ArgumentException.ThrowIfNullOrEmpty(sheetName);
+        if (columnKeys.Count == 0)
+        {
+            throw new ArgumentException("columnKeys 不能为空", nameof(columnKeys));
+        }
+        if (columnLabels.Count != columnKeys.Count)
+        {
+            throw new ArgumentException("columnLabels 必须与 columnKeys 数量一致", nameof(columnLabels));
+        }
+        var workbookOptions = ResolveExcelOptions(excelOptions);
+        using var package = new ExcelPackage();
+        SetWorkbookProperties(package.Workbook, workbookOptions);
+        var worksheet = package.Workbook.Worksheets.Add(sheetName);
+        worksheet.Cells[1, 1].LoadFromArrays(new[] { columnLabels.ToArray() });
+        if (rows.Count > 0)
+        {
+            var dataArray = new List<object[]>(rows.Count);
+            foreach (var row in rows)
+            {
+                var line = new object[columnKeys.Count];
+                for (var i = 0; i < columnKeys.Count; i++)
+                {
+                    row.TryGetValue(columnKeys[i], out var cell);
+                    line[i] = cell ?? DBNull.Value;
+                }
+                dataArray.Add(line);
+            }
+            worksheet.Cells[2, 1].LoadFromArrays(dataArray);
+        }
+        if (worksheet.Dimension != null)
+        {
+            worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+        }
+        var actualFileName = GenerateTimestampFileName(fileName ?? sheetName);
+        var content = await package.GetAsByteArrayAsync();
+        TaktLogger.Information("[TaktExcelHelper] 导出动态报表成功，Sheet: {SheetName}, 文件名: {FileName}, 行数: {RowCount}", sheetName, actualFileName, rows.Count);
+        return (actualFileName, content);
+    }
+
+    /// <summary>
     /// 导入Excel(单个Sheet)
     /// </summary>
     /// <typeparam name="T">要导入的数据类型</typeparam>

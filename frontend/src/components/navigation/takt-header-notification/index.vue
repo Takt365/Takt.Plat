@@ -77,7 +77,7 @@
               size="small"
               @click="handleMarkRead(item.id)"
             >
-              {{ $t('common.page.button.markread') }}
+              {{ $t('common.page.button.read') }}
             </a-button>
             <a-button
               type="text"
@@ -139,7 +139,7 @@ const count = computed(() => {
 const pagination = computed(() => ({
   pageSize: 10,
   showSizeChanger: false,
-  showTotal: (total: number) => t('components.navigation.page.systemsetting.totalcount', { total })
+  showTotal: (total: number) => t('common.table.total', { total })
 }))
 
 const handleClick = () => {

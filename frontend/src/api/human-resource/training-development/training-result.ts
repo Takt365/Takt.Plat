@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/training-development
 // 文件名称：training-result.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/training-development 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteTrainingResultBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新培训结果状态
- * @param {TrainingResultStatus} dto 状态DTO
+ * @param {TrainingResultStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<TrainingResult>} 培训结果DTO
  */
 export function updateTrainingResultStatus(dto: TrainingResultStatus): Promise<TrainingResult> {
@@ -163,11 +163,11 @@ export function getTrainingResultTemplate(sheetName?: string, templateName?: str
 
 /**
  * 导入培训结果
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importTrainingResult(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importTrainingResult(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

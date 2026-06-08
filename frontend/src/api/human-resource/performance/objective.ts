@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/performance
 // 文件名称：objective.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/performance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteObjectiveBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新绩效目标状态
- * @param {ObjectiveStatus} dto 状态DTO
+ * @param {ObjectiveStatus} dto 状态 DTO
  * @returns {Promise<Objective>} 绩效目标DTO
  */
 export function updateObjectiveStatus(dto: ObjectiveStatus): Promise<Objective> {
@@ -163,11 +163,11 @@ export function getObjectiveTemplate(sheetName?: string, templateName?: string):
 
 /**
  * 导入绩效目标
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importObjective(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importObjective(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

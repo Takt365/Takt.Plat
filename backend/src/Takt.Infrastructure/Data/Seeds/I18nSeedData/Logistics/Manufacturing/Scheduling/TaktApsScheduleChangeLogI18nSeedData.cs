@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleChangeLogI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsScheduleChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -144,6 +144,15 @@ public class TaktApsScheduleChangeLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsScheduleChangeLog.changetime", "zh-CN", "变更时间", "变更时间"),
             // entity.apsScheduleChangeLog.changetime
             new TranslationSeedItem("entity.apsScheduleChangeLog.changetime", "zh-HK", "变更时间", "变更时间"),
+
+            // entity.apsScheduleChangeLog.schedule
+            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "en-US", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsScheduleChangeLog.schedule
+            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "ja-JP", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsScheduleChangeLog.schedule
+            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "zh-CN", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsScheduleChangeLog.schedule
+            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "zh-HK", "APS排程主表", "APS排程主表（主表）"),
         };
     }
 

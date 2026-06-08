@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工劳动合同控制器
 // 
@@ -183,7 +183,7 @@ public class TaktEmployeeContractsController : TaktControllerBase
     /// <summary>
     /// 更新员工劳动合同状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>员工劳动合同DTO</returns>
     [TaktPermission("humanresource:personnel:employeecontract:update", "更新员工劳动合同状态")]
     [HttpPut("status")]

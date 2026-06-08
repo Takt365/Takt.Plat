@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktMaterialsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料控制器
 // 
@@ -183,7 +183,7 @@ public class TaktMaterialsController : TaktControllerBase
     /// <summary>
     /// 更新物料状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>物料DTO</returns>
     [TaktPermission("logistics:materials:material:update", "更新物料状态")]
     [HttpPut("status")]

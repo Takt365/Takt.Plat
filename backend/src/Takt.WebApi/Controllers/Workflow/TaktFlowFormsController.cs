@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Workflow
 // 文件名称：TaktFlowFormsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程表单控制器
 // 
@@ -183,7 +183,7 @@ public class TaktFlowFormsController : TaktControllerBase
     /// <summary>
     /// 更新流程表单状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>流程表单DTO</returns>
     [TaktPermission("workflow:flowform:update", "更新流程表单状态")]
     [HttpPut("status")]

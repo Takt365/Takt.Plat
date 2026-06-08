@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -216,6 +216,15 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyOutputDetail.achievementrate", "zh-CN", "达成率", "达成率(%)"),
             // entity.assyOutputDetail.achievementrate
             new TranslationSeedItem("entity.assyOutputDetail.achievementrate", "zh-HK", "达成率", "达成率(%)"),
+
+            // entity.assyOutputDetail.assyoutput
+            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "en-US", "组立日报", "组立日报（主表）"),
+            // entity.assyOutputDetail.assyoutput
+            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "ja-JP", "组立日报", "组立日报（主表）"),
+            // entity.assyOutputDetail.assyoutput
+            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "zh-CN", "组立日报", "组立日报（主表）"),
+            // entity.assyOutputDetail.assyoutput
+            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "zh-HK", "组立日报", "组立日报（主表）"),
         };
     }
 

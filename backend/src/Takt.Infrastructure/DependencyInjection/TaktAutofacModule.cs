@@ -102,7 +102,7 @@ public class TaktAutofacModule : Autofac.Module
             .As<ITaktUniqueValidator>()
             .InstancePerLifetimeScope();
 
-        builder.RegisterType<Takt.Infrastructure.Services.Foundation.TaktVocabularyFilter>()
+        builder.RegisterType<TaktVocabularyFilter>()
             .As<ITaktVocabularyFilter>()
             .InstancePerLifetimeScope();
 
@@ -123,6 +123,10 @@ public class TaktAutofacModule : Autofac.Module
 
         builder.RegisterType<Takt.Application.Services.Foundation.TaktNumberingGenerator>()
             .As<Takt.Application.Services.Foundation.ITaktNumberingGenerator>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Infrastructure.Services.TaktFileUploadEngine>()
+            .As<Takt.Domain.Interfaces.ITaktFileUploadEngine>()
             .InstancePerLifetimeScope();
 
         builder.RegisterType<Takt.Infrastructure.Data.Schema.TaktDatabaseSchemaProvider>()

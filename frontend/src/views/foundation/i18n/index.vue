@@ -60,6 +60,7 @@
         />
         <!-- 列表模式 -->
         <TaktSingleTable
+      entity-scope="tenant"
           v-if="translationViewMode === 'list'"
           :columns="translationDisplayColumns"
           :data-source="translationDataSource"
@@ -161,6 +162,7 @@
           </a-form-item>
         </TaktQueryDrawer>
         <TaktColumnDrawer
+      entity-scope="tenant"
           v-model:open="translationColumnDrawerVisible"
           :columns="translationListColumns"
           :checked-keys="translationVisibleColumnKeys"
@@ -218,7 +220,9 @@
 
         <!-- 表格 -->
         <TaktSingleTable
-          :columns="displayColumns"
+      entity-scope="tenant"
+          :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
           :data-source="dataSource"
           :loading="loading"
           :stripe="true"
@@ -242,16 +246,23 @@
               />
             </template>
             <template v-else-if="column.key === 'isDefault'">
-              {{ record.isDefault === 0 ? t('common.page.button.yes') : t('common.page.button.no') }}
+              <TaktDictTag
+                :value="record.isDefault"
+                dict-type="sys_yes_no"
+              />
             </template>
             <template v-else-if="column.key === 'isRtl'">
-              {{ record.isRtl === 0 ? t('common.page.button.yes') : t('common.page.button.no') }}
+              <TaktDictTag
+                :value="record.isRtl"
+                dict-type="sys_yes_no"
+              />
             </template>
           </template>
           <!-- 展开行渲染 -->
           <template #expandedRowRender="{ record }">
             <div style="padding: 16px">
               <TaktSingleTable
+      entity-scope="tenant"
                 v-if="getCultureTranslationList(record.cultureId).length > 0"
                 :columns="translationColumnsNested"
                 :data-source="getCultureTranslationList(record.cultureId) as unknown as Record<string, unknown>[]"
@@ -303,8 +314,7 @@
           <a-form-item :label="t('entity.language.status')">
             <TaktSelect
               v-model:value="advancedQueryForm.languageStatus"
-              api-url="/api/TaktDictDatas/options?dictTypeCode=sys_status"
-              :field-names="{ label: 'dictLabel', value: 'extLabel' }"
+              dict-type="sys_status"
               allow-clear
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.language.status') })"
             />
@@ -314,6 +324,7 @@
         <!-- 列设置抽屉 -->
         <!-- 审计字段统一在 TaktColumnDrawer 中处理 -->
         <TaktColumnDrawer
+      entity-scope="tenant"
           v-model:open="columnDrawerVisible"
           :columns="mergedColumns"
           :checked-keys="visibleColumnKeys"
@@ -332,7 +343,6 @@ import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import CultureForm from './components/culture-form.vue'
 import TranslationForm from './components/translation-form.vue'
 import TranslationTransposedForm from './components/translation-transposed-form.vue'
@@ -758,42 +768,6 @@ const columns = computed<TableColumnsType<Culture>>(() => [
 
 // 审计字段统一在 TaktColumnDrawer 中处理
 
-// 合并列配置（包含审计字段）- 参照 file/index.vue 的实现
-// 注意：CreateActionColumn 内部使用 h 函数返回 VNode，导致 TypeScript 类型推断过深
-// 这是 TypeScript 在处理复杂递归类型时的已知限制，使用类型断言是合理的解决方案
-const mergedColumns = computed((): any => {
-  return mergeDefaultColumns(columns.value as any, t, true)
-})
-
-// 根据可见列过滤显示的列 - 保持原始列的顺序
-// 注意：由于 mergedColumns 包含 VNode 返回类型，需要类型断言避免类型推断过深
-// 使用 any 类型避免 TypeScript 类型推断过深的问题
-const displayColumns = computed((): any => {
-  const keys = visibleColumnKeys.value || []
-  // 直接对 mergedColumns.value 进行类型断言，避免类型推断
-  const merged: any = mergedColumns.value || []
-  
-  // 如果 keys 为空，返回原始列配置（等待 TaktColumnDrawer 初始化）
-  if (keys.length === 0) {
-    const cols: any = columns.value
-    return cols
-  }
-  
-  // 根据选中的 keys 过滤列，但保持原始列的顺序
-  const getColumnKey = (col: any): string => {
-    const key = col.key || col.dataIndex || col.title
-    return key ? String(key) : ''
-  }
-  
-  // 将 keys 转换为 Set 以便快速查找
-  const keysSet = new Set(keys.map(k => String(k)))
-  
-  // 按照 merged 的原始顺序过滤，只保留选中的列
-  return merged.filter((col: any) => {
-    const colKey = getColumnKey(col)
-    return colKey && keysSet.has(colKey)
-  })
-})
 
 // ========================================
 // 方法定义

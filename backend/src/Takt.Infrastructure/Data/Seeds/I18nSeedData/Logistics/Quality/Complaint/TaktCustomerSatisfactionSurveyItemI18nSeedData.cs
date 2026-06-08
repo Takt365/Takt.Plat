@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerSatisfactionSurveyItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -207,6 +207,15 @@ public class TaktCustomerSatisfactionSurveyItemI18nSeedData : ITaktSeedDataCoord
             new TranslationSeedItem("entity.customerSatisfactionSurveyItem.followupstatus", "zh-CN", "跟进状态", "跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）"),
             // entity.customerSatisfactionSurveyItem.followupstatus
             new TranslationSeedItem("entity.customerSatisfactionSurveyItem.followupstatus", "zh-HK", "跟进状态", "跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）"),
+
+            // entity.customerSatisfactionSurveyItem.survey
+            new TranslationSeedItem("entity.customerSatisfactionSurveyItem.survey", "en-US", "调查表主表", "调查表主表"),
+            // entity.customerSatisfactionSurveyItem.survey
+            new TranslationSeedItem("entity.customerSatisfactionSurveyItem.survey", "ja-JP", "调查表主表", "调查表主表"),
+            // entity.customerSatisfactionSurveyItem.survey
+            new TranslationSeedItem("entity.customerSatisfactionSurveyItem.survey", "zh-CN", "调查表主表", "调查表主表"),
+            // entity.customerSatisfactionSurveyItem.survey
+            new TranslationSeedItem("entity.customerSatisfactionSurveyItem.survey", "zh-HK", "调查表主表", "调查表主表"),
         };
     }
 

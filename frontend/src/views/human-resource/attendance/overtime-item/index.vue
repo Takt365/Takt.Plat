@@ -54,15 +54,17 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      :columns="columns"
+      entity-scope="company"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'overtimeItemId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
       :row-key="getOvertimeItemId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
@@ -98,10 +100,15 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-human-resource-attendance-overtime-item'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('overtimeId')">
       <a-form-item :label="t('entity.overtimeItem.overtimeid')">
         <a-input
           v-model:value="advancedQueryForm.overtimeId"
@@ -109,13 +116,17 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('lineNumber')">
       <a-form-item :label="t('entity.overtimeItem.linenumber')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.linenumber') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeId')">
       <a-form-item :label="t('entity.overtimeItem.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
@@ -123,6 +134,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeName')">
       <a-form-item :label="t('entity.overtimeItem.employeename')">
         <a-input
           v-model:value="advancedQueryForm.employeeName"
@@ -130,33 +143,117 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedHours')">
       <a-form-item :label="t('entity.overtimeItem.plannedhours')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.plannedHours"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.plannedhours') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualStartTimeStart')">
+      <a-form-item :label="t('entity.overtimeItem.actualstarttimestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualStartTimeStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtimeItem.actualstarttimestart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualStartTimeEnd')">
+      <a-form-item :label="t('entity.overtimeItem.actualstarttimeend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualStartTimeEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtimeItem.actualstarttimeend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualEndTimeStart')">
+      <a-form-item :label="t('entity.overtimeItem.actualendtimestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualEndTimeStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtimeItem.actualendtimestart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualEndTimeEnd')">
+      <a-form-item :label="t('entity.overtimeItem.actualendtimeend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualEndTimeEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtimeItem.actualendtimeend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualHours')">
       <a-form-item :label="t('entity.overtimeItem.actualhours')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.actualHours"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.actualhours') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
-      <a-form-item :label="t('common.page.entity.remark')">
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extFieldJson')">
+      <a-form-item :label="t('common.page.entity.extfieldjson')">
         <a-input
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.remark') })"
+          v-model:value="advancedQueryForm.extFieldJson"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.overtimeItem._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.overtimeItem._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -181,6 +278,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'overtimeItemId'"
       :action-column-key="'action'"
+      entity-scope="company"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -196,7 +295,6 @@ import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import OvertimeItemForm from './components/overtime-item-form.vue'
 import { getOvertimeItemList, getOvertimeItemById, createOvertimeItem, updateOvertimeItem, deleteOvertimeItemById, deleteOvertimeItemBatch, getOvertimeItemTemplate, importOvertimeItem, exportOvertimeItem } from '@/api/human-resource/attendance/overtime-item'
@@ -233,9 +331,34 @@ const advancedQueryForm = ref({
   employeeId: '',
   employeeName: '',
   plannedHours: undefined as number | undefined,
+  actualStartTimeStart: '',
+  actualStartTimeEnd: '',
+  actualEndTimeStart: '',
+  actualEndTimeEnd: '',
   actualHours: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
   remark: '',
 })
+/** 高级查询字段元数据（显隐配置） */
+const queryFieldsMeta = computed(() => [
+  { key: 'overtimeId', label: t('entity.overtimeItem.overtimeid') },
+  { key: 'lineNumber', label: t('entity.overtimeItem.linenumber') },
+  { key: 'employeeId', label: t('entity.overtimeItem.employeeid') },
+  { key: 'employeeName', label: t('entity.overtimeItem.employeename') },
+  { key: 'plannedHours', label: t('entity.overtimeItem.plannedhours') },
+  { key: 'actualStartTimeStart', label: t('entity.overtimeItem.actualstarttimestart') },
+  { key: 'actualStartTimeEnd', label: t('entity.overtimeItem.actualstarttimeend') },
+  { key: 'actualEndTimeStart', label: t('entity.overtimeItem.actualendtimestart') },
+  { key: 'actualEndTimeEnd', label: t('entity.overtimeItem.actualendtimeend') },
+  { key: 'actualHours', label: t('entity.overtimeItem.actualhours') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+const visibleQueryFieldKeys = ref<string[]>([])
 const columnSettingVisible = ref(false)
 const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
@@ -378,18 +501,6 @@ const columns = computed<TableColumnsType>(() => [
 const getOvertimeItemId = (record: any): string => record?.[entityIdName] ?? ''
 const getOvertimeItemField = (record: any, field: string): any => record?.[field]
 
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
-})
-
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: OvertimeItem[]) => {
@@ -464,7 +575,14 @@ function handleReset() {
   employeeId: '',
   employeeName: '',
   plannedHours: undefined as number | undefined,
+  actualStartTimeStart: '',
+  actualStartTimeEnd: '',
+  actualEndTimeStart: '',
+  actualEndTimeEnd: '',
   actualHours: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
   remark: '',
   }
   currentPage.value = 1
@@ -472,12 +590,12 @@ function handleReset() {
 }
 
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.overtimeItem._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.overtimeItem._self') })
   formData.value = {}
   formVisible.value = true
 }
 function handleEdit(record: OvertimeItem) {
-  formTitle.value = t('common.page.button.edit') + t('entity.overtimeItem._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.overtimeItem._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -626,7 +744,14 @@ function handleAdvancedQueryReset() {
   employeeId: '',
   employeeName: '',
   plannedHours: undefined as number | undefined,
+  actualStartTimeStart: '',
+  actualStartTimeEnd: '',
+  actualEndTimeStart: '',
+  actualEndTimeEnd: '',
   actualHours: undefined as number | undefined,
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
   remark: '',
   }
 }
@@ -640,7 +765,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
 function handleRefresh() {

@@ -12,7 +12,7 @@
 <template>
   <a-input-search
     v-model:value="query"
-    :placeholder="$t('common.page.form.placeholder.searchmenu')"
+    :placeholder="searchPlaceholder"
     class="takt-query"
     allow-clear
     @search="handleSearch"
@@ -52,8 +52,18 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { useMenuStore } from '@/stores/identity/menu'
 import { RiSearchLine } from '@remixicon/vue'
+
+const { t } = useI18n()
+
+/** 菜单搜索占位：参数化 search + entity.menu（非 common 抽象类） */
+const searchPlaceholder = computed(() =>
+  t('common.page.form.placeholder.search', {
+    keyword: t('entity.menu.name') + t('common.tip.or') + t('entity.menu.code'),
+  }),
+)
 
 interface SearchResult {
   title: string

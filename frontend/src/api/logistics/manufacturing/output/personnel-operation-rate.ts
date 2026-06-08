@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：personnel-operation-rate.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deletePersonnelOperationRateBatch(ids: string[]): Promise<void> 
 
 /**
  * 更新人员稼动率状态
- * @param {PersonnelOperationRateStatus} dto 状态DTO
+ * @param {PersonnelOperationRateStatus} dto 状态 DTO
  * @returns {Promise<PersonnelOperationRate>} 人员稼动率DTO
  */
 export function updatePersonnelOperationRateStatus(dto: PersonnelOperationRateStatus): Promise<PersonnelOperationRate> {
@@ -163,11 +163,11 @@ export function getPersonnelOperationRateTemplate(sheetName?: string, templateNa
 
 /**
  * 导入人员稼动率
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importPersonnelOperationRate(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importPersonnelOperationRate(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

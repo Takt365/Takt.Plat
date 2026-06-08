@@ -37,7 +37,7 @@ public class TaktSampleQuartzJobHandler : ITaktQuartzJobHandler
             context.Task.Id,
             context.Task.TaskCode,
             context.UserName ?? "system",
-            context.JobParams ?? string.Empty);
+            context.ExecuteParams ?? string.Empty);
         return Task.CompletedTask;
     }
 }

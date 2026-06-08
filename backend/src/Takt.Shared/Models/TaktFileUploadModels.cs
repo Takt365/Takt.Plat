@@ -1,0 +1,238 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Shared.Models
+// 文件名称：TaktFileUploadModels.cs
+// 创建时间：2026-06-08
+// 创建人：Takt365(Cursor AI)
+// 功能描述：通用文件上传/下载模型（与 frontend upload.ts 协议对齐，供各业务模块复用）
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Takt.Shared.Enums;
+
+namespace Takt.Shared.Models;
+
+/// <summary>
+/// 文件存储隔离范围（租户/公司/可选业务子目录）
+/// </summary>
+public class TaktFileUploadScope
+{
+    /// <summary>
+    /// 租户编码
+    /// </summary>
+    public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司编码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可选业务子路径段（如 leave、ecn），写入相对路径
+    /// </summary>
+    public string? CategoryPath { get; set; }
+}
+
+/// <summary>
+/// 分片存在性检查请求
+/// </summary>
+public class TaktFileChunkCheckRequest
+{
+    /// <summary>
+    /// 文件唯一标识（通常为 MD5）
+    /// </summary>
+    public string Identifier { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 分片序号（从 1 开始）
+    /// </summary>
+    public int ChunkNumber { get; set; }
+
+    /// <summary>
+    /// 当前分片大小（字节）
+    /// </summary>
+    public long ChunkSize { get; set; }
+
+    /// <summary>
+    /// 文件总大小（字节）
+    /// </summary>
+    public long TotalSize { get; set; }
+
+    /// <summary>
+    /// 原始文件名
+    /// </summary>
+    public string? FileName { get; set; }
+}
+
+/// <summary>
+/// 分片存在性检查结果
+/// </summary>
+public class TaktFileChunkCheckResult
+{
+    /// <summary>
+    /// 分片是否已存在
+    /// </summary>
+    public bool Exists { get; set; }
+}
+
+/// <summary>
+/// 分片上传元数据（不含二进制流）
+/// </summary>
+public class TaktFileChunkUploadRequest
+{
+    /// <summary>
+    /// 文件唯一标识
+    /// </summary>
+    public string Identifier { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 分片序号（从 1 开始）
+    /// </summary>
+    public int ChunkNumber { get; set; }
+
+    /// <summary>
+    /// 总分片数
+    /// </summary>
+    public int TotalChunks { get; set; }
+
+    /// <summary>
+    /// 当前分片大小（字节）
+    /// </summary>
+    public long ChunkSize { get; set; }
+
+    /// <summary>
+    /// 文件总大小（字节）
+    /// </summary>
+    public long TotalSize { get; set; }
+
+    /// <summary>
+    /// 原始文件名
+    /// </summary>
+    public string FileName { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 分片合并请求（纯存储层，不含业务元数据）
+/// </summary>
+public class TaktFileChunkMergeRequest
+{
+    /// <summary>
+    /// 文件唯一标识
+    /// </summary>
+    public string Identifier { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 原始文件名
+    /// </summary>
+    public string FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总分片数
+    /// </summary>
+    public int TotalChunks { get; set; }
+
+    /// <summary>
+    /// 文件总大小（字节）
+    /// </summary>
+    public long TotalSize { get; set; }
+}
+
+/// <summary>
+/// 存储完成后的文件描述（字段名与 <c>TaktFile</c> 实体存储列 1:1 对齐）
+/// </summary>
+public class TaktStoredFileResult
+{
+    /// <summary>
+    /// 文件名称（存储文件名）→ <c>TaktFile.FileName</c>
+    /// </summary>
+    public string FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件原始名称 → <c>TaktFile.FileOriginalName</c>
+    /// </summary>
+    public string FileOriginalName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件路径（相对 wwwroot）→ <c>TaktFile.FilePath</c>
+    /// </summary>
+    public string FilePath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文件大小（字节）→ <c>TaktFile.FileSize</c>
+    /// </summary>
+    public long FileSize { get; set; }
+
+    /// <summary>
+    /// 文件 MIME 类型 → <c>TaktFile.FileType</c>
+    /// </summary>
+    public string? FileType { get; set; }
+
+    /// <summary>
+    /// 文件扩展名（不含点）→ <c>TaktFile.FileExtension</c>
+    /// </summary>
+    public string? FileExtension { get; set; }
+
+    /// <summary>
+    /// 文件哈希（MD5）→ <c>TaktFile.FileHash</c>
+    /// </summary>
+    public string? FileHash { get; set; }
+
+    /// <summary>
+    /// 文件分类 → <c>TaktFile.FileCategory</c>
+    /// </summary>
+    public TaktFileCategory FileCategory { get; set; } = TaktFileCategory.Other;
+
+    /// <summary>
+    /// 存储方式 → <c>TaktFile.StorageType</c>
+    /// </summary>
+    public TaktFileStorageType StorageType { get; set; } = TaktFileStorageType.Local;
+
+    /// <summary>
+    /// 存储配置（JSON）→ <c>TaktFile.StorageConfig</c>
+    /// </summary>
+    public string? StorageConfig { get; set; }
+
+    /// <summary>
+    /// 访问地址 → <c>TaktFile.AccessUrl</c>
+    /// </summary>
+    public string? AccessUrl { get; set; }
+}
+
+/// <summary>
+/// 已存储文件的读取定位符（与 <c>TaktFile.FilePath</c> + <c>TaktFile.StorageType</c> 对齐）
+/// </summary>
+public class TaktFileStorageDescriptor
+{
+    /// <summary>
+    /// 文件路径（相对 wwwroot）→ <c>TaktFile.FilePath</c>
+    /// </summary>
+    public string FilePath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 存储方式 → <c>TaktFile.StorageType</c>
+    /// </summary>
+    public TaktFileStorageType StorageType { get; set; } = TaktFileStorageType.Local;
+}
+
+/// <summary>
+/// 打开文件流结果（调用方负责释放 Stream）
+/// </summary>
+public sealed class TaktFileDownloadStreamResult
+{
+    /// <summary>
+    /// 可读流
+    /// </summary>
+    public required Stream Stream { get; init; }
+
+    /// <summary>
+    /// 建议下载文件名
+    /// </summary>
+    public required string FileName { get; init; }
+
+    /// <summary>
+    /// MIME 类型
+    /// </summary>
+    public required string ContentType { get; init; }
+}

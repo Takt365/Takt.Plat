@@ -65,13 +65,13 @@
  */
 import { ref, computed, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getByProcessKey } from '@/api/workflow/scheme'
-import { getFlowFormById, getFlowFormByCode } from '@/api/workflow/form'
+import { getFlowSchemeByProcessKey } from '@/api/workflow/flow-scheme'
+import { getFlowFormById, getFlowFormByCode } from '@/api/workflow/flow-form'
 import { getEmployeeOptions } from '@/api/human-resource/personnel/employee'
 import { FORM_CREATE_DEFAULT_OPTION } from '@/utils/constants/form-create'
-import type { FlowInstanceDetail } from '@/types/workflow/flow-instance'
-import type { FlowForm } from '@/types/workflow/form'
-import type { FlowScheme } from '@/types/workflow/scheme'
+import type { FlowInstanceDetailView } from '@/types/workflow/flow-engine'
+import type { FlowForm } from '@/types/workflow/flow-form'
+import type { FlowScheme } from '@/types/workflow/flow-scheme'
 
 const { t } = useI18n()
 
@@ -80,7 +80,7 @@ type FormConfigRule = Record<string, unknown>[]
 
 /** 父组件传入的实例详情（含 processTitle、frmData、formCode 等） */
 interface Props {
-  detail: FlowInstanceDetail | null
+  detail: FlowInstanceDetailView | null
 }
 
 const props = defineProps<Props>()
@@ -132,7 +132,7 @@ async function loadFormConfig() {
     else if (d.formCode?.trim()) flowForm = await getFlowFormByCode(d.formCode.trim())
     if (!flowForm && d.processKey?.trim()) {
       try {
-        const scheme: FlowScheme = await getByProcessKey(d.processKey.trim())
+        const scheme: FlowScheme = await getFlowSchemeByProcessKey(d.processKey.trim())
         if (scheme.formId) flowForm = await getFlowFormById(String(scheme.formId))
         else if (scheme.formCode?.trim()) flowForm = await getFlowFormByCode(scheme.formCode.trim())
       } catch {

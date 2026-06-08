@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktOnlineI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOnline 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,6 +171,15 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online.browsertype", "zh-CN", "浏览器类型", "浏览器类型"),
             // entity.online.browsertype
             new TranslationSeedItem("entity.online.browsertype", "zh-HK", "浏览器类型", "浏览器类型"),
+
+            // entity.online.operatingsystem
+            new TranslationSeedItem("entity.online.operatingsystem", "en-US", "操作系统", "操作系统"),
+            // entity.online.operatingsystem
+            new TranslationSeedItem("entity.online.operatingsystem", "ja-JP", "操作系统", "操作系统"),
+            // entity.online.operatingsystem
+            new TranslationSeedItem("entity.online.operatingsystem", "zh-CN", "操作系统", "操作系统"),
+            // entity.online.operatingsystem
+            new TranslationSeedItem("entity.online.operatingsystem", "zh-HK", "操作系统", "操作系统"),
 
             // entity.online.connecttime
             new TranslationSeedItem("entity.online.connecttime", "en-US", "连接时间", "连接时间"),

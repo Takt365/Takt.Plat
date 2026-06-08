@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeFamily 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,6 +153,15 @@ public class TaktEmployeeFamilyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeFamily.birthdate", "zh-CN", "出生日期", "出生日期"),
             // entity.employeeFamily.birthdate
             new TranslationSeedItem("entity.employeeFamily.birthdate", "zh-HK", "出生日期", "出生日期"),
+
+            // entity.employeeFamily.isemergencycontact
+            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "en-US", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
+            // entity.employeeFamily.isemergencycontact
+            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "ja-JP", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
+            // entity.employeeFamily.isemergencycontact
+            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "zh-CN", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
+            // entity.employeeFamily.isemergencycontact
+            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "zh-HK", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
         };
     }
 

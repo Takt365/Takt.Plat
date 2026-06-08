@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktOvertimeItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOvertimeItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -162,6 +162,15 @@ public class TaktOvertimeItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.overtimeItem.actualhours", "zh-CN", "实际小时数", "实际加班小时数"),
             // entity.overtimeItem.actualhours
             new TranslationSeedItem("entity.overtimeItem.actualhours", "zh-HK", "实际小时数", "实际加班小时数"),
+
+            // entity.overtimeItem.overtime
+            new TranslationSeedItem("entity.overtimeItem.overtime", "en-US", "加班主表", "加班主表"),
+            // entity.overtimeItem.overtime
+            new TranslationSeedItem("entity.overtimeItem.overtime", "ja-JP", "加班主表", "加班主表"),
+            // entity.overtimeItem.overtime
+            new TranslationSeedItem("entity.overtimeItem.overtime", "zh-CN", "加班主表", "加班主表"),
+            // entity.overtimeItem.overtime
+            new TranslationSeedItem("entity.overtimeItem.overtime", "zh-HK", "加班主表", "加班主表"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Material 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterial 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Materials;
 
@@ -238,7 +239,7 @@ public class TaktMaterialDto : TaktCompanyDtoBase
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
-    public int MaterialStatus { get; set; } = 0;
+    public TaktCommonStatus MaterialStatus { get; set; }
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -480,7 +481,7 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
-    public int? MaterialStatus { get; set; }
+    public TaktCommonStatus? MaterialStatus { get; set; }
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -755,7 +756,7 @@ public class TaktMaterialCreateDto
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
-    public int MaterialStatus { get; set; } = 0;
+    public TaktCommonStatus MaterialStatus { get; set; }
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -825,7 +826,7 @@ public class TaktMaterialStatusDto
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "物料状态（1=启用，0=禁用）不能为空")]
-    public int MaterialStatus { get; set; } = 0;
+    public TaktCommonStatus MaterialStatus { get; set; }
 }
 
 // ========================================
@@ -1235,7 +1236,7 @@ public class TaktMaterialExportDto
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
-    public int MaterialStatus { get; set; } = 0;
+    public TaktCommonStatus MaterialStatus { get; set; }
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）

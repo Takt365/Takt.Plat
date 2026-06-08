@@ -1,6 +1,6 @@
 /**
  * 导航组件 · 香港繁体
- * 用于 components/navigation：标签页、系统设置等
+ * 用于 components/navigation：标签页、快捷入口、系统设置等；引用键 components.navigation.page.*
  */
 export default {
   page: {
@@ -14,6 +14,10 @@ export default {
         refreshcurrent: '刷新當前',
         unnamed: '未命名'
       },
+      headerquery: {
+        title: '添加快捷入口',
+        placeholder: '輸入關鍵詞搜索，選擇菜單添加到工作台快捷入口',
+      },
       systemsetting: {
         borderradius: '圓角設置',
         card: '卡片',
@@ -23,13 +27,9 @@ export default {
         collapsetitle: '摺疊標題',
         collapsetitlehint: '摺疊時顯示的標題文本（始終顯示）',
         colorweak: '色弱模式',
-        confirmlogout: '確認退出',
         contentnav: '內容',
         contentwidth: '內容區域寬度',
-        copyfail: '複製失敗，請手動複製',
         copyright: '版權信息',
-        custom: '自定義',
-        dark: '深色',
         defaultlanguage: '默認語言',
         demoswitch: 'Demo開關',
         enablemultitab: '啓用多標籤頁',
@@ -42,10 +42,8 @@ export default {
         graymode: '灰度模式',
         layout: '佈局設置',
         layoutmode: '佈局模式',
-        light: '淺色',
         logopath: 'Logo路徑',
         logopathhint: "例如：assets/images/takt.svg（自動添加 {'@'}/ 前綴）",
-        logoutcontent: '確定要退出登錄嗎？',
         maxtabs: '最大標籤數',
         menuaccordion: '菜單手風琴模式',
         menustyle: '菜單風格',
@@ -55,8 +53,6 @@ export default {
         other: '其他設置',
         persisttabs: '持久化標籤頁',
         plain: '樸素',
-        preferencescopied: '偏好設置已複製到剪貼板',
-        resettodefault: '已重置為默認設置',
         rounded: '圓潤',
         showbreadcrumb: '顯示麪包屑',
         showbreadcrumbicon: '顯示麪包屑圖標',
@@ -79,7 +75,6 @@ export default {
         titlehint: '未摺疊時顯示的標題文本（始終顯示）',
         titlelabel: '標題',
         topnav: '頂部',
-        totalcount: '共 {total} 條',
         watermark: '啓用水印',
         watermarkcontent: '水印內容'
       }

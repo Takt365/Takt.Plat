@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktTenantI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTenant 实体字段国际化种子（已对齐前端 locales：src/locales/identity/tenant）
 // 
@@ -100,23 +100,23 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
             // entity.tenant.name
             new TranslationSeedItem("entity.tenant.name", "zh-HK", "租户名称", "租户名称"),
 
-            // entity.tenant.starttime
-            new TranslationSeedItem("entity.tenant.starttime", "en-US", "订阅开始时间", "订阅开始时间"),
-            // entity.tenant.starttime
-            new TranslationSeedItem("entity.tenant.starttime", "ja-JP", "订阅开始时间", "订阅开始时间"),
-            // entity.tenant.starttime
-            new TranslationSeedItem("entity.tenant.starttime", "zh-CN", "订阅开始时间", "订阅开始时间"),
-            // entity.tenant.starttime
-            new TranslationSeedItem("entity.tenant.starttime", "zh-HK", "订阅开始时间", "订阅开始时间"),
+            // entity.tenant.subscriptionstarttime
+            new TranslationSeedItem("entity.tenant.subscriptionstarttime", "en-US", "订阅开始时间", "订阅开始时间"),
+            // entity.tenant.subscriptionstarttime
+            new TranslationSeedItem("entity.tenant.subscriptionstarttime", "ja-JP", "订阅开始时间", "订阅开始时间"),
+            // entity.tenant.subscriptionstarttime
+            new TranslationSeedItem("entity.tenant.subscriptionstarttime", "zh-CN", "订阅开始时间", "订阅开始时间"),
+            // entity.tenant.subscriptionstarttime
+            new TranslationSeedItem("entity.tenant.subscriptionstarttime", "zh-HK", "订阅开始时间", "订阅开始时间"),
 
-            // entity.tenant.endtime
-            new TranslationSeedItem("entity.tenant.endtime", "en-US", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
-            // entity.tenant.endtime
-            new TranslationSeedItem("entity.tenant.endtime", "ja-JP", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
-            // entity.tenant.endtime
-            new TranslationSeedItem("entity.tenant.endtime", "zh-CN", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
-            // entity.tenant.endtime
-            new TranslationSeedItem("entity.tenant.endtime", "zh-HK", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
+            // entity.tenant.subscriptionendtime
+            new TranslationSeedItem("entity.tenant.subscriptionendtime", "en-US", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
+            // entity.tenant.subscriptionendtime
+            new TranslationSeedItem("entity.tenant.subscriptionendtime", "ja-JP", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
+            // entity.tenant.subscriptionendtime
+            new TranslationSeedItem("entity.tenant.subscriptionendtime", "zh-CN", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
+            // entity.tenant.subscriptionendtime
+            new TranslationSeedItem("entity.tenant.subscriptionendtime", "zh-HK", "订阅结束时间", "订阅结束时间（9999/12/31 23:59:59表示长期有效）"),
 
             // entity.tenant.contactname
             new TranslationSeedItem("entity.tenant.contactname", "en-US", "联系人姓名", "联系人姓名"),
@@ -145,6 +145,15 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
             // entity.tenant.contactemail
             new TranslationSeedItem("entity.tenant.contactemail", "zh-HK", "联系邮箱", "联系邮箱"),
 
+            // entity.tenant.isbuiltin
+            new TranslationSeedItem("entity.tenant.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+            // entity.tenant.isbuiltin
+            new TranslationSeedItem("entity.tenant.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+            // entity.tenant.isbuiltin
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+            // entity.tenant.isbuiltin
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+
             // entity.tenant.status
             new TranslationSeedItem("entity.tenant.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
             // entity.tenant.status
@@ -155,13 +164,13 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.tenant.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
 
             // entity.tenant.usertenants
-            new TranslationSeedItem("entity.tenant.usertenants", "en-US", "userTenants", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
+            new TranslationSeedItem("entity.tenant.usertenants", "en-US", "可访问该租户的用户关联", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
             // entity.tenant.usertenants
-            new TranslationSeedItem("entity.tenant.usertenants", "ja-JP", "userTenants", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
+            new TranslationSeedItem("entity.tenant.usertenants", "ja-JP", "可访问该租户的用户关联", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
             // entity.tenant.usertenants
-            new TranslationSeedItem("entity.tenant.usertenants", "zh-CN", "userTenants", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
+            new TranslationSeedItem("entity.tenant.usertenants", "zh-CN", "可访问该租户的用户关联", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
             // entity.tenant.usertenants
-            new TranslationSeedItem("entity.tenant.usertenants", "zh-HK", "userTenants", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
+            new TranslationSeedItem("entity.tenant.usertenants", "zh-HK", "可访问该租户的用户关联", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
         };
     }
 

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/compensation-benefits/social-security -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：员工社保缴纳记录管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->
+<!-- 功能描述：员工社保缴纳记录管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -54,15 +54,17 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      :columns="columns"
+      entity-scope="company"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'socialSecurityId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
       :row-key="getSocialSecurityId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
@@ -98,10 +100,15 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-human-resource-compensation-benefits-social-security'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('employeeId')">
       <a-form-item :label="t('entity.socialSecurity.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
@@ -109,6 +116,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeName')">
       <a-form-item :label="t('entity.socialSecurity.employeename')">
         <a-input
           v-model:value="advancedQueryForm.employeeName"
@@ -116,6 +125,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('payPeriod')">
       <a-form-item :label="t('entity.socialSecurity.payperiod')">
         <a-input
           v-model:value="advancedQueryForm.payPeriod"
@@ -123,47 +134,154 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('socialSecurityBase')">
       <a-form-item :label="t('entity.socialSecurity.base')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.socialSecurityBase"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.base') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pensionAmount')">
       <a-form-item :label="t('entity.socialSecurity.pensionamount')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.pensionAmount"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.pensionamount') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('medicalAmount')">
       <a-form-item :label="t('entity.socialSecurity.medicalamount')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.medicalAmount"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.medicalamount') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('unemploymentAmount')">
       <a-form-item :label="t('entity.socialSecurity.unemploymentamount')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.unemploymentAmount"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.unemploymentamount') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('injuryAmount')">
       <a-form-item :label="t('entity.socialSecurity.injuryamount')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.injuryAmount"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.injuryamount') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('maternityAmount')">
+      <a-form-item :label="t('entity.socialSecurity.maternityamount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.maternityAmount"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.maternityamount') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('housingFundBase')">
+      <a-form-item :label="t('entity.socialSecurity.housingfundbase')">
+        <a-input-number
+          v-model:value="advancedQueryForm.housingFundBase"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.housingfundbase') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('housingFundAmount')">
+      <a-form-item :label="t('entity.socialSecurity.housingfundamount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.housingFundAmount"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.housingfundamount') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('totalAmount')">
+      <a-form-item :label="t('entity.socialSecurity.totalamount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.totalAmount"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.totalamount') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('payStatus')">
+      <a-form-item :label="t('entity.socialSecurity.paystatus')">
+        <a-input-number
+          v-model:value="advancedQueryForm.payStatus"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.paystatus') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('relatedPlant')">
+      <a-form-item :label="t('entity.socialSecurity.relatedplant')">
+        <a-input
+          v-model:value="advancedQueryForm.relatedPlant"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.socialSecurity.relatedplant') })"
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extFieldJson')">
+      <a-form-item :label="t('common.page.entity.extfieldjson')">
+        <a-input
+          v-model:value="advancedQueryForm.extFieldJson"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.socialSecurity._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.socialSecurity._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -188,6 +306,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'socialSecurityId'"
       :action-column-key="'action'"
+      entity-scope="company"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -196,14 +316,13 @@
 
 <script setup lang="ts">
 /**
- * 员工社保缴纳记录管理页 · 由 generate-vue-from-api 根据 types/api 生成
+ * 员工社保缴纳记录管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/compensation-benefits/social-security
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import SocialSecurityForm from './components/social-security-form.vue'
 import { getSocialSecurityList, getSocialSecurityById, createSocialSecurity, updateSocialSecurity, deleteSocialSecurityById, deleteSocialSecurityBatch, getSocialSecurityTemplate, importSocialSecurity, exportSocialSecurity } from '@/api/human-resource/compensation-benefits/social-security'
@@ -212,28 +331,46 @@ import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktSocialSecurity')
+/** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.socialSecurity._self') })
 )
 
+/** 快捷查询关键字 */
 const queryKeyword = ref('')
+/** 列表 loading */
 const loading = ref(false)
+/** 分页列表数据 */
 const dataSource = ref<SocialSecurity[]>([])
+/** 当前页码 */
 const currentPage = ref(1)
+/** 每页条数 */
 const pageSize = ref(20)
+/** 分页 total */
 const total = ref(0)
+/** 工具栏单选时当前行 */
 const selectedRow = ref<SocialSecurity | null>(null)
+/** 表格多选行 */
 const selectedRows = ref<SocialSecurity[]>([])
+/** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
+/** 新增/编辑弹窗是否打开 */
 const formVisible = ref(false)
+/** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
+/** 传入内嵌表单的编辑数据 */
 const formData = ref<Partial<SocialSecurity>>({})
+/** 表单提交 loading */
 const formLoading = ref(false)
-const formRef = ref()
+/** 内嵌表单组件 ref（validate / getValues / resetFields） */
+const formRef = ref()/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/** 高级查询表单模型 */
 const advancedQueryForm = ref({
   employeeId: '',
   employeeName: '',
@@ -243,14 +380,55 @@ const advancedQueryForm = ref({
   medicalAmount: undefined as number | undefined,
   unemploymentAmount: undefined as number | undefined,
   injuryAmount: undefined as number | undefined,
+  maternityAmount: undefined as number | undefined,
+  housingFundBase: undefined as number | undefined,
+  housingFundAmount: undefined as number | undefined,
+  totalAmount: undefined as number | undefined,
+  payStatus: undefined as number | undefined,
+  relatedPlant: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
 })
+/** 高级查询字段元数据（列显隐配置） */
+const queryFieldsMeta = computed(() => [
+  { key: 'employeeId', label: t('entity.socialSecurity.employeeid') },
+  { key: 'employeeName', label: t('entity.socialSecurity.employeename') },
+  { key: 'payPeriod', label: t('entity.socialSecurity.payperiod') },
+  { key: 'socialSecurityBase', label: t('entity.socialSecurity.base') },
+  { key: 'pensionAmount', label: t('entity.socialSecurity.pensionamount') },
+  { key: 'medicalAmount', label: t('entity.socialSecurity.medicalamount') },
+  { key: 'unemploymentAmount', label: t('entity.socialSecurity.unemploymentamount') },
+  { key: 'injuryAmount', label: t('entity.socialSecurity.injuryamount') },
+  { key: 'maternityAmount', label: t('entity.socialSecurity.maternityamount') },
+  { key: 'housingFundBase', label: t('entity.socialSecurity.housingfundbase') },
+  { key: 'housingFundAmount', label: t('entity.socialSecurity.housingfundamount') },
+  { key: 'totalAmount', label: t('entity.socialSecurity.totalamount') },
+  { key: 'payStatus', label: t('entity.socialSecurity.paystatus') },
+  { key: 'relatedPlant', label: t('entity.socialSecurity.relatedplant') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+/** 高级查询当前可见字段 key */
+const visibleQueryFieldKeys = ref<string[]>([])
+/** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
+/** 导入对话框是否打开 */
 const importVisible = ref(false)
+/** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
+/** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'socialSecurityId'
+/** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
+/** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+
+/** 页面挂载后加载分页列表 */
 onMounted(() => {
   loadData()
 })
@@ -260,6 +438,7 @@ onMounted(() => {
 
 
 
+/** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
@@ -379,6 +558,24 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSocialSecurityField(record, 'totalAmount') ?? ''
   },
+  {
+    title: t('entity.socialSecurity.paystatus'),
+    dataIndex: 'payStatus',
+    key: 'payStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSocialSecurityField(record, 'payStatus') ?? ''
+  },
+  {
+    title: t('entity.socialSecurity.relatedplant'),
+    dataIndex: 'relatedPlant',
+    key: 'relatedPlant',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSocialSecurityField(record, 'relatedPlant') ?? ''
+  },
   CreateActionColumn({
     actions: [
       {
@@ -401,21 +598,16 @@ const columns = computed<TableColumnsType>(() => [
   })
 ])
 
+/** 表格 row-key（优先实体主键字段） */
 const getSocialSecurityId = (record: any): string => record?.[entityIdName] ?? ''
+/**
+ * 读取行字段值
+ * @param record 行数据
+ * @param field 字段名
+ */
 const getSocialSecurityField = (record: any, field: string): any => record?.[field]
 
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
-})
-
+/** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: SocialSecurity[]) => {
@@ -435,6 +627,7 @@ const rowSelection = computed(() => ({
   }
 }))
 
+/** 行点击切换选中（与 rowSelection 联动） */
 const onClickRow = (record: SocialSecurity) => ({
   onClick: () => {
     const key = getSocialSecurityId(record)
@@ -452,6 +645,7 @@ const onClickRow = (record: SocialSecurity) => ({
   }
 })
 
+/** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
@@ -477,11 +671,13 @@ async function loadData() {
   }
 }
 
+/** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
   loadData()
 }
 
+/** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
@@ -493,22 +689,35 @@ function handleReset() {
   medicalAmount: undefined as number | undefined,
   unemploymentAmount: undefined as number | undefined,
   injuryAmount: undefined as number | undefined,
+  maternityAmount: undefined as number | undefined,
+  housingFundBase: undefined as number | undefined,
+  housingFundAmount: undefined as number | undefined,
+  totalAmount: undefined as number | undefined,
+  payStatus: undefined as number | undefined,
+  relatedPlant: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
   currentPage.value = 1
   loadData()
 }
 
+/** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.socialSecurity._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.socialSecurity._self') })
   formData.value = {}
   formVisible.value = true
 }
+/** 打开编辑弹窗 */
 function handleEdit(record: SocialSecurity) {
-  formTitle.value = t('common.page.button.edit') + t('entity.socialSecurity._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.socialSecurity._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
 
+/** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
@@ -516,6 +725,7 @@ function handleUpdate() {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.socialSecurity._self') }))
   }
 }
+/** 提交新增/编辑表单 */
 async function handleFormSubmit() {
   const refInst = formRef.value
   if (!refInst?.validate) return
@@ -542,30 +752,37 @@ async function handleFormSubmit() {
   }
 }
 
+/** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
 }
+/** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
 }
 
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
   const res = await getSocialSecurityTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
+/** 上传并导入 Excel 文件 */
 async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   return await importSocialSecurity(file, sheetName)
 }
 
+/** 导入完成回调：刷新列表并可选关闭对话框 */
 function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
   loadData()
   if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
 }
 
+/** 关闭导入对话框 */
 function handleImportCancel() {
   importVisible.value = false
 }
+/** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
     loading.value = true
@@ -605,6 +822,7 @@ async function handleExport() {
     loading.value = false
   }
 }
+/** 删除单行 */
 async function handleDeleteOne(record: SocialSecurity) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
@@ -618,6 +836,7 @@ async function handleDeleteOne(record: SocialSecurity) {
     }
   })
 }
+/** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.socialSecurity._self') }))
@@ -636,10 +855,12 @@ async function handleDelete() {
     }
   })
 }
+/** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
+/** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
   currentPage.value = 1
@@ -656,31 +877,49 @@ function handleAdvancedQueryReset() {
   medicalAmount: undefined as number | undefined,
   unemploymentAmount: undefined as number | undefined,
   injuryAmount: undefined as number | undefined,
+  maternityAmount: undefined as number | undefined,
+  housingFundBase: undefined as number | undefined,
+  housingFundAmount: undefined as number | undefined,
+  totalAmount: undefined as number | undefined,
+  payStatus: undefined as number | undefined,
+  relatedPlant: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
+  remark: '',
   }
 }
 
+/** 打开列设置抽屉 */
 function handleColumnSetting() {
   columnSettingVisible.value = true
 }
 
+/** 列设置：更新可见列 key */
 function handleColumnKeysChange(keys: string[]) {
   visibleColumnKeys.value = keys
 }
 
+/** 列设置：恢复默认可见列 */
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
+/** 刷新列表 */
 function handleRefresh() {
   loadData()
 }
 
+/** 表格 change 占位 */
 function handleTableChange() {}
+/** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
+/** 分页页码变更 */
 function handlePaginationChange(page: number) {
   currentPage.value = page
   loadData()
 }
+/** 分页每页条数变更 */
 function handlePaginationSizeChange(_current: number, size: number) {
   pageSize.value = size
   currentPage.value = 1

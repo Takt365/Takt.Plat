@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktServiceTicketI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktServiceTicket 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -342,6 +342,33 @@ public class TaktServiceTicketI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serviceTicket.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.serviceTicket.sortorder
             new TranslationSeedItem("entity.serviceTicket.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+
+            // entity.serviceTicket.servicerequest
+            new TranslationSeedItem("entity.serviceTicket.servicerequest", "en-US", "关联服务请求", "关联服务请求"),
+            // entity.serviceTicket.servicerequest
+            new TranslationSeedItem("entity.serviceTicket.servicerequest", "ja-JP", "关联服务请求", "关联服务请求"),
+            // entity.serviceTicket.servicerequest
+            new TranslationSeedItem("entity.serviceTicket.servicerequest", "zh-CN", "关联服务请求", "关联服务请求"),
+            // entity.serviceTicket.servicerequest
+            new TranslationSeedItem("entity.serviceTicket.servicerequest", "zh-HK", "关联服务请求", "关联服务请求"),
+
+            // entity.serviceTicket.serviceorder
+            new TranslationSeedItem("entity.serviceTicket.serviceorder", "en-US", "关联服务订单", "关联服务订单"),
+            // entity.serviceTicket.serviceorder
+            new TranslationSeedItem("entity.serviceTicket.serviceorder", "ja-JP", "关联服务订单", "关联服务订单"),
+            // entity.serviceTicket.serviceorder
+            new TranslationSeedItem("entity.serviceTicket.serviceorder", "zh-CN", "关联服务订单", "关联服务订单"),
+            // entity.serviceTicket.serviceorder
+            new TranslationSeedItem("entity.serviceTicket.serviceorder", "zh-HK", "关联服务订单", "关联服务订单"),
+
+            // entity.serviceTicket.servicecontract
+            new TranslationSeedItem("entity.serviceTicket.servicecontract", "en-US", "关联服务合同", "关联服务合同"),
+            // entity.serviceTicket.servicecontract
+            new TranslationSeedItem("entity.serviceTicket.servicecontract", "ja-JP", "关联服务合同", "关联服务合同"),
+            // entity.serviceTicket.servicecontract
+            new TranslationSeedItem("entity.serviceTicket.servicecontract", "zh-CN", "关联服务合同", "关联服务合同"),
+            // entity.serviceTicket.servicecontract
+            new TranslationSeedItem("entity.serviceTicket.servicecontract", "zh-HK", "关联服务合同", "关联服务合同"),
         };
     }
 

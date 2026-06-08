@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostElementDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostElement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostElement 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Accounting.Controlling;
 
@@ -69,7 +70,7 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int CostElementStatus { get; set; } = 0;
+    public TaktCommonStatus CostElementStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -158,7 +159,7 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int? CostElementStatus { get; set; }
+    public TaktCommonStatus? CostElementStatus { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -266,7 +267,7 @@ public class TaktCostElementCreateDto
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int CostElementStatus { get; set; } = 0;
+    public TaktCommonStatus CostElementStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -336,7 +337,7 @@ public class TaktCostElementStatusDto
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "成本要素状态（1=启用，0=禁用）不能为空")]
-    public int CostElementStatus { get; set; } = 0;
+    public TaktCommonStatus CostElementStatus { get; set; }
 }
 
 // ========================================
@@ -416,7 +417,7 @@ public class TaktCostElementTemplateDto
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int? CostElementStatus { get; set; }
+    public TaktCommonStatus? CostElementStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -489,7 +490,7 @@ public class TaktCostElementImportDto
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int? CostElementStatus { get; set; }
+    public TaktCommonStatus? CostElementStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -563,7 +564,7 @@ public class TaktCostElementExportDto
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int CostElementStatus { get; set; } = 0;
+    public TaktCommonStatus CostElementStatus { get; set; }
 
     /// <summary>
     /// 生效日期

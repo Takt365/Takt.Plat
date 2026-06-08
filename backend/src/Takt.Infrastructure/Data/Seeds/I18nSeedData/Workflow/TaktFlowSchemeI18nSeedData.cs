@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowSchemeI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,6 +163,15 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
             // entity.flowScheme.processstatus
             new TranslationSeedItem("entity.flowScheme.processstatus", "zh-HK", "发布状态", "发布状态"),
 
+            // entity.flowScheme.suspensionstate
+            new TranslationSeedItem("entity.flowScheme.suspensionstate", "en-US", "挂起状态", "挂起状态（1 激活，2 挂起）"),
+            // entity.flowScheme.suspensionstate
+            new TranslationSeedItem("entity.flowScheme.suspensionstate", "ja-JP", "挂起状态", "挂起状态（1 激活，2 挂起）"),
+            // entity.flowScheme.suspensionstate
+            new TranslationSeedItem("entity.flowScheme.suspensionstate", "zh-CN", "挂起状态", "挂起状态（1 激活，2 挂起）"),
+            // entity.flowScheme.suspensionstate
+            new TranslationSeedItem("entity.flowScheme.suspensionstate", "zh-HK", "挂起状态", "挂起状态（1 激活，2 挂起）"),
+
             // entity.flowScheme.processcontent
             new TranslationSeedItem("entity.flowScheme.processcontent", "en-US", "流程设计JSON", "流程设计 JSON（节点、网关、条件、审批人配置）"),
             // entity.flowScheme.processcontent
@@ -207,6 +216,15 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowScheme.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.flowScheme.sortorder
             new TranslationSeedItem("entity.flowScheme.sortorder", "zh-HK", "排序号", "排序号"),
+
+            // entity.flowScheme.form
+            new TranslationSeedItem("entity.flowScheme.form", "en-US", "关联表单", "关联表单"),
+            // entity.flowScheme.form
+            new TranslationSeedItem("entity.flowScheme.form", "ja-JP", "关联表单", "关联表单"),
+            // entity.flowScheme.form
+            new TranslationSeedItem("entity.flowScheme.form", "zh-CN", "关联表单", "关联表单"),
+            // entity.flowScheme.form
+            new TranslationSeedItem("entity.flowScheme.form", "zh-HK", "关联表单", "关联表单"),
         };
     }
 

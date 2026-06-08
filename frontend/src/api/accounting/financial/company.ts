@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/financial
 // 文件名称：company.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -114,7 +114,7 @@ export function deleteCompanyBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新公司状态
- * @param {CompanyStatus} dto 状态DTO
+ * @param {CompanyStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<Company>} 公司DTO
  */
 export function updateCompanyStatus(dto: CompanyStatus): Promise<Company> {
@@ -177,11 +177,11 @@ export function getCompanyTemplate(sheetName?: string, templateName?: string): P
 
 /**
  * 导入公司
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importCompany(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importCompany(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心控制器
 // 
@@ -183,7 +183,7 @@ public class TaktNewsesController : TaktControllerBase
     /// <summary>
     /// 更新新闻中心状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktNewsStatus 枚举）</param>
     /// <returns>新闻中心DTO</returns>
     [TaktPermission("routine:newscenter:news:update", "更新新闻中心状态")]
     [HttpPut("status")]

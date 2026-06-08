@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/talent
 // 文件名称：talent-job-posting.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/talent 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteTalentJobPostingBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新职位发布状态
- * @param {TalentJobPostingStatus} dto 状态DTO
+ * @param {TalentJobPostingStatus} dto 状态 DTO
  * @returns {Promise<TalentJobPosting>} 职位发布DTO
  */
 export function updateTalentJobPostingStatus(dto: TalentJobPostingStatus): Promise<TalentJobPosting> {
@@ -163,11 +163,11 @@ export function getTalentJobPostingTemplate(sheetName?: string, templateName?: s
 
 /**
  * 导入职位发布
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importTalentJobPosting(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importTalentJobPosting(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

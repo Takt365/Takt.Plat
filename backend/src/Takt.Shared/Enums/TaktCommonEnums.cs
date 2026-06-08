@@ -34,6 +34,24 @@ public enum TaktYesNo
 }
 
 /// <summary>
+/// 执行结果状态枚举（全局通用：0=失败，1=成功）
+/// </summary>
+public enum TaktExecuteStatus
+{
+    /// <summary>
+    /// 失败
+    /// </summary>
+    [Display(Name = "失败")]
+    Failed = 0,
+
+    /// <summary>
+    /// 成功
+    /// </summary>
+    [Display(Name = "成功")]
+    Success = 1
+}
+
+/// <summary>
 /// 通用状态枚举（全局通用）
 /// </summary>
 public enum TaktCommonStatus

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityOperationIncomingI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityOperationIncoming 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,6 +171,15 @@ public class TaktQualityOperationIncomingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityOperationIncoming.incomingnote", "zh-CN", "来料检验备注", "来料检验备注"),
             // entity.qualityOperationIncoming.incomingnote
             new TranslationSeedItem("entity.qualityOperationIncoming.incomingnote", "zh-HK", "来料检验备注", "来料检验备注"),
+
+            // entity.qualityOperationIncoming.operation
+            new TranslationSeedItem("entity.qualityOperationIncoming.operation", "en-US", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityOperationIncoming.operation
+            new TranslationSeedItem("entity.qualityOperationIncoming.operation", "ja-JP", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityOperationIncoming.operation
+            new TranslationSeedItem("entity.qualityOperationIncoming.operation", "zh-CN", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityOperationIncoming.operation
+            new TranslationSeedItem("entity.qualityOperationIncoming.operation", "zh-HK", "品质业务主表", "品质业务主表(导航属性)"),
         };
     }
 

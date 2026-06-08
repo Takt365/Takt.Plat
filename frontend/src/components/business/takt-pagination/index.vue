@@ -91,7 +91,7 @@ const showTotalAttr = computed(() => {
     return { 'show-total': props.showTotal }
   }
   if (props.showTotal === true) {
-    return { 'show-total': (total: number, _range: [number, number]) => t('components.navigation.page.systemsetting.totalcount', { total }) }
+    return { 'show-total': (total: number, _range: [number, number]) => t('common.table.total', { total }) }
   }
   // 当 showTotal 为 false 时，不传递 show-total 属性
   return {}

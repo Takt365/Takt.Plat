@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentInterviewI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentInterview 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -189,6 +189,24 @@ public class TaktTalentInterviewI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentInterview.reason", "zh-CN", "面试说明", "面试说明"),
             // entity.talentInterview.reason
             new TranslationSeedItem("entity.talentInterview.reason", "zh-HK", "面试说明", "面试说明"),
+
+            // entity.talentInterview.jobposting
+            new TranslationSeedItem("entity.talentInterview.jobposting", "en-US", "职位发布", "职位发布"),
+            // entity.talentInterview.jobposting
+            new TranslationSeedItem("entity.talentInterview.jobposting", "ja-JP", "职位发布", "职位发布"),
+            // entity.talentInterview.jobposting
+            new TranslationSeedItem("entity.talentInterview.jobposting", "zh-CN", "职位发布", "职位发布"),
+            // entity.talentInterview.jobposting
+            new TranslationSeedItem("entity.talentInterview.jobposting", "zh-HK", "职位发布", "职位发布"),
+
+            // entity.talentInterview.talentoffers
+            new TranslationSeedItem("entity.talentInterview.talentoffers", "en-US", "录用信息", "录用信息"),
+            // entity.talentInterview.talentoffers
+            new TranslationSeedItem("entity.talentInterview.talentoffers", "ja-JP", "录用信息", "录用信息"),
+            // entity.talentInterview.talentoffers
+            new TranslationSeedItem("entity.talentInterview.talentoffers", "zh-CN", "录用信息", "录用信息"),
+            // entity.talentInterview.talentoffers
+            new TranslationSeedItem("entity.talentInterview.talentoffers", "zh-HK", "录用信息", "录用信息"),
         };
     }
 

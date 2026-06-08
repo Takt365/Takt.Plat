@@ -875,7 +875,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         var roles = await _roleRepository.GetListAsync(r =>
             roleIds.Contains(r.Id) && r.TenantCode == tenantCode);
         return roles
-            .Where(r => r.RoleStatus == (int)TaktCommonStatus.Enabled)
+            .Where(r => r.RoleStatus == TaktCommonStatus.Enabled)
             .ToList();
     }
 
@@ -888,7 +888,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     private async Task<List<TaktMenu>> GetAccessibleMenusAsync(long userId, string tenantCode)
     {
         var allMenus = await _menuRepository.GetListAsync(m =>
-            m.TenantCode == tenantCode && m.MenuStatus == (int)TaktCommonStatus.Enabled);
+            m.TenantCode == tenantCode && m.MenuStatus == TaktCommonStatus.Enabled);
 
         var roles = await GetEnabledRolesAsync(userId, tenantCode);
         if (roles.Count == 0)

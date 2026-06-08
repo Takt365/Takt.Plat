@@ -149,14 +149,14 @@ watch(
   { immediate: true, deep: true }
 )
 
-/** 校验规则：IsCreate 且 IsRequired 的列必填；文案使用 common.form.placeholder.* + entity.*（与 user-form 一致） */
+/** 校验规则：IsCreate 且 IsRequired 的列必填；文案使用 common.page.form.placeholder.* + entity.*（与 user-form 一致） */
 const rules = computed<Record<string, Rule[]>>(() => ({
 {{~ for col in columns ~}}
 {{~ if col.is_create == 1 && col.is_required == 1 ~}}
   {{ col.ts_column_name }}: [
     {
       required: true,
-      message: t('{{ if col.html_type == "select" && col.dict_type }}common.form.placeholder.select{{ else }}common.form.placeholder.required{{ end }}', { field: t('entity.{{ table.entity_name_camel }}.{{ col.ts_column_name | string.downcase }}') }),
+      message: t('{{ if col.html_type == "select" && col.dict_type }}common.page.form.placeholder.select{{ else }}common.page.form.placeholder.required{{ end }}', { field: t('entity.{{ table.entity_name_camel }}.{{ col.ts_column_name | string.downcase }}') }),
       trigger: '{{ if col.html_type == "select" && col.dict_type }}change{{ else }}blur{{ end }}'
     }
   ],

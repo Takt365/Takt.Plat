@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：sales-quotation.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteSalesQuotationBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新销售报价状态
- * @param {SalesQuotationStatus} dto 状态DTO
+ * @param {SalesQuotationStatus} dto 状态 DTO
  * @returns {Promise<SalesQuotation>} 销售报价DTO
  */
 export function updateSalesQuotationStatus(dto: SalesQuotationStatus): Promise<SalesQuotation> {
@@ -163,11 +163,11 @@ export function getSalesQuotationTemplate(sheetName?: string, templateName?: str
 
 /**
  * 导入销售报价
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importSalesQuotation(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importSalesQuotation(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

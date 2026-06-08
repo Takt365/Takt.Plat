@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyDefect 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -209,13 +209,13 @@ public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyDefect.status", "zh-HK", "状态", "状态(0=正常 1=停用)"),
 
             // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "en-US", "assyDefectDetails", "组立不良明细列表"),
+            new TranslationSeedItem("entity.assyDefect.details", "en-US", "组立不良明细列表", "组立不良明细列表"),
             // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "ja-JP", "assyDefectDetails", "组立不良明细列表"),
+            new TranslationSeedItem("entity.assyDefect.details", "ja-JP", "组立不良明细列表", "组立不良明细列表"),
             // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "zh-CN", "assyDefectDetails", "组立不良明细列表"),
+            new TranslationSeedItem("entity.assyDefect.details", "zh-CN", "组立不良明细列表", "组立不良明细列表"),
             // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "zh-HK", "assyDefectDetails", "组立不良明细列表"),
+            new TranslationSeedItem("entity.assyDefect.details", "zh-HK", "组立不良明细列表", "组立不良明细列表"),
         };
     }
 

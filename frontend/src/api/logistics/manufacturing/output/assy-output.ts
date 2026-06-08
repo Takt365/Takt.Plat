@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：assy-output.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteAssyOutputBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新组立日报状态
- * @param {AssyOutputStatus} dto 状态DTO
+ * @param {AssyOutputStatus} dto 状态 DTO
  * @returns {Promise<AssyOutput>} 组立日报DTO
  */
 export function updateAssyOutputStatus(dto: AssyOutputStatus): Promise<AssyOutput> {
@@ -163,11 +163,11 @@ export function getAssyOutputTemplate(sheetName?: string, templateName?: string)
 
 /**
  * 导入组立日报
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importAssyOutput(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importAssyOutput(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

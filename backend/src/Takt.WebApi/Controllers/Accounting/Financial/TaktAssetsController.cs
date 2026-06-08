@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktAssetsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：资产控制器
 // 
@@ -183,7 +183,7 @@ public class TaktAssetsController : TaktControllerBase
     /// <summary>
     /// 更新资产状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>资产DTO</returns>
     [TaktPermission("accounting:financial:asset:update", "更新资产状态")]
     [HttpPut("status")]

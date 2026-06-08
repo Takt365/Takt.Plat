@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentRecruitmentPlanI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentRecruitmentPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,6 +153,24 @@ public class TaktTalentRecruitmentPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentRecruitmentPlan.reason", "zh-CN", "计划说明", "计划说明"),
             // entity.talentRecruitmentPlan.reason
             new TranslationSeedItem("entity.talentRecruitmentPlan.reason", "zh-HK", "计划说明", "计划说明"),
+
+            // entity.talentRecruitmentPlan.staffingrequirement
+            new TranslationSeedItem("entity.talentRecruitmentPlan.staffingrequirement", "en-US", "用人需求", "用人需求"),
+            // entity.talentRecruitmentPlan.staffingrequirement
+            new TranslationSeedItem("entity.talentRecruitmentPlan.staffingrequirement", "ja-JP", "用人需求", "用人需求"),
+            // entity.talentRecruitmentPlan.staffingrequirement
+            new TranslationSeedItem("entity.talentRecruitmentPlan.staffingrequirement", "zh-CN", "用人需求", "用人需求"),
+            // entity.talentRecruitmentPlan.staffingrequirement
+            new TranslationSeedItem("entity.talentRecruitmentPlan.staffingrequirement", "zh-HK", "用人需求", "用人需求"),
+
+            // entity.talentRecruitmentPlan.talentjobpostings
+            new TranslationSeedItem("entity.talentRecruitmentPlan.talentjobpostings", "en-US", "职位发布", "职位发布"),
+            // entity.talentRecruitmentPlan.talentjobpostings
+            new TranslationSeedItem("entity.talentRecruitmentPlan.talentjobpostings", "ja-JP", "职位发布", "职位发布"),
+            // entity.talentRecruitmentPlan.talentjobpostings
+            new TranslationSeedItem("entity.talentRecruitmentPlan.talentjobpostings", "zh-CN", "职位发布", "职位发布"),
+            // entity.talentRecruitmentPlan.talentjobpostings
+            new TranslationSeedItem("entity.talentRecruitmentPlan.talentjobpostings", "zh-HK", "职位发布", "职位发布"),
         };
     }
 

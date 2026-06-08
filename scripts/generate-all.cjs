@@ -68,8 +68,8 @@ const PIPELINE = [
   },
   {
     key: 'vue',
-    label: '前端视图与表单（types/api → views）',
-    script: 'generate-vue-from-api.cjs',
+    label: '前端视图与表单（types/api → views；CRUD + TREE + Master-Detail）',
+    script: 'generate-vue-all-from-api.cjs',
     skipForManualFrontend: true,
   },
 ];
@@ -141,7 +141,7 @@ function printUsage() {
   5. generate-controllers-from-services.cjs
   6. generate-from-backend.cjs
   7. generate-entity-i18n-seed.cjs
-  8. generate-vue-from-api.cjs（最后；User/Menu/workflow 等见 generate-entity-exclusions.cjs）
+  8. generate-vue-all-from-api.cjs（串联 CRUD / TREE / Master-Detail；User/Menu/workflow/*ChangeLog 等见 generate-entity-exclusions.cjs）
 
 说明:
   - 写入策略（各子脚本统一）：目标文件不存在则创建，已存在则整文件覆盖更新（无需 --force）
@@ -149,10 +149,9 @@ function printUsage() {
   - 手工 CRUD 实体：User（密码等）、Online、Message（跳过 DTO/服务/控制器/前端）
   - RBAC 八表：UserRole/UserTenant/…/EmployeePost（仅 TaktRbac，跳过独立 CRUD）
   - 独立服务：TaktAuth、TaktRbac 等（见 generate-entity-exclusions.cjs）
-  - 主子表（OneToMany，如 Culture+TranslationList、DictType+DictDataList）：
-      DTO：响应 List<子Dto>；Create/Update List<子CreateDto>
-      服务：Fill*DetailsAsync、Save*ChildrenAsync 级联
-      控制器/类型/API：与标准 CRUD 一并生成
+  - 主子表（OneToMany，如 PurchaseOrder+items、DictType+DictDataList）：
+      DTO/服务/控制器/API：主从均生成
+      Vue：**仅主表** index.vue + *-form.vue（展开行 + 表单 Tab，对齐 foundation/dict）；从实体视图自动跳过
   - 转置（仅 Translation）：
       DTO：*TransposedDto / *TransposedQueryDto / *TransposedResultDto / *TransposedBatchDto
       服务：Get*TransposedListAsync、Save*TransposedBatchAsync

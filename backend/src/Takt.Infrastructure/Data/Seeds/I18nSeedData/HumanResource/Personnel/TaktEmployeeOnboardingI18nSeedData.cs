@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeOnboarding 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,6 +171,24 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeOnboarding.reason", "zh-CN", "待办说明", "待办说明"),
             // entity.employeeOnboarding.reason
             new TranslationSeedItem("entity.employeeOnboarding.reason", "zh-HK", "待办说明", "待办说明"),
+
+            // entity.employeeOnboarding.offer
+            new TranslationSeedItem("entity.employeeOnboarding.offer", "en-US", "录用信息", "录用信息"),
+            // entity.employeeOnboarding.offer
+            new TranslationSeedItem("entity.employeeOnboarding.offer", "ja-JP", "录用信息", "录用信息"),
+            // entity.employeeOnboarding.offer
+            new TranslationSeedItem("entity.employeeOnboarding.offer", "zh-CN", "录用信息", "录用信息"),
+            // entity.employeeOnboarding.offer
+            new TranslationSeedItem("entity.employeeOnboarding.offer", "zh-HK", "录用信息", "录用信息"),
+
+            // entity.employeeOnboarding.employeejoined
+            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "en-US", "入职上岗单", "入职上岗单"),
+            // entity.employeeOnboarding.employeejoined
+            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "ja-JP", "入职上岗单", "入职上岗单"),
+            // entity.employeeOnboarding.employeejoined
+            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "zh-CN", "入职上岗单", "入职上岗单"),
+            // entity.employeeOnboarding.employeejoined
+            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "zh-HK", "入职上岗单", "入职上岗单"),
         };
     }
 

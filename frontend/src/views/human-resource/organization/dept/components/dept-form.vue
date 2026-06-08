@@ -210,9 +210,8 @@
               >
                 <TaktSelect
                   v-model:value="formState.deptStatus"
-                  api-url="/api/TaktDictDatas/options?dictTypeCode=sys_normal_disable"
+                  dict-type="sys_normal_disable"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.status') })"
-                  :field-names="{ label: 'dictLabel', value: 'extLabel' }"
                 />
               </a-form-item>
             </a-col>

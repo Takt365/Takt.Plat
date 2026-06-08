@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepairDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -216,6 +216,15 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaRepairDetail.repairoperator", "zh-CN", "修理员", "修理员"),
             // entity.pcbaRepairDetail.repairoperator
             new TranslationSeedItem("entity.pcbaRepairDetail.repairoperator", "zh-HK", "修理员", "修理员"),
+
+            // entity.pcbaRepairDetail.pcbarepair
+            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "en-US", "PCBA改修日报", "PCBA改修日报（主表）"),
+            // entity.pcbaRepairDetail.pcbarepair
+            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "ja-JP", "PCBA改修日报", "PCBA改修日报（主表）"),
+            // entity.pcbaRepairDetail.pcbarepair
+            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "zh-CN", "PCBA改修日报", "PCBA改修日报（主表）"),
+            // entity.pcbaRepairDetail.pcbarepair
+            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "zh-HK", "PCBA改修日报", "PCBA改修日报（主表）"),
         };
     }
 

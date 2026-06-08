@@ -15,6 +15,7 @@
     <div class="takt-tree-right-table__body">
       <a-table
         class="ant-table-striped"
+        table-layout="fixed"
         :columns="resolvedDisplayColumns"
         :data-source="dataSource"
         :loading="loading"
@@ -62,10 +63,17 @@
 import type { TableColumnsType, TableProps, TablePaginationConfig } from 'ant-design-vue'
 import type { ColumnType, SorterResult, FilterValue, TableCurrentDataSource } from 'ant-design-vue/es/table/interface'
 import {
+  filterMergedColumnsByDefaultVisible,
   filterTableColumnsByVisibleKeys,
   mergeDefaultColumns,
+  normalizeUserTableColumns,
   type TaktEntityScope,
+  type TaktTableLayoutMode,
 } from '@/utils/table-columns'
+import {
+  applyTableColumnPresentation,
+  resolveTableScrollConfig,
+} from '@/utils/table-scroll'
 import { useI18n } from 'vue-i18n'
 
 type TableRecord = Record<string, unknown>
@@ -77,12 +85,18 @@ type ResizableColumn = { width?: number | string }
 interface Props {
   /** 业务列配置（不含实体基座字段，由 entityScope 自动合并） */
   columns: TableColumnsType
-  /** 实体基类作用域（默认 company，对齐 CompanyDtoBase） */
-  entityScope?: TaktEntityScope
+  /** 实体基类作用域（tenant/company/approval，必填） */
+  entityScope: TaktEntityScope
   /** 是否合并审计字段列 */
   includeAuditFields?: boolean
-  /** 可见列键（列设置抽屉）；空数组时仅展示业务列 */
+  /** 可见列键（列设置抽屉）；空数组时按 tableMode 默认显隐 */
   visibleColumnKeys?: string[]
+  /** ID 列键（默认 id） */
+  idColumnKey?: string | number
+  /** 操作列键（默认 action） */
+  actionColumnKey?: string | number
+  /** 左树右表默认 4 个业务列（默认 tree） */
+  tableMode?: TaktTableLayoutMode
   /** 数据源 */
   dataSource?: TableRecord[]
   /** 加载状态 */
@@ -134,9 +148,11 @@ const props = withDefaults(defineProps<Props>(), {
   current: 1,
   pageSize: 20,
   total: 0,
-  entityScope: 'company',
   includeAuditFields: true,
   visibleColumnKeys: () => [],
+  idColumnKey: 'id',
+  actionColumnKey: 'action',
+  tableMode: 'tree',
 })
 
 const { t } = useI18n()
@@ -184,49 +200,38 @@ const rowClassName = computed(() => {
   return ''
 })
 
+const userColumns = computed((): TableColumnsType => normalizeUserTableColumns(props.columns))
+
 const mergedColumns = computed(() =>
-  mergeDefaultColumns(props.columns, t, props.includeAuditFields, props.entityScope),
+  mergeDefaultColumns(userColumns.value, t, props.includeAuditFields, props.entityScope),
 )
 
 const displayColumnSource = computed((): TableColumnsType => {
   const keys = props.visibleColumnKeys ?? []
   if (keys.length > 0) {
-    return filterTableColumnsByVisibleKeys(mergedColumns.value, keys, props.columns)
+    return filterTableColumnsByVisibleKeys(mergedColumns.value, keys, mergedColumns.value)
   }
-  return props.columns
-})
-
-const resolvedDisplayColumns = computed<TableColumnsType>(() => {
-  const cols = displayColumnSource.value
-  const visibleCount = cols.length
-  return cols.map((column) => {
-    const processedColumn = { ...column } as ColumnType<TableRecord>
-    if (!processedColumn.width && visibleCount > 0) {
-      const viewportWidth = window.innerWidth - 40
-      processedColumn.width = Math.floor(viewportWidth / 9)
-    }
-    if (props.defaultEllipsis && column.ellipsis === undefined) {
-      processedColumn.ellipsis = true
-    }
-    return processedColumn
+  return filterMergedColumnsByDefaultVisible(mergedColumns.value, userColumns.value, {
+    idColumnKey: props.idColumnKey,
+    actionColumnKey: props.actionColumnKey,
+    tableMode: props.tableMode,
+    entityScope: props.entityScope,
   })
 })
 
-const scrollConfig = computed(() => {
-  const config: { x?: number | string | true; y?: number | string } = { ...props.scroll }
-  if (!config.x) {
-    const totalWidth = resolvedDisplayColumns.value.reduce((sum: number, col) => {
-      const width = (col as ResizableColumn).width
-      return sum + (typeof width === 'number' ? width : 0)
-    }, 0)
-    config.x = totalWidth > 0 && resolvedDisplayColumns.value.every((col) => !!(col as ResizableColumn).width) ? totalWidth : 'max-content'
-  }
-  if (shouldUseVirtual.value && !config.y) config.y = 600
-  if (props.showPagination && !config.y) {
-    config.y = 'calc(100vh - 320px)'
-  }
-  return config
-})
+const resolvedDisplayColumns = computed(() =>
+  applyTableColumnPresentation(displayColumnSource.value, props.defaultEllipsis),
+)
+
+const scrollConfig = computed(() =>
+  resolveTableScrollConfig({
+    columns: resolvedDisplayColumns.value,
+    scroll: props.scroll,
+    includeRowSelection: effectiveRowSelection.value != null,
+    enableVerticalScroll: shouldUseVirtual.value || props.showPagination,
+    verticalScrollHeight: props.showPagination ? 'calc(100vh - 320px)' : 600,
+  }),
+)
 
 const handleTableChange = (pagination: TablePaginationConfig, filters: Record<string, FilterValue | null>, sorter: SorterResult<any> | SorterResult<any>[], _extra: TableCurrentDataSource<any>) => {
   const finalSorter = Array.isArray(sorter) ? sorter[0] : sorter
@@ -277,6 +282,16 @@ const handlePaginationSizeChange = (_page: number, size: number) => {
 .takt-tree-right-table__body {
   flex: 1;
   min-height: 0;
+  min-width: 0;
   overflow: hidden;
+}
+
+.takt-tree-right-table__body :deep(.ant-table-wrapper) {
+  width: 100%;
+  min-width: 0;
+}
+
+.takt-tree-right-table__body :deep(.ant-table-container) {
+  min-width: 0;
 }
 </style>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPurchasePriceItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePriceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -191,13 +191,13 @@ public class TaktPurchasePriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasePriceItem.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
             // entity.purchasePriceItem.scales
-            new TranslationSeedItem("entity.purchasePriceItem.scales", "en-US", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.purchasePriceItem.scales", "en-US", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
             // entity.purchasePriceItem.scales
-            new TranslationSeedItem("entity.purchasePriceItem.scales", "ja-JP", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.purchasePriceItem.scales", "ja-JP", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
             // entity.purchasePriceItem.scales
-            new TranslationSeedItem("entity.purchasePriceItem.scales", "zh-CN", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.purchasePriceItem.scales", "zh-CN", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
             // entity.purchasePriceItem.scales
-            new TranslationSeedItem("entity.purchasePriceItem.scales", "zh-HK", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.purchasePriceItem.scales", "zh-HK", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
         };
     }
 

@@ -73,6 +73,21 @@ export const themeColorMap: Record<Exclude<ThemeColor, 'custom'>, string> = {
   gray: '#808080',
 };
 
+/** 主题色 preset → common.page.color.* 键段（与 locales/common 静态包一致） */
+export const themeColorI18nKeyMap: Record<Exclude<ThemeColor, 'custom'>, string> = {
+  green: 'mars-green',
+  cyan: 'tiffany-blue',
+  red: 'chinese-red',
+  orange: 'titian-red',
+  purple: 'burgundy',
+  pink: 'bordeaux',
+  blue: 'klein-blue',
+  brown: 'van-dyke-brown',
+  indigo: 'prussian-blue',
+  yellow: 'senelier-yellow',
+  gray: 'memorial-gray',
+};
+
 /**
  * 解析主题色色值
  * @param {ThemeColorConfig} config 主题色配置

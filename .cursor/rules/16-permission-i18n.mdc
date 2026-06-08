@@ -118,7 +118,7 @@ menu.RoutePath = "/identity/user";
 
 ### 1.6 代码生成
 
-`generate-controllers-from-services.cjs` 写入 `[TaktPermission]`；`generate-vue-from-api.cjs` 从菜单种子或控制器解析权限前缀。生成后 **必须人工核对** 与 `TaktMenuButtonSeedData` 一致（`15-codegen` §五）。
+`generate-controllers-from-services.cjs` 写入 `[TaktPermission]`；`generate-vue-crud-from-api.cjs` 等从菜单种子或控制器解析权限前缀。生成后 **必须人工核对** 与 `TaktMenuButtonSeedData` 一致（`15-codegen` §五）。
 
 ---
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRole 实体字段国际化种子（已对齐前端 locales：src/locales/identity/role）
 // 
@@ -127,6 +127,15 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
             // entity.role.sortorder
             new TranslationSeedItem("entity.role.sortorder", "zh-HK", "排序号", "排序号"),
 
+            // entity.role.isbuiltin
+            new TranslationSeedItem("entity.role.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+            // entity.role.isbuiltin
+            new TranslationSeedItem("entity.role.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+            // entity.role.isbuiltin
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+            // entity.role.isbuiltin
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+
             // entity.role.status
             new TranslationSeedItem("entity.role.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
             // entity.role.status
@@ -146,13 +155,40 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.role.description", "zh-HK", "角色描述", "角色描述"),
 
             // entity.role.menus
-            new TranslationSeedItem("entity.role.menus", "en-US", "roleMenus", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.role.menus", "en-US", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
             // entity.role.menus
-            new TranslationSeedItem("entity.role.menus", "ja-JP", "roleMenus", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.role.menus", "ja-JP", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
             // entity.role.menus
-            new TranslationSeedItem("entity.role.menus", "zh-CN", "roleMenus", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.role.menus", "zh-CN", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
             // entity.role.menus
-            new TranslationSeedItem("entity.role.menus", "zh-HK", "roleMenus", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.role.menus", "zh-HK", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+
+            // entity.role.companies
+            new TranslationSeedItem("entity.role.companies", "en-US", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
+            // entity.role.companies
+            new TranslationSeedItem("entity.role.companies", "ja-JP", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
+            // entity.role.companies
+            new TranslationSeedItem("entity.role.companies", "zh-CN", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
+            // entity.role.companies
+            new TranslationSeedItem("entity.role.companies", "zh-HK", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
+
+            // entity.role.depts
+            new TranslationSeedItem("entity.role.depts", "en-US", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            // entity.role.depts
+            new TranslationSeedItem("entity.role.depts", "ja-JP", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            // entity.role.depts
+            new TranslationSeedItem("entity.role.depts", "zh-CN", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            // entity.role.depts
+            new TranslationSeedItem("entity.role.depts", "zh-HK", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
+
+            // entity.role.userroles
+            new TranslationSeedItem("entity.role.userroles", "en-US", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
+            // entity.role.userroles
+            new TranslationSeedItem("entity.role.userroles", "ja-JP", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
+            // entity.role.userroles
+            new TranslationSeedItem("entity.role.userroles", "zh-CN", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
+            // entity.role.userroles
+            new TranslationSeedItem("entity.role.userroles", "zh-HK", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
         };
     }
 

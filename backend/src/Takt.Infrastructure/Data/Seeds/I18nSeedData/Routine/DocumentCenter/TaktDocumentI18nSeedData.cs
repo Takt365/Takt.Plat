@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,6 +126,15 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.status", "zh-CN", "文档状态", "文档状态"),
             // entity.document.status
             new TranslationSeedItem("entity.document.status", "zh-HK", "文档状态", "文档状态"),
+
+            // entity.document.confidentiallevel
+            new TranslationSeedItem("entity.document.confidentiallevel", "en-US", "密级", "密级"),
+            // entity.document.confidentiallevel
+            new TranslationSeedItem("entity.document.confidentiallevel", "ja-JP", "密级", "密级"),
+            // entity.document.confidentiallevel
+            new TranslationSeedItem("entity.document.confidentiallevel", "zh-CN", "密级", "密级"),
+            // entity.document.confidentiallevel
+            new TranslationSeedItem("entity.document.confidentiallevel", "zh-HK", "密级", "密级"),
 
             // entity.document.version
             new TranslationSeedItem("entity.document.version", "en-US", "当前版本号", "当前版本号"),
@@ -280,6 +289,15 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             // entity.document.deptname
             new TranslationSeedItem("entity.document.deptname", "zh-HK", "归属部门名称", "归属部门名称"),
 
+            // entity.document.istop
+            new TranslationSeedItem("entity.document.istop", "en-US", "是否置顶", "是否置顶"),
+            // entity.document.istop
+            new TranslationSeedItem("entity.document.istop", "ja-JP", "是否置顶", "是否置顶"),
+            // entity.document.istop
+            new TranslationSeedItem("entity.document.istop", "zh-CN", "是否置顶", "是否置顶"),
+            // entity.document.istop
+            new TranslationSeedItem("entity.document.istop", "zh-HK", "是否置顶", "是否置顶"),
+
             // entity.document.sortorder
             new TranslationSeedItem("entity.document.sortorder", "en-US", "排序号", "排序号"),
             // entity.document.sortorder
@@ -335,13 +353,22 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.targetusers", "zh-HK", "目标用户ID", "目标用户 ID（多个用逗号分隔）"),
 
             // entity.document.versions
-            new TranslationSeedItem("entity.document.versions", "en-US", "versions", "版本历史列表（主子表关系）"),
+            new TranslationSeedItem("entity.document.versions", "en-US", "版本历史列表", "版本历史列表（主子表关系）"),
             // entity.document.versions
-            new TranslationSeedItem("entity.document.versions", "ja-JP", "versions", "版本历史列表（主子表关系）"),
+            new TranslationSeedItem("entity.document.versions", "ja-JP", "版本历史列表", "版本历史列表（主子表关系）"),
             // entity.document.versions
-            new TranslationSeedItem("entity.document.versions", "zh-CN", "versions", "版本历史列表（主子表关系）"),
+            new TranslationSeedItem("entity.document.versions", "zh-CN", "版本历史列表", "版本历史列表（主子表关系）"),
             // entity.document.versions
-            new TranslationSeedItem("entity.document.versions", "zh-HK", "versions", "版本历史列表（主子表关系）"),
+            new TranslationSeedItem("entity.document.versions", "zh-HK", "版本历史列表", "版本历史列表（主子表关系）"),
+
+            // entity.document.changelogs
+            new TranslationSeedItem("entity.document.changelogs", "en-US", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.document.changelogs
+            new TranslationSeedItem("entity.document.changelogs", "ja-JP", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.document.changelogs
+            new TranslationSeedItem("entity.document.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.document.changelogs
+            new TranslationSeedItem("entity.document.changelogs", "zh-HK", "变更日志列表", "变更日志列表（主子表关系）"),
         };
     }
 

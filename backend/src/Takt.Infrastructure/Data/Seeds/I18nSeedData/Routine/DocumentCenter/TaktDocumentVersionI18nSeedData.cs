@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentVersionI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocumentVersion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -198,6 +198,15 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.documentVersion.revisedat", "zh-CN", "修订时间", "修订时间"),
             // entity.documentVersion.revisedat
             new TranslationSeedItem("entity.documentVersion.revisedat", "zh-HK", "修订时间", "修订时间"),
+
+            // entity.documentVersion.document
+            new TranslationSeedItem("entity.documentVersion.document", "en-US", "文档", "文档（主表）"),
+            // entity.documentVersion.document
+            new TranslationSeedItem("entity.documentVersion.document", "ja-JP", "文档", "文档（主表）"),
+            // entity.documentVersion.document
+            new TranslationSeedItem("entity.documentVersion.document", "zh-CN", "文档", "文档（主表）"),
+            // entity.documentVersion.document
+            new TranslationSeedItem("entity.documentVersion.document", "zh-HK", "文档", "文档（主表）"),
         };
     }
 

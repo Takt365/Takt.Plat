@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Performance
 // 文件名称：TaktAnalysisImprovementsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：绩效分析改进控制器
 // 
@@ -183,7 +183,7 @@ public class TaktAnalysisImprovementsController : TaktControllerBase
     /// <summary>
     /// 更新绩效分析改进状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>绩效分析改进DTO</returns>
     [TaktPermission("humanresource:performance:analysisimprovement:update", "更新绩效分析改进状态")]
     [HttpPut("status")]

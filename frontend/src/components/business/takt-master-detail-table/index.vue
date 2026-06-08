@@ -475,7 +475,7 @@ const computedShowTotal = computed((): boolean | ((total: number, range: [number
     return props.showTotal
   }
   if (props.showTotal === true) {
-    return (total: number, _range: [number, number]) => t('components.navigation.page.systemsetting.totalcount', { total })
+    return (total: number, _range: [number, number]) => t('common.table.total', { total })
   }
   return false
 })

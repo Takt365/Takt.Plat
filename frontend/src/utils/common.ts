@@ -164,6 +164,9 @@ export const TAKT_LOGIN_PREVIEW_DEBOUNCE_MS = 300;
 /** 空闲自动登出默认超时时长（分钟） */
 export const TAKT_AUTH_IDLE_DEFAULT_TIMEOUT_MINUTES = 30;
 
+/** 空闲登出预警默认时长（分钟；到期前弹窗，用户可点「继续使用」续期） */
+export const TAKT_AUTH_IDLE_DEFAULT_WARNING_MINUTES = 5;
+
 /** 空闲会话视为用户活动的 DOM 事件（不含 mousemove，避免扩展脚本/微动持续重置计时） */
 export const TAKT_IDLE_ACTIVITY_EVENTS = [
   'pointerdown',

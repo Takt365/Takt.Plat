@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktCultureI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCulture 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,6 +136,15 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             // entity.culture.sortorder
             new TranslationSeedItem("entity.culture.sortorder", "zh-HK", "排序号", "排序号"),
 
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "en-US", "是否默认语言", "是否默认语言（1=是，0=否）"),
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "ja-JP", "是否默认语言", "是否默认语言（1=是，0=否）"),
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "zh-CN", "是否默认语言", "是否默认语言（1=是，0=否）"),
+            // entity.culture.isdefault
+            new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "是否默认语言", "是否默认语言（1=是，0=否）"),
+
             // entity.culture.languagestatus
             new TranslationSeedItem("entity.culture.languagestatus", "en-US", "状态", "状态（1=启用，0=禁用）"),
             // entity.culture.languagestatus
@@ -146,13 +155,13 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.culture.languagestatus", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
 
             // entity.culture.translationlist
-            new TranslationSeedItem("entity.culture.translationlist", "en-US", "translationList", "翻译列表（一对多关联）"),
+            new TranslationSeedItem("entity.culture.translationlist", "en-US", "翻译列表", "翻译列表（一对多关联）"),
             // entity.culture.translationlist
-            new TranslationSeedItem("entity.culture.translationlist", "ja-JP", "translationList", "翻译列表（一对多关联）"),
+            new TranslationSeedItem("entity.culture.translationlist", "ja-JP", "翻译列表", "翻译列表（一对多关联）"),
             // entity.culture.translationlist
-            new TranslationSeedItem("entity.culture.translationlist", "zh-CN", "translationList", "翻译列表（一对多关联）"),
+            new TranslationSeedItem("entity.culture.translationlist", "zh-CN", "翻译列表", "翻译列表（一对多关联）"),
             // entity.culture.translationlist
-            new TranslationSeedItem("entity.culture.translationlist", "zh-HK", "translationList", "翻译列表（一对多关联）"),
+            new TranslationSeedItem("entity.culture.translationlist", "zh-HK", "翻译列表", "翻译列表（一对多关联）"),
         };
     }
 

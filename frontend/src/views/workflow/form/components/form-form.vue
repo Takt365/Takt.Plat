@@ -38,7 +38,7 @@
               <a-input
                 v-model:value="form.formCode"
                 :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowform.formcode') })"
-                :disabled="!!form.formId"
+                :disabled="!!form.flowFormId"
               />
             </a-form-item>
           </a-col>
@@ -220,7 +220,7 @@
       >
         <a-form-item :label="t('entity.flowform.formconfig')">
           <TaktFormDesigner
-            :key="'form-designer-' + (form.formId ?? 'new')"
+            :key="'form-designer-' + (form.flowFormId ?? 'new')"
             ref="designerRef"
             v-model="formConfigModel"
             height="480px"
@@ -319,9 +319,9 @@ const sfcDownloadBasename = computed(() =>
 
 const { t } = useI18n()
 
-/** 父组件传入的表单数据（含 formId 表示编辑） */
+/** 父组件传入的表单数据（含 flowFormId 表示编辑） */
 interface Props {
-  form: FlowFormCreate & { formId?: string }
+  form: FlowFormCreate & { flowFormId?: string }
 }
 
 const props = defineProps<Props>()
@@ -480,7 +480,7 @@ function loadTableColumns() {
   getDatabaseTableColumnInfoList(tenantCode, tableName)
     .then((list) => {
       // 编辑且已有 form.relatedFormField 字段元数据时，不覆盖（由进入第二步时从 form.relatedFormField 还原）
-      if (form.formId && form.relatedFormField?.trim()) {
+      if (form.flowFormId && form.relatedFormField?.trim()) {
         try {
           const parsed = JSON.parse(form.relatedFormField) as unknown
           if (Array.isArray(parsed) && parsed.length > 0) {
@@ -550,8 +550,8 @@ function filterDictTypeOption(input: string, option?: unknown) {
 }
 
 
-/** 是否编辑（有 formId 为编辑，反之为新增）；编辑时表单设计器由 form.formConfig 还原 */
-const isEdit = computed(() => !!form.formId)
+/** 是否编辑（有 flowFormId 为编辑，反之为新增）；编辑时表单设计器由 form.formConfig 还原 */
+const isEdit = computed(() => !!form.flowFormId)
 
 /** 编辑时进入第二步：若 form.relatedFormField 为字段元数据数组(与 syncFieldsToFormModel 一致)，则还原到字段网格 */
 watch(currentStep, (step) => {

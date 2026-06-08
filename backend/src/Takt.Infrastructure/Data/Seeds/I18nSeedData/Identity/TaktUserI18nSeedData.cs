@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUser 实体字段国际化种子（已对齐前端 locales：src/locales/identity/user）
 // 
@@ -136,6 +136,24 @@ public class TaktUserI18nSeedData : ITaktSeedDataCoordinator
             // entity.user.employeeid
             new TranslationSeedItem("entity.user.employeeid", "zh-HK", "员工ID", "关联的员工ID（必须关联人事档案）"),
 
+            // entity.user.defaultculture
+            new TranslationSeedItem("entity.user.defaultculture", "en-US", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
+            // entity.user.defaultculture
+            new TranslationSeedItem("entity.user.defaultculture", "ja-JP", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
+            // entity.user.defaultculture
+            new TranslationSeedItem("entity.user.defaultculture", "zh-CN", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
+            // entity.user.defaultculture
+            new TranslationSeedItem("entity.user.defaultculture", "zh-HK", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
+
+            // entity.user.isbuiltin
+            new TranslationSeedItem("entity.user.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 种子用户（admin/guest/demo）为内置，不允许删除"),
+            // entity.user.isbuiltin
+            new TranslationSeedItem("entity.user.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 种子用户（admin/guest/demo）为内置，不允许删除"),
+            // entity.user.isbuiltin
+            new TranslationSeedItem("entity.user.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子用户（admin/guest/demo）为内置，不允许删除"),
+            // entity.user.isbuiltin
+            new TranslationSeedItem("entity.user.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 种子用户（admin/guest/demo）为内置，不允许删除"),
+
             // entity.user.status
             new TranslationSeedItem("entity.user.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
             // entity.user.status
@@ -199,23 +217,32 @@ public class TaktUserI18nSeedData : ITaktSeedDataCoordinator
             // entity.user.lockeduntil
             new TranslationSeedItem("entity.user.lockeduntil", "zh-HK", "锁定时间", "锁定时间（登录失败过多时锁定）"),
 
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "en-US", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "ja-JP", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "zh-CN", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "zh-HK", "默认区域文化编码", "默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
+            // entity.user.roles
+            new TranslationSeedItem("entity.user.roles", "en-US", "用户角色关联", "用户角色关联（RBAC，表 takt_identity_user_role）"),
+            // entity.user.roles
+            new TranslationSeedItem("entity.user.roles", "ja-JP", "用户角色关联", "用户角色关联（RBAC，表 takt_identity_user_role）"),
+            // entity.user.roles
+            new TranslationSeedItem("entity.user.roles", "zh-CN", "用户角色关联", "用户角色关联（RBAC，表 takt_identity_user_role）"),
+            // entity.user.roles
+            new TranslationSeedItem("entity.user.roles", "zh-HK", "用户角色关联", "用户角色关联（RBAC，表 takt_identity_user_role）"),
 
-            // entity.user.roles
-            new TranslationSeedItem("entity.user.roles", "en-US", "userRoles", "用户角色关联（RBAC，表 takt_identity_user_role）"),
-            // entity.user.roles
-            new TranslationSeedItem("entity.user.roles", "ja-JP", "userRoles", "用户角色关联（RBAC，表 takt_identity_user_role）"),
-            // entity.user.roles
-            new TranslationSeedItem("entity.user.roles", "zh-CN", "userRoles", "用户角色关联（RBAC，表 takt_identity_user_role）"),
-            // entity.user.roles
-            new TranslationSeedItem("entity.user.roles", "zh-HK", "userRoles", "用户角色关联（RBAC，表 takt_identity_user_role）"),
+            // entity.user.tenants
+            new TranslationSeedItem("entity.user.tenants", "en-US", "用户可访问租户关联", "用户可访问租户关联（RBAC，表 takt_identity_user_tenant）"),
+            // entity.user.tenants
+            new TranslationSeedItem("entity.user.tenants", "ja-JP", "用户可访问租户关联", "用户可访问租户关联（RBAC，表 takt_identity_user_tenant）"),
+            // entity.user.tenants
+            new TranslationSeedItem("entity.user.tenants", "zh-CN", "用户可访问租户关联", "用户可访问租户关联（RBAC，表 takt_identity_user_tenant）"),
+            // entity.user.tenants
+            new TranslationSeedItem("entity.user.tenants", "zh-HK", "用户可访问租户关联", "用户可访问租户关联（RBAC，表 takt_identity_user_tenant）"),
+
+            // entity.user.companies
+            new TranslationSeedItem("entity.user.companies", "en-US", "用户可访问公司关联", "用户可访问公司关联（RBAC，表 takt_identity_user_company）"),
+            // entity.user.companies
+            new TranslationSeedItem("entity.user.companies", "ja-JP", "用户可访问公司关联", "用户可访问公司关联（RBAC，表 takt_identity_user_company）"),
+            // entity.user.companies
+            new TranslationSeedItem("entity.user.companies", "zh-CN", "用户可访问公司关联", "用户可访问公司关联（RBAC，表 takt_identity_user_company）"),
+            // entity.user.companies
+            new TranslationSeedItem("entity.user.companies", "zh-HK", "用户可访问公司关联", "用户可访问公司关联（RBAC，表 takt_identity_user_company）"),
         };
     }
 

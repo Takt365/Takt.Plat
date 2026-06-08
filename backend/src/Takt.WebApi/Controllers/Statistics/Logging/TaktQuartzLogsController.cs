@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Statistics.Logging
 // 文件名称：TaktQuartzLogsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：任务执行日志控制器
 // 
@@ -183,7 +183,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// <summary>
     /// 更新任务执行日志状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktExecuteStatus 枚举）</param>
     /// <returns>任务执行日志DTO</returns>
     [TaktPermission("statistics:logging:quartzlog:update", "更新任务执行日志状态")]
     [HttpPut("status")]

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktQuartzTaskService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：定时任务应用服务实现
 // 
@@ -21,6 +21,9 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
+using Takt.Application.Dtos.Statistics.Logging;
+using Takt.Domain.Entities.Statistics.Logging;
 
 namespace Takt.Application.Services.Foundation;
 
@@ -30,23 +33,27 @@ namespace Takt.Application.Services.Foundation;
 public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 {
     private readonly ITaktCompanyRepository<TaktQuartzTask> _quartzTaskRepository;
+    private readonly ITaktCompanyRepository<TaktQuartzLog> _quartzLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="quartzTaskRepository">定时任务仓储</param>
+    /// <param name="quartzLogRepository">QuartzLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktQuartzTaskService(
         ITaktCompanyRepository<TaktQuartzTask> quartzTaskRepository,
+        ITaktCompanyRepository<TaktQuartzLog> quartzLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _quartzTaskRepository = quartzTaskRepository;
+        _quartzLogRepository = quartzLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -81,8 +88,9 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
         {
             return null;
         }
-        return entity.Adapt<TaktQuartzTaskDto>();
-    }
+        var dto = entity.Adapt<TaktQuartzTaskDto>();
+        await FillQuartzTaskDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取定时任务选项列表
@@ -118,6 +126,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
             throw new TaktBusinessException("定时任务的TaskCode已存在");
         }
         entity = await _quartzTaskRepository.CreateAsync(entity);
+                await SaveQuartzTaskChildrenAsync(entity, dto);
         return await GetQuartzTaskByIdAsync(entity.Id) ?? entity.Adapt<TaktQuartzTaskDto>();
     }
 
@@ -144,6 +153,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
             throw new TaktBusinessException("定时任务的TaskCode已存在");
         }
         await _quartzTaskRepository.UpdateAsync(entity);
+                await SaveQuartzTaskChildrenAsync(entity, dto);
         return await GetQuartzTaskByIdAsync(id) ?? throw new TaktBusinessException("定时任务不存在");
     }
 
@@ -154,6 +164,12 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
     /// <returns>任务</returns>
     public async Task DeleteQuartzTaskByIdAsync(long id)
     {
+        var entity = await _quartzTaskRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("定时任务不存在或已删除");
+        }
+        await _quartzLogRepository.DeleteAsync(x => x.QuartzTaskId == entity.Id);
         var deleted = await _quartzTaskRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -282,6 +298,54 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充定时任务详情（加载 OneToMany 子表：任务执行日志）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillQuartzTaskDetailsAsync(TaktQuartzTaskDto dto, TaktQuartzTask entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 任务执行日志 → dto.QuartzLogs
+        var quartzlogs = await _quartzLogRepository.GetListAsync(x => x.QuartzTaskId == entity.Id);
+        dto.QuartzLogs = quartzlogs.Adapt<List<TaktQuartzLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存定时任务子表级联（任务执行日志；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveQuartzTaskChildrenAsync(TaktQuartzTask entity, TaktQuartzTaskCreateDto dto)
+    {
+        // 任务执行日志（QuartzLogs）
+        if (dto.QuartzLogs is not { Count: > 0 })
+        {
+            await _quartzLogRepository.DeleteAsync(x => x.QuartzTaskId == entity.Id);
+        }
+        else
+        {
+            var quartzlogs = dto.QuartzLogs.Adapt<List<TaktQuartzLog>>();
+            foreach (var child in quartzlogs)
+            {
+                child.QuartzTaskId = entity.Id;
+            }
+            await _quartzLogRepository.DeleteAsync(x => x.QuartzTaskId == entity.Id);
+            foreach (var child in quartzlogs)
+            {
+            }
+            await _quartzLogRepository.CreateRangeAsync(quartzlogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -302,15 +366,24 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
                 || (x.TaskName != null && x.TaskName.Contains(keywords))
                 || (x.JobName != null && x.JobName.Contains(keywords))
                 || (x.JobGroup != null && x.JobGroup.Contains(keywords))
+                || SqlFunc.ToString(x.TaskType).Contains(keywords)
+                || (x.AssemblyName != null && x.AssemblyName.Contains(keywords))
+                || (x.ClassName != null && x.ClassName.Contains(keywords))
+                || (x.ApiUrl != null && x.ApiUrl.Contains(keywords))
+                || (x.RequestMethod != null && x.RequestMethod.Contains(keywords))
+                || (x.SqlScript != null && x.SqlScript.Contains(keywords))
+                || SqlFunc.ToString(x.TriggerType).Contains(keywords)
                 || (x.CronExpression != null && x.CronExpression.Contains(keywords))
-                || (x.JobType != null && x.JobType.Contains(keywords))
-                || (x.JobParams != null && x.JobParams.Contains(keywords))
+                || SqlFunc.ToString(x.IntervalSeconds).Contains(keywords)
+                || (x.ExecuteParams != null && x.ExecuteParams.Contains(keywords))
                 || SqlFunc.ToString(x.TaskStatus).Contains(keywords)
                 || SqlFunc.ToString(x.Concurrent).Contains(keywords)
                 || SqlFunc.ToString(x.MisfirePolicy).Contains(keywords)
+                || SqlFunc.ToString(x.ExecuteCount).Contains(keywords)
                 || (x.Description != null && x.Description.Contains(keywords))
                 || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
+                || SqlFunc.ToString(x.FirstRunAt).Contains(keywords)
                 || SqlFunc.ToString(x.LastRunAt).Contains(keywords)
                 || SqlFunc.ToString(x.NextRunAt).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -337,19 +410,54 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
             exp = exp.And(x => x.JobGroup != null && x.JobGroup.Contains(queryDto.JobGroup));
         }
 
+        if (queryDto?.TaskType.HasValue == true)
+        {
+            exp = exp.And(x => x.TaskType == queryDto.TaskType);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.AssemblyName))
+        {
+            exp = exp.And(x => x.AssemblyName != null && x.AssemblyName.Contains(queryDto.AssemblyName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ClassName))
+        {
+            exp = exp.And(x => x.ClassName != null && x.ClassName.Contains(queryDto.ClassName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ApiUrl))
+        {
+            exp = exp.And(x => x.ApiUrl != null && x.ApiUrl.Contains(queryDto.ApiUrl));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.RequestMethod))
+        {
+            exp = exp.And(x => x.RequestMethod != null && x.RequestMethod.Contains(queryDto.RequestMethod));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.SqlScript))
+        {
+            exp = exp.And(x => x.SqlScript != null && x.SqlScript.Contains(queryDto.SqlScript));
+        }
+
+        if (queryDto?.TriggerType.HasValue == true)
+        {
+            exp = exp.And(x => x.TriggerType == queryDto.TriggerType);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.CronExpression))
         {
             exp = exp.And(x => x.CronExpression != null && x.CronExpression.Contains(queryDto.CronExpression));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JobType))
+        if (queryDto?.IntervalSeconds.HasValue == true)
         {
-            exp = exp.And(x => x.JobType != null && x.JobType.Contains(queryDto.JobType));
+            exp = exp.And(x => x.IntervalSeconds == queryDto.IntervalSeconds);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JobParams))
+        if (!string.IsNullOrEmpty(queryDto?.ExecuteParams))
         {
-            exp = exp.And(x => x.JobParams != null && x.JobParams.Contains(queryDto.JobParams));
+            exp = exp.And(x => x.ExecuteParams != null && x.ExecuteParams.Contains(queryDto.ExecuteParams));
         }
 
         if (queryDto?.TaskStatus.HasValue == true)
@@ -367,6 +475,11 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
             exp = exp.And(x => x.MisfirePolicy == queryDto.MisfirePolicy);
         }
 
+        if (queryDto?.ExecuteCount.HasValue == true)
+        {
+            exp = exp.And(x => x.ExecuteCount == queryDto.ExecuteCount);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.Description))
         {
             exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
@@ -380,6 +493,16 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+        }
+
+        if (queryDto?.FirstRunAtStart.HasValue == true)
+        {
+            exp = exp.And(x => x.FirstRunAt >= queryDto.FirstRunAtStart);
+        }
+
+        if (queryDto?.FirstRunAtEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.FirstRunAt <= queryDto.FirstRunAtEnd);
         }
 
         if (queryDto?.LastRunAtStart.HasValue == true)

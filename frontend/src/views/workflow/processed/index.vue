@@ -20,7 +20,7 @@
       @reset="handleReset"
     />
     <TaktToolsBar
-      export-permission="workflow:processed:export"
+      export-permission="workflow:instance:export"
       :show-create="false"
       :show-update="false"
       :show-delete="false"
@@ -35,7 +35,9 @@
       @export="handleExport"
     />
     <TaktSingleTable
+      entity-scope="company"
       :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
@@ -44,12 +46,13 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'instanceStatus'">
-          <a-tag :color="statusColor((record as FlowInstance).instanceStatus)">
-            {{ statusText((record as FlowInstance).instanceStatus) }}
+          <a-tag :color="statusColor((record as FlowEngineListRow).instanceStatus)">
+            {{ statusText((record as FlowEngineListRow).instanceStatus) }}
           </a-tag>
         </template>
         <template v-else-if="column.key === 'action'">
           <a-button
+            v-permission="'workflow:processed:detail'"
             type="link"
             size="small"
             @click="showDetail(asFlowInstance(record))"
@@ -68,7 +71,7 @@
     />
     <TaktModal
       v-model:open="detailVisible"
-      :title="t('workflow.instance.detailTitle')"
+      :title="t('common.dialog.title.detail', { entity: t('entity.flowinstance._self') })"
       width="640px"
       :footer="null"
       :cancel-text="t('common.page.button.cancel')"
@@ -91,24 +94,25 @@ import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import {
   buildFlowTodoQuery,
-  getFlowInstanceProcessedList,
-  getFlowInstanceById,
-  exportFlowInstanceProcessed
-} from '@/api/workflow/instance'
+  getFlowEngineProcessedList,
+  getFlowEngineInstanceById
+} from '@/api/workflow/flow-engine'
+import { exportFlowInstance } from '@/api/workflow/flow-instance'
 import FlowInstanceDetailForm from '@/views/workflow/processed/components/flow-instance-detail-form.vue'
-import type { FlowInstance, FlowInstanceDetail, FlowInstanceQuery } from '@/types/workflow/flow-instance'
+import type { FlowEngineListRow, FlowInstanceDetailView } from '@/types/workflow/flow-engine'
+import type { FlowInstanceQuery } from '@/types/workflow/flow-instance'
 const toErrorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error))
 
 const { t } = useI18n()
 const loading = ref(false)
 const exportLoading = ref(false)
 const queryKeyword = ref('')
-const dataSource = ref<FlowInstance[]>([])
+const dataSource = ref<FlowEngineListRow[]>([])
 const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 const detailVisible = ref(false)
-const detail = ref<FlowInstanceDetail | null>(null)
+const detail = ref<FlowInstanceDetailView | null>(null)
 
 const columns = [
   { title: '实例编码', dataIndex: 'instanceCode', key: 'instanceCode', width: 200 },
@@ -122,8 +126,7 @@ const columns = [
 
 /** 实例状态码转展示文案 */
 function statusText(s: number) {
-  const m: Record<number, string> = { 0: '运行中', 1: '已完成', 2: '已终止', 3: '已挂起', 4: '已撤回' }
-  return m[s] ?? '未知'
+  return t(`workflow.instance.status.${s}`) || t('workflow.instance.status.unknown')
 }
 
 /** 实例状态对应 Tag 颜色 */
@@ -132,9 +135,9 @@ function statusColor(s: number) {
   return m[s] ?? 'default'
 }
 
-/** 将 a-table bodyCell 的 record 断言为 FlowInstance */
-function asFlowInstance(r: Record<string, unknown>): FlowInstance {
-  return r as unknown as FlowInstance
+/** 将 a-table bodyCell 的 record 断言为 FlowEngineListRow */
+function asFlowInstance(r: Record<string, unknown>): FlowEngineListRow {
+  return r as unknown as FlowEngineListRow
 }
 
 /** 实例行 key：取 instanceId 字符串 */
@@ -148,7 +151,7 @@ function getInstanceId(record: unknown): string {
 async function loadList() {
   loading.value = true
   try {
-    const res = await getFlowInstanceProcessedList(
+    const res = await getFlowEngineProcessedList(
       buildFlowTodoQuery(currentPage.value, pageSize.value, queryKeyword.value)
     )
     dataSource.value = res.data ?? []
@@ -191,9 +194,9 @@ function handlePaginationSizeChange(current: number, size: number) {
 }
 
 /** 拉取实例详情并打开详情弹窗 */
-async function showDetail(record: FlowInstance) {
+async function showDetail(record: FlowEngineListRow) {
   try {
-    detail.value = await getFlowInstanceById(record.instanceId)
+    detail.value = await getFlowEngineInstanceById(record.instanceId, 'processed')
     detailVisible.value = true
   } catch {
     message.error('加载详情失败')
@@ -204,7 +207,7 @@ async function showDetail(record: FlowInstance) {
 async function reloadInstanceDetail() {
   if (!detail.value?.instanceId) return
   try {
-    detail.value = await getFlowInstanceById(detail.value.instanceId)
+    detail.value = await getFlowEngineInstanceById(detail.value.instanceId, 'processed')
   } catch {
     message.error(t('common.page.msg.loadFail'))
   }
@@ -219,7 +222,7 @@ async function handleExport() {
       params.processKey = queryKeyword.value.trim()
       params.instanceCode = queryKeyword.value.trim()
     }
-    const blob = await exportFlowInstanceProcessed(params)
+    const blob = await exportFlowInstance(params)
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fileName = `已办_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`

@@ -68,7 +68,7 @@
               >
                 <a-select-option
                   v-for="item in formList"
-                  :key="item.formId ?? item.formCode"
+                  :key="item.flowFormId ?? item.formCode"
                   :value="item.formCode ?? ''"
                   :label="(item.formCode ?? '') + ' ' + (item.formName ?? '')"
                 >
@@ -111,7 +111,7 @@
           <div class="scheme-designer-section__body">
             <TaktFlowAntflowDesigner
               ref="flowDesignerRef"
-              :key="'flow-antflow-designer-' + (form.schemeId ?? 'new')"
+              :key="'flow-antflow-designer-' + (form.flowSchemeId ?? 'new')"
               :model-value="form.processContent || ''"
               @update:model-value="(v: string) => { form.processContent = v }"
             />
@@ -152,24 +152,22 @@ import { useI18n } from 'vue-i18n'
 import TaktFlowAntflowDesigner from '@/components/business/takt-flow-antflow-designer/index.vue'
 import TaktFlowBasicSetting from '@/components/business/takt-flow-antflow-designer/basic-setting/takt-flow-basic-setting.vue'
 import TaktFormDesigner from '@/components/business/takt-form-designer/index.vue'
-import { getFlowFormList, getFlowFormById } from '@/api/workflow/form'
-import type { FlowSchemeCreate, FlowSchemeUpdate } from '@/types/workflow/flow-scheme'
+import { getFlowFormList, getFlowFormById } from '@/api/workflow/flow-form'
+import type { FlowSchemeFormModel } from '@/types/workflow/flow-scheme'
 import type { FlowForm } from '@/types/workflow/flow-form'
-
-type FlowSchemeCreateOrUpdate = FlowSchemeCreate | FlowSchemeUpdate
 
 const { t } = useI18n()
 
-// 父组件传入的表单数据（含 schemeId 表示编辑）
+// 父组件传入的表单数据（含 flowSchemeId 表示编辑）
 interface Props {
-  form: FlowSchemeCreateOrUpdate & { schemeId?: string }
+  form: FlowSchemeFormModel
 }
 
 const props = defineProps<Props>()
 const form = props.form
 
-// 是否编辑（有 schemeId 为编辑，反之为新增）
-const isEdit = computed(() => !!form.schemeId)
+// 是否编辑（有 flowSchemeId 为编辑，反之为新增）
+const isEdit = computed(() => !!form.flowSchemeId)
 // 当前步骤
 const currentStep = ref(0)
 // Ant Design 表单实例
@@ -224,8 +222,8 @@ const onFormSelectChange = (value: unknown) => {
     delete form.formCode
   }
   const found = formCode ? formList.value.find(f => (f.formCode ?? '') === formCode) : undefined
-  if (found?.formId != null) {
-    form.formId = String(found.formId)
+  if (found?.flowFormId != null) {
+    form.formId = String(found.flowFormId)
   } else {
     delete form.formId
   }

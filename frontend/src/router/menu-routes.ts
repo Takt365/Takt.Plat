@@ -11,7 +11,7 @@
 // ========================================
 
 import type { RouteRecordRaw, Router } from 'vue-router';
-import type { TaktMenuTreeDto } from '@/types/identity/menu';
+import type { MenuTree } from '@/types/identity/menu';
 import { normalizeRoutePath } from '@/utils/permission';
 import { createLogger } from '@/utils/logger';
 import {

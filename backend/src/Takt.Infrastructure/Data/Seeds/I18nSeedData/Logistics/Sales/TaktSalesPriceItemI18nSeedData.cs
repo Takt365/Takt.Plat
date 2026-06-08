@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -164,13 +164,22 @@ public class TaktSalesPriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesPriceItem.maxorderquantity", "zh-HK", "最大订购量", "最大订购量（基本单位数量，0表示无限制）"),
 
             // entity.salesPriceItem.scales
-            new TranslationSeedItem("entity.salesPriceItem.scales", "en-US", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.salesPriceItem.scales", "en-US", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
             // entity.salesPriceItem.scales
-            new TranslationSeedItem("entity.salesPriceItem.scales", "ja-JP", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.salesPriceItem.scales", "ja-JP", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
             // entity.salesPriceItem.scales
-            new TranslationSeedItem("entity.salesPriceItem.scales", "zh-CN", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.salesPriceItem.scales", "zh-CN", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
             // entity.salesPriceItem.scales
-            new TranslationSeedItem("entity.salesPriceItem.scales", "zh-HK", "scales", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+            new TranslationSeedItem("entity.salesPriceItem.scales", "zh-HK", "价格阶梯列表", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),
+
+            // entity.salesPriceItem.price
+            new TranslationSeedItem("entity.salesPriceItem.price", "en-US", "销售价格", "销售价格（主表）"),
+            // entity.salesPriceItem.price
+            new TranslationSeedItem("entity.salesPriceItem.price", "ja-JP", "销售价格", "销售价格（主表）"),
+            // entity.salesPriceItem.price
+            new TranslationSeedItem("entity.salesPriceItem.price", "zh-CN", "销售价格", "销售价格（主表）"),
+            // entity.salesPriceItem.price
+            new TranslationSeedItem("entity.salesPriceItem.price", "zh-HK", "销售价格", "销售价格（主表）"),
         };
     }
 

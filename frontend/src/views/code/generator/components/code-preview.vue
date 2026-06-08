@@ -10,7 +10,7 @@
 <template>
   <TaktModal
     v-model:open="open"
-    :title="t('common.page.button.preview')"
+    :title="t('common.dialog.title.preview', { entity: t('entity.gentable._self') })"
     width="80%"
     :centered="true"
     :body-style="{ height: '75vh', overflow: 'auto' }"

@@ -54,15 +54,17 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      :columns="columns"
+      entity-scope="approval"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'talentRecruitmentPlanId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
       :row-key="getTalentRecruitmentPlanId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
@@ -98,10 +100,15 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-human-resource-talent-talent-recruitment-plan'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('staffingRequirementId')">
       <a-form-item :label="t('entity.talentRecruitmentPlan.staffingrequirementid')">
         <a-input
           v-model:value="advancedQueryForm.staffingRequirementId"
@@ -109,6 +116,8 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planNo')">
       <a-form-item :label="t('entity.talentRecruitmentPlan.planno')">
         <a-input
           v-model:value="advancedQueryForm.planNo"
@@ -116,13 +125,77 @@
           allow-clear
         />
       </a-form-item>
-      <a-form-item :label="t('entity.talentRecruitmentPlan.planheadcount')">
-        <a-input
-          v-model:value="advancedQueryForm.planHeadcount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.planheadcount') })"
-          allow-clear
+      </div>
+      <div v-show="isFieldVisible('planDateStart')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.plandatestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.plandatestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planDateEnd')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.plandateend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.plandateend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planStartDateStart')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.planstartdatestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planStartDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.planstartdatestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planStartDateEnd')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.planstartdateend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planStartDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.planstartdateend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planEndDateStart')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.planenddatestart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planEndDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.planenddatestart') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planEndDateEnd')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.planenddateend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planEndDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.planenddateend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planHeadcount')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.planheadcount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.planHeadcount"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.planheadcount') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('reason')">
       <a-form-item :label="t('entity.talentRecruitmentPlan.reason')">
         <a-input
           v-model:value="advancedQueryForm.reason"
@@ -130,13 +203,17 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvalStatus')">
       <a-form-item :label="t('entity.talentRecruitmentPlan.approvalstatus')">
-        <a-input
+        <a-input-number
           v-model:value="advancedQueryForm.approvalStatus"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.approvalstatus') })"
-          allow-clear
+          style="width: 100%"
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatorId')">
       <a-form-item :label="t('entity.talentRecruitmentPlan.initiatorid')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
@@ -144,6 +221,27 @@
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtStart')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.initiatedatstart')">
+        <a-input
+          v-model:value="advancedQueryForm.initiatedAtStart"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.initiatedatstart') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtEnd')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.initiatedatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.initiatedAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.initiatedatend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedBy')">
       <a-form-item :label="t('entity.talentRecruitmentPlan.approvedby')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
@@ -151,19 +249,74 @@
           allow-clear
         />
       </a-form-item>
-      <a-form-item :label="t('common.page.entity.remark')">
+      </div>
+      <div v-show="isFieldVisible('approvedAtStart')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.approvedatstart')">
         <a-input
-          v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.remark') })"
+          v-model:value="advancedQueryForm.approvedAtStart"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.approvedatstart') })"
           allow-clear
         />
       </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedAtEnd')">
+      <a-form-item :label="t('entity.talentRecruitmentPlan.approvedatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.approvedAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.approvedatend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="t('common.page.entity.createdatstart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="t('common.page.entity.createdatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extFieldJson')">
+      <a-form-item :label="t('common.page.entity.extfieldjson')">
+        <a-input
+          v-model:value="advancedQueryForm.extFieldJson"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="t('common.page.entity.remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
     </TaktQueryDrawer>
 
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.talentRecruitmentPlan._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.talentRecruitmentPlan._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -188,6 +341,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'talentRecruitmentPlanId'"
       :action-column-key="'action'"
+      entity-scope="approval"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -203,7 +358,6 @@ import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import TalentRecruitmentPlanForm from './components/talent-recruitment-plan-form.vue'
 import { getTalentRecruitmentPlanList, getTalentRecruitmentPlanById, createTalentRecruitmentPlan, updateTalentRecruitmentPlan, deleteTalentRecruitmentPlanById, deleteTalentRecruitmentPlanBatch, getTalentRecruitmentPlanTemplate, importTalentRecruitmentPlan, exportTalentRecruitmentPlan } from '@/api/human-resource/talent/talent-recruitment-plan'
@@ -237,13 +391,51 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   staffingRequirementId: '',
   planNo: '',
+  planDateStart: '',
+  planDateEnd: '',
+  planStartDateStart: '',
+  planStartDateEnd: '',
+  planEndDateStart: '',
+  planEndDateEnd: '',
   planHeadcount: undefined as number | undefined,
   reason: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
   approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
   remark: '',
 })
+/** 高级查询字段元数据（显隐配置） */
+const queryFieldsMeta = computed(() => [
+  { key: 'staffingRequirementId', label: t('entity.talentRecruitmentPlan.staffingrequirementid') },
+  { key: 'planNo', label: t('entity.talentRecruitmentPlan.planno') },
+  { key: 'planDateStart', label: t('entity.talentRecruitmentPlan.plandatestart') },
+  { key: 'planDateEnd', label: t('entity.talentRecruitmentPlan.plandateend') },
+  { key: 'planStartDateStart', label: t('entity.talentRecruitmentPlan.planstartdatestart') },
+  { key: 'planStartDateEnd', label: t('entity.talentRecruitmentPlan.planstartdateend') },
+  { key: 'planEndDateStart', label: t('entity.talentRecruitmentPlan.planenddatestart') },
+  { key: 'planEndDateEnd', label: t('entity.talentRecruitmentPlan.planenddateend') },
+  { key: 'planHeadcount', label: t('entity.talentRecruitmentPlan.planheadcount') },
+  { key: 'reason', label: t('entity.talentRecruitmentPlan.reason') },
+  { key: 'approvalStatus', label: t('entity.talentRecruitmentPlan.approvalstatus') },
+  { key: 'initiatorId', label: t('entity.talentRecruitmentPlan.initiatorid') },
+  { key: 'initiatedAtStart', label: t('entity.talentRecruitmentPlan.initiatedatstart') },
+  { key: 'initiatedAtEnd', label: t('entity.talentRecruitmentPlan.initiatedatend') },
+  { key: 'approvedBy', label: t('entity.talentRecruitmentPlan.approvedby') },
+  { key: 'approvedAtStart', label: t('entity.talentRecruitmentPlan.approvedatstart') },
+  { key: 'approvedAtEnd', label: t('entity.talentRecruitmentPlan.approvedatend') },
+  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
+  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
+  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
+const visibleQueryFieldKeys = ref<string[]>([])
 const columnSettingVisible = ref(false)
 const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
@@ -386,18 +578,6 @@ const columns = computed<TableColumnsType>(() => [
 const getTalentRecruitmentPlanId = (record: any): string => record?.[entityIdName] ?? ''
 const getTalentRecruitmentPlanField = (record: any, field: string): any => record?.[field]
 
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
-})
-
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: TalentRecruitmentPlan[]) => {
@@ -469,11 +649,24 @@ function handleReset() {
   advancedQueryForm.value = {
   staffingRequirementId: '',
   planNo: '',
+  planDateStart: '',
+  planDateEnd: '',
+  planStartDateStart: '',
+  planStartDateEnd: '',
+  planEndDateStart: '',
+  planEndDateEnd: '',
   planHeadcount: undefined as number | undefined,
   reason: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
   approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
   remark: '',
   }
   currentPage.value = 1
@@ -481,12 +674,12 @@ function handleReset() {
 }
 
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + t('entity.talentRecruitmentPlan._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.talentRecruitmentPlan._self') })
   formData.value = {}
   formVisible.value = true
 }
 function handleEdit(record: TalentRecruitmentPlan) {
-  formTitle.value = t('common.page.button.edit') + t('entity.talentRecruitmentPlan._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.talentRecruitmentPlan._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -632,11 +825,24 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   staffingRequirementId: '',
   planNo: '',
+  planDateStart: '',
+  planDateEnd: '',
+  planStartDateStart: '',
+  planStartDateEnd: '',
+  planEndDateStart: '',
+  planEndDateEnd: '',
   planHeadcount: undefined as number | undefined,
   reason: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
   approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extFieldJson: '',
   remark: '',
   }
 }
@@ -650,7 +856,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
 function handleRefresh() {

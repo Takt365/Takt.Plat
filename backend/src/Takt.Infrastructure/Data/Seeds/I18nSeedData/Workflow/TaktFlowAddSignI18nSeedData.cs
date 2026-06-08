@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowAddSignI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowAddSign 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -162,6 +162,15 @@ public class TaktFlowAddSignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowAddSign.ishandled", "zh-CN", "是否已处理", "是否已处理（含减签）"),
             // entity.flowAddSign.ishandled
             new TranslationSeedItem("entity.flowAddSign.ishandled", "zh-HK", "是否已处理", "是否已处理（含减签）"),
+
+            // entity.flowAddSign.instance
+            new TranslationSeedItem("entity.flowAddSign.instance", "en-US", "所属流程实例", "所属流程实例"),
+            // entity.flowAddSign.instance
+            new TranslationSeedItem("entity.flowAddSign.instance", "ja-JP", "所属流程实例", "所属流程实例"),
+            // entity.flowAddSign.instance
+            new TranslationSeedItem("entity.flowAddSign.instance", "zh-CN", "所属流程实例", "所属流程实例"),
+            // entity.flowAddSign.instance
+            new TranslationSeedItem("entity.flowAddSign.instance", "zh-HK", "所属流程实例", "所属流程实例"),
         };
     }
 

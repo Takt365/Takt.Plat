@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：cost-center.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -64,7 +64,7 @@ export function getCostCenterById(id: string): Promise<CostCenter> {
 /**
  * 获取成本中心树形列表
  * @param {string} parentId parentId
- * @param {boolean} includeDisabled includeDisabled
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
  * @returns {Promise<CostCenterTree[]>} 树形数据
  */
 export function getCostCenterTree(parentId: string, includeDisabled: boolean): Promise<CostCenterTree[]> {
@@ -132,7 +132,7 @@ export function deleteCostCenterBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新成本中心状态
- * @param {CostCenterStatus} dto 状态DTO
+ * @param {CostCenterStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<CostCenter>} 成本中心DTO
  */
 export function updateCostCenterStatus(dto: CostCenterStatus): Promise<CostCenter> {
@@ -195,11 +195,11 @@ export function getCostCenterTemplate(sheetName?: string, templateName?: string)
 
 /**
  * 导入成本中心
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importCostCenter(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importCostCenter(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

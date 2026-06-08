@@ -60,7 +60,13 @@
 
 <script setup lang="ts">
 import type { TableColumnsType } from 'ant-design-vue'
-import { mergeDefaultColumns, type TaktEntityScope } from '@/utils/table-columns'
+import {
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+  resolveDefaultVisibleColumnKeys,
+  type TaktEntityScope,
+  type TaktTableLayoutMode,
+} from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import { createLogger } from '@/utils/logger'
 
@@ -108,8 +114,10 @@ interface Props {
   idColumnKey?: string | number
   /** 操作列的键（默认 'action'） */
   actionColumnKey?: string | number
-  /** 实体基类作用域（默认 company，对齐 TaktCompanyEntityBase） */
-  entityScope?: TaktEntityScope
+  /** 实体基类作用域：tenant | company | approval，与 common.d.ts 三个 EntityBase 字段一一对应，驱动 mergeDefaultColumns */
+  entityScope: TaktEntityScope
+  /** 单表 8 个业务列 / 左树右表 4 个业务列（默认 single） */
+  tableMode?: TaktTableLayoutMode
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -119,7 +127,7 @@ const props = withDefaults(defineProps<Props>(), {
   checkedKeys: (): string[] => [],
   idColumnKey: 'id',
   actionColumnKey: 'action',
-  entityScope: 'company',
+  tableMode: 'single',
 })
 
 const emit = defineEmits<{
@@ -129,18 +137,17 @@ const emit = defineEmits<{
   'close': []
 }>()
 
+/** 页面业务列（解包 Ref/ComputedRef，避免 merge 时只剩审计字段） */
+const userColumns = computed(() => normalizeUserTableColumns(props.columns))
+
 const mergedColumns = computed(() => {
-  // 确保 columns 是数组，避免 undefined 导致的错误
-  const columns = Array.isArray(props.columns) ? props.columns : []
-  
-  // 如果 columns 为空，直接返回空数组（不应该发生，但防止错误）
+  const columns = userColumns.value
   if (columns.length === 0) {
     if (import.meta.env.DEV) {
-      columnDrawerLogger.warn('props.columns 为空数组，mergedColumns 将返回空数组', { action: 'mergedColumns' })
+      columnDrawerLogger.warn('业务 columns 为空，列设置仅显示实体基座字段', { action: 'mergedColumns' })
     }
-    return []
+    return mergeDefaultColumns([], t, true, props.entityScope)
   }
-  
   if (import.meta.env.DEV) {
     columnDrawerLogger.debug('mergedColumns 计算', {
       action: 'mergedColumns',
@@ -148,7 +155,6 @@ const mergedColumns = computed(() => {
       columnsKeys: columns.slice(0, 5).map((col) => col.key ?? columnDataIndex(col) ?? columnTitlePrimitive(col)),
     })
   }
-  
   const merged = mergeDefaultColumns(columns, t, true, props.entityScope)
   
   if (import.meta.env.DEV) {
@@ -210,27 +216,14 @@ const validColumns = computed(() => {
   })
 })
 
-// 获取默认选中的8个列：ID + 前7个非固定列（操作列固定显示，不计算在内）
-// 优先选择业务字段，如果业务字段不足7个，则用其他字段（包括审计字段）补充
+/** 默认可见列：ID + 按 columns 顺序的前 N 个业务字段 + 操作列（不从 merge 审计列猜测） */
 const getDefaultCheckedKeys = (): string[] => {
-  const idKey = String(props.idColumnKey)
-  const actionKey = String(props.actionColumnKey)
-  
-  // 获取所有非固定列（排除操作列和ID列）
-  const allNonFixedColumns = validColumns.value.filter(col => {
-    const key = getColumnKey(col)
-    return key && key !== actionKey && key !== idKey
+  return resolveDefaultVisibleColumnKeys(userColumns.value, {
+    idColumnKey: props.idColumnKey,
+    actionColumnKey: props.actionColumnKey,
+    tableMode: props.tableMode,
+    entityScope: props.entityScope,
   })
-  
-  // 优先选择前7个字段（包括业务字段和审计字段）
-  // 如果字段总数少于7个，就选择所有可用的字段
-  const selectedKeys = allNonFixedColumns
-    .slice(0, 7)
-    .map(col => getColumnKey(col))
-    .filter(k => k && k !== '')
-  
-  // 返回：ID + 选中的字段 + 操作列（操作列在最后，固定显示）
-  return [idKey, ...selectedKeys, actionKey]
 }
 
 // 内部选中状态，用于跟踪用户的选择
@@ -304,7 +297,7 @@ const selectedColumnKeys = computed({
 
 // 处理重置
 const handleReset = () => {
-  // 重置为默认的9个列（ID + 7个字段 + 操作列）
+  // 重置为默认可见列（ID + 前 N 个业务字段 + 操作列）
   selectedColumnKeys.value = getDefaultCheckedKeys()
   emit('reset')
 }

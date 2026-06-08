@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.TrainingDevelopment
 // 文件名称：TaktTrainingPlanValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingPlan 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTrainingPlan 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.HumanResource.TrainingDevelopment;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.HumanResource.TrainingDevelopment;
 
@@ -53,6 +54,8 @@ public class TaktTrainingPlanCreateValidator : AbstractValidator<TaktTrainingPla
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("计划说明不能为空")
             .MaximumLength(1000).WithMessage("计划说明长度不能超过1000个字符");
+        RuleFor(x => x.TrainingPlanStatus)
+            .IsInEnum().WithMessage("业务状态无效");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtFieldJson)
@@ -117,6 +120,8 @@ public class TaktTrainingPlanImportValidator : AbstractValidator<TaktTrainingPla
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("计划说明不能为空")
             .MaximumLength(1000).WithMessage("计划说明长度不能超过1000个字符");
+        RuleFor(x => x.TrainingPlanStatus)
+            .IsInEnum().WithMessage("业务状态无效");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
         RuleFor(x => x.ExtFieldJson)

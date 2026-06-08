@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：sales-price.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteSalesPriceBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新销售价格状态
- * @param {SalesPriceStatus} dto 状态DTO
+ * @param {SalesPriceStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<SalesPrice>} 销售价格DTO
  */
 export function updateSalesPriceStatus(dto: SalesPriceStatus): Promise<SalesPrice> {
@@ -163,11 +163,11 @@ export function getSalesPriceTemplate(sheetName?: string, templateName?: string)
 
 /**
  * 导入销售价格
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importSalesPrice(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importSalesPrice(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

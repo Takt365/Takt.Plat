@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.CompensationBenefits
 // 文件名称：TaktTaxCalcsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：个税计算规则控制器
 // 
@@ -183,7 +183,7 @@ public class TaktTaxCalcsController : TaktControllerBase
     /// <summary>
     /// 更新个税计算规则状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>个税计算规则DTO</returns>
     [TaktPermission("humanresource:compensationbenefits:taxcalc:update", "更新个税计算规则状态")]
     [HttpPut("status")]

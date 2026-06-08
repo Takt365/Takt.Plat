@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktTranslationI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTranslation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,6 +127,24 @@ public class TaktTranslationI18nSeedData : ITaktSeedDataCoordinator
             // entity.translation.text
             new TranslationSeedItem("entity.translation.text", "zh-HK", "翻译文本", "翻译文本（该语言下的显示文本）"),
 
+            // entity.translation.resourcegroup
+            new TranslationSeedItem("entity.translation.resourcegroup", "en-US", "资源分组", "资源分组（用于分类管理翻译）"),
+            // entity.translation.resourcegroup
+            new TranslationSeedItem("entity.translation.resourcegroup", "ja-JP", "资源分组", "资源分组（用于分类管理翻译）"),
+            // entity.translation.resourcegroup
+            new TranslationSeedItem("entity.translation.resourcegroup", "zh-CN", "资源分组", "资源分组（用于分类管理翻译）"),
+            // entity.translation.resourcegroup
+            new TranslationSeedItem("entity.translation.resourcegroup", "zh-HK", "资源分组", "资源分组（用于分类管理翻译）"),
+
+            // entity.translation.resourcetype
+            new TranslationSeedItem("entity.translation.resourcetype", "en-US", "资源类别", "资源类别（0=前端，1=后端）"),
+            // entity.translation.resourcetype
+            new TranslationSeedItem("entity.translation.resourcetype", "ja-JP", "资源类别", "资源类别（0=前端，1=后端）"),
+            // entity.translation.resourcetype
+            new TranslationSeedItem("entity.translation.resourcetype", "zh-CN", "资源类别", "资源类别（0=前端，1=后端）"),
+            // entity.translation.resourcetype
+            new TranslationSeedItem("entity.translation.resourcetype", "zh-HK", "资源类别", "资源类别（0=前端，1=后端）"),
+
             // entity.translation.contextnote
             new TranslationSeedItem("entity.translation.contextnote", "en-US", "上下文注释", "上下文注释（帮助翻译人员理解使用场景）"),
             // entity.translation.contextnote
@@ -135,6 +153,15 @@ public class TaktTranslationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.translation.contextnote", "zh-CN", "上下文注释", "上下文注释（帮助翻译人员理解使用场景）"),
             // entity.translation.contextnote
             new TranslationSeedItem("entity.translation.contextnote", "zh-HK", "上下文注释", "上下文注释（帮助翻译人员理解使用场景）"),
+
+            // entity.translation.culture
+            new TranslationSeedItem("entity.translation.culture", "en-US", "区域文化", "区域文化（多对一关联）"),
+            // entity.translation.culture
+            new TranslationSeedItem("entity.translation.culture", "ja-JP", "区域文化", "区域文化（多对一关联）"),
+            // entity.translation.culture
+            new TranslationSeedItem("entity.translation.culture", "zh-CN", "区域文化", "区域文化（多对一关联）"),
+            // entity.translation.culture
+            new TranslationSeedItem("entity.translation.culture", "zh-HK", "区域文化", "区域文化（多对一关联）"),
         };
     }
 

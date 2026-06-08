@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNoticeValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotice 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcNotice 生成，请按需审阅）
 // 
@@ -56,14 +56,8 @@ public class TaktEcNoticeCreateValidator : AbstractValidator<TaktEcNoticeCreateD
             .GreaterThanOrEqualTo(0).WithMessage("通知人ID不能为负数");
         RuleFor(x => x.EcNoticeNotifierName)
             .MaximumLength(50).WithMessage("通知人姓名长度不能超过50个字符");
-        RuleFor(x => x.EcNoticeConfirmerId)
-            .GreaterThanOrEqualTo(0).WithMessage("确认人ID不能为负数");
-        RuleFor(x => x.EcNoticeConfirmerName)
-            .MaximumLength(50).WithMessage("确认人姓名长度不能超过50个字符");
-        RuleFor(x => x.EcNoticeConfirmComment)
-            .MaximumLength(1000).WithMessage("确认意见/反馈长度不能超过1000个字符");
         RuleFor(x => x.FlowInstanceId)
-            .GreaterThanOrEqualTo(0).WithMessage("流程实例ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("流程实例 ID不能为负数");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -129,8 +123,8 @@ public class TaktEcNoticeImportValidator : AbstractValidator<TaktEcNoticeImportD
             .GreaterThanOrEqualTo(0).WithMessage("通知人ID不能为负数");
         RuleFor(x => x.EcNoticeNotifierName)
             .MaximumLength(50).WithMessage("通知人姓名长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.EcNoticeNotifierName));
-        RuleFor(x => x.EcNoticeConfirmerId)
-            .GreaterThanOrEqualTo(0).WithMessage("确认人ID不能为负数");
+        RuleFor(x => x.FlowInstanceId)
+            .GreaterThanOrEqualTo(0).WithMessage("流程实例 ID不能为负数");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

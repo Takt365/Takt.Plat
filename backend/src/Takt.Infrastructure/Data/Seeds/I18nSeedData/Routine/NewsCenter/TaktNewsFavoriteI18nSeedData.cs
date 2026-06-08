@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsFavoriteI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsFavorite 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,6 +126,15 @@ public class TaktNewsFavoriteI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newsFavorite.favoritetime", "zh-CN", "收藏时间", "收藏时间"),
             // entity.newsFavorite.favoritetime
             new TranslationSeedItem("entity.newsFavorite.favoritetime", "zh-HK", "收藏时间", "收藏时间"),
+
+            // entity.newsFavorite.news
+            new TranslationSeedItem("entity.newsFavorite.news", "en-US", "新闻", "新闻（主表）"),
+            // entity.newsFavorite.news
+            new TranslationSeedItem("entity.newsFavorite.news", "ja-JP", "新闻", "新闻（主表）"),
+            // entity.newsFavorite.news
+            new TranslationSeedItem("entity.newsFavorite.news", "zh-CN", "新闻", "新闻（主表）"),
+            // entity.newsFavorite.news
+            new TranslationSeedItem("entity.newsFavorite.news", "zh-HK", "新闻", "新闻（主表）"),
         };
     }
 

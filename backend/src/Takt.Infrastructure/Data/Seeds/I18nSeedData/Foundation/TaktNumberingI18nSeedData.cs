@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktNumberingI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNumbering 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -207,6 +207,15 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.separator", "zh-CN", "分隔符", "分隔符（默认 -，也可用 _ 或 /）"),
             // entity.numbering.separator
             new TranslationSeedItem("entity.numbering.separator", "zh-HK", "分隔符", "分隔符（默认 -，也可用 _ 或 /）"),
+
+            // entity.numbering.isbuiltin
+            new TranslationSeedItem("entity.numbering.isbuiltin", "en-US", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            // entity.numbering.isbuiltin
+            new TranslationSeedItem("entity.numbering.isbuiltin", "ja-JP", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            // entity.numbering.isbuiltin
+            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-CN", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            // entity.numbering.isbuiltin
+            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
 
             // entity.numbering.status
             new TranslationSeedItem("entity.numbering.status", "en-US", "状态", "状态（1=启用，0=禁用）"),

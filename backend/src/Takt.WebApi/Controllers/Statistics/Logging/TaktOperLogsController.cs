@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Statistics.Logging
 // 文件名称：TaktOperLogsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：操作日志控制器
 // 
@@ -183,7 +183,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// <summary>
     /// 更新操作日志状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>操作日志DTO</returns>
     [TaktPermission("statistics:logging:operlog:update", "更新操作日志状态")]
     [HttpPut("status")]

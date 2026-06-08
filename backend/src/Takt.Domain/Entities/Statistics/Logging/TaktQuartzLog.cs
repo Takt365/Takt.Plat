@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Domain.Entities.Foundation;
 using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Logging;
@@ -23,60 +24,90 @@ namespace Takt.Domain.Entities.Statistics.Logging;
 [SugarIndex("ix_quartz_log_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_quartz_log_task_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(QuartzTaskId), OrderByType.Asc, false)]
 [SugarIndex("ix_quartz_log_execute_time", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ExecuteTime), OrderByType.Desc, false)]
+[SugarIndex("ix_quartz_log_execute_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ExecuteStatus), OrderByType.Asc, false)]
 public class TaktQuartzLog : TaktCompanyEntityBase
 {
     /// <summary>
     /// 关联定时任务 ID
     /// </summary>
-    [SugarColumn(ColumnName = "quartz_task_id", ColumnDescription = "定时任务ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "quartz_task_id", ColumnDescription = "定时任务ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QuartzTaskId { get; set; }
+    public long QuartzTaskId { get; set; }
 
     /// <summary>
-    /// 触发用户（系统任务为 system）
+    /// 任务名称（执行时快照）
     /// </summary>
-    [SugarColumn(ColumnName = "user_name", ColumnDescription = "触发用户", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
-    public string? UserName { get; set; }
+    [SugarColumn(ColumnName = "task_name", ColumnDescription = "任务名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "''")]
+    public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Job 名称
+    /// 任务组名（执行时快照）
     /// </summary>
-    [SugarColumn(ColumnName = "job_name", ColumnDescription = "Job名称", ColumnDataType = "varchar", Length = 100, IsNullable = false)]
-    public string JobName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job 分组
-    /// </summary>
-    [SugarColumn(ColumnName = "job_group", ColumnDescription = "Job分组", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "job_group", ColumnDescription = "任务组名", ColumnDataType = "varchar", Length = 50, IsNullable = false, DefaultValue = "''")]
     public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// Trigger 名称
+    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    [SugarColumn(ColumnName = "trigger_name", ColumnDescription = "Trigger名称", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
-    public string? TriggerName { get; set; }
-
-    /// <summary>
-    /// 执行状态（0=成功，1=失败）
-    /// </summary>
-    [SugarColumn(ColumnName = "execute_status", ColumnDescription = "执行状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktQuartzExecuteStatus ExecuteStatus { get; set; } = TaktQuartzExecuteStatus.Success;
-
-    /// <summary>
-    /// 错误消息
-    /// </summary>
-    [SugarColumn(ColumnName = "error_msg", ColumnDescription = "错误消息", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? ErrorMsg { get; set; }
+    [SugarColumn(ColumnName = "task_type", ColumnDescription = "任务类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public TaktQuartzTaskType TaskType { get; set; } = TaktQuartzTaskType.Assembly;
 
     /// <summary>
     /// 执行时间
     /// </summary>
     [SugarColumn(ColumnName = "execute_time", ColumnDescription = "执行时间", ColumnDataType = "datetime", IsNullable = false)]
-    public DateTime ExecuteTime { get; set; } = DateTime.Now;
+    public DateTime ExecuteTime { get; set; }
 
     /// <summary>
-    /// 耗时（毫秒）
+    /// 执行耗时（毫秒）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_time", ColumnDescription = "耗时毫秒", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int CostTime { get; set; }
+    [SugarColumn(ColumnName = "execute_duration", ColumnDescription = "执行耗时（毫秒）", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
+    public long ExecuteDuration { get; set; }
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    [SugarColumn(ColumnName = "execute_params", ColumnDescription = "执行参数", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    public string? ExecuteParams { get; set; }
+
+    /// <summary>
+    /// 执行消息
+    /// </summary>
+    [SugarColumn(ColumnName = "execute_message", ColumnDescription = "执行消息", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? ExecuteMessage { get; set; }
+
+    /// <summary>
+    /// 错误信息
+    /// </summary>
+    [SugarColumn(ColumnName = "error_info", ColumnDescription = "错误信息", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? ErrorInfo { get; set; }
+
+    /// <summary>
+    /// 执行机器 IP
+    /// </summary>
+    [SugarColumn(ColumnName = "execute_ip", ColumnDescription = "执行机器IP", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    public string? ExecuteIp { get; set; }
+
+    /// <summary>
+    /// 执行机器名
+    /// </summary>
+    [SugarColumn(ColumnName = "execute_host", ColumnDescription = "执行机器名", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? ExecuteHost { get; set; }
+
+    /// <summary>
+    /// 执行状态（0=失败，1=成功）
+    /// </summary>
+    [SugarColumn(ColumnName = "execute_status", ColumnDescription = "执行状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public TaktExecuteStatus ExecuteStatus { get; set; } = TaktExecuteStatus.Failed;
+
+    // ========================================
+    // 导航属性区域
+    // ========================================
+
+    /// <summary>
+    /// 关联的定时任务
+    /// </summary>
+    [SugarColumn(IsIgnore = true)]
+    [Navigate(NavigateType.OneToOne, nameof(QuartzTaskId))]
+    public TaktQuartzTask? QuartzTask { get; set; }
 }

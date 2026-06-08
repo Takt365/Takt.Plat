@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktProfitCenterDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProfitCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProfitCenter 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Accounting.Controlling;
 
@@ -86,7 +87,7 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public int ProfitCenterStatus { get; set; } = 0;
+    public TaktCommonStatus ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -192,7 +193,7 @@ public class TaktProfitCenterQueryDto : TaktPagedQuery
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public int? ProfitCenterStatus { get; set; }
+    public TaktCommonStatus? ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -317,7 +318,7 @@ public class TaktProfitCenterCreateDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public int ProfitCenterStatus { get; set; } = 0;
+    public TaktCommonStatus ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -387,7 +388,7 @@ public class TaktProfitCenterStatusDto
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "利润中心状态（1=启用，0=禁用）不能为空")]
-    public int ProfitCenterStatus { get; set; } = 0;
+    public TaktCommonStatus ProfitCenterStatus { get; set; }
 }
 
 // ========================================
@@ -484,7 +485,7 @@ public class TaktProfitCenterTemplateDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public int? ProfitCenterStatus { get; set; }
+    public TaktCommonStatus? ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -574,7 +575,7 @@ public class TaktProfitCenterImportDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public int? ProfitCenterStatus { get; set; }
+    public TaktCommonStatus? ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -665,7 +666,7 @@ public class TaktProfitCenterExportDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public int ProfitCenterStatus { get; set; } = 0;
+    public TaktCommonStatus ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期

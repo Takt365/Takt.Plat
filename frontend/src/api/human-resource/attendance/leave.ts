@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/attendance
 // 文件名称：leave.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteLeaveBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新请假信息状态
- * @param {LeaveStatus} dto 状态DTO
+ * @param {LeaveStatus} dto 状态 DTO
  * @returns {Promise<Leave>} 请假信息DTO
  */
 export function updateLeaveStatus(dto: LeaveStatus): Promise<Leave> {
@@ -163,11 +163,11 @@ export function getLeaveTemplate(sheetName?: string, templateName?: string): Pro
 
 /**
  * 导入请假信息
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importLeave(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importLeave(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

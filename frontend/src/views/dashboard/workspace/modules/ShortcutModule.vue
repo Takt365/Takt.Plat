@@ -66,7 +66,7 @@ const { t } = useI18n()
 const menuStore = useMenuStore()
 const shortcutStore = useWorkspaceShortcutStore()
 
-const availableShortcuts = computed(() => menuStore.leafMenuItems || [])
+const availableShortcuts = computed(() => menuStore.leafMenus)
 
 const FAMOUS_COLORS: string[] = [
   '#2e8b57', '#00a0b0', '#FF0000', '#FF6347', '#990033',

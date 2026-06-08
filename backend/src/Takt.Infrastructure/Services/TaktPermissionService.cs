@@ -194,7 +194,7 @@ public class TaktPermissionService : ITaktPermissionService
             .InnerJoin<TaktRole>((ur, r) => ur.RoleId == r.Id)
             .Where((ur, r) => ur.UserId == userId)
             .Where((ur, r) => ur.TenantCode == tenantCode)
-            .Where((ur, r) => ur.IsDeleted == 0 && r.IsDeleted == 0 && r.RoleStatus == 1)
+            .Where((ur, r) => ur.IsDeleted == 0 && r.IsDeleted == 0 && r.RoleStatus == TaktCommonStatus.Enabled)
             .MaxAsync((ur, r) => r.DataScope);
 
         return (TaktDataScope)(maxDataScope > 0 ? maxDataScope : (int)TaktDataScope.Self);

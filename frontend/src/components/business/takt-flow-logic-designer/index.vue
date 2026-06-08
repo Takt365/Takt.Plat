@@ -280,7 +280,7 @@
 import LogicFlow from '@logicflow/core'
 import { DndPanel, SelectionSelect } from '@logicflow/extension'
 import { useI18n } from 'vue-i18n'
-import { useThemeStore } from '@/stores/theme'
+import { useThemeStore } from '@/stores/common/theme'
 import { RiFullscreenLine, RiFullscreenExitLine } from '@remixicon/vue'
 import { getRoleOptions } from '@/api/identity/role'
 import { getDeptTreeOptions } from '@/api/human-resource/organization/dept'
@@ -326,9 +326,9 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const themeStore = useThemeStore()
-/** 主题：与官方示例一致 https://logicflow.cn/tutorial/basic/theme — 内置 mode: default | radius | colorful | dark，切换用 lf.setTheme(themeConfig, mode)；TS 类型为 dark|radius|colorful，亮色用 radius */
-const isDark = computed(() => themeStore.themeMode === 'dark')
-const lfThemeMode = computed(() => (isDark.value ? 'dark' : 'radius'))
+/** 主题：LogicFlow 2.2.x 内置 ThemeMode 为 default | retro | dark | colorful；圆角由 lfStyleConfig 覆盖，亮色用 default */
+const isDark = computed(() => themeStore.resolvedTheme === 'dark')
+const lfThemeMode = computed<LogicFlow.ThemeMode>(() => (isDark.value ? 'dark' : 'default'))
 
 const rootRef = ref<HTMLDivElement | null>(null)
 const containerRef = ref<HTMLDivElement | null>(null)
@@ -947,8 +947,8 @@ watch(
 )
 
 /** 运行时切换主题：官方示例用 lf.setTheme({}, mode)，见 https://logicflow.cn/tutorial/basic/theme */
-watch(lfThemeMode, (mode) => {
-  const lfAny = lf as unknown as { setTheme?: (config: object, mode: string) => void }
+watch(lfThemeMode, (mode: LogicFlow.ThemeMode) => {
+  const lfAny = lf as unknown as { setTheme?: (config: object, themeMode?: LogicFlow.ThemeMode) => void }
   if (lf && typeof lfAny.setTheme === 'function') {
     lfAny.setTheme({}, mode)
   }

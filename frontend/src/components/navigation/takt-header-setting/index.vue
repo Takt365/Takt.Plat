@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:系统设置抽屉组件,提供布局、主题、导航等设置项
+功能描述:系统设置抽屉组件,提供布局、主题、导航等设置项;引用键 components.navigation.page.systemsetting.* 与 common.page.button.*
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -135,10 +135,10 @@ const handleCopy = async () => {
   try {
     const settingJson = JSON.stringify(currentSetting, null, 2)
     await navigator.clipboard.writeText(settingJson)
-    message.success(t('components.navigation.page.systemsetting.preferencescopied'))
+    message.success(t('common.feedback.copied.clipboard'))
   } catch (error) {
     headerSettingLogger.error('复制偏好设置失败', { action: 'copy' }, error)
-    message.error(t('components.navigation.page.systemsetting.copyfail'))
+    message.error(t('common.feedback.copy.manual'))
   }
 }
 
@@ -148,7 +148,7 @@ const handleReset = () => {
   useSettingStore().resetSetting()
   applySettings()
   notifySettingsChanged()
-  message.success(t('components.navigation.page.systemsetting.resettodefault'))
+  message.success(t('common.feedback.action.success', { action: t('common.page.button.reset') }))
 }
 </script>
 

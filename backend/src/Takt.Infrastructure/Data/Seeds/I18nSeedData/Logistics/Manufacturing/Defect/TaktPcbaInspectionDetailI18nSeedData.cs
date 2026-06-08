@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDetailI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaInspectionDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -279,6 +279,15 @@ public class TaktPcbaInspectionDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaInspectionDetail.defectlocation", "zh-CN", "不良个所", "不良个所"),
             // entity.pcbaInspectionDetail.defectlocation
             new TranslationSeedItem("entity.pcbaInspectionDetail.defectlocation", "zh-HK", "不良个所", "不良个所"),
+
+            // entity.pcbaInspectionDetail.pcbainspection
+            new TranslationSeedItem("entity.pcbaInspectionDetail.pcbainspection", "en-US", "PCBA检查日报", "PCBA检查日报（主表）"),
+            // entity.pcbaInspectionDetail.pcbainspection
+            new TranslationSeedItem("entity.pcbaInspectionDetail.pcbainspection", "ja-JP", "PCBA检查日报", "PCBA检查日报（主表）"),
+            // entity.pcbaInspectionDetail.pcbainspection
+            new TranslationSeedItem("entity.pcbaInspectionDetail.pcbainspection", "zh-CN", "PCBA检查日报", "PCBA检查日报（主表）"),
+            // entity.pcbaInspectionDetail.pcbainspection
+            new TranslationSeedItem("entity.pcbaInspectionDetail.pcbainspection", "zh-HK", "PCBA检查日报", "PCBA检查日报（主表）"),
         };
     }
 

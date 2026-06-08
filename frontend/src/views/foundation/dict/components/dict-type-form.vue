@@ -52,10 +52,9 @@
           >
             <TaktSelect
               v-model:value="mainFormState.dataSource"
-              api-url="/api/TaktDictDatas/options?dictTypeCode=sys_data_source"
+              dict-type="sys_data_source"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.datasource') })"
               allow-clear
-              :field-names="{ label: 'dictLabel', value: 'extLabel' }"
             />
           </a-form-item>
 
@@ -77,10 +76,9 @@
           >
             <TaktSelect
               v-model:value="mainFormState.isBuiltIn"
-              api-url="/api/TaktDictDatas/options?dictTypeCode=sys_yes_no"
+              dict-type="sys_yes_no"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.isbuiltin') })"
               allow-clear
-              :field-names="{ label: 'dictLabel', value: 'extLabel' }"
             />
           </a-form-item>
 
@@ -102,10 +100,9 @@
           >
             <TaktSelect
               v-model:value="mainFormState.dictStatus"
-              api-url="/api/TaktDictDatas/options?dictTypeCode=sys_status"
+              dict-type="sys_status"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.dictstatus') })"
               allow-clear
-              :field-names="{ label: 'dictLabel', value: 'extLabel' }"
             />
           </a-form-item>
 

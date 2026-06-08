@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/maintenance
 // 文件名称：equipment.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteEquipmentBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新工厂设备状态
- * @param {EquipmentStatus} dto 状态DTO
+ * @param {EquipmentStatus} dto 状态 DTO
  * @returns {Promise<Equipment>} 工厂设备DTO
  */
 export function updateEquipmentStatus(dto: EquipmentStatus): Promise<Equipment> {
@@ -163,11 +163,11 @@ export function getEquipmentTemplate(sheetName?: string, templateName?: string):
 
 /**
  * 导入工厂设备
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importEquipment(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importEquipment(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-notice.d.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -11,18 +11,18 @@
 // ========================================
 
 import type {
-  CompanyDtoBase,
+  ApprovalDtoBase,
   TaktPagedQuery
 } from '@/types/common';
 
 /**
- * 工程变更通知单实体（EC Notice），用于将设变（ECN）通知到相关部门和人员，追踪通知状态和反馈
+ * 工程变更通知单实体（EC Notice）。FlowInstanceId 由业务在发起流程后写入；流程引擎通过 BusinessKey/BusinessType 与本模块对接。
  * 对应前端 TaktEcNoticeDto
- * 继承 TaktCompanyDtoBase
+ * 继承 TaktApprovalDtoBase
  * 对应前端 EcNotice
  * @description 对应后端 TaktEcNoticeDto
  */
-export interface EcNotice extends CompanyDtoBase {
+export interface EcNotice extends ApprovalDtoBase {
   /**
    * EcNoticeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -94,37 +94,12 @@ export interface EcNotice extends CompanyDtoBase {
   ecNoticeStatus: number;
 
   /**
-   * 确认人ID（序列化为string以避免Javascript精度问题）
+   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
    */
-  ecNoticeConfirmerId?: string;
+  flowInstanceId?: string;
 
   /**
-   * 确认人姓名
-   */
-  ecNoticeConfirmerName?: string;
-
-  /**
-   * 确认日期
-   */
-  ecNoticeConfirmDate?: string;
-
-  /**
-   * 确认意见/反馈
-   */
-  ecNoticeConfirmComment?: string;
-
-  /**
-   * 要求反馈截止日期
-   */
-  ecNoticeRequireFeedbackDate?: string;
-
-  /**
-   * 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
-   */
-  flowInstanceId: string;
-
-  /**
-   * 流程实例名称（填充字段）
+   * 流程实例 名称（填充字段）
    */
   flowInstanceName?: string;
 
@@ -219,44 +194,44 @@ export interface EcNoticeQuery extends TaktPagedQuery {
   ecNoticeStatus?: number;
 
   /**
-   * 确认人ID（序列化为string以避免Javascript精度问题）
-   */
-  ecNoticeConfirmerId?: string;
-
-  /**
-   * 确认人姓名
-   */
-  ecNoticeConfirmerName?: string;
-
-  /**
-   * 确认日期（范围查询-开始）
-   */
-  ecNoticeConfirmDateStart?: string;
-
-  /**
-   * 确认日期（范围查询-结束）
-   */
-  ecNoticeConfirmDateEnd?: string;
-
-  /**
-   * 确认意见/反馈
-   */
-  ecNoticeConfirmComment?: string;
-
-  /**
-   * 要求反馈截止日期（范围查询-开始）
-   */
-  ecNoticeRequireFeedbackDateStart?: string;
-
-  /**
-   * 要求反馈截止日期（范围查询-结束）
-   */
-  ecNoticeRequireFeedbackDateEnd?: string;
-
-  /**
-   * 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
+   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
    */
   flowInstanceId?: string;
+
+  /**
+   * 审批状态（TaktApprovalStatus）
+   */
+  approvalStatus?: number;
+
+  /**
+   * 发起人ID
+   */
+  initiatorId?: string;
+
+  /**
+   * 发起时间（范围查询-开始）
+   */
+  initiatedAtStart?: string;
+
+  /**
+   * 发起时间（范围查询-结束）
+   */
+  initiatedAtEnd?: string;
+
+  /**
+   * 最终审批人ID
+   */
+  approvedBy?: string;
+
+  /**
+   * 最终审批时间（范围查询-开始）
+   */
+  approvedAtStart?: string;
+
+  /**
+   * 最终审批时间（范围查询-结束）
+   */
+  approvedAtEnd?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -363,34 +338,9 @@ export interface EcNoticeCreate {
   ecNoticeStatus: number;
 
   /**
-   * 确认人ID（序列化为string以避免Javascript精度问题）
+   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
    */
-  ecNoticeConfirmerId?: string;
-
-  /**
-   * 确认人姓名
-   */
-  ecNoticeConfirmerName?: string;
-
-  /**
-   * 确认日期
-   */
-  ecNoticeConfirmDate?: string;
-
-  /**
-   * 确认意见/反馈
-   */
-  ecNoticeConfirmComment?: string;
-
-  /**
-   * 要求反馈截止日期
-   */
-  ecNoticeRequireFeedbackDate?: string;
-
-  /**
-   * 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
-   */
-  flowInstanceId: string;
+  flowInstanceId?: string;
 
   /**
    * 扩展字段JSON
@@ -511,9 +461,9 @@ export interface EcNoticeTemplate {
   ecNoticeStatus?: number;
 
   /**
-   * 确认人ID（序列化为string以避免Javascript精度问题）
+   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
    */
-  ecNoticeConfirmerId?: string;
+  flowInstanceId?: string;
 
   /**
    * 扩展字段JSON
@@ -605,9 +555,9 @@ export interface EcNoticeImport {
   ecNoticeStatus?: number;
 
   /**
-   * 确认人ID（序列化为string以避免Javascript精度问题）
+   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
    */
-  ecNoticeConfirmerId?: string;
+  flowInstanceId?: string;
 
   /**
    * 扩展字段JSON
@@ -632,11 +582,6 @@ export interface EcNoticeExport {
    * EcNoticeID
    */
   ecNoticeId: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode: string;
 
   /**
    * 工厂代码
@@ -699,34 +644,9 @@ export interface EcNoticeExport {
   ecNoticeStatus: number;
 
   /**
-   * 确认人ID（序列化为string以避免Javascript精度问题）
+   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
    */
-  ecNoticeConfirmerId?: string;
-
-  /**
-   * 确认人姓名
-   */
-  ecNoticeConfirmerName?: string;
-
-  /**
-   * 确认日期
-   */
-  ecNoticeConfirmDate?: string;
-
-  /**
-   * 确认意见/反馈
-   */
-  ecNoticeConfirmComment?: string;
-
-  /**
-   * 要求反馈截止日期
-   */
-  ecNoticeRequireFeedbackDate?: string;
-
-  /**
-   * 流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）
-   */
-  flowInstanceId: string;
+  flowInstanceId?: string;
 
   /**
    * 扩展字段JSON

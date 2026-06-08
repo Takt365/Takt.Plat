@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsCommentI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsComment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -216,6 +216,24 @@ public class TaktNewsCommentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newsComment.commentstatus", "zh-CN", "评论状态", "评论状态"),
             // entity.newsComment.commentstatus
             new TranslationSeedItem("entity.newsComment.commentstatus", "zh-HK", "评论状态", "评论状态"),
+
+            // entity.newsComment.news
+            new TranslationSeedItem("entity.newsComment.news", "en-US", "新闻", "新闻（主表）"),
+            // entity.newsComment.news
+            new TranslationSeedItem("entity.newsComment.news", "ja-JP", "新闻", "新闻（主表）"),
+            // entity.newsComment.news
+            new TranslationSeedItem("entity.newsComment.news", "zh-CN", "新闻", "新闻（主表）"),
+            // entity.newsComment.news
+            new TranslationSeedItem("entity.newsComment.news", "zh-HK", "新闻", "新闻（主表）"),
+
+            // entity.newsComment.likes
+            new TranslationSeedItem("entity.newsComment.likes", "en-US", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
+            // entity.newsComment.likes
+            new TranslationSeedItem("entity.newsComment.likes", "ja-JP", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
+            // entity.newsComment.likes
+            new TranslationSeedItem("entity.newsComment.likes", "zh-CN", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
+            // entity.newsComment.likes
+            new TranslationSeedItem("entity.newsComment.likes", "zh-HK", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktManufacturerI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktManufacturer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -299,13 +299,13 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
             // entity.manufacturer.materials
-            new TranslationSeedItem("entity.manufacturer.materials", "en-US", "manufacturerMaterials", "导航属性：制造商物料明细列表"),
+            new TranslationSeedItem("entity.manufacturer.materials", "en-US", "导航属性：制造商物料明细列表", "导航属性：制造商物料明细列表"),
             // entity.manufacturer.materials
-            new TranslationSeedItem("entity.manufacturer.materials", "ja-JP", "manufacturerMaterials", "导航属性：制造商物料明细列表"),
+            new TranslationSeedItem("entity.manufacturer.materials", "ja-JP", "导航属性：制造商物料明细列表", "导航属性：制造商物料明细列表"),
             // entity.manufacturer.materials
-            new TranslationSeedItem("entity.manufacturer.materials", "zh-CN", "manufacturerMaterials", "导航属性：制造商物料明细列表"),
+            new TranslationSeedItem("entity.manufacturer.materials", "zh-CN", "导航属性：制造商物料明细列表", "导航属性：制造商物料明细列表"),
             // entity.manufacturer.materials
-            new TranslationSeedItem("entity.manufacturer.materials", "zh-HK", "manufacturerMaterials", "导航属性：制造商物料明细列表"),
+            new TranslationSeedItem("entity.manufacturer.materials", "zh-HK", "导航属性：制造商物料明细列表", "导航属性：制造商物料明细列表"),
         };
     }
 

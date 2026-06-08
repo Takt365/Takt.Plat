@@ -10,7 +10,7 @@
 <template>
   <a-modal
     v-model:open="visible"
-    :title="t('common.page.button.allocate') + t('entity.tenant._self')"
+    :title="t('common.dialog.title.allocate', { entity: t('entity.tenant._self') })"
     :width="'33.333vw'"
     :confirm-loading="loading"
     :centered="true"

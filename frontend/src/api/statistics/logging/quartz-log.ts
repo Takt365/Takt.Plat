@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/statistics/logging
 // 文件名称：quartz-log.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteQuartzLogBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新任务执行日志状态
- * @param {QuartzLogStatus} dto 状态DTO
+ * @param {QuartzLogStatus} dto 状态 DTO（TaktExecuteStatus 枚举）
  * @returns {Promise<QuartzLog>} 任务执行日志DTO
  */
 export function updateQuartzLogStatus(dto: QuartzLogStatus): Promise<QuartzLog> {

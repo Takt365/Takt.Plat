@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -315,6 +315,24 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecDetail.isendofline", "zh-CN", "EOL", "EOL（End of Line，0=否 1=是）"),
             // entity.ecDetail.isendofline
             new TranslationSeedItem("entity.ecDetail.isendofline", "zh-HK", "EOL", "EOL（End of Line，0=否 1=是）"),
+
+            // entity.ecDetail.ec
+            new TranslationSeedItem("entity.ecDetail.ec", "en-US", "设变主表", "设变主表"),
+            // entity.ecDetail.ec
+            new TranslationSeedItem("entity.ecDetail.ec", "ja-JP", "设变主表", "设变主表"),
+            // entity.ecDetail.ec
+            new TranslationSeedItem("entity.ecDetail.ec", "zh-CN", "设变主表", "设变主表"),
+            // entity.ecDetail.ec
+            new TranslationSeedItem("entity.ecDetail.ec", "zh-HK", "设变主表", "设变主表"),
+
+            // entity.ecDetail.deptrecords
+            new TranslationSeedItem("entity.ecDetail.deptrecords", "en-US", "设变明细-部门记录列表", "设变明细-部门记录列表（按 DeptCode 区分部门：Assy/It/Cus/Fins/Gas/Iqc/Mc/Mp/Pcba/Pmc/Qa/Te/Eng）"),
+            // entity.ecDetail.deptrecords
+            new TranslationSeedItem("entity.ecDetail.deptrecords", "ja-JP", "设变明细-部门记录列表", "设变明细-部门记录列表（按 DeptCode 区分部门：Assy/It/Cus/Fins/Gas/Iqc/Mc/Mp/Pcba/Pmc/Qa/Te/Eng）"),
+            // entity.ecDetail.deptrecords
+            new TranslationSeedItem("entity.ecDetail.deptrecords", "zh-CN", "设变明细-部门记录列表", "设变明细-部门记录列表（按 DeptCode 区分部门：Assy/It/Cus/Fins/Gas/Iqc/Mc/Mp/Pcba/Pmc/Qa/Te/Eng）"),
+            // entity.ecDetail.deptrecords
+            new TranslationSeedItem("entity.ecDetail.deptrecords", "zh-HK", "设变明细-部门记录列表", "设变明细-部门记录列表（按 DeptCode 区分部门：Assy/It/Cus/Fins/Gas/Iqc/Mc/Mp/Pcba/Pmc/Qa/Te/Eng）"),
         };
     }
 

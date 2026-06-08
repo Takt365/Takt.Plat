@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesQuotationI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesQuotation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -218,13 +218,13 @@ public class TaktSalesQuotationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesQuotation.salesordercode", "zh-HK", "销售订单编码", "关联销售订单编码（报价转订单后回填）"),
 
             // entity.salesQuotation.items
-            new TranslationSeedItem("entity.salesQuotation.items", "en-US", "items", "销售报价明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.salesQuotation.items", "en-US", "销售报价明细列表", "销售报价明细列表（主子表关系）"),
             // entity.salesQuotation.items
-            new TranslationSeedItem("entity.salesQuotation.items", "ja-JP", "items", "销售报价明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.salesQuotation.items", "ja-JP", "销售报价明细列表", "销售报价明细列表（主子表关系）"),
             // entity.salesQuotation.items
-            new TranslationSeedItem("entity.salesQuotation.items", "zh-CN", "items", "销售报价明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.salesQuotation.items", "zh-CN", "销售报价明细列表", "销售报价明细列表（主子表关系）"),
             // entity.salesQuotation.items
-            new TranslationSeedItem("entity.salesQuotation.items", "zh-HK", "items", "销售报价明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.salesQuotation.items", "zh-HK", "销售报价明细列表", "销售报价明细列表（主子表关系）"),
         };
     }
 

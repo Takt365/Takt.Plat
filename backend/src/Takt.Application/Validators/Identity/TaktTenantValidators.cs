@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktTenantValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Tenant 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTenant 生成，请按需审阅）
 // 
@@ -46,6 +46,8 @@ public class TaktTenantCreateValidator : AbstractValidator<TaktTenantCreateDto>
             .EmailAddress().WithMessage("联系邮箱格式不正确").When(x => !string.IsNullOrWhiteSpace(x.ContactEmail));
         RuleFor(x => x.IsBuiltIn)
             .IsInEnum().WithMessage("是否内置无效");
+        RuleFor(x => x.TenantStatus)
+            .IsInEnum().WithMessage("状态无效");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -101,6 +103,8 @@ public class TaktTenantImportValidator : AbstractValidator<TaktTenantImportDto>
             .EmailAddress().WithMessage("联系邮箱格式不正确").When(x => !string.IsNullOrWhiteSpace(x.ContactEmail));
         RuleFor(x => x.IsBuiltIn)
             .IsInEnum().WithMessage("是否内置无效");
+        RuleFor(x => x.TenantStatus)
+            .IsInEnum().WithMessage("状态无效");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

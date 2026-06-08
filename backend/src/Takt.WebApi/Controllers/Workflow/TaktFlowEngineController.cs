@@ -38,13 +38,51 @@ public class TaktFlowEngineController : TaktControllerBase
     #region 详情与列表
 
     /// <summary>
-    /// 获取流程实例详情（运行时视图）
+    /// 获取待办流程实例运行时详情
     /// </summary>
     /// <param name="id">实例 ID</param>
     /// <returns>实例详情</returns>
-    [TaktPermission("workflow:instance:detail", "流程实例详情")]
+    [TaktPermission("workflow:todo:query", "待办流程实例详情")]
+    [HttpGet("todo/{id:long}")]
+    public Task<IActionResult> GetFlowInstanceTodoDetailByIdAsync(long id) =>
+        GetFlowInstanceDetailCoreAsync(id);
+
+    /// <summary>
+    /// 获取我发起的流程实例运行时详情
+    /// </summary>
+    /// <param name="id">实例 ID</param>
+    /// <returns>实例详情</returns>
+    [TaktPermission("workflow:my:query", "我的流程实例详情")]
+    [HttpGet("my/{id:long}")]
+    public Task<IActionResult> GetFlowInstanceMyDetailByIdAsync(long id) =>
+        GetFlowInstanceDetailCoreAsync(id);
+
+    /// <summary>
+    /// 获取已办流程实例运行时详情
+    /// </summary>
+    /// <param name="id">实例 ID</param>
+    /// <returns>实例详情</returns>
+    [TaktPermission("workflow:processed:query", "已办流程实例详情")]
+    [HttpGet("processed/{id:long}")]
+    public Task<IActionResult> GetFlowInstanceProcessedDetailByIdAsync(long id) =>
+        GetFlowInstanceDetailCoreAsync(id);
+
+    /// <summary>
+    /// 获取流程实例运行时详情（实例管理页）
+    /// </summary>
+    /// <param name="id">实例 ID</param>
+    /// <returns>实例详情</returns>
+    [TaktPermission("workflow:instance:query", "流程实例运行时详情")]
     [HttpGet("{id:long}")]
-    public async Task<IActionResult> GetFlowInstanceDetailByIdAsync(long id)
+    public Task<IActionResult> GetFlowInstanceDetailByIdAsync(long id) =>
+        GetFlowInstanceDetailCoreAsync(id);
+
+    /// <summary>
+    /// 流程实例运行时详情查询（各入口 Action 共用）
+    /// </summary>
+    /// <param name="id">实例 ID</param>
+    /// <returns>实例详情</returns>
+    private async Task<IActionResult> GetFlowInstanceDetailCoreAsync(long id)
     {
         try
         {

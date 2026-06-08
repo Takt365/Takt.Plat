@@ -56,8 +56,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="tenant"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :large-screen-column-count="9"
       :small-screen-column-count="5"
@@ -116,7 +116,7 @@
     <!-- 修改密码对话框 -->
     <TaktModal
       v-model:open="changePasswordVisible"
-      :title="t('common.page.button.changepwd')"
+      :title="t('common.dialog.title.changepwd')"
       :width="'33.333vw'"
       :confirm-loading="changePasswordLoading"
       @ok="handleChangePasswordSubmit"
@@ -146,10 +146,9 @@
       <a-form-item :label="t('entity.user.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.userStatus"
-          api-url="/api/TaktDictDatas/options?dictTypeCode=sys_normal_disable"
+          dict-type="sys_normal_disable"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.user.status') })"
           allow-clear
-          :field-names="{ label: 'dictLabel', value: 'extLabel' }"
         />
       </a-form-item>
     </TaktQueryDrawer>
@@ -157,7 +156,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.page.button.import') + t('entity.user._self')"
+      :title="t('common.dialog.title.import', { entity: t('entity.user._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -198,12 +197,12 @@
     />
 
     <TaktColumnDrawer
+      entity-scope="tenant"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       :id-column-key="'id'"
       :action-column-key="'action'"
-      entity-scope="tenant"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -652,7 +651,7 @@ const handleResizeColumn = (w: number, col: any) => {
 
 // 新增
 const handleCreate = () => {
-  formTitle.value = t('common.page.button.create') + t('entity.user._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.user._self') })
   formData.value = {}
   formVisible.value = true
 }
@@ -663,7 +662,7 @@ const handleEdit = (record: User) => {
     message.warning(t('common.tip.subject.cannot.action', { subject: t('common.tip.super.user'), action: t('common.page.button.update') }))
     return
   }
-  formTitle.value = t('common.page.button.edit') + t('entity.user._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.user._self') })
   formData.value = toUserAssignRecord(record)
   formVisible.value = true
 }
@@ -865,7 +864,7 @@ const handleUnlock = (record: User) => {
   }
   const userName = getUsername(record) || t('common.tip.this.target', { target: t('entity.user._self') })
   Modal.confirm({
-    title: t('common.tip.confirm.action', { action: t('common.page.button.unlock') }),
+    title: t('common.tip.confirm.action.title', { action: t('common.page.button.unlock') }),
     content: t('common.tip.confirm.entity.action', { action: t('common.page.button.unlock'), entity: t('entity.user._self'), name: userName }),
     okText: t('common.page.button.unlock'),
     cancelText: t('common.page.button.cancel'),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.TrainingDevelopment
 // 文件名称：TaktTrainingPlansController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：培训计划控制器
 // 
@@ -183,7 +183,7 @@ public class TaktTrainingPlansController : TaktControllerBase
     /// <summary>
     /// 更新培训计划状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>培训计划DTO</returns>
     [TaktPermission("humanresource:trainingdevelopment:trainingplan:update", "更新培训计划状态")]
     [HttpPut("status")]

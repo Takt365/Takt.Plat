@@ -25,7 +25,7 @@ alwaysApply: false
 | 4 | `generate-controllers-from-services.cjs` | `TaktXxxsController`（复数路由） |
 | 5 | `generate-from-backend.cjs` | `frontend/src/types/**`、`frontend/src/api/**` |
 | 6 | `generate-entity-i18n-seed.cjs` | `Takt.Infrastructure/.../I18nSeedData/TaktXxxI18nSeedData.cs` |
-| 7 | `generate-vue-from-api.cjs` | `views/**/index.vue` + `components/*-form.vue` |
+| 7 | `generate-vue-all-from-api.cjs` | `views/**/index.vue` + `components/*-form.vue`（串联 CRUD / TREE / Master-Detail） |
 
 任一步非零退出码则中止。完成后须 **编译 backend** 并人工审阅（见 §五）。
 
@@ -37,7 +37,7 @@ alwaysApply: false
 
 | 形态 | 模板 | 实体特征 | 后端生成 | 前端 Vue 生成 |
 |------|------|----------|----------|---------------|
-| **单表** | `crud` | 无 `OneToMany` 导航、无 `ParentId` | 标准 CRUD + Options | ✅ `generate-vue-from-api` |
+| **单表** | `crud` | 无 `OneToMany` 导航、无 `ParentId` | 标准 CRUD + Options | ✅ `generate-vue-crud-from-api` |
 | **主子表** | `sub` | 实体含 `[Navigate(NavigateType.OneToMany…)]` | DTO 含 `List<子Dto>`；`Fill*DetailsAsync` / `Save*ChildrenAsync` | ✅ 展开行 + 表单子表 Tab |
 | **树表** | `tree` | 实体含 `ParentId` | `*TreeDto`、`Get*TreeAsync`、`Get*TreeOptionsAsync`；路由 `tree` / `tree-options` | ❌ **不生成**；手工 `13-vue-view` §四 |
 
@@ -89,10 +89,17 @@ alwaysApply: false
 - 输出：`TaktXxxI18nSeedData.cs`；键 `entity.{slug}.*`（与 `00-project` §1.6 对齐）
 - 语言：`en-US`、`ja-JP`、`zh-CN`、`zh-HK`
 
-### 3.6 Vue（`generate-vue-from-api.cjs`）
+### 3.6 Vue（`generate-vue-*-from-api.cjs`）
 
-**输入**：`types/**/{entity}.d.ts` + `api/**/{entity}.ts`  
-**输出**：`views/{viewPath}/index.vue`、`components/{entity}-form.vue`
+**入口**：`generate-vue-all-from-api.cjs`（一键串联）；或按模板单独调用：
+
+| 脚本 | 模板 |
+|------|------|
+| `generate-vue-crud-from-api.cjs` | 单表 CRUD |
+| `generate-vue-tree-from-api.cjs` | 树表（ParentId + getXxxTree） |
+| `generate-vue-master-detail-from-api.cjs` | 主子表（展开行 + 表单 Tab） |
+
+**共享基础设施**：`generate-vue-common.cjs`（三脚本互不 `require`）
 
 | 能力 | 说明 |
 |------|------|
@@ -151,7 +158,8 @@ alwaysApply: false
 node scripts/generate-all.cjs --Holiday
 node scripts/generate-all.cjs --all
 node scripts/generate-all.cjs --Plant --dry-run
-node scripts/generate-vue-from-api.cjs --Holiday --view-path human-resource/attendance-leave/holiday
+node scripts/generate-vue-crud-from-api.cjs --Holiday --view-path human-resource/attendance-leave/holiday
+node scripts/generate-vue-all-from-api.cjs --CostCenter
 ```
 
 ---

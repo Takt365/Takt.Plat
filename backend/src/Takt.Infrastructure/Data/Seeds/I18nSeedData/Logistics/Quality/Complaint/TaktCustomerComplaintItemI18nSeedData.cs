@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerComplaintItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -252,6 +252,15 @@ public class TaktCustomerComplaintItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerComplaintItem.attachmentpaths", "zh-CN", "附件路径", "附件路径（多个附件用逗号分隔）"),
             // entity.customerComplaintItem.attachmentpaths
             new TranslationSeedItem("entity.customerComplaintItem.attachmentpaths", "zh-HK", "附件路径", "附件路径（多个附件用逗号分隔）"),
+
+            // entity.customerComplaintItem.complaint
+            new TranslationSeedItem("entity.customerComplaintItem.complaint", "en-US", "客诉主表", "客诉主表"),
+            // entity.customerComplaintItem.complaint
+            new TranslationSeedItem("entity.customerComplaintItem.complaint", "ja-JP", "客诉主表", "客诉主表"),
+            // entity.customerComplaintItem.complaint
+            new TranslationSeedItem("entity.customerComplaintItem.complaint", "zh-CN", "客诉主表", "客诉主表"),
+            // entity.customerComplaintItem.complaint
+            new TranslationSeedItem("entity.customerComplaintItem.complaint", "zh-HK", "客诉主表", "客诉主表"),
         };
     }
 

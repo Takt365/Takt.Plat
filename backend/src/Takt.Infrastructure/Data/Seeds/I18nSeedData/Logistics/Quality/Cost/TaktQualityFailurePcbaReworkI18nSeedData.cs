@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityFailurePcbaReworkI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityFailurePcbaRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -243,6 +243,15 @@ public class TaktQualityFailurePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityFailurePcbaRework.pcbarecorder", "zh-CN", "PCBA不良改修对应记录者", "PCBA不良改修应对记录者"),
             // entity.qualityFailurePcbaRework.pcbarecorder
             new TranslationSeedItem("entity.qualityFailurePcbaRework.pcbarecorder", "zh-HK", "PCBA不良改修对应记录者", "PCBA不良改修应对记录者"),
+
+            // entity.qualityFailurePcbaRework.issue
+            new TranslationSeedItem("entity.qualityFailurePcbaRework.issue", "en-US", "质量问题主表", "质量问题主表（导航属性）"),
+            // entity.qualityFailurePcbaRework.issue
+            new TranslationSeedItem("entity.qualityFailurePcbaRework.issue", "ja-JP", "质量问题主表", "质量问题主表（导航属性）"),
+            // entity.qualityFailurePcbaRework.issue
+            new TranslationSeedItem("entity.qualityFailurePcbaRework.issue", "zh-CN", "质量问题主表", "质量问题主表（导航属性）"),
+            // entity.qualityFailurePcbaRework.issue
+            new TranslationSeedItem("entity.qualityFailurePcbaRework.issue", "zh-HK", "质量问题主表", "质量问题主表（导航属性）"),
         };
     }
 

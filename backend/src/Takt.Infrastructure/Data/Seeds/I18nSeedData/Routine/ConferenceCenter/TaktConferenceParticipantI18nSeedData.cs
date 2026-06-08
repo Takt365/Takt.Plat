@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceParticipant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,6 +118,15 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
             // entity.conferenceParticipant.username
             new TranslationSeedItem("entity.conferenceParticipant.username", "zh-HK", "用户姓名", "用户姓名"),
 
+            // entity.conferenceParticipant.participantrole
+            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "en-US", "参与角色", "参与角色"),
+            // entity.conferenceParticipant.participantrole
+            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "ja-JP", "参与角色", "参与角色"),
+            // entity.conferenceParticipant.participantrole
+            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "zh-CN", "参与角色", "参与角色"),
+            // entity.conferenceParticipant.participantrole
+            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "zh-HK", "参与角色", "参与角色"),
+
             // entity.conferenceParticipant.attendancestatus
             new TranslationSeedItem("entity.conferenceParticipant.attendancestatus", "en-US", "出席状态", "出席状态"),
             // entity.conferenceParticipant.attendancestatus
@@ -144,6 +153,15 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceParticipant.checkouttime", "zh-CN", "签退时间", "签退时间"),
             // entity.conferenceParticipant.checkouttime
             new TranslationSeedItem("entity.conferenceParticipant.checkouttime", "zh-HK", "签退时间", "签退时间"),
+
+            // entity.conferenceParticipant.conference
+            new TranslationSeedItem("entity.conferenceParticipant.conference", "en-US", "会议", "会议（主表）"),
+            // entity.conferenceParticipant.conference
+            new TranslationSeedItem("entity.conferenceParticipant.conference", "ja-JP", "会议", "会议（主表）"),
+            // entity.conferenceParticipant.conference
+            new TranslationSeedItem("entity.conferenceParticipant.conference", "zh-CN", "会议", "会议（主表）"),
+            // entity.conferenceParticipant.conference
+            new TranslationSeedItem("entity.conferenceParticipant.conference", "zh-HK", "会议", "会议（主表）"),
         };
     }
 

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/code/database/database-info -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：数据库摘要管理页面，含查询、增删改，由 generate-vue-from-api 根据 types/api 自动生成 -->
+<!-- 功能描述：数据库摘要管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -51,15 +51,17 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="displayColumns"
+      :columns="columns"
+      entity-scope="company"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'databaseInfoId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
       :row-key="getDatabaseInfoId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-      :large-screen-column-count="9"
-      :small-screen-column-count="5"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
@@ -79,11 +81,16 @@
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-code-database-database-info'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
+      <template #default="{ isFieldVisible }">
 
+      </template>
     </TaktQueryDrawer>
 
     <!-- 列设置抽屉 -->
@@ -93,6 +100,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'databaseInfoId'"
       :action-column-key="'action'"
+      entity-scope="company"
+      table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -101,41 +110,63 @@
 
 <script setup lang="ts">
 /**
- * 数据库摘要管理页 · 由 generate-vue-from-api 根据 types/api 生成
+ * 数据库摘要管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/code/database/database-info
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import { getDatabaseInfoList } from '@/api/code/database/database-info'
 import type { DatabaseInfo, DatabaseInfoQuery, DatabaseInfoCreate, DatabaseInfoUpdate } from '@/types/code/database/database-info'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
+/** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.databaseInfo._self') })
 )
 
+/** 快捷查询关键字 */
 const queryKeyword = ref('')
+/** 列表 loading */
 const loading = ref(false)
+/** 分页列表数据 */
 const dataSource = ref<DatabaseInfo[]>([])
+/** 当前页码 */
 const currentPage = ref(1)
+/** 每页条数 */
 const pageSize = ref(20)
+/** 分页 total */
 const total = ref(0)
+/** 工具栏单选时当前行 */
 const selectedRow = ref<DatabaseInfo | null>(null)
+/** 表格多选行 */
 const selectedRows = ref<DatabaseInfo[]>([])
+/** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
-
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/** 高级查询表单模型 */
 const advancedQueryForm = ref({
 
 })
+/** 高级查询字段元数据（列显隐配置） */
+const queryFieldsMeta = computed(() => [
+
+])
+/** 高级查询当前可见字段 key */
+const visibleQueryFieldKeys = ref<string[]>([])
+/** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
+/** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
+/** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'databaseInfoId'
 
+
+/** 页面挂载后加载分页列表 */
 onMounted(() => {
   loadData()
 })
@@ -145,6 +176,7 @@ onMounted(() => {
 
 
 
+/** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
@@ -172,21 +204,16 @@ const columns = computed<TableColumnsType>(() => [
   })
 ])
 
+/** 表格 row-key（优先实体主键字段） */
 const getDatabaseInfoId = (record: any): string => record?.[entityIdName] ?? ''
+/**
+ * 读取行字段值
+ * @param record 行数据
+ * @param field 字段名
+ */
 const getDatabaseInfoField = (record: any, field: string): any => record?.[field]
 
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return merged
-  const keysSet = new Set(keys.map((k: any) => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = col.key || col.dataIndex || col.title
-    return colKey && keysSet.has(String(colKey))
-  })
-})
-
+/** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: DatabaseInfo[]) => {
@@ -206,6 +233,7 @@ const rowSelection = computed(() => ({
   }
 }))
 
+/** 行点击切换选中（与 rowSelection 联动） */
 const onClickRow = (record: DatabaseInfo) => ({
   onClick: () => {
     const key = getDatabaseInfoId(record)
@@ -223,6 +251,7 @@ const onClickRow = (record: DatabaseInfo) => ({
   }
 })
 
+/** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
@@ -248,11 +277,13 @@ async function loadData() {
   }
 }
 
+/** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
   loadData()
 }
 
+/** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
@@ -262,10 +293,12 @@ function handleReset() {
   loadData()
 }
 
+/** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
+/** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
   currentPage.value = 1
@@ -278,28 +311,36 @@ function handleAdvancedQueryReset() {
   }
 }
 
+/** 打开列设置抽屉 */
 function handleColumnSetting() {
   columnSettingVisible.value = true
 }
 
+/** 列设置：更新可见列 key */
 function handleColumnKeysChange(keys: string[]) {
   visibleColumnKeys.value = keys
 }
 
+/** 列设置：恢复默认可见列 */
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = columns.value.map((c: any) => c.key || c.dataIndex).filter(Boolean)
+  visibleColumnKeys.value = []
 }
 
+/** 刷新列表 */
 function handleRefresh() {
   loadData()
 }
 
+/** 表格 change 占位 */
 function handleTableChange() {}
+/** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
+/** 分页页码变更 */
 function handlePaginationChange(page: number) {
   currentPage.value = page
   loadData()
 }
+/** 分页每页条数变更 */
 function handlePaginationSizeChange(_current: number, size: number) {
   pageSize.value = size
   currentPage.value = 1

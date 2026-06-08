@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Generator
 // 文件名称：TaktGenTableI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktGenTable 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -515,13 +515,13 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.genTable.othergenoptions", "zh-HK", "其他生成选项", "其他生成选项（JSON格式，存储其他生成配置）"),
 
             // entity.genTable.columns
-            new TranslationSeedItem("entity.genTable.columns", "en-US", "columns", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
+            new TranslationSeedItem("entity.genTable.columns", "en-US", "字段配置列表", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
             // entity.genTable.columns
-            new TranslationSeedItem("entity.genTable.columns", "ja-JP", "columns", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
+            new TranslationSeedItem("entity.genTable.columns", "ja-JP", "字段配置列表", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
             // entity.genTable.columns
-            new TranslationSeedItem("entity.genTable.columns", "zh-CN", "columns", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
+            new TranslationSeedItem("entity.genTable.columns", "zh-CN", "字段配置列表", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
             // entity.genTable.columns
-            new TranslationSeedItem("entity.genTable.columns", "zh-HK", "columns", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
+            new TranslationSeedItem("entity.genTable.columns", "zh-HK", "字段配置列表", "字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）"),
         };
     }
 

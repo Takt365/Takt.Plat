@@ -24,6 +24,10 @@ import {
   TAKT_OAUTH_PENDING_TENANT_STORAGE_KEY,
   TAKT_TENANT_CODE_STORAGE_KEY,
 } from '@/utils/common';
+import {
+  STORE_I18N_ENTITY_TENANT_LIST,
+  translateLoadEmpty,
+} from '@/utils/takt-store-i18n';
 
 /**
  * 是否已持有访问令牌（避免 tenant ↔ user store 循环依赖）
@@ -290,7 +294,7 @@ export const useTenantStore = defineStore('tenant', () => {
       const options = await getSessionTenantOptions();
 
       if (options.length === 0) {
-        throw new Error('未获取到可用的租户列表');
+        throw new Error(translateLoadEmpty(STORE_I18N_ENTITY_TENANT_LIST));
       }
 
       tenantOptions.value = options;
@@ -324,7 +328,7 @@ export const useTenantStore = defineStore('tenant', () => {
       const options = await getSessionTenantOptions();
 
       if (options.length === 0) {
-        throw new Error('未获取到可用的租户列表');
+        throw new Error(translateLoadEmpty(STORE_I18N_ENTITY_TENANT_LIST));
       }
 
       tenantOptions.value = options;

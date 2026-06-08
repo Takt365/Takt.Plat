@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.NewsCenter
 // 文件名称：TaktNewsCommentService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心评论应用服务实现
 // 
@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.NewsCenter;
 
@@ -134,7 +135,9 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
     {
         EnsureThreeLayerContext();
         var list = await _newsCommentRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
-        var filtered = list;
+        var filtered = includeDisabled
+            ? list
+            : list.Where(x => x.CommentStatus == TaktNewsCommentStatus.Normal).ToList();
         return BuildNewsCommentTree(filtered, parentId);
     }
 

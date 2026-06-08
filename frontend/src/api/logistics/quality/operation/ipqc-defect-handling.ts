@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/operation
 // 文件名称：ipqc-defect-handling.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteIpqcDefectHandlingBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新制程检验不良处理记录状态
- * @param {IpqcDefectHandlingStatus} dto 状态DTO
+ * @param {IpqcDefectHandlingStatus} dto 状态 DTO
  * @returns {Promise<IpqcDefectHandling>} 制程检验不良处理记录DTO
  */
 export function updateIpqcDefectHandlingStatus(dto: IpqcDefectHandlingStatus): Promise<IpqcDefectHandling> {
@@ -163,11 +163,11 @@ export function getIpqcDefectHandlingTemplate(sheetName?: string, templateName?:
 
 /**
  * 导入制程检验不良处理记录
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importIpqcDefectHandling(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importIpqcDefectHandling(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

@@ -30,6 +30,11 @@ import {
   resolveTaktCultureCode,
   syncTaktComponentLocales,
 } from '@/utils/takt-locale-sync';
+import {
+  STORE_I18N_ENTITY_CULTURE_LIST,
+  translateLoadEmpty,
+  translateLoadFailed,
+} from '@/utils/takt-store-i18n';
 
 /**
  * 解析发往后端的 Accept-Language（与 vue-i18n 当前 locale 一致）
@@ -84,7 +89,7 @@ function resolveCultureLoadErrorMessage(error: unknown): string {
     return error.message;
   }
 
-  return '加载语言列表失败';
+  return translateLoadFailed(STORE_I18N_ENTITY_CULTURE_LIST);
 }
 
 /**
@@ -167,7 +172,7 @@ export const useLocaleStore = defineStore('locale', () => {
         : await getSessionCultureOptions(explicitTenant);
 
       if (list.length === 0) {
-        throw new Error('未获取到可用的语言列表');
+        throw new Error(translateLoadEmpty(STORE_I18N_ENTITY_CULTURE_LIST));
       }
 
       cultureOptions.value = list;

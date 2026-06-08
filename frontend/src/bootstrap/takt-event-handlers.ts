@@ -22,14 +22,25 @@ import { useMenuStore } from '@/stores/identity/menu';
 import { usePermissionStore } from '@/stores/identity/permission';
 import { useSignalRStore } from '@/stores/foundation/signalr';
 import { EventBus, type NotificationType } from '@/utils/event-bus';
+import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import {
+  isLogoutInProgress,
+  runServerSignOutIfLoggedInAsync,
+  withLogoutInProgress,
+} from '@/bootstrap/takt-logout-flow';
+import {
+  STORE_I18N_TIP_SESSION_EXPIRED,
+  STORE_I18N_TIP_SESSION_IDLE_LOGOUT,
+} from '@/utils/takt-store-i18n';
 
 /**
  * 执行登出清理并跳转登录页
  * @description 重置用户/租户/字典/翻译/菜单/权限/SignalR 状态；已在 /login 时不重复 push
- * @param {string} [toastMessage] 可选错误提示（Ant Design Message）
+ * @param {string} [toastMessage] 可选提示（Ant Design Message）
+ * @param {NotificationType} [toastType='error'] 提示类型；空闲登出用 warning
  * @returns {void}
  */
-function performLogout(toastMessage?: string): void {
+function performLogout(toastMessage?: string, toastType: NotificationType = 'error'): void {
   /** 用户身份与令牌 Store */
   const userStore = useUserStore();
   /** 当前租户/公司上下文 Store */
@@ -66,8 +77,7 @@ function performLogout(toastMessage?: string): void {
 
   // 调用方传入提示文案时展示错误 Message
   if (toastMessage) {
-    // 展示登出原因（会话过期、空闲超时等）
-    message.error(toastMessage);
+    showAntdMessage(toastType, toastMessage);
   }
 }
 
@@ -103,6 +113,19 @@ function showAntdMessage(type: NotificationType, content: string, description?: 
 }
 
 /**
+ * 空闲超时登出：先服务端 signOut（token 仍在），再清前端并 warning 提示
+ * @param message 提示文案；缺省 common.tip.session.idle.logout
+ * @returns {Promise<void>}
+ */
+export async function executeIdleLogoutAsync(message?: string): Promise<void> {
+  await withLogoutInProgress(async () => {
+    const logoutMessage = message ?? translateLocaleMessage(STORE_I18N_TIP_SESSION_IDLE_LOGOUT);
+    await runServerSignOutIfLoggedInAsync();
+    performLogout(logoutMessage, 'warning');
+  });
+}
+
+/**
  * 注册全局事件订阅（在 createApp 且 app.use(pinia)、app.use(router) 之后调用一次）
  * @description 订阅 auth:session-expired、auth:idle-timeout、user:logout、notification:show、
  *   user:login、menu:refresh、tenant:change、company:change、theme:change、locale:change
@@ -111,8 +134,11 @@ function showAntdMessage(type: NotificationType, content: string, description?: 
 export function registerTaktEventHandlers(): void {
   // 401 / 业务未授权：request 拦截器仅发事件，此处统一清状态并跳转
   EventBus.on('auth:session-expired', (payload) => {
-    /** 会话失效提示；缺省为固定中文兜底 */
-    const logoutMessage = payload?.message ?? '登录已过期，请重新登录';
+    if (isLogoutInProgress()) {
+      return;
+    }
+
+    const logoutMessage = payload?.message ?? translateLocaleMessage(STORE_I18N_TIP_SESSION_EXPIRED);
     const userStore = useUserStore();
     if (!userStore.isLoggedIn && router.currentRoute.value.path === '/login') {
       if (logoutMessage) {
@@ -120,22 +146,21 @@ export function registerTaktEventHandlers(): void {
       }
       return;
     }
-    // 执行统一登出清理
-    performLogout(logoutMessage);
+
+    void withLogoutInProgress(async () => {
+      performLogout(logoutMessage);
+    });
   });
 
-  // 空闲超时：takt-idle-session 发事件，与 session-expired 共用登出流程
   EventBus.on('auth:idle-timeout', (payload) => {
-    /** 空闲登出提示；缺省与 session-expired 一致 */
-    const logoutMessage = payload?.message ?? '登录已过期，请重新登录';
-    // 执行统一登出清理
-    performLogout(logoutMessage);
+    void executeIdleLogoutAsync(payload?.message);
   });
 
-  // 主动登出：用户点击退出，无额外提示
   EventBus.on('user:logout', () => {
-    // 执行统一登出清理（无 toast）
-    performLogout();
+    void withLogoutInProgress(async () => {
+      await runServerSignOutIfLoggedInAsync();
+      performLogout();
+    });
   });
 
   // 全局 Toast：request / Store 等非 UI 层通过 EventBus 触发

@@ -35,7 +35,9 @@
       @export="handleExport"
     />
     <TaktSingleTable
+      entity-scope="company"
       :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
@@ -46,33 +48,37 @@
         <template v-if="column.key === 'action'">
           <a-space wrap>
             <a-button
+              v-permission="'workflow:todo:approve'"
               type="link"
               size="small"
               @click="handleApprove(asFlowTodoItem(record), true)"
             >
-              通过
+              {{ t('common.page.button.pass') }}
             </a-button>
             <a-button
+              v-permission="'workflow:todo:approve'"
               type="link"
               size="small"
               danger
               @click="handleApprove(asFlowTodoItem(record), false)"
             >
-              驳回
+              {{ t('common.page.button.reject') }}
             </a-button>
             <a-button
+              v-permission="'workflow:todo:transfer'"
               type="link"
               size="small"
               @click="openTransfer(asFlowTodoItem(record))"
             >
-              {{ t('workflow.instance.transfer') }}
+              {{ t('common.page.button.transfer') }}
             </a-button>
             <a-button
+              v-permission="'workflow:todo:addsign'"
               type="link"
               size="small"
               @click="openAddSign(asFlowTodoItem(record))"
             >
-              {{ t('workflow.instance.addSign') }}
+              {{ t('common.page.button.addsign') }}
             </a-button>
           </a-space>
         </template>
@@ -87,7 +93,7 @@
     />
     <TaktModal
       v-model:open="modalVisible"
-      :title="t('workflow.instance.approveTitle')"
+      :title="t('common.dialog.title.approve')"
       :confirm-loading="loading"
       :ok-text="t('common.page.button.submit')"
       :cancel-text="t('common.page.button.cancel')"
@@ -108,7 +114,7 @@
           />
         </div>
         <div
-          v-if="taskDetail?.currentNodeName === CASHIER_ROUTE_NODE_ID"
+          v-if="getTaskNodeId(taskDetail) === CASHIER_ROUTE_NODE_ID"
           class="todo-modal__section"
         >
           <div class="todo-modal__section-title">
@@ -135,7 +141,7 @@
     </TaktModal>
     <TaktModal
       v-model:open="transferVisible"
-      :title="t('workflow.instance.transfer')"
+      :title="t('common.dialog.title.transfer')"
       :confirm-loading="loading"
       :ok-text="t('common.page.button.submit')"
       :cancel-text="t('common.page.button.cancel')"
@@ -169,7 +175,7 @@
     </TaktModal>
     <TaktModal
       v-model:open="addSignVisible"
-      :title="t('workflow.instance.addSign')"
+      :title="t('common.dialog.title.addsign')"
       :confirm-loading="loading"
       :ok-text="t('common.page.button.submit')"
       :cancel-text="t('common.page.button.cancel')"
@@ -211,15 +217,15 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { buildFlowTodoQuery, getFlowInstanceTodoList, getFlowInstanceById, completeFlowInstanceTask, exportFlowInstanceTodo, transferFlowInstance, addFlowInstanceApprovers } from '@/api/workflow/instance'
+import { buildFlowTodoQuery, getFlowEngineTodoList, getFlowEngineInstanceById, completeFlowEngineTask, transferFlowEngineTask, addFlowEngineApprovers } from '@/api/workflow/flow-engine'
+import { exportFlowTask } from '@/api/workflow/flow-task'
 import { getUserOptions } from '@/api/identity/user'
 import ApproveForm from './components/flow-approve-form.vue'
 import TransferForm from './components/flow-transfer-form.vue'
 import AddSignForm from './components/flow-add-sign-form.vue'
 import TaskFormContent from './components/flow-task-form-content.vue'
 import FlowPendingAddApproversPanel from '@/views/workflow/components/flow-pending-add-approvers-panel.vue'
-import type { FlowTodoItem, FlowTodoQuery, FlowInstanceDetail } from '@/types/workflow/flow-instance'
-import type { FlowAddApproverItem } from '@/types/workflow/flow-instance'
+import type { FlowTodoTableRow, FlowInstanceDetailView, FlowAddApproverItem } from '@/types/workflow/flow-engine'
 import type { TaktSelectOption } from '@/types/common'
 const toErrorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error))
 
@@ -227,6 +233,11 @@ const { t } = useI18n()
 
 /** 与种子 ProcessContent 节点 id 一致：出纳确认付款方式 */
 const CASHIER_ROUTE_NODE_ID = 'cashier_route'
+
+/** 当前任务节点 ID */
+function getTaskNodeId(detail: FlowInstanceDetailView | null): string | undefined {
+  return detail?.currentActivityId
+}
 
 const cashierPayoutChannel = ref<number | undefined>(undefined)
 const cashierPayoutOptions = computed(() => [
@@ -238,7 +249,7 @@ const cashierPayoutOptions = computed(() => [
 const loading = ref(false)
 const exportLoading = ref(false)
 const queryKeyword = ref('')
-const dataSource = ref<FlowTodoItem[]>([])
+const dataSource = ref<FlowTodoTableRow[]>([])
 const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
@@ -252,9 +263,9 @@ const columns = [
   { title: '操作', key: 'action', width: 260, fixed: 'right' as const }
 ]
 
-/** 将 a-table bodyCell 的 record 断言为 FlowTodoItem */
-function asFlowTodoItem(r: Record<string, unknown>): FlowTodoItem {
-  return r as unknown as FlowTodoItem
+/** 将 a-table bodyCell 的 record 断言为 FlowTodoTableRow */
+function asFlowTodoItem(r: Record<string, unknown>): FlowTodoTableRow {
+  return r as unknown as FlowTodoTableRow
 }
 
 /** 待办行 key：取 instanceId 字符串 */
@@ -265,8 +276,8 @@ function getTodoRowKey(record: unknown): string {
 }
 
 const modalVisible = ref(false)
-const currentTask = ref<FlowTodoItem | null>(null)
-const taskDetail = ref<FlowInstanceDetail | null>(null)
+const currentTask = ref<FlowTodoTableRow | null>(null)
+const taskDetail = ref<FlowInstanceDetailView | null>(null)
 const approveFormRef = ref<InstanceType<typeof ApproveForm> | null>(null)
 const completeForm = reactive({
   comment: '',
@@ -277,8 +288,8 @@ const completeForm = reactive({
 const userOptions = ref<TaktSelectOption[]>([])
 const transferVisible = ref(false)
 const addSignVisible = ref(false)
-const currentTransferTask = ref<FlowTodoItem | null>(null)
-const currentAddSignTask = ref<FlowTodoItem | null>(null)
+const currentTransferTask = ref<FlowTodoTableRow | null>(null)
+const currentAddSignTask = ref<FlowTodoTableRow | null>(null)
 const transferFormRef = ref<InstanceType<typeof TransferForm> | null>(null)
 const transferForm = reactive<{
   toUserId?: string
@@ -299,7 +310,7 @@ const addSignForm = reactive({
 async function loadTodo() {
   loading.value = true
   try {
-    const res = await getFlowInstanceTodoList(
+    const res = await getFlowEngineTodoList(
       buildFlowTodoQuery(currentPage.value, pageSize.value, queryKeyword.value)
     )
     dataSource.value = res.data ?? []
@@ -340,7 +351,7 @@ async function reloadTaskDetailInModal() {
   const id = taskDetail.value?.instanceId
   if (id == null) return
   try {
-    taskDetail.value = await getFlowInstanceById(id)
+    taskDetail.value = await getFlowEngineInstanceById(id, 'todo')
     await loadTodo()
   } catch {
     message.error(t('common.page.msg.loadFail'))
@@ -354,7 +365,7 @@ async function closeApproveModal() {
 }
 
 /** 打开审批弹窗：设置当前任务、办结表单、拉取实例详情 */
-async function handleApprove(record: FlowTodoItem, pass: boolean) {
+async function handleApprove(record: FlowTodoTableRow, pass: boolean) {
   currentTask.value = record
   completeForm.comment = ''
   completeForm.approved = pass
@@ -362,7 +373,7 @@ async function handleApprove(record: FlowTodoItem, pass: boolean) {
   cashierPayoutChannel.value = undefined
   taskDetail.value = null
   try {
-    taskDetail.value = await getFlowInstanceById(record.instanceId)
+    taskDetail.value = await getFlowEngineInstanceById(record.instanceId, 'todo')
     const fd = taskDetail.value?.frmData?.trim()
     if (fd) {
       try {
@@ -384,19 +395,20 @@ async function handleApprove(record: FlowTodoItem, pass: boolean) {
 async function handleApproveOk() {
   const ok = await approveFormRef.value?.validate()
   if (!ok || !currentTask.value) return
+  const detail = taskDetail.value
   if (
     completeForm.approved &&
-    taskDetail.value?.currentNodeName === CASHIER_ROUTE_NODE_ID &&
+    getTaskNodeId(detail) === CASHIER_ROUTE_NODE_ID &&
     cashierPayoutChannel.value == null
   ) {
     message.warning(t('workflow.instance.cashierPayoutRequired'))
     return
   }
   let frmDataPayload: string | undefined
-  if (completeForm.approved && taskDetail.value?.currentNodeName === CASHIER_ROUTE_NODE_ID) {
+  if (completeForm.approved && getTaskNodeId(detail) === CASHIER_ROUTE_NODE_ID && detail) {
     try {
-      const base = taskDetail.value.frmData?.trim()
-        ? (JSON.parse(taskDetail.value.frmData) as Record<string, unknown>)
+      const base = detail.frmData?.trim()
+        ? (JSON.parse(detail.frmData) as Record<string, unknown>)
         : {}
       base.payoutChannel = cashierPayoutChannel.value as number
       frmDataPayload = JSON.stringify(base)
@@ -422,7 +434,7 @@ async function handleApproveOk() {
     if (completeForm.comment) payload.comment = completeForm.comment
     if (completeForm.nodeRejectStep) payload.nodeRejectStep = completeForm.nodeRejectStep
     if (frmDataPayload) payload.frmData = frmDataPayload
-    await completeFlowInstanceTask(payload)
+    await completeFlowEngineTask(payload)
     message.success('已提交')
     modalVisible.value = false
     taskDetail.value = null
@@ -438,7 +450,7 @@ async function handleApproveOk() {
 async function handleExport() {
   try {
     exportLoading.value = true
-    const blob = await exportFlowInstanceTodo({ pageIndex: 1, pageSize: 99999 })
+    const blob = await exportFlowTask({ ...buildFlowTodoQuery(1, 500, queryKeyword.value), taskStatus: 0, sheetName: 'FlowTodo' })
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fileName = `待办_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
@@ -483,14 +495,14 @@ function closeAddSignModal() {
 }
 
 /** 打开转办弹窗：设置当前任务、拉取实例详情、拉取用户选项 */
-async function openTransfer(record: FlowTodoItem) {
+async function openTransfer(record: FlowTodoTableRow) {
   currentTransferTask.value = record
   delete transferForm.toUserId
   transferForm.toUserName = ''
   delete transferForm.comment
   taskDetail.value = null
   try {
-    taskDetail.value = await getFlowInstanceById(record.instanceId)
+    taskDetail.value = await getFlowEngineInstanceById(record.instanceId, 'todo')
   } catch {
     taskDetail.value = null
   }
@@ -504,7 +516,7 @@ async function handleTransferOk() {
   if (!ok || !currentTransferTask.value || !transferForm.toUserId || !transferForm.toUserName) return
   loading.value = true
   try {
-    await transferFlowInstance({
+    await transferFlowEngineTask({
       flowInstanceId: currentTransferTask.value.instanceId,
       instanceCode: currentTransferTask.value.instanceCode,
       toUserId: transferForm.toUserId,
@@ -524,7 +536,7 @@ async function handleTransferOk() {
 }
 
 /** 打开加签弹窗：设置当前任务、拉取实例详情、拉取用户选项 */
-async function openAddSign(record: FlowTodoItem) {
+async function openAddSign(record: FlowTodoTableRow) {
   currentAddSignTask.value = record
   addSignForm.approverIds = []
   addSignForm.approveType = 'sequential'
@@ -532,7 +544,7 @@ async function openAddSign(record: FlowTodoItem) {
   addSignForm.returnToSignNode = false
   taskDetail.value = null
   try {
-    taskDetail.value = await getFlowInstanceById(record.instanceId)
+    taskDetail.value = await getFlowEngineInstanceById(record.instanceId, 'todo')
   } catch {
     taskDetail.value = null
   }
@@ -565,7 +577,7 @@ async function handleAddSignOk() {
       returnToSignNode: addSignForm.returnToSignNode
     }
     if (addSignForm.reason) payload.reason = addSignForm.reason
-    await addFlowInstanceApprovers(payload)
+    await addFlowEngineApprovers(payload)
     message.success('加签成功')
     addSignVisible.value = false
     currentAddSignTask.value = null

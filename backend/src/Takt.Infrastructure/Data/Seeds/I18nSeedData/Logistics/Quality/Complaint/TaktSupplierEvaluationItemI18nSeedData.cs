@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -234,6 +234,15 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierEvaluationItem.rectificationstatus", "zh-CN", "整改状态", "整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
             // entity.supplierEvaluationItem.rectificationstatus
             new TranslationSeedItem("entity.supplierEvaluationItem.rectificationstatus", "zh-HK", "整改状态", "整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+
+            // entity.supplierEvaluationItem.evaluation
+            new TranslationSeedItem("entity.supplierEvaluationItem.evaluation", "en-US", "评价表主表", "评价表主表"),
+            // entity.supplierEvaluationItem.evaluation
+            new TranslationSeedItem("entity.supplierEvaluationItem.evaluation", "ja-JP", "评价表主表", "评价表主表"),
+            // entity.supplierEvaluationItem.evaluation
+            new TranslationSeedItem("entity.supplierEvaluationItem.evaluation", "zh-CN", "评价表主表", "评价表主表"),
+            // entity.supplierEvaluationItem.evaluation
+            new TranslationSeedItem("entity.supplierEvaluationItem.evaluation", "zh-HK", "评价表主表", "评价表主表"),
         };
     }
 

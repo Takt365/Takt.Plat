@@ -17,6 +17,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Logistics.Sales;
@@ -198,7 +199,7 @@ public class TaktCustomer : TaktCompanyEntityBase
     /// 客户状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "customer_status", ColumnDescription = "客户状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int CustomerStatus { get; set; } = 1;
+    public TaktCommonStatus CustomerStatus { get; set; } = TaktCommonStatus.Enabled;
 
     /// <summary>
     /// 排序号（越小越靠前）

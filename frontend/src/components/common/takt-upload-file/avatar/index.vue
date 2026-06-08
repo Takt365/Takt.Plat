@@ -326,8 +326,8 @@ const handleRemove = () => {
   Modal.confirm({
     title: t('components.common.page.upload.confirmdeleteavatar'),
     content: t('components.common.page.upload.confirmdeleteavatarcontent'),
-    okText: t('components.common.page.upload.ok'),
-    cancelText: t('components.common.page.upload.cancel'),
+    okText: t('common.page.button.ok'),
+    cancelText: t('common.page.button.cancel'),
     onOk: () => {
       avatarUrl.value = ''
       message.success(t('components.common.page.upload.deletesuccess'))

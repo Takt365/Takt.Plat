@@ -57,6 +57,12 @@ public class TaktUser : TaktTenantEntityBase
     public long EmployeeId { get; set; }
 
     /// <summary>
+    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// </summary>
+    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "默认区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
+    public string DefaultCulture { get; set; } = "en-US";
+    
+    /// <summary>
     /// 是否内置（1=是，0=否）
     /// 种子用户（admin/guest/demo）为内置，不允许删除
     /// </summary>
@@ -104,12 +110,6 @@ public class TaktUser : TaktTenantEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "locked_until", ColumnDescription = "锁定时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? LockedUntil { get; set; }
-
-    /// <summary>
-    /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "默认区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
-    public string DefaultCulture { get; set; } = "en-US";
 
     // ========================================
     // 导航属性区域

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNoticeI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcNotice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -199,59 +199,23 @@ public class TaktEcNoticeI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecNotice.status
             new TranslationSeedItem("entity.ecNotice.status", "zh-HK", "通知状态", "通知状态（0=待通知 1=已通知 2=已确认 3=已驳回 4=已过期）"),
 
-            // entity.ecNotice.confirmerid
-            new TranslationSeedItem("entity.ecNotice.confirmerid", "en-US", "确认人ID", "确认人ID（序列化为string以避免Javascript精度问题）"),
-            // entity.ecNotice.confirmerid
-            new TranslationSeedItem("entity.ecNotice.confirmerid", "ja-JP", "确认人ID", "确认人ID（序列化为string以避免Javascript精度问题）"),
-            // entity.ecNotice.confirmerid
-            new TranslationSeedItem("entity.ecNotice.confirmerid", "zh-CN", "确认人ID", "确认人ID（序列化为string以避免Javascript精度问题）"),
-            // entity.ecNotice.confirmerid
-            new TranslationSeedItem("entity.ecNotice.confirmerid", "zh-HK", "确认人ID", "确认人ID（序列化为string以避免Javascript精度问题）"),
-
-            // entity.ecNotice.confirmername
-            new TranslationSeedItem("entity.ecNotice.confirmername", "en-US", "确认人姓名", "确认人姓名"),
-            // entity.ecNotice.confirmername
-            new TranslationSeedItem("entity.ecNotice.confirmername", "ja-JP", "确认人姓名", "确认人姓名"),
-            // entity.ecNotice.confirmername
-            new TranslationSeedItem("entity.ecNotice.confirmername", "zh-CN", "确认人姓名", "确认人姓名"),
-            // entity.ecNotice.confirmername
-            new TranslationSeedItem("entity.ecNotice.confirmername", "zh-HK", "确认人姓名", "确认人姓名"),
-
-            // entity.ecNotice.confirmdate
-            new TranslationSeedItem("entity.ecNotice.confirmdate", "en-US", "确认日期", "确认日期"),
-            // entity.ecNotice.confirmdate
-            new TranslationSeedItem("entity.ecNotice.confirmdate", "ja-JP", "确认日期", "确认日期"),
-            // entity.ecNotice.confirmdate
-            new TranslationSeedItem("entity.ecNotice.confirmdate", "zh-CN", "确认日期", "确认日期"),
-            // entity.ecNotice.confirmdate
-            new TranslationSeedItem("entity.ecNotice.confirmdate", "zh-HK", "确认日期", "确认日期"),
-
-            // entity.ecNotice.confirmcomment
-            new TranslationSeedItem("entity.ecNotice.confirmcomment", "en-US", "确认意见", "确认意见/反馈"),
-            // entity.ecNotice.confirmcomment
-            new TranslationSeedItem("entity.ecNotice.confirmcomment", "ja-JP", "确认意见", "确认意见/反馈"),
-            // entity.ecNotice.confirmcomment
-            new TranslationSeedItem("entity.ecNotice.confirmcomment", "zh-CN", "确认意见", "确认意见/反馈"),
-            // entity.ecNotice.confirmcomment
-            new TranslationSeedItem("entity.ecNotice.confirmcomment", "zh-HK", "确认意见", "确认意见/反馈"),
-
-            // entity.ecNotice.requirefeedbackdate
-            new TranslationSeedItem("entity.ecNotice.requirefeedbackdate", "en-US", "要求反馈截止日期", "要求反馈截止日期"),
-            // entity.ecNotice.requirefeedbackdate
-            new TranslationSeedItem("entity.ecNotice.requirefeedbackdate", "ja-JP", "要求反馈截止日期", "要求反馈截止日期"),
-            // entity.ecNotice.requirefeedbackdate
-            new TranslationSeedItem("entity.ecNotice.requirefeedbackdate", "zh-CN", "要求反馈截止日期", "要求反馈截止日期"),
-            // entity.ecNotice.requirefeedbackdate
-            new TranslationSeedItem("entity.ecNotice.requirefeedbackdate", "zh-HK", "要求反馈截止日期", "要求反馈截止日期"),
-
             // entity.ecNotice.flowinstanceid
-            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "en-US", "流程实例ID", "流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "en-US", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>；发起审批后由业务写入）"),
             // entity.ecNotice.flowinstanceid
-            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "ja-JP", "流程实例ID", "流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "ja-JP", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>；发起审批后由业务写入）"),
             // entity.ecNotice.flowinstanceid
-            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "zh-CN", "流程实例ID", "流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "zh-CN", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>；发起审批后由业务写入）"),
             // entity.ecNotice.flowinstanceid
-            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "zh-HK", "流程实例ID", "流程实例ID（关联工作流，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.ecNotice.flowinstanceid", "zh-HK", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>；发起审批后由业务写入）"),
+
+            // entity.ecNotice.ec
+            new TranslationSeedItem("entity.ecNotice.ec", "en-US", "关联的设变主表", "关联的设变主表"),
+            // entity.ecNotice.ec
+            new TranslationSeedItem("entity.ecNotice.ec", "ja-JP", "关联的设变主表", "关联的设变主表"),
+            // entity.ecNotice.ec
+            new TranslationSeedItem("entity.ecNotice.ec", "zh-CN", "关联的设变主表", "关联的设变主表"),
+            // entity.ecNotice.ec
+            new TranslationSeedItem("entity.ecNotice.ec", "zh-HK", "关联的设变主表", "关联的设变主表"),
         };
     }
 

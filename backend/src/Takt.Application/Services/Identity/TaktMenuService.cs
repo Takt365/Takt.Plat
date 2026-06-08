@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktMenuService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单应用服务实现
 // 
@@ -103,7 +103,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
     /// <returns>树形选项</returns>
     public async Task<List<TaktTreeSelectOption>> GetMenuTreeOptionsAsync()
     {
-        var list = await _menuRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.MenuStatus == 1);
+        var list = await _menuRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.MenuStatus == TaktCommonStatus.Enabled);
         return BuildMenuTreeOptions(list, 0);
     }
 
@@ -142,7 +142,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
         var list = await _menuRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.MenuStatus == 1).ToList();
+            : list.Where(x => x.MenuStatus == TaktCommonStatus.Enabled).ToList();
         return BuildMenuTree(filtered, parentId);
     }
 
@@ -307,7 +307,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
         {
             throw new TaktBusinessException("菜单不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.MenuStatus != (int)TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.MenuStatus != TaktCommonStatus.Enabled)
         {
             throw new TaktBusinessException("不允许禁用内置菜单");
         }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/scheduling
 // 文件名称：aps-schedule-item.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteApsScheduleItemBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新APS排程明细状态
- * @param {ApsScheduleItemStatus} dto 状态DTO
+ * @param {ApsScheduleItemStatus} dto 状态 DTO
  * @returns {Promise<ApsScheduleItem>} APS排程明细DTO
  */
 export function updateApsScheduleItemStatus(dto: ApsScheduleItemStatus): Promise<ApsScheduleItem> {
@@ -163,11 +163,11 @@ export function getApsScheduleItemTemplate(sheetName?: string, templateName?: st
 
 /**
  * 导入APS排程明细
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importApsScheduleItem(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importApsScheduleItem(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

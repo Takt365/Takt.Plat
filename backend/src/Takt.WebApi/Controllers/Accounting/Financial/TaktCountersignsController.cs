@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktCountersignsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会签单控制器
 // 
@@ -183,7 +183,7 @@ public class TaktCountersignsController : TaktControllerBase
     /// <summary>
     /// 更新会签单状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>会签单DTO</returns>
     [TaktPermission("accounting:financial:countersign:update", "更新会签单状态")]
     [HttpPut("status")]

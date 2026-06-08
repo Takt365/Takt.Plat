@@ -1,0 +1,291 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.WebApi.Controllers.Statistics.Report
+// 文件名称：TaktConfigurablesController.cs
+// 创建时间：2026-06-08
+// 创建人：Takt365(Cursor AI)
+// 功能描述：自定义报表主控制器
+// 
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Microsoft.AspNetCore.Mvc;
+using Takt.Application.Dtos.Statistics.Report;
+using Takt.Application.Services.Statistics.Report;
+using Takt.Shared.Constants;
+
+namespace Takt.WebApi.Controllers.Statistics.Report;
+
+/// <summary>
+/// 自定义报表主控制器
+/// 提供自定义报表主的 REST API
+/// </summary>
+[ApiModule(TaktModule.Statistics, "统计看板")]
+[Route("api/[controller]", Name = "自定义报表主")]
+public class TaktConfigurablesController : TaktControllerBase
+{
+    private readonly ITaktConfigurableService _configurableService;
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="configurableService">自定义报表主服务</param>
+    public TaktConfigurablesController(ITaktConfigurableService configurableService)
+    {
+        _configurableService = configurableService;
+    }
+
+    /// <summary>
+    /// 获取自定义报表主列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("statistics:report:configurable:list", "自定义报表主列表")]
+    [HttpGet("list")]
+    public async Task<IActionResult> GetConfigurableListAsync([FromQuery] TaktConfigurableQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _configurableService.GetConfigurableListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据ID获取自定义报表主
+    /// </summary>
+    /// <param name="id">自定义报表主ID</param>
+    /// <returns>自定义报表主DTO</returns>
+    [TaktPermission("statistics:report:configurable:query", "自定义报表主详情")]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetConfigurableByIdAsync(long id)
+    {
+        try
+        {
+            var result = await _configurableService.GetConfigurableByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound("自定义报表主不存在");
+            }
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取报表下拉选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("statistics:report:configurable:query", "自定义报表主选项")]
+    [HttpGet("options")]
+    public async Task<IActionResult> GetConfigurableOptionsAsync()
+    {
+        try
+        {
+            var result = await _configurableService.GetConfigurableOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 创建自定义报表主
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>自定义报表主DTO</returns>
+    [TaktPermission("statistics:report:configurable:create", "创建自定义报表主")]
+    [HttpPost]
+    public async Task<IActionResult> CreateConfigurableAsync([FromBody] TaktConfigurableCreateDto dto)
+    {
+        try
+        {
+            var result = await _configurableService.CreateConfigurableAsync(dto);
+            return Success(result, "创建成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新自定义报表主
+    /// </summary>
+    /// <param name="id">自定义报表主ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>自定义报表主DTO</returns>
+    [TaktPermission("statistics:report:configurable:update", "更新自定义报表主")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateConfigurableAsync(long id, [FromBody] TaktConfigurableUpdateDto dto)
+    {
+        try
+        {
+            var result = await _configurableService.UpdateConfigurableAsync(id, dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 删除自定义报表主
+    /// </summary>
+    /// <param name="id">自定义报表主ID</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("statistics:report:configurable:delete", "删除自定义报表主")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteConfigurableByIdAsync(long id)
+    {
+        try
+        {
+            await _configurableService.DeleteConfigurableByIdAsync(id);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 批量删除自定义报表主
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("statistics:report:configurable:delete", "批量删除自定义报表主")]
+    [HttpDelete("batch")]
+    public async Task<IActionResult> DeleteConfigurableBatchAsync([FromBody] IEnumerable<long> ids)
+    {
+        try
+        {
+            await _configurableService.DeleteConfigurableBatchAsync(ids);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新自定义报表主状态
+    /// </summary>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <returns>自定义报表主DTO</returns>
+    [TaktPermission("statistics:report:configurable:update", "更新自定义报表主状态")]
+    [HttpPut("status")]
+    public async Task<IActionResult> UpdateConfigurableStatusAsync([FromBody] TaktConfigurableStatusDto dto)
+    {
+        try
+        {
+            var result = await _configurableService.UpdateConfigurableStatusAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新自定义报表主排序
+    /// </summary>
+    /// <param name="dto">排序DTO</param>
+    /// <returns>自定义报表主DTO</returns>
+    [TaktPermission("statistics:report:configurable:update", "更新自定义报表主排序")]
+    [HttpPut("sort")]
+    public async Task<IActionResult> UpdateConfigurableSortAsync([FromBody] TaktConfigurableSortDto dto)
+    {
+        try
+        {
+            var result = await _configurableService.UpdateConfigurableSortAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <returns>Excel文件</returns>
+    [TaktPermission("statistics:report:configurable:import", "获取自定义报表主导入模板")]
+    [HttpGet("template")]
+    public async Task<IActionResult> GetConfigurableTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    {
+        try
+        {
+            var (resultFileName, content) = await _configurableService.GetConfigurableTemplateAsync(sheetName, templateName);
+            return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 导入自定义报表主
+    /// </summary>
+    /// <param name="file">Excel文件</param>
+    /// <returns>导入结果</returns>
+    [TaktPermission("statistics:report:configurable:import", "导入自定义报表主")]
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportConfigurableAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    {
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("请选择要导入的文件");
+            }
+
+            await using var stream = file.OpenReadStream();
+            var (success, fail, errors) = await _configurableService.ImportConfigurableAsync(stream, sheetName);
+            return Success(new
+            {
+                SuccessCount = success,
+                FailCount = fail,
+                Errors = errors
+            }, $"导入完成：成功{success}条，失败{fail}条");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 导出自定义报表主
+    /// </summary>
+    /// <returns>Excel文件</returns>
+    [TaktPermission("statistics:report:configurable:export", "导出自定义报表主")]
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportConfigurableAsync([FromQuery] TaktConfigurableQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    {
+        try
+        {
+            var (resultFileName, fileContent) = await _configurableService.ExportConfigurableAsync(query, sheetName, exportName);
+            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+}

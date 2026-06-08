@@ -58,6 +58,7 @@ export default {
       'prussian-blue': '普鲁士蓝',
       'senelier-yellow': '申内利尔黄',
       'memorial-gray': '纪念灰',
+      custom: '自定义',
     },
     layout: {
       switch: '切换登录布局',
@@ -65,6 +66,46 @@ export default {
         left: '左对齐',
         center: '居中',
         right: '右对齐',
+      },
+    },
+    entity: {
+      culturelist: '语言列表',
+      menulist: '菜单',
+      tenantlist: '租户列表',
+    },
+    button: {
+      ok: '确定',
+      cancel: '取消',
+      logout: '退出登录',
+      profile: '个人中心',
+    },
+  },
+  feedback: {
+    load: {
+      empty: '未获取到可用的{target}',
+      failed: '加载{target}失败',
+    },
+    connect: {
+      success: '连接成功',
+    },
+    signalr: {
+      error: '实时连接发生错误',
+    },
+  },
+  tip: {
+    session: {
+      expired: '登录已过期，请重新登录',
+      idle: {
+        logout: '长时间未操作，已自动退出登录',
+      },
+    },
+    force: {
+      logout: '您已被强制下线',
+    },
+    confirm: {
+      action: {
+        title: '确认{action}',
+        question: '确定要{action}吗？',
       },
     },
   },

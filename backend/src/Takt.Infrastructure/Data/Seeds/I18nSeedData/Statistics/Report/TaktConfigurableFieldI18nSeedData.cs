@@ -1,0 +1,233 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
+// 文件名称：TaktConfigurableFieldI18nSeedData.cs
+// 创建时间：2026-06-08
+// 创建人：Takt365(Auto Generated)
+// 功能描述：TaktConfigurableField 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Interfaces;
+using Takt.Domain.Repositories;
+using Takt.Shared.Enums;
+using Takt.Shared.Helpers;
+
+namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report;
+
+/// <summary>
+/// TaktConfigurableField 实体国际化翻译种子（键前缀 entity.configurableField.*）
+/// 幂等性：存在则更新，不存在则创建
+/// </summary>
+public class TaktConfigurableFieldI18nSeedData : ITaktSeedDataCoordinator
+{
+    /// <summary>
+    /// 执行顺序（实体翻译种子，位于部门翻译之后）
+    /// </summary>
+    public int Order => 52;
+
+    /// <summary>
+    /// 初始化实体字段翻译种子
+    /// </summary>
+    public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
+    {
+        TaktLogger.Information("开始初始化 TaktConfigurableField 实体国际化翻译种子...");
+
+        if (string.IsNullOrEmpty(tenantCode))
+        {
+            TaktLogger.Warning("租户编码为空，跳过实体国际化翻译种子初始化");
+            return (0, 0);
+        }
+
+        var repository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktTranslation>>();
+        var cultureRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCulture>>();
+        var cultureIdByCode = (await cultureRepository.GetListAsync(c => c.TenantCode == tenantCode))
+            .ToDictionary(c => c.CultureCode, c => c.Id);
+        int insertCount = 0;
+        int updateCount = 0;
+
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 configurableField 实体翻译...", tenantCode);
+
+        foreach (var item in GetConfigurableFieldTranslations())
+        {
+            if (!cultureIdByCode.TryGetValue(item.CultureCode, out var cultureId))
+            {
+                TaktLogger.Warning("未找到区域文化 {CultureCode}，跳过翻译 {I18nKey}", item.CultureCode, item.I18nKey);
+                continue;
+            }
+
+            var (translation, i, u) = await CreateOrUpdateTranslationAsync(
+                repository,
+                tenantCode,
+                cultureId,
+                item);
+            insertCount += i;
+            updateCount += u;
+        }
+
+        TaktLogger.Information("TaktConfigurableField 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
+        return (insertCount, updateCount);
+    }
+
+    /// <summary>
+    /// TaktConfigurableField 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
+    /// I18nKey：entity.configurableField._self / entity.configurableField.{{field}}；ResourceGroup=TaktModule.Statistics；ResourceType=TaktAppSide.Frontend
+    /// </summary>
+    private static List<TranslationSeedItem> GetConfigurableFieldTranslations()
+    {
+        return new List<TranslationSeedItem>
+        {
+            // entity.configurableField._self
+            new TranslationSeedItem("entity.configurableField._self", "en-US", "Configurable Field Information", "实体名称"),
+            // entity.configurableField._self
+            new TranslationSeedItem("entity.configurableField._self", "ja-JP", "自定义报表输出字段定义信息", "实体名称"),
+            // entity.configurableField._self
+            new TranslationSeedItem("entity.configurableField._self", "zh-CN", "自定义报表输出字段定义信息", "实体名称"),
+            // entity.configurableField._self
+            new TranslationSeedItem("entity.configurableField._self", "zh-HK", "自定义报表输出字段定义信息", "实体名称"),
+
+            // entity.configurableField.configurableid
+            new TranslationSeedItem("entity.configurableField.configurableid", "en-US", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            // entity.configurableField.configurableid
+            new TranslationSeedItem("entity.configurableField.configurableid", "ja-JP", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            // entity.configurableField.configurableid
+            new TranslationSeedItem("entity.configurableField.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            // entity.configurableField.configurableid
+            new TranslationSeedItem("entity.configurableField.configurableid", "zh-HK", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+
+            // entity.configurableField.sourcealias
+            new TranslationSeedItem("entity.configurableField.sourcealias", "en-US", "数据源别名", "数据源别名"),
+            // entity.configurableField.sourcealias
+            new TranslationSeedItem("entity.configurableField.sourcealias", "ja-JP", "数据源别名", "数据源别名"),
+            // entity.configurableField.sourcealias
+            new TranslationSeedItem("entity.configurableField.sourcealias", "zh-CN", "数据源别名", "数据源别名"),
+            // entity.configurableField.sourcealias
+            new TranslationSeedItem("entity.configurableField.sourcealias", "zh-HK", "数据源别名", "数据源别名"),
+
+            // entity.configurableField.columnname
+            new TranslationSeedItem("entity.configurableField.columnname", "en-US", "列名", "列名"),
+            // entity.configurableField.columnname
+            new TranslationSeedItem("entity.configurableField.columnname", "ja-JP", "列名", "列名"),
+            // entity.configurableField.columnname
+            new TranslationSeedItem("entity.configurableField.columnname", "zh-CN", "列名", "列名"),
+            // entity.configurableField.columnname
+            new TranslationSeedItem("entity.configurableField.columnname", "zh-HK", "列名", "列名"),
+
+            // entity.configurableField.displayname
+            new TranslationSeedItem("entity.configurableField.displayname", "en-US", "显示名称", "显示名称（表头/Excel 列标题）"),
+            // entity.configurableField.displayname
+            new TranslationSeedItem("entity.configurableField.displayname", "ja-JP", "显示名称", "显示名称（表头/Excel 列标题）"),
+            // entity.configurableField.displayname
+            new TranslationSeedItem("entity.configurableField.displayname", "zh-CN", "显示名称", "显示名称（表头/Excel 列标题）"),
+            // entity.configurableField.displayname
+            new TranslationSeedItem("entity.configurableField.displayname", "zh-HK", "显示名称", "显示名称（表头/Excel 列标题）"),
+
+            // entity.configurableField.outputalias
+            new TranslationSeedItem("entity.configurableField.outputalias", "en-US", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
+            // entity.configurableField.outputalias
+            new TranslationSeedItem("entity.configurableField.outputalias", "ja-JP", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
+            // entity.configurableField.outputalias
+            new TranslationSeedItem("entity.configurableField.outputalias", "zh-CN", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
+            // entity.configurableField.outputalias
+            new TranslationSeedItem("entity.configurableField.outputalias", "zh-HK", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
+
+            // entity.configurableField.aggregatefunc
+            new TranslationSeedItem("entity.configurableField.aggregatefunc", "en-US", "聚合函数", "聚合函数（无分组时为 None）"),
+            // entity.configurableField.aggregatefunc
+            new TranslationSeedItem("entity.configurableField.aggregatefunc", "ja-JP", "聚合函数", "聚合函数（无分组时为 None）"),
+            // entity.configurableField.aggregatefunc
+            new TranslationSeedItem("entity.configurableField.aggregatefunc", "zh-CN", "聚合函数", "聚合函数（无分组时为 None）"),
+            // entity.configurableField.aggregatefunc
+            new TranslationSeedItem("entity.configurableField.aggregatefunc", "zh-HK", "聚合函数", "聚合函数（无分组时为 None）"),
+
+            // entity.configurableField.isvisible
+            new TranslationSeedItem("entity.configurableField.isvisible", "en-US", "是否输出", "是否输出（0=隐藏 1=显示）"),
+            // entity.configurableField.isvisible
+            new TranslationSeedItem("entity.configurableField.isvisible", "ja-JP", "是否输出", "是否输出（0=隐藏 1=显示）"),
+            // entity.configurableField.isvisible
+            new TranslationSeedItem("entity.configurableField.isvisible", "zh-CN", "是否输出", "是否输出（0=隐藏 1=显示）"),
+            // entity.configurableField.isvisible
+            new TranslationSeedItem("entity.configurableField.isvisible", "zh-HK", "是否输出", "是否输出（0=隐藏 1=显示）"),
+
+            // entity.configurableField.sortorder
+            new TranslationSeedItem("entity.configurableField.sortorder", "en-US", "排序号", "排序号（SELECT 列顺序）"),
+            // entity.configurableField.sortorder
+            new TranslationSeedItem("entity.configurableField.sortorder", "ja-JP", "排序号", "排序号（SELECT 列顺序）"),
+            // entity.configurableField.sortorder
+            new TranslationSeedItem("entity.configurableField.sortorder", "zh-CN", "排序号", "排序号（SELECT 列顺序）"),
+            // entity.configurableField.sortorder
+            new TranslationSeedItem("entity.configurableField.sortorder", "zh-HK", "排序号", "排序号（SELECT 列顺序）"),
+
+            // entity.configurableField.configurable
+            new TranslationSeedItem("entity.configurableField.configurable", "en-US", "关联的报表主表", "关联的报表主表"),
+            // entity.configurableField.configurable
+            new TranslationSeedItem("entity.configurableField.configurable", "ja-JP", "关联的报表主表", "关联的报表主表"),
+            // entity.configurableField.configurable
+            new TranslationSeedItem("entity.configurableField.configurable", "zh-CN", "关联的报表主表", "关联的报表主表"),
+            // entity.configurableField.configurable
+            new TranslationSeedItem("entity.configurableField.configurable", "zh-HK", "关联的报表主表", "关联的报表主表"),
+        };
+    }
+
+    /// <summary>
+    /// 填充 TaktTranslation 全部业务字段（含租户基类字段）
+    /// </summary>
+    private static void ApplyTranslationFields(
+        TaktTranslation translation,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        translation.TenantCode = tenantCode;
+        translation.CultureId = cultureId;
+        translation.CultureCode = item.CultureCode;
+        translation.I18nKey = item.I18nKey;
+        translation.TranslationText = item.TranslationText;
+        translation.ResourceGroup = TaktModule.Statistics;
+        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ContextNote = item.ContextNote;
+        translation.ExtFieldJson = null;
+        translation.Remark = null;
+        translation.IsDeleted = 0;
+        translation.DeletedBy = null;
+        translation.DeletedAt = null;
+    }
+
+    private static async Task<(TaktTranslation Translation, int InsertCount, int UpdateCount)> CreateOrUpdateTranslationAsync(
+        ITaktTenantSeedRepository<TaktTranslation> repository,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        var translation = await repository.FirstAsync(t =>
+            t.TenantCode == tenantCode &&
+            t.I18nKey == item.I18nKey &&
+            t.CultureCode == item.CultureCode);
+
+        if (translation == null)
+        {
+            translation = new TaktTranslation();
+            ApplyTranslationFields(translation, tenantCode, cultureId, item);
+            translation = await repository.CreateAsync(translation);
+            return (translation, 1, 0);
+        }
+
+        ApplyTranslationFields(translation, tenantCode, cultureId, item);
+        await repository.UpdateAsync(translation);
+        return (translation, 0, 1);
+    }
+
+    /// <summary>
+    /// 翻译种子项（对应 TaktTranslation 全部可写字段，CultureId 由 SeedAsync 解析）
+    /// </summary>
+    private sealed record TranslationSeedItem(
+        string I18nKey,
+        string CultureCode,
+        string TranslationText,
+        string? ContextNote);
+}

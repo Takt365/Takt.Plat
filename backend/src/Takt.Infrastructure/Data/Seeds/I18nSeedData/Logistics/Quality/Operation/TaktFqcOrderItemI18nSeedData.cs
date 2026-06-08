@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFqcOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -261,6 +261,24 @@ public class TaktFqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcOrderItem.inspectiondate", "zh-CN", "检验日期", "检验日期"),
             // entity.fqcOrderItem.inspectiondate
             new TranslationSeedItem("entity.fqcOrderItem.inspectiondate", "zh-HK", "检验日期", "检验日期"),
+
+            // entity.fqcOrderItem.order
+            new TranslationSeedItem("entity.fqcOrderItem.order", "en-US", "FQC检验单", "FQC检验单（主表）"),
+            // entity.fqcOrderItem.order
+            new TranslationSeedItem("entity.fqcOrderItem.order", "ja-JP", "FQC检验单", "FQC检验单（主表）"),
+            // entity.fqcOrderItem.order
+            new TranslationSeedItem("entity.fqcOrderItem.order", "zh-CN", "FQC检验单", "FQC检验单（主表）"),
+            // entity.fqcOrderItem.order
+            new TranslationSeedItem("entity.fqcOrderItem.order", "zh-HK", "FQC检验单", "FQC检验单（主表）"),
+
+            // entity.fqcOrderItem.defecthandlings
+            new TranslationSeedItem("entity.fqcOrderItem.defecthandlings", "en-US", "不良处理记录列表", "不良处理记录列表（主子表关系）"),
+            // entity.fqcOrderItem.defecthandlings
+            new TranslationSeedItem("entity.fqcOrderItem.defecthandlings", "ja-JP", "不良处理记录列表", "不良处理记录列表（主子表关系）"),
+            // entity.fqcOrderItem.defecthandlings
+            new TranslationSeedItem("entity.fqcOrderItem.defecthandlings", "zh-CN", "不良处理记录列表", "不良处理记录列表（主子表关系）"),
+            // entity.fqcOrderItem.defecthandlings
+            new TranslationSeedItem("entity.fqcOrderItem.defecthandlings", "zh-HK", "不良处理记录列表", "不良处理记录列表（主子表关系）"),
         };
     }
 

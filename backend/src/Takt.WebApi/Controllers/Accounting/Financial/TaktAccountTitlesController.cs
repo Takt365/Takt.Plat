@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktAccountTitlesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目控制器
 // 
@@ -102,6 +102,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// <summary>
     /// 获取会计科目树形列表
     /// </summary>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
     /// <returns>树形数据</returns>
     [TaktPermission("accounting:financial:accounttitle:query", "会计科目树")]
     [HttpGet("tree")]
@@ -202,7 +203,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// <summary>
     /// 更新会计科目状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>会计科目DTO</returns>
     [TaktPermission("accounting:financial:accounttitle:update", "更新会计科目状态")]
     [HttpPut("status")]

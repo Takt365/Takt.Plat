@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
 namespace Takt.Application.Services.Workflow.FlowEngine;
@@ -37,7 +38,29 @@ public static class TaktFlowProcessNavigator
         }
         try
         {
-            return JsonConvert.DeserializeObject<TaktFlowTreeNode>(processContent, DesignJsonSettings);
+            var token = JToken.Parse(processContent.Trim());
+            if (token.Type == JTokenType.String)
+            {
+                var inner = token.ToString();
+                if (!string.IsNullOrWhiteSpace(inner))
+                {
+                    token = JToken.Parse(inner);
+                }
+            }
+            if (token is not JObject obj)
+            {
+                return null;
+            }
+            var treeToken = obj["flowTree"] ?? obj["FlowTree"];
+            if (treeToken is JObject treeObj)
+            {
+                return treeObj.ToObject<TaktFlowTreeNode>(JsonSerializer.Create(DesignJsonSettings));
+            }
+            if (obj["nodeType"] != null || obj["NodeType"] != null)
+            {
+                return obj.ToObject<TaktFlowTreeNode>(JsonSerializer.Create(DesignJsonSettings));
+            }
+            return null;
         }
         catch
         {

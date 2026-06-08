@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesInvoiceI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesInvoice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -200,13 +200,13 @@ public class TaktSalesInvoiceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesInvoice.taxinvoiceno", "zh-HK", "税务发票号码", "发票号码（税务系统票号）"),
 
             // entity.salesInvoice.items
-            new TranslationSeedItem("entity.salesInvoice.items", "en-US", "items", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
+            new TranslationSeedItem("entity.salesInvoice.items", "en-US", "销售发票明细列表", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
             // entity.salesInvoice.items
-            new TranslationSeedItem("entity.salesInvoice.items", "ja-JP", "items", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
+            new TranslationSeedItem("entity.salesInvoice.items", "ja-JP", "销售发票明细列表", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
             // entity.salesInvoice.items
-            new TranslationSeedItem("entity.salesInvoice.items", "zh-CN", "items", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
+            new TranslationSeedItem("entity.salesInvoice.items", "zh-CN", "销售发票明细列表", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
             // entity.salesInvoice.items
-            new TranslationSeedItem("entity.salesInvoice.items", "zh-HK", "items", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
+            new TranslationSeedItem("entity.salesInvoice.items", "zh-HK", "销售发票明细列表", "销售发票明细列表（主子表关系，一张发票可有多个明细行）"),
         };
     }
 

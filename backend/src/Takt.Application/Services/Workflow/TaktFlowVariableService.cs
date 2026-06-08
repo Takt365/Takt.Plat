@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Workflow
 // 文件名称：TaktFlowVariableService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程变量应用服务实现
 // 
@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Workflow;
 
@@ -325,11 +326,6 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
         if (queryDto?.LongValue.HasValue == true)
         {
             exp = exp.And(x => x.LongValue == queryDto.LongValue);
-        }
-
-        if (queryDto?.DoubleValue.HasValue == true)
-        {
-            exp = exp.And(x => x.DoubleValue == queryDto.DoubleValue);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))

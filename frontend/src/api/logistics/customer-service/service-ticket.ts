@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/customer-service
 // 文件名称：service-ticket.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -114,7 +114,7 @@ export function deleteServiceTicketBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新服务工单状态
- * @param {ServiceTicketStatus} dto 状态DTO
+ * @param {ServiceTicketStatus} dto 状态 DTO
  * @returns {Promise<ServiceTicket>} 服务工单DTO
  */
 export function updateServiceTicketStatus(dto: ServiceTicketStatus): Promise<ServiceTicket> {
@@ -177,11 +177,11 @@ export function getServiceTicketTemplate(sheetName?: string, templateName?: stri
 
 /**
  * 导入服务工单
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importServiceTicket(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importServiceTicket(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktSamplingSchemeI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSamplingScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -245,13 +245,13 @@ public class TaktSamplingSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.samplingScheme.schemedescription", "zh-HK", "抽样方案描述", "抽样方案描述"),
 
             // entity.samplingScheme.inspectionstandards
-            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "en-US", "inspectionStandards", "检验标准列表（主子表关系）"),
+            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "en-US", "检验标准列表", "检验标准列表（主子表关系）"),
             // entity.samplingScheme.inspectionstandards
-            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "ja-JP", "inspectionStandards", "检验标准列表（主子表关系）"),
+            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "ja-JP", "检验标准列表", "检验标准列表（主子表关系）"),
             // entity.samplingScheme.inspectionstandards
-            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "zh-CN", "inspectionStandards", "检验标准列表（主子表关系）"),
+            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "zh-CN", "检验标准列表", "检验标准列表（主子表关系）"),
             // entity.samplingScheme.inspectionstandards
-            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "zh-HK", "inspectionStandards", "检验标准列表（主子表关系）"),
+            new TranslationSeedItem("entity.samplingScheme.inspectionstandards", "zh-HK", "检验标准列表", "检验标准列表（主子表关系）"),
         };
     }
 

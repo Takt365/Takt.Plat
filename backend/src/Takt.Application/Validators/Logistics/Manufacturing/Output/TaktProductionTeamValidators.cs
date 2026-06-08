@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionTeamValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeam 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktProductionTeam 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Logistics.Manufacturing.Output;
 
@@ -54,6 +55,8 @@ public class TaktProductionTeamCreateValidator : AbstractValidator<TaktProductio
             .GreaterThanOrEqualTo(0).WithMessage("班组长员工Id不能为负数");
         RuleFor(x => x.TeamLeaderName)
             .MaximumLength(50).WithMessage("班组长姓名长度不能超过50个字符");
+        RuleFor(x => x.Status)
+            .IsInEnum().WithMessage("启用状态无效");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -117,6 +120,8 @@ public class TaktProductionTeamImportValidator : AbstractValidator<TaktProductio
             .GreaterThanOrEqualTo(0).WithMessage("班组长员工Id不能为负数");
         RuleFor(x => x.TeamLeaderName)
             .MaximumLength(50).WithMessage("班组长姓名长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.TeamLeaderName));
+        RuleFor(x => x.Status)
+            .IsInEnum().WithMessage("启用状态无效");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

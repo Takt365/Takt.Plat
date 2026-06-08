@@ -1161,9 +1161,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.statistics.report.financial._self", "zh-CN", "财务统计", "三级菜单"),
-            ("menu.statistics.report.humanresource._self", "zh-CN", "人力统计", "三级菜单"),
-            ("menu.statistics.report.logistics._self", "zh-CN", "后勤统计", "三级菜单"),
+            ("menu.statistics.report.configurable", "zh-CN", "自定义报表", "三级菜单"),
             ("menu.statistics.logging.loginlog", "zh-CN", "登录日志", "三级菜单"),
             ("menu.statistics.logging.operlog", "zh-CN", "操作日志", "三级菜单"),
             ("menu.statistics.logging.deltalog", "zh-CN", "差异日志", "三级菜单"),
@@ -1171,9 +1169,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.statistics.logging.servermonitor", "zh-CN", "服务监控", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.statistics.report.financial._self", "en-US", "Financial Statistics", "Level 3 Menu"),
-            ("menu.statistics.report.humanresource._self", "en-US", "HR Statistics", "Level 3 Menu"),
-            ("menu.statistics.report.logistics._self", "en-US", "Logistics Statistics", "Level 3 Menu"),
+            ("menu.statistics.report.configurable", "en-US", "Custom Reports", "Level 3 Menu"),
             ("menu.statistics.logging.loginlog", "en-US", "Login Log", "Level 3 Menu"),
             ("menu.statistics.logging.operlog", "en-US", "Operation Log", "Level 3 Menu"),
             ("menu.statistics.logging.deltalog", "en-US", "Delta Log", "Level 3 Menu"),
@@ -1181,9 +1177,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.statistics.logging.servermonitor", "en-US", "Server Monitor", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.statistics.report.financial._self", "ja-JP", "財務統計", "レベル3メニュー"),
-            ("menu.statistics.report.humanresource._self", "ja-JP", "人事統計", "レベル3メニュー"),
-            ("menu.statistics.report.logistics._self", "ja-JP", "后勤統計", "レベル3メニュー"),
+            ("menu.statistics.report.configurable", "ja-JP", "カスタムレポート", "レベル3メニュー"),
             ("menu.statistics.logging.loginlog", "ja-JP", "ログインログ", "レベル3メニュー"),
             ("menu.statistics.logging.operlog", "ja-JP", "操作ログ", "レベル3メニュー"),
             ("menu.statistics.logging.deltalog", "ja-JP", "差分ログ", "レベル3メニュー"),
@@ -1191,94 +1185,12 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.statistics.logging.servermonitor", "ja-JP", "サービス監視", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.statistics.report.financial._self", "zh-HK", "財務統計", "三级菜单"),
-            ("menu.statistics.report.humanresource._self", "zh-HK", "人力統計", "三级菜单"),
-            ("menu.statistics.report.logistics._self", "zh-HK", "後勤統計", "三级菜单"),
+            ("menu.statistics.report.configurable", "zh-HK", "自定義報表", "三级菜单"),
             ("menu.statistics.logging.loginlog", "zh-HK", "登錄日誌", "三级菜单"),
             ("menu.statistics.logging.operlog", "zh-HK", "操作日誌", "三级菜单"),
             ("menu.statistics.logging.deltalog", "zh-HK", "差異日誌", "三级菜单"),
             ("menu.statistics.logging.quartzlog", "zh-HK", "任務日誌", "三级菜单"),
             ("menu.statistics.logging.servermonitor", "zh-HK", "服務監控", "三级菜单"),
-
-            // ========================================
-            // 四级菜单（统计看板-报表管理-财务统计）
-            // ========================================
-
-            // 简体中文 (zh-CN)
-            ("menu.statistics.report.financial.management", "zh-CN", "管理统计", "四级菜单"),
-            ("menu.statistics.report.financial.controlling", "zh-CN", "控制统计", "四级菜单"),
-
-            // 英文 (en-US)
-            ("menu.statistics.report.financial.management", "en-US", "Management Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.financial.controlling", "en-US", "Controlling Statistics", "Level 4 Menu"),
-
-            // 日文 (ja-JP)
-            ("menu.statistics.report.financial.management", "ja-JP", "管理統計", "レベル4メニュー"),
-            ("menu.statistics.report.financial.controlling", "ja-JP", "コントロール統計", "レベル4メニュー"),
-
-            // 香港繁体 (zh-HK)
-            ("menu.statistics.report.financial.management", "zh-HK", "管理統計", "四级菜单"),
-            ("menu.statistics.report.financial.controlling", "zh-HK", "控制統計", "四级菜单"),
-
-            // ========================================
-            // 四级菜单（统计看板-报表管理-人力统计）
-            // ========================================
-
-            // 简体中文 (zh-CN)
-            ("menu.statistics.report.humanresource.attendance", "zh-CN", "考勤统计", "四级菜单"),
-            ("menu.statistics.report.humanresource.personnel", "zh-CN", "人事统计", "四级菜单"),
-            ("menu.statistics.report.humanresource.talent", "zh-CN", "人才统计", "四级菜单"),
-
-            // 英文 (en-US)
-            ("menu.statistics.report.humanresource.attendance", "en-US", "Attendance Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.humanresource.personnel", "en-US", "Personnel Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.humanresource.talent", "en-US", "Talent Statistics", "Level 4 Menu"),
-
-            // 日文 (ja-JP)
-            ("menu.statistics.report.humanresource.attendance", "ja-JP", "勤怠統計", "レベル4メニュー"),
-            ("menu.statistics.report.humanresource.personnel", "ja-JP", "人事統計", "レベル4メニュー"),
-            ("menu.statistics.report.humanresource.talent", "ja-JP", "人材統計", "レベル4メニュー"),
-
-            // 香港繁体 (zh-HK)
-            ("menu.statistics.report.humanresource.attendance", "zh-HK", "考勤統計", "四级菜单"),
-            ("menu.statistics.report.humanresource.personnel", "zh-HK", "人事統計", "四级菜单"),
-            ("menu.statistics.report.humanresource.talent", "zh-HK", "人才統計", "四级菜单"),
-
-            // ========================================
-            // 四级菜单（统计看板-报表管理-后勤统计）
-            // ========================================
-
-            // 简体中文 (zh-CN)
-            ("menu.statistics.report.logistics.maintenance", "zh-CN", "维护统计", "四级菜单"),
-            ("menu.statistics.report.logistics.manufacturing", "zh-CN", "生产统计", "四级菜单"),
-            ("menu.statistics.report.logistics.material", "zh-CN", "物料统计", "四级菜单"),
-            ("menu.statistics.report.logistics.quality", "zh-CN", "质量统计", "四级菜单"),
-            ("menu.statistics.report.logistics.sales", "zh-CN", "销售统计", "四级菜单"),
-            ("menu.statistics.report.logistics.serial", "zh-CN", "序列号统计", "四级菜单"),
-
-            // 英文 (en-US)
-            ("menu.statistics.report.logistics.maintenance", "en-US", "Maintenance Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.logistics.manufacturing", "en-US", "Production Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.logistics.material", "en-US", "Material Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.logistics.quality", "en-US", "Quality Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.logistics.sales", "en-US", "Sales Statistics", "Level 4 Menu"),
-            ("menu.statistics.report.logistics.serial", "en-US", "Serial Number Statistics", "Level 4 Menu"),
-
-            // 日文 (ja-JP)
-            ("menu.statistics.report.logistics.maintenance", "ja-JP", "保守統計", "レベル4メニュー"),
-            ("menu.statistics.report.logistics.manufacturing", "ja-JP", "生産統計", "レベル4メニュー"),
-            ("menu.statistics.report.logistics.material", "ja-JP", "資材統計", "レベル4メニュー"),
-            ("menu.statistics.report.logistics.quality", "ja-JP", "品質統計", "レベル4メニュー"),
-            ("menu.statistics.report.logistics.sales", "ja-JP", "販売統計", "レベル4メニュー"),
-            ("menu.statistics.report.logistics.serial", "ja-JP", "シリアル番号統計", "レベル4メニュー"),
-
-            // 香港繁体 (zh-HK)
-            ("menu.statistics.report.logistics.maintenance", "zh-HK", "維護統計", "四级菜单"),
-            ("menu.statistics.report.logistics.manufacturing", "zh-HK", "生產統計", "四级菜单"),
-            ("menu.statistics.report.logistics.material", "zh-HK", "物料統計", "四级菜单"),
-            ("menu.statistics.report.logistics.quality", "zh-HK", "質量統計", "四级菜单"),
-            ("menu.statistics.report.logistics.sales", "zh-HK", "銷售統計", "四级菜单"),
-            ("menu.statistics.report.logistics.serial", "zh-HK", "序列號統計", "四级菜单"),
 
             // ========================================
             // 三级菜单（客户服务与工厂维护）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktRoleValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Role 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktRole 生成，请按需审阅）
 // 
@@ -43,6 +43,8 @@ public class TaktRoleCreateValidator : AbstractValidator<TaktRoleCreateDto>
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.IsBuiltIn)
             .IsInEnum().WithMessage("是否内置无效");
+        RuleFor(x => x.RoleStatus)
+            .IsInEnum().WithMessage("状态无效");
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("角色描述长度不能超过500个字符");
         RuleFor(x => x.ExtFieldJson)
@@ -97,6 +99,8 @@ public class TaktRoleImportValidator : AbstractValidator<TaktRoleImportDto>
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.IsBuiltIn)
             .IsInEnum().WithMessage("是否内置无效");
+        RuleFor(x => x.RoleStatus)
+            .IsInEnum().WithMessage("状态无效");
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("角色描述长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Description));
         RuleFor(x => x.ExtFieldJson)

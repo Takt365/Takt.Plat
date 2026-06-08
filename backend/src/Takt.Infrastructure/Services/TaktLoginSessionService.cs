@@ -59,7 +59,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
             {
                 using var seedContext = CreateSeedContext(code);
                 var tenant = await seedContext.Query<TaktTenant>()
-                    .Where(t => t.TenantCode == code && t.TenantStatus == 1)
+                    .Where(t => t.TenantCode == code && t.TenantStatus == TaktCommonStatus.Enabled)
                     .FirstAsync(cancellationToken);
                 if (tenant == null)
                 {
@@ -161,7 +161,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
             using var seedContext = CreateSeedContext(trimmedTenant);
             return await seedContext.Query<TaktTenant>()
                 .AnyAsync(
-                    t => t.TenantCode == trimmedTenant && t.TenantStatus == 1,
+                    t => t.TenantCode == trimmedTenant && t.TenantStatus == TaktCommonStatus.Enabled,
                     cancellationToken);
         }
         catch (Exception ex) when (TaktTenantDatabaseHelper.IsInfrastructureFailure(ex))

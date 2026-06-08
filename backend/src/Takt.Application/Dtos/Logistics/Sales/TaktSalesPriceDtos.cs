@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPrice 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Sales;
 
@@ -68,7 +69,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; } = 0;
+    public TaktCommonStatus PriceStatus { get; set; }
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）
@@ -147,7 +148,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int? PriceStatus { get; set; }
+    public TaktCommonStatus? PriceStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -228,7 +229,7 @@ public class TaktSalesPriceCreateDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; } = 0;
+    public TaktCommonStatus PriceStatus { get; set; }
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
@@ -293,7 +294,7 @@ public class TaktSalesPriceStatusDto
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "价格状态（1=启用，0=禁用）不能为空")]
-    public int PriceStatus { get; set; } = 0;
+    public TaktCommonStatus PriceStatus { get; set; }
 }
 
 // ========================================
@@ -338,7 +339,7 @@ public class TaktSalesPriceTemplateDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int? PriceStatus { get; set; }
+    public TaktCommonStatus? PriceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -395,7 +396,7 @@ public class TaktSalesPriceImportDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int? PriceStatus { get; set; }
+    public TaktCommonStatus? PriceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -463,7 +464,7 @@ public class TaktSalesPriceExportDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; } = 0;
+    public TaktCommonStatus PriceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.DocumentCenter
 // 文件名称：TaktDocumentsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文管中心控制器
 // 
@@ -183,7 +183,7 @@ public class TaktDocumentsController : TaktControllerBase
     /// <summary>
     /// 更新文管中心状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktDocumentStatus 枚举）</param>
     /// <returns>文管中心DTO</returns>
     [TaktPermission("routine:documentcenter:document:update", "更新文管中心状态")]
     [HttpPut("status")]

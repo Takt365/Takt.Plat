@@ -67,10 +67,6 @@ public class TaktMenuLevel4SeedData
         var qualityCostMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_QUALITY_COST");
         var qualityOperationMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_QUALITY_OPERATION");
         var qualityComplaintMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_QUALITY_COMPLAINT");
-        var statisticsReportFinancialMenu = await menuRepository.FirstAsync(m => m.MenuCode == "STATISTICS_REPORT_FINANCIAL");
-        var statisticsReportHumanResourceMenu = await menuRepository.FirstAsync(m => m.MenuCode == "STATISTICS_REPORT_HUMANRESOURCE");
-        var statisticsReportLogisticsMenu = await menuRepository.FirstAsync(m => m.MenuCode == "STATISTICS_REPORT_LOGISTICS");
-
         // ========== 采购管理下的四级菜单 ==========
         if (logisticsMaterialPurchasingMenu != null)
         {
@@ -86,7 +82,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/supplier";
                 menu.ComponentPath = "logistics/materials/purchasing/supplier/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -106,7 +102,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/vendor";
                 menu.ComponentPath = "logistics/materials/purchasing/vendor/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -126,7 +122,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/info";
                 menu.ComponentPath = "logistics/materials/purchasing/info/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -146,7 +142,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/source";
                 menu.ComponentPath = "logistics/materials/purchasing/source/index";
                 menu.SortOrder = 4;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -166,7 +162,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/request";
                 menu.ComponentPath = "logistics/materials/purchasing/request/index";
                 menu.SortOrder = 5;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -186,7 +182,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/order";
                 menu.ComponentPath = "logistics/materials/purchasing/order/index";
                 menu.SortOrder = 6;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -206,7 +202,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/invoice";
                 menu.ComponentPath = "logistics/materials/purchasing/invoice/index";
                 menu.SortOrder = 7;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -226,7 +222,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/materials/purchasing/plan";
                 menu.ComponentPath = "logistics/materials/purchasing/plan/index";
                 menu.SortOrder = 8;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -250,7 +246,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/bom/model-destination";
                 menu.ComponentPath = "logistics/manufacturing/bom/model-destination/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -270,7 +266,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/bom/bill-of-material";
                 menu.ComponentPath = "logistics/manufacturing/bom/bill-of-material/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -290,7 +286,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/bom/routing";
                 menu.ComponentPath = "logistics/manufacturing/bom/routing/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -310,7 +306,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/bom/packaging";
                 menu.ComponentPath = "logistics/manufacturing/bom/packaging/index";
                 menu.SortOrder = 4;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -330,7 +326,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/bom/standard-operation-time";
                 menu.ComponentPath = "logistics/manufacturing/bom/standard-operation-time/index";
                 menu.SortOrder = 5;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -354,7 +350,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/scheduling/aps-schedule";
                 menu.ComponentPath = "logistics/manufacturing/scheduling/aps-schedule/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -378,7 +374,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/kanban";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/kanban/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -398,7 +394,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/batch";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/batch/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -418,7 +414,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/kakunin";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/kakunin/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -438,7 +434,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-notice";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-notice/index";
                 menu.SortOrder = 4;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -458,7 +454,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/gijutsu";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/gijutsu/index";
                 menu.SortOrder = 5;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -478,7 +474,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/koubai";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/koubai/index";
                 menu.SortOrder = 6;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -498,7 +494,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/seikan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/seikan/index";
                 menu.SortOrder = 7;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -518,7 +514,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ukeken";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ukeken/index";
                 menu.SortOrder = 8;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -538,7 +534,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/bukan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/bukan/index";
                 menu.SortOrder = 9;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -558,7 +554,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/seizonika";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/seizonika/index";
                 menu.SortOrder = 10;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -578,7 +574,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/seizoikka";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/seizoikka/index";
                 menu.SortOrder = 11;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -598,7 +594,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/hinkan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/hinkan/index";
                 menu.SortOrder = 12;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -618,7 +614,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/legacy-product";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/legacy-product/index";
                 menu.SortOrder = 13;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -642,7 +638,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/production-order";
                 menu.ComponentPath = "logistics/manufacturing/output/production-order/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -662,7 +658,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/pcba-output";
                 menu.ComponentPath = "logistics/manufacturing/output/pcba-output/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -682,7 +678,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/assy-output";
                 menu.ComponentPath = "logistics/manufacturing/output/assy-output/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -702,7 +698,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/changeover";
                 menu.ComponentPath = "logistics/manufacturing/output/changeover/index";
                 menu.SortOrder = 4;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -722,7 +718,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/equipment-operation-rate";
                 menu.ComponentPath = "logistics/manufacturing/output/equipment-operation-rate/index";
                 menu.SortOrder = 5;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -742,7 +738,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/personnel-operation-rate";
                 menu.ComponentPath = "logistics/manufacturing/output/personnel-operation-rate/index";
                 menu.SortOrder = 6;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -762,7 +758,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/production-team";
                 menu.ComponentPath = "logistics/manufacturing/output/production-team/index";
                 menu.SortOrder = 7;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -782,7 +778,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/output/standard-operation-rate";
                 menu.ComponentPath = "logistics/manufacturing/output/standard-operation-rate/index";
                 menu.SortOrder = 8;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -806,7 +802,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/defect/pcba-inspection";
                 menu.ComponentPath = "logistics/manufacturing/defect/pcba-inspection/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -826,7 +822,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/defect/pcba-repair";
                 menu.ComponentPath = "logistics/manufacturing/defect/pcba-repair/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -846,7 +842,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/manufacturing/defect/assy-defect";
                 menu.ComponentPath = "logistics/manufacturing/defect/assy-defect/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -870,7 +866,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/cost/quality-operation";
                 menu.ComponentPath = "logistics/quality/cost/quality-operation/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -890,7 +886,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/cost/quality-failure";
                 menu.ComponentPath = "logistics/quality/cost/quality-failure/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -910,7 +906,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/cost/quality-incident";
                 menu.ComponentPath = "logistics/quality/cost/quality-incident/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -934,7 +930,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/operation/sampling-scheme";
                 menu.ComponentPath = "logistics/quality/operation/sampling-scheme/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -954,7 +950,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/operation/inspection-standard";
                 menu.ComponentPath = "logistics/quality/operation/inspection-standard/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -974,7 +970,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/operation/iqc-order";
                 menu.ComponentPath = "logistics/quality/operation/iqc-order/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -994,7 +990,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/operation/ipqc-order";
                 menu.ComponentPath = "logistics/quality/operation/ipqc-order/index";
                 menu.SortOrder = 4;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -1014,7 +1010,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/operation/fqc-order";
                 menu.ComponentPath = "logistics/quality/operation/fqc-order/index";
                 menu.SortOrder = 5;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -1038,7 +1034,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/complaint/customer-complaint";
                 menu.ComponentPath = "logistics/quality/complaint/customer-complaint/index";
                 menu.SortOrder = 1;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -1058,7 +1054,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/complaint/customer-complaint-handling";
                 menu.ComponentPath = "logistics/quality/complaint/customer-complaint-handling/index";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -1078,7 +1074,7 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/complaint/customer-satisfaction-survey";
                 menu.ComponentPath = "logistics/quality/complaint/customer-satisfaction-survey/index";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -1098,245 +1094,13 @@ public class TaktMenuLevel4SeedData
                 menu.RoutePath = "/logistics/quality/complaint/supplier-evaluation";
                 menu.ComponentPath = "logistics/quality/complaint/supplier-evaluation/index";
                 menu.SortOrder = 4;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
             });
             insertCount += insertCP6;
             updateCount += updateCP6;
-        }
-
-        // ========== 财务统计下的四级菜单 (STATISTICS_REPORT_FINANCIAL) ==========
-        if (statisticsReportFinancialMenu != null)
-        {
-            var (insertSRF1, updateSRF1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_FINANCIAL_MANAGEMENT", menu =>
-            {
-                menu.MenuName = "管理统计";
-                menu.MenuCode = "STATISTICS_REPORT_FINANCIAL_MANAGEMENT";
-                menu.I18nKey = "menu.statistics.report.financial.management";
-                menu.Icon = "RiPieChartLine";
-                menu.ParentId = statisticsReportFinancialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:financial:management:list";
-                menu.RoutePath = "/statistics/report/financial/management";
-                menu.ComponentPath = "statistics/report/financial/management/index";
-                menu.SortOrder = 1;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRF1;
-            updateCount += updateSRF1;
-
-            var (insertSRF2, updateSRF2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_FINANCIAL_CONTROLLING", menu =>
-            {
-                menu.MenuName = "控制统计";
-                menu.MenuCode = "STATISTICS_REPORT_FINANCIAL_CONTROLLING";
-                menu.I18nKey = "menu.statistics.report.financial.controlling";
-                menu.Icon = "RiFundsLine";
-                menu.ParentId = statisticsReportFinancialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:financial:controlling:list";
-                menu.RoutePath = "/statistics/report/financial/controlling";
-                menu.ComponentPath = "statistics/report/financial/controlling/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRF2;
-            updateCount += updateSRF2;
-        }
-
-        // ========== 人力统计下的四级菜单 (STATISTICS_REPORT_HUMANRESOURCE) ==========
-        if (statisticsReportHumanResourceMenu != null)
-        {
-            var (insertSRH1, updateSRH1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_HUMANRESOURCE_ATTENDANCE", menu =>
-            {
-                menu.MenuName = "考勤统计";
-                menu.MenuCode = "STATISTICS_REPORT_HUMANRESOURCE_ATTENDANCE";
-                menu.I18nKey = "menu.statistics.report.humanresource.attendance";
-                menu.Icon = "RiCalendarCheckLine";
-                menu.ParentId = statisticsReportHumanResourceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:humanresource:attendance:list";
-                menu.RoutePath = "/statistics/report/human-resource/attendance";
-                menu.ComponentPath = "statistics/report/human-resource/attendance/index";
-                menu.SortOrder = 1;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRH1;
-            updateCount += updateSRH1;
-
-            var (insertSRH2, updateSRH2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_HUMANRESOURCE_PERSONNEL", menu =>
-            {
-                menu.MenuName = "人事统计";
-                menu.MenuCode = "STATISTICS_REPORT_HUMANRESOURCE_PERSONNEL";
-                menu.I18nKey = "menu.statistics.report.humanresource.personnel";
-                menu.Icon = "RiUserSettingsLine";
-                menu.ParentId = statisticsReportHumanResourceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:humanresource:personnel:list";
-                menu.RoutePath = "/statistics/report/human-resource/personnel";
-                menu.ComponentPath = "statistics/report/human-resource/personnel/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRH2;
-            updateCount += updateSRH2;
-
-            var (insertSRH3, updateSRH3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_HUMANRESOURCE_TALENT", menu =>
-            {
-                menu.MenuName = "人才统计";
-                menu.MenuCode = "STATISTICS_REPORT_HUMANRESOURCE_TALENT";
-                menu.I18nKey = "menu.statistics.report.humanresource.talent";
-                menu.Icon = "RiUserStarLine";
-                menu.ParentId = statisticsReportHumanResourceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:humanresource:talent:list";
-                menu.RoutePath = "/statistics/report/human-resource/talent";
-                menu.ComponentPath = "statistics/report/human-resource/talent/index";
-                menu.SortOrder = 3;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRH3;
-            updateCount += updateSRH3;
-        }
-
-        // ========== 后勤统计下的四级菜单 (STATISTICS_REPORT_LOGISTICS) ==========
-        if (statisticsReportLogisticsMenu != null)
-        {
-            var (insertSRL1, updateSRL1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_LOGISTICS_MAINTENANCE", menu =>
-            {
-                menu.MenuName = "维护统计";
-                menu.MenuCode = "STATISTICS_REPORT_LOGISTICS_MAINTENANCE";
-                menu.I18nKey = "menu.statistics.report.logistics.maintenance";
-                menu.Icon = "RiToolsLine";
-                menu.ParentId = statisticsReportLogisticsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:logistics:maintenance:list";
-                menu.RoutePath = "/statistics/report/logistics/maintenance";
-                menu.ComponentPath = "statistics/report/logistics/maintenance/index";
-                menu.SortOrder = 1;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRL1;
-            updateCount += updateSRL1;
-
-            var (insertSRL2, updateSRL2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_LOGISTICS_MANUFACTURING", menu =>
-            {
-                menu.MenuName = "生产统计";
-                menu.MenuCode = "STATISTICS_REPORT_LOGISTICS_MANUFACTURING";
-                menu.I18nKey = "menu.statistics.report.logistics.manufacturing";
-                menu.Icon = "RiPlantLine";
-                menu.ParentId = statisticsReportLogisticsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:logistics:manufacturing:list";
-                menu.RoutePath = "/statistics/report/logistics/manufacturing";
-                menu.ComponentPath = "statistics/report/logistics/manufacturing/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRL2;
-            updateCount += updateSRL2;
-
-            var (insertSRL3, updateSRL3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_LOGISTICS_MATERIAL", menu =>
-            {
-                menu.MenuName = "物料统计";
-                menu.MenuCode = "STATISTICS_REPORT_LOGISTICS_MATERIAL";
-                menu.I18nKey = "menu.statistics.report.logistics.material";
-                menu.Icon = "RiBox3Line";
-                menu.ParentId = statisticsReportLogisticsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:logistics:material:list";
-                menu.RoutePath = "/statistics/report/logistics/material";
-                menu.ComponentPath = "statistics/report/logistics/material/index";
-                menu.SortOrder = 3;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRL3;
-            updateCount += updateSRL3;
-
-            var (insertSRL4, updateSRL4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_LOGISTICS_QUALITY", menu =>
-            {
-                menu.MenuName = "质量统计";
-                menu.MenuCode = "STATISTICS_REPORT_LOGISTICS_QUALITY";
-                menu.I18nKey = "menu.statistics.report.logistics.quality";
-                menu.Icon = "RiShieldCheckLine";
-                menu.ParentId = statisticsReportLogisticsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:logistics:quality:list";
-                menu.RoutePath = "/statistics/report/logistics/quality";
-                menu.ComponentPath = "statistics/report/logistics/quality/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRL4;
-            updateCount += updateSRL4;
-
-            var (insertSRL5, updateSRL5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_LOGISTICS_SALES", menu =>
-            {
-                menu.MenuName = "销售统计";
-                menu.MenuCode = "STATISTICS_REPORT_LOGISTICS_SALES";
-                menu.I18nKey = "menu.statistics.report.logistics.sales";
-                menu.Icon = "RiShoppingCartLine";
-                menu.ParentId = statisticsReportLogisticsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:logistics:sales:list";
-                menu.RoutePath = "/statistics/report/logistics/sales";
-                menu.ComponentPath = "statistics/report/logistics/sales/index";
-                menu.SortOrder = 5;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRL5;
-            updateCount += updateSRL5;
-
-            var (insertSRL6, updateSRL6) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT_LOGISTICS_SERIAL", menu =>
-            {
-                menu.MenuName = "序列号统计";
-                menu.MenuCode = "STATISTICS_REPORT_LOGISTICS_SERIAL";
-                menu.I18nKey = "menu.statistics.report.logistics.serial";
-                menu.Icon = "RiBarcodeLine";
-                menu.ParentId = statisticsReportLogisticsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "statistics:report:logistics:serial:list";
-                menu.RoutePath = "/statistics/report/logistics/serial";
-                menu.ComponentPath = "statistics/report/logistics/serial/index";
-                menu.SortOrder = 6;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSRL6;
-            updateCount += updateSRL6;
         }
 
         return (insertCount, updateCount);

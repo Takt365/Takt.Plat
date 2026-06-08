@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesInvoicesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票控制器
 // 
@@ -183,7 +183,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// <summary>
     /// 更新销售发票状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>销售发票DTO</returns>
     [TaktPermission("logistics:sales:salesinvoice:update", "更新销售发票状态")]
     [HttpPut("status")]

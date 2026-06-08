@@ -169,7 +169,10 @@ Takt.Plat/
 ├── scripts/                       # 代码生成与实体维护脚本
 │   ├── generate-all.cjs           # 一键：DTO → 服务 → 控制器 → 前端 → i18n
 │   ├── generate-from-backend.cjs  # 前端 api/types 生成
-│   └── generate-vue-from-api.cjs  # 前端 CRUD 页面生成
+│   ├── generate-vue-all-from-api.cjs  # 串联 Vue 三模板（CRUD / TREE / Master-Detail）
+│   ├── generate-vue-crud-from-api.cjs
+│   ├── generate-vue-tree-from-api.cjs
+│   └── generate-vue-master-detail-from-api.cjs
 ├── .cursor/rules/                 # 开发规范（00-project / 01-backend / 02-frontend）
 ├── LICENSE
 └── README.md

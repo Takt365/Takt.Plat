@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Generator
 // 文件名称：TaktGenTableColumnI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktGenTableColumn 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -297,6 +297,15 @@ public class TaktGenTableColumnI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.genTableColumn.sortorder", "zh-CN", "排序序号", "排序序号"),
             // entity.genTableColumn.sortorder
             new TranslationSeedItem("entity.genTableColumn.sortorder", "zh-HK", "排序序号", "排序序号"),
+
+            // entity.genTableColumn.table
+            new TranslationSeedItem("entity.genTableColumn.table", "en-US", "所属表配置", "所属表配置（主表，本表 GenTableId 关联 TaktGenTable.Id）"),
+            // entity.genTableColumn.table
+            new TranslationSeedItem("entity.genTableColumn.table", "ja-JP", "所属表配置", "所属表配置（主表，本表 GenTableId 关联 TaktGenTable.Id）"),
+            // entity.genTableColumn.table
+            new TranslationSeedItem("entity.genTableColumn.table", "zh-CN", "所属表配置", "所属表配置（主表，本表 GenTableId 关联 TaktGenTable.Id）"),
+            // entity.genTableColumn.table
+            new TranslationSeedItem("entity.genTableColumn.table", "zh-HK", "所属表配置", "所属表配置（主表，本表 GenTableId 关联 TaktGenTable.Id）"),
         };
     }
 

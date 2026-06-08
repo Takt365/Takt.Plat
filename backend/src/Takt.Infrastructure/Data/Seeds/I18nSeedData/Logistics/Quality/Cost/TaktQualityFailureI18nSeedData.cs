@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityFailureI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityFailure 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -191,13 +191,31 @@ public class TaktQualityFailureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityFailure.costcurrency", "zh-HK", "成本币种", "成本币种（CNY/USD/JPY等）"),
 
             // entity.qualityFailure.meetingitems
-            new TranslationSeedItem("entity.qualityFailure.meetingitems", "en-US", "meetingItems", "会议/调查/试验费用明细列表"),
+            new TranslationSeedItem("entity.qualityFailure.meetingitems", "en-US", "会议/调查/试验费用明细列表", "会议/调查/试验费用明细列表"),
             // entity.qualityFailure.meetingitems
-            new TranslationSeedItem("entity.qualityFailure.meetingitems", "ja-JP", "meetingItems", "会议/调查/试验费用明细列表"),
+            new TranslationSeedItem("entity.qualityFailure.meetingitems", "ja-JP", "会议/调查/试验费用明细列表", "会议/调查/试验费用明细列表"),
             // entity.qualityFailure.meetingitems
-            new TranslationSeedItem("entity.qualityFailure.meetingitems", "zh-CN", "meetingItems", "会议/调查/试验费用明细列表"),
+            new TranslationSeedItem("entity.qualityFailure.meetingitems", "zh-CN", "会议/调查/试验费用明细列表", "会议/调查/试验费用明细列表"),
             // entity.qualityFailure.meetingitems
-            new TranslationSeedItem("entity.qualityFailure.meetingitems", "zh-HK", "meetingItems", "会议/调查/试验费用明细列表"),
+            new TranslationSeedItem("entity.qualityFailure.meetingitems", "zh-HK", "会议/调查/试验费用明细列表", "会议/调查/试验费用明细列表"),
+
+            // entity.qualityFailure.assyreworkitems
+            new TranslationSeedItem("entity.qualityFailure.assyreworkitems", "en-US", "组装不良改修应对明细列表", "组装不良改修应对明细列表"),
+            // entity.qualityFailure.assyreworkitems
+            new TranslationSeedItem("entity.qualityFailure.assyreworkitems", "ja-JP", "组装不良改修应对明细列表", "组装不良改修应对明细列表"),
+            // entity.qualityFailure.assyreworkitems
+            new TranslationSeedItem("entity.qualityFailure.assyreworkitems", "zh-CN", "组装不良改修应对明细列表", "组装不良改修应对明细列表"),
+            // entity.qualityFailure.assyreworkitems
+            new TranslationSeedItem("entity.qualityFailure.assyreworkitems", "zh-HK", "组装不良改修应对明细列表", "组装不良改修应对明细列表"),
+
+            // entity.qualityFailure.pcbareworkitems
+            new TranslationSeedItem("entity.qualityFailure.pcbareworkitems", "en-US", "PCBA不良改修应对明细列表", "PCBA不良改修应对明细列表"),
+            // entity.qualityFailure.pcbareworkitems
+            new TranslationSeedItem("entity.qualityFailure.pcbareworkitems", "ja-JP", "PCBA不良改修应对明细列表", "PCBA不良改修应对明细列表"),
+            // entity.qualityFailure.pcbareworkitems
+            new TranslationSeedItem("entity.qualityFailure.pcbareworkitems", "zh-CN", "PCBA不良改修应对明细列表", "PCBA不良改修应对明细列表"),
+            // entity.qualityFailure.pcbareworkitems
+            new TranslationSeedItem("entity.qualityFailure.pcbareworkitems", "zh-HK", "PCBA不良改修应对明细列表", "PCBA不良改修应对明细列表"),
         };
     }
 

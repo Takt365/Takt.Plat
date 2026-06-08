@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktTenantService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：租户应用服务实现
 // 
@@ -94,35 +94,20 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
         return dto;    }
 
     /// <summary>
-    /// 获取当前登录会话的租户选项（仅一项，DictValue 为 TenantCode；登录后不可跨租户切换）
+    /// 获取租户选项列表
     /// </summary>
-    /// <returns>当前租户下拉项</returns>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetTenantOptionsAsync()
     {
-        if (string.IsNullOrWhiteSpace(CurrentTenantCode))
-        {
-            return new List<TaktSelectOption>();
-        }
-
-        var tenantCode = CurrentTenantCode.Trim();
         var list = await _tenantRepository.GetListAsync(
-            x => x.TenantCode == tenantCode && x.TenantStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.TenantStatus == TaktCommonStatus.Enabled,
             x => x.TenantName,
             false);
-        var entity = list.FirstOrDefault();
-
-        return new List<TaktSelectOption>
+        return list.Select(e => new TaktSelectOption
         {
-            new TaktSelectOption
-            {
-                DictValue = tenantCode,
-                DictLabel = entity != null && !string.IsNullOrWhiteSpace(entity.TenantName)
-                    ? entity.TenantName
-                    : tenantCode,
-                ExtLabel = "1",
-                SortOrder = 0,
-            },
-        };
+            DictValue = e.Id,
+            DictLabel = e.TenantName ?? e.Id.ToString(),
+        }).ToList();
     }
 
     /// <summary>
@@ -241,7 +226,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
         {
             throw new TaktBusinessException("租户不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.TenantStatus != (int)TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.TenantStatus != TaktCommonStatus.Enabled)
         {
             throw new TaktBusinessException("不允许禁用内置租户");
         }

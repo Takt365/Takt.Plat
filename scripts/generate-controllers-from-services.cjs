@@ -19,6 +19,7 @@ const {
   shouldExcludeStandaloneService,
 } = require('./generate-entity-exclusions.cjs');
 const { transposedClassNames } = require('./generate-transposed-support.cjs');
+const { isSharedEnumType } = require('./generate-enum-common.cjs');
 
 // ========================================
 // 配置
@@ -29,6 +30,7 @@ const CONFIG = {
   servicesRoot: path.join(path.resolve(__dirname, '../backend/src'), 'Takt.Application', 'Services'),
   controllersRoot: path.join(path.resolve(__dirname, '../backend/src'), 'Takt.WebApi', 'Controllers'),
   entitiesRoot: path.join(path.resolve(__dirname, '../backend/src'), 'Takt.Domain', 'Entities'),
+  dtosRoot: path.join(path.resolve(__dirname, '../backend/src'), 'Takt.Application', 'Dtos'),
 };
 
 /**
@@ -99,6 +101,78 @@ function isInEngineDirectory(filePath) {
 
 function readUtf8(filePath) {
   return fs.readFileSync(filePath, 'utf-8');
+}
+
+function extractClassBlock(content, className) {
+  const startRegex = new RegExp(`public\\s+(?:partial\\s+)?class\\s+${className}\\b`);
+  const startMatch = startRegex.exec(content);
+  if (!startMatch) {
+    return '';
+  }
+  const braceStart = content.indexOf('{', startMatch.index);
+  if (braceStart < 0) {
+    return '';
+  }
+  let depth = 0;
+  for (let i = braceStart; i < content.length; i += 1) {
+    if (content[i] === '{') {
+      depth += 1;
+    } else if (content[i] === '}') {
+      depth -= 1;
+      if (depth === 0) {
+        return content.slice(braceStart + 1, i);
+      }
+    }
+  }
+  return '';
+}
+
+/**
+ * 解析 StatusDto 中除 Id 外的状态值属性（用于 XML 注释标注 Shared 枚举）
+ * @param {string} dtoContent
+ * @param {string} statusDtoName
+ */
+function parseStatusDtoFields(dtoContent, statusDtoName) {
+  const block = extractClassBlock(dtoContent, statusDtoName);
+  const idMatch = block.match(/public\s+long\s+(\w+Id)\s*\{/);
+  const props = [];
+  const propRegex = /public\s+([\w?<>,\s]+)\s+(\w+)\s*\{/g;
+  let m;
+  while ((m = propRegex.exec(block)) !== null) {
+    if (m[2].endsWith('Id')) {
+      continue;
+    }
+    props.push({ type: m[1].trim(), name: m[2] });
+  }
+  return {
+    idProperty: idMatch ? idMatch[1] : null,
+    valueProperties: props,
+  };
+}
+
+function findDtoFileByEntity(entityName) {
+  const fileName = `${entityName}Dtos.cs`;
+  function searchDir(dir) {
+    if (!fs.existsSync(dir)) {
+      return null;
+    }
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (isInEngineDirectory(fullPath)) {
+          continue;
+        }
+        const found = searchDir(fullPath);
+        if (found) {
+          return found;
+        }
+      } else if (entry.name === fileName) {
+        return fullPath;
+      }
+    }
+    return null;
+  }
+  return searchDir(CONFIG.dtosRoot);
 }
 
 function todayFileHeaderDate() {
@@ -534,9 +608,13 @@ function generateTreeEndpoint(ctx) {
   const paramDecl = formatControllerParameters(ctx.params, 'query');
   const callArgs = ctx.params.map((p) => p.name).join(', ');
   const perm = `${ctx.permissionBase}:query`;
+  const includeDisabledParam = ctx.params.find((p) => p.name === 'includeDisabled');
+  const includeDisabledDoc = includeDisabledParam
+    ? `\n    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>`
+    : '';
   const code = `    /// <summary>
     /// ${ctx.summary || `获取${ctx.displayName}树`}
-    /// </summary>
+    /// </summary>${includeDisabledDoc}
     /// <returns>树形数据</returns>
     [TaktPermission("${perm}", "${ctx.displayName}树")]
     [HttpGet("tree")]
@@ -627,10 +705,15 @@ function generateUpdateStatusEndpoint(ctx) {
   const routeSuffix = statusSuffix ? `-${statusSuffix.charAt(0).toLowerCase()}${statusSuffix.slice(1)}` : '';
   const statusLabel = statusSuffix || '状态';
   const perm = `${ctx.permissionBase}:update`;
+  const statusValueProp = ctx.statusValueProperty;
+  const enumHint =
+    statusValueProp && isSharedEnumType(statusValueProp.type)
+      ? `（${statusValueProp.type} 枚举）`
+      : '';
   const code = `    /// <summary>
     /// ${ctx.summary || `更新${ctx.displayName}${statusLabel}`}
     /// </summary>
-    /// <param name="${dtoParam.name}">状态DTO</param>
+    /// <param name="${dtoParam.name}">状态 DTO${enumHint}</param>
     /// <returns>${ctx.displayName}DTO</returns>
     [TaktPermission("${perm}", "更新${ctx.displayName}${statusLabel}")]
     [HttpPut("status${routeSuffix}")]
@@ -859,7 +942,13 @@ function generateEndpoint(method, ctx) {
     return generateUpdateEndpoint(fullCtx);
   }
   if (new RegExp(`^Update${entityShort}\\w*StatusAsync$`).test(methodName)) {
-    return generateUpdateStatusEndpoint(fullCtx);
+    const statusDtoParam = fullCtx.params[0];
+    let statusValueProperty = null;
+    if (statusDtoParam && ctx.dtoFilePath && fs.existsSync(ctx.dtoFilePath)) {
+      const statusFields = parseStatusDtoFields(readUtf8(ctx.dtoFilePath), statusDtoParam.type);
+      statusValueProperty = statusFields.valueProperties[0] || null;
+    }
+    return generateUpdateStatusEndpoint({ ...fullCtx, statusValueProperty });
   }
   if (methodName === `Update${entityShort}SortAsync`) {
     return generateUpdateSortEndpoint(fullCtx);
@@ -956,6 +1045,7 @@ function generateController(interfaceFile, entityName, methods, options) {
   const dtoNs = buildNamespace('Takt.Application.Dtos', pathParts);
   const serviceNs = buildNamespace('Takt.Application.Services', pathParts);
   const outputFile = path.join(CONFIG.controllersRoot, ...pathParts, `${controllerClass}.cs`);
+  const dtoFilePath = findDtoFileByEntity(entityName);
 
   const ctx = {
     entityName,
@@ -965,6 +1055,7 @@ function generateController(interfaceFile, entityName, methods, options) {
     serviceField,
     serviceInterface,
     serviceParam,
+    dtoFilePath,
   };
 
   const endpointBlocks = [];

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktProductSerialInboundItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductSerialInboundItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -135,6 +135,15 @@ public class TaktProductSerialInboundItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productSerialInboundItem.inboundtime", "zh-CN", "入库时间", "入库时间"),
             // entity.productSerialInboundItem.inboundtime
             new TranslationSeedItem("entity.productSerialInboundItem.inboundtime", "zh-HK", "入库时间", "入库时间"),
+
+            // entity.productSerialInboundItem.inbound
+            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "en-US", "入库主表", "入库主表"),
+            // entity.productSerialInboundItem.inbound
+            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "ja-JP", "入库主表", "入库主表"),
+            // entity.productSerialInboundItem.inbound
+            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "zh-CN", "入库主表", "入库主表"),
+            // entity.productSerialInboundItem.inbound
+            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "zh-HK", "入库主表", "入库主表"),
         };
     }
 

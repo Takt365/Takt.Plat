@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/complaint/supplier-evaluation/components -->
 <!-- 文件名称：supplier-evaluation-form.vue -->
-<!-- 功能描述：供应商评价考核主表实体维护弹窗内嵌表单。由 generate-vue-from-api 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：供应商评价考核主表实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -19,9 +19,10 @@
       v-model:active-key="activeTab"
       class="supplier-evaluation-form-tabs"
     >
+      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
@@ -162,7 +163,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
@@ -302,7 +303,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
         force-render
       >
         <div :class="formContentClass">
@@ -413,19 +414,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.items')"
-                name="items"
-              >
-                <a-input
-                  v-model:value="formState.items"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.items') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('common.page.entity.extfieldjson')"
                 name="extFieldJson"
               >
@@ -437,16 +425,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -463,26 +441,144 @@
           </a-row>
         </div>
       </a-tab-pane>
-
+      <!-- 子表：supplierEvaluationItem -->
+      <a-tab-pane
+        key="child-items"
+        :tab="t('entity.supplierEvaluationItem._self')"
+        force-render
+      >
+        <div class="mb-2">
+          <a-button type="primary" size="small" @click="handleAddSupplierEvaluationItemRow">
+            {{ t('common.page.button.create') }}{{ t('entity.supplierEvaluationItem._self') }}
+          </a-button>
+        </div>
+        <a-table
+          :columns="supplierEvaluationItemFormColumns"
+          :data-source="childSupplierEvaluationItemRows"
+          :pagination="false"
+          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
+          size="small"
+          bordered
+        >
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.key === 'tenantCode'">
+              <a-input
+                v-model:value="record.tenantCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyCode'">
+              <a-input
+                v-model:value="record.companyCode"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'companyDefaultCulture'">
+              <a-input
+                v-model:value="record.companyDefaultCulture"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                size="small"
+                readonly
+              />
+            </template>
+            <template v-else-if="column.key === 'evaluationId'">
+              <a-input
+                v-model:value="record.evaluationId"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.evaluationid') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'lineNumber'">
+              <a-input-number
+                v-model:value="record.lineNumber"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.linenumber') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'categoryType'">
+              <a-input-number
+                v-model:value="record.categoryType"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.categorytype') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'itemName'">
+              <a-input
+                v-model:value="record.itemName"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.itemname') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'itemDescription'">
+              <a-textarea
+                v-model:value="record.itemDescription"
+                :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.supplierEvaluationItem.itemdescription') })"
+                :rows="2"
+                size="small"
+              />
+            </template>
+            <template v-else-if="column.key === 'weight'">
+              <a-input-number
+                v-model:value="record.weight"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.weight') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === 'scoringStandard'">
+              <a-input
+                v-model:value="record.scoringStandard"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.scoringstandard') })"
+                size="small"
+                allow-clear
+              />
+            </template>
+            <template v-else-if="column.key === 'score'">
+              <a-input-number
+                v-model:value="record.score"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.score') })"
+                size="small"
+                style="width: 100%"
+              />
+            </template>
+            <template v-else-if="column.key === '__action'">
+              <a-button type="link" danger size="small" @click="handleRemoveSupplierEvaluationItemRow(index)">
+                {{ t('common.page.button.delete') }}
+              </a-button>
+            </template>
+          </template>
+        </a-table>
+      </a-tab-pane>
     </a-tabs>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 供应商评价考核主表实体维护表单 · 由 generate-vue-from-api 根据 types/api 生成
+ * 供应商评价考核主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/quality/complaint/supplier-evaluation/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { SupplierEvaluationCreate } from '@/types/logistics/quality/complaint/supplier-evaluation'
+import type { SupplierEvaluationCreate, SupplierEvaluationItemCreate, SupplierEvaluationItem } from '@/types/logistics/quality/complaint/supplier-evaluation'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
+/** i18n 翻译函数 */
 const { t } = useI18n()
 
+/** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
 const userStore = useUserStore()
 
 /**
@@ -501,36 +597,163 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
+/** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","supplierEvaluationCode","supplierId","supplierName","supplierCode","evaluationDate","evaluationPeriod","evaluationType","evaluatorBy","evaluationDept","overallRating","totalScore","qualityScore","deliveryScore","priceScore","serviceScore","technicalScore","mainStrengths","mainIssues","improvementRequirements","evaluationConclusion","rectificationDeadline","evaluationStatus","rectificationStatus","relatedPlant","sortOrder","items","extFieldJson","remark"]
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","supplierEvaluationCode","supplierId","supplierName","supplierCode","evaluationDate","evaluationPeriod","evaluationType","evaluatorBy","evaluationDept","overallRating","totalScore","qualityScore","deliveryScore","priceScore","serviceScore","technicalScore","mainStrengths","mainIssues","improvementRequirements","evaluationConclusion","rectificationDeadline","evaluationStatus","rectificationStatus","relatedPlant","sortOrder","extFieldJson","remark"]
 
+/** supplierEvaluationItem 子表行（表单 Tab 内嵌） */
+const childSupplierEvaluationItemRows = ref<Record<string, unknown>[]>([])
 
+/** 子表 supplierEvaluationItem 表单列定义 */
+const supplierEvaluationItemFormColumns = computed(() => [
+  {
+    title: t('common.page.entity.tenantcode'),
+    dataIndex: 'tenantCode',
+    key: 'tenantCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companycode'),
+    dataIndex: 'companyCode',
+    key: 'companyCode',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.companydefaultculture'),
+    dataIndex: 'companyDefaultCulture',
+    key: 'companyDefaultCulture',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.evaluationid'),
+    dataIndex: 'evaluationId',
+    key: 'evaluationId',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.linenumber'),
+    dataIndex: 'lineNumber',
+    key: 'lineNumber',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.categorytype'),
+    dataIndex: 'categoryType',
+    key: 'categoryType',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.itemname'),
+    dataIndex: 'itemName',
+    key: 'itemName',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.itemdescription'),
+    dataIndex: 'itemDescription',
+    key: 'itemDescription',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.weight'),
+    dataIndex: 'weight',
+    key: 'weight',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.scoringstandard'),
+    dataIndex: 'scoringStandard',
+    key: 'scoringStandard',
+    width: 140,
+  },
+  {
+    title: t('entity.supplierEvaluationItem.score'),
+    dataIndex: 'score',
+    key: 'score',
+    width: 140,
+  },
+  {
+    title: t('common.page.entity.action'),
+    key: '__action',
+    width: 80,
+    fixed: 'right',
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<SupplierEvaluationCreate & { supplierEvaluationId?: string }> | null | undefined) {
+  childSupplierEvaluationItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
+    ...item,
+    __rowKey: item.supplierEvaluationItemId ?? `new-${index}`,
+  }))
+}
+
+/** 表单 Tab 内新增 supplierEvaluationItem 行 */
+function handleAddSupplierEvaluationItemRow() {
+  childSupplierEvaluationItemRows.value.push({
+    __rowKey: `new-${Date.now()}`,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      evaluationId: '',
+      lineNumber: 0,
+      categoryType: 0,
+      itemName: '',
+      itemDescription: '',
+      weight: 0,
+      scoringStandard: '',
+      score: 0,
+  })
+}
+
+/** 表单 Tab 内删除 supplierEvaluationItem 行 */
+function handleRemoveSupplierEvaluationItemRow(index: number) {
+  childSupplierEvaluationItemRows.value.splice(index, 1)
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  return {
+    ...formState,
+    items: childSupplierEvaluationItemRows.value.map(({ __rowKey, ...rest }) => rest),
+  }
+}
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<SupplierEvaluationCreate & { supplierEvaluationId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: () => ({}),
-  loading: false
+  loading: false,
 })
 
+/** a-form 实例 ref */
 const formRef = ref()
+/** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
 
+/** 编辑态灌入 formData；新增态 reset */
 watch(
   () => props.formData,
   (val) => {
     const next = val ? { ...val } : {}
     Object.keys(formState).forEach((k) => delete formState[k])
-
+    delete (next as any).items
     applyScopeDefaults(next)
     Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
   },
   { immediate: true, deep: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
@@ -541,6 +764,7 @@ watch(
   },
 )
 
+/** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   supplierEvaluationCode: [
     {
@@ -621,19 +845,22 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ],
 }))
 
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
   return formState
 }
 
+/** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  return buildSubmitPayload()
 }
 
+/** 重置表单与子表行 */
 function resetFields() {
   formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-
+  childSupplierEvaluationItemRows.value = []
   activeTab.value = 'tab-0'
 }
 

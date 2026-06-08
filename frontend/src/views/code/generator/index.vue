@@ -11,7 +11,6 @@
   <div class="p-4">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.searchkeyword')"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -50,7 +49,9 @@
     />
 
     <TaktSingleTable
-      :columns="displayColumns"
+      entity-scope="tenant"
+      :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
@@ -99,7 +100,7 @@
     <!-- 导入表弹窗：宽度 80%，高度 75% -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('code.generator.page.importfromdb')"
+      :title="t('common.dialog.title.importfromdb')"
       width="80%"
       :centered="true"
       :body-style="{ height: '75vh', overflow: 'auto' }"
@@ -128,7 +129,7 @@
     <!-- 另存为：输入生成路径后确定生成 -->
     <a-modal
       v-model:open="saveAsVisible"
-      :title="t('code.generator.page.saveas')"
+      :title="t('common.dialog.title.saveas')"
       :ok-text="t('common.page.button.ok')"
       :cancel-text="t('common.page.button.cancel')"
       :confirm-loading="loading"
@@ -149,16 +150,16 @@
     <!-- 高级查询抽屉 -->
     <a-drawer
       v-model:open="advancedQueryVisible"
-      :title="t('common.page.button.advancedquery')"
+      :title="t('common.dialog.title.advancedquery')"
       placement="right"
       width="360"
       @close="advancedQueryVisible = false"
     >
       <a-form layout="vertical">
-        <a-form-item :label="t('common.page.form.placeholder.keyword')">
+        <a-form-item :label="t('common.page.form.keyword')">
           <a-input
             v-model:value="queryKeyword"
-            :placeholder="t('common.page.form.placeholder.searchkeyword')"
+            :placeholder="t('common.page.form.placeholder.search', { keyword: t('common.page.form.keyword') })"
             allow-clear
           />
         </a-form-item>
@@ -180,6 +181,7 @@
 
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
+      entity-scope="tenant"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
@@ -534,7 +536,7 @@ function handlePaginationSizeChange(current: number, size: number) {
  * 打开新增表单弹窗
  */
 function handleCreate() {
-  formTitle.value = t('common.page.button.create') + tableConfig()
+  formTitle.value = t('common.dialog.title.create', { entity: tableConfig() })
   formData.value = null
   formVisible.value = true
 }
@@ -545,7 +547,7 @@ function handleCreate() {
  * @returns {Promise<void>}
  */
 async function handleEdit(record: GenTable) {
-  formTitle.value = t('common.page.button.edit') + tableConfig()
+  formTitle.value = t('common.dialog.title.edit', { entity: tableConfig() })
   const id = getTableId(record)
   if (!id) {
     formData.value = { ...record, genTableId: record.genTableId }
@@ -730,7 +732,7 @@ async function handleGenerateOne(record: GenTable) {
     if (existingFiles.length > 0) {
       const fileList = existingFiles.slice(0, 20).join('\n') + (existingFiles.length > 20 ? '\n... ' + t('code.generator.page.existingfilessuffix', { count: existingFiles.length }) : '')
       Modal.confirm({
-        title: t('code.generator.page.overwriteconfirmtitle'),
+        title: t('common.dialog.title.overwrite'),
         content: t('code.generator.page.overwriteconfirmcontent') + '\n\n' + fileList,
         okText: t('code.generator.page.overwrite'),
         cancelText: genMethod === 2 ? t('common.page.button.cancel') : t('code.generator.page.saveascancel'),
@@ -781,7 +783,7 @@ async function handleSync(record: GenTable) {
       ...detail,
       genTableId: detail.genTableId != null ? String(detail.genTableId) : (fallbackTableId || undefined)
     } as Partial<GenTable>
-    formTitle.value = t('common.page.button.sync') + tableConfig()
+    formTitle.value = t('common.dialog.title.sync', { entity: tableConfig() })
     formVisible.value = true
     message.info(t('code.generator.page.syncformhint'))
   } catch (e: unknown) {
@@ -825,7 +827,7 @@ async function handleClone(record: GenTable) {
   if (!id) {
     const { genTableId: _omitId, ...recordWithoutId } = record
     formData.value = { ...recordWithoutId, tableName: `${record.tableName ?? 'table'}_copy` }
-    formTitle.value = t('common.page.button.clone') + tableConfig()
+    formTitle.value = t('common.dialog.title.clone', { entity: tableConfig() })
     formVisible.value = true
     return
   }
@@ -846,7 +848,7 @@ async function handleClone(record: GenTable) {
       })
     }
     formData.value = cloneData
-    formTitle.value = t('common.page.button.clone') + tableConfig()
+    formTitle.value = t('common.dialog.title.clone', { entity: tableConfig() })
     formVisible.value = true
     message.success(t('code.generator.page.clonesuccess'))
   } catch (e: unknown) {

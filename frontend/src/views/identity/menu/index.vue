@@ -11,7 +11,6 @@
     <div class="menu-query-row">
       <TaktTreeLeftQueryBar
         v-model="treeQueryKeyword"
-        placeholder="树关键字"
         @search="handleTreeQuerySearch"
       />
       <TaktTreeRightQueryBar
@@ -80,9 +79,10 @@
         @tree-drop="handleMenuTreeDrop"
       />
       <TaktTreeRightTable
+      entity-scope="tenant"
         v-model:current="tableCurrentPage"
         v-model:page-size="tablePageSize"
-        :columns="displayColumns"
+        :columns="columns"
         :data-source="paginatedFlatTableRows"
         :loading="loading"
         :row-key="getMenuId"
@@ -214,12 +214,12 @@
     />
 
     <TaktColumnDrawer
+      entity-scope="tenant"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       :id-column-key="'menuId'"
       :action-column-key="'action'"
-      entity-scope="tenant"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -232,7 +232,6 @@ import type { TreeDataItem } from 'ant-design-vue/es/tree'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import MenuForm from './components/menu-form.vue'
 import AssignMenuRoles from './components/assign-menu-roles.vue'
@@ -765,18 +764,6 @@ const columns = computed<TableColumnsType>(() => [
   })
 ])
 
-const mergedColumns = computed((): any => mergeDefaultColumns(columns.value as any, t, true, 'tenant'))
-const displayColumns = computed(() => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) return columns.value as any
-  const getColumnKey = (col: any): string => (col.key || col.dataIndex || col.title) ? String(col.key || col.dataIndex || col.title) : ''
-  const keysSet = new Set(keys.map(k => String(k)))
-  return merged.filter((col: any) => {
-    const colKey = getColumnKey(col)
-    return colKey && keysSet.has(colKey)
-  })
-})
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,

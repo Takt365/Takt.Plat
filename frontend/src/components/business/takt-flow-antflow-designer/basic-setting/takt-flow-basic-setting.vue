@@ -20,7 +20,7 @@
         <a-input
           v-model:value="processKeyModel"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowscheme.processkey') })"
-          :disabled="!!props.form.schemeId"
+          :disabled="!!props.form.flowSchemeId"
         />
       </a-form-item>
     </a-col>
@@ -97,49 +97,48 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { FlowSchemeCreate } from '@/types/workflow/flow-scheme'
+import type { FlowSchemeFormModel } from '@/types/workflow/flow-scheme'
 
 const { t } = useI18n()
 
 const props = defineProps<{
-  form: FlowSchemeCreate & { schemeId?: string }
+  form: FlowSchemeFormModel
 }>()
 
-const emit = defineEmits<{
-  'update:form': [form: FlowSchemeCreate & { schemeId?: string }]
-}>()
-
-function updateFormField<K extends keyof (FlowSchemeCreate & { schemeId?: string })>(
-  key: K,
-  value: (FlowSchemeCreate & { schemeId?: string })[K]
-) {
-  emit('update:form', { ...props.form, [key]: value })
+/**
+ * 更新父级 reactive form 字段（与后端 TaktFlowSchemeCreateDto 字段名一致）
+ * @param key 字段名
+ * @param value 新值
+ */
+function updateFormField<K extends keyof FlowSchemeFormModel>(key: K, value: FlowSchemeFormModel[K]) {
+  props.form[key] = value
 }
 
 const processKeyModel = computed({
-  get: () => props.form.schemeKey ?? '',
-  set: (value: string) => updateFormField('schemeKey', value)
+  get: () => props.form.processKey ?? '',
+  set: (value: string) => updateFormField('processKey', value)
 })
 
 const processNameModel = computed({
-  get: () => props.form.schemeName ?? '',
-  set: (value: string) => updateFormField('schemeName', value)
+  get: () => props.form.processName ?? '',
+  set: (value: string) => updateFormField('processName', value)
 })
 
 const processCategoryModel = computed({
-  get: () => props.form.schemeCategory ?? 0,
-  set: (value: number | null) => updateFormField('schemeCategory', value ?? 0)
+  get: () => props.form.processCategory ?? 0,
+  set: (value: number | null) => updateFormField('processCategory', value ?? 0)
 })
 
 const processDescriptionModel = computed({
-  get: () => props.form.schemeDescription ?? '',
-  set: (value: string) => updateFormField('schemeDescription', value)
+  get: () => props.form.processDescription ?? '',
+  set: (value: string) => updateFormField('processDescription', value)
 })
 
 const processStatusModel = computed({
-  get: () => props.form.schemeStatus ?? 0,
-  set: (value: number | null) => updateFormField('schemeStatus', value ?? 0)
+  get: () => props.form.processStatus ?? 0,
+  set: (value: number | null) => updateFormField('processStatus', value ?? 0)
 })
 
 const sortOrderModel = computed({

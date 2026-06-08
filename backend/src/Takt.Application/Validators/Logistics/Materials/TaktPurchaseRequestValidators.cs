@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktPurchaseRequestValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Logistics.Materials;
 
@@ -46,6 +47,8 @@ public class TaktPurchaseRequestCreateValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.RequestBy)
             .NotEmpty().WithMessage("申请人不能为空")
             .MaximumLength(50).WithMessage("申请人长度不能超过50个字符");
+        RuleFor(x => x.RequestStatus)
+            .IsInEnum().WithMessage("申请状态无效");
         RuleFor(x => x.FlowInstanceId)
             .GreaterThanOrEqualTo(0).WithMessage("流程实例ID不能为负数");
         RuleFor(x => x.RequestReason)
@@ -105,6 +108,8 @@ public class TaktPurchaseRequestImportValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.RequestBy)
             .NotEmpty().WithMessage("申请人不能为空")
             .MaximumLength(50).WithMessage("申请人长度不能超过50个字符");
+        RuleFor(x => x.RequestStatus)
+            .IsInEnum().WithMessage("申请状态无效");
         RuleFor(x => x.FlowInstanceId)
             .GreaterThanOrEqualTo(0).WithMessage("流程实例ID不能为负数");
         RuleFor(x => x.RequestReason)

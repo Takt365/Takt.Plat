@@ -96,7 +96,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/dashboard";
                 menu.ComponentPath = "";
                 menu.SortOrder = 2;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -116,7 +116,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/routine";
                 menu.ComponentPath = "";
                 menu.SortOrder = 3;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -136,7 +136,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/accounting";
                 menu.ComponentPath = "";
                 menu.SortOrder = 4;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -156,7 +156,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/logistics";
                 menu.ComponentPath = "";
                 menu.SortOrder = 5;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -176,7 +176,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/human-resource";
                 menu.ComponentPath = "";
                 menu.SortOrder = 6;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -196,7 +196,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/identity";
                 menu.ComponentPath = "";
                 menu.SortOrder = 7;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -216,7 +216,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/workflow";
                 menu.ComponentPath = "";
                 menu.SortOrder = 8;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -236,7 +236,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/code";
                 menu.ComponentPath = "";
                 menu.SortOrder = 9;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -256,7 +256,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/foundation";
                 menu.ComponentPath = "";
                 menu.SortOrder = 10;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -276,7 +276,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/statistics";
                 menu.ComponentPath = "";
                 menu.SortOrder = 11;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -297,7 +297,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/about";
                 menu.ComponentPath = "about/index";
                 menu.SortOrder = 12;
-                menu.MenuStatus = 1;
+                menu.MenuStatus = TaktCommonStatus.Enabled;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;

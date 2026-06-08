@@ -36,7 +36,9 @@
       @refresh="handleRefresh"
     />
     <TaktSingleTable
-      :columns="displayColumns"
+      entity-scope="company"
+      :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
@@ -123,6 +125,7 @@
       </a-form-item>
     </TaktQueryDrawer>
     <TaktColumnDrawer
+      entity-scope="company"
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
@@ -138,7 +141,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
-import { mergeDefaultColumns } from '@/utils/table-columns'
 import { useI18n } from 'vue-i18n'
 import NumberingForm from './components/numbering-form.vue'
 import {
@@ -316,27 +318,6 @@ const columns = computed<TableColumnsType>(() => [
   })
 ])
 
-const mergedColumns = computed((): TableColumnsType => {
-  return mergeDefaultColumns(columns.value as TableColumnsType, t, true) as TableColumnsType
-})
-
-const displayColumns = computed((): TableColumnsType => {
-  const keys = visibleColumnKeys.value || []
-  const merged = mergedColumns.value || []
-  if (keys.length === 0) {
-    return columns.value
-  }
-  const keysSet = new Set(keys.map(k => String(k)))
-  const getColumnKey = (col: NumberingTableColumn): string => {
-    const c = col as { key?: unknown; dataIndex?: unknown; title?: unknown }
-    const resolved = c.key ?? c.dataIndex ?? c.title
-    return resolved != null && String(resolved) !== '' ? String(resolved) : ''
-  }
-  return merged.filter((col: NumberingTableColumn) => {
-    const colKey = getColumnKey(col)
-    return colKey.length > 0 && keysSet.has(colKey)
-  })
-})
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,

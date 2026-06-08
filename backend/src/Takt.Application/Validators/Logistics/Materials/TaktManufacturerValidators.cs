@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktManufacturerValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Manufacturer 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktManufacturer 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Logistics.Materials;
 
@@ -71,6 +72,8 @@ public class TaktManufacturerCreateValidator : AbstractValidator<TaktManufacture
         RuleFor(x => x.ContactEmail)
             .MaximumLength(100).WithMessage("联系人邮箱长度不能超过100个字符")
             .EmailAddress().WithMessage("联系人邮箱格式不正确").When(x => !string.IsNullOrWhiteSpace(x.ContactEmail));
+        RuleFor(x => x.ManufacturerStatus)
+            .IsInEnum().WithMessage("制造商状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)

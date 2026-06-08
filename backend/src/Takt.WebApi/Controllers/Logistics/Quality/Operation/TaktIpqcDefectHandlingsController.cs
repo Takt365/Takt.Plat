@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Operation
 // 文件名称：TaktIpqcDefectHandlingsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制程检验不良处理记录控制器
 // 
@@ -183,7 +183,7 @@ public class TaktIpqcDefectHandlingsController : TaktControllerBase
     /// <summary>
     /// 更新制程检验不良处理记录状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>制程检验不良处理记录DTO</returns>
     [TaktPermission("logistics:quality:operation:ipqcdefecthandling:update", "更新制程检验不良处理记录状态")]
     [HttpPut("status")]

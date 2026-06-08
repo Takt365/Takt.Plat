@@ -32,6 +32,13 @@ const {
   generateTransposedInterfaceMethods,
   generateTransposedServiceImplementation,
 } = require('./generate-transposed-support.cjs');
+const {
+  isSharedEnumType,
+  contentUsesSharedEnums,
+  extractPrimaryEnableStatusMeta,
+  extractBuiltInDisableStatusMeta,
+  optionsBlockUsesStaleIntStatusCompare,
+} = require('./generate-enum-common.cjs');
 
 // ========================================
 // 配置
@@ -334,7 +341,7 @@ function hasGetOptionsAsyncMethod(content, methodName) {
  * @param {string} repoField 如 _menuRepository
  * @returns {boolean}
  */
-function isValidOptionsImplementationBlock(block, repoField) {
+function isValidOptionsImplementationBlock(block, repoField, statusMeta = null) {
   if (!block || !block.trim()) {
     return false;
   }
@@ -342,6 +349,9 @@ function isValidOptionsImplementationBlock(block, repoField) {
     return false;
   }
   if (/\bawait\s+Get(?:Tenant|Company)?\w+ListAsync\s*\(/.test(block)) {
+    return false;
+  }
+  if (optionsBlockUsesStaleIntStatusCompare(block, statusMeta)) {
     return false;
   }
   return true;
@@ -363,6 +373,7 @@ function resolveOptionsImplementationBlock({
   repoField,
   freshTemplate,
   refreshOptions = false,
+  statusMeta = null,
 }) {
   if (!hasGetOptionsAsyncMethod(existingContent, methodName)) {
     return { block: freshTemplate, preserved: false, regenerated: false };
@@ -375,7 +386,7 @@ function resolveOptionsImplementationBlock({
     methodName,
     'implementation',
   );
-  if (preserved && isValidOptionsImplementationBlock(preserved, repoField)) {
+  if (preserved && isValidOptionsImplementationBlock(preserved, repoField, statusMeta)) {
     return { block: preserved, preserved: true, regenerated: false };
   }
   return { block: freshTemplate, preserved: false, regenerated: true };
@@ -590,14 +601,22 @@ function buildEntityScopeGuard(dtoBase) {
 }
 
 /**
- * Options 列表查询 predicate
+ * Options 列表查询 predicate（可选：仅启用状态）
  * @param {string} dtoBase
+ * @param {{ field?: string, kind?: string, enabledLiteral?: string, intEnabled?: number }|null} [statusMeta]
  */
-function buildOptionsListPredicate(dtoBase) {
-  if (dtoBase === 'TaktTenantDtoBase') {
-    return 'x => x.TenantCode == CurrentTenantCode';
+function buildOptionsListPredicate(dtoBase, statusMeta = null) {
+  const scope =
+    dtoBase === 'TaktTenantDtoBase'
+      ? 'x.TenantCode == CurrentTenantCode'
+      : 'x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
+  if (statusMeta?.kind === 'sharedEnum' && statusMeta.enabledLiteral) {
+    return `x => ${scope} && x.${statusMeta.field} == ${statusMeta.enabledLiteral}`;
   }
-  return 'x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
+  if (statusMeta?.kind === 'int') {
+    return `x => ${scope} && x.${statusMeta.field} == ${statusMeta.intEnabled ?? 1}`;
+  }
+  return `x => ${scope}`;
 }
 
 /**
@@ -1921,15 +1940,19 @@ function extractQueryDtoProperties(dtoContent, queryDtoName, entityPropertyNames
     if (!entityPropertyNames.has(name) && name !== 'Remark' && name !== 'ExtFieldJson') {
       continue;
     }
+    const bareType = rawType.replace('?', '').trim();
+    const isSharedEnum = isSharedEnumType(bareType);
     props.push({
       name,
       rawType,
-      isNullableEnum: /\?\s*$/.test(rawType) && !rawType.startsWith('string'),
-      isEnum: !rawType.startsWith('string') && !rawType.includes('DateTime') && !rawType.includes('bool') && !rawType.includes('int') && !rawType.includes('long') && !rawType.includes('decimal'),
+      bareType,
+      isSharedEnum,
+      isNullableEnum: isSharedEnum && rawType.endsWith('?'),
+      isEnum: isSharedEnum,
       isString: rawType.startsWith('string'),
       isDateTime: rawType.includes('DateTime'),
       isBool: rawType.includes('bool'),
-      isNumeric: /^(int|long|decimal)/.test(rawType),
+      isNumeric: /^(int|long|decimal)/.test(rawType) && !isSharedEnum,
     });
   }
   return props;
@@ -2017,60 +2040,12 @@ function omitDuplicateTransposedCtorExtras(manyToOneMaster, transposedGen, entit
 }
 
 /**
- * 树形实体上的「启用」状态字段（用于 includeDisabled 过滤）
- * @param {string} entityFile
- * @param {string} entityShort
- * @returns {{ field: string, type: 'enum'|'int' }|null}
- */
-function extractTreeStatusField(entityFile, entityShort) {
-  const content = readUtf8(entityFile);
-  const enumMatch = content.match(
-    new RegExp(`public\\s+TaktCommonStatus\\s+(${entityShort}\\w*Status|\\w+Status)\\s*\\{`),
-  );
-  if (enumMatch) {
-    return { field: enumMatch[1], type: 'enum' };
-  }
-  const intMatch = content.match(
-    new RegExp(`public\\s+int\\s+(${entityShort}\\w*Status|\\w+Status)\\s*\\{`),
-  );
-  if (intMatch) {
-    return { field: intMatch[1], type: 'int' };
-  }
-  return null;
-}
-
-/**
  * 实体是否含 IsBuiltIn（种子内置项，禁止删除/禁用）
  * @param {string} entityFile
  * @returns {boolean}
  */
 function entityHasIsBuiltIn(entityFile) {
   return extractEntityPropertyNames(entityFile).has('IsBuiltIn');
-}
-
-/**
- * 内置项「禁用/离职」保护所用的状态字段元数据
- * @param {string} entityFile
- * @returns {{ field: string, kind: 'commonStatus'|'intEnabled'|'employeeResigned' }|null}
- */
-function extractBuiltInDisableStatusMeta(entityFile) {
-  if (!entityHasIsBuiltIn(entityFile)) {
-    return null;
-  }
-  const props = extractEntityPropertyNames(entityFile);
-  if (props.has('EmployeeStatus')) {
-    return { field: 'EmployeeStatus', kind: 'employeeResigned' };
-  }
-  const content = readUtf8(entityFile);
-  const commonMatch = content.match(/public\s+TaktCommonStatus\s+(\w+Status)\s*\{/);
-  if (commonMatch) {
-    return { field: commonMatch[1], kind: 'commonStatus' };
-  }
-  const intMatch = content.match(/public\s+int\s+(\w+Status)\s*\{/);
-  if (intMatch) {
-    return { field: intMatch[1], kind: 'intEnabled' };
-  }
-  return null;
 }
 
 /**
@@ -2170,19 +2145,11 @@ function buildBuiltInStatusDisableGuardLines(desc, builtInStatusMeta, dtoPropNam
 
 /**
  * 树形选项列表查询条件（仅启用项，用于 GetXxxTreeOptionsAsync）
+ * @param {string} dtoBase
+ * @param {ReturnType<typeof extractPrimaryEnableStatusMeta>} statusMeta
  */
 function buildTreeOptionsListPredicate(dtoBase, statusMeta) {
-  const scope =
-    dtoBase === 'TaktTenantDtoBase'
-      ? 'x.TenantCode == CurrentTenantCode'
-      : 'x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
-  if (statusMeta?.type === 'enum') {
-    return `x => ${scope} && x.${statusMeta.field} == TaktCommonStatus.Enabled`;
-  }
-  if (statusMeta?.type === 'int') {
-    return `x => ${scope} && x.${statusMeta.field} == 1`;
-  }
-  return `x => ${scope}`;
+  return buildOptionsListPredicate(dtoBase, statusMeta);
 }
 
 /**
@@ -2199,8 +2166,8 @@ function generateTreeServiceMethods(
   nameField,
 ) {
   const treeDto = dtoInfo.tree;
-  const statusMeta = extractTreeStatusField(entityFile, entityShort);
   const entityContent = readUtf8(entityFile);
+  const statusMeta = extractPrimaryEnableStatusMeta(entityContent, entityShort);
   const hasSortOrder = /public\s+int\s+SortOrder\s*\{/.test(entityContent);
   const orderField = hasSortOrder ? 'SortOrder' : 'Id';
   const listPredicate =
@@ -2251,14 +2218,14 @@ function generateTreeServiceMethods(
   block += '    }\n\n';
 
   let filterBlock;
-  if (statusMeta?.type === 'enum') {
+  if (statusMeta?.kind === 'sharedEnum' && statusMeta.enabledLiteral) {
     filterBlock = `        var filtered = includeDisabled
             ? list
-            : list.Where(x => x.${statusMeta.field} == TaktCommonStatus.Enabled).ToList();`;
-  } else if (statusMeta?.type === 'int') {
+            : list.Where(x => x.${statusMeta.field} == ${statusMeta.enabledLiteral}).ToList();`;
+  } else if (statusMeta?.kind === 'int') {
     filterBlock = `        var filtered = includeDisabled
             ? list
-            : list.Where(x => x.${statusMeta.field} == 1).ToList();`;
+            : list.Where(x => x.${statusMeta.field} == ${statusMeta.intEnabled ?? 1}).ToList();`;
   } else {
     filterBlock = '        var filtered = list;';
   }
@@ -2304,7 +2271,7 @@ function generateTreeServiceMethods(
     treeOptionsBlock,
     treeRemainderBlock: block,
     block: treeOptionsBlock + block,
-    needsEnumsUsing: statusMeta?.type === 'enum',
+    needsEnumsUsing: statusMeta?.kind === 'sharedEnum',
   };
 }
 
@@ -2596,7 +2563,7 @@ function buildQueryExpressionBody(entityName, queryProps, dateRanges) {
       continue;
     }
 
-    if (prop.isNullableEnum || prop.isEnum || prop.isBool || prop.isNumeric) {
+    if (prop.isSharedEnum || prop.isNullableEnum || prop.isBool || prop.isNumeric) {
       lines.push(`        if (queryDto?.${prop.name}.HasValue == true)`);
       lines.push('        {');
       lines.push(`            exp = exp.And(x => x.${prop.name} == queryDto.${prop.name});`);
@@ -2643,9 +2610,11 @@ function generateServiceImplementation(
   const preservedOptionsMethods = [];
   const regeneratedOptionsMethods = [];
   const dtoContent = readUtf8(findDtoFileByEntity(entityName));
+  const entityContent = readUtf8(entityFile);
   const entityProps = extractEntityPropertyNames(entityFile);
   const queryProps = extractQueryDtoProperties(dtoContent, dtoInfo.query, entityProps);
   const dateRanges = extractDateRangeFields(dtoContent, dtoInfo.query, entityProps);
+  const enableStatusMeta = extractPrimaryEnableStatusMeta(entityContent, entityShort);
   const nameField = getNameFieldName(entityFile);
   const importDtoName = dtoInfo.import;
   const uniqueIndexes = extractUniqueIndexes(entityFile, dtoBase);
@@ -2737,10 +2706,17 @@ function generateServiceImplementation(
   );
 
   const entityScopeGuard = buildEntityScopeGuard(dtoBase);
-  const optionsListPredicate = buildOptionsListPredicate(dtoBase);
+  const optionsListPredicate = buildOptionsListPredicate(dtoBase, enableStatusMeta);
   const ensureContextLine = buildEnsureContextLine(dtoBase);
   const hasBuiltIn = entityHasIsBuiltIn(entityFile);
-  const builtInStatusMeta = hasBuiltIn ? extractBuiltInDisableStatusMeta(entityFile) : null;
+  const builtInStatusMeta = hasBuiltIn ? extractBuiltInDisableStatusMeta(entityContent) : null;
+  const needsSharedEnumsUsing =
+    hasBuiltIn
+    || queryProps.some((p) => p.isSharedEnum)
+    || contentUsesSharedEnums(dtoContent)
+    || contentUsesSharedEnums(entityContent)
+    || Boolean(treeGen?.needsEnumsUsing)
+    || Boolean(transposedGen?.needsEnumsUsing);
 
   let content = '';
   content += '// ========================================\n';
@@ -2765,7 +2741,7 @@ function generateServiceImplementation(
   content += 'using Takt.Shared.Helpers;\n';
   content += 'using Takt.Shared.Models;\n';
   content += 'using Takt.Shared.Options;\n';
-  if (hasBuiltIn || treeGen?.needsEnumsUsing || transposedGen?.needsEnumsUsing) {
+  if (needsSharedEnumsUsing) {
     content += 'using Takt.Shared.Enums;\n';
   }
   const extraUsingNs = new Set([
@@ -2924,6 +2900,7 @@ function generateServiceImplementation(
       repoField,
       freshTemplate: treeGen.treeOptionsBlock,
       refreshOptions: genOptions.refreshOptions === true,
+      statusMeta: enableStatusMeta,
     });
     content += treeOptionsResolved.block;
     if (treeOptionsResolved.preserved) {
@@ -2948,6 +2925,7 @@ function generateServiceImplementation(
       repoField,
       freshTemplate: flatOptionsTemplate,
       refreshOptions: genOptions.refreshOptions === true,
+      statusMeta: enableStatusMeta,
     });
     content += flatOptionsResolved.block;
     if (flatOptionsResolved.preserved) {

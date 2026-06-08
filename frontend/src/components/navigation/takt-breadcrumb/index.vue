@@ -48,7 +48,7 @@ import type { RouteMeta } from 'vue-router';
 import { useI18n } from 'vue-i18n'
 import { defaultSetting, useSettingStore } from '@/stores/common/setting'
 import { useMenuStore } from '@/stores/identity/menu'
-import type { TaktMenuTreeDto } from '@/types/identity/menu'
+import type { MenuTree } from '@/types/identity/menu'
 import {
   getRemixIconComponent,
   preloadRemixIcons,
@@ -76,7 +76,7 @@ const iconRevision = ref(0)
  * @param menus 菜单树
  * @param path 当前路由 path
  */
-const findMenuByPath = (menus: TaktMenuTreeDto[], path: string): TaktMenuTreeDto | null => {
+const findMenuByPath = (menus: MenuTree[], path: string): MenuTree | null => {
   const normalized = normalizeRoutePath(path)
 
   for (const menu of menus) {
@@ -104,7 +104,7 @@ const findMenuByPath = (menus: TaktMenuTreeDto[], path: string): TaktMenuTreeDto
  * @param menu 菜单节点
  * @param routeMeta 路由 meta
  */
-const getTranslatedTitle = (menu: TaktMenuTreeDto | null, routeMeta: RouteMeta | undefined): string => {
+const getTranslatedTitle = (menu: MenuTree | null, routeMeta: RouteMeta | undefined): string => {
   if (menu?.i18nKey) {
     const translated = t(menu.i18nKey)
     if (translated && translated !== menu.i18nKey) {

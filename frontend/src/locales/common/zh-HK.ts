@@ -58,6 +58,7 @@ export default {
       'prussian-blue': '普魯士藍',
       'senelier-yellow': '申內利爾黃',
       'memorial-gray': '紀念灰',
+      custom: '自定義',
     },
     layout: {
       switch: '切換登錄佈局',
@@ -65,6 +66,46 @@ export default {
         left: '左對齊',
         center: '居中',
         right: '右對齊',
+      },
+    },
+    entity: {
+      culturelist: '語言列表',
+      menulist: '菜單',
+      tenantlist: '租戶列表',
+    },
+    button: {
+      ok: '確定',
+      cancel: '取消',
+      logout: '退出登錄',
+      profile: '個人中心',
+    },
+  },
+  feedback: {
+    load: {
+      empty: '未獲取到可用的{target}',
+      failed: '加載{target}失敗',
+    },
+    connect: {
+      success: '連接成功',
+    },
+    signalr: {
+      error: '實時連接發生錯誤',
+    },
+  },
+  tip: {
+    session: {
+      expired: '登錄已過期，請重新登錄',
+      idle: {
+        logout: '長時間未操作，已自動退出登錄',
+      },
+    },
+    force: {
+      logout: '您已被強制下線',
+    },
+    confirm: {
+      action: {
+        title: '確認{action}',
+        question: '確定要{action}嗎？',
       },
     },
   },

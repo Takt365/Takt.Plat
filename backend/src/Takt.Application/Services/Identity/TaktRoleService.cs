@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktRoleService.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：角色应用服务实现
 // 
@@ -256,7 +256,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
         {
             throw new TaktBusinessException("角色不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.RoleStatus != (int)TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.RoleStatus != TaktCommonStatus.Enabled)
         {
             throw new TaktBusinessException("不允许禁用内置角色");
         }

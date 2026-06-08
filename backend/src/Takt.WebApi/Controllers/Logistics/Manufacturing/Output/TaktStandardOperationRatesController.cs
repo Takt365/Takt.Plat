@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktStandardOperationRatesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准生产稼动率控制器
 // 
@@ -183,7 +183,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// <summary>
     /// 更新标准生产稼动率状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>标准生产稼动率DTO</returns>
     [TaktPermission("logistics:manufacturing:output:standardoperationrate:update", "更新标准生产稼动率状态")]
     [HttpPut("status")]

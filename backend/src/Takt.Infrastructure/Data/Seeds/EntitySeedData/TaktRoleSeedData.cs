@@ -115,7 +115,7 @@ public class TaktRoleSeedData : ITaktSeedDataCoordinator
                 RoleName = roleName,
                 DataScope = dataScope,
                 IsBuiltIn = TaktYesNo.Yes,
-                RoleStatus = (int)TaktCommonStatus.Enabled,
+                RoleStatus = TaktCommonStatus.Enabled,
                 SortOrder = sortOrder
             };
             role = await repository.CreateAsync(role);
@@ -127,7 +127,7 @@ public class TaktRoleSeedData : ITaktSeedDataCoordinator
             role.RoleName = roleName;
             role.DataScope = dataScope;
             role.IsBuiltIn = TaktYesNo.Yes;
-            role.RoleStatus = (int)TaktCommonStatus.Enabled;
+            role.RoleStatus = TaktCommonStatus.Enabled;
             role.SortOrder = sortOrder;
 
             await repository.UpdateAsync(role);

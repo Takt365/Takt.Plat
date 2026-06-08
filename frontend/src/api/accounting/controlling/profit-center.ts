@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：profit-center.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -64,7 +64,7 @@ export function getProfitCenterById(id: string): Promise<ProfitCenter> {
 /**
  * 获取利润中心树形列表
  * @param {string} parentId parentId
- * @param {boolean} includeDisabled includeDisabled
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
  * @returns {Promise<ProfitCenterTree[]>} 树形数据
  */
 export function getProfitCenterTree(parentId: string, includeDisabled: boolean): Promise<ProfitCenterTree[]> {
@@ -132,7 +132,7 @@ export function deleteProfitCenterBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新利润中心状态
- * @param {ProfitCenterStatus} dto 状态DTO
+ * @param {ProfitCenterStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<ProfitCenter>} 利润中心DTO
  */
 export function updateProfitCenterStatus(dto: ProfitCenterStatus): Promise<ProfitCenter> {
@@ -195,11 +195,11 @@ export function getProfitCenterTemplate(sheetName?: string, templateName?: strin
 
 /**
  * 导入利润中心
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importProfitCenter(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importProfitCenter(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

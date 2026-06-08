@@ -14,6 +14,7 @@
     <div class="takt-single-table__body">
       <a-table
         class="ant-table-striped"
+        table-layout="fixed"
         :columns="resolvedDisplayColumns"
         :data-source="dataSource"
         :loading="loading"
@@ -69,11 +70,17 @@ import type {
   TablePaginationConfig
 } from 'ant-design-vue/es/table/interface'
 import {
+  filterMergedColumnsByDefaultVisible,
   filterTableColumnsByVisibleKeys,
-  getTableColumnKey,
   mergeDefaultColumns,
+  normalizeUserTableColumns,
   type TaktEntityScope,
+  type TaktTableLayoutMode,
 } from '@/utils/table-columns'
+import {
+  applyTableColumnPresentation,
+  resolveTableScrollConfig,
+} from '@/utils/table-scroll'
 import { useI18n } from 'vue-i18n'
 
 type TableRecord = Record<string, unknown>
@@ -121,10 +128,10 @@ interface Props {
   /** 总条数 */
   total?: number
   /**
-   * 实体基类作用域（与 DTO 继承 TenantDtoBase / CompanyDtoBase / ApprovalDtoBase 对齐）
+   * 实体基类作用域（与 DTO 继承 TenantDtoBase / CompanyDtoBase / ApprovalDtoBase 对齐，必填）
    * tenant → TaktTenantEntityBase；company → TaktCompanyEntityBase；approval → TaktApprovalEntityBase
    */
-  entityScope?: TaktEntityScope
+  entityScope: TaktEntityScope
   /** 是否合并审计字段列 */
   includeAuditFields?: boolean
   /** 可见列键（列设置抽屉）；空数组时仅展示业务列 columns */
@@ -133,11 +140,13 @@ interface Props {
   idColumnKey?: string | number
   /** 操作列键（默认 action） */
   actionColumnKey?: string | number
-  /** 大屏默认显示的非固定列数（不含 id、action；未传 visibleColumnKeys 且未启用列设置时不生效） */
+  /** 单表 8 个业务列 / 左树右表 4 个业务列（默认 single） */
+  tableMode?: TaktTableLayoutMode
+  /** @deprecated 请使用 tableMode；保留兼容旧页，不再从 merge 列截取 */
   largeScreenColumnCount?: number
-  /** 小屏默认显示的非固定列数 */
+  /** @deprecated 请使用 tableMode */
   smallScreenColumnCount?: number
-  /** 大屏断点（px） */
+  /** @deprecated 请使用 tableMode */
   largeScreenBreakpoint?: number
 }
 
@@ -158,11 +167,11 @@ const props = withDefaults(defineProps<Props>(), {
   current: 1,
   pageSize: 20,
   total: 0,
-  entityScope: 'company',
   includeAuditFields: true,
   visibleColumnKeys: () => [],
   idColumnKey: 'id',
   actionColumnKey: 'action',
+  tableMode: 'single',
   smallScreenColumnCount: 5,
   largeScreenBreakpoint: 1200,
 })
@@ -204,82 +213,32 @@ const effectiveRowSelection = computed(() => {
   return props.rowSelection !== undefined && props.rowSelection !== null ? props.rowSelection : {}
 })
 
+/** 页面业务列（解包 Ref/ComputedRef） */
+const userColumns = computed((): TableColumnsType => normalizeUserTableColumns(props.columns))
+
 /** 合并实体基座字段后的完整列 */
 const mergedColumns = computed((): TableColumnsType =>
-  mergeDefaultColumns(props.columns, t, props.includeAuditFields, props.entityScope),
+  mergeDefaultColumns(userColumns.value, t, props.includeAuditFields, props.entityScope),
 )
-
-/** 响应式大屏检测 */
-const isLargeScreen = ref(window.innerWidth >= props.largeScreenBreakpoint)
-
-const handleWindowResize = () => {
-  isLargeScreen.value = window.innerWidth >= props.largeScreenBreakpoint
-}
-
-onMounted(() => {
-  window.addEventListener('resize', handleWindowResize)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleWindowResize)
-})
-
-/**
- * 按大屏/小屏配置截取默认可见列（id + 前 N 个非固定列 + action）
- * @param sourceColumns 已合并基座的列
- */
-const pickResponsiveDefaultColumns = (sourceColumns: TableColumnsType): TableColumnsType => {
-  const count = props.largeScreenColumnCount
-  if (count == null || count <= 0) {
-    return props.columns
-  }
-  const idKey = String(props.idColumnKey)
-  const actionKey = String(props.actionColumnKey)
-  const limit = isLargeScreen.value ? count : (props.smallScreenColumnCount ?? count)
-  const nonFixed = sourceColumns.filter((col) => {
-    const key = getTableColumnKey(col as ColumnType<TableRecord>)
-    return key != null && key !== idKey && key !== actionKey
-  })
-  const selected = nonFixed.slice(0, limit)
-  const idCol = sourceColumns.find((col) => getTableColumnKey(col as ColumnType<TableRecord>) === idKey)
-  const actionCol = sourceColumns.find((col) => getTableColumnKey(col as ColumnType<TableRecord>) === actionKey)
-  const result: TableColumnsType = []
-  if (idCol) result.push(idCol)
-  result.push(...selected)
-  if (actionCol) result.push(actionCol)
-  return result
-}
 
 /** 列设置过滤前的展示列源 */
 const displayColumnSource = computed((): TableColumnsType => {
   const keys = props.visibleColumnKeys ?? []
   if (keys.length > 0) {
-    return filterTableColumnsByVisibleKeys(mergedColumns.value, keys, props.columns)
+    return filterTableColumnsByVisibleKeys(mergedColumns.value, keys, mergedColumns.value)
   }
-  return pickResponsiveDefaultColumns(mergedColumns.value)
+  return filterMergedColumnsByDefaultVisible(mergedColumns.value, userColumns.value, {
+    idColumnKey: props.idColumnKey,
+    actionColumnKey: props.actionColumnKey,
+    tableMode: props.tableMode,
+    entityScope: props.entityScope,
+  })
 })
 
-/**
- * 为列补充默认宽度与 ellipsis
- * @param cols 列配置
- */
-const applyColumnPresentation = (cols: TableColumnsType): TableColumnsType => {
-  const visibleCount = cols.length
-  return cols.map((column) => {
-    const processedColumn = { ...column } as ResizableColumn & Record<string, unknown>
-    if (!processedColumn.width && visibleCount > 0) {
-      const viewportWidth = window.innerWidth - 40
-      processedColumn.width = Math.floor(viewportWidth / 9)
-    }
-    if (props.defaultEllipsis && !('ellipsis' in column)) {
-      processedColumn.ellipsis = true
-    }
-    return processedColumn
-  })
-}
-
 /** 最终传给 a-table 的列 */
-const resolvedDisplayColumns = computed(() => applyColumnPresentation(displayColumnSource.value))
+const resolvedDisplayColumns = computed(() =>
+  applyTableColumnPresentation(displayColumnSource.value, props.defaultEllipsis),
+)
 
 const handleResizeColumn = (w: number, col: ColumnType<unknown>) => {
   const mutableCol = col as ResizableColumn
@@ -287,31 +246,15 @@ const handleResizeColumn = (w: number, col: ColumnType<unknown>) => {
   emit('resize-column', w, mutableCol)
 }
 
-const scrollConfig = computed(() => {
-  const config: { x?: number | string | true; y?: number | string } = {
-    ...props.scroll,
-  }
-  if (!config.x) {
-    const totalWidth = resolvedDisplayColumns.value.reduce((sum: number, col) => {
-      const width = (col as ResizableColumn).width
-      return sum + (typeof width === 'number' ? width : 0)
-    }, 0)
-    if (totalWidth > 0 && resolvedDisplayColumns.value.every((col) => (col as ResizableColumn).width)) {
-      config.x = totalWidth
-    } else {
-      config.x = 'max-content'
-    }
-  }
-  if (shouldUseVirtual.value) {
-    if (!config.y) {
-      config.y = 600
-    }
-  }
-  if (props.showPagination && !config.y) {
-    config.y = 'calc(100vh - 320px)'
-  }
-  return config
-})
+const scrollConfig = computed(() =>
+  resolveTableScrollConfig({
+    columns: resolvedDisplayColumns.value,
+    scroll: props.scroll,
+    includeRowSelection: effectiveRowSelection.value != null,
+    enableVerticalScroll: shouldUseVirtual.value || props.showPagination,
+    verticalScrollHeight: props.showPagination ? 'calc(100vh - 320px)' : 600,
+  }),
+)
 
 /**
  * 分页页码变更
@@ -353,6 +296,7 @@ defineExpose({
 .takt-single-table {
   margin: 0 4px 4px 4px;
   width: 100%;
+  min-width: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -362,6 +306,16 @@ defineExpose({
 .takt-single-table__body {
   flex: 1;
   min-height: 0;
+  min-width: 0;
   overflow: hidden;
+}
+
+.takt-single-table__body :deep(.ant-table-wrapper) {
+  width: 100%;
+  min-width: 0;
+}
+
+.takt-single-table__body :deep(.ant-table-container) {
+  min-width: 0;
 }
 </style>

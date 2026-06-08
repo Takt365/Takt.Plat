@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：quartz-log.d.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -14,6 +14,10 @@ import type {
   CompanyDtoBase,
   TaktPagedQuery
 } from '@/types/common';
+
+import type {
+  QuartzTask
+} from '@/types/foundation/quartz-task';
 
 /**
  * Quartz 任务执行日志实体
@@ -31,7 +35,7 @@ export interface QuartzLog extends CompanyDtoBase {
   /**
    * 关联定时任务 ID
    */
-  quartzTaskId?: string;
+  quartzTaskId: string;
 
   /**
    * 关联定时任务 名称（填充字段）
@@ -39,34 +43,19 @@ export interface QuartzLog extends CompanyDtoBase {
   quartzTaskName?: string;
 
   /**
-   * 触发用户（系统任务为 system）
+   * 任务名称（执行时快照）
    */
-  userName?: string;
+  taskName: string;
 
   /**
-   * Job 名称
-   */
-  jobName: string;
-
-  /**
-   * Job 分组
+   * 任务组名（执行时快照）
    */
   jobGroup: string;
 
   /**
-   * Trigger 名称
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
    */
-  triggerName?: string;
-
-  /**
-   * 执行状态（0=成功，1=失败）
-   */
-  executeStatus: number;
-
-  /**
-   * 错误消息
-   */
-  errorMsg?: string;
+  taskType: number;
 
   /**
    * 执行时间
@@ -74,9 +63,44 @@ export interface QuartzLog extends CompanyDtoBase {
   executeTime: string;
 
   /**
-   * 耗时（毫秒）
+   * 执行耗时（毫秒）
    */
-  costTime: number;
+  executeDuration: string;
+
+  /**
+   * 执行参数
+   */
+  executeParams?: string;
+
+  /**
+   * 执行消息
+   */
+  executeMessage?: string;
+
+  /**
+   * 错误信息
+   */
+  errorInfo?: string;
+
+  /**
+   * 执行机器 IP
+   */
+  executeIp?: string;
+
+  /**
+   * 执行机器名
+   */
+  executeHost?: string;
+
+  /**
+   * 执行状态（0=失败，1=成功）
+   */
+  executeStatus: number;
+
+  /**
+   * 关联的定时任务 （主表：TaktQuartzTask）
+   */
+  quartzTask?: QuartzTask;
 
 }
 
@@ -104,34 +128,19 @@ export interface QuartzLogQuery extends TaktPagedQuery {
   quartzTaskId?: string;
 
   /**
-   * 触发用户（系统任务为 system）
+   * 任务名称（执行时快照）
    */
-  userName?: string;
+  taskName?: string;
 
   /**
-   * Job 名称
-   */
-  jobName?: string;
-
-  /**
-   * Job 分组
+   * 任务组名（执行时快照）
    */
   jobGroup?: string;
 
   /**
-   * Trigger 名称
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
    */
-  triggerName?: string;
-
-  /**
-   * 执行状态（0=成功，1=失败）
-   */
-  executeStatus?: number;
-
-  /**
-   * 错误消息
-   */
-  errorMsg?: string;
+  taskType?: number;
 
   /**
    * 执行时间（范围查询-开始）
@@ -144,9 +153,39 @@ export interface QuartzLogQuery extends TaktPagedQuery {
   executeTimeEnd?: string;
 
   /**
-   * 耗时（毫秒）
+   * 执行耗时（毫秒）
    */
-  costTime?: number;
+  executeDuration?: string;
+
+  /**
+   * 执行参数
+   */
+  executeParams?: string;
+
+  /**
+   * 执行消息
+   */
+  executeMessage?: string;
+
+  /**
+   * 错误信息
+   */
+  errorInfo?: string;
+
+  /**
+   * 执行机器 IP
+   */
+  executeIp?: string;
+
+  /**
+   * 执行机器名
+   */
+  executeHost?: string;
+
+  /**
+   * 执行状态（0=失败，1=成功）
+   */
+  executeStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -195,37 +234,22 @@ export interface QuartzLogCreate {
   /**
    * 关联定时任务 ID
    */
-  quartzTaskId?: string;
+  quartzTaskId: string;
 
   /**
-   * 触发用户（系统任务为 system）
+   * 任务名称（执行时快照）
    */
-  userName?: string;
+  taskName: string;
 
   /**
-   * Job 名称
-   */
-  jobName: string;
-
-  /**
-   * Job 分组
+   * 任务组名（执行时快照）
    */
   jobGroup: string;
 
   /**
-   * Trigger 名称
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
    */
-  triggerName?: string;
-
-  /**
-   * 执行状态（0=成功，1=失败）
-   */
-  executeStatus: number;
-
-  /**
-   * 错误消息
-   */
-  errorMsg?: string;
+  taskType: number;
 
   /**
    * 执行时间
@@ -233,9 +257,39 @@ export interface QuartzLogCreate {
   executeTime: string;
 
   /**
-   * 耗时（毫秒）
+   * 执行耗时（毫秒）
    */
-  costTime: number;
+  executeDuration: string;
+
+  /**
+   * 执行参数
+   */
+  executeParams?: string;
+
+  /**
+   * 执行消息
+   */
+  executeMessage?: string;
+
+  /**
+   * 错误信息
+   */
+  errorInfo?: string;
+
+  /**
+   * 执行机器 IP
+   */
+  executeIp?: string;
+
+  /**
+   * 执行机器名
+   */
+  executeHost?: string;
+
+  /**
+   * 执行状态（0=失败，1=成功）
+   */
+  executeStatus: number;
 
   /**
    * 扩展字段JSON
@@ -277,7 +331,7 @@ export interface QuartzLogStatus {
   quartzLogId: string;
 
   /**
-   * 执行状态（0=成功，1=失败）
+   * 执行状态（0=失败，1=成功）
    */
   executeStatus: number;
 
@@ -303,37 +357,22 @@ export interface QuartzLogExport {
   /**
    * 关联定时任务 ID
    */
-  quartzTaskId?: string;
+  quartzTaskId: string;
 
   /**
-   * 触发用户（系统任务为 system）
+   * 任务名称（执行时快照）
    */
-  userName?: string;
+  taskName: string;
 
   /**
-   * Job 名称
-   */
-  jobName: string;
-
-  /**
-   * Job 分组
+   * 任务组名（执行时快照）
    */
   jobGroup: string;
 
   /**
-   * Trigger 名称
+   * 任务类型（1=程序集 2=网络请求 3=SQL语句）
    */
-  triggerName?: string;
-
-  /**
-   * 执行状态（0=成功，1=失败）
-   */
-  executeStatus: number;
-
-  /**
-   * 错误消息
-   */
-  errorMsg?: string;
+  taskType: number;
 
   /**
    * 执行时间
@@ -341,9 +380,39 @@ export interface QuartzLogExport {
   executeTime: string;
 
   /**
-   * 耗时（毫秒）
+   * 执行耗时（毫秒）
    */
-  costTime: number;
+  executeDuration: string;
+
+  /**
+   * 执行参数
+   */
+  executeParams?: string;
+
+  /**
+   * 执行消息
+   */
+  executeMessage?: string;
+
+  /**
+   * 错误信息
+   */
+  errorInfo?: string;
+
+  /**
+   * 执行机器 IP
+   */
+  executeIp?: string;
+
+  /**
+   * 执行机器名
+   */
+  executeHost?: string;
+
+  /**
+   * 执行状态（0=失败，1=成功）
+   */
+  executeStatus: number;
 
   /**
    * 扩展字段JSON

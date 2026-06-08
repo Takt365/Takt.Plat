@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -218,13 +218,22 @@ public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcOrder.judgedescription", "zh-HK", "判定说明", "判定说明"),
 
             // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "en-US", "items", "IQC检验单明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.iqcOrder.items", "en-US", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
             // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "ja-JP", "items", "IQC检验单明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.iqcOrder.items", "ja-JP", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
             // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "zh-CN", "items", "IQC检验单明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.iqcOrder.items", "zh-CN", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
             // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "zh-HK", "items", "IQC检验单明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.iqcOrder.items", "zh-HK", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
+
+            // entity.iqcOrder.changelogs
+            new TranslationSeedItem("entity.iqcOrder.changelogs", "en-US", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.iqcOrder.changelogs
+            new TranslationSeedItem("entity.iqcOrder.changelogs", "ja-JP", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.iqcOrder.changelogs
+            new TranslationSeedItem("entity.iqcOrder.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.iqcOrder.changelogs
+            new TranslationSeedItem("entity.iqcOrder.changelogs", "zh-HK", "变更日志列表", "变更日志列表（主子表关系）"),
         };
     }
 

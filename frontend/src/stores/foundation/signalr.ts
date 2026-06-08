@@ -30,6 +30,12 @@ import { useTenantStore } from '@/stores/identity/tenant';
 import { taktSignalRManager } from '@/utils/takt-signalr';
 import { EventBus } from '@/utils/event-bus';
 import { createLogger } from '@/utils/logger';
+import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import {
+  STORE_I18N_FEEDBACK_CONNECT_SUCCESS,
+  STORE_I18N_FEEDBACK_SIGNALR_ERROR,
+  STORE_I18N_TIP_FORCE_LOGOUT,
+} from '@/utils/takt-store-i18n';
 
 const signalrStoreLogger = createLogger('signalr-store');
 
@@ -116,7 +122,7 @@ export const useSignalRStore = defineStore('signalr', () => {
   function handleForceLogout(event: ForceLogoutEvent): void {
     EventBus.emit('notification:show', {
       type: 'warning',
-      message: event.message || '您已被强制下线',
+      message: event.message || translateLocaleMessage(STORE_I18N_TIP_FORCE_LOGOUT),
     });
     EventBus.emit('user:logout', undefined);
   }
@@ -173,7 +179,7 @@ export const useSignalRStore = defineStore('signalr', () => {
         onMessageStatisticsUpdated: applyMessageStatistics,
         onOnlineMessage: (event) => {
           notification.success({
-            message: '连接成功',
+            message: translateLocaleMessage(STORE_I18N_FEEDBACK_CONNECT_SUCCESS),
             description: String(event.message ?? ''),
             placement: 'topRight',
             duration: 5,
@@ -189,7 +195,7 @@ export const useSignalRStore = defineStore('signalr', () => {
         onError: (error) => {
           EventBus.emit('notification:show', {
             type: 'error',
-            message: error.message || 'SignalR 发生错误',
+            message: error.message || translateLocaleMessage(STORE_I18N_FEEDBACK_SIGNALR_ERROR),
           });
         },
       });

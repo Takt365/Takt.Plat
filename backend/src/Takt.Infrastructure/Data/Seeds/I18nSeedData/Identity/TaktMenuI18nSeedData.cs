@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMenu 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -253,6 +253,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // entity.menu.status
             new TranslationSeedItem("entity.menu.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
 
+            // entity.menu.isbuiltin
+            new TranslationSeedItem("entity.menu.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 种子菜单为内置，不允许删除"),
+            // entity.menu.isbuiltin
+            new TranslationSeedItem("entity.menu.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 种子菜单为内置，不允许删除"),
+            // entity.menu.isbuiltin
+            new TranslationSeedItem("entity.menu.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子菜单为内置，不允许删除"),
+            // entity.menu.isbuiltin
+            new TranslationSeedItem("entity.menu.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 种子菜单为内置，不允许删除"),
+
             // entity.menu.description
             new TranslationSeedItem("entity.menu.description", "en-US", "菜单描述", "菜单描述"),
             // entity.menu.description
@@ -263,13 +272,13 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.menu.description", "zh-HK", "菜单描述", "菜单描述"),
 
             // entity.menu.rolemenus
-            new TranslationSeedItem("entity.menu.rolemenus", "en-US", "roleMenus", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.menu.rolemenus", "en-US", "拥有该菜单权限的角色关联", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
             // entity.menu.rolemenus
-            new TranslationSeedItem("entity.menu.rolemenus", "ja-JP", "roleMenus", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.menu.rolemenus", "ja-JP", "拥有该菜单权限的角色关联", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
             // entity.menu.rolemenus
-            new TranslationSeedItem("entity.menu.rolemenus", "zh-CN", "roleMenus", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.menu.rolemenus", "zh-CN", "拥有该菜单权限的角色关联", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
             // entity.menu.rolemenus
-            new TranslationSeedItem("entity.menu.rolemenus", "zh-HK", "roleMenus", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.menu.rolemenus", "zh-HK", "拥有该菜单权限的角色关联", "拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）"),
         };
     }
 

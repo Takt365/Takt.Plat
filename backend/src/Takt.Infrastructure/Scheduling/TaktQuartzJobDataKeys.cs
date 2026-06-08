@@ -33,14 +33,49 @@ public static class TaktQuartzJobDataKeys
     public const string QuartzTaskId = "QuartzTaskId";
 
     /// <summary>
-    /// 任务处理器类型
+    /// 任务类型
     /// </summary>
-    public const string JobType = "JobType";
+    public const string TaskType = "TaskType";
 
     /// <summary>
-    /// 任务参数 JSON
+    /// 程序集名称
     /// </summary>
-    public const string JobParams = "JobParams";
+    public const string AssemblyName = "AssemblyName";
+
+    /// <summary>
+    /// 任务类名
+    /// </summary>
+    public const string ClassName = "ClassName";
+
+    /// <summary>
+    /// API 执行地址
+    /// </summary>
+    public const string ApiUrl = "ApiUrl";
+
+    /// <summary>
+    /// 网络请求方式
+    /// </summary>
+    public const string RequestMethod = "RequestMethod";
+
+    /// <summary>
+    /// SQL 语句
+    /// </summary>
+    public const string SqlScript = "SqlScript";
+
+    /// <summary>
+    /// 触发器类型
+    /// </summary>
+    public const string TriggerType = "TriggerType";
+
+    /// <summary>
+    /// 执行间隔时间（秒）
+    /// </summary>
+    public const string IntervalSeconds = "IntervalSeconds";
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    public const string ExecuteParams = "ExecuteParams";
 
     /// <summary>
     /// 触发用户

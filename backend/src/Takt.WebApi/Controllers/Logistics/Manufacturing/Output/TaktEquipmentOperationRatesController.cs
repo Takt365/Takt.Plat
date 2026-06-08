@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktEquipmentOperationRatesController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：机器稼动率控制器
 // 
@@ -183,7 +183,7 @@ public class TaktEquipmentOperationRatesController : TaktControllerBase
     /// <summary>
     /// 更新机器稼动率状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>机器稼动率DTO</returns>
     [TaktPermission("logistics:manufacturing:output:equipmentoperationrate:update", "更新机器稼动率状态")]
     [HttpPut("status")]

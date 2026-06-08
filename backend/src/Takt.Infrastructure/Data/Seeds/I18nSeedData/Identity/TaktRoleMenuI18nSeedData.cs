@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleMenuI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoleMenu 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -108,6 +108,24 @@ public class TaktRoleMenuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.roleMenu.menuid", "zh-CN", "菜单ID", "菜单ID"),
             // entity.roleMenu.menuid
             new TranslationSeedItem("entity.roleMenu.menuid", "zh-HK", "菜单ID", "菜单ID"),
+
+            // entity.roleMenu.role
+            new TranslationSeedItem("entity.roleMenu.role", "en-US", "角色", "角色（多对一）"),
+            // entity.roleMenu.role
+            new TranslationSeedItem("entity.roleMenu.role", "ja-JP", "角色", "角色（多对一）"),
+            // entity.roleMenu.role
+            new TranslationSeedItem("entity.roleMenu.role", "zh-CN", "角色", "角色（多对一）"),
+            // entity.roleMenu.role
+            new TranslationSeedItem("entity.roleMenu.role", "zh-HK", "角色", "角色（多对一）"),
+
+            // entity.roleMenu.menu
+            new TranslationSeedItem("entity.roleMenu.menu", "en-US", "菜单", "菜单（多对一）"),
+            // entity.roleMenu.menu
+            new TranslationSeedItem("entity.roleMenu.menu", "ja-JP", "菜单", "菜单（多对一）"),
+            // entity.roleMenu.menu
+            new TranslationSeedItem("entity.roleMenu.menu", "zh-CN", "菜单", "菜单（多对一）"),
+            // entity.roleMenu.menu
+            new TranslationSeedItem("entity.roleMenu.menu", "zh-HK", "菜单", "菜单（多对一）"),
         };
     }
 

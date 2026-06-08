@@ -177,12 +177,13 @@ import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import type { Dayjs } from 'dayjs'
 import { useUserStore } from '@/stores/identity/user'
-import { getFlowSchemeByProcessKey } from '@/api/workflow/scheme'
-import { getFlowFormById, getFlowFormByCode } from '@/api/workflow/form'
+import { getFlowSchemeByProcessKey } from '@/api/workflow/flow-scheme'
+import { getFlowFormById, getFlowFormByCode } from '@/api/workflow/flow-form'
 import { getEmployeeOptions } from '@/api/human-resource/personnel/employee'
 import TaktFlowLogicDesigner from '@/components/business/takt-flow-logic-designer/index.vue'
 import type { FlowScheme } from '@/types/workflow/flow-scheme'
 import type { FlowForm } from '@/types/workflow/flow-form'
+import type { UserInfoResponse } from '@/types/identity/login'
 
 const { t } = useI18n()
 
@@ -208,11 +209,14 @@ const form = props.form
 const formRef = ref()
 const activeTab = ref('fill')
 const { userInfo } = storeToRefs(useUserStore())
-const currentUserDisplayName = computed(() => {
-  const u = userInfo.value
+
+/** 从登录用户信息解析展示名（优先级：员工姓名 > 昵称 > 用户名） */
+function resolveUserDisplayName(u: UserInfoResponse | null | undefined): string {
   if (!u) return ''
-  return (u.realName?.trim() || u.nickName?.trim() || u.userName || '').trim() || ''
-})
+  return (u.employeeName?.trim() || u.nickname?.trim() || u.username || '').trim() || ''
+}
+
+const currentUserDisplayName = computed(() => resolveUserDisplayName(userInfo.value))
 const applicantEmployeeId = ref<string>('')
 const employeeOptions = ref<{ dictLabel: string; dictValue: string | number }[]>([])
 const employeeOptionsLoading = ref(false)
@@ -352,7 +356,7 @@ function applyDefaultApplicant(list: { dictLabel?: string; dictValue?: string | 
     }
   }
   const u = userInfo.value
-  const displayName = (u?.realName?.trim() || u?.nickName?.trim() || u?.userName || '').trim()
+  const displayName = resolveUserDisplayName(u)
   if (!displayName) return
   const found = opts.find((o) => (o.dictLabel ?? '').trim() === displayName)
   if (found) applicantEmployeeId.value = String(found.dictValue ?? '')

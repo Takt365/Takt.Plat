@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserCompanyI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUserCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,6 +99,33 @@ public class TaktUserCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.userCompany.userid", "zh-CN", "用户ID", "用户ID"),
             // entity.userCompany.userid
             new TranslationSeedItem("entity.userCompany.userid", "zh-HK", "用户ID", "用户ID"),
+
+            // entity.userCompany.isdefault
+            new TranslationSeedItem("entity.userCompany.isdefault", "en-US", "是否默认公司", "是否默认登录公司（1=是，0=否；同一用户在同一租户下仅应有一条为是）"),
+            // entity.userCompany.isdefault
+            new TranslationSeedItem("entity.userCompany.isdefault", "ja-JP", "是否默认公司", "是否默认登录公司（1=是，0=否；同一用户在同一租户下仅应有一条为是）"),
+            // entity.userCompany.isdefault
+            new TranslationSeedItem("entity.userCompany.isdefault", "zh-CN", "是否默认公司", "是否默认登录公司（1=是，0=否；同一用户在同一租户下仅应有一条为是）"),
+            // entity.userCompany.isdefault
+            new TranslationSeedItem("entity.userCompany.isdefault", "zh-HK", "是否默认公司", "是否默认登录公司（1=是，0=否；同一用户在同一租户下仅应有一条为是）"),
+
+            // entity.userCompany.user
+            new TranslationSeedItem("entity.userCompany.user", "en-US", "用户", "用户（多对一）"),
+            // entity.userCompany.user
+            new TranslationSeedItem("entity.userCompany.user", "ja-JP", "用户", "用户（多对一）"),
+            // entity.userCompany.user
+            new TranslationSeedItem("entity.userCompany.user", "zh-CN", "用户", "用户（多对一）"),
+            // entity.userCompany.user
+            new TranslationSeedItem("entity.userCompany.user", "zh-HK", "用户", "用户（多对一）"),
+
+            // entity.userCompany.company
+            new TranslationSeedItem("entity.userCompany.company", "en-US", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
+            // entity.userCompany.company
+            new TranslationSeedItem("entity.userCompany.company", "ja-JP", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
+            // entity.userCompany.company
+            new TranslationSeedItem("entity.userCompany.company", "zh-CN", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
+            // entity.userCompany.company
+            new TranslationSeedItem("entity.userCompany.company", "zh-HK", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
         };
     }
 

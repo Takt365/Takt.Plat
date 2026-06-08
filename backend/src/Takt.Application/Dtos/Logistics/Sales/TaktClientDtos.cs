@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktClientDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Client 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktClient 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Sales;
 
@@ -168,7 +169,7 @@ public class TaktClientDto : TaktCompanyDtoBase
     /// <summary>
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
-    public int ClientStatus { get; set; } = 0;
+    public TaktCommonStatus ClientStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -330,7 +331,7 @@ public class TaktClientQueryDto : TaktPagedQuery
     /// <summary>
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
-    public int? ClientStatus { get; set; }
+    public TaktCommonStatus? ClientStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -519,7 +520,7 @@ public class TaktClientCreateDto
     /// <summary>
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
-    public int ClientStatus { get; set; } = 0;
+    public TaktCommonStatus ClientStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -579,7 +580,7 @@ public class TaktClientStatusDto
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "客户端状态（1=启用，0=禁用）不能为空")]
-    public int ClientStatus { get; set; } = 0;
+    public TaktCommonStatus ClientStatus { get; set; }
 }
 
 // ========================================
@@ -943,7 +944,7 @@ public class TaktClientExportDto
     /// <summary>
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
-    public int ClientStatus { get; set; } = 0;
+    public TaktCommonStatus ClientStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）

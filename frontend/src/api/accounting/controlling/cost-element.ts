@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：cost-element.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -64,7 +64,7 @@ export function getCostElementById(id: string): Promise<CostElement> {
 /**
  * 获取成本要素树形列表
  * @param {string} parentId parentId
- * @param {boolean} includeDisabled includeDisabled
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
  * @returns {Promise<CostElementTree[]>} 树形数据
  */
 export function getCostElementTree(parentId: string, includeDisabled: boolean): Promise<CostElementTree[]> {
@@ -132,7 +132,7 @@ export function deleteCostElementBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新成本要素状态
- * @param {CostElementStatus} dto 状态DTO
+ * @param {CostElementStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<CostElement>} 成本要素DTO
  */
 export function updateCostElementStatus(dto: CostElementStatus): Promise<CostElement> {
@@ -195,11 +195,11 @@ export function getCostElementTemplate(sheetName?: string, templateName?: string
 
 /**
  * 导入成本要素
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importCostElement(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importCostElement(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserRoleI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUserRole 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -108,6 +108,24 @@ public class TaktUserRoleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.userRole.roleid", "zh-CN", "角色ID", "角色ID"),
             // entity.userRole.roleid
             new TranslationSeedItem("entity.userRole.roleid", "zh-HK", "角色ID", "角色ID"),
+
+            // entity.userRole.user
+            new TranslationSeedItem("entity.userRole.user", "en-US", "用户", "用户（多对一）"),
+            // entity.userRole.user
+            new TranslationSeedItem("entity.userRole.user", "ja-JP", "用户", "用户（多对一）"),
+            // entity.userRole.user
+            new TranslationSeedItem("entity.userRole.user", "zh-CN", "用户", "用户（多对一）"),
+            // entity.userRole.user
+            new TranslationSeedItem("entity.userRole.user", "zh-HK", "用户", "用户（多对一）"),
+
+            // entity.userRole.role
+            new TranslationSeedItem("entity.userRole.role", "en-US", "角色", "角色（多对一）"),
+            // entity.userRole.role
+            new TranslationSeedItem("entity.userRole.role", "ja-JP", "角色", "角色（多对一）"),
+            // entity.userRole.role
+            new TranslationSeedItem("entity.userRole.role", "zh-CN", "角色", "角色（多对一）"),
+            // entity.userRole.role
+            new TranslationSeedItem("entity.userRole.role", "zh-HK", "角色", "角色（多对一）"),
         };
     }
 

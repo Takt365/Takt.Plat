@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceScale 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -144,6 +144,15 @@ public class TaktSalesPriceScaleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesPriceScale.scaleprice", "zh-CN", "阶梯价格", "阶梯价格（精确到分，存储为整数，单位为分）"),
             // entity.salesPriceScale.scaleprice
             new TranslationSeedItem("entity.salesPriceScale.scaleprice", "zh-HK", "阶梯价格", "阶梯价格（精确到分，存储为整数，单位为分）"),
+
+            // entity.salesPriceScale.priceitem
+            new TranslationSeedItem("entity.salesPriceScale.priceitem", "en-US", "销售价格明细", "销售价格明细（主表）"),
+            // entity.salesPriceScale.priceitem
+            new TranslationSeedItem("entity.salesPriceScale.priceitem", "ja-JP", "销售价格明细", "销售价格明细（主表）"),
+            // entity.salesPriceScale.priceitem
+            new TranslationSeedItem("entity.salesPriceScale.priceitem", "zh-CN", "销售价格明细", "销售价格明细（主表）"),
+            // entity.salesPriceScale.priceitem
+            new TranslationSeedItem("entity.salesPriceScale.priceitem", "zh-HK", "销售价格明细", "销售价格明细（主表）"),
         };
     }
 

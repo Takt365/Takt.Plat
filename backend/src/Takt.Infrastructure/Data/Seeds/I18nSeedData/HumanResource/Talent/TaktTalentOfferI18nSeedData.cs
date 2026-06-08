@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentOfferI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentOffer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,6 +171,24 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentOffer.reason", "zh-CN", "录用说明", "录用说明"),
             // entity.talentOffer.reason
             new TranslationSeedItem("entity.talentOffer.reason", "zh-HK", "录用说明", "录用说明"),
+
+            // entity.talentOffer.interview
+            new TranslationSeedItem("entity.talentOffer.interview", "en-US", "面试安排", "面试安排"),
+            // entity.talentOffer.interview
+            new TranslationSeedItem("entity.talentOffer.interview", "ja-JP", "面试安排", "面试安排"),
+            // entity.talentOffer.interview
+            new TranslationSeedItem("entity.talentOffer.interview", "zh-CN", "面试安排", "面试安排"),
+            // entity.talentOffer.interview
+            new TranslationSeedItem("entity.talentOffer.interview", "zh-HK", "面试安排", "面试安排"),
+
+            // entity.talentOffer.employeeonboardings
+            new TranslationSeedItem("entity.talentOffer.employeeonboardings", "en-US", "入职待办", "入职待办"),
+            // entity.talentOffer.employeeonboardings
+            new TranslationSeedItem("entity.talentOffer.employeeonboardings", "ja-JP", "入职待办", "入职待办"),
+            // entity.talentOffer.employeeonboardings
+            new TranslationSeedItem("entity.talentOffer.employeeonboardings", "zh-CN", "入职待办", "入职待办"),
+            // entity.talentOffer.employeeonboardings
+            new TranslationSeedItem("entity.talentOffer.employeeonboardings", "zh-HK", "入职待办", "入职待办"),
         };
     }
 

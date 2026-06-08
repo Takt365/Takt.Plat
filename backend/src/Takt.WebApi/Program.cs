@@ -110,7 +110,9 @@ try
         excelOptions.Export.MaxRowsPerRequest,
         excelOptions.Export.MaxRowsPerSheet,
         excelOptions.Export.MaxSheetsPerFile);
-    
+
+    builder.Services.Configure<TaktFileUploadOptions>(
+        builder.Configuration.GetSection(TaktFileUploadOptions.SectionName));
     var authenticationOptions = builder.Configuration.RequireAuthentication();
     builder.Services.Configure<TaktAuthenticationOptions>(
         builder.Configuration.GetSection(TaktAuthenticationOptions.SectionName));

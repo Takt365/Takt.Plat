@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktClientValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Client 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktClient 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Logistics.Sales;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Logistics.Sales;
 
@@ -81,6 +82,8 @@ public class TaktClientCreateValidator : AbstractValidator<TaktClientCreateDto>
             .MaximumLength(100).WithMessage("平台名称长度不能超过100个字符");
         RuleFor(x => x.StoreName)
             .MaximumLength(100).WithMessage("店铺名称长度不能超过100个字符");
+        RuleFor(x => x.ClientStatus)
+            .IsInEnum().WithMessage("客户端状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)

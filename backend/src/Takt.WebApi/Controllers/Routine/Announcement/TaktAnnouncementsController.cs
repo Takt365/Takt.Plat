@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.Announcement
 // 文件名称：TaktAnnouncementsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公告通知控制器
 // 
@@ -183,7 +183,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// <summary>
     /// 更新公告通知状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO（TaktAnnouncementStatus 枚举）</param>
     /// <returns>公告通知DTO</returns>
     [TaktPermission("routine:announcement:announcement:update", "更新公告通知状态")]
     [HttpPut("status")]

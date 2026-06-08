@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/compensation-benefits
 // 文件名称：tax-calc.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/compensation-benefits 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteTaxCalcBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新个税计算规则状态
- * @param {TaxCalcStatus} dto 状态DTO
+ * @param {TaxCalcStatus} dto 状态 DTO
  * @returns {Promise<TaxCalc>} 个税计算规则DTO
  */
 export function updateTaxCalcStatus(dto: TaxCalcStatus): Promise<TaxCalc> {
@@ -163,11 +163,11 @@ export function getTaxCalcTemplate(sheetName?: string, templateName?: string): P
 
 /**
  * 导入个税计算规则
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importTaxCalc(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importTaxCalc(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

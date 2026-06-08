@@ -138,7 +138,7 @@ loading    列表/提交 async + loading 态
 |------|------|
 | `generate-all.cjs` | 全栈 8 步流水线 |
 | `generate-from-backend.cjs` | 前端 `api/`、`types/` |
-| `generate-vue-from-api.cjs` | `index.vue` + `*-form.vue`（单表/主子表） |
+| `generate-vue-all-from-api.cjs` | `index.vue` + `*-form.vue`（串联 CRUD / TREE / Master-Detail） |
 | `generate-services-from-dtos.cjs` | 服务 |
 | `generate-controllers-from-services.cjs` | 控制器 |
 

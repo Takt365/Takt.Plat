@@ -6,5 +6,8 @@ export default {
     columndrawer: {
       fixed: '固定',
     },
-  }
+    querydrawer: {
+      fieldsetting: '検索項目',
+    },
+  },
 }

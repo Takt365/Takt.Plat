@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/organization
 // 文件名称：dept.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/organization 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -64,7 +64,7 @@ export function getDeptById(id: string): Promise<Dept> {
 /**
  * 获取部门树形列表
  * @param {string} parentId parentId
- * @param {boolean} includeDisabled includeDisabled
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
  * @returns {Promise<DeptTree[]>} 树形数据
  */
 export function getDeptTree(parentId: string, includeDisabled: boolean): Promise<DeptTree[]> {
@@ -132,7 +132,7 @@ export function deleteDeptBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新部门状态
- * @param {DeptStatus} dto 状态DTO
+ * @param {DeptStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<Dept>} 部门DTO
  */
 export function updateDeptStatus(dto: DeptStatus): Promise<Dept> {
@@ -195,11 +195,11 @@ export function getDeptTemplate(sheetName?: string, templateName?: string): Prom
 
 /**
  * 导入部门
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importDept(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importDept(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

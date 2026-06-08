@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：production-team.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteProductionTeamBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新生产班组状态
- * @param {ProductionTeamStatus} dto 状态DTO
+ * @param {ProductionTeamStatus} dto 状态 DTO（TaktCommonStatus 枚举）
  * @returns {Promise<ProductionTeam>} 生产班组DTO
  */
 export function updateProductionTeamStatus(dto: ProductionTeamStatus): Promise<ProductionTeam> {
@@ -163,11 +163,11 @@ export function getProductionTeamTemplate(sheetName?: string, templateName?: str
 
 /**
  * 导入生产班组
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importProductionTeam(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importProductionTeam(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

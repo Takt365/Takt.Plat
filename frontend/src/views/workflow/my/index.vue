@@ -20,7 +20,7 @@
       @reset="handleReset"
     />
     <TaktToolsBar
-      export-permission="workflow:my:export"
+      export-permission="workflow:instance:export"
       :show-create="false"
       :show-update="false"
       :show-delete="false"
@@ -39,7 +39,9 @@
       @start-flow="goStartFlow"
     />
     <TaktSingleTable
+      entity-scope="company"
       :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
@@ -48,13 +50,14 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'instanceStatus'">
-          <a-tag :color="statusColor((record as FlowInstance).instanceStatus)">
-            {{ statusText((record as FlowInstance).instanceStatus) }}
+          <a-tag :color="statusColor((record as FlowEngineListRow).instanceStatus)">
+            {{ statusText((record as FlowEngineListRow).instanceStatus) }}
           </a-tag>
         </template>
         <template v-else-if="column.key === 'action'">
           <a-space>
             <a-button
+              v-permission="'workflow:my:detail'"
               type="link"
               size="small"
               @click="showDetail(asFlowInstance(record))"
@@ -62,7 +65,8 @@
               {{ t('common.page.button.detail') }}
             </a-button>
             <a-button
-              v-if="((record as FlowInstance).instanceStatus === 0 || (record as FlowInstance).instanceStatus === 5) && isStarter(asFlowInstance(record))"
+              v-if="((record as FlowEngineListRow).instanceStatus === 0 || (record as FlowEngineListRow).instanceStatus === 5) && isStarter(asFlowInstance(record))"
+              v-permission="'workflow:instance:update'"
               type="link"
               size="small"
               @click="handleEdit(asFlowInstance(record))"
@@ -70,7 +74,8 @@
               {{ t('common.page.button.edit') }}
             </a-button>
             <a-button
-              v-if="(record as FlowInstance).instanceStatus === 5 && isStarter(asFlowInstance(record))"
+              v-if="(record as FlowEngineListRow).instanceStatus === 5 && isStarter(asFlowInstance(record))"
+              v-permission="'workflow:instance:start'"
               type="link"
               size="small"
               @click="handleStartFromDraft(asFlowInstance(record))"
@@ -78,7 +83,8 @@
               {{ t('workflow.instance.my.startFromDraft') }}
             </a-button>
             <a-button
-              v-if="(record as FlowInstance).instanceStatus === 0 && isStarter(asFlowInstance(record))"
+              v-if="(record as FlowEngineListRow).instanceStatus === 0 && isStarter(asFlowInstance(record))"
+              v-permission="'workflow:instance:revoke'"
               type="link"
               size="small"
               danger
@@ -99,7 +105,7 @@
     />
     <TaktModal
       v-model:open="detailVisible"
-      :title="t('workflow.instance.detailTitle')"
+      :title="t('common.dialog.title.detail', { entity: t('entity.flowinstance._self') })"
       width="640px"
       :footer="null"
       :cancel-text="t('common.page.button.cancel')"
@@ -112,7 +118,7 @@
     </TaktModal>
     <TaktModal
       v-model:open="editVisible"
-      :title="t('common.page.button.edit') + t('entity.flowinstance._self')"
+      :title="t('common.dialog.title.edit', { entity: t('entity.flowinstance._self') })"
       :confirm-loading="editLoading"
       :ok-text="t('common.page.button.ok')"
       :cancel-text="t('common.page.button.cancel')"
@@ -126,7 +132,7 @@
     </TaktModal>
     <TaktModal
       v-model:open="startFlowVisible"
-      :title="t('common.page.button.startFlow')"
+      :title="t('common.dialog.title.startflow')"
       width="900px"
       @cancel="closeStartFlowModal"
     >
@@ -142,12 +148,14 @@
           {{ t('common.page.button.cancel') }}
         </a-button>
         <a-button
+          v-permission="'workflow:instance:start'"
           :loading="startDraftLoading"
           @click="handleStartFlowDraft"
         >
           {{ t('workflow.instance.startFlowForm.saveDraft') }}
         </a-button>
         <a-button
+          v-permission="'workflow:instance:start'"
           type="primary"
           :loading="startFlowLoading"
           @click="handleStartFlowSubmit"
@@ -168,39 +176,38 @@ import { message, Modal } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import {
   buildFlowMyQuery,
-  getFlowInstanceMyList,
-  getFlowInstanceById,
-  revokeFlowInstance,
-  updateFlowInstance,
-  startFlowInstanceFromDraft,
-  exportFlowInstanceMy,
-  startFlowInstance,
-  createFlowInstanceDraft
-} from '@/api/workflow/instance'
-import { getFlowSchemeList } from '@/api/workflow/scheme'
+  getFlowEngineMyList,
+  getFlowEngineInstanceById,
+  revokeFlowEngineInstance,
+  startFlowEngineFromDraft,
+  startFlowEngineInstance,
+  createFlowEngineDraft
+} from '@/api/workflow/flow-engine'
+import { updateFlowInstance, exportFlowInstance } from '@/api/workflow/flow-instance'
+import { getFlowSchemeList } from '@/api/workflow/flow-scheme'
 import { useUserStore } from '@/stores/identity/user'
-import FlowInstanceDetailForm from './components/flow-instance-detail-form.vue'
+import FlowInstanceDetailForm from '../instance/components/flow-instance-detail-form.vue'
 import FlowInstanceEditForm from './components/flow-instance-edit-form.vue'
 import FlowStartForm from './components/flow-start-form.vue'
-import type { FlowInstance, FlowInstanceDetail, FlowStart as FlowStartRequest } from '@/types/workflow/flow-instance'
+import type { FlowStart, FlowEngineListRow, FlowInstanceDetailView, FlowMyInstanceQuery } from '@/types/workflow/flow-engine'
 import type { FlowScheme } from '@/types/workflow/flow-scheme'
-import type { FlowInstanceQuery } from '@/types/workflow/flow-instance'
+import type { FlowInstanceEditPayload } from '@/types/workflow/flow-instance'
 const toErrorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error))
 
 const { t } = useI18n()
 const loading = ref(false)
 const queryKeyword = ref('')
-const dataSource = ref<FlowInstance[]>([])
+const dataSource = ref<FlowEngineListRow[]>([])
 const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 const detailVisible = ref(false)
-const detail = ref<FlowInstanceDetail | null>(null)
+const detail = ref<FlowInstanceDetailView | null>(null)
 const editVisible = ref(false)
 const editFormRef = ref<InstanceType<typeof FlowInstanceEditForm> | null>(null)
 const editForm = reactive({ processTitle: '', frmData: '' })
 const editLoading = ref(false)
-const currentEditRecord = ref<FlowInstance | null>(null)
+const currentEditRecord = ref<FlowEngineListRow | null>(null)
 const exportLoading = ref(false)
 const startFlowVisible = ref(false)
 const startFlowForm = reactive<{ processKey: string; processTitle: string; frmData: string }>({ processKey: '', processTitle: '', frmData: '' })
@@ -235,13 +242,13 @@ function statusColor(s: number) {
   return m[s] ?? 'default'
 }
 
-/** 将 a-table bodyCell 的 record 断言为 FlowInstance */
-function asFlowInstance(r: Record<string, unknown>): FlowInstance {
-  return r as unknown as FlowInstance
+/** 将 a-table bodyCell 的 record 断言为 FlowEngineListRow */
+function asFlowInstance(r: Record<string, unknown>): FlowEngineListRow {
+  return r as unknown as FlowEngineListRow
 }
 
 /** 判断当前用户是否为该实例发起人 */
-function isStarter(r: FlowInstance) {
+function isStarter(r: FlowEngineListRow) {
   return String(r.startUserId) === String(currentUserId.value)
 }
 
@@ -279,12 +286,12 @@ async function handleStartFlowSubmit() {
   if (!ok || !startFlowForm.processKey?.trim()) return
   startFlowLoading.value = true
   try {
-    const payload: FlowStartRequest = { processKey: startFlowForm.processKey.trim() }
+    const payload: FlowStart = { processKey: startFlowForm.processKey.trim() }
     const processTitle = startFlowForm.processTitle.trim()
     const frmData = startFlowForm.frmData.trim()
     if (processTitle) payload.processTitle = processTitle
     if (frmData) payload.frmData = frmData
-    const res = await startFlowInstance(payload)
+    const res = await startFlowEngineInstance(payload)
     message.success(t('workflow.instance.startFlowForm.submitSuccess', { code: res.instanceCode }))
     closeStartFlowModal()
     loadList()
@@ -301,12 +308,12 @@ async function handleStartFlowDraft() {
   if (!ok || !startFlowForm.processKey?.trim()) return
   startDraftLoading.value = true
   try {
-    const payload: FlowStartRequest = { processKey: startFlowForm.processKey.trim() }
+    const payload: FlowStart = { processKey: startFlowForm.processKey.trim() }
     const processTitle = startFlowForm.processTitle.trim()
     const frmData = startFlowForm.frmData.trim()
     if (processTitle) payload.processTitle = processTitle
     if (frmData) payload.frmData = frmData
-    const res = await createFlowInstanceDraft(payload)
+    const res = await createFlowEngineDraft(payload)
     message.success(t('workflow.instance.startFlowForm.saveDraftSuccess', { code: res.instanceCode }))
     closeStartFlowModal()
     loadList()
@@ -328,7 +335,7 @@ function getInstanceId(record: unknown): string {
 async function loadList() {
   loading.value = true
   try {
-    const res = await getFlowInstanceMyList(
+    const res = await getFlowEngineMyList(
       buildFlowMyQuery(currentPage.value, pageSize.value, queryKeyword.value)
     )
     dataSource.value = res.data ?? []
@@ -371,9 +378,9 @@ function handlePaginationSizeChange(current: number, size: number) {
 }
 
 /** 拉取实例详情并打开详情弹窗 */
-async function showDetail(record: FlowInstance) {
+async function showDetail(record: FlowEngineListRow) {
   try {
-    detail.value = await getFlowInstanceById(record.instanceId)
+    detail.value = await getFlowEngineInstanceById(record.instanceId, 'my')
     detailVisible.value = true
   } catch {
     message.error(t('common.page.msg.loadFail'))
@@ -384,19 +391,19 @@ async function showDetail(record: FlowInstance) {
 async function reloadInstanceDetail() {
   if (!detail.value?.instanceId) return
   try {
-    detail.value = await getFlowInstanceById(detail.value.instanceId)
+    detail.value = await getFlowEngineInstanceById(detail.value.instanceId, 'my')
   } catch {
     message.error(t('common.page.msg.loadFail'))
   }
 }
 
 /** 打开编辑弹窗：回填标题与 frmData，拉取最新详情 */
-async function handleEdit(record: FlowInstance) {
+async function handleEdit(record: FlowEngineListRow) {
   currentEditRecord.value = record
   editForm.processTitle = record.processTitle ?? ''
   editForm.frmData = record.frmData ?? ''
   try {
-    const d = await getFlowInstanceById(record.instanceId)
+    const d = await getFlowEngineInstanceById(record.instanceId, 'my')
     if (d) {
       editForm.processTitle = d.processTitle ?? ''
       editForm.frmData = d.frmData ?? ''
@@ -413,12 +420,15 @@ async function handleEditSubmit() {
   if (!ok || !currentEditRecord.value) return
   try {
     editLoading.value = true
-    const payload: { id: string; processTitle?: string; frmData?: string } = { id: currentEditRecord.value.instanceId }
+    const id = currentEditRecord.value.instanceId
     const processTitle = editForm.processTitle?.trim()
     const frmData = editForm.frmData?.trim()
-    if (processTitle) payload.processTitle = processTitle
-    if (frmData) payload.frmData = frmData
-    await updateFlowInstance(payload)
+    const dto: FlowInstanceEditPayload = {
+      flowInstanceId: id,
+      ...(processTitle ? { processTitle } : {}),
+      ...(frmData ? { frmData } : {})
+    }
+    await updateFlowInstance(id, dto)
     message.success(t('common.page.msg.updateSuccess'))
     editVisible.value = false
     currentEditRecord.value = null
@@ -431,7 +441,7 @@ async function handleEditSubmit() {
 }
 
 /** 从草稿启动：二次确认后调用 startFromDraft 并刷新列表 */
-function handleStartFromDraft(record: FlowInstance) {
+function handleStartFromDraft(record: FlowEngineListRow) {
   Modal.confirm({
     centered: true,
     title: t('workflow.my.startFromDraft'),
@@ -439,7 +449,7 @@ function handleStartFromDraft(record: FlowInstance) {
     onOk: async () => {
       try {
         loading.value = true
-        await startFlowInstanceFromDraft(record.instanceId)
+        await startFlowEngineFromDraft(record.instanceId)
         message.success(t('common.page.msg.operateSuccess'))
         loadList()
       } catch (error: unknown) {
@@ -455,12 +465,12 @@ function handleStartFromDraft(record: FlowInstance) {
 async function handleExport() {
   try {
     exportLoading.value = true
-    const query: FlowInstanceQuery = { pageIndex: 1, pageSize: 99999, myStartedOnly: true }
+    const query: FlowMyInstanceQuery = { pageIndex: 1, pageSize: 99999, myStartedOnly: true }
     if (queryKeyword.value?.trim()) {
       query.processKey = queryKeyword.value.trim()
       query.instanceCode = queryKeyword.value.trim()
     }
-    const blob = await exportFlowInstanceMy(query)
+    const blob = await exportFlowInstance(query)
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fileName = `我的流程_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
@@ -482,7 +492,7 @@ async function handleExport() {
 }
 
 /** 撤回：二次确认后调用 revoke 接口并刷新列表 */
-function handleRevoke(record: FlowInstance) {
+function handleRevoke(record: FlowEngineListRow) {
   Modal.confirm({
     centered: true,
     title: t('common.page.action.confirmAction', { action: t('common.page.button.revoke') }),
@@ -490,7 +500,7 @@ function handleRevoke(record: FlowInstance) {
     onOk: async () => {
       try {
         loading.value = true
-        await revokeFlowInstance(record.instanceCode)
+        await revokeFlowEngineInstance(record.instanceCode)
         message.success(t('common.page.msg.actionSuccess', { action: t('common.page.button.revoke') }))
         loadList()
       } catch (error: unknown) {

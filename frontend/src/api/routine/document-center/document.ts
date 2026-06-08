@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/document-center
 // 文件名称：document.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/document-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -114,7 +114,7 @@ export function deleteDocumentBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新文管中心状态
- * @param {DocumentStatus} dto 状态DTO
+ * @param {DocumentStatus} dto 状态 DTO（TaktDocumentStatus 枚举）
  * @returns {Promise<Document>} 文管中心DTO
  */
 export function updateDocumentStatus(dto: DocumentStatus): Promise<Document> {
@@ -177,11 +177,11 @@ export function getDocumentTemplate(sheetName?: string, templateName?: string): 
 
 /**
  * 导入文管中心
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importDocument(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importDocument(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

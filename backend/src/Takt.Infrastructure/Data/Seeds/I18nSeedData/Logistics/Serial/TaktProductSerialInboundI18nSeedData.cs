@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktProductSerialInboundI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductSerialInbound 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -164,13 +164,13 @@ public class TaktProductSerialInboundI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productSerialInbound.relatedcompany", "zh-HK", "关联公司", "关联公司"),
 
             // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "en-US", "items", "产品序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.productSerialInbound.items", "en-US", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
             // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "ja-JP", "items", "产品序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.productSerialInbound.items", "ja-JP", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
             // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "zh-CN", "items", "产品序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.productSerialInbound.items", "zh-CN", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
             // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "zh-HK", "items", "产品序列号入库明细列表(主子表关系)"),
+            new TranslationSeedItem("entity.productSerialInbound.items", "zh-HK", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
         };
     }
 

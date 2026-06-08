@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktUserValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：User 关联 DTO FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktUser 生成，请按需审阅）
 // 
@@ -41,13 +41,13 @@ public class TaktUserDtoValidator : AbstractValidator<TaktUserDto>
             .MaximumLength(255).WithMessage("密码哈希值长度不能超过255个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThan(0).WithMessage("关联的员工ID无效");
+        RuleFor(x => x.DefaultCulture)
+            .NotEmpty().WithMessage("默认区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("默认区域文化编码长度不能超过5个字符");
         RuleFor(x => x.UserStatus)
             .IsInEnum().WithMessage("状态无效");
         RuleFor(x => x.LastLoginIp)
             .MaximumLength(50).WithMessage("最后登录IP长度不能超过50个字符");
-        RuleFor(x => x.DefaultCulture)
-            .NotEmpty().WithMessage("默认区域文化编码不能为空")
-            .MaximumLength(5).WithMessage("默认区域文化编码长度不能超过5个字符");
         RuleFor(x => x.EmployeeName)
             .MaximumLength(200).WithMessage("EmployeeName长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.EmployeeName));
     }

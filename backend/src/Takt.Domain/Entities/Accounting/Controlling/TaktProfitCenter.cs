@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Accounting.Controlling;
@@ -74,7 +75,7 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "profit_center_status", ColumnDescription = "利润中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int ProfitCenterStatus { get; set; } = 1;
+    public TaktCommonStatus ProfitCenterStatus { get; set; } = TaktCommonStatus.Enabled;
     /// <summary>
     /// 生效日期
     /// </summary>

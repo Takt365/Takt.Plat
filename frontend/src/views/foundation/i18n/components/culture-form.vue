@@ -80,8 +80,7 @@
           >
             <TaktSelect
               v-model:value="mainFormState.languageStatus"
-              api-url="/api/TaktDictDatas/options?dictTypeCode=sys_status"
-              :field-names="{ label: 'dictLabel', value: 'extLabel' }"
+              dict-type="sys_status"
               allow-clear
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.language.status') })"
             />
@@ -92,8 +91,7 @@
           >
             <TaktSelect
               v-model:value="mainFormState.isDefault"
-              api-url="/api/TaktDictDatas/options?dictTypeCode=sys_yes_no"
-              :field-names="{ label: 'dictLabel', value: 'extLabel' }"
+              dict-type="sys_yes_no"
               allow-clear
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.language.isdefault') })"
             />

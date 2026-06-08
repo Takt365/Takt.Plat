@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Routine.HelpDesk;
@@ -59,7 +60,7 @@ public class TaktSelfService : TaktCompanyEntityBase
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "self_service_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int SelfServiceStatus { get; set; } = 1;
+    public TaktCommonStatus SelfServiceStatus { get; set; } = TaktCommonStatus.Enabled;
 
     /// <summary>
     /// 排序号（越小越靠前）

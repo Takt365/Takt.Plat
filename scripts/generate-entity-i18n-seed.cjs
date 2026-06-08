@@ -59,8 +59,8 @@ const ENTITY_BASE_FIELDS = new Set([
 ]);
 
 /**
- * 全局：属性 camelCase → I18nKey 末段（无法由「去实体 slug 前缀」推导时）
- * 例：passwordHash → password；lastLoginAt → lastloginat（toLowerCase）
+ * 全局：属性 camelCase → I18nKey 末段（仅保留与实体属性 camelCase 不一致的历史别名）
+ * 默认规则：去实体 slug 前缀后 camelCase 全小写（subscriptionStartTime → subscriptionstarttime；tenantName → name）
  */
 const ENTITY_FIELD_I18N_SEGMENT = {
   passwordHash: 'password',
@@ -71,18 +71,13 @@ const ENTITY_FIELD_I18N_SEGMENT = {
 };
 
 /**
- * 按实体 slug 覆盖末段（与前端 t('entity.{slug}.*') 对齐）
- * 默认规则：menuStatus + menu → status；tenantName + tenant → name
+ * 按实体 slug 覆盖末段（仅 menu 等历史键与属性 camelCase 不一致时使用）
  */
 const ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG = {
   menu: {
     i18nKey: 'l10nkey',
     componentPath: 'component',
     externalUrl: 'linkurl',
-  },
-  tenant: {
-    subscriptionStartTime: 'starttime',
-    subscriptionEndTime: 'endtime',
   },
 };
 
@@ -134,7 +129,8 @@ function stripEntitySlugPrefixFromCamel(camelName, entitySlug) {
 }
 
 /**
- * 将 C# 属性 camelCase 解析为 I18nKey 末段（全小写，去冗余实体前缀）
+ * 将 C# 属性 camelCase 解析为 I18nKey 末段（全小写 a-z0-9）
+ * 默认：去实体 slug 前缀后 camelCase 转小写（tenantName+tenant→name；subscriptionStartTime→subscriptionstarttime）
  * @param {string} camelName _self 或属性 camelCase
  * @param {string} [entitySlug] 实体 slug（TaktTenant → tenant）
  */
@@ -152,6 +148,135 @@ function resolveEntityFieldI18nSegment(camelName, entitySlug) {
     throw new Error(`I18n 键末段非法（须全小写 a-z0-9）：${camelName} → ${segment}`);
   }
   return segment;
+}
+
+/** @type {Set<string> | null} */
+let TAKT_ENUM_TYPE_NAMES = null;
+
+/** @type {Set<string> | null} */
+let TAKT_ENTITY_CLASS_NAMES = null;
+
+/**
+ * 扫描 Takt.Shared/Enums 下全部 public enum TaktXxx
+ * @returns {Set<string>}
+ */
+function loadTaktEnumTypeNames() {
+  if (TAKT_ENUM_TYPE_NAMES) {
+    return TAKT_ENUM_TYPE_NAMES;
+  }
+  const set = new Set();
+  const enumsRoot = path.join(CONFIG.backendRoot, 'Takt.Shared', 'Enums');
+  function walk(dir) {
+    fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+        return;
+      }
+      if (!entry.name.endsWith('.cs')) {
+        return;
+      }
+      const content = fs.readFileSync(full, 'utf-8');
+      for (const m of content.matchAll(/public\s+enum\s+(Takt\w+)/g)) {
+        set.add(m[1]);
+      }
+    });
+  }
+  walk(enumsRoot);
+  TAKT_ENUM_TYPE_NAMES = set;
+  return set;
+}
+
+/**
+ * 扫描 Domain/Entities 下全部 public class TaktXxx
+ * @returns {Set<string>}
+ */
+function loadTaktEntityClassNames() {
+  if (TAKT_ENTITY_CLASS_NAMES) {
+    return TAKT_ENTITY_CLASS_NAMES;
+  }
+  const set = new Set();
+  function walk(dir) {
+    fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+        return;
+      }
+      if (!entry.name.startsWith('Takt') || !entry.name.endsWith('.cs')) {
+        return;
+      }
+      const content = fs.readFileSync(full, 'utf-8');
+      const classMatch = content.match(/public\s+class\s+(Takt\w+)/);
+      if (classMatch) {
+        set.add(classMatch[1]);
+      }
+    });
+  }
+  walk(CONFIG.entitiesRoot);
+  TAKT_ENTITY_CLASS_NAMES = set;
+  return set;
+}
+
+/**
+ * 判断是否为 Shared 枚举类型（须生成 entity.* 字段键）
+ * @param {string} bareType
+ * @returns {boolean}
+ */
+function isTaktEnumType(bareType) {
+  return loadTaktEnumTypeNames().has(bareType.replace(/\?$/, '').trim());
+}
+
+/**
+ * 判断是否为 Domain 实体类型
+ * @param {string} bareType
+ * @returns {boolean}
+ */
+function isTaktDomainEntityType(bareType) {
+  return loadTaktEntityClassNames().has(bareType.replace(/\?$/, '').trim());
+}
+
+/**
+ * 解析集合元素类型（List/ICollection&lt;T&gt; 等）
+ * @param {string} csharpType
+ * @returns {string | null}
+ */
+function unwrapCollectionInnerType(csharpType) {
+  const bare = csharpType.replace(/\?$/, '').trim();
+  const match = bare.match(/^(?:List|IList|ICollection|IEnumerable|HashSet)<(.+)>$/);
+  if (!match) {
+    return null;
+  }
+  return match[1].replace(/\?$/, '').trim();
+}
+
+/**
+ * 无 [Navigate] 的实体引用/集合引用应跳过（ORM 导航，非业务字段标签）
+ * @param {string} bareType 去掉尾部 ? 的类型名
+ * @returns {boolean}
+ */
+function isSkippedEntityNavigationReference(bareType) {
+  const bare = bareType.replace(/\?$/, '').trim();
+  if (!/^Takt[A-Z]/.test(bare)) {
+    return false;
+  }
+  if (isTaktEnumType(bare)) {
+    return false;
+  }
+  return isTaktDomainEntityType(bare);
+}
+
+/**
+ * 判断是否为无 [Navigate] 的实体集合导航（应跳过）
+ * @param {string} csharpType 属性 C# 类型（可含 ?）
+ * @returns {boolean}
+ */
+function isEntityCollectionNavigationType(csharpType) {
+  const inner = unwrapCollectionInnerType(csharpType);
+  if (!inner) {
+    return false;
+  }
+  return isSkippedEntityNavigationReference(inner);
 }
 
 /**
@@ -331,19 +456,18 @@ function extractColumnDescription(propSegment) {
 
 function parseEntityProperties(classBody) {
   const properties = [];
+  /** 支持 List&lt;TaktXxx&gt;?、TaktYesNo、string? 等 */
   const propertyRegex =
-    /\/\/\/\s*<summary>([\s\S]*?)<\/summary>(?:[\s\S]*?)?([\w.?[\]]+)\s+(\w+)\s*\{[\s\S]*?get;\s*set;/g;
+    /\/\/\/\s*<summary>([\s\S]*?)<\/summary>[\s\S]*?\b([\w]+(?:<[^>]+>)?\??)\s+(\w+)\s*\{[\s\S]*?get;\s*set;/g;
   let match;
 
   while ((match = propertyRegex.exec(classBody)) !== null) {
-    const before = classBody.slice(Math.max(0, match.index - 300), match.index);
-    if (/\[Navigate\(/.test(before)) {
-      continue;
-    }
-
     const csharpType = match[2].trim();
-    const bare = csharpType.replace('?', '');
-    if (/^Takt[A-Z][a-zA-Z]+$/.test(bare) && !bare.includes('Status') && !bare.includes('Type') && !bare.includes('Result') && !bare.includes('Category')) {
+    const bare = csharpType.replace(/\?$/, '');
+    const propSegment = match[0];
+    const hasNavigate = /\[Navigate\s*\(/.test(propSegment);
+
+    if (!hasNavigate && (isSkippedEntityNavigationReference(bare) || isEntityCollectionNavigationType(csharpType))) {
       continue;
     }
 
@@ -352,7 +476,6 @@ function parseEntityProperties(classBody) {
       continue;
     }
 
-    const propSegment = classBody.slice(match.index, match.index + match[0].length);
     const summaryXml = csharpDocToXml(`/// <summary>${match[1]}</summary>`);
     properties.push({
       name,
@@ -360,6 +483,7 @@ function parseEntityProperties(classBody) {
       summary: extractSummary(summaryXml),
       summaryFirstLine: extractSummaryFirstLine(summaryXml),
       columnDescription: extractColumnDescription(propSegment),
+      isNavigate: hasNavigate,
     });
   }
 
@@ -518,18 +642,20 @@ function resolveEntitySelfTranslations(entity) {
  * @param {string} columnDescription SugarColumn.ColumnDescription
  * @param {object} localeData loadFrontendLocaleFields 结果
  */
-function resolveFieldTranslations(entity, propCamel, columnDescription, localeData) {
+function resolveFieldTranslations(entity, propCamel, columnDescription, summaryFirstLine, localeData) {
   const { fields } = localeData;
   const texts = {};
 
   const localeKey = LOCALE_FIELD_ALIASES[propCamel] || propCamel;
   const pickLocale = (cultureMap) => cultureMap?.[localeKey] || cultureMap?.[propCamel];
+  const summaryLabel = normalizeEntityFieldLabel(summaryFirstLine);
 
   CONFIG.cultures.forEach((culture) => {
     texts[culture] =
       columnDescription ||
       pickLocale(fields[culture]) ||
       pickLocale(fields['zh-CN']) ||
+      summaryLabel ||
       propCamel;
   });
 
@@ -566,7 +692,13 @@ function buildTranslationTuples(entity) {
       return;
     }
     seenFieldKeys.add(i18nKey);
-    const texts = resolveFieldTranslations(entity, prop.camelName, prop.columnDescription, localeData);
+    const texts = resolveFieldTranslations(
+      entity,
+      prop.camelName,
+      prop.columnDescription,
+      prop.summaryFirstLine,
+      localeData,
+    );
     CONFIG.cultures.forEach((culture) => {
       tuples.push({
         i18nKey,
@@ -819,8 +951,11 @@ function printUsage() {
       → I18nSeedData/Accounting/Financial/TaktCompanyI18nSeedData.cs
 
 翻译键规则:
-  entity.{slug}._self              实体名称（summary 首行；「实体」→「信息」；en-US 为 Slug Information；不用 locales page.title）
-  entity.{slug}.{fieldSegment}     TranslationText=ColumnDescription；ContextNote=属性 XML summary 全文
+  entity.{slug}._self              实体名称（summary 首行；「实体」→「信息」；en-US 为 Slug Information）
+  entity.{slug}.{fieldSegment}     默认=属性 camelCase 去 slug 前缀后全小写（tenantName→name；userRoles→roles）
+                                   含 SugarColumn 映射字段、Takt.Shared 枚举字段、[Navigate] 导航属性
+                                   跳过：基类审计字段、无 [Navigate] 的 ORM 实体引用/集合引用
+                                   TranslationText=ColumnDescription→locales→summary 首行；ContextNote=属性 XML summary 全文
 
 语言:
   ${CONFIG.cultures.join('、')}（缺省语言文件时回退 zh-CN 文案，请人工校对）
@@ -878,6 +1013,8 @@ console.log('🚀 从实体生成 Entity I18n 种子...\n');
 logGeneratedFileWritePolicy();
 
 try {
+  loadTaktEnumTypeNames();
+  loadTaktEntityClassNames();
   const options = parseArgs();
   const entities = scanEntities(options.all ? null : options.entityPrefix);
   if (entities.length === 0) {

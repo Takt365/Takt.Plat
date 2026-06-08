@@ -51,6 +51,9 @@ export function signOutSession(): Promise<boolean> {
   return request<boolean>({
     url: `${AUTH_API_BASE}/session/signout`,
     method: 'post',
+    skipTokenRefresh: true,
+    skipLoginAuthError: true,
+    skipErrorNotification: true,
   });
 }
 

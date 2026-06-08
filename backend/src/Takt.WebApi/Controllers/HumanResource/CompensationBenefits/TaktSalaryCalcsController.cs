@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.CompensationBenefits
 // 文件名称：TaktSalaryCalcsController.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：薪资核算控制器
 // 
@@ -183,7 +183,7 @@ public class TaktSalaryCalcsController : TaktControllerBase
     /// <summary>
     /// 更新薪资核算状态
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>薪资核算DTO</returns>
     [TaktPermission("humanresource:compensationbenefits:salarycalc:update", "更新薪资核算状态")]
     [HttpPut("status")]

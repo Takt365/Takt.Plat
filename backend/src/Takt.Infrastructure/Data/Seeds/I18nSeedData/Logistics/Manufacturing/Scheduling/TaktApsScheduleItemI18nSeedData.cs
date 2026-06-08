@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsScheduleItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -279,6 +279,15 @@ public class TaktApsScheduleItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsScheduleItem.priority", "zh-CN", "优先级", "优先级（0=普通，1=紧急，2=特急）"),
             // entity.apsScheduleItem.priority
             new TranslationSeedItem("entity.apsScheduleItem.priority", "zh-HK", "优先级", "优先级（0=普通，1=紧急，2=特急）"),
+
+            // entity.apsScheduleItem.schedule
+            new TranslationSeedItem("entity.apsScheduleItem.schedule", "en-US", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsScheduleItem.schedule
+            new TranslationSeedItem("entity.apsScheduleItem.schedule", "ja-JP", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsScheduleItem.schedule
+            new TranslationSeedItem("entity.apsScheduleItem.schedule", "zh-CN", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsScheduleItem.schedule
+            new TranslationSeedItem("entity.apsScheduleItem.schedule", "zh-HK", "APS排程主表", "APS排程主表（主表）"),
         };
     }
 

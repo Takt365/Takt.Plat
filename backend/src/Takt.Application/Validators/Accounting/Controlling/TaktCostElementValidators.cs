@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Controlling
 // 文件名称：TaktCostElementValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostElement 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCostElement 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Accounting.Controlling;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Accounting.Controlling;
 
@@ -43,6 +44,8 @@ public class TaktCostElementCreateValidator : AbstractValidator<TaktCostElementC
             .MaximumLength(100).WithMessage("成本要素名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.CostElementStatus)
+            .IsInEnum().WithMessage("成本要素状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)
@@ -97,6 +100,8 @@ public class TaktCostElementImportValidator : AbstractValidator<TaktCostElementI
             .MaximumLength(100).WithMessage("成本要素名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.CostElementStatus)
+            .IsInEnum().WithMessage("成本要素状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)

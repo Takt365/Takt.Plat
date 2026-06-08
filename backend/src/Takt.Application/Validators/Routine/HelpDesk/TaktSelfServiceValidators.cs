@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.HelpDesk
 // 文件名称：TaktSelfServiceValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SelfService 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSelfService 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Routine.HelpDesk;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Routine.HelpDesk;
 
@@ -44,6 +45,8 @@ public class TaktSelfServiceCreateValidator : AbstractValidator<TaktSelfServiceC
             .MaximumLength(500).WithMessage("链接地址或表单编码长度不能超过500个字符");
         RuleFor(x => x.IconUrl)
             .MaximumLength(500).WithMessage("图标或图片 URL长度不能超过500个字符");
+        RuleFor(x => x.SelfServiceStatus)
+            .IsInEnum().WithMessage("自助服务状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)
@@ -99,6 +102,8 @@ public class TaktSelfServiceImportValidator : AbstractValidator<TaktSelfServiceI
             .MaximumLength(500).WithMessage("链接地址或表单编码长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.LinkOrCode));
         RuleFor(x => x.IconUrl)
             .MaximumLength(500).WithMessage("图标或图片 URL长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.IconUrl));
+        RuleFor(x => x.SelfServiceStatus)
+            .IsInEnum().WithMessage("自助服务状态无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtFieldJson)

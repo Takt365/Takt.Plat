@@ -67,11 +67,11 @@ const dto = formRef.value?.getValues()
 
 ## 代码生成
 
-| 形态 | generate-vue-from-api |
-|------|------------------------|
-| 单表 | ✅ CreateDto → form + Tabs |
-| 主子表 | ✅ 主 Tab + 子表行编辑 Tab |
-| 树表 | ❌ 手工 TaktTreeSelect |
+| 形态 | 脚本 |
+|------|------|
+| 单表 | `generate-vue-crud-from-api.cjs` |
+| 主子表 | `generate-vue-master-detail-from-api.cjs` |
+| 树表 | `generate-vue-tree-from-api.cjs` |
 
 ## 交叉规则
 

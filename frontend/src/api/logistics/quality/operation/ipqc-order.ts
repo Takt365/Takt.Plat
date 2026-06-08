@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/operation
 // 文件名称：ipqc-order.ts
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -113,7 +113,7 @@ export function deleteIpqcOrderBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新制程检验单状态
- * @param {IpqcOrderStatus} dto 状态DTO
+ * @param {IpqcOrderStatus} dto 状态 DTO
  * @returns {Promise<IpqcOrder>} 制程检验单DTO
  */
 export function updateIpqcOrderStatus(dto: IpqcOrderStatus): Promise<IpqcOrder> {
@@ -163,11 +163,11 @@ export function getIpqcOrderTemplate(sheetName?: string, templateName?: string):
 
 /**
  * 导入制程检验单
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importIpqcOrder(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importIpqcOrder(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   

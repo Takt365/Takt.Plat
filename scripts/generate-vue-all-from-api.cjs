@@ -1,0 +1,109 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/scripts
+// 文件名称：generate-vue-all-from-api.cjs
+// 创建时间：2026-06-08
+// 创建人：Takt365(Cursor AI)
+// 功能描述：一键串联 Vue 三模板生成（CRUD + TREE + Master-Detail）
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+const path = require('path');
+const { spawnSync } = require('child_process');
+const { logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
+const { parseVueCliArgs } = require('./generate-vue-common.cjs');
+
+const REPO_ROOT = path.resolve(__dirname, '..');
+const SCRIPTS_DIR = __dirname;
+
+const VUE_PIPELINE = [
+  { script: 'generate-vue-crud-from-api.cjs', label: '单表 CRUD' },
+  { script: 'generate-vue-tree-from-api.cjs', label: '树表 TREE' },
+  { script: 'generate-vue-master-detail-from-api.cjs', label: '主子表 Master-Detail' },
+];
+
+/**
+ * @param {string} scriptName
+ * @param {string[]} args
+ * @returns {number}
+ */
+function runChildScript(scriptName, args) {
+  const scriptPath = path.join(SCRIPTS_DIR, scriptName);
+  const result = spawnSync(process.execPath, [scriptPath, ...args], {
+    cwd: REPO_ROOT,
+    stdio: 'inherit',
+    env: process.env,
+  });
+  if (result.error) {
+    throw result.error;
+  }
+  return result.status ?? 1;
+}
+
+/**
+ * @param {{ all: boolean, entityPrefix: string|null, force: boolean, dryRun: boolean, viewPath: string|null }} options
+ * @returns {string[]}
+ */
+function buildChildArgs(options) {
+  const args = [];
+  if (options.all) {
+    args.push('--all');
+  } else if (options.entityPrefix) {
+    args.push(`--${options.entityPrefix}`);
+  }
+  if (options.dryRun) {
+    args.push('--dry-run');
+  }
+  if (options.viewPath) {
+    args.push('--view-path', options.viewPath);
+  }
+  return args;
+}
+
+function printAllUsage() {
+  console.log(`
+用法: node scripts/generate-vue-all-from-api.cjs [参数]
+
+按顺序执行三模板 Vue 生成（各脚本仅处理匹配模板，其余自动跳过）:
+  1. generate-vue-crud-from-api.cjs     单表 CRUD
+  2. generate-vue-tree-from-api.cjs     树表 TREE（ParentId + getXxxTree）
+  3. generate-vue-master-detail-from-api.cjs  主子表 Master-Detail
+
+参数:
+  --all                 扫描全部 API
+  --<实体名>            如 --Plant、--CostCenter、--DictType
+  --view-path <路径>    覆盖 views 输出目录
+  --dry-run             仅预览
+
+示例:
+  node scripts/generate-vue-all-from-api.cjs --CostCenter
+  node scripts/generate-vue-all-from-api.cjs --all
+`);
+}
+
+if (require.main === module) {
+  console.log('🚀 开始一键生成 Vue 视图（CRUD + TREE + Master-Detail）...\n');
+  logGeneratedFileWritePolicy();
+  const options = parseVueCliArgs(printAllUsage);
+  const childArgs = buildChildArgs(options);
+  let exitCode = 0;
+  VUE_PIPELINE.forEach((step, index) => {
+    console.log(`\n── 步骤 ${index + 1}/${VUE_PIPELINE.length}: ${step.label} (${step.script}) ──\n`);
+    const code = runChildScript(step.script, childArgs);
+    if (code !== 0) {
+      exitCode = code;
+    }
+  });
+  if (exitCode !== 0) {
+    process.exit(exitCode);
+  }
+  console.log('\n✨ Vue 三模板流水线完成');
+}
+
+module.exports = {
+  VUE_PIPELINE,
+  runChildScript,
+  buildChildArgs,
+};

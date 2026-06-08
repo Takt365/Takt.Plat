@@ -11,10 +11,10 @@
           @change="handleChange"
         >
           <a-radio-button value="light">
-            {{ $t('components.navigation.page.systemsetting.light') }}
+            {{ $t('common.page.theme.light') }}
           </a-radio-button>
           <a-radio-button value="dark">
-            {{ $t('components.navigation.page.systemsetting.dark') }}
+            {{ $t('common.page.theme.dark') }}
           </a-radio-button>
         </a-radio-group>
       </a-form-item>
@@ -24,7 +24,7 @@
           <a-tooltip
             v-for="(color, key) in themeColorMap"
             :key="key"
-            :title="$t(`common.settings.color.${key}`)"
+            :title="$t(`common.page.color.${themeColorI18nKeyMap[key as Exclude<ThemeColor, 'custom'>]}`)"
             placement="top"
           >
             <div
@@ -40,7 +40,7 @@
             </div>
           </a-tooltip>
           <a-tooltip
-            :title="$t('components.navigation.page.systemsetting.custom')"
+            :title="$t('common.page.color.custom')"
             placement="top"
           >
             <div
@@ -127,7 +127,7 @@
 <script setup lang="ts">
 import { RiCheckLine } from '@remixicon/vue'
 import type { AppSetting, ThemeColor } from '@/stores/common/setting'
-import { themeColorMap, validateFontSize } from '@/stores/common/setting'
+import { themeColorMap, themeColorI18nKeyMap, validateFontSize } from '@/stores/common/setting'
 
 const setting = inject<AppSetting>('setting')!
 

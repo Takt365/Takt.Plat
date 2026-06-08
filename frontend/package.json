@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "generate": "node ../scripts/generate-from-backend.cjs",
-    "generate:vue": "node ../scripts/generate-vue-from-api.cjs"
+    "generate:vue": "node ../scripts/generate-vue-crud-from-api.cjs"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",

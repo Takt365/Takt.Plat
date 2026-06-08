@@ -25,9 +25,9 @@ public class TaktQuartzJobContext
     public TaktQuartzTask Task { get; set; } = null!;
 
     /// <summary>
-    /// 任务参数 JSON
+    /// 执行参数
     /// </summary>
-    public string? JobParams { get; set; }
+    public string? ExecuteParams { get; set; }
 
     /// <summary>
     /// 触发用户
@@ -41,7 +41,7 @@ public class TaktQuartzJobContext
 public interface ITaktQuartzJobHandler
 {
     /// <summary>
-    /// 处理器键（与 <see cref="TaktQuartzTask.JobType"/> 匹配）
+    /// 处理器键（与 <see cref="TaktQuartzTask.ClassName"/> 或 DI 注册键匹配）
     /// </summary>
     string HandlerKey { get; }
 

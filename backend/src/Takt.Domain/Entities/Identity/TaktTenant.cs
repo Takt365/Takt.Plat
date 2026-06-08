@@ -72,7 +72,7 @@ public class TaktTenant : TaktTenantEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "tenant_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int TenantStatus { get; set; } = 1;
+    public TaktCommonStatus TenantStatus { get; set; } = TaktCommonStatus.Enabled;
 
     // ========================================
     // 导航属性区域

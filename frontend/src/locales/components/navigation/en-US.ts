@@ -1,6 +1,6 @@
 /**
  * Navigation components · English
- * For components/navigation: tabs, system setting
+ * For components/navigation: tabs, shortcut query, system setting; keys components.navigation.page.*
  */
 export default {
   page: {
@@ -14,6 +14,10 @@ export default {
         refreshcurrent: 'Refresh Current',
         unnamed: 'Unnamed'
       },
+      headerquery: {
+        title: 'Add Shortcut',
+        placeholder: 'Search by keyword and select a menu to add to workspace shortcuts',
+      },
       systemsetting: {
         borderradius: 'Border Radius',
         card: 'Card',
@@ -23,13 +27,9 @@ export default {
         collapsetitle: 'Collapse Title',
         collapsetitlehint: 'Title when collapsed (always visible)',
         colorweak: 'Color Weak',
-        confirmlogout: 'Confirm Logout',
         contentnav: 'Content',
         contentwidth: 'Content Width',
-        copyfail: 'Copy failed, please copy manually',
         copyright: 'Copyright',
-        custom: 'Custom',
-        dark: 'Dark',
         defaultlanguage: 'Default Language',
         demoswitch: 'Demo Switch',
         enablemultitab: 'Enable Multi Tab',
@@ -42,10 +42,8 @@ export default {
         graymode: 'Gray Mode',
         layout: 'Layout',
         layoutmode: 'Layout Mode',
-        light: 'Light',
         logopath: 'Logo Path',
         logopathhint: "e.g. assets/images/takt.svg ({'@'}/ prefix added automatically)",
-        logoutcontent: 'Are you sure to logout?',
         maxtabs: 'Max Tabs',
         menuaccordion: 'Menu Accordion',
         menustyle: 'Menu Style',
@@ -55,8 +53,6 @@ export default {
         other: 'Other',
         persisttabs: 'Persist Tabs',
         plain: 'Plain',
-        preferencescopied: 'Preferences copied to clipboard',
-        resettodefault: 'Reset to default',
         rounded: 'Rounded',
         showbreadcrumb: 'Show Breadcrumb',
         showbreadcrumbicon: 'Show Breadcrumb Icon',
@@ -79,7 +75,6 @@ export default {
         titlehint: 'Title when expanded (always visible)',
         titlelabel: 'Title',
         topnav: 'Top',
-        totalcount: '{total} items in total',
         watermark: 'Watermark',
         watermarkcontent: 'Watermark Content'
       }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktEmployeeDeptI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -108,6 +108,24 @@ public class TaktEmployeeDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeDept.deptid", "zh-CN", "部门ID", "部门ID"),
             // entity.employeeDept.deptid
             new TranslationSeedItem("entity.employeeDept.deptid", "zh-HK", "部门ID", "部门ID"),
+
+            // entity.employeeDept.employee
+            new TranslationSeedItem("entity.employeeDept.employee", "en-US", "员工", "员工（多对一）"),
+            // entity.employeeDept.employee
+            new TranslationSeedItem("entity.employeeDept.employee", "ja-JP", "员工", "员工（多对一）"),
+            // entity.employeeDept.employee
+            new TranslationSeedItem("entity.employeeDept.employee", "zh-CN", "员工", "员工（多对一）"),
+            // entity.employeeDept.employee
+            new TranslationSeedItem("entity.employeeDept.employee", "zh-HK", "员工", "员工（多对一）"),
+
+            // entity.employeeDept.dept
+            new TranslationSeedItem("entity.employeeDept.dept", "en-US", "部门", "部门（多对一）"),
+            // entity.employeeDept.dept
+            new TranslationSeedItem("entity.employeeDept.dept", "ja-JP", "部门", "部门（多对一）"),
+            // entity.employeeDept.dept
+            new TranslationSeedItem("entity.employeeDept.dept", "zh-CN", "部门", "部门（多对一）"),
+            // entity.employeeDept.dept
+            new TranslationSeedItem("entity.employeeDept.dept", "zh-HK", "部门", "部门（多对一）"),
         };
     }
 

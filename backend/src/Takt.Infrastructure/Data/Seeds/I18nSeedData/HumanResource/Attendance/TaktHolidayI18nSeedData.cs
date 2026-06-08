@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktHolidayI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktHoliday 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,6 +126,15 @@ public class TaktHolidayI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.holiday.enddate", "zh-CN", "假日结束日期", "假日结束日期"),
             // entity.holiday.enddate
             new TranslationSeedItem("entity.holiday.enddate", "zh-HK", "假日结束日期", "假日结束日期"),
+
+            // entity.holiday.isworkingday
+            new TranslationSeedItem("entity.holiday.isworkingday", "en-US", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
+            // entity.holiday.isworkingday
+            new TranslationSeedItem("entity.holiday.isworkingday", "ja-JP", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
+            // entity.holiday.isworkingday
+            new TranslationSeedItem("entity.holiday.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
+            // entity.holiday.isworkingday
+            new TranslationSeedItem("entity.holiday.isworkingday", "zh-HK", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
 
             // entity.holiday.greeting
             new TranslationSeedItem("entity.holiday.greeting", "en-US", "假日问候语", "假日问候语（简短，用于界面问候展示）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutput 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -209,13 +209,13 @@ public class TaktPcbaOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaOutput.stdcapacity", "zh-HK", "标准产能", "标准产能"),
 
             // entity.pcbaOutput.details
-            new TranslationSeedItem("entity.pcbaOutput.details", "en-US", "pcbaOutputDetails", "PCBA明细列表"),
+            new TranslationSeedItem("entity.pcbaOutput.details", "en-US", "PCBA明细列表", "PCBA明细列表"),
             // entity.pcbaOutput.details
-            new TranslationSeedItem("entity.pcbaOutput.details", "ja-JP", "pcbaOutputDetails", "PCBA明细列表"),
+            new TranslationSeedItem("entity.pcbaOutput.details", "ja-JP", "PCBA明细列表", "PCBA明细列表"),
             // entity.pcbaOutput.details
-            new TranslationSeedItem("entity.pcbaOutput.details", "zh-CN", "pcbaOutputDetails", "PCBA明细列表"),
+            new TranslationSeedItem("entity.pcbaOutput.details", "zh-CN", "PCBA明细列表", "PCBA明细列表"),
             // entity.pcbaOutput.details
-            new TranslationSeedItem("entity.pcbaOutput.details", "zh-HK", "pcbaOutputDetails", "PCBA明细列表"),
+            new TranslationSeedItem("entity.pcbaOutput.details", "zh-HK", "PCBA明细列表", "PCBA明细列表"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoutingItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -234,6 +234,15 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingItem.processdescription", "zh-CN", "工序说明", "工序说明"),
             // entity.routingItem.processdescription
             new TranslationSeedItem("entity.routingItem.processdescription", "zh-HK", "工序说明", "工序说明"),
+
+            // entity.routingItem.routing
+            new TranslationSeedItem("entity.routingItem.routing", "en-US", "工艺路线主表", "工艺路线主表（主表）"),
+            // entity.routingItem.routing
+            new TranslationSeedItem("entity.routingItem.routing", "ja-JP", "工艺路线主表", "工艺路线主表（主表）"),
+            // entity.routingItem.routing
+            new TranslationSeedItem("entity.routingItem.routing", "zh-CN", "工艺路线主表", "工艺路线主表（主表）"),
+            // entity.routingItem.routing
+            new TranslationSeedItem("entity.routingItem.routing", "zh-HK", "工艺路线主表", "工艺路线主表（主表）"),
         };
     }
 

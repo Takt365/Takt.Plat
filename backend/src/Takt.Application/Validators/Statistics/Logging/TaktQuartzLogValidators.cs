@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktQuartzLogValidators.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQuartzLog 生成，请按需审阅）
 // 
@@ -38,20 +38,26 @@ public class TaktQuartzLogCreateValidator : AbstractValidator<TaktQuartzLogCreat
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.QuartzTaskId)
             .GreaterThanOrEqualTo(0).WithMessage("关联定时任务 ID不能为负数");
-        RuleFor(x => x.UserName)
-            .MaximumLength(50).WithMessage("触发用户长度不能超过50个字符");
-        RuleFor(x => x.JobName)
-            .NotEmpty().WithMessage("Job 名称不能为空")
-            .MaximumLength(100).WithMessage("Job 名称长度不能超过100个字符");
+        RuleFor(x => x.TaskName)
+            .NotEmpty().WithMessage("任务名称不能为空")
+            .MaximumLength(100).WithMessage("任务名称长度不能超过100个字符");
         RuleFor(x => x.JobGroup)
-            .NotEmpty().WithMessage("Job 分组不能为空")
-            .MaximumLength(50).WithMessage("Job 分组长度不能超过50个字符");
-        RuleFor(x => x.TriggerName)
-            .MaximumLength(100).WithMessage("Trigger 名称长度不能超过100个字符");
+            .NotEmpty().WithMessage("任务组名不能为空")
+            .MaximumLength(50).WithMessage("任务组名长度不能超过50个字符");
+        RuleFor(x => x.TaskType)
+            .IsInEnum().WithMessage("任务类型无效");
+        RuleFor(x => x.ExecuteParams)
+            .MaximumLength(1000).WithMessage("执行参数长度不能超过1000个字符");
+        RuleFor(x => x.ExecuteMessage)
+            .MaximumLength(2000).WithMessage("执行消息长度不能超过2000个字符");
+        RuleFor(x => x.ErrorInfo)
+            .MaximumLength(2000).WithMessage("错误信息长度不能超过2000个字符");
+        RuleFor(x => x.ExecuteIp)
+            .MaximumLength(50).WithMessage("执行机器 IP长度不能超过50个字符");
+        RuleFor(x => x.ExecuteHost)
+            .MaximumLength(100).WithMessage("执行机器名长度不能超过100个字符");
         RuleFor(x => x.ExecuteStatus)
             .IsInEnum().WithMessage("执行状态无效");
-        RuleFor(x => x.ErrorMsg)
-            .MaximumLength(2000).WithMessage("错误消息长度不能超过2000个字符");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)

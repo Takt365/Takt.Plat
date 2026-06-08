@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIpqcDefectHandlingI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIpqcDefectHandling 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -243,6 +243,15 @@ public class TaktIpqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ipqcDefectHandling.defectimages", "zh-CN", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
             // entity.ipqcDefectHandling.defectimages
             new TranslationSeedItem("entity.ipqcDefectHandling.defectimages", "zh-HK", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
+
+            // entity.ipqcDefectHandling.orderitem
+            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "en-US", "IPQC检验单明细", "IPQC检验单明细（主表）"),
+            // entity.ipqcDefectHandling.orderitem
+            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "ja-JP", "IPQC检验单明细", "IPQC检验单明细（主表）"),
+            // entity.ipqcDefectHandling.orderitem
+            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "zh-CN", "IPQC检验单明细", "IPQC检验单明细（主表）"),
+            // entity.ipqcDefectHandling.orderitem
+            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "zh-HK", "IPQC检验单明细", "IPQC检验单明细（主表）"),
         };
     }
 

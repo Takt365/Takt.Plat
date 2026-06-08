@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPurchaseOrderI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -281,13 +281,22 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseOrder.deliveryaddress", "zh-HK", "交货地址", "交货地址"),
 
             // entity.purchaseOrder.items
-            new TranslationSeedItem("entity.purchaseOrder.items", "en-US", "items", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
+            new TranslationSeedItem("entity.purchaseOrder.items", "en-US", "订单明细列表", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
             // entity.purchaseOrder.items
-            new TranslationSeedItem("entity.purchaseOrder.items", "ja-JP", "items", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
+            new TranslationSeedItem("entity.purchaseOrder.items", "ja-JP", "订单明细列表", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
             // entity.purchaseOrder.items
-            new TranslationSeedItem("entity.purchaseOrder.items", "zh-CN", "items", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
+            new TranslationSeedItem("entity.purchaseOrder.items", "zh-CN", "订单明细列表", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
             // entity.purchaseOrder.items
-            new TranslationSeedItem("entity.purchaseOrder.items", "zh-HK", "items", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
+            new TranslationSeedItem("entity.purchaseOrder.items", "zh-HK", "订单明细列表", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
+
+            // entity.purchaseOrder.changelogs
+            new TranslationSeedItem("entity.purchaseOrder.changelogs", "en-US", "采购订单变更记录列表", "采购订单变更记录列表（外键在子表 <see cref=\"TaktPurchaseOrderChangeLog.OrderId\"/>）"),
+            // entity.purchaseOrder.changelogs
+            new TranslationSeedItem("entity.purchaseOrder.changelogs", "ja-JP", "采购订单变更记录列表", "采购订单变更记录列表（外键在子表 <see cref=\"TaktPurchaseOrderChangeLog.OrderId\"/>）"),
+            // entity.purchaseOrder.changelogs
+            new TranslationSeedItem("entity.purchaseOrder.changelogs", "zh-CN", "采购订单变更记录列表", "采购订单变更记录列表（外键在子表 <see cref=\"TaktPurchaseOrderChangeLog.OrderId\"/>）"),
+            // entity.purchaseOrder.changelogs
+            new TranslationSeedItem("entity.purchaseOrder.changelogs", "zh-HK", "采购订单变更记录列表", "采购订单变更记录列表（外键在子表 <see cref=\"TaktPurchaseOrderChangeLog.OrderId\"/>）"),
         };
     }
 

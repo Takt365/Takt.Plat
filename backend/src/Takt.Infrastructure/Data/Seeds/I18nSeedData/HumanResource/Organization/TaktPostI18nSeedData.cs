@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktPostI18nSeedData.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,6 +127,15 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             // entity.post.type
             new TranslationSeedItem("entity.post.type", "zh-HK", "岗位类型", "岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）"),
 
+            // entity.post.level
+            new TranslationSeedItem("entity.post.level", "en-US", "岗位职级", "岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）"),
+            // entity.post.level
+            new TranslationSeedItem("entity.post.level", "ja-JP", "岗位职级", "岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）"),
+            // entity.post.level
+            new TranslationSeedItem("entity.post.level", "zh-CN", "岗位职级", "岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）"),
+            // entity.post.level
+            new TranslationSeedItem("entity.post.level", "zh-HK", "岗位职级", "岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）"),
+
             // entity.post.headcount
             new TranslationSeedItem("entity.post.headcount", "en-US", "编制人数", "编制人数"),
             // entity.post.headcount
@@ -208,6 +217,15 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             // entity.post.status
             new TranslationSeedItem("entity.post.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
 
+            // entity.post.isbuiltin
+            new TranslationSeedItem("entity.post.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 种子岗位为内置，不允许删除"),
+            // entity.post.isbuiltin
+            new TranslationSeedItem("entity.post.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 种子岗位为内置，不允许删除"),
+            // entity.post.isbuiltin
+            new TranslationSeedItem("entity.post.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子岗位为内置，不允许删除"),
+            // entity.post.isbuiltin
+            new TranslationSeedItem("entity.post.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 种子岗位为内置，不允许删除"),
+
             // entity.post.sortorder
             new TranslationSeedItem("entity.post.sortorder", "en-US", "排序号", "排序号"),
             // entity.post.sortorder
@@ -227,13 +245,13 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.post.description", "zh-HK", "岗位描述", "岗位描述"),
 
             // entity.post.employeeposts
-            new TranslationSeedItem("entity.post.employeeposts", "en-US", "employeePosts", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+            new TranslationSeedItem("entity.post.employeeposts", "en-US", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
             // entity.post.employeeposts
-            new TranslationSeedItem("entity.post.employeeposts", "ja-JP", "employeePosts", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+            new TranslationSeedItem("entity.post.employeeposts", "ja-JP", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
             // entity.post.employeeposts
-            new TranslationSeedItem("entity.post.employeeposts", "zh-CN", "employeePosts", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+            new TranslationSeedItem("entity.post.employeeposts", "zh-CN", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
             // entity.post.employeeposts
-            new TranslationSeedItem("entity.post.employeeposts", "zh-HK", "employeePosts", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+            new TranslationSeedItem("entity.post.employeeposts", "zh-HK", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
         };
     }
 

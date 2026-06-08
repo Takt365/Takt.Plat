@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktQuartzLogDtos.cs
-// 创建时间：2026-06-07
+// 创建时间：2026-06-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQuartzLog 生成，请按需审阅）
 // 
@@ -15,6 +15,7 @@ using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Enums;
+using Takt.Application.Dtos.Foundation;
 
 namespace Takt.Application.Dtos.Statistics.Logging;
 
@@ -40,7 +41,7 @@ public class TaktQuartzLogDto : TaktCompanyDtoBase
     /// 关联定时任务 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QuartzTaskId { get; set; }
+    public long QuartzTaskId { get; set; }
 
     /// <summary>
     /// 关联定时任务 名称（填充字段）
@@ -48,34 +49,19 @@ public class TaktQuartzLogDto : TaktCompanyDtoBase
     public string? QuartzTaskName { get; set; }
 
     /// <summary>
-    /// 触发用户（系统任务为 system）
+    /// 任务名称（执行时快照）
     /// </summary>
-    public string? UserName { get; set; } = string.Empty;
+    public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Job 名称
-    /// </summary>
-    public string JobName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job 分组
+    /// 任务组名（执行时快照）
     /// </summary>
     public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// Trigger 名称
+    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public string? TriggerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 执行状态（0=成功，1=失败）
-    /// </summary>
-    public TaktQuartzExecuteStatus ExecuteStatus { get; set; }
-
-    /// <summary>
-    /// 错误消息
-    /// </summary>
-    public string? ErrorMsg { get; set; } = string.Empty;
+    public TaktQuartzTaskType TaskType { get; set; }
 
     /// <summary>
     /// 执行时间
@@ -83,9 +69,46 @@ public class TaktQuartzLogDto : TaktCompanyDtoBase
     public DateTime ExecuteTime { get; set; }
 
     /// <summary>
-    /// 耗时（毫秒）
+    /// 执行耗时（毫秒）
     /// </summary>
-    public int CostTime { get; set; } = 0;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ExecuteDuration { get; set; }
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    public string? ExecuteParams { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行消息
+    /// </summary>
+    public string? ExecuteMessage { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 错误信息
+    /// </summary>
+    public string? ErrorInfo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器 IP
+    /// </summary>
+    public string? ExecuteIp { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器名
+    /// </summary>
+    public string? ExecuteHost { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus ExecuteStatus { get; set; }
+
+    /// <summary>
+    /// 关联的定时任务
+    /// （主表：TaktQuartzTask）
+    /// </summary>
+    public TaktQuartzTaskDto? QuartzTask { get; set; }
 
 }
 
@@ -116,34 +139,19 @@ public class TaktQuartzLogQueryDto : TaktPagedQuery
     public long? QuartzTaskId { get; set; }
 
     /// <summary>
-    /// 触发用户（系统任务为 system）
+    /// 任务名称（执行时快照）
     /// </summary>
-    public string? UserName { get; set; } = string.Empty;
+    public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Job 名称
-    /// </summary>
-    public string? JobName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job 分组
+    /// 任务组名（执行时快照）
     /// </summary>
     public string? JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// Trigger 名称
+    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public string? TriggerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 执行状态（0=成功，1=失败）
-    /// </summary>
-    public TaktQuartzExecuteStatus? ExecuteStatus { get; set; }
-
-    /// <summary>
-    /// 错误消息
-    /// </summary>
-    public string? ErrorMsg { get; set; } = string.Empty;
+    public TaktQuartzTaskType? TaskType { get; set; }
 
     /// <summary>
     /// 执行时间（范围查询-开始）
@@ -156,9 +164,40 @@ public class TaktQuartzLogQueryDto : TaktPagedQuery
     public DateTime? ExecuteTimeEnd { get; set; }
 
     /// <summary>
-    /// 耗时（毫秒）
+    /// 执行耗时（毫秒）
     /// </summary>
-    public int? CostTime { get; set; }
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ExecuteDuration { get; set; }
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    public string? ExecuteParams { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行消息
+    /// </summary>
+    public string? ExecuteMessage { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 错误信息
+    /// </summary>
+    public string? ErrorInfo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器 IP
+    /// </summary>
+    public string? ExecuteIp { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器名
+    /// </summary>
+    public string? ExecuteHost { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus? ExecuteStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -209,39 +248,24 @@ public class TaktQuartzLogCreateDto
     /// 关联定时任务 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QuartzTaskId { get; set; }
+    public long QuartzTaskId { get; set; }
 
     /// <summary>
-    /// 触发用户（系统任务为 system）
+    /// 任务名称（执行时快照）
     /// </summary>
-    public string? UserName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "任务名称（执行时快照）不能为空")]
+    public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Job 名称
+    /// 任务组名（执行时快照）
     /// </summary>
-    [Required(ErrorMessage = "Job 名称不能为空")]
-    public string JobName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job 分组
-    /// </summary>
-    [Required(ErrorMessage = "Job 分组不能为空")]
+    [Required(ErrorMessage = "任务组名（执行时快照）不能为空")]
     public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// Trigger 名称
+    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public string? TriggerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 执行状态（0=成功，1=失败）
-    /// </summary>
-    public TaktQuartzExecuteStatus ExecuteStatus { get; set; }
-
-    /// <summary>
-    /// 错误消息
-    /// </summary>
-    public string? ErrorMsg { get; set; } = string.Empty;
+    public TaktQuartzTaskType TaskType { get; set; }
 
     /// <summary>
     /// 执行时间
@@ -249,9 +273,40 @@ public class TaktQuartzLogCreateDto
     public DateTime ExecuteTime { get; set; }
 
     /// <summary>
-    /// 耗时（毫秒）
+    /// 执行耗时（毫秒）
     /// </summary>
-    public int CostTime { get; set; } = 0;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ExecuteDuration { get; set; }
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    public string? ExecuteParams { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行消息
+    /// </summary>
+    public string? ExecuteMessage { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 错误信息
+    /// </summary>
+    public string? ErrorInfo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器 IP
+    /// </summary>
+    public string? ExecuteIp { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器名
+    /// </summary>
+    public string? ExecuteHost { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus ExecuteStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -303,10 +358,10 @@ public class TaktQuartzLogStatusDto
     public long QuartzLogId { get; set; }
 
     /// <summary>
-    /// 执行状态（0=成功，1=失败）
+    /// 执行状态（0=失败，1=成功）
     /// </summary>
-    [Required(ErrorMessage = "执行状态（0=成功，1=失败）不能为空")]
-    public TaktQuartzExecuteStatus ExecuteStatus { get; set; }
+    [Required(ErrorMessage = "执行状态（0=失败，1=成功）不能为空")]
+    public TaktExecuteStatus ExecuteStatus { get; set; }
 }
 
 // ========================================
@@ -334,37 +389,22 @@ public class TaktQuartzLogExportDto
     /// 关联定时任务 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QuartzTaskId { get; set; }
+    public long QuartzTaskId { get; set; }
 
     /// <summary>
-    /// 触发用户（系统任务为 system）
+    /// 任务名称（执行时快照）
     /// </summary>
-    public string? UserName { get; set; } = string.Empty;
+    public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Job 名称
-    /// </summary>
-    public string JobName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job 分组
+    /// 任务组名（执行时快照）
     /// </summary>
     public string JobGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// Trigger 名称
+    /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public string? TriggerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 执行状态（0=成功，1=失败）
-    /// </summary>
-    public TaktQuartzExecuteStatus ExecuteStatus { get; set; }
-
-    /// <summary>
-    /// 错误消息
-    /// </summary>
-    public string? ErrorMsg { get; set; } = string.Empty;
+    public TaktQuartzTaskType TaskType { get; set; }
 
     /// <summary>
     /// 执行时间
@@ -372,9 +412,40 @@ public class TaktQuartzLogExportDto
     public DateTime ExecuteTime { get; set; }
 
     /// <summary>
-    /// 耗时（毫秒）
+    /// 执行耗时（毫秒）
     /// </summary>
-    public int CostTime { get; set; } = 0;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ExecuteDuration { get; set; }
+
+    /// <summary>
+    /// 执行参数
+    /// </summary>
+    public string? ExecuteParams { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行消息
+    /// </summary>
+    public string? ExecuteMessage { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 错误信息
+    /// </summary>
+    public string? ErrorInfo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器 IP
+    /// </summary>
+    public string? ExecuteIp { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行机器名
+    /// </summary>
+    public string? ExecuteHost { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行状态（0=失败，1=成功）
+    /// </summary>
+    public TaktExecuteStatus ExecuteStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
