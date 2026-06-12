@@ -5,6 +5,7 @@ node_modules/
 frontend/dist/
 backend/**/bin/
 backend/**/obj/
+backend/_build_out/
 backend/.vs/
 *.user
 *.suo
