@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktStandardOperationTimesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工序时间控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
 /// 标准工序时间控制器
 /// 提供标准工序时间的 REST API
 /// </summary>
-[ApiModule(TaktModule.Logistics, "后勤管理")]
+[ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "标准工序时间")]
 public class TaktStandardOperationTimesController : TaktControllerBase
 {

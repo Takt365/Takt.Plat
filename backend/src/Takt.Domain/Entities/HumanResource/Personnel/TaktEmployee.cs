@@ -13,7 +13,6 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 using Takt.Domain.Entities.HumanResource.Organization;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Personnel;
 
@@ -177,7 +176,7 @@ public class TaktEmployee : TaktCompanyEntityBase
     /// 是否内置（种子员工不可删）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 紧急联系人姓名

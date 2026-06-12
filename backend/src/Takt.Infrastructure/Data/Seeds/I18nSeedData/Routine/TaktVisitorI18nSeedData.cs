@@ -76,7 +76,7 @@ public class TaktVisitorI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktVisitor 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.visitor._self / entity.visitor.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.visitor._self / entity.visitor.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetVisitorTranslations()
     {
@@ -143,8 +143,8 @@ public class TaktVisitorI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

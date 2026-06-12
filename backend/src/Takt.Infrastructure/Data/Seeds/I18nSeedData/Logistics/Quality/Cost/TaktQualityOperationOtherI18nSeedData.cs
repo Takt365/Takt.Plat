@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityOperationOtherI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityOperationOther 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost;
 
 /// <summary>
-/// TaktQualityOperationOther 实体国际化翻译种子（键前缀 entity.qualityOperationOther.*）
+/// TaktQualityOperationOther 实体国际化翻译种子（键前缀 entity.qualityoperationother.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktQualityOperationOtherI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktQualityOperationOtherI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityOperationOther 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityoperationother 实体翻译...", tenantCode);
 
         foreach (var item in GetQualityOperationOtherTranslations())
         {
@@ -76,92 +75,92 @@ public class TaktQualityOperationOtherI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktQualityOperationOther 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.qualityOperationOther._self / entity.qualityOperationOther.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.qualityoperationother._self / entity.qualityoperationother.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetQualityOperationOtherTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.qualityOperationOther._self
-            new TranslationSeedItem("entity.qualityOperationOther._self", "en-US", "Quality Operation Other Information", "实体名称"),
-            // entity.qualityOperationOther._self
-            new TranslationSeedItem("entity.qualityOperationOther._self", "ja-JP", "品质业务明细 - 其他通常业务费用信息", "实体名称"),
-            // entity.qualityOperationOther._self
-            new TranslationSeedItem("entity.qualityOperationOther._self", "zh-CN", "品质业务明细 - 其他通常业务费用信息", "实体名称"),
-            // entity.qualityOperationOther._self
-            new TranslationSeedItem("entity.qualityOperationOther._self", "zh-HK", "品质业务明细 - 其他通常业务费用信息", "实体名称"),
+            // entity.qualityoperationother._self
+            new TranslationSeedItem("entity.qualityoperationother._self", "en-US", "Quality Operation Other Information", "实体名称"),
+            // entity.qualityoperationother._self
+            new TranslationSeedItem("entity.qualityoperationother._self", "ja-JP", "品质业务明细 - 其他通常业务费用信息", "实体名称"),
+            // entity.qualityoperationother._self
+            new TranslationSeedItem("entity.qualityoperationother._self", "zh-CN", "品质业务明细 - 其他通常业务费用信息", "实体名称"),
+            // entity.qualityoperationother._self
+            new TranslationSeedItem("entity.qualityoperationother._self", "zh-HK", "品质业务明细 - 其他通常业务费用信息", "实体名称"),
 
-            // entity.qualityOperationOther.qualityoperationid
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationid", "en-US", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityOperationOther.qualityoperationid
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationid", "ja-JP", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityOperationOther.qualityoperationid
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationid", "zh-CN", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityOperationOther.qualityoperationid
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationid", "zh-HK", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityoperationother.qualityoperationid
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationid", "en-US", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityoperationother.qualityoperationid
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationid", "ja-JP", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityoperationother.qualityoperationid
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationid", "zh-CN", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityoperationother.qualityoperationid
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationid", "zh-HK", "品质业务主表ID", "品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
 
-            // entity.qualityOperationOther.qualityoperationcode
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationcode", "en-US", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
-            // entity.qualityOperationOther.qualityoperationcode
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationcode", "ja-JP", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
-            // entity.qualityOperationOther.qualityoperationcode
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationcode", "zh-CN", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
-            // entity.qualityOperationOther.qualityoperationcode
-            new TranslationSeedItem("entity.qualityOperationOther.qualityoperationcode", "zh-HK", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
+            // entity.qualityoperationother.qualityoperationcode
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationcode", "en-US", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
+            // entity.qualityoperationother.qualityoperationcode
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationcode", "ja-JP", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
+            // entity.qualityoperationother.qualityoperationcode
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationcode", "zh-CN", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
+            // entity.qualityoperationother.qualityoperationcode
+            new TranslationSeedItem("entity.qualityoperationother.qualityoperationcode", "zh-HK", "品质业务编码", "品质业务编码（冗余字段,便于查询）"),
 
-            // entity.qualityOperationOther.linenumber
-            new TranslationSeedItem("entity.qualityOperationOther.linenumber", "en-US", "项号", "项号（如10, 20, 30，步长严格为10）"),
-            // entity.qualityOperationOther.linenumber
-            new TranslationSeedItem("entity.qualityOperationOther.linenumber", "ja-JP", "项号", "项号（如10, 20, 30，步长严格为10）"),
-            // entity.qualityOperationOther.linenumber
-            new TranslationSeedItem("entity.qualityOperationOther.linenumber", "zh-CN", "项号", "项号（如10, 20, 30，步长严格为10）"),
-            // entity.qualityOperationOther.linenumber
-            new TranslationSeedItem("entity.qualityOperationOther.linenumber", "zh-HK", "项号", "项号（如10, 20, 30，步长严格为10）"),
+            // entity.qualityoperationother.linenumber
+            new TranslationSeedItem("entity.qualityoperationother.linenumber", "en-US", "项号", "项号（如10, 20, 30，步长严格为10）"),
+            // entity.qualityoperationother.linenumber
+            new TranslationSeedItem("entity.qualityoperationother.linenumber", "ja-JP", "项号", "项号（如10, 20, 30，步长严格为10）"),
+            // entity.qualityoperationother.linenumber
+            new TranslationSeedItem("entity.qualityoperationother.linenumber", "zh-CN", "项号", "项号（如10, 20, 30，步长严格为10）"),
+            // entity.qualityoperationother.linenumber
+            new TranslationSeedItem("entity.qualityoperationother.linenumber", "zh-HK", "项号", "项号（如10, 20, 30，步长严格为10）"),
 
-            // entity.qualityOperationOther.operationscost
-            new TranslationSeedItem("entity.qualityOperationOther.operationscost", "en-US", "其他通常业务费用", "其他通常业务费用(元)"),
-            // entity.qualityOperationOther.operationscost
-            new TranslationSeedItem("entity.qualityOperationOther.operationscost", "ja-JP", "其他通常业务费用", "其他通常业务费用(元)"),
-            // entity.qualityOperationOther.operationscost
-            new TranslationSeedItem("entity.qualityOperationOther.operationscost", "zh-CN", "其他通常业务费用", "其他通常业务费用(元)"),
-            // entity.qualityOperationOther.operationscost
-            new TranslationSeedItem("entity.qualityOperationOther.operationscost", "zh-HK", "其他通常业务费用", "其他通常业务费用(元)"),
+            // entity.qualityoperationother.operationscost
+            new TranslationSeedItem("entity.qualityoperationother.operationscost", "en-US", "其他通常业务费用", "其他通常业务费用(元)"),
+            // entity.qualityoperationother.operationscost
+            new TranslationSeedItem("entity.qualityoperationother.operationscost", "ja-JP", "其他通常业务费用", "其他通常业务费用(元)"),
+            // entity.qualityoperationother.operationscost
+            new TranslationSeedItem("entity.qualityoperationother.operationscost", "zh-CN", "其他通常业务费用", "其他通常业务费用(元)"),
+            // entity.qualityoperationother.operationscost
+            new TranslationSeedItem("entity.qualityoperationother.operationscost", "zh-HK", "其他通常业务费用", "其他通常业务费用(元)"),
 
-            // entity.qualityOperationOther.worktimeminutes
-            new TranslationSeedItem("entity.qualityOperationOther.worktimeminutes", "en-US", "通常业务作业时间", "通常业务作业时间(分钟)"),
-            // entity.qualityOperationOther.worktimeminutes
-            new TranslationSeedItem("entity.qualityOperationOther.worktimeminutes", "ja-JP", "通常业务作业时间", "通常业务作业时间(分钟)"),
-            // entity.qualityOperationOther.worktimeminutes
-            new TranslationSeedItem("entity.qualityOperationOther.worktimeminutes", "zh-CN", "通常业务作业时间", "通常业务作业时间(分钟)"),
-            // entity.qualityOperationOther.worktimeminutes
-            new TranslationSeedItem("entity.qualityOperationOther.worktimeminutes", "zh-HK", "通常业务作业时间", "通常业务作业时间(分钟)"),
+            // entity.qualityoperationother.worktimeminutes
+            new TranslationSeedItem("entity.qualityoperationother.worktimeminutes", "en-US", "通常业务作业时间", "通常业务作业时间(分钟)"),
+            // entity.qualityoperationother.worktimeminutes
+            new TranslationSeedItem("entity.qualityoperationother.worktimeminutes", "ja-JP", "通常业务作业时间", "通常业务作业时间(分钟)"),
+            // entity.qualityoperationother.worktimeminutes
+            new TranslationSeedItem("entity.qualityoperationother.worktimeminutes", "zh-CN", "通常业务作业时间", "通常业务作业时间(分钟)"),
+            // entity.qualityoperationother.worktimeminutes
+            new TranslationSeedItem("entity.qualityoperationother.worktimeminutes", "zh-HK", "通常业务作业时间", "通常业务作业时间(分钟)"),
 
-            // entity.qualityOperationOther.otherexpenses
-            new TranslationSeedItem("entity.qualityOperationOther.otherexpenses", "en-US", "通常业务其他费用", "通常业务其他费用(元)"),
-            // entity.qualityOperationOther.otherexpenses
-            new TranslationSeedItem("entity.qualityOperationOther.otherexpenses", "ja-JP", "通常业务其他费用", "通常业务其他费用(元)"),
-            // entity.qualityOperationOther.otherexpenses
-            new TranslationSeedItem("entity.qualityOperationOther.otherexpenses", "zh-CN", "通常业务其他费用", "通常业务其他费用(元)"),
-            // entity.qualityOperationOther.otherexpenses
-            new TranslationSeedItem("entity.qualityOperationOther.otherexpenses", "zh-HK", "通常业务其他费用", "通常业务其他费用(元)"),
+            // entity.qualityoperationother.otherexpenses
+            new TranslationSeedItem("entity.qualityoperationother.otherexpenses", "en-US", "通常业务其他费用", "通常业务其他费用(元)"),
+            // entity.qualityoperationother.otherexpenses
+            new TranslationSeedItem("entity.qualityoperationother.otherexpenses", "ja-JP", "通常业务其他费用", "通常业务其他费用(元)"),
+            // entity.qualityoperationother.otherexpenses
+            new TranslationSeedItem("entity.qualityoperationother.otherexpenses", "zh-CN", "通常业务其他费用", "通常业务其他费用(元)"),
+            // entity.qualityoperationother.otherexpenses
+            new TranslationSeedItem("entity.qualityoperationother.otherexpenses", "zh-HK", "通常业务其他费用", "通常业务其他费用(元)"),
 
-            // entity.qualityOperationOther.othernote
-            new TranslationSeedItem("entity.qualityOperationOther.othernote", "en-US", "通常业务其他备注", "通常业务其他备注"),
-            // entity.qualityOperationOther.othernote
-            new TranslationSeedItem("entity.qualityOperationOther.othernote", "ja-JP", "通常业务其他备注", "通常业务其他备注"),
-            // entity.qualityOperationOther.othernote
-            new TranslationSeedItem("entity.qualityOperationOther.othernote", "zh-CN", "通常业务其他备注", "通常业务其他备注"),
-            // entity.qualityOperationOther.othernote
-            new TranslationSeedItem("entity.qualityOperationOther.othernote", "zh-HK", "通常业务其他备注", "通常业务其他备注"),
+            // entity.qualityoperationother.othernote
+            new TranslationSeedItem("entity.qualityoperationother.othernote", "en-US", "通常业务其他备注", "通常业务其他备注"),
+            // entity.qualityoperationother.othernote
+            new TranslationSeedItem("entity.qualityoperationother.othernote", "ja-JP", "通常业务其他备注", "通常业务其他备注"),
+            // entity.qualityoperationother.othernote
+            new TranslationSeedItem("entity.qualityoperationother.othernote", "zh-CN", "通常业务其他备注", "通常业务其他备注"),
+            // entity.qualityoperationother.othernote
+            new TranslationSeedItem("entity.qualityoperationother.othernote", "zh-HK", "通常业务其他备注", "通常业务其他备注"),
 
-            // entity.qualityOperationOther.operation
-            new TranslationSeedItem("entity.qualityOperationOther.operation", "en-US", "品质业务主表", "品质业务主表(导航属性)"),
-            // entity.qualityOperationOther.operation
-            new TranslationSeedItem("entity.qualityOperationOther.operation", "ja-JP", "品质业务主表", "品质业务主表(导航属性)"),
-            // entity.qualityOperationOther.operation
-            new TranslationSeedItem("entity.qualityOperationOther.operation", "zh-CN", "品质业务主表", "品质业务主表(导航属性)"),
-            // entity.qualityOperationOther.operation
-            new TranslationSeedItem("entity.qualityOperationOther.operation", "zh-HK", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityoperationother.operation
+            new TranslationSeedItem("entity.qualityoperationother.operation", "en-US", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityoperationother.operation
+            new TranslationSeedItem("entity.qualityoperationother.operation", "ja-JP", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityoperationother.operation
+            new TranslationSeedItem("entity.qualityoperationother.operation", "zh-CN", "品质业务主表", "品质业务主表(导航属性)"),
+            // entity.qualityoperationother.operation
+            new TranslationSeedItem("entity.qualityoperationother.operation", "zh-HK", "品质业务主表", "品质业务主表(导航属性)"),
         };
     }
 
@@ -179,8 +178,8 @@ public class TaktQualityOperationOtherI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

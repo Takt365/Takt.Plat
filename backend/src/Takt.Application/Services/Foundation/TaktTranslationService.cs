@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktTranslationService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：翻译应用服务实现
 // 
@@ -310,7 +310,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     private async Task<List<TaktCulture>> GetTransposedMasterCulturesAsync()
     {
         return await _cultureRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.LanguageStatus == TaktCommonStatus.Enabled,
+            x => x.TenantCode == CurrentTenantCode && x.LanguageStatus == 1,
             x => x.SortOrder,
             false);
     }
@@ -418,6 +418,33 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
             }
         }
         return affected;
+    }
+
+    /// <summary>
+    /// 获取指定区域文化的前端扁平翻译消息（ResourceType=Frontend）
+    /// </summary>
+    /// <param name="cultureCode">区域文化编码 BCP47</param>
+    /// <returns>扁平键值 DTO</returns>
+    public async Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode)
+    {
+        if (string.IsNullOrWhiteSpace(cultureCode))
+        {
+            ThrowBusinessException("区域文化编码不能为空");
+        }
+        var trimmedCulture = cultureCode.Trim();
+        var list = await _translationRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CultureCode == trimmedCulture
+                && x.ResourceType == 0);
+        var messages = list
+            .Where(x => !string.IsNullOrWhiteSpace(x.I18nKey))
+            .GroupBy(x => x.I18nKey)
+            .ToDictionary(g => g.Key, g => g.First().TranslationText ?? string.Empty);
+        return new TaktTranslationMessagesDto
+        {
+            CultureCode = trimmedCulture,
+            Messages = messages,
+        };
     }
 
     // ========================================

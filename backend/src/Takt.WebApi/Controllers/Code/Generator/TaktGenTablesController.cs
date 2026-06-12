@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Code.Generator
 // 文件名称：TaktGenTablesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表配置控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Code.Generator;
 /// 代码生成数据表配置控制器
 /// 提供代码生成数据表配置的 REST API
 /// </summary>
-[ApiModule(TaktModule.Code, "代码管理")]
+[ApiModule(7, "代码管理")]
 [Route("api/[controller]", Name = "代码生成数据表配置")]
 public class TaktGenTablesController : TaktControllerBase
 {

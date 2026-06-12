@@ -15,7 +15,11 @@ import type { NotificationPlacement } from 'ant-design-vue';
 import type { VNode } from 'vue';
 import { translateLocaleMessage as translate } from '@/utils/takt-i18n-message';
 import type { NotificationType } from '@/types/event';
-import { EventBus } from '@/utils/event-bus';
+import {
+  HEADER_ONLINE_AUTO_READ_MS,
+  useHeaderNotificationStore,
+  type TaktHeaderNotificationKind,
+} from '@/stores/navigation/header-notification';
 
 /** 与 EventBus / 通知中心一致的类型 */
 export type NotifyType = NotificationType;
@@ -60,6 +64,16 @@ export interface NotifyOptions {
    * 是否同步写入通知中心（默认 true）
    */
   syncToCenter?: boolean;
+
+  /**
+   * 通知中心入列选项（类别、落库 ID、自动已读等）
+   */
+  center?: {
+    kind?: TaktHeaderNotificationKind;
+    messageId?: string;
+    time?: string;
+    autoMarkReadAfterMs?: number;
+  };
 }
 
 /** API 连接失败通知固定 key */
@@ -84,14 +98,17 @@ export function notify(options: NotifyOptions): void {
     key,
     onClose,
     syncToCenter = true,
+    center,
   } = options;
 
   if (syncToCenter) {
-    EventBus.emit('notification:show', {
-      type,
-      message,
-      description: typeof description === 'string' ? description : undefined,
-      silent: true,
+    useHeaderNotificationStore().enqueueNotification({
+      title: message,
+      content: typeof description === 'string' ? description : '',
+      kind: center?.kind,
+      messageId: center?.messageId,
+      time: center?.time,
+      autoMarkReadAfterMs: center?.autoMarkReadAfterMs,
     });
   }
 
@@ -165,12 +182,18 @@ export function showSignalrConnectFail(options?: Partial<NotifyOptions>): void {
  * @param {Partial<NotifyOptions> & { description: string }} options 须含 description
  */
 export function showOnlineNotify(options: Partial<NotifyOptions> & { description: string }): void {
+  const { center: centerOverride, ...rest } = options;
   notify({
     type: 'success',
     message: translate('common.page.signalr.onlineNotify'),
     placement: DEFAULT_PLACEMENT,
-    duration: DEFAULT_DURATION,
-    ...options,
+    duration: 5,
+    ...rest,
+    center: {
+      kind: 'online',
+      autoMarkReadAfterMs: HEADER_ONLINE_AUTO_READ_MS,
+      ...centerOverride,
+    },
   });
 }
 
@@ -186,5 +209,36 @@ export function showNewMessage(
     placement: DEFAULT_PLACEMENT,
     duration: 5,
     ...options,
+  });
+}
+
+/**
+ * 显示站内私信通知（右上角 Notification + 顶栏通知中心入列）
+ * @param options 发送者与正文
+ */
+export function showPrivateMessageNotify(options: {
+  sender: string;
+  content: string;
+  title?: string;
+  messageId?: string;
+  sendTime?: string;
+}): void {
+  const sender = options.sender.trim() || '?';
+  const body = options.content.trim();
+  const messageTitle = options.title?.trim();
+  const description = messageTitle && body
+    ? `${messageTitle}\n${body}`
+    : (messageTitle || body);
+  notify({
+    type: 'info',
+    message: translate('common.page.signalr.newMessage'),
+    description: description ? `${sender}: ${description}` : sender,
+    placement: DEFAULT_PLACEMENT,
+    duration: 5,
+    center: {
+      kind: 'persisted',
+      messageId: options.messageId,
+      time: options.sendTime,
+    },
   });
 }

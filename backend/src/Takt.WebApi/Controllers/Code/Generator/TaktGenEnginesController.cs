@@ -22,7 +22,7 @@ namespace Takt.WebApi.Controllers.Code.Generator;
 /// 代码生成工作流控制器
 /// 提供代码生成的完整工作流：数据库选表 → 导入配置 → 代码生成/预览
 /// </summary>
-[ApiModule(TaktModule.Code, "代码管理")]
+[ApiModule(7, "代码管理")]
 [Route("api/[controller]", Name = "代码生成工作流")]
 public class TaktGenEnginesController : TaktControllerBase
 {

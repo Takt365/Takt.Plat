@@ -43,8 +43,8 @@ public class TaktQuartzLog : TaktCompanyEntityBase
     /// <summary>
     /// 任务组名（执行时快照）
     /// </summary>
-    [SugarColumn(ColumnName = "job_group", ColumnDescription = "任务组名", ColumnDataType = "varchar", Length = 50, IsNullable = false, DefaultValue = "''")]
-    public string JobGroup { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "job_group", ColumnDescription = "任务组名", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public TaktQuartzLogJobGroup JobGroup { get; set; } = TaktQuartzLogJobGroup.Unknown;
 
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）

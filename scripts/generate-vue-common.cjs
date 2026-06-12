@@ -18,11 +18,15 @@ const {
   resolveEntityScope,
   findDomainEntityFile,
   logGeneratedFileWritePolicy,
+  parseSingleEntityGenerateArgsFromArgv,
+  entityClassToSlug,
+  buildEntityI18nKey,
 } = require('./generate-script-common.cjs');
 const {
   shouldExcludeDtoSourceBase,
   shouldExcludeVueGeneration,
   isChangeLogEntity,
+  isStandaloneChildVueEntity,
   RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
 } = require('./generate-entity-exclusions.cjs');
 
@@ -104,52 +108,12 @@ function kebabToPascal(str) {
 }
 
 /**
- * 解析 CLI 参数
+ * 解析 CLI 参数（单实体，禁止 --all）
  * @param {() => void} printUsage
- * @returns {{ all: boolean, entityPrefix: string|null, force: boolean, dryRun: boolean, viewPath: string|null }}
+ * @returns {{ entityPrefix: string, force: boolean, dryRun: boolean, viewPath: string|null }}
  */
 function parseVueCliArgs(printUsage) {
-  const args = process.argv.slice(2);
-  const options = { all: false, entityPrefix: null, force: false, dryRun: false, viewPath: null };
-  for (let i = 0; i < args.length; i += 1) {
-    const arg = args[i];
-    if (arg === '--force') {
-      options.force = true;
-      continue;
-    }
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-      continue;
-    }
-    if (arg === '--view-path') {
-      options.viewPath = args[i + 1] || null;
-      i += 1;
-      continue;
-    }
-    if (!arg.startsWith('--')) {
-      console.error(`❌ 未知参数: ${arg}`);
-      process.exit(1);
-    }
-    const value = arg.slice(2);
-    if (value.toLowerCase() === 'all') {
-      options.all = true;
-      continue;
-    }
-    if (value.startsWith('Takt')) {
-      console.error('❌ 实体名不要带 Takt 前缀，例如 --Plant');
-      process.exit(1);
-    }
-    if (options.entityPrefix) {
-      console.error('❌ 只能指定 --all 或一个实体名');
-      process.exit(1);
-    }
-    options.entityPrefix = value;
-  }
-  if (!options.all && !options.entityPrefix) {
-    printUsage();
-    process.exit(1);
-  }
-  return options;
+  return parseSingleEntityGenerateArgsFromArgv(process.argv.slice(2), printUsage, { allowViewPath: true });
 }
 
 /**
@@ -255,24 +219,6 @@ function pascalToKebab(str) {
   return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
-/**
- * 字段名转 entity i18n 末段（全小写）
- * @param {string} name
- * @returns {string}
- */
-function fieldI18nKey(name, entitySlug) {
-  if (!entitySlug) {
-    return name.toLowerCase();
-  }
-  const prefix = entitySlug.toLowerCase();
-  const lower = name.toLowerCase();
-  if (lower.startsWith(prefix) && name.length > prefix.length) {
-    const rest = name.slice(prefix.length);
-    return (rest.charAt(0).toLowerCase() + rest.slice(1)).toLowerCase();
-  }
-  return name.toLowerCase();
-}
-
 /** 通用实体字段 → common.page.entity.* 完整翻译键（与 TaktCommonI18nSeedData 对齐） */
 const COMMON_ENTITY_FIELD_T_KEYS = {
   remark: 'common.page.entity.remark',
@@ -286,15 +232,16 @@ const COMMON_ENTITY_FIELD_T_KEYS = {
 
 /**
  * 解析字段完整 i18n 键（remark / extFieldJson 等走 common.page.entity.*，其余走 entity.{slug}.*）
- * @param {string} name
- * @param {string} entitySlug
+ * 与 generate-entity-i18n-seed.cjs / TaktXxxI18nSeedData 键规则一致（slug 全小写 + 末段别名）
+ * @param {string} name 属性 camelCase
+ * @param {string} entityI18nSlug 实体 slug（全小写，如 itasset）
  * @returns {string}
  */
-function resolveFieldTranslationKey(name, entitySlug) {
+function resolveFieldTranslationKey(name, entityI18nSlug) {
   if (COMMON_ENTITY_FIELD_T_KEYS[name]) {
     return COMMON_ENTITY_FIELD_T_KEYS[name];
   }
-  return `entity.${entitySlug}.${fieldI18nKey(name, entitySlug)}`;
+  return buildEntityI18nKey(entityI18nSlug, name);
 }
 
 /**
@@ -519,6 +466,16 @@ function parseTypeInterfaces(content) {
 function extractDictType(doc) {
   const match = doc.match(/字典\s+([a-z0-9_]+)/i);
   return match ? match[1] : '';
+}
+
+/**
+ * DTO/类型 JSDoc 是否为响应 DTO 填充字段（服务层 Fill，不参与列表/表单/查询）
+ * 与 generate-dtos-from-entity 中「（填充字段）」注释对齐
+ * @param {string} doc
+ * @returns {boolean}
+ */
+function isDtoFillField(doc) {
+  return /填充字段/.test(doc || '');
 }
 
 /** sys_normal_disable：注释含「1=启用…0=禁用」的通用状态字段 */
@@ -760,16 +717,17 @@ function childTypesFileExists(modulePath, childPascal) {
  * @param {string} [childTypeOverride]
  */
 function buildMasterDetailChildMeta(fieldName, childPascal, childTypeOverride) {
-  const childSlug = pascalToCamel(childPascal);
+  const childCamel = pascalToCamel(childPascal);
   const childType = childTypeOverride || childPascal;
   return {
     fieldName,
     childPascal,
     childCreateType: `${childPascal}Create`,
     childType,
-    childCamel: childSlug,
+    childCamel,
+    childI18nSlug: entityClassToSlug(`Takt${childPascal}`),
     childKebab: pascalToKebab(childPascal),
-    childIdField: `${childSlug}Id`,
+    childIdField: `${childCamel}Id`,
   };
 }
 
@@ -1003,6 +961,9 @@ function buildChildFormFieldProps(interfaces, childPascal, masterCamel) {
     if (scopeNames.has(p.name) || SKIP_FORM_FIELDS.has(p.name)) {
       return false;
     }
+    if (isDtoFillField(p.doc)) {
+      return false;
+    }
     if (p.name === `${pascalToCamel(childPascal)}Id`) {
       return false;
     }
@@ -1045,18 +1006,30 @@ function buildFieldMeta(interfaces, entityPascal, typesContent = '', modulePath 
   const query = interfaces.get(`${entityPascal}Query`);
   const masterDetailChildren = resolveMasterDetailChildren(interfaces, entityPascal, modulePath);
   const childFieldNames = new Set(masterDetailChildren.map((c) => c.fieldName));
-  const entitySlug = pascalToCamel(entityPascal);
-  const enrich = (fields, slug) => fields.map((f) => ({
+  const entityCamel = pascalToCamel(entityPascal);
+  const entityI18nSlug = entityClassToSlug(`Takt${entityPascal}`);
+  const enrich = (fields, i18nSlug) => fields.map((f) => ({
     ...f,
     htmlType: inferHtmlType(f),
     dictType: resolveDictType(f),
-    i18nKey: resolveFieldTranslationKey(f.name, slug),
+    i18nKey: resolveFieldTranslationKey(f.name, i18nSlug),
   }));
-  const listFields = (entity?.properties || []).filter((p) => !skipListFields.has(p.name) && !childFieldNames.has(p.name));
+  const listFields = (entity?.properties || []).filter((p) => {
+    if (skipListFields.has(p.name) || childFieldNames.has(p.name)) {
+      return false;
+    }
+    if (isDtoFillField(p.doc)) {
+      return false;
+    }
+    return true;
+  });
   const scopeFields = buildScopeFormFields(create?.properties || [], entityPascal);
   const scopeNames = new Set(scopeFields.map((f) => f.name));
   const formFieldsRaw = (create?.properties || []).filter((p) => {
     if (scopeNames.has(p.name) || SKIP_FORM_FIELDS.has(p.name)) {
+      return false;
+    }
+    if (isDtoFillField(p.doc)) {
       return false;
     }
     if (p.name === `${pascalToCamel(entityPascal)}Id`) {
@@ -1071,40 +1044,46 @@ function buildFieldMeta(interfaces, entityPascal, typesContent = '', modulePath 
     if (SKIP_QUERY_FIELDS.has(p.name)) {
       return false;
     }
+    if (isDtoFillField(p.doc)) {
+      return false;
+    }
     if (childFieldNames.has(p.name)) {
       return false;
     }
     return true;
   });
-  const queryFields = enrich(queryFieldsRaw, entitySlug);
+  const queryFields = enrich(queryFieldsRaw, entityI18nSlug);
   const enrichedChildren = masterDetailChildren.map((child) => {
     const childTypesPath = path.join(CONFIG.frontendRoot, CONFIG.typesDir, modulePath, `${child.childKebab}.d.ts`);
     const childTypesContent = fs.existsSync(childTypesPath) ? fs.readFileSync(childTypesPath, 'utf-8') : '';
     const childInterfaces = childTypesContent ? parseTypeInterfaces(childTypesContent) : interfaces;
-    const childFormRaw = buildChildFormFieldProps(childInterfaces, child.childPascal, entitySlug);
+    const childFormRaw = buildChildFormFieldProps(childInterfaces, child.childPascal, entityCamel);
     const childEntity = interfaces.get(child.childType) || childInterfaces.get(child.childType);
     const childListRaw = (childEntity?.properties || []).filter((p) => {
       if (SKIP_LIST_FIELDS.has(p.name)) {
         return false;
       }
-      if (p.name === child.childIdField || p.name === `${entitySlug}Id`) {
+      if (isDtoFillField(p.doc)) {
+        return false;
+      }
+      if (p.name === child.childIdField || p.name === `${entityCamel}Id`) {
         return false;
       }
       return true;
     }).slice(0, 8);
-    const childSlug = pascalToCamel(child.childPascal);
+    const childI18nSlug = child.childI18nSlug || entityClassToSlug(`Takt${child.childPascal}`);
     return {
       ...child,
-      masterFkField: resolveChildMasterFkField(childInterfaces, child.childPascal, entitySlug),
+      masterFkField: resolveChildMasterFkField(childInterfaces, child.childPascal, entityCamel),
       apiGetList: resolveChildListApiMethod(modulePath, child.childKebab, child.childPascal),
-      formFields: enrich(childFormRaw, childSlug),
-      listFields: enrich(childListRaw, childSlug),
+      formFields: enrich(childFormRaw, childI18nSlug),
+      listFields: enrich(childListRaw, childI18nSlug),
     };
   });
   return {
-    listFields: enrich(listFields, entitySlug),
-    formFields: enrich([...scopeFields, ...formFieldsRaw], entitySlug),
-    queryFields: enrich(queryFields, entitySlug),
+    listFields: enrich(listFields, entityI18nSlug),
+    formFields: enrich([...scopeFields, ...formFieldsRaw], entityI18nSlug),
+    queryFields: enrich(queryFields, entityI18nSlug),
     masterDetailChildren: enrichedChildren,
     entityScope,
   };
@@ -1129,13 +1108,16 @@ function resolveModuleContext(apiFilePath, entityShort, overrides) {
   if (!permissionPrefix) {
     permissionPrefix = `${modulePath.replace(/\//g, ':')}:${entityKebab}`;
   }
+  const entityCamel = pascalToCamel(entityPascal);
+  const entityI18nSlug = entityClassToSlug(`Takt${entityPascal}`);
   return {
     modulePath,
     viewModulePath,
     entityKebab,
     entityPascal,
-    entityCamel: pascalToCamel(entityPascal),
-    entitySlug: pascalToCamel(entityPascal),
+    entityCamel,
+    entityI18nSlug,
+    entitySlug: entityCamel,
     permissionPrefix,
     cssRootClass: viewModulePath.replace(/\//g, '-'),
   };
@@ -1326,14 +1308,17 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
   if (shouldExcludeVueGeneration(rel, entityShort)) {
     const reason = isChangeLogEntity(entityShort)
       ? 'ChangeLog 从属实体无独立视图/表单'
-      : '手工/排除模块';
+      : '架构约束跳过';
     console.log(`⏭️  跳过 Vue 生成（${reason}）: ${rel}`);
     return { skipped: true };
   }
   const masterRef = masterDetailChildRegistry.get(entityShort);
-  if (masterRef) {
+  if (masterRef && !isStandaloneChildVueEntity(entityShort)) {
     console.log(`⏭️  跳过主子表从实体: ${rel}（视图由主表 ${masterRef.masterPascal}.${masterRef.fieldName} 承载）`);
     return { skipped: true };
+  }
+  if (masterRef && isStandaloneChildVueEntity(entityShort)) {
+    console.log(`ℹ️  从实体 ${entityShort} 仍有独立菜单页，继续生成 Vue（主表 ${masterRef.masterPascal}.${masterRef.fieldName} 展开区并存）`);
   }
   const typesPath = path.join(CONFIG.frontendRoot, CONFIG.typesDir, `${rel.replace(/\.ts$/, '.d.ts')}`);
   if (!fs.existsSync(typesPath)) {
@@ -1363,7 +1348,7 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
     apiBase,
     treeMeta: null,
     updateDtoFields: (create?.properties || []).filter(
-      (p) => !SKIP_FORM_FIELDS.has(p.name) && p.name !== `${ctx.entitySlug}Id`,
+      (p) => !SKIP_FORM_FIELDS.has(p.name) && !isDtoFillField(p.doc) && p.name !== `${ctx.entitySlug}Id`,
     ),
   };
   const viewDir = path.join(CONFIG.frontendRoot, CONFIG.viewsDir, ctx.viewModulePath);
@@ -1423,7 +1408,8 @@ module.exports = {
   FORM_TAB_FIELDS_PER_TAB,
   MENU_INDEX,
   pascalToCamel,
-  fieldI18nKey,
+  entityClassToSlug,
+  buildEntityI18nKey,
   resolveFieldTranslationKey,
   fieldLabelTExpr,
   fieldPlaceholderTExpr,
@@ -1437,6 +1423,7 @@ module.exports = {
   resolvePermissionPrefixFromController,
   parseApiFile,
   parseTypeInterfaces,
+  isDtoFillField,
   detectApiCapabilities,
   entityHasParentId,
   extendTreeApiCapabilities,

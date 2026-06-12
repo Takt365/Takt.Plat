@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktServiceRequestI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktServiceRequest 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService;
 
 /// <summary>
-/// TaktServiceRequest 实体国际化翻译种子（键前缀 entity.serviceRequest.*）
+/// TaktServiceRequest 实体国际化翻译种子（键前缀 entity.servicerequest.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktServiceRequestI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktServiceRequestI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 serviceRequest 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 servicerequest 实体翻译...", tenantCode);
 
         foreach (var item in GetServiceRequestTranslations())
         {
@@ -76,245 +75,245 @@ public class TaktServiceRequestI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktServiceRequest 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.serviceRequest._self / entity.serviceRequest.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.servicerequest._self / entity.servicerequest.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetServiceRequestTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.serviceRequest._self
-            new TranslationSeedItem("entity.serviceRequest._self", "en-US", "Service Request Information", "实体名称"),
-            // entity.serviceRequest._self
-            new TranslationSeedItem("entity.serviceRequest._self", "ja-JP", "服务请求信息", "实体名称"),
-            // entity.serviceRequest._self
-            new TranslationSeedItem("entity.serviceRequest._self", "zh-CN", "服务请求信息", "实体名称"),
-            // entity.serviceRequest._self
-            new TranslationSeedItem("entity.serviceRequest._self", "zh-HK", "服务请求信息", "实体名称"),
+            // entity.servicerequest._self
+            new TranslationSeedItem("entity.servicerequest._self", "en-US", "Service Request Information", "实体名称"),
+            // entity.servicerequest._self
+            new TranslationSeedItem("entity.servicerequest._self", "ja-JP", "服务请求信息", "实体名称"),
+            // entity.servicerequest._self
+            new TranslationSeedItem("entity.servicerequest._self", "zh-CN", "服务请求信息", "实体名称"),
+            // entity.servicerequest._self
+            new TranslationSeedItem("entity.servicerequest._self", "zh-HK", "服务请求信息", "实体名称"),
 
-            // entity.serviceRequest.plantcode
-            new TranslationSeedItem("entity.serviceRequest.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.serviceRequest.plantcode
-            new TranslationSeedItem("entity.serviceRequest.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.serviceRequest.plantcode
-            new TranslationSeedItem("entity.serviceRequest.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.serviceRequest.plantcode
-            new TranslationSeedItem("entity.serviceRequest.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.servicerequest.plantcode
+            new TranslationSeedItem("entity.servicerequest.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.servicerequest.plantcode
+            new TranslationSeedItem("entity.servicerequest.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.servicerequest.plantcode
+            new TranslationSeedItem("entity.servicerequest.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.servicerequest.plantcode
+            new TranslationSeedItem("entity.servicerequest.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.serviceRequest.code
-            new TranslationSeedItem("entity.serviceRequest.code", "en-US", "服务请求单号", "服务请求单号（组合唯一索引）"),
-            // entity.serviceRequest.code
-            new TranslationSeedItem("entity.serviceRequest.code", "ja-JP", "服务请求单号", "服务请求单号（组合唯一索引）"),
-            // entity.serviceRequest.code
-            new TranslationSeedItem("entity.serviceRequest.code", "zh-CN", "服务请求单号", "服务请求单号（组合唯一索引）"),
-            // entity.serviceRequest.code
-            new TranslationSeedItem("entity.serviceRequest.code", "zh-HK", "服务请求单号", "服务请求单号（组合唯一索引）"),
+            // entity.servicerequest.code
+            new TranslationSeedItem("entity.servicerequest.code", "en-US", "服务请求单号", "服务请求单号（组合唯一索引）"),
+            // entity.servicerequest.code
+            new TranslationSeedItem("entity.servicerequest.code", "ja-JP", "服务请求单号", "服务请求单号（组合唯一索引）"),
+            // entity.servicerequest.code
+            new TranslationSeedItem("entity.servicerequest.code", "zh-CN", "服务请求单号", "服务请求单号（组合唯一索引）"),
+            // entity.servicerequest.code
+            new TranslationSeedItem("entity.servicerequest.code", "zh-HK", "服务请求单号", "服务请求单号（组合唯一索引）"),
 
-            // entity.serviceRequest.clientid
-            new TranslationSeedItem("entity.serviceRequest.clientid", "en-US", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.clientid
-            new TranslationSeedItem("entity.serviceRequest.clientid", "ja-JP", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.clientid
-            new TranslationSeedItem("entity.serviceRequest.clientid", "zh-CN", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.clientid
-            new TranslationSeedItem("entity.serviceRequest.clientid", "zh-HK", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.clientid
+            new TranslationSeedItem("entity.servicerequest.clientid", "en-US", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.clientid
+            new TranslationSeedItem("entity.servicerequest.clientid", "ja-JP", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.clientid
+            new TranslationSeedItem("entity.servicerequest.clientid", "zh-CN", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.clientid
+            new TranslationSeedItem("entity.servicerequest.clientid", "zh-HK", "客户端ID", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
 
-            // entity.serviceRequest.clientcode
-            new TranslationSeedItem("entity.serviceRequest.clientcode", "en-US", "客户端编码", "客户端编码（冗余字段，便于查询）"),
-            // entity.serviceRequest.clientcode
-            new TranslationSeedItem("entity.serviceRequest.clientcode", "ja-JP", "客户端编码", "客户端编码（冗余字段，便于查询）"),
-            // entity.serviceRequest.clientcode
-            new TranslationSeedItem("entity.serviceRequest.clientcode", "zh-CN", "客户端编码", "客户端编码（冗余字段，便于查询）"),
-            // entity.serviceRequest.clientcode
-            new TranslationSeedItem("entity.serviceRequest.clientcode", "zh-HK", "客户端编码", "客户端编码（冗余字段，便于查询）"),
+            // entity.servicerequest.clientcode
+            new TranslationSeedItem("entity.servicerequest.clientcode", "en-US", "客户端编码", "客户端编码（冗余字段，便于查询）"),
+            // entity.servicerequest.clientcode
+            new TranslationSeedItem("entity.servicerequest.clientcode", "ja-JP", "客户端编码", "客户端编码（冗余字段，便于查询）"),
+            // entity.servicerequest.clientcode
+            new TranslationSeedItem("entity.servicerequest.clientcode", "zh-CN", "客户端编码", "客户端编码（冗余字段，便于查询）"),
+            // entity.servicerequest.clientcode
+            new TranslationSeedItem("entity.servicerequest.clientcode", "zh-HK", "客户端编码", "客户端编码（冗余字段，便于查询）"),
 
-            // entity.serviceRequest.clientname
-            new TranslationSeedItem("entity.serviceRequest.clientname", "en-US", "客户端名称", "客户端名称（冗余字段，便于查询）"),
-            // entity.serviceRequest.clientname
-            new TranslationSeedItem("entity.serviceRequest.clientname", "ja-JP", "客户端名称", "客户端名称（冗余字段，便于查询）"),
-            // entity.serviceRequest.clientname
-            new TranslationSeedItem("entity.serviceRequest.clientname", "zh-CN", "客户端名称", "客户端名称（冗余字段，便于查询）"),
-            // entity.serviceRequest.clientname
-            new TranslationSeedItem("entity.serviceRequest.clientname", "zh-HK", "客户端名称", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicerequest.clientname
+            new TranslationSeedItem("entity.servicerequest.clientname", "en-US", "客户端名称", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicerequest.clientname
+            new TranslationSeedItem("entity.servicerequest.clientname", "ja-JP", "客户端名称", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicerequest.clientname
+            new TranslationSeedItem("entity.servicerequest.clientname", "zh-CN", "客户端名称", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicerequest.clientname
+            new TranslationSeedItem("entity.servicerequest.clientname", "zh-HK", "客户端名称", "客户端名称（冗余字段，便于查询）"),
 
-            // entity.serviceRequest.servicecontractid
-            new TranslationSeedItem("entity.serviceRequest.servicecontractid", "en-US", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.servicecontractid
-            new TranslationSeedItem("entity.serviceRequest.servicecontractid", "ja-JP", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.servicecontractid
-            new TranslationSeedItem("entity.serviceRequest.servicecontractid", "zh-CN", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.servicecontractid
-            new TranslationSeedItem("entity.serviceRequest.servicecontractid", "zh-HK", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.servicecontractid
+            new TranslationSeedItem("entity.servicerequest.servicecontractid", "en-US", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.servicecontractid
+            new TranslationSeedItem("entity.servicerequest.servicecontractid", "ja-JP", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.servicecontractid
+            new TranslationSeedItem("entity.servicerequest.servicecontractid", "zh-CN", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.servicecontractid
+            new TranslationSeedItem("entity.servicerequest.servicecontractid", "zh-HK", "关联服务合同ID", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
 
-            // entity.serviceRequest.servicecontractcode
-            new TranslationSeedItem("entity.serviceRequest.servicecontractcode", "en-US", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
-            // entity.serviceRequest.servicecontractcode
-            new TranslationSeedItem("entity.serviceRequest.servicecontractcode", "ja-JP", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
-            // entity.serviceRequest.servicecontractcode
-            new TranslationSeedItem("entity.serviceRequest.servicecontractcode", "zh-CN", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
-            // entity.serviceRequest.servicecontractcode
-            new TranslationSeedItem("entity.serviceRequest.servicecontractcode", "zh-HK", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
+            // entity.servicerequest.servicecontractcode
+            new TranslationSeedItem("entity.servicerequest.servicecontractcode", "en-US", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
+            // entity.servicerequest.servicecontractcode
+            new TranslationSeedItem("entity.servicerequest.servicecontractcode", "ja-JP", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
+            // entity.servicerequest.servicecontractcode
+            new TranslationSeedItem("entity.servicerequest.servicecontractcode", "zh-CN", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
+            // entity.servicerequest.servicecontractcode
+            new TranslationSeedItem("entity.servicerequest.servicecontractcode", "zh-HK", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
 
-            // entity.serviceRequest.requestdate
-            new TranslationSeedItem("entity.serviceRequest.requestdate", "en-US", "请求日期", "请求日期"),
-            // entity.serviceRequest.requestdate
-            new TranslationSeedItem("entity.serviceRequest.requestdate", "ja-JP", "请求日期", "请求日期"),
-            // entity.serviceRequest.requestdate
-            new TranslationSeedItem("entity.serviceRequest.requestdate", "zh-CN", "请求日期", "请求日期"),
-            // entity.serviceRequest.requestdate
-            new TranslationSeedItem("entity.serviceRequest.requestdate", "zh-HK", "请求日期", "请求日期"),
+            // entity.servicerequest.requestdate
+            new TranslationSeedItem("entity.servicerequest.requestdate", "en-US", "请求日期", "请求日期"),
+            // entity.servicerequest.requestdate
+            new TranslationSeedItem("entity.servicerequest.requestdate", "ja-JP", "请求日期", "请求日期"),
+            // entity.servicerequest.requestdate
+            new TranslationSeedItem("entity.servicerequest.requestdate", "zh-CN", "请求日期", "请求日期"),
+            // entity.servicerequest.requestdate
+            new TranslationSeedItem("entity.servicerequest.requestdate", "zh-HK", "请求日期", "请求日期"),
 
-            // entity.serviceRequest.expectedservicedate
-            new TranslationSeedItem("entity.serviceRequest.expectedservicedate", "en-US", "期望服务日期", "期望服务日期"),
-            // entity.serviceRequest.expectedservicedate
-            new TranslationSeedItem("entity.serviceRequest.expectedservicedate", "ja-JP", "期望服务日期", "期望服务日期"),
-            // entity.serviceRequest.expectedservicedate
-            new TranslationSeedItem("entity.serviceRequest.expectedservicedate", "zh-CN", "期望服务日期", "期望服务日期"),
-            // entity.serviceRequest.expectedservicedate
-            new TranslationSeedItem("entity.serviceRequest.expectedservicedate", "zh-HK", "期望服务日期", "期望服务日期"),
+            // entity.servicerequest.expectedservicedate
+            new TranslationSeedItem("entity.servicerequest.expectedservicedate", "en-US", "期望服务日期", "期望服务日期"),
+            // entity.servicerequest.expectedservicedate
+            new TranslationSeedItem("entity.servicerequest.expectedservicedate", "ja-JP", "期望服务日期", "期望服务日期"),
+            // entity.servicerequest.expectedservicedate
+            new TranslationSeedItem("entity.servicerequest.expectedservicedate", "zh-CN", "期望服务日期", "期望服务日期"),
+            // entity.servicerequest.expectedservicedate
+            new TranslationSeedItem("entity.servicerequest.expectedservicedate", "zh-HK", "期望服务日期", "期望服务日期"),
 
-            // entity.serviceRequest.requesttype
-            new TranslationSeedItem("entity.serviceRequest.requesttype", "en-US", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
-            // entity.serviceRequest.requesttype
-            new TranslationSeedItem("entity.serviceRequest.requesttype", "ja-JP", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
-            // entity.serviceRequest.requesttype
-            new TranslationSeedItem("entity.serviceRequest.requesttype", "zh-CN", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
-            // entity.serviceRequest.requesttype
-            new TranslationSeedItem("entity.serviceRequest.requesttype", "zh-HK", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
+            // entity.servicerequest.requesttype
+            new TranslationSeedItem("entity.servicerequest.requesttype", "en-US", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
+            // entity.servicerequest.requesttype
+            new TranslationSeedItem("entity.servicerequest.requesttype", "ja-JP", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
+            // entity.servicerequest.requesttype
+            new TranslationSeedItem("entity.servicerequest.requesttype", "zh-CN", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
+            // entity.servicerequest.requesttype
+            new TranslationSeedItem("entity.servicerequest.requesttype", "zh-HK", "请求类型", "请求类型（0=咨询，1=报修，2=投诉，3=安装，4=巡检，5=其他）"),
 
-            // entity.serviceRequest.sourcechannel
-            new TranslationSeedItem("entity.serviceRequest.sourcechannel", "en-US", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
-            // entity.serviceRequest.sourcechannel
-            new TranslationSeedItem("entity.serviceRequest.sourcechannel", "ja-JP", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
-            // entity.serviceRequest.sourcechannel
-            new TranslationSeedItem("entity.serviceRequest.sourcechannel", "zh-CN", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
-            // entity.serviceRequest.sourcechannel
-            new TranslationSeedItem("entity.serviceRequest.sourcechannel", "zh-HK", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
+            // entity.servicerequest.sourcechannel
+            new TranslationSeedItem("entity.servicerequest.sourcechannel", "en-US", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
+            // entity.servicerequest.sourcechannel
+            new TranslationSeedItem("entity.servicerequest.sourcechannel", "ja-JP", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
+            // entity.servicerequest.sourcechannel
+            new TranslationSeedItem("entity.servicerequest.sourcechannel", "zh-CN", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
+            // entity.servicerequest.sourcechannel
+            new TranslationSeedItem("entity.servicerequest.sourcechannel", "zh-HK", "请求来源", "请求来源（0=电话，1=邮件，2=门户，3=现场，4=其他）"),
 
-            // entity.serviceRequest.priority
-            new TranslationSeedItem("entity.serviceRequest.priority", "en-US", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
-            // entity.serviceRequest.priority
-            new TranslationSeedItem("entity.serviceRequest.priority", "ja-JP", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
-            // entity.serviceRequest.priority
-            new TranslationSeedItem("entity.serviceRequest.priority", "zh-CN", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
-            // entity.serviceRequest.priority
-            new TranslationSeedItem("entity.serviceRequest.priority", "zh-HK", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
+            // entity.servicerequest.priority
+            new TranslationSeedItem("entity.servicerequest.priority", "en-US", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
+            // entity.servicerequest.priority
+            new TranslationSeedItem("entity.servicerequest.priority", "ja-JP", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
+            // entity.servicerequest.priority
+            new TranslationSeedItem("entity.servicerequest.priority", "zh-CN", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
+            // entity.servicerequest.priority
+            new TranslationSeedItem("entity.servicerequest.priority", "zh-HK", "优先级", "优先级（0=低，1=中，2=高，3=紧急）"),
 
-            // entity.serviceRequest.requeststatus
-            new TranslationSeedItem("entity.serviceRequest.requeststatus", "en-US", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
-            // entity.serviceRequest.requeststatus
-            new TranslationSeedItem("entity.serviceRequest.requeststatus", "ja-JP", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
-            // entity.serviceRequest.requeststatus
-            new TranslationSeedItem("entity.serviceRequest.requeststatus", "zh-CN", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
-            // entity.serviceRequest.requeststatus
-            new TranslationSeedItem("entity.serviceRequest.requeststatus", "zh-HK", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
+            // entity.servicerequest.requeststatus
+            new TranslationSeedItem("entity.servicerequest.requeststatus", "en-US", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
+            // entity.servicerequest.requeststatus
+            new TranslationSeedItem("entity.servicerequest.requeststatus", "ja-JP", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
+            // entity.servicerequest.requeststatus
+            new TranslationSeedItem("entity.servicerequest.requeststatus", "zh-CN", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
+            // entity.servicerequest.requeststatus
+            new TranslationSeedItem("entity.servicerequest.requeststatus", "zh-HK", "请求状态", "请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）"),
 
-            // entity.serviceRequest.requestsubject
-            new TranslationSeedItem("entity.serviceRequest.requestsubject", "en-US", "请求主题", "请求主题"),
-            // entity.serviceRequest.requestsubject
-            new TranslationSeedItem("entity.serviceRequest.requestsubject", "ja-JP", "请求主题", "请求主题"),
-            // entity.serviceRequest.requestsubject
-            new TranslationSeedItem("entity.serviceRequest.requestsubject", "zh-CN", "请求主题", "请求主题"),
-            // entity.serviceRequest.requestsubject
-            new TranslationSeedItem("entity.serviceRequest.requestsubject", "zh-HK", "请求主题", "请求主题"),
+            // entity.servicerequest.requestsubject
+            new TranslationSeedItem("entity.servicerequest.requestsubject", "en-US", "请求主题", "请求主题"),
+            // entity.servicerequest.requestsubject
+            new TranslationSeedItem("entity.servicerequest.requestsubject", "ja-JP", "请求主题", "请求主题"),
+            // entity.servicerequest.requestsubject
+            new TranslationSeedItem("entity.servicerequest.requestsubject", "zh-CN", "请求主题", "请求主题"),
+            // entity.servicerequest.requestsubject
+            new TranslationSeedItem("entity.servicerequest.requestsubject", "zh-HK", "请求主题", "请求主题"),
 
-            // entity.serviceRequest.requestdescription
-            new TranslationSeedItem("entity.serviceRequest.requestdescription", "en-US", "请求描述", "请求描述"),
-            // entity.serviceRequest.requestdescription
-            new TranslationSeedItem("entity.serviceRequest.requestdescription", "ja-JP", "请求描述", "请求描述"),
-            // entity.serviceRequest.requestdescription
-            new TranslationSeedItem("entity.serviceRequest.requestdescription", "zh-CN", "请求描述", "请求描述"),
-            // entity.serviceRequest.requestdescription
-            new TranslationSeedItem("entity.serviceRequest.requestdescription", "zh-HK", "请求描述", "请求描述"),
+            // entity.servicerequest.requestdescription
+            new TranslationSeedItem("entity.servicerequest.requestdescription", "en-US", "请求描述", "请求描述"),
+            // entity.servicerequest.requestdescription
+            new TranslationSeedItem("entity.servicerequest.requestdescription", "ja-JP", "请求描述", "请求描述"),
+            // entity.servicerequest.requestdescription
+            new TranslationSeedItem("entity.servicerequest.requestdescription", "zh-CN", "请求描述", "请求描述"),
+            // entity.servicerequest.requestdescription
+            new TranslationSeedItem("entity.servicerequest.requestdescription", "zh-HK", "请求描述", "请求描述"),
 
-            // entity.serviceRequest.contactperson
-            new TranslationSeedItem("entity.serviceRequest.contactperson", "en-US", "联系人", "联系人"),
-            // entity.serviceRequest.contactperson
-            new TranslationSeedItem("entity.serviceRequest.contactperson", "ja-JP", "联系人", "联系人"),
-            // entity.serviceRequest.contactperson
-            new TranslationSeedItem("entity.serviceRequest.contactperson", "zh-CN", "联系人", "联系人"),
-            // entity.serviceRequest.contactperson
-            new TranslationSeedItem("entity.serviceRequest.contactperson", "zh-HK", "联系人", "联系人"),
+            // entity.servicerequest.contactperson
+            new TranslationSeedItem("entity.servicerequest.contactperson", "en-US", "联系人", "联系人"),
+            // entity.servicerequest.contactperson
+            new TranslationSeedItem("entity.servicerequest.contactperson", "ja-JP", "联系人", "联系人"),
+            // entity.servicerequest.contactperson
+            new TranslationSeedItem("entity.servicerequest.contactperson", "zh-CN", "联系人", "联系人"),
+            // entity.servicerequest.contactperson
+            new TranslationSeedItem("entity.servicerequest.contactperson", "zh-HK", "联系人", "联系人"),
 
-            // entity.serviceRequest.contactphone
-            new TranslationSeedItem("entity.serviceRequest.contactphone", "en-US", "联系电话", "联系电话"),
-            // entity.serviceRequest.contactphone
-            new TranslationSeedItem("entity.serviceRequest.contactphone", "ja-JP", "联系电话", "联系电话"),
-            // entity.serviceRequest.contactphone
-            new TranslationSeedItem("entity.serviceRequest.contactphone", "zh-CN", "联系电话", "联系电话"),
-            // entity.serviceRequest.contactphone
-            new TranslationSeedItem("entity.serviceRequest.contactphone", "zh-HK", "联系电话", "联系电话"),
+            // entity.servicerequest.contactphone
+            new TranslationSeedItem("entity.servicerequest.contactphone", "en-US", "联系电话", "联系电话"),
+            // entity.servicerequest.contactphone
+            new TranslationSeedItem("entity.servicerequest.contactphone", "ja-JP", "联系电话", "联系电话"),
+            // entity.servicerequest.contactphone
+            new TranslationSeedItem("entity.servicerequest.contactphone", "zh-CN", "联系电话", "联系电话"),
+            // entity.servicerequest.contactphone
+            new TranslationSeedItem("entity.servicerequest.contactphone", "zh-HK", "联系电话", "联系电话"),
 
-            // entity.serviceRequest.contactemail
-            new TranslationSeedItem("entity.serviceRequest.contactemail", "en-US", "联系邮箱", "联系邮箱"),
-            // entity.serviceRequest.contactemail
-            new TranslationSeedItem("entity.serviceRequest.contactemail", "ja-JP", "联系邮箱", "联系邮箱"),
-            // entity.serviceRequest.contactemail
-            new TranslationSeedItem("entity.serviceRequest.contactemail", "zh-CN", "联系邮箱", "联系邮箱"),
-            // entity.serviceRequest.contactemail
-            new TranslationSeedItem("entity.serviceRequest.contactemail", "zh-HK", "联系邮箱", "联系邮箱"),
+            // entity.servicerequest.contactemail
+            new TranslationSeedItem("entity.servicerequest.contactemail", "en-US", "联系邮箱", "联系邮箱"),
+            // entity.servicerequest.contactemail
+            new TranslationSeedItem("entity.servicerequest.contactemail", "ja-JP", "联系邮箱", "联系邮箱"),
+            // entity.servicerequest.contactemail
+            new TranslationSeedItem("entity.servicerequest.contactemail", "zh-CN", "联系邮箱", "联系邮箱"),
+            // entity.servicerequest.contactemail
+            new TranslationSeedItem("entity.servicerequest.contactemail", "zh-HK", "联系邮箱", "联系邮箱"),
 
-            // entity.serviceRequest.serviceaddress
-            new TranslationSeedItem("entity.serviceRequest.serviceaddress", "en-US", "服务地址", "服务地址"),
-            // entity.serviceRequest.serviceaddress
-            new TranslationSeedItem("entity.serviceRequest.serviceaddress", "ja-JP", "服务地址", "服务地址"),
-            // entity.serviceRequest.serviceaddress
-            new TranslationSeedItem("entity.serviceRequest.serviceaddress", "zh-CN", "服务地址", "服务地址"),
-            // entity.serviceRequest.serviceaddress
-            new TranslationSeedItem("entity.serviceRequest.serviceaddress", "zh-HK", "服务地址", "服务地址"),
+            // entity.servicerequest.serviceaddress
+            new TranslationSeedItem("entity.servicerequest.serviceaddress", "en-US", "服务地址", "服务地址"),
+            // entity.servicerequest.serviceaddress
+            new TranslationSeedItem("entity.servicerequest.serviceaddress", "ja-JP", "服务地址", "服务地址"),
+            // entity.servicerequest.serviceaddress
+            new TranslationSeedItem("entity.servicerequest.serviceaddress", "zh-CN", "服务地址", "服务地址"),
+            // entity.servicerequest.serviceaddress
+            new TranslationSeedItem("entity.servicerequest.serviceaddress", "zh-HK", "服务地址", "服务地址"),
 
-            // entity.serviceRequest.assignedemployeeid
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeeid", "en-US", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.assignedemployeeid
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeeid", "ja-JP", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.assignedemployeeid
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeeid", "zh-CN", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
-            // entity.serviceRequest.assignedemployeeid
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeeid", "zh-HK", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.assignedemployeeid
+            new TranslationSeedItem("entity.servicerequest.assignedemployeeid", "en-US", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.assignedemployeeid
+            new TranslationSeedItem("entity.servicerequest.assignedemployeeid", "ja-JP", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.assignedemployeeid
+            new TranslationSeedItem("entity.servicerequest.assignedemployeeid", "zh-CN", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
+            // entity.servicerequest.assignedemployeeid
+            new TranslationSeedItem("entity.servicerequest.assignedemployeeid", "zh-HK", "受理人员工ID", "受理人员工ID（序列化为string以避免Javascript精度问题）"),
 
-            // entity.serviceRequest.assignedemployeename
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeename", "en-US", "受理人姓名", "受理人姓名"),
-            // entity.serviceRequest.assignedemployeename
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeename", "ja-JP", "受理人姓名", "受理人姓名"),
-            // entity.serviceRequest.assignedemployeename
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeename", "zh-CN", "受理人姓名", "受理人姓名"),
-            // entity.serviceRequest.assignedemployeename
-            new TranslationSeedItem("entity.serviceRequest.assignedemployeename", "zh-HK", "受理人姓名", "受理人姓名"),
+            // entity.servicerequest.assignedemployeename
+            new TranslationSeedItem("entity.servicerequest.assignedemployeename", "en-US", "受理人姓名", "受理人姓名"),
+            // entity.servicerequest.assignedemployeename
+            new TranslationSeedItem("entity.servicerequest.assignedemployeename", "ja-JP", "受理人姓名", "受理人姓名"),
+            // entity.servicerequest.assignedemployeename
+            new TranslationSeedItem("entity.servicerequest.assignedemployeename", "zh-CN", "受理人姓名", "受理人姓名"),
+            // entity.servicerequest.assignedemployeename
+            new TranslationSeedItem("entity.servicerequest.assignedemployeename", "zh-HK", "受理人姓名", "受理人姓名"),
 
-            // entity.serviceRequest.assignedat
-            new TranslationSeedItem("entity.serviceRequest.assignedat", "en-US", "受理时间", "受理时间"),
-            // entity.serviceRequest.assignedat
-            new TranslationSeedItem("entity.serviceRequest.assignedat", "ja-JP", "受理时间", "受理时间"),
-            // entity.serviceRequest.assignedat
-            new TranslationSeedItem("entity.serviceRequest.assignedat", "zh-CN", "受理时间", "受理时间"),
-            // entity.serviceRequest.assignedat
-            new TranslationSeedItem("entity.serviceRequest.assignedat", "zh-HK", "受理时间", "受理时间"),
+            // entity.servicerequest.assignedat
+            new TranslationSeedItem("entity.servicerequest.assignedat", "en-US", "受理时间", "受理时间"),
+            // entity.servicerequest.assignedat
+            new TranslationSeedItem("entity.servicerequest.assignedat", "ja-JP", "受理时间", "受理时间"),
+            // entity.servicerequest.assignedat
+            new TranslationSeedItem("entity.servicerequest.assignedat", "zh-CN", "受理时间", "受理时间"),
+            // entity.servicerequest.assignedat
+            new TranslationSeedItem("entity.servicerequest.assignedat", "zh-HK", "受理时间", "受理时间"),
 
-            // entity.serviceRequest.closedat
-            new TranslationSeedItem("entity.serviceRequest.closedat", "en-US", "关闭时间", "关闭时间"),
-            // entity.serviceRequest.closedat
-            new TranslationSeedItem("entity.serviceRequest.closedat", "ja-JP", "关闭时间", "关闭时间"),
-            // entity.serviceRequest.closedat
-            new TranslationSeedItem("entity.serviceRequest.closedat", "zh-CN", "关闭时间", "关闭时间"),
-            // entity.serviceRequest.closedat
-            new TranslationSeedItem("entity.serviceRequest.closedat", "zh-HK", "关闭时间", "关闭时间"),
+            // entity.servicerequest.closedat
+            new TranslationSeedItem("entity.servicerequest.closedat", "en-US", "关闭时间", "关闭时间"),
+            // entity.servicerequest.closedat
+            new TranslationSeedItem("entity.servicerequest.closedat", "ja-JP", "关闭时间", "关闭时间"),
+            // entity.servicerequest.closedat
+            new TranslationSeedItem("entity.servicerequest.closedat", "zh-CN", "关闭时间", "关闭时间"),
+            // entity.servicerequest.closedat
+            new TranslationSeedItem("entity.servicerequest.closedat", "zh-HK", "关闭时间", "关闭时间"),
 
-            // entity.serviceRequest.sortorder
-            new TranslationSeedItem("entity.serviceRequest.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
-            // entity.serviceRequest.sortorder
-            new TranslationSeedItem("entity.serviceRequest.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
-            // entity.serviceRequest.sortorder
-            new TranslationSeedItem("entity.serviceRequest.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
-            // entity.serviceRequest.sortorder
-            new TranslationSeedItem("entity.serviceRequest.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+            // entity.servicerequest.sortorder
+            new TranslationSeedItem("entity.servicerequest.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
+            // entity.servicerequest.sortorder
+            new TranslationSeedItem("entity.servicerequest.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
+            // entity.servicerequest.sortorder
+            new TranslationSeedItem("entity.servicerequest.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            // entity.servicerequest.sortorder
+            new TranslationSeedItem("entity.servicerequest.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
-            // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "en-US", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
-            // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "ja-JP", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
-            // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "zh-CN", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
-            // entity.serviceRequest.tickets
-            new TranslationSeedItem("entity.serviceRequest.tickets", "zh-HK", "服务工单列表", "服务工单列表（外键在子表 <see cref=\"TaktServiceTicket.ServiceRequestId\"/>）"),
+            // entity.servicerequest.tickets
+            new TranslationSeedItem("entity.servicerequest.tickets", "en-US", "服务工单列表", "服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）"),
+            // entity.servicerequest.tickets
+            new TranslationSeedItem("entity.servicerequest.tickets", "ja-JP", "服务工单列表", "服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）"),
+            // entity.servicerequest.tickets
+            new TranslationSeedItem("entity.servicerequest.tickets", "zh-CN", "服务工单列表", "服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）"),
+            // entity.servicerequest.tickets
+            new TranslationSeedItem("entity.servicerequest.tickets", "zh-HK", "服务工单列表", "服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）"),
         };
     }
 
@@ -332,8 +331,8 @@ public class TaktServiceRequestI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

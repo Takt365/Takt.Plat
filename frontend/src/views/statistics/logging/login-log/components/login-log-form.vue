@@ -67,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.loginLog.username')"
+                :label="t('entity.loginlog.username')"
                 name="username"
               >
                 <a-input
                   v-model:value="formState.username"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.username') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.username') })"
                   size="small"
                   allow-clear
                 />
@@ -80,64 +80,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.loginLog.logintype')"
+                :label="t('entity.loginlog.logintype')"
                 name="loginType"
               >
-                <a-input
-                  v-model:value="formState.loginType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.logintype') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.loginLog.browser')"
-                name="browser"
-              >
-                <a-input
-                  v-model:value="formState.browser"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.browser') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.loginLog.os')"
-                name="os"
-              >
-                <a-input
-                  v-model:value="formState.os"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.os') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.loginLog.useragent')"
-                name="userAgent"
-              >
-                <a-input
-                  v-model:value="formState.userAgent"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.useragent') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.loginLog.loginresult')"
-                name="loginResult"
-              >
                 <a-input-number
-                  v-model:value="formState.loginResult"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginresult') })"
+                  v-model:value="formState.loginType"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.logintype') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -145,12 +93,64 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.loginLog.loginmessage')"
+                :label="t('entity.loginlog.browser')"
+                name="browser"
+              >
+                <a-input-number
+                  v-model:value="formState.browser"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.browser') })"
+                  size="small"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.loginlog.os')"
+                name="os"
+              >
+                <a-input-number
+                  v-model:value="formState.os"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.os') })"
+                  size="small"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.loginlog.useragent')"
+                name="userAgent"
+              >
+                <a-input
+                  v-model:value="formState.userAgent"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.useragent') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.loginlog.loginresult')"
+                name="loginResult"
+              >
+                <a-input-number
+                  v-model:value="formState.loginResult"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginresult') })"
+                  size="small"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.loginlog.loginmessage')"
                 name="loginMessage"
               >
                 <a-input
                   v-model:value="formState.loginMessage"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginmessage') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginmessage') })"
                   size="small"
                   allow-clear
                 />
@@ -168,12 +168,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.loginLog.loginip')"
+                :label="t('entity.loginlog.loginip')"
                 name="loginIp"
               >
                 <a-input
                   v-model:value="formState.loginIp"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginip') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginip') })"
                   size="small"
                   allow-clear
                 />
@@ -181,12 +181,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.loginLog.loginlocation')"
+                :label="t('entity.loginlog.loginlocation')"
                 name="loginLocation"
               >
                 <a-input
                   v-model:value="formState.loginLocation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginlocation') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginlocation') })"
                   size="small"
                   allow-clear
                 />
@@ -194,12 +194,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.loginLog.logoutat')"
+                :label="t('entity.loginlog.logoutat')"
                 name="logoutAt"
               >
                 <a-input
                   v-model:value="formState.logoutAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.logoutat') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.logoutat') })"
                   size="small"
                   allow-clear
                 />
@@ -329,14 +329,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   username: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.loginLog.username') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.loginlog.username') }),
       trigger: 'blur'
     }
   ],
   loginResult: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.loginLog.loginresult') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.loginlog.loginresult') }),
       trigger: 'change'
     }
   ],

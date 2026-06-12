@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktProfitCenterChangeLogI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProfitCenterChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling;
 
 /// <summary>
-/// TaktProfitCenterChangeLog 实体国际化翻译种子（键前缀 entity.profitCenterChangeLog.*）
+/// TaktProfitCenterChangeLog 实体国际化翻译种子（键前缀 entity.profitcenterchangelog.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktProfitCenterChangeLogI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktProfitCenterChangeLogI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 profitCenterChangeLog 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 profitcenterchangelog 实体翻译...", tenantCode);
 
         foreach (var item in GetProfitCenterChangeLogTranslations())
         {
@@ -76,74 +75,74 @@ public class TaktProfitCenterChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktProfitCenterChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.profitCenterChangeLog._self / entity.profitCenterChangeLog.{{field}}；ResourceGroup=TaktModule.Accounting；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.profitcenterchangelog._self / entity.profitcenterchangelog.{{field}}；ResourceGroup=3；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetProfitCenterChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.profitCenterChangeLog._self
-            new TranslationSeedItem("entity.profitCenterChangeLog._self", "en-US", "Profit Center Change Log Information", "实体名称"),
-            // entity.profitCenterChangeLog._self
-            new TranslationSeedItem("entity.profitCenterChangeLog._self", "ja-JP", "利润中心变更记录信息", "实体名称"),
-            // entity.profitCenterChangeLog._self
-            new TranslationSeedItem("entity.profitCenterChangeLog._self", "zh-CN", "利润中心变更记录信息", "实体名称"),
-            // entity.profitCenterChangeLog._self
-            new TranslationSeedItem("entity.profitCenterChangeLog._self", "zh-HK", "利润中心变更记录信息", "实体名称"),
+            // entity.profitcenterchangelog._self
+            new TranslationSeedItem("entity.profitcenterchangelog._self", "en-US", "Profit Center Change Log Information", "实体名称"),
+            // entity.profitcenterchangelog._self
+            new TranslationSeedItem("entity.profitcenterchangelog._self", "ja-JP", "利润中心变更记录信息", "实体名称"),
+            // entity.profitcenterchangelog._self
+            new TranslationSeedItem("entity.profitcenterchangelog._self", "zh-CN", "利润中心变更记录信息", "实体名称"),
+            // entity.profitcenterchangelog._self
+            new TranslationSeedItem("entity.profitcenterchangelog._self", "zh-HK", "利润中心变更记录信息", "实体名称"),
 
-            // entity.profitCenterChangeLog.profitcenterid
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcenterid", "en-US", "利润中心ID", "利润中心 ID"),
-            // entity.profitCenterChangeLog.profitcenterid
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcenterid", "ja-JP", "利润中心ID", "利润中心 ID"),
-            // entity.profitCenterChangeLog.profitcenterid
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcenterid", "zh-CN", "利润中心ID", "利润中心 ID"),
-            // entity.profitCenterChangeLog.profitcenterid
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcenterid", "zh-HK", "利润中心ID", "利润中心 ID"),
+            // entity.profitcenterchangelog.profitcenterid
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcenterid", "en-US", "利润中心ID", "利润中心 ID"),
+            // entity.profitcenterchangelog.profitcenterid
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcenterid", "ja-JP", "利润中心ID", "利润中心 ID"),
+            // entity.profitcenterchangelog.profitcenterid
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcenterid", "zh-CN", "利润中心ID", "利润中心 ID"),
+            // entity.profitcenterchangelog.profitcenterid
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcenterid", "zh-HK", "利润中心ID", "利润中心 ID"),
 
-            // entity.profitCenterChangeLog.profitcentercode
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcentercode", "en-US", "利润中心编码", "利润中心编码（冗余）"),
-            // entity.profitCenterChangeLog.profitcentercode
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcentercode", "ja-JP", "利润中心编码", "利润中心编码（冗余）"),
-            // entity.profitCenterChangeLog.profitcentercode
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcentercode", "zh-CN", "利润中心编码", "利润中心编码（冗余）"),
-            // entity.profitCenterChangeLog.profitcentercode
-            new TranslationSeedItem("entity.profitCenterChangeLog.profitcentercode", "zh-HK", "利润中心编码", "利润中心编码（冗余）"),
+            // entity.profitcenterchangelog.profitcentercode
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcentercode", "en-US", "利润中心编码", "利润中心编码（冗余）"),
+            // entity.profitcenterchangelog.profitcentercode
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcentercode", "ja-JP", "利润中心编码", "利润中心编码（冗余）"),
+            // entity.profitcenterchangelog.profitcentercode
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcentercode", "zh-CN", "利润中心编码", "利润中心编码（冗余）"),
+            // entity.profitcenterchangelog.profitcentercode
+            new TranslationSeedItem("entity.profitcenterchangelog.profitcentercode", "zh-HK", "利润中心编码", "利润中心编码（冗余）"),
 
-            // entity.profitCenterChangeLog.changefields
-            new TranslationSeedItem("entity.profitCenterChangeLog.changefields", "en-US", "变更字段列表", "变更字段列表 JSON"),
-            // entity.profitCenterChangeLog.changefields
-            new TranslationSeedItem("entity.profitCenterChangeLog.changefields", "ja-JP", "变更字段列表", "变更字段列表 JSON"),
-            // entity.profitCenterChangeLog.changefields
-            new TranslationSeedItem("entity.profitCenterChangeLog.changefields", "zh-CN", "变更字段列表", "变更字段列表 JSON"),
-            // entity.profitCenterChangeLog.changefields
-            new TranslationSeedItem("entity.profitCenterChangeLog.changefields", "zh-HK", "变更字段列表", "变更字段列表 JSON"),
+            // entity.profitcenterchangelog.changefields
+            new TranslationSeedItem("entity.profitcenterchangelog.changefields", "en-US", "变更字段列表", "变更字段列表 JSON"),
+            // entity.profitcenterchangelog.changefields
+            new TranslationSeedItem("entity.profitcenterchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表 JSON"),
+            // entity.profitcenterchangelog.changefields
+            new TranslationSeedItem("entity.profitcenterchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表 JSON"),
+            // entity.profitcenterchangelog.changefields
+            new TranslationSeedItem("entity.profitcenterchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表 JSON"),
 
-            // entity.profitCenterChangeLog.changetime
-            new TranslationSeedItem("entity.profitCenterChangeLog.changetime", "en-US", "变更时间", "变更时间"),
-            // entity.profitCenterChangeLog.changetime
-            new TranslationSeedItem("entity.profitCenterChangeLog.changetime", "ja-JP", "变更时间", "变更时间"),
-            // entity.profitCenterChangeLog.changetime
-            new TranslationSeedItem("entity.profitCenterChangeLog.changetime", "zh-CN", "变更时间", "变更时间"),
-            // entity.profitCenterChangeLog.changetime
-            new TranslationSeedItem("entity.profitCenterChangeLog.changetime", "zh-HK", "变更时间", "变更时间"),
+            // entity.profitcenterchangelog.changetime
+            new TranslationSeedItem("entity.profitcenterchangelog.changetime", "en-US", "变更时间", "变更时间"),
+            // entity.profitcenterchangelog.changetime
+            new TranslationSeedItem("entity.profitcenterchangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            // entity.profitcenterchangelog.changetime
+            new TranslationSeedItem("entity.profitcenterchangelog.changetime", "zh-CN", "变更时间", "变更时间"),
+            // entity.profitcenterchangelog.changetime
+            new TranslationSeedItem("entity.profitcenterchangelog.changetime", "zh-HK", "变更时间", "变更时间"),
 
-            // entity.profitCenterChangeLog.changeby
-            new TranslationSeedItem("entity.profitCenterChangeLog.changeby", "en-US", "变更人", "变更人"),
-            // entity.profitCenterChangeLog.changeby
-            new TranslationSeedItem("entity.profitCenterChangeLog.changeby", "ja-JP", "变更人", "变更人"),
-            // entity.profitCenterChangeLog.changeby
-            new TranslationSeedItem("entity.profitCenterChangeLog.changeby", "zh-CN", "变更人", "变更人"),
-            // entity.profitCenterChangeLog.changeby
-            new TranslationSeedItem("entity.profitCenterChangeLog.changeby", "zh-HK", "变更人", "变更人"),
+            // entity.profitcenterchangelog.changeby
+            new TranslationSeedItem("entity.profitcenterchangelog.changeby", "en-US", "变更人", "变更人"),
+            // entity.profitcenterchangelog.changeby
+            new TranslationSeedItem("entity.profitcenterchangelog.changeby", "ja-JP", "变更人", "变更人"),
+            // entity.profitcenterchangelog.changeby
+            new TranslationSeedItem("entity.profitcenterchangelog.changeby", "zh-CN", "变更人", "变更人"),
+            // entity.profitcenterchangelog.changeby
+            new TranslationSeedItem("entity.profitcenterchangelog.changeby", "zh-HK", "变更人", "变更人"),
 
-            // entity.profitCenterChangeLog.changereason
-            new TranslationSeedItem("entity.profitCenterChangeLog.changereason", "en-US", "变更原因", "变更原因"),
-            // entity.profitCenterChangeLog.changereason
-            new TranslationSeedItem("entity.profitCenterChangeLog.changereason", "ja-JP", "变更原因", "变更原因"),
-            // entity.profitCenterChangeLog.changereason
-            new TranslationSeedItem("entity.profitCenterChangeLog.changereason", "zh-CN", "变更原因", "变更原因"),
-            // entity.profitCenterChangeLog.changereason
-            new TranslationSeedItem("entity.profitCenterChangeLog.changereason", "zh-HK", "变更原因", "变更原因"),
+            // entity.profitcenterchangelog.changereason
+            new TranslationSeedItem("entity.profitcenterchangelog.changereason", "en-US", "变更原因", "变更原因"),
+            // entity.profitcenterchangelog.changereason
+            new TranslationSeedItem("entity.profitcenterchangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            // entity.profitcenterchangelog.changereason
+            new TranslationSeedItem("entity.profitcenterchangelog.changereason", "zh-CN", "变更原因", "变更原因"),
+            // entity.profitcenterchangelog.changereason
+            new TranslationSeedItem("entity.profitcenterchangelog.changereason", "zh-HK", "变更原因", "变更原因"),
         };
     }
 
@@ -161,8 +160,8 @@ public class TaktProfitCenterChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Accounting;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 3;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

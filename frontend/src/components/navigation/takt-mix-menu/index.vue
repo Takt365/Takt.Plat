@@ -21,6 +21,7 @@
     :accordion="setting.menuAccordion"
     :class="['takt-mix-menu', `menu-style-${setting.menuStyle}`]"
     @click="handleMenuClick"
+    @openChange="handleOpenChange"
   />
 </template>
 
@@ -30,7 +31,11 @@ import { useThemeStore } from '@/stores/common/theme'
 import { useMenuStore } from '@/stores/identity/menu'
 import { useSettingStore } from '@/stores/common/setting'
 import { TAKT_MENU_INLINE_INDENT } from '@/utils/common'
-import { resolveMenuOpenKeysForPath } from '@/utils/takt-menu-open-keys'
+import {
+  buildMenuParentKeyMap,
+  normalizeMenuOpenKeys,
+  resolveMenuOpenKeysForPath,
+} from '@/utils/takt-menu-open-keys'
 
 interface Props {
   collapsed?: boolean
@@ -57,6 +62,9 @@ const openKeys = ref<string[]>([])
 
 const menuItems = computed(() => menuStore.menuItems ?? [])
 
+/** 菜单 key → 父 key（收起父级时级联清理子孙 openKeys） */
+const menuParentKeyMap = computed(() => buildMenuParentKeyMap(menuItems.value))
+
 const theme = computed(() => {
   if (props.theme === 'dark') return 'dark'
   return themeStore.resolvedTheme === 'dark' ? 'dark' : 'light'
@@ -66,6 +74,14 @@ const handleMenuClick = (info: MenuInfo) => {
   const key = String(info.key)
   router.push(key)
   emit('click', key)
+}
+
+/**
+ * SubMenu 展开/收拢：收起父级时级联移除子孙 openKeys
+ * @param keys 变更后的 openKeys
+ */
+const handleOpenChange = (keys: string[]) => {
+  openKeys.value = normalizeMenuOpenKeys(keys, menuParentKeyMap.value, setting.menuAccordion)
 }
 
 watch(

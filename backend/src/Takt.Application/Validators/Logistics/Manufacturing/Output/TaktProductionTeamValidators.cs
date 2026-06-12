@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionTeamValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeam 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktProductionTeam 生成，请按需审阅）
 // 
@@ -32,29 +32,29 @@ public class TaktProductionTeamCreateValidator : AbstractValidator<TaktProductio
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.TeamCode)
             .NotEmpty().WithMessage("班组编码不能为空")
-            .MaximumLength(32).WithMessage("班组编码长度不能超过32个字符");
+            .MaximumLength(40).WithMessage("班组编码长度不能超过40个字符");
         RuleFor(x => x.TeamName)
             .NotEmpty().WithMessage("班组名称不能为空")
-            .MaximumLength(64).WithMessage("班组名称长度不能超过64个字符");
+            .MaximumLength(40).WithMessage("班组名称长度不能超过40个字符");
         RuleFor(x => x.TeamCategory)
             .MaximumLength(10).WithMessage("班组分类编码长度不能超过10个字符");
         RuleFor(x => x.TeamCategoryName)
-            .MaximumLength(50).WithMessage("班组分类名称长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("班组分类名称长度不能超过40个字符");
         RuleFor(x => x.ProductionLine)
             .MaximumLength(20).WithMessage("生产线代码长度不能超过20个字符");
         RuleFor(x => x.TeamLeaderId)
             .GreaterThanOrEqualTo(0).WithMessage("班组长员工Id不能为负数");
         RuleFor(x => x.TeamLeaderName)
-            .MaximumLength(50).WithMessage("班组长姓名长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("班组长姓名长度不能超过40个字符");
         RuleFor(x => x.Status)
             .IsInEnum().WithMessage("启用状态无效");
         RuleFor(x => x.ExtFieldJson)
@@ -98,28 +98,28 @@ public class TaktProductionTeamImportValidator : AbstractValidator<TaktProductio
     public TaktProductionTeamImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.TeamCode)
             .NotEmpty().WithMessage("班组编码不能为空")
-            .MaximumLength(32).WithMessage("班组编码长度不能超过32个字符");
+            .MaximumLength(40).WithMessage("班组编码长度不能超过40个字符");
         RuleFor(x => x.TeamName)
             .NotEmpty().WithMessage("班组名称不能为空")
-            .MaximumLength(64).WithMessage("班组名称长度不能超过64个字符");
+            .MaximumLength(40).WithMessage("班组名称长度不能超过40个字符");
         RuleFor(x => x.TeamCategory)
             .MaximumLength(10).WithMessage("班组分类编码长度不能超过10个字符").When(x => !string.IsNullOrWhiteSpace(x.TeamCategory));
         RuleFor(x => x.TeamCategoryName)
-            .MaximumLength(50).WithMessage("班组分类名称长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.TeamCategoryName));
+            .MaximumLength(40).WithMessage("班组分类名称长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TeamCategoryName));
         RuleFor(x => x.ProductionLine)
             .MaximumLength(20).WithMessage("生产线代码长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.ProductionLine));
         RuleFor(x => x.TeamLeaderId)
             .GreaterThanOrEqualTo(0).WithMessage("班组长员工Id不能为负数");
         RuleFor(x => x.TeamLeaderName)
-            .MaximumLength(50).WithMessage("班组长姓名长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.TeamLeaderName));
+            .MaximumLength(40).WithMessage("班组长姓名长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TeamLeaderName));
         RuleFor(x => x.Status)
             .IsInEnum().WithMessage("启用状态无效");
         RuleFor(x => x.ExtFieldJson)

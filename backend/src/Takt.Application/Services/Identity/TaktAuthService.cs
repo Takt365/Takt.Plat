@@ -164,7 +164,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         var user = await _userRepository.FirstAsync(u =>
             u.TenantCode == effectiveTenant
             && u.Username == trimmedUsername
-            && u.UserStatus == TaktCommonStatus.Enabled);
+            && u.UserStatus == 1);
         if (user == null)
         {
             WriteAuthFlowLog(
@@ -250,7 +250,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         var defaultLinkCodes = (await _userCompanyRepository.GetListAsync(
             uc => uc.TenantCode == tenantCode
                 && uc.UserId == userId
-                && uc.IsDefault == TaktYesNo.Yes,
+                && uc.IsDefault == 1,
             uc => uc.CompanyCode,
             false))
             .Select(link => link.CompanyCode)
@@ -267,7 +267,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         var companies = await _companyRepository.GetListAsync(
             c => c.TenantCode == tenantCode
                 && defaultLinkCodes.Contains(c.CompanyCode)
-                && c.CompanyStatus == TaktCommonStatus.Enabled,
+                && c.CompanyStatus == 1,
             c => c.SortOrder,
             false);
 
@@ -374,7 +374,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             return null;
         }
 
-        if (user.UserStatus != TaktCommonStatus.Enabled)
+        if (user.UserStatus != 1)
         {
             ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.StatusAccountDisabled);
         }
@@ -496,7 +496,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         var userId = CurrentUserId.Value;
         var activeCompany = await ResolveCurrentActiveCompanyCodeAsync(userId, tenantCode);
         var companies = await _companyRepository.GetListAsync(
-            x => x.TenantCode == tenantCode && x.CompanyStatus == TaktCommonStatus.Enabled,
+            x => x.TenantCode == tenantCode && x.CompanyStatus == 1,
             x => x.SortOrder,
             false);
 
@@ -537,7 +537,46 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         }
 
         var codes = await GetUserPermissionCodesAsync(userId, tenantCode);
-        return codes.Contains(permissionCode, StringComparer.OrdinalIgnoreCase);
+        var normalizedRequired = NormalizePermissionCodeForMatch(permissionCode);
+        return codes.Any(c =>
+            string.Equals(
+                NormalizePermissionCodeForMatch(c),
+                normalizedRequired,
+                StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// 工作流域历史权限码与菜单种子对齐（如 flowscheme→scheme），校验前归一化。
+    /// </summary>
+    /// <param name="permissionCode">原始权限码</param>
+    /// <returns>归一化后的权限码</returns>
+    private static string NormalizePermissionCodeForMatch(string permissionCode)
+    {
+        if (string.IsNullOrWhiteSpace(permissionCode))
+        {
+            return permissionCode;
+        }
+
+        var code = permissionCode.Trim();
+        const string flowSchemePrefix = "workflow:flowscheme:";
+        const string flowFormPrefix = "workflow:flowform:";
+        const string flowInstancePrefix = "workflow:flowinstance:";
+        if (code.StartsWith(flowSchemePrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return "workflow:scheme:" + code[flowSchemePrefix.Length..];
+        }
+
+        if (code.StartsWith(flowFormPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return "workflow:form:" + code[flowFormPrefix.Length..];
+        }
+
+        if (code.StartsWith(flowInstancePrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return "workflow:instance:" + code[flowInstancePrefix.Length..];
+        }
+
+        return code;
     }
 
     /// <summary>
@@ -839,7 +878,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     {
         var menus = await GetAccessibleMenusAsync(userId, tenantCode);
         return menus
-            .Where(m => m.MenuType == (int)TaktMenuType.Menu && !string.IsNullOrWhiteSpace(m.RoutePath))
+            .Where(m => m.MenuType == (int)1 && !string.IsNullOrWhiteSpace(m.RoutePath))
             .Select(m => NormalizeRoutePath(m.RoutePath))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
@@ -875,7 +914,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         var roles = await _roleRepository.GetListAsync(r =>
             roleIds.Contains(r.Id) && r.TenantCode == tenantCode);
         return roles
-            .Where(r => r.RoleStatus == TaktCommonStatus.Enabled)
+            .Where(r => r.RoleStatus == 1)
             .ToList();
     }
 
@@ -888,7 +927,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     private async Task<List<TaktMenu>> GetAccessibleMenusAsync(long userId, string tenantCode)
     {
         var allMenus = await _menuRepository.GetListAsync(m =>
-            m.TenantCode == tenantCode && m.MenuStatus == TaktCommonStatus.Enabled);
+            m.TenantCode == tenantCode && m.MenuStatus == 1);
 
         var roles = await GetEnabledRolesAsync(userId, tenantCode);
         if (roles.Count == 0)
@@ -913,7 +952,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     {
         var menus = await GetAccessibleMenusAsync(userId, tenantCode);
         // 与 TaktMenuType 及种子数据一致：0=目录、1=页面菜单、2=按钮（按钮不参与侧栏树）
-        var treeSource = menus.Where(m => m.MenuType != (int)TaktMenuType.Button).ToList();
+        var treeSource = menus.Where(m => m.MenuType != (int)2).ToList();
         return BuildMenuTree(treeSource, 0);
     }
 
@@ -988,7 +1027,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         var company = await _companyRepository.FirstAsync(c =>
             c.TenantCode == tenantCode
             && c.CompanyCode == companyCode
-            && c.CompanyStatus == TaktCommonStatus.Enabled);
+            && c.CompanyStatus == 1);
         return company != null;
     }
 
@@ -1109,7 +1148,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         {
             foreach (var node in nodes)
             {
-                if (node.MenuType == (int)TaktMenuType.Menu && !string.IsNullOrWhiteSpace(node.RoutePath))
+                if (node.MenuType == (int)1 && !string.IsNullOrWhiteSpace(node.RoutePath))
                 {
                     paths.Add(node.RoutePath.Trim());
                 }

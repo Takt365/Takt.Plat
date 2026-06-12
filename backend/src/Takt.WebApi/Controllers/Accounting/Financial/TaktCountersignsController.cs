@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktCountersignsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会签单控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Accounting.Financial;
 /// 会签单控制器
 /// 提供会签单的 REST API
 /// </summary>
-[ApiModule(TaktModule.Accounting, "财务核算")]
+[ApiModule(3, "财务核算")]
 [Route("api/[controller]", Name = "会签单")]
 public class TaktCountersignsController : TaktControllerBase
 {

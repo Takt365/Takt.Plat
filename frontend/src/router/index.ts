@@ -17,6 +17,7 @@ import { useTranslationStore } from '@/stores/foundation/translation';
 import { useMenuStore } from '@/stores/identity/menu';
 import { usePermissionStore } from '@/stores/identity/permission';
 import { useSignalRStore } from '@/stores/foundation/signalr';
+import { useHeaderNotificationStore } from '@/stores/navigation/header-notification';
 import { useTenantStore } from '@/stores/identity/tenant';
 import i18n from '@/locales';
 import {
@@ -124,6 +125,7 @@ router.beforeEach(async (to) => {
     await userStore.loadUserProfile();
     await useTranslationStore().loadTranslationMessagesAsync(String(i18n.global.locale.value));
     await ensureMenuAndRoutesLoaded();
+    void useHeaderNotificationStore().hydratePersistedUnreadAsync().catch(() => undefined);
     void useSignalRStore().connectSignalRAsync().catch(() => undefined);
   } catch {
     userStore.logout();

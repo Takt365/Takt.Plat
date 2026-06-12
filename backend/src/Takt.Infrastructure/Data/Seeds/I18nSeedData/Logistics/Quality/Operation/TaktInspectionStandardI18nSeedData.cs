@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInspectionStandard 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation;
 
 /// <summary>
-/// TaktInspectionStandard 实体国际化翻译种子（键前缀 entity.inspectionStandard.*）
+/// TaktInspectionStandard 实体国际化翻译种子（键前缀 entity.inspectionstandard.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 inspectionStandard 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 inspectionstandard 实体翻译...", tenantCode);
 
         foreach (var item in GetInspectionStandardTranslations())
         {
@@ -76,128 +75,128 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktInspectionStandard 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.inspectionStandard._self / entity.inspectionStandard.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.inspectionstandard._self / entity.inspectionstandard.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetInspectionStandardTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.inspectionStandard._self
-            new TranslationSeedItem("entity.inspectionStandard._self", "en-US", "Inspection Standard Information", "实体名称"),
-            // entity.inspectionStandard._self
-            new TranslationSeedItem("entity.inspectionStandard._self", "ja-JP", "检验标准信息", "实体名称"),
-            // entity.inspectionStandard._self
-            new TranslationSeedItem("entity.inspectionStandard._self", "zh-CN", "检验标准信息", "实体名称"),
-            // entity.inspectionStandard._self
-            new TranslationSeedItem("entity.inspectionStandard._self", "zh-HK", "检验标准信息", "实体名称"),
+            // entity.inspectionstandard._self
+            new TranslationSeedItem("entity.inspectionstandard._self", "en-US", "Inspection Standard Information", "实体名称"),
+            // entity.inspectionstandard._self
+            new TranslationSeedItem("entity.inspectionstandard._self", "ja-JP", "检验标准信息", "实体名称"),
+            // entity.inspectionstandard._self
+            new TranslationSeedItem("entity.inspectionstandard._self", "zh-CN", "检验标准信息", "实体名称"),
+            // entity.inspectionstandard._self
+            new TranslationSeedItem("entity.inspectionstandard._self", "zh-HK", "检验标准信息", "实体名称"),
 
-            // entity.inspectionStandard.plantcode
-            new TranslationSeedItem("entity.inspectionStandard.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.inspectionStandard.plantcode
-            new TranslationSeedItem("entity.inspectionStandard.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.inspectionStandard.plantcode
-            new TranslationSeedItem("entity.inspectionStandard.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.inspectionStandard.plantcode
-            new TranslationSeedItem("entity.inspectionStandard.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.inspectionstandard.plantcode
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.inspectionstandard.plantcode
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.inspectionstandard.plantcode
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.inspectionstandard.plantcode
+            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.inspectionStandard.standardcode
-            new TranslationSeedItem("entity.inspectionStandard.standardcode", "en-US", "检验标准编码", "检验标准编码（唯一索引）"),
-            // entity.inspectionStandard.standardcode
-            new TranslationSeedItem("entity.inspectionStandard.standardcode", "ja-JP", "检验标准编码", "检验标准编码（唯一索引）"),
-            // entity.inspectionStandard.standardcode
-            new TranslationSeedItem("entity.inspectionStandard.standardcode", "zh-CN", "检验标准编码", "检验标准编码（唯一索引）"),
-            // entity.inspectionStandard.standardcode
-            new TranslationSeedItem("entity.inspectionStandard.standardcode", "zh-HK", "检验标准编码", "检验标准编码（唯一索引）"),
+            // entity.inspectionstandard.standardcode
+            new TranslationSeedItem("entity.inspectionstandard.standardcode", "en-US", "检验标准编码", "检验标准编码（唯一索引）"),
+            // entity.inspectionstandard.standardcode
+            new TranslationSeedItem("entity.inspectionstandard.standardcode", "ja-JP", "检验标准编码", "检验标准编码（唯一索引）"),
+            // entity.inspectionstandard.standardcode
+            new TranslationSeedItem("entity.inspectionstandard.standardcode", "zh-CN", "检验标准编码", "检验标准编码（唯一索引）"),
+            // entity.inspectionstandard.standardcode
+            new TranslationSeedItem("entity.inspectionstandard.standardcode", "zh-HK", "检验标准编码", "检验标准编码（唯一索引）"),
 
-            // entity.inspectionStandard.standardname
-            new TranslationSeedItem("entity.inspectionStandard.standardname", "en-US", "检验标准名称", "检验标准名称"),
-            // entity.inspectionStandard.standardname
-            new TranslationSeedItem("entity.inspectionStandard.standardname", "ja-JP", "检验标准名称", "检验标准名称"),
-            // entity.inspectionStandard.standardname
-            new TranslationSeedItem("entity.inspectionStandard.standardname", "zh-CN", "检验标准名称", "检验标准名称"),
-            // entity.inspectionStandard.standardname
-            new TranslationSeedItem("entity.inspectionStandard.standardname", "zh-HK", "检验标准名称", "检验标准名称"),
+            // entity.inspectionstandard.standardname
+            new TranslationSeedItem("entity.inspectionstandard.standardname", "en-US", "检验标准名称", "检验标准名称"),
+            // entity.inspectionstandard.standardname
+            new TranslationSeedItem("entity.inspectionstandard.standardname", "ja-JP", "检验标准名称", "检验标准名称"),
+            // entity.inspectionstandard.standardname
+            new TranslationSeedItem("entity.inspectionstandard.standardname", "zh-CN", "检验标准名称", "检验标准名称"),
+            // entity.inspectionstandard.standardname
+            new TranslationSeedItem("entity.inspectionstandard.standardname", "zh-HK", "检验标准名称", "检验标准名称"),
 
-            // entity.inspectionStandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionStandard.inspectiontype", "en-US", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
-            // entity.inspectionStandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionStandard.inspectiontype", "ja-JP", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
-            // entity.inspectionStandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionStandard.inspectiontype", "zh-CN", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
-            // entity.inspectionStandard.inspectiontype
-            new TranslationSeedItem("entity.inspectionStandard.inspectiontype", "zh-HK", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            // entity.inspectionstandard.inspectiontype
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "en-US", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            // entity.inspectionstandard.inspectiontype
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "ja-JP", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            // entity.inspectionstandard.inspectiontype
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "zh-CN", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
+            // entity.inspectionstandard.inspectiontype
+            new TranslationSeedItem("entity.inspectionstandard.inspectiontype", "zh-HK", "检验类型", "检验类型（0=IQC来料检验，1=IPQC过程检验，2=FQC最终检验）"),
 
-            // entity.inspectionStandard.materialcategorycode
-            new TranslationSeedItem("entity.inspectionStandard.materialcategorycode", "en-US", "物料类别编码", "物料类别编码"),
-            // entity.inspectionStandard.materialcategorycode
-            new TranslationSeedItem("entity.inspectionStandard.materialcategorycode", "ja-JP", "物料类别编码", "物料类别编码"),
-            // entity.inspectionStandard.materialcategorycode
-            new TranslationSeedItem("entity.inspectionStandard.materialcategorycode", "zh-CN", "物料类别编码", "物料类别编码"),
-            // entity.inspectionStandard.materialcategorycode
-            new TranslationSeedItem("entity.inspectionStandard.materialcategorycode", "zh-HK", "物料类别编码", "物料类别编码"),
+            // entity.inspectionstandard.materialcategorycode
+            new TranslationSeedItem("entity.inspectionstandard.materialcategorycode", "en-US", "物料类别编码", "物料类别编码"),
+            // entity.inspectionstandard.materialcategorycode
+            new TranslationSeedItem("entity.inspectionstandard.materialcategorycode", "ja-JP", "物料类别编码", "物料类别编码"),
+            // entity.inspectionstandard.materialcategorycode
+            new TranslationSeedItem("entity.inspectionstandard.materialcategorycode", "zh-CN", "物料类别编码", "物料类别编码"),
+            // entity.inspectionstandard.materialcategorycode
+            new TranslationSeedItem("entity.inspectionstandard.materialcategorycode", "zh-HK", "物料类别编码", "物料类别编码"),
 
-            // entity.inspectionStandard.materialcategoryname
-            new TranslationSeedItem("entity.inspectionStandard.materialcategoryname", "en-US", "物料类别名称", "物料类别名称"),
-            // entity.inspectionStandard.materialcategoryname
-            new TranslationSeedItem("entity.inspectionStandard.materialcategoryname", "ja-JP", "物料类别名称", "物料类别名称"),
-            // entity.inspectionStandard.materialcategoryname
-            new TranslationSeedItem("entity.inspectionStandard.materialcategoryname", "zh-CN", "物料类别名称", "物料类别名称"),
-            // entity.inspectionStandard.materialcategoryname
-            new TranslationSeedItem("entity.inspectionStandard.materialcategoryname", "zh-HK", "物料类别名称", "物料类别名称"),
+            // entity.inspectionstandard.materialcategoryname
+            new TranslationSeedItem("entity.inspectionstandard.materialcategoryname", "en-US", "物料类别名称", "物料类别名称"),
+            // entity.inspectionstandard.materialcategoryname
+            new TranslationSeedItem("entity.inspectionstandard.materialcategoryname", "ja-JP", "物料类别名称", "物料类别名称"),
+            // entity.inspectionstandard.materialcategoryname
+            new TranslationSeedItem("entity.inspectionstandard.materialcategoryname", "zh-CN", "物料类别名称", "物料类别名称"),
+            // entity.inspectionstandard.materialcategoryname
+            new TranslationSeedItem("entity.inspectionstandard.materialcategoryname", "zh-HK", "物料类别名称", "物料类别名称"),
 
-            // entity.inspectionStandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemecode", "en-US", "抽样方案编码", "抽样方案编码"),
-            // entity.inspectionStandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemecode", "ja-JP", "抽样方案编码", "抽样方案编码"),
-            // entity.inspectionStandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码"),
-            // entity.inspectionStandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemecode", "zh-HK", "抽样方案编码", "抽样方案编码"),
+            // entity.inspectionstandard.samplingschemecode
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "en-US", "抽样方案编码", "抽样方案编码"),
+            // entity.inspectionstandard.samplingschemecode
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "ja-JP", "抽样方案编码", "抽样方案编码"),
+            // entity.inspectionstandard.samplingschemecode
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码"),
+            // entity.inspectionstandard.samplingschemecode
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-HK", "抽样方案编码", "抽样方案编码"),
 
-            // entity.inspectionStandard.samplingschemename
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemename", "en-US", "抽样方案名称", "抽样方案名称"),
-            // entity.inspectionStandard.samplingschemename
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemename", "ja-JP", "抽样方案名称", "抽样方案名称"),
-            // entity.inspectionStandard.samplingschemename
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemename", "zh-CN", "抽样方案名称", "抽样方案名称"),
-            // entity.inspectionStandard.samplingschemename
-            new TranslationSeedItem("entity.inspectionStandard.samplingschemename", "zh-HK", "抽样方案名称", "抽样方案名称"),
+            // entity.inspectionstandard.samplingschemename
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemename", "en-US", "抽样方案名称", "抽样方案名称"),
+            // entity.inspectionstandard.samplingschemename
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemename", "ja-JP", "抽样方案名称", "抽样方案名称"),
+            // entity.inspectionstandard.samplingschemename
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemename", "zh-CN", "抽样方案名称", "抽样方案名称"),
+            // entity.inspectionstandard.samplingschemename
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemename", "zh-HK", "抽样方案名称", "抽样方案名称"),
 
-            // entity.inspectionStandard.isenabled
-            new TranslationSeedItem("entity.inspectionStandard.isenabled", "en-US", "是否启用", "是否启用（0=否，1=是）"),
-            // entity.inspectionStandard.isenabled
-            new TranslationSeedItem("entity.inspectionStandard.isenabled", "ja-JP", "是否启用", "是否启用（0=否，1=是）"),
-            // entity.inspectionStandard.isenabled
-            new TranslationSeedItem("entity.inspectionStandard.isenabled", "zh-CN", "是否启用", "是否启用（0=否，1=是）"),
-            // entity.inspectionStandard.isenabled
-            new TranslationSeedItem("entity.inspectionStandard.isenabled", "zh-HK", "是否启用", "是否启用（0=否，1=是）"),
+            // entity.inspectionstandard.isenabled
+            new TranslationSeedItem("entity.inspectionstandard.isenabled", "en-US", "是否启用", "是否启用（0=否，1=是）"),
+            // entity.inspectionstandard.isenabled
+            new TranslationSeedItem("entity.inspectionstandard.isenabled", "ja-JP", "是否启用", "是否启用（0=否，1=是）"),
+            // entity.inspectionstandard.isenabled
+            new TranslationSeedItem("entity.inspectionstandard.isenabled", "zh-CN", "是否启用", "是否启用（0=否，1=是）"),
+            // entity.inspectionstandard.isenabled
+            new TranslationSeedItem("entity.inspectionstandard.isenabled", "zh-HK", "是否启用", "是否启用（0=否，1=是）"),
 
-            // entity.inspectionStandard.standardstatus
-            new TranslationSeedItem("entity.inspectionStandard.standardstatus", "en-US", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.inspectionStandard.standardstatus
-            new TranslationSeedItem("entity.inspectionStandard.standardstatus", "ja-JP", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.inspectionStandard.standardstatus
-            new TranslationSeedItem("entity.inspectionStandard.standardstatus", "zh-CN", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
-            // entity.inspectionStandard.standardstatus
-            new TranslationSeedItem("entity.inspectionStandard.standardstatus", "zh-HK", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "en-US", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "ja-JP", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "zh-CN", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
+            // entity.inspectionstandard.standardstatus
+            new TranslationSeedItem("entity.inspectionstandard.standardstatus", "zh-HK", "检验标准状态", "检验标准状态（0=草稿，1=已发布，2=已停用）"),
 
-            // entity.inspectionStandard.standarddescription
-            new TranslationSeedItem("entity.inspectionStandard.standarddescription", "en-US", "检验标准描述", "检验标准描述"),
-            // entity.inspectionStandard.standarddescription
-            new TranslationSeedItem("entity.inspectionStandard.standarddescription", "ja-JP", "检验标准描述", "检验标准描述"),
-            // entity.inspectionStandard.standarddescription
-            new TranslationSeedItem("entity.inspectionStandard.standarddescription", "zh-CN", "检验标准描述", "检验标准描述"),
-            // entity.inspectionStandard.standarddescription
-            new TranslationSeedItem("entity.inspectionStandard.standarddescription", "zh-HK", "检验标准描述", "检验标准描述"),
+            // entity.inspectionstandard.standarddescription
+            new TranslationSeedItem("entity.inspectionstandard.standarddescription", "en-US", "检验标准描述", "检验标准描述"),
+            // entity.inspectionstandard.standarddescription
+            new TranslationSeedItem("entity.inspectionstandard.standarddescription", "ja-JP", "检验标准描述", "检验标准描述"),
+            // entity.inspectionstandard.standarddescription
+            new TranslationSeedItem("entity.inspectionstandard.standarddescription", "zh-CN", "检验标准描述", "检验标准描述"),
+            // entity.inspectionstandard.standarddescription
+            new TranslationSeedItem("entity.inspectionstandard.standarddescription", "zh-HK", "检验标准描述", "检验标准描述"),
 
-            // entity.inspectionStandard.items
-            new TranslationSeedItem("entity.inspectionStandard.items", "en-US", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
-            // entity.inspectionStandard.items
-            new TranslationSeedItem("entity.inspectionStandard.items", "ja-JP", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
-            // entity.inspectionStandard.items
-            new TranslationSeedItem("entity.inspectionStandard.items", "zh-CN", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
-            // entity.inspectionStandard.items
-            new TranslationSeedItem("entity.inspectionStandard.items", "zh-HK", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
+            // entity.inspectionstandard.items
+            new TranslationSeedItem("entity.inspectionstandard.items", "en-US", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
+            // entity.inspectionstandard.items
+            new TranslationSeedItem("entity.inspectionstandard.items", "ja-JP", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
+            // entity.inspectionstandard.items
+            new TranslationSeedItem("entity.inspectionstandard.items", "zh-CN", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
+            // entity.inspectionstandard.items
+            new TranslationSeedItem("entity.inspectionstandard.items", "zh-HK", "检验标准明细列表", "检验标准明细列表（主子表关系）"),
         };
     }
 
@@ -215,8 +214,8 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

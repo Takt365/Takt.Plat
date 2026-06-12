@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeReassignment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel;
 
 /// <summary>
-/// TaktEmployeeReassignment 实体国际化翻译种子（键前缀 entity.employeeReassignment.*）
+/// TaktEmployeeReassignment 实体国际化翻译种子（键前缀 entity.employeereassignment.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeReassignment 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeereassignment 实体翻译...", tenantCode);
 
         foreach (var item in GetEmployeeReassignmentTranslations())
         {
@@ -76,128 +75,128 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeReassignment 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeReassignment._self / entity.employeeReassignment.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.employeereassignment._self / entity.employeereassignment.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeReassignmentTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.employeeReassignment._self
-            new TranslationSeedItem("entity.employeeReassignment._self", "en-US", "Employee Reassignment Information", "实体名称"),
-            // entity.employeeReassignment._self
-            new TranslationSeedItem("entity.employeeReassignment._self", "ja-JP", "员工调动记录信息", "实体名称"),
-            // entity.employeeReassignment._self
-            new TranslationSeedItem("entity.employeeReassignment._self", "zh-CN", "员工调动记录信息", "实体名称"),
-            // entity.employeeReassignment._self
-            new TranslationSeedItem("entity.employeeReassignment._self", "zh-HK", "员工调动记录信息", "实体名称"),
+            // entity.employeereassignment._self
+            new TranslationSeedItem("entity.employeereassignment._self", "en-US", "Employee Reassignment Information", "实体名称"),
+            // entity.employeereassignment._self
+            new TranslationSeedItem("entity.employeereassignment._self", "ja-JP", "员工调动记录信息", "实体名称"),
+            // entity.employeereassignment._self
+            new TranslationSeedItem("entity.employeereassignment._self", "zh-CN", "员工调动记录信息", "实体名称"),
+            // entity.employeereassignment._self
+            new TranslationSeedItem("entity.employeereassignment._self", "zh-HK", "员工调动记录信息", "实体名称"),
 
-            // entity.employeeReassignment.employeeid
-            new TranslationSeedItem("entity.employeeReassignment.employeeid", "en-US", "员工ID", "员工ID"),
-            // entity.employeeReassignment.employeeid
-            new TranslationSeedItem("entity.employeeReassignment.employeeid", "ja-JP", "员工ID", "员工ID"),
-            // entity.employeeReassignment.employeeid
-            new TranslationSeedItem("entity.employeeReassignment.employeeid", "zh-CN", "员工ID", "员工ID"),
-            // entity.employeeReassignment.employeeid
-            new TranslationSeedItem("entity.employeeReassignment.employeeid", "zh-HK", "员工ID", "员工ID"),
+            // entity.employeereassignment.employeeid
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "en-US", "员工ID", "员工ID"),
+            // entity.employeereassignment.employeeid
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "ja-JP", "员工ID", "员工ID"),
+            // entity.employeereassignment.employeeid
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "zh-CN", "员工ID", "员工ID"),
+            // entity.employeereassignment.employeeid
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "zh-HK", "员工ID", "员工ID"),
 
-            // entity.employeeReassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeeReassignment.reassignmenttype", "en-US", "调动类型", "调动类型（0=转岗，1=调岗）"),
-            // entity.employeeReassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeeReassignment.reassignmenttype", "ja-JP", "调动类型", "调动类型（0=转岗，1=调岗）"),
-            // entity.employeeReassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeeReassignment.reassignmenttype", "zh-CN", "调动类型", "调动类型（0=转岗，1=调岗）"),
-            // entity.employeeReassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeeReassignment.reassignmenttype", "zh-HK", "调动类型", "调动类型（0=转岗，1=调岗）"),
+            // entity.employeereassignment.reassignmenttype
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "en-US", "调动类型", "调动类型（0=转岗，1=调岗）"),
+            // entity.employeereassignment.reassignmenttype
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "ja-JP", "调动类型", "调动类型（0=转岗，1=调岗）"),
+            // entity.employeereassignment.reassignmenttype
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "zh-CN", "调动类型", "调动类型（0=转岗，1=调岗）"),
+            // entity.employeereassignment.reassignmenttype
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "zh-HK", "调动类型", "调动类型（0=转岗，1=调岗）"),
 
-            // entity.employeeReassignment.fromdeptid
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptid", "en-US", "调出部门ID", "调出部门ID"),
-            // entity.employeeReassignment.fromdeptid
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptid", "ja-JP", "调出部门ID", "调出部门ID"),
-            // entity.employeeReassignment.fromdeptid
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptid", "zh-CN", "调出部门ID", "调出部门ID"),
-            // entity.employeeReassignment.fromdeptid
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptid", "zh-HK", "调出部门ID", "调出部门ID"),
+            // entity.employeereassignment.fromdeptid
+            new TranslationSeedItem("entity.employeereassignment.fromdeptid", "en-US", "调出部门ID", "调出部门ID"),
+            // entity.employeereassignment.fromdeptid
+            new TranslationSeedItem("entity.employeereassignment.fromdeptid", "ja-JP", "调出部门ID", "调出部门ID"),
+            // entity.employeereassignment.fromdeptid
+            new TranslationSeedItem("entity.employeereassignment.fromdeptid", "zh-CN", "调出部门ID", "调出部门ID"),
+            // entity.employeereassignment.fromdeptid
+            new TranslationSeedItem("entity.employeereassignment.fromdeptid", "zh-HK", "调出部门ID", "调出部门ID"),
 
-            // entity.employeeReassignment.fromdeptname
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptname", "en-US", "调出部门名称", "调出部门名称"),
-            // entity.employeeReassignment.fromdeptname
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptname", "ja-JP", "调出部门名称", "调出部门名称"),
-            // entity.employeeReassignment.fromdeptname
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptname", "zh-CN", "调出部门名称", "调出部门名称"),
-            // entity.employeeReassignment.fromdeptname
-            new TranslationSeedItem("entity.employeeReassignment.fromdeptname", "zh-HK", "调出部门名称", "调出部门名称"),
+            // entity.employeereassignment.fromdeptname
+            new TranslationSeedItem("entity.employeereassignment.fromdeptname", "en-US", "调出部门名称", "调出部门名称"),
+            // entity.employeereassignment.fromdeptname
+            new TranslationSeedItem("entity.employeereassignment.fromdeptname", "ja-JP", "调出部门名称", "调出部门名称"),
+            // entity.employeereassignment.fromdeptname
+            new TranslationSeedItem("entity.employeereassignment.fromdeptname", "zh-CN", "调出部门名称", "调出部门名称"),
+            // entity.employeereassignment.fromdeptname
+            new TranslationSeedItem("entity.employeereassignment.fromdeptname", "zh-HK", "调出部门名称", "调出部门名称"),
 
-            // entity.employeeReassignment.frompostid
-            new TranslationSeedItem("entity.employeeReassignment.frompostid", "en-US", "调出岗位ID", "调出岗位ID"),
-            // entity.employeeReassignment.frompostid
-            new TranslationSeedItem("entity.employeeReassignment.frompostid", "ja-JP", "调出岗位ID", "调出岗位ID"),
-            // entity.employeeReassignment.frompostid
-            new TranslationSeedItem("entity.employeeReassignment.frompostid", "zh-CN", "调出岗位ID", "调出岗位ID"),
-            // entity.employeeReassignment.frompostid
-            new TranslationSeedItem("entity.employeeReassignment.frompostid", "zh-HK", "调出岗位ID", "调出岗位ID"),
+            // entity.employeereassignment.frompostid
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "en-US", "调出岗位ID", "调出岗位ID"),
+            // entity.employeereassignment.frompostid
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "ja-JP", "调出岗位ID", "调出岗位ID"),
+            // entity.employeereassignment.frompostid
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "zh-CN", "调出岗位ID", "调出岗位ID"),
+            // entity.employeereassignment.frompostid
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "zh-HK", "调出岗位ID", "调出岗位ID"),
 
-            // entity.employeeReassignment.frompostname
-            new TranslationSeedItem("entity.employeeReassignment.frompostname", "en-US", "调出岗位名称", "调出岗位名称"),
-            // entity.employeeReassignment.frompostname
-            new TranslationSeedItem("entity.employeeReassignment.frompostname", "ja-JP", "调出岗位名称", "调出岗位名称"),
-            // entity.employeeReassignment.frompostname
-            new TranslationSeedItem("entity.employeeReassignment.frompostname", "zh-CN", "调出岗位名称", "调出岗位名称"),
-            // entity.employeeReassignment.frompostname
-            new TranslationSeedItem("entity.employeeReassignment.frompostname", "zh-HK", "调出岗位名称", "调出岗位名称"),
+            // entity.employeereassignment.frompostname
+            new TranslationSeedItem("entity.employeereassignment.frompostname", "en-US", "调出岗位名称", "调出岗位名称"),
+            // entity.employeereassignment.frompostname
+            new TranslationSeedItem("entity.employeereassignment.frompostname", "ja-JP", "调出岗位名称", "调出岗位名称"),
+            // entity.employeereassignment.frompostname
+            new TranslationSeedItem("entity.employeereassignment.frompostname", "zh-CN", "调出岗位名称", "调出岗位名称"),
+            // entity.employeereassignment.frompostname
+            new TranslationSeedItem("entity.employeereassignment.frompostname", "zh-HK", "调出岗位名称", "调出岗位名称"),
 
-            // entity.employeeReassignment.todeptid
-            new TranslationSeedItem("entity.employeeReassignment.todeptid", "en-US", "调入部门ID", "调入部门ID"),
-            // entity.employeeReassignment.todeptid
-            new TranslationSeedItem("entity.employeeReassignment.todeptid", "ja-JP", "调入部门ID", "调入部门ID"),
-            // entity.employeeReassignment.todeptid
-            new TranslationSeedItem("entity.employeeReassignment.todeptid", "zh-CN", "调入部门ID", "调入部门ID"),
-            // entity.employeeReassignment.todeptid
-            new TranslationSeedItem("entity.employeeReassignment.todeptid", "zh-HK", "调入部门ID", "调入部门ID"),
+            // entity.employeereassignment.todeptid
+            new TranslationSeedItem("entity.employeereassignment.todeptid", "en-US", "调入部门ID", "调入部门ID"),
+            // entity.employeereassignment.todeptid
+            new TranslationSeedItem("entity.employeereassignment.todeptid", "ja-JP", "调入部门ID", "调入部门ID"),
+            // entity.employeereassignment.todeptid
+            new TranslationSeedItem("entity.employeereassignment.todeptid", "zh-CN", "调入部门ID", "调入部门ID"),
+            // entity.employeereassignment.todeptid
+            new TranslationSeedItem("entity.employeereassignment.todeptid", "zh-HK", "调入部门ID", "调入部门ID"),
 
-            // entity.employeeReassignment.todeptname
-            new TranslationSeedItem("entity.employeeReassignment.todeptname", "en-US", "调入部门名称", "调入部门名称"),
-            // entity.employeeReassignment.todeptname
-            new TranslationSeedItem("entity.employeeReassignment.todeptname", "ja-JP", "调入部门名称", "调入部门名称"),
-            // entity.employeeReassignment.todeptname
-            new TranslationSeedItem("entity.employeeReassignment.todeptname", "zh-CN", "调入部门名称", "调入部门名称"),
-            // entity.employeeReassignment.todeptname
-            new TranslationSeedItem("entity.employeeReassignment.todeptname", "zh-HK", "调入部门名称", "调入部门名称"),
+            // entity.employeereassignment.todeptname
+            new TranslationSeedItem("entity.employeereassignment.todeptname", "en-US", "调入部门名称", "调入部门名称"),
+            // entity.employeereassignment.todeptname
+            new TranslationSeedItem("entity.employeereassignment.todeptname", "ja-JP", "调入部门名称", "调入部门名称"),
+            // entity.employeereassignment.todeptname
+            new TranslationSeedItem("entity.employeereassignment.todeptname", "zh-CN", "调入部门名称", "调入部门名称"),
+            // entity.employeereassignment.todeptname
+            new TranslationSeedItem("entity.employeereassignment.todeptname", "zh-HK", "调入部门名称", "调入部门名称"),
 
-            // entity.employeeReassignment.topostid
-            new TranslationSeedItem("entity.employeeReassignment.topostid", "en-US", "调入岗位ID", "调入岗位ID"),
-            // entity.employeeReassignment.topostid
-            new TranslationSeedItem("entity.employeeReassignment.topostid", "ja-JP", "调入岗位ID", "调入岗位ID"),
-            // entity.employeeReassignment.topostid
-            new TranslationSeedItem("entity.employeeReassignment.topostid", "zh-CN", "调入岗位ID", "调入岗位ID"),
-            // entity.employeeReassignment.topostid
-            new TranslationSeedItem("entity.employeeReassignment.topostid", "zh-HK", "调入岗位ID", "调入岗位ID"),
+            // entity.employeereassignment.topostid
+            new TranslationSeedItem("entity.employeereassignment.topostid", "en-US", "调入岗位ID", "调入岗位ID"),
+            // entity.employeereassignment.topostid
+            new TranslationSeedItem("entity.employeereassignment.topostid", "ja-JP", "调入岗位ID", "调入岗位ID"),
+            // entity.employeereassignment.topostid
+            new TranslationSeedItem("entity.employeereassignment.topostid", "zh-CN", "调入岗位ID", "调入岗位ID"),
+            // entity.employeereassignment.topostid
+            new TranslationSeedItem("entity.employeereassignment.topostid", "zh-HK", "调入岗位ID", "调入岗位ID"),
 
-            // entity.employeeReassignment.topostname
-            new TranslationSeedItem("entity.employeeReassignment.topostname", "en-US", "调入岗位名称", "调入岗位名称"),
-            // entity.employeeReassignment.topostname
-            new TranslationSeedItem("entity.employeeReassignment.topostname", "ja-JP", "调入岗位名称", "调入岗位名称"),
-            // entity.employeeReassignment.topostname
-            new TranslationSeedItem("entity.employeeReassignment.topostname", "zh-CN", "调入岗位名称", "调入岗位名称"),
-            // entity.employeeReassignment.topostname
-            new TranslationSeedItem("entity.employeeReassignment.topostname", "zh-HK", "调入岗位名称", "调入岗位名称"),
+            // entity.employeereassignment.topostname
+            new TranslationSeedItem("entity.employeereassignment.topostname", "en-US", "调入岗位名称", "调入岗位名称"),
+            // entity.employeereassignment.topostname
+            new TranslationSeedItem("entity.employeereassignment.topostname", "ja-JP", "调入岗位名称", "调入岗位名称"),
+            // entity.employeereassignment.topostname
+            new TranslationSeedItem("entity.employeereassignment.topostname", "zh-CN", "调入岗位名称", "调入岗位名称"),
+            // entity.employeereassignment.topostname
+            new TranslationSeedItem("entity.employeereassignment.topostname", "zh-HK", "调入岗位名称", "调入岗位名称"),
 
-            // entity.employeeReassignment.effectivedate
-            new TranslationSeedItem("entity.employeeReassignment.effectivedate", "en-US", "生效日期", "生效日期"),
-            // entity.employeeReassignment.effectivedate
-            new TranslationSeedItem("entity.employeeReassignment.effectivedate", "ja-JP", "生效日期", "生效日期"),
-            // entity.employeeReassignment.effectivedate
-            new TranslationSeedItem("entity.employeeReassignment.effectivedate", "zh-CN", "生效日期", "生效日期"),
-            // entity.employeeReassignment.effectivedate
-            new TranslationSeedItem("entity.employeeReassignment.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            // entity.employeereassignment.effectivedate
+            new TranslationSeedItem("entity.employeereassignment.effectivedate", "en-US", "生效日期", "生效日期"),
+            // entity.employeereassignment.effectivedate
+            new TranslationSeedItem("entity.employeereassignment.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            // entity.employeereassignment.effectivedate
+            new TranslationSeedItem("entity.employeereassignment.effectivedate", "zh-CN", "生效日期", "生效日期"),
+            // entity.employeereassignment.effectivedate
+            new TranslationSeedItem("entity.employeereassignment.effectivedate", "zh-HK", "生效日期", "生效日期"),
 
-            // entity.employeeReassignment.reason
-            new TranslationSeedItem("entity.employeeReassignment.reason", "en-US", "调动原因", "调动原因"),
-            // entity.employeeReassignment.reason
-            new TranslationSeedItem("entity.employeeReassignment.reason", "ja-JP", "调动原因", "调动原因"),
-            // entity.employeeReassignment.reason
-            new TranslationSeedItem("entity.employeeReassignment.reason", "zh-CN", "调动原因", "调动原因"),
-            // entity.employeeReassignment.reason
-            new TranslationSeedItem("entity.employeeReassignment.reason", "zh-HK", "调动原因", "调动原因"),
+            // entity.employeereassignment.reason
+            new TranslationSeedItem("entity.employeereassignment.reason", "en-US", "调动原因", "调动原因"),
+            // entity.employeereassignment.reason
+            new TranslationSeedItem("entity.employeereassignment.reason", "ja-JP", "调动原因", "调动原因"),
+            // entity.employeereassignment.reason
+            new TranslationSeedItem("entity.employeereassignment.reason", "zh-CN", "调动原因", "调动原因"),
+            // entity.employeereassignment.reason
+            new TranslationSeedItem("entity.employeereassignment.reason", "zh-HK", "调动原因", "调动原因"),
         };
     }
 
@@ -215,8 +214,8 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

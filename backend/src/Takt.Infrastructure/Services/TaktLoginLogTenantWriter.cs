@@ -24,7 +24,7 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktLoginLogTenantWriter"/> 实现
+/// ITaktLoginLogTenantWriter 实现
 /// </summary>
 public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
 {
@@ -120,7 +120,7 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
                 .Where(uc =>
                     uc.TenantCode == trimmedTenant
                     && uc.UserId == userId
-                    && uc.IsDefault == TaktYesNo.Yes)
+                    && uc.IsDefault == 1)
                 .Select(uc => uc.CompanyCode)
                 .ToListAsync(cancellationToken))
                 .Where(code => !string.IsNullOrWhiteSpace(code))
@@ -137,7 +137,7 @@ public class TaktLoginLogTenantWriter : ITaktLoginLogTenantWriter
                 .Where(c =>
                     c.TenantCode == trimmedTenant
                     && defaultLinkCodes.Contains(c.CompanyCode)
-                    && c.CompanyStatus == TaktCommonStatus.Enabled)
+                    && c.CompanyStatus == 1)
                 .ToListAsync(cancellationToken);
 
             var company = companies

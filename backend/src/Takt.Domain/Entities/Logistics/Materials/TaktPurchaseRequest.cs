@@ -94,7 +94,7 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "request_status", ColumnDescription = "申请状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus RequestStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int RequestStatus { get; set; } = 1;
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）

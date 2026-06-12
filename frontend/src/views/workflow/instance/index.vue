@@ -14,7 +14,7 @@
   <div class="workflow-instance">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowinstance.instancecode'), t('entity.flowinstance.processkey')].join(t('common.page.action.or')) })"
+      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowInstance.instancecode'), t('entity.flowInstance.processkey')].join(t('common.tip.or')) })"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -77,7 +77,7 @@
 
     <TaktModal
       v-model:open="detailVisible"
-      :title="t('common.dialog.title.detail', { entity: t('entity.flowinstance._self') })"
+      :title="t('common.dialog.title.detail', { entity: t('entity.flowInstance._self') })"
       width="640px"
       :footer="null"
       :cancel-text="t('common.page.button.cancel')"
@@ -97,11 +97,11 @@
       @cancel="currentSuspendInstance = null; suspendReason = ''"
     >
       <a-form layout="vertical">
-        <a-form-item :label="t('workflow.instance.suspendReason')">
+        <a-form-item :label="t('workflow.instance.page.suspendReason')">
           <a-textarea
             v-model:value="suspendReason"
             :rows="3"
-            :placeholder="t('workflow.instance.suspendReasonPlaceholder')"
+            :placeholder="t('workflow.instance.page.suspendReasonPlaceholder')"
           />
         </a-form-item>
       </a-form>
@@ -114,11 +114,11 @@
       @cancel="currentTerminateInstance = null; terminateReason = ''"
     >
       <a-form layout="vertical">
-        <a-form-item :label="t('workflow.instance.terminateReason')">
+        <a-form-item :label="t('entity.flowInstance.deletereason')">
           <a-textarea
             v-model:value="terminateReason"
             :rows="3"
-            :placeholder="t('workflow.instance.terminateReasonPlaceholder')"
+            :placeholder="t('workflow.instance.page.terminateReasonPlaceholder')"
           />
         </a-form-item>
       </a-form>
@@ -126,23 +126,23 @@
     <!-- 编辑实例（流程标题与表单数据） -->
     <TaktModal
       v-model:open="updateVisible"
-      :title="t('common.dialog.title.edit', { entity: t('entity.flowinstance._self') })"
+      :title="t('common.dialog.title.edit', { entity: t('entity.flowInstance._self') })"
       :confirm-loading="updateLoading"
       @ok="handleUpdateSubmit"
       @cancel="updateVisible = false"
     >
       <a-form layout="vertical">
-        <a-form-item :label="t('entity.flowinstance.processtitle')">
+        <a-form-item :label="t('entity.flowInstance.processtitle')">
           <a-input
             v-model:value="updateProcessTitle"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowinstance.processtitle') })"
+            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowInstance.processtitle') })"
           />
         </a-form-item>
-        <a-form-item :label="t('entity.flowinstance.frmdata')">
+        <a-form-item :label="t('entity.flowInstance.frmdata')">
           <a-textarea
             v-model:value="updateFrmData"
             :rows="6"
-            :placeholder="t('workflow.instance.frmDataPlaceholder')"
+            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowInstance.frmdata') })"
           />
         </a-form-item>
       </a-form>
@@ -155,16 +155,16 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.flowinstance.instancecode')">
+      <a-form-item :label="t('entity.flowInstance.instancecode')">
         <a-input v-model:value="advancedQueryForm.instanceCode" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowinstance.processkey')">
+      <a-form-item :label="t('entity.flowInstance.processkey')">
         <a-input v-model:value="advancedQueryForm.processKey" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowinstance.instancestatus')">
+      <a-form-item :label="t('entity.flowInstance.instancestatus')">
         <a-select
           v-model:value="advancedQueryForm.instanceStatus"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowinstance.instancestatus') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowInstance.instancestatus') })"
           allow-clear
         >
           <a-select-option
@@ -194,7 +194,7 @@
 
 <script setup lang="ts">
 /**
- * 流程实例列表页：全部实例查询、分页、详情、更新、撤回、挂起、恢复、终止、撤销审批、删除、导出。
+ * 流程实例列表页：全部实例查询、分页、详情、更新、撤回、挂起、恢复、终止、删除、导出。
  */
 import { ref, onMounted, computed } from 'vue'
 import { message, Modal } from 'ant-design-vue'
@@ -202,8 +202,8 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import {
-  getFlowEngineInstanceById,
-  revokeFlowEngineInstance,
+  getFlowEngineDetailById,
+  withdrawFlowEngineInstance,
   suspendFlowEngineInstance,
   resumeFlowEngineInstance,
   terminateFlowEngineInstance
@@ -218,7 +218,8 @@ import {
 import { useUserStore } from '@/stores/identity/user'
 import InstanceForm from './components/instance-form.vue'
 import type { FlowInstance, FlowInstanceQuery, FlowInstanceEditPayload } from '@/types/workflow/flow-instance'
-import type { FlowInstanceDetailView } from '@/types/workflow/flow-engine'
+import type { FlowInstanceDetail } from '@/types/workflow/flow-engine'
+import { useWorkflowSignalRRefresh, WORKFLOW_TABLE_NAMES } from '@/composables/use-workflow-signalr-refresh'
 
 type FlowInstanceTableRow = FlowInstance & { instanceId: string; currentNodeName?: string }
 import { RiEyeLine, RiArrowGoBackLine, RiEditLine, RiDeleteBinLine, RiPauseLine, RiPlayLine, RiStopLine } from '@remixicon/vue'
@@ -235,7 +236,7 @@ const selectedRow = ref<FlowInstanceTableRow | null>(null)
 const selectedRows = ref<FlowInstanceTableRow[]>([])
 const selectedRowKeys = ref<(string | number)[]>([])
 const detailVisible = ref(false)
-const detail = ref<FlowInstanceDetailView | null>(null)
+const detail = ref<FlowInstanceDetail | null>(null)
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref<{ instanceCode: string; processKey: string; instanceStatus: number | undefined }>({
   instanceCode: '',
@@ -294,12 +295,12 @@ const userStore = useUserStore()
 const currentUserId = computed(() => userStore.userInfo?.userId ?? '')
 
 const statusOptions = computed(() => ({
-  0: t('workflow.instance.status.0'),
-  1: t('workflow.instance.status.1'),
-  2: t('workflow.instance.status.2'),
-  3: t('workflow.instance.status.3'),
-  4: t('workflow.instance.status.4'),
-  5: t('workflow.instance.status.5')
+  0: t('workflow.instance.page.status.0'),
+  1: t('workflow.instance.page.status.1'),
+  2: t('workflow.instance.page.status.2'),
+  3: t('workflow.instance.page.status.3'),
+  4: t('workflow.instance.page.status.4'),
+  5: t('workflow.instance.page.status.5')
 }))
 
 const getInstanceId = (record: unknown): string => {
@@ -321,7 +322,7 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left'
   },
   {
-    title: t('entity.flowinstance.instancecode'),
+    title: t('entity.flowInstance.instancecode'),
     dataIndex: 'instanceCode',
     key: 'instanceCode',
     width: 160,
@@ -329,7 +330,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowinstance.processkey'),
+    title: t('entity.flowInstance.processkey'),
     dataIndex: 'processKey',
     key: 'processKey',
     width: 120,
@@ -337,7 +338,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowinstance.processname'),
+    title: t('entity.flowInstance.processname'),
     dataIndex: 'processName',
     key: 'processName',
     width: 120,
@@ -345,7 +346,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowinstance.processtitle'),
+    title: t('entity.flowInstance.processtitle'),
     dataIndex: 'processTitle',
     key: 'processTitle',
     width: 140,
@@ -353,32 +354,32 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true
   },
   {
-    title: t('entity.flowinstance.instancestatus'),
+    title: t('entity.flowInstance.instancestatus'),
     dataIndex: 'instanceStatus',
     key: 'instanceStatus',
     width: 90
   },
   {
-    title: t('entity.flowinstance.currentnodename'),
+    title: t('entity.flowInstance.currentactivityname'),
     dataIndex: 'currentNodeName',
     key: 'currentNodeName',
     width: 100,
     ellipsis: true
   },
   {
-    title: t('entity.flowinstance.startusername'),
+    title: t('entity.flowInstance.startusername'),
     dataIndex: 'startUserName',
     key: 'startUserName',
     width: 100
   },
   {
-    title: t('entity.flowinstance.starttime'),
+    title: t('entity.flowInstance.starttime'),
     dataIndex: 'startTime',
     key: 'startTime',
     width: 160
   },
   {
-    title: t('entity.flowinstance.endtime'),
+    title: t('entity.flowInstance.endtime'),
     dataIndex: 'endTime',
     key: 'endTime',
     width: 160
@@ -403,13 +404,13 @@ const columns = computed<TableColumnsType>(() => [
         onClick: (_record: FlowInstanceTableRow) => handleEditInstance(_record)
       },
       {
-        key: 'revoke',
-        label: t('common.page.button.revoke'),
+        key: 'withdraw',
+        label: t('common.page.button.withdraw'),
         shape: 'plain',
         icon: RiArrowGoBackLine,
-        permission: 'workflow:instance:revoke',
+        permission: 'workflow:instance:withdraw',
         visible: (record: FlowInstanceTableRow) => record.instanceStatus === 0 && isStarter(record),
-        onClick: (_record: FlowInstanceTableRow) => handleRevoke(_record)
+        onClick: (_record: FlowInstanceTableRow) => handleWithdraw(_record)
       },
       {
         key: 'delete',
@@ -421,7 +422,7 @@ const columns = computed<TableColumnsType>(() => [
       },
       {
         key: 'suspend',
-        label: t('workflow.instance.suspend'),
+        label: t('common.page.button.suspend'),
         shape: 'plain',
         icon: RiPauseLine,
         permission: 'workflow:instance:suspend',
@@ -430,7 +431,7 @@ const columns = computed<TableColumnsType>(() => [
       },
       {
         key: 'resume',
-        label: t('workflow.instance.resume'),
+        label: t('common.page.button.resume'),
         shape: 'plain',
         icon: RiPlayLine,
         permission: 'workflow:instance:resume',
@@ -439,7 +440,7 @@ const columns = computed<TableColumnsType>(() => [
       },
       {
         key: 'terminate',
-        label: t('workflow.instance.terminate'),
+        label: t('common.page.button.terminate'),
         shape: 'plain',
         icon: RiStopLine,
         permission: 'workflow:instance:terminate',
@@ -481,7 +482,7 @@ const onClickRow = (record: FlowInstanceTableRow) => ({
 
 /** 实例状态码转展示文案 */
 function statusText(s: number): string {
-  return t(`workflow.instance.status.${s}`) || t('workflow.instance.status.unknown')
+  return t(`workflow.instance.page.status.${s}`) || t('workflow.instance.page.status.unknown')
 }
 
 /** 实例状态对应 Tag 颜色 */
@@ -516,7 +517,7 @@ async function loadData() {
     }))
     total.value = res.total ?? 0
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.loadFail')))
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
     dataSource.value = []
     total.value = 0
   } finally {
@@ -524,7 +525,8 @@ async function loadData() {
   }
 }
 
-/** 查询：页码置 1 并重新拉取 */
+/** 租户/公司切换与工作流 SignalR 推送时自动重载列表 */
+useWorkflowSignalRRefresh(loadData, WORKFLOW_TABLE_NAMES.instance)
 function handleSearch() {
   currentPage.value = 1
   loadData()
@@ -592,7 +594,7 @@ async function handleExport() {
     const blob = await exportFlowInstance(query)
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
-    const fileName = `${t('entity.flowinstance._self')}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
+    const fileName = `${t('entity.flowInstance._self')}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -602,9 +604,9 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.page.msg.exportSuccess'))
+    message.success(t('common.feedback.export.success'))
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.exportFail')))
+    message.error(getErrorMessage(error, t('common.feedback.export.failed')))
   } finally {
     loading.value = false
   }
@@ -641,20 +643,20 @@ function handleResizeColumn(w: number, col: FlowInstanceTableRowColumn) {
 /** 拉取实例详情并打开详情弹窗 */
 async function showDetail(record: FlowInstanceTableRow) {
   try {
-    detail.value = await getFlowEngineInstanceById(record.instanceId, 'instance')
+    detail.value = await getFlowEngineDetailById(record.instanceId)
     detailVisible.value = true
   } catch {
-    message.error(t('common.page.msg.loadFail'))
+    message.error(t('common.feedback.load.data.failed'))
   }
 }
 
 /** 加签/减签后刷新当前详情（保持弹窗打开） */
 async function reloadInstanceDetail() {
-  if (!detail.value?.instanceId) return
+  if (!detail.value?.flowInstanceId) return
   try {
-    detail.value = await getFlowEngineInstanceById(detail.value.instanceId, 'instance')
+    detail.value = await getFlowEngineDetailById(detail.value.flowInstanceId)
   } catch {
-    message.error(t('common.page.msg.loadFail'))
+    message.error(t('common.feedback.load.data.failed'))
   }
 }
 
@@ -674,13 +676,13 @@ async function submitSuspend() {
     const reason = suspendReason.value.trim()
     if (reason) payload.reason = reason
     await suspendFlowEngineInstance(payload)
-    message.success(t('workflow.instance.suspendSuccess'))
+    message.success(t('workflow.instance.page.msg.suspendSuccess'))
     suspendVisible.value = false
     currentSuspendInstance.value = null
     suspendReason.value = ''
     loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.operateFail')))
+    message.error(getErrorMessage(error, t('common.feedback.failed')))
   } finally {
     loading.value = false
   }
@@ -691,18 +693,18 @@ function handleResume(record: FlowInstanceTableRow) {
   const name = record.processTitle || record.instanceCode
   Modal.confirm({
     centered: true,
-    title: t('workflow.instance.resume'),
-    content: t('workflow.instance.confirmResume', { name }),
+    title: t('common.page.button.resume'),
+    content: t('workflow.instance.page.confirmResume', { name }),
     okText: t('common.page.button.ok'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
         await resumeFlowEngineInstance({ flowInstanceId: record.instanceId })
-        message.success(t('workflow.instance.resumeSuccess'))
+        message.success(t('workflow.instance.page.msg.resumeSuccess'))
         loadData()
       } catch (error: unknown) {
-        message.error(getErrorMessage(error, t('common.page.msg.operateFail')))
+        message.error(getErrorMessage(error, t('common.feedback.failed')))
       } finally {
         loading.value = false
       }
@@ -726,35 +728,35 @@ async function submitTerminate() {
     const reason = terminateReason.value.trim()
     if (reason) payload.reason = reason
     await terminateFlowEngineInstance(payload)
-    message.success(t('workflow.instance.terminateSuccess'))
+    message.success(t('workflow.instance.page.msg.terminateSuccess'))
     terminateVisible.value = false
     currentTerminateInstance.value = null
     terminateReason.value = ''
     loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.operateFail')))
+    message.error(getErrorMessage(error, t('common.feedback.failed')))
   } finally {
     loading.value = false
   }
 }
 
-/** 撤回：二次确认后调用 revoke 接口并刷新列表 */
-function handleRevoke(record: FlowInstanceTableRow) {
+/** 撤回：二次确认后调用 withdraw 接口并刷新列表 */
+function handleWithdraw(record: FlowInstanceTableRow) {
   const name = record.processTitle || record.instanceCode
   Modal.confirm({
     centered: true,
-    title: t('common.page.action.confirmAction', { action: t('common.page.button.revoke') }),
-    content: t('workflow.instance.confirmRevoke', { name }),
+    title: t('common.tip.confirm.title', { action: t('common.page.button.withdraw') }),
+    content: t('workflow.instance.page.confirmRevoke', { name }),
     okText: t('common.page.button.ok'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
-        await revokeFlowEngineInstance(record.instanceCode)
-        message.success(t('common.page.msg.actionSuccess', { action: t('common.page.button.revoke') }))
+        await withdrawFlowEngineInstance(record.instanceCode)
+        message.success(t('common.feedback.action.success', { action: t('common.page.button.withdraw') }))
         loadData()
       } catch (error: unknown) {
-        message.error(getErrorMessage(error, t('common.page.msg.operateFail')))
+        message.error(getErrorMessage(error, t('common.feedback.failed')))
       } finally {
         loading.value = false
       }
@@ -765,7 +767,7 @@ function handleRevoke(record: FlowInstanceTableRow) {
 /** 更新：若有选中行则打编辑弹窗，否则提示请选择 */
 function handleUpdate() {
   if (selectedRow.value) handleEditInstance(selectedRow.value)
-  else message.warning(t('common.page.action.warnSelectToAction', { action: t('common.page.button.edit'), entity: t('entity.flowinstance._self') }))
+  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowInstance._self') }))
 }
 
 /** 打开编辑弹窗：回填标题与 frmData，拉取最新详情 */
@@ -774,13 +776,13 @@ async function handleEditInstance(record: FlowInstanceTableRow) {
   updateProcessTitle.value = record.processTitle ?? ''
   updateFrmData.value = record.frmData ?? ''
   try {
-    const d = await getFlowEngineInstanceById(record.instanceId, 'instance')
+    const d = await getFlowEngineDetailById(record.instanceId)
     if (d) {
       updateProcessTitle.value = d.processTitle ?? ''
       updateFrmData.value = d.frmData ?? ''
     }
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.loadFail')))
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
   }
   updateVisible.value = true
 }
@@ -797,12 +799,12 @@ async function handleUpdateSubmit() {
     if (processTitle) updatePayload.processTitle = processTitle
     if (frmData) updatePayload.frmData = frmData
     await updateFlowInstance(id, updatePayload)
-    message.success(t('common.page.msg.updateSuccess'))
+    message.success(t('common.feedback.updated'))
     updateVisible.value = false
     currentEditInstance.value = null
     loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.operateFail')))
+    message.error(getErrorMessage(error, t('common.feedback.failed')))
   } finally {
     updateLoading.value = false
   }
@@ -813,18 +815,18 @@ function handleDeleteOne(record: FlowInstanceTableRow) {
   const name = record.processTitle || record.instanceCode
   Modal.confirm({
     centered: true,
-    title: t('common.page.action.confirmDelete'),
-    content: t('common.page.confirm.deleteEntity', { entity: t('entity.flowinstance._self'), name }),
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowInstance._self'), name }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
         await deleteFlowInstanceById(record.instanceId)
-        message.success(t('common.page.msg.deleteSuccess'))
+        message.success(t('common.feedback.deleted'))
         loadData()
       } catch (error: unknown) {
-        message.error(getErrorMessage(error, t('common.page.msg.deleteFail')))
+        message.error(getErrorMessage(error, t('common.feedback.delete.failed')))
       } finally {
         loading.value = false
       }
@@ -835,26 +837,26 @@ function handleDeleteOne(record: FlowInstanceTableRow) {
 /** 批量删除：无选中则提示；有选中则二次确认后 deleteBatch 并刷新 */
 function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.page.action.warnSelectToAction', { action: t('common.page.button.delete'), entity: t('entity.flowinstance._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowInstance._self') }))
     return
   }
   Modal.confirm({
     centered: true,
-    title: t('common.page.action.confirmDelete'),
-    content: t('common.page.confirm.deleteCountEntity', { entity: t('entity.flowinstance._self'), count: selectedRows.value.length }),
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.flowInstance._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
         await deleteFlowInstanceBatch(selectedRows.value.map(r => r.instanceId))
-        message.success(t('common.page.msg.deleteSuccess'))
+        message.success(t('common.feedback.deleted'))
         selectedRows.value = []
         selectedRowKeys.value = []
         selectedRow.value = null
         loadData()
       } catch (error: unknown) {
-        message.error(getErrorMessage(error, t('common.page.msg.deleteFail')))
+        message.error(getErrorMessage(error, t('common.feedback.delete.failed')))
       } finally {
         loading.value = false
       }

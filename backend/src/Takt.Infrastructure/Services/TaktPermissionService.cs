@@ -20,7 +20,7 @@ using Takt.Shared.Enums;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktPermissionService"/> 实现
+/// ITaktPermissionService 实现
 /// 基于用户-公司、用户-角色-公司关联及角色数据范围判断访问权限
 /// </summary>
 public class TaktPermissionService : ITaktPermissionService
@@ -114,7 +114,7 @@ public class TaktPermissionService : ITaktPermissionService
 
         var ordered = await Db.Queryable<TaktCompany>()
             .Where(c => c.TenantCode == tenantCode && companies.Contains(c.CompanyCode))
-            .Where(c => c.CompanyStatus == TaktCommonStatus.Enabled)
+            .Where(c => c.CompanyStatus == 1)
             .OrderBy(c => c.SortOrder)
             .OrderBy(c => c.CompanyCode)
             .Select(c => c.CompanyCode)
@@ -149,22 +149,22 @@ public class TaktPermissionService : ITaktPermissionService
 
         var dataScope = await GetDataScopeAsync(userId, tenantCode);
 
-        if (dataScope == TaktDataScope.All)
+        if (dataScope == 1)
         {
             return true;
         }
 
-        if (dataScope == TaktDataScope.Company)
+        if (dataScope == 2)
         {
             return await HasCompanyAccessAsync(userId, tenantCode, companyCode);
         }
 
-        if (dataScope == TaktDataScope.Self)
+        if (dataScope == 4)
         {
             return permissionType == TaktPermissionType.Menu;
         }
 
-        if (dataScope == TaktDataScope.Custom)
+        if (dataScope == 5)
         {
             var hasPermission = await Db.Queryable<TaktUserRole>()
                 .InnerJoin<TaktRole>((ur, r) => ur.RoleId == r.Id)
@@ -172,7 +172,7 @@ public class TaktPermissionService : ITaktPermissionService
                 .Where((ur, r, rd) => ur.UserId == userId)
                 .Where((ur, r, rd) => ur.TenantCode == tenantCode)
                 .Where((ur, r, rd) => rd.CompanyCode == companyCode)
-                .Where((ur, r, rd) => r.DataScope == (int)TaktDataScope.Custom)
+                .Where((ur, r, rd) => r.DataScope == (int)5)
                 .Where((ur, r, rd) => ur.IsDeleted == 0 && r.IsDeleted == 0 && rd.IsDeleted == 0)
                 .AnyAsync();
 
@@ -188,15 +188,15 @@ public class TaktPermissionService : ITaktPermissionService
     /// <param name="userId">用户ID</param>
     /// <param name="tenantCode">租户编码</param>
     /// <returns>数据权限范围；无角色时返回 Self</returns>
-    public async Task<TaktDataScope> GetDataScopeAsync(long userId, string tenantCode)
+    public async Task<int> GetDataScopeAsync(long userId, string tenantCode)
     {
         var maxDataScope = await Db.Queryable<TaktUserRole>()
             .InnerJoin<TaktRole>((ur, r) => ur.RoleId == r.Id)
             .Where((ur, r) => ur.UserId == userId)
             .Where((ur, r) => ur.TenantCode == tenantCode)
-            .Where((ur, r) => ur.IsDeleted == 0 && r.IsDeleted == 0 && r.RoleStatus == TaktCommonStatus.Enabled)
+            .Where((ur, r) => ur.IsDeleted == 0 && r.IsDeleted == 0 && r.RoleStatus == 1)
             .MaxAsync((ur, r) => r.DataScope);
 
-        return (TaktDataScope)(maxDataScope > 0 ? maxDataScope : (int)TaktDataScope.Self);
+        return maxDataScope > 0 ? maxDataScope : 4;
     }
 }

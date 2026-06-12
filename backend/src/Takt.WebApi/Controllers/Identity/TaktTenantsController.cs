@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Identity
 // 文件名称：TaktTenantsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：租户控制器
 // 
@@ -22,7 +22,7 @@ namespace Takt.WebApi.Controllers.Identity;
 /// 租户控制器
 /// 提供租户的 REST API
 /// </summary>
-[ApiModule(TaktModule.Identity, "身份认证")]
+[ApiModule(1, "身份认证")]
 [Route("api/[controller]", Name = "租户")]
 public class TaktTenantsController : TaktControllerBase
 {

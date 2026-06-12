@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingChangeLogI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoutingChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom;
 
 /// <summary>
-/// TaktRoutingChangeLog 实体国际化翻译种子（键前缀 entity.routingChangeLog.*）
+/// TaktRoutingChangeLog 实体国际化翻译种子（键前缀 entity.routingchangelog.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktRoutingChangeLogI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktRoutingChangeLogI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 routingChangeLog 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 routingchangelog 实体翻译...", tenantCode);
 
         foreach (var item in GetRoutingChangeLogTranslations())
         {
@@ -76,83 +75,83 @@ public class TaktRoutingChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktRoutingChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.routingChangeLog._self / entity.routingChangeLog.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.routingchangelog._self / entity.routingchangelog.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetRoutingChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.routingChangeLog._self
-            new TranslationSeedItem("entity.routingChangeLog._self", "en-US", "Routing Change Log Information", "实体名称"),
-            // entity.routingChangeLog._self
-            new TranslationSeedItem("entity.routingChangeLog._self", "ja-JP", "工艺路线变更日志", "实体名称"),
-            // entity.routingChangeLog._self
-            new TranslationSeedItem("entity.routingChangeLog._self", "zh-CN", "工艺路线变更日志", "实体名称"),
-            // entity.routingChangeLog._self
-            new TranslationSeedItem("entity.routingChangeLog._self", "zh-HK", "工艺路线变更日志", "实体名称"),
+            // entity.routingchangelog._self
+            new TranslationSeedItem("entity.routingchangelog._self", "en-US", "Routing Change Log Information", "实体名称"),
+            // entity.routingchangelog._self
+            new TranslationSeedItem("entity.routingchangelog._self", "ja-JP", "工艺路线变更日志", "实体名称"),
+            // entity.routingchangelog._self
+            new TranslationSeedItem("entity.routingchangelog._self", "zh-CN", "工艺路线变更日志", "实体名称"),
+            // entity.routingchangelog._self
+            new TranslationSeedItem("entity.routingchangelog._self", "zh-HK", "工艺路线变更日志", "实体名称"),
 
-            // entity.routingChangeLog.routingid
-            new TranslationSeedItem("entity.routingChangeLog.routingid", "en-US", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.routingChangeLog.routingid
-            new TranslationSeedItem("entity.routingChangeLog.routingid", "ja-JP", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.routingChangeLog.routingid
-            new TranslationSeedItem("entity.routingChangeLog.routingid", "zh-CN", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.routingChangeLog.routingid
-            new TranslationSeedItem("entity.routingChangeLog.routingid", "zh-HK", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.routingchangelog.routingid
+            new TranslationSeedItem("entity.routingchangelog.routingid", "en-US", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.routingchangelog.routingid
+            new TranslationSeedItem("entity.routingchangelog.routingid", "ja-JP", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.routingchangelog.routingid
+            new TranslationSeedItem("entity.routingchangelog.routingid", "zh-CN", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.routingchangelog.routingid
+            new TranslationSeedItem("entity.routingchangelog.routingid", "zh-HK", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
-            // entity.routingChangeLog.changefields
-            new TranslationSeedItem("entity.routingChangeLog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.routingChangeLog.changefields
-            new TranslationSeedItem("entity.routingChangeLog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.routingChangeLog.changefields
-            new TranslationSeedItem("entity.routingChangeLog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.routingChangeLog.changefields
-            new TranslationSeedItem("entity.routingChangeLog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.routingchangelog.changefields
+            new TranslationSeedItem("entity.routingchangelog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.routingchangelog.changefields
+            new TranslationSeedItem("entity.routingchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.routingchangelog.changefields
+            new TranslationSeedItem("entity.routingchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.routingchangelog.changefields
+            new TranslationSeedItem("entity.routingchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
 
-            // entity.routingChangeLog.changetype
-            new TranslationSeedItem("entity.routingChangeLog.changetype", "en-US", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
-            // entity.routingChangeLog.changetype
-            new TranslationSeedItem("entity.routingChangeLog.changetype", "ja-JP", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
-            // entity.routingChangeLog.changetype
-            new TranslationSeedItem("entity.routingChangeLog.changetype", "zh-CN", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
-            // entity.routingChangeLog.changetype
-            new TranslationSeedItem("entity.routingChangeLog.changetype", "zh-HK", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
+            // entity.routingchangelog.changetype
+            new TranslationSeedItem("entity.routingchangelog.changetype", "en-US", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
+            // entity.routingchangelog.changetype
+            new TranslationSeedItem("entity.routingchangelog.changetype", "ja-JP", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
+            // entity.routingchangelog.changetype
+            new TranslationSeedItem("entity.routingchangelog.changetype", "zh-CN", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
+            // entity.routingchangelog.changetype
+            new TranslationSeedItem("entity.routingchangelog.changetype", "zh-HK", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=版本升级）"),
 
-            // entity.routingChangeLog.changereason
-            new TranslationSeedItem("entity.routingChangeLog.changereason", "en-US", "变更原因", "变更原因"),
-            // entity.routingChangeLog.changereason
-            new TranslationSeedItem("entity.routingChangeLog.changereason", "ja-JP", "变更原因", "变更原因"),
-            // entity.routingChangeLog.changereason
-            new TranslationSeedItem("entity.routingChangeLog.changereason", "zh-CN", "变更原因", "变更原因"),
-            // entity.routingChangeLog.changereason
-            new TranslationSeedItem("entity.routingChangeLog.changereason", "zh-HK", "变更原因", "变更原因"),
+            // entity.routingchangelog.changereason
+            new TranslationSeedItem("entity.routingchangelog.changereason", "en-US", "变更原因", "变更原因"),
+            // entity.routingchangelog.changereason
+            new TranslationSeedItem("entity.routingchangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            // entity.routingchangelog.changereason
+            new TranslationSeedItem("entity.routingchangelog.changereason", "zh-CN", "变更原因", "变更原因"),
+            // entity.routingchangelog.changereason
+            new TranslationSeedItem("entity.routingchangelog.changereason", "zh-HK", "变更原因", "变更原因"),
 
-            // entity.routingChangeLog.changeby
-            new TranslationSeedItem("entity.routingChangeLog.changeby", "en-US", "变更人", "变更人（人员代码）"),
-            // entity.routingChangeLog.changeby
-            new TranslationSeedItem("entity.routingChangeLog.changeby", "ja-JP", "变更人", "变更人（人员代码）"),
-            // entity.routingChangeLog.changeby
-            new TranslationSeedItem("entity.routingChangeLog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
-            // entity.routingChangeLog.changeby
-            new TranslationSeedItem("entity.routingChangeLog.changeby", "zh-HK", "变更人", "变更人（人员代码）"),
+            // entity.routingchangelog.changeby
+            new TranslationSeedItem("entity.routingchangelog.changeby", "en-US", "变更人", "变更人（人员代码）"),
+            // entity.routingchangelog.changeby
+            new TranslationSeedItem("entity.routingchangelog.changeby", "ja-JP", "变更人", "变更人（人员代码）"),
+            // entity.routingchangelog.changeby
+            new TranslationSeedItem("entity.routingchangelog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
+            // entity.routingchangelog.changeby
+            new TranslationSeedItem("entity.routingchangelog.changeby", "zh-HK", "变更人", "变更人（人员代码）"),
 
-            // entity.routingChangeLog.changetime
-            new TranslationSeedItem("entity.routingChangeLog.changetime", "en-US", "变更时间", "变更时间"),
-            // entity.routingChangeLog.changetime
-            new TranslationSeedItem("entity.routingChangeLog.changetime", "ja-JP", "变更时间", "变更时间"),
-            // entity.routingChangeLog.changetime
-            new TranslationSeedItem("entity.routingChangeLog.changetime", "zh-CN", "变更时间", "变更时间"),
-            // entity.routingChangeLog.changetime
-            new TranslationSeedItem("entity.routingChangeLog.changetime", "zh-HK", "变更时间", "变更时间"),
+            // entity.routingchangelog.changetime
+            new TranslationSeedItem("entity.routingchangelog.changetime", "en-US", "变更时间", "变更时间"),
+            // entity.routingchangelog.changetime
+            new TranslationSeedItem("entity.routingchangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            // entity.routingchangelog.changetime
+            new TranslationSeedItem("entity.routingchangelog.changetime", "zh-CN", "变更时间", "变更时间"),
+            // entity.routingchangelog.changetime
+            new TranslationSeedItem("entity.routingchangelog.changetime", "zh-HK", "变更时间", "变更时间"),
 
-            // entity.routingChangeLog.routing
-            new TranslationSeedItem("entity.routingChangeLog.routing", "en-US", "工艺路线主表", "工艺路线主表（主表）"),
-            // entity.routingChangeLog.routing
-            new TranslationSeedItem("entity.routingChangeLog.routing", "ja-JP", "工艺路线主表", "工艺路线主表（主表）"),
-            // entity.routingChangeLog.routing
-            new TranslationSeedItem("entity.routingChangeLog.routing", "zh-CN", "工艺路线主表", "工艺路线主表（主表）"),
-            // entity.routingChangeLog.routing
-            new TranslationSeedItem("entity.routingChangeLog.routing", "zh-HK", "工艺路线主表", "工艺路线主表（主表）"),
+            // entity.routingchangelog.routing
+            new TranslationSeedItem("entity.routingchangelog.routing", "en-US", "工艺路线主表", "工艺路线主表（主表）"),
+            // entity.routingchangelog.routing
+            new TranslationSeedItem("entity.routingchangelog.routing", "ja-JP", "工艺路线主表", "工艺路线主表（主表）"),
+            // entity.routingchangelog.routing
+            new TranslationSeedItem("entity.routingchangelog.routing", "zh-CN", "工艺路线主表", "工艺路线主表（主表）"),
+            // entity.routingchangelog.routing
+            new TranslationSeedItem("entity.routingchangelog.routing", "zh-HK", "工艺路线主表", "工艺路线主表（主表）"),
         };
     }
 
@@ -170,8 +169,8 @@ public class TaktRoutingChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

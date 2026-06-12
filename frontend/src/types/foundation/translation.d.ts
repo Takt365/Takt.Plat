@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：translation.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -520,5 +520,21 @@ export interface TranslationTransposedBatch {
    */
   rows: TranslationTransposed[];
 
+}
+
+/**
+ * 指定区域文化下的前端扁平翻译消息（供 vue-i18n mergeLocaleMessage）
+ * @description 对应后端 TaktTranslationMessagesDto
+ */
+export interface TranslationMessages {
+  /**
+   * 区域文化编码（BCP47，如 zh-CN）
+   */
+  cultureCode: string;
+
+  /**
+   * 扁平 i18n 键值（键为 i18nKey，值为 translationText）
+   */
+  messages: Record<string, string>;
 }
 

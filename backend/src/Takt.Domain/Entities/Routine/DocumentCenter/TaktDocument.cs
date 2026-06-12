@@ -11,7 +11,6 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.DocumentCenter;
 
@@ -42,17 +41,17 @@ public class TaktDocument : TaktApprovalEntityBase
     /// 文档分类
     /// </summary>
     [SugarColumn(ColumnName = "document_category", ColumnDescription = "文档分类", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktDocumentCategory DocumentCategory { get; set; } = TaktDocumentCategory.Policy;
+    public int DocumentCategory { get; set; } = 0;
     /// <summary>
     /// 文档状态
     /// </summary>
     [SugarColumn(ColumnName = "document_status", ColumnDescription = "文档状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktDocumentStatus DocumentStatus { get; set; } = TaktDocumentStatus.Draft;
+    public int DocumentStatus { get; set; } = 0;
     /// <summary>
     /// 密级
     /// </summary>
     [SugarColumn(ColumnName = "confidential_level", ColumnDescription = "密级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktDocumentConfidentialLevel ConfidentialLevel { get; set; } = TaktDocumentConfidentialLevel.Public;
+    public int ConfidentialLevel { get; set; } = 0;
     /// <summary>
     /// 当前版本号
     /// </summary>
@@ -145,7 +144,7 @@ public class TaktDocument : TaktApprovalEntityBase
     /// 是否置顶
     /// </summary>
     [SugarColumn(ColumnName = "is_top", ColumnDescription = "是否置顶", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsTop { get; set; } = TaktYesNo.No;
+    public int IsTop { get; set; } = 0;
     /// <summary>
     /// 排序号
     /// </summary>

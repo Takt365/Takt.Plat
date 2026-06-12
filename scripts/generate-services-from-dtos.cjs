@@ -12,14 +12,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
+const { writeGeneratedFile, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgsFromArgv } = require('./generate-script-common.cjs');
 const {
-  MANUAL_CRUD_ENTITY_SHORT_NAMES,
-  MANUAL_CRUD_DTO_FILE_NAMES,
-  isManualCrudEntity,
   isRbacJunctionEntity,
-  shouldExcludeDtoFile: shouldExcludeManualCrudDtoFile,
+  assertNotRbacJunctionEntityCli,
+  shouldExcludeDtoFile: shouldExcludeRbacDtoFile,
   shouldExcludeStandaloneService,
+  RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
 } = require('./generate-entity-exclusions.cjs');
 
 const {
@@ -51,33 +50,11 @@ const CONFIG = {
   servicesRoot: path.join(path.resolve(__dirname, '../backend/src'), 'Takt.Application', 'Services'),
 };
 
-/**
- * 手工维护的特殊实体（禁止脚本生成服务）
- * --all 时自动跳过；--User / --Online / --Message 将直接报错退出
- */
-function isSpecialEntity(entityShort) {
-  return isManualCrudEntity(entityShort);
-}
-
-/** 特殊实体对应的 Dtos 文件名（双重排除，防止误扫） */
-const SPECIAL_ENTITY_DTO_FILES = MANUAL_CRUD_DTO_FILE_NAMES;
-
-/**
- * 已有手工服务（实体类名精确匹配）
- * - TaktAuth：无 TaktAuthDtos 标准聚合，认证在 TaktAuthsController
- * TaktLoginLog 走标准生成；Identity 的 TaktLoginDtos.cs 见下方排除列表
- */
-const EXISTING_MANUAL_SERVICE_ENTITIES = new Set(['TaktAuth', 'TaktRbac', 'TaktUser']);
-
-/**
- * 禁止进入扫描列表的 *Dtos.cs（仅文件名全字匹配）
- * - TaktLoginDtos.cs：Identity 登录/令牌 DTO（特殊，非实体 CRUD），与统计域 TaktLoginLog 无关
- */
-const EXCLUDED_DTO_FILE_NAMES = new Set([
+/** 禁止进入扫描列表的 *Dtos.cs（无对应实体 CRUD 聚合） */
+const INFRASTRUCTURE_DTO_FILE_NAMES = new Set([
   'TaktLoginDtos.cs',
   'TaktCacheDtos.cs',
   'TaktServerMonitorDtos.cs',
-  ...SPECIAL_ENTITY_DTO_FILES,
 ]);
 
 /** QueryDto 中继承自 TaktPagedQuery 的字段，不参与 QueryExpression */
@@ -129,13 +106,8 @@ const UNIQUE_INDEX_SKIP_FIELDS = new Set([
 // 工具
 // ========================================
 
-/**
- * 是否为特殊实体（服务需手工维护）
- * @param {string} entityShort 不含 Takt 前缀，如 User、Online
- */
-function isSpecialEntity(entityShort) {
-  return isManualCrudEntity(entityShort);
-}
+/** 已有手工服务（单实体生成时须 --force 才覆盖） */
+const EXISTING_MANUAL_SERVICE_ENTITIES = new Set(['TaktAuth', 'TaktRbac', 'TaktFlowEngine']);
 
 /**
  * 是否应跳过该 Dtos 文件
@@ -143,25 +115,10 @@ function isSpecialEntity(entityShort) {
  */
 function shouldExcludeDtoFile(dtoFile) {
   const fileName = path.basename(dtoFile);
-  if (EXCLUDED_DTO_FILE_NAMES.has(fileName)) {
+  if (INFRASTRUCTURE_DTO_FILE_NAMES.has(fileName)) {
     return true;
   }
-  return shouldExcludeManualCrudDtoFile(dtoFile);
-}
-
-/**
- * CLI 指定单实体时，禁止对特殊实体生成
- * @param {string} entityShort
- */
-function assertNotSpecialEntityCli(entityShort) {
-  if (!isSpecialEntity(entityShort)) {
-    return;
-  }
-  console.error(
-    `❌ 实体 ${entityShort} 为手工维护的特殊模块（如 TaktUserService、TaktDictDataService），禁止本脚本生成。`,
-  );
-  console.error(`   已排除: ${[...MANUAL_CRUD_ENTITY_SHORT_NAMES].join('、')}`);
-  process.exit(1);
+  return shouldExcludeRbacDtoFile(dtoFile);
 }
 
 function isInEngineDirectory(filePath) {
@@ -3562,12 +3519,12 @@ function printUsage() {
   console.log(`
 用法:
   node scripts/generate-services-from-dtos.cjs --Holiday
-  node scripts/generate-services-from-dtos.cjs --all
   node scripts/generate-services-from-dtos.cjs --Holiday --force
   node scripts/generate-services-from-dtos.cjs --Holiday --refresh-options
   node scripts/generate-services-from-dtos.cjs --Holiday --dry-run
 
 说明:
+  - 已禁用 --all；每次必须指定一个实体
   - 扫描 Takt.Application/Dtos/**/*Dtos.cs
   - 仅处理同时具备 TaktXxxDto / QueryDto / CreateDto / UpdateDto 的聚合模块
   - 隔离与仓储由主 DTO 继承的 DtoBase 决定：
@@ -3590,54 +3547,12 @@ function printUsage() {
 }
 
 function parseArgs() {
-  const args = process.argv.slice(2);
-  const options = {
-    all: false,
-    entityPrefix: null,
-    force: false,
-    dryRun: false,
-    refreshOptions: false,
-  };
-  for (const arg of args) {
-    if (arg === '--force') {
-      options.force = true;
-      continue;
-    }
-    if (arg === '--refresh-options') {
-      options.refreshOptions = true;
-      continue;
-    }
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-      continue;
-    }
-    if (!arg.startsWith('--')) {
-      console.error(`❌ 未知参数: ${arg}`);
-      process.exit(1);
-    }
-    const value = arg.slice(2);
-    if (value.toLowerCase() === 'all') {
-      options.all = true;
-      continue;
-    }
-    if (value.startsWith('Takt')) {
-      console.error('❌ 实体名不要带 Takt 前缀，例如 --Holiday');
-      process.exit(1);
-    }
-    if (options.entityPrefix) {
-      console.error('❌ 只能指定一个实体，或使用 --all');
-      process.exit(1);
-    }
-    options.entityPrefix = value;
-  }
-  if (!options.all && !options.entityPrefix) {
-    console.error('❌ 请指定 --all 或 --<实体名>');
-    printUsage();
-    process.exit(1);
-  }
-  if (options.entityPrefix) {
-    assertNotSpecialEntityCli(options.entityPrefix);
-  }
+  const rawArgs = process.argv.slice(2);
+  const refreshOptions = rawArgs.includes('--refresh-options');
+  const args = rawArgs.filter((arg) => arg !== '--refresh-options');
+  const options = parseSingleEntityGenerateArgsFromArgv(args, printUsage);
+  options.refreshOptions = refreshOptions;
+  assertNotRbacJunctionEntityCli(options.entityPrefix);
   return options;
 }
 
@@ -3647,11 +3562,11 @@ function parseArgs() {
 
 console.log('🚀 从 DTO 生成 Application 服务接口与实现...\n');
 logGeneratedFileWritePolicy();
-console.log(`⏭️  排除特殊实体: ${[...MANUAL_CRUD_ENTITY_SHORT_NAMES].join('、')}\n`);
+console.log(`⏭️  跳过 RBAC 关联表 DTO: ${[...RBAC_ASSOCIATION_ENTITY_SHORT_NAMES].join('、')}\n`);
 
 try {
   const options = parseArgs();
-  const dtoFiles = scanDtoFiles(options.all ? null : options.entityPrefix);
+  const dtoFiles = scanDtoFiles(options.entityPrefix);
 
   if (dtoFiles.length === 0) {
     console.error('❌ 未找到匹配的 DTO 文件');

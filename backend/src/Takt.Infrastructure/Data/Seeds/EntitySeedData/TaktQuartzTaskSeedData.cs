@@ -1,0 +1,263 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Infrastructure.Data.Seeds.EntitySeedData
+// 文件名称：TaktQuartzTaskSeedData.cs
+// 创建时间：2026-06-11
+// 创建人：Takt365(Cursor AI)
+// 功能描述：Quartz 定时任务示例种子（SQL/HTTP/Cron 三种类型，默认暂停，供管理页参考配置）
+//
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Takt.Domain.Entities.Accounting.Financial;
+using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Interfaces;
+using Takt.Domain.Repositories;
+using Takt.Shared.Helpers;
+using Takt.Shared.Options;
+
+namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
+
+/// <summary>
+/// Quartz 定时任务示例种子（按 Database:CompanyCodes 各公司写入；幂等：存在则更新，不存在则创建）
+/// </summary>
+public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
+{
+    private const int TaskStatusPaused = 1;
+    private const int TaskTypeSql = 3;
+    private const int TaskTypeHttp = 2;
+    private const int TriggerTypeSimple = 0;
+    private const int TriggerTypeCron = 1;
+
+    /// <summary>
+    /// 执行顺序（在字典数据与公司基础数据之后）
+    /// </summary>
+    public int Order => 56;
+
+    /// <summary>
+    /// 初始化 Quartz 定时任务示例种子
+    /// </summary>
+    /// <param name="serviceProvider">服务提供者</param>
+    /// <param name="tenantCode">租户编码（由协调器传入）</param>
+    /// <returns>返回插入和更新的记录数（插入数, 更新数）</returns>
+    public async Task<(int InsertCount, int UpdateCount)> SeedAsync(
+        IServiceProvider serviceProvider,
+        string? tenantCode = null)
+    {
+        TaktLogger.Information("开始初始化 Quartz 定时任务示例种子数据...");
+        if (string.IsNullOrEmpty(tenantCode))
+        {
+            TaktLogger.Warning("租户编码为空，跳过 Quartz 定时任务种子数据初始化");
+            return (0, 0);
+        }
+        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+        var database = configuration.RequireDatabase();
+        var repository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktQuartzTask>>();
+        var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
+        var companies = await companyRepository.GetListAsync(
+            c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
+        if (companies == null || companies.Count == 0)
+        {
+            TaktLogger.Warning("租户 {TenantCode} 未找到启用的公司，跳过 Quartz 定时任务种子", tenantCode);
+            return (0, 0);
+        }
+        var orderedCompanies = TaktDatabaseOptions.OrderByConfiguredCodes(
+            database.CompanyCodes,
+            companies,
+            c => c.CompanyCode);
+        if (orderedCompanies.Count == 0)
+        {
+            TaktLogger.Warning("租户 {TenantCode} 未找到 Database:CompanyCodes 对应的公司，跳过 Quartz 定时任务种子", tenantCode);
+            return (0, 0);
+        }
+        var healthCheckUrl = ResolveHealthCheckUrl(configuration);
+        var templates = GetDemoTaskTemplates(healthCheckUrl);
+        var insertCount = 0;
+        var updateCount = 0;
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 Quartz 定时任务示例...", tenantCode);
+        foreach (var company in orderedCompanies)
+        {
+            foreach (var template in templates)
+            {
+                var (_, inserted, updated) = await CreateOrUpdateQuartzTaskAsync(
+                    repository,
+                    tenantCode,
+                    company.CompanyCode,
+                    template);
+                insertCount += inserted;
+                updateCount += updated;
+            }
+        }
+        TaktLogger.Information(
+            "Quartz 定时任务示例种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条",
+            insertCount,
+            updateCount);
+        return (insertCount, updateCount);
+    }
+
+    /// <summary>
+    /// 解析本机健康检查地址（供 HTTP 示例任务使用）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>健康检查 URL</returns>
+    private static string ResolveHealthCheckUrl(IConfiguration configuration)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        var urls = configuration["ASPNETCORE_URLS"];
+        if (!string.IsNullOrWhiteSpace(urls))
+        {
+            var first = urls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .FirstOrDefault(u => u.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+                ?? urls.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(first))
+            {
+                return $"{first.TrimEnd('/')}/health";
+            }
+        }
+        return "http://localhost:60070/health";
+    }
+
+    /// <summary>
+    /// 获取示例任务模板（默认暂停，避免启动自动调度）
+    /// </summary>
+    /// <param name="healthCheckUrl">HTTP 健康检查地址</param>
+    /// <returns>任务模板列表</returns>
+    private static List<QuartzTaskSeedTemplate> GetDemoTaskTemplates(string healthCheckUrl)
+    {
+        return new List<QuartzTaskSeedTemplate>
+        {
+            new(
+                TaskCode: "QT_DEMO_SQL",
+                TaskName: "示例：只读 SQL 统计",
+                JobName: "demo_sql_dict_count",
+                TaskType: TaskTypeSql,
+                SqlScript: "SELECT COUNT(*) AS dict_type_count FROM takt_foundation_dict_type WHERE is_deleted = 0",
+                TriggerType: TriggerTypeSimple,
+                IntervalSeconds: 3600,
+                CronExpression: string.Empty,
+                TaskStatus: TaskStatusPaused,
+                Description: "种子示例：Simple 触发器 + SQL 只读任务（默认暂停，可手动执行验证）"),
+            new(
+                TaskCode: "QT_DEMO_HTTP",
+                TaskName: "示例：HTTP 健康检查",
+                JobName: "demo_http_health",
+                TaskType: TaskTypeHttp,
+                ApiUrl: healthCheckUrl,
+                RequestMethod: "GET",
+                TriggerType: TriggerTypeSimple,
+                IntervalSeconds: 1800,
+                CronExpression: string.Empty,
+                TaskStatus: TaskStatusPaused,
+                Description: "种子示例：Simple 触发器 + GET 健康检查（默认暂停，ApiUrl 随 ASPNETCORE_URLS 解析）"),
+            new(
+                TaskCode: "QT_DEMO_CRON_SQL",
+                TaskName: "示例：Cron SQL",
+                JobName: "demo_cron_sql_ping",
+                TaskType: TaskTypeSql,
+                SqlScript: "SELECT 1 AS ok",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 0 2 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "种子示例：Cron 触发器（每日 02:00）+ SQL 只读任务（默认暂停）"),
+        };
+    }
+
+    /// <summary>
+    /// 创建或更新定时任务示例
+    /// </summary>
+    /// <param name="repository">定时任务仓储</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司代码</param>
+    /// <param name="template">任务模板</param>
+    /// <returns>实体与插入/更新计数</returns>
+    private static async Task<(TaktQuartzTask Task, int InsertCount, int UpdateCount)> CreateOrUpdateQuartzTaskAsync(
+        ITaktCompanySeedRepository<TaktQuartzTask> repository,
+        string tenantCode,
+        string companyCode,
+        QuartzTaskSeedTemplate template)
+    {
+        var entity = await repository.FirstAsync(x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.TaskCode == template.TaskCode);
+        if (entity == null)
+        {
+            entity = new TaktQuartzTask
+            {
+                TenantCode = tenantCode,
+                CompanyCode = companyCode,
+                TaskCode = template.TaskCode,
+                TaskName = template.TaskName,
+                JobName = template.JobName,
+                JobGroup = "DEFAULT",
+                TaskType = template.TaskType,
+                AssemblyName = string.Empty,
+                ClassName = string.Empty,
+                ApiUrl = template.ApiUrl,
+                RequestMethod = template.RequestMethod,
+                SqlScript = template.SqlScript,
+                TriggerType = template.TriggerType,
+                CronExpression = template.CronExpression,
+                IntervalSeconds = template.IntervalSeconds,
+                ExecuteParams = null,
+                TaskStatus = template.TaskStatus,
+                Concurrent = 0,
+                MisfirePolicy = 0,
+                Description = template.Description,
+                Remark = "系统内置示例任务种子",
+            };
+            entity = await repository.CreateAsync(entity);
+            return (entity, 1, 0);
+        }
+        entity.TaskName = template.TaskName;
+        entity.JobName = template.JobName;
+        entity.JobGroup = "DEFAULT";
+        entity.TaskType = template.TaskType;
+        entity.ApiUrl = template.ApiUrl;
+        entity.RequestMethod = template.RequestMethod;
+        entity.SqlScript = template.SqlScript;
+        entity.TriggerType = template.TriggerType;
+        entity.CronExpression = template.CronExpression;
+        entity.IntervalSeconds = template.IntervalSeconds;
+        entity.TaskStatus = template.TaskStatus;
+        entity.Concurrent = 0;
+        entity.MisfirePolicy = 0;
+        entity.Description = template.Description;
+        entity.Remark = "系统内置示例任务种子";
+        await repository.UpdateAsync(entity);
+        return (entity, 0, 1);
+    }
+
+    /// <summary>
+    /// Quartz 任务种子模板
+    /// </summary>
+    /// <param name="TaskCode">任务编码</param>
+    /// <param name="TaskName">任务名称</param>
+    /// <param name="JobName">Job 名称</param>
+    /// <param name="TaskType">任务类型</param>
+    /// <param name="SqlScript">SQL 脚本</param>
+    /// <param name="ApiUrl">API 地址</param>
+    /// <param name="RequestMethod">请求方式</param>
+    /// <param name="TriggerType">触发器类型</param>
+    /// <param name="IntervalSeconds">间隔秒数</param>
+    /// <param name="CronExpression">Cron 表达式</param>
+    /// <param name="TaskStatus">任务状态</param>
+    /// <param name="Description">任务描述</param>
+    private sealed record QuartzTaskSeedTemplate(
+        string TaskCode,
+        string TaskName,
+        string JobName,
+        int TaskType,
+        string? SqlScript = null,
+        string? ApiUrl = null,
+        string? RequestMethod = null,
+        int TriggerType = 0,
+        int IntervalSeconds = 0,
+        string CronExpression = "",
+        int TaskStatus = 1,
+        string? Description = null);
+}

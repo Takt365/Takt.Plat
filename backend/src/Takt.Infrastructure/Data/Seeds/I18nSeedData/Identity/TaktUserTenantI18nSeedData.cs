@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserTenantI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUserTenant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity;
 
 /// <summary>
-/// TaktUserTenant 实体国际化翻译种子（键前缀 entity.userTenant.*）
+/// TaktUserTenant 实体国际化翻译种子（键前缀 entity.usertenant.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktUserTenantI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktUserTenantI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 userTenant 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 usertenant 实体翻译...", tenantCode);
 
         foreach (var item in GetUserTenantTranslations())
         {
@@ -76,56 +75,56 @@ public class TaktUserTenantI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktUserTenant 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.userTenant._self / entity.userTenant.{{field}}；ResourceGroup=TaktModule.Identity；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.usertenant._self / entity.usertenant.{{field}}；ResourceGroup=1；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetUserTenantTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.userTenant._self
-            new TranslationSeedItem("entity.userTenant._self", "en-US", "User Tenant Information", "实体名称"),
-            // entity.userTenant._self
-            new TranslationSeedItem("entity.userTenant._self", "ja-JP", "用户-租户关联信息", "实体名称"),
-            // entity.userTenant._self
-            new TranslationSeedItem("entity.userTenant._self", "zh-CN", "用户-租户关联信息", "实体名称"),
-            // entity.userTenant._self
-            new TranslationSeedItem("entity.userTenant._self", "zh-HK", "用户-租户关联信息", "实体名称"),
+            // entity.usertenant._self
+            new TranslationSeedItem("entity.usertenant._self", "en-US", "User Tenant Information", "实体名称"),
+            // entity.usertenant._self
+            new TranslationSeedItem("entity.usertenant._self", "ja-JP", "用户-租户关联信息", "实体名称"),
+            // entity.usertenant._self
+            new TranslationSeedItem("entity.usertenant._self", "zh-CN", "用户-租户关联信息", "实体名称"),
+            // entity.usertenant._self
+            new TranslationSeedItem("entity.usertenant._self", "zh-HK", "用户-租户关联信息", "实体名称"),
 
-            // entity.userTenant.userid
-            new TranslationSeedItem("entity.userTenant.userid", "en-US", "用户ID", "用户ID"),
-            // entity.userTenant.userid
-            new TranslationSeedItem("entity.userTenant.userid", "ja-JP", "用户ID", "用户ID"),
-            // entity.userTenant.userid
-            new TranslationSeedItem("entity.userTenant.userid", "zh-CN", "用户ID", "用户ID"),
-            // entity.userTenant.userid
-            new TranslationSeedItem("entity.userTenant.userid", "zh-HK", "用户ID", "用户ID"),
+            // entity.usertenant.userid
+            new TranslationSeedItem("entity.usertenant.userid", "en-US", "用户ID", "用户ID"),
+            // entity.usertenant.userid
+            new TranslationSeedItem("entity.usertenant.userid", "ja-JP", "用户ID", "用户ID"),
+            // entity.usertenant.userid
+            new TranslationSeedItem("entity.usertenant.userid", "zh-CN", "用户ID", "用户ID"),
+            // entity.usertenant.userid
+            new TranslationSeedItem("entity.usertenant.userid", "zh-HK", "用户ID", "用户ID"),
 
-            // entity.userTenant.isdefault
-            new TranslationSeedItem("entity.userTenant.isdefault", "en-US", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
-            // entity.userTenant.isdefault
-            new TranslationSeedItem("entity.userTenant.isdefault", "ja-JP", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
-            // entity.userTenant.isdefault
-            new TranslationSeedItem("entity.userTenant.isdefault", "zh-CN", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
-            // entity.userTenant.isdefault
-            new TranslationSeedItem("entity.userTenant.isdefault", "zh-HK", "是否默认租户", "是否默认登录租户（1=是，0=否；同一用户仅应有一条为是）"),
+            // entity.usertenant.isdefault
+            new TranslationSeedItem("entity.usertenant.isdefault", "en-US", "是否默认租户", "是否默认登录租户（字典 sys_yes_no；同一用户仅应有一条为是）"),
+            // entity.usertenant.isdefault
+            new TranslationSeedItem("entity.usertenant.isdefault", "ja-JP", "是否默认租户", "是否默认登录租户（字典 sys_yes_no；同一用户仅应有一条为是）"),
+            // entity.usertenant.isdefault
+            new TranslationSeedItem("entity.usertenant.isdefault", "zh-CN", "是否默认租户", "是否默认登录租户（字典 sys_yes_no；同一用户仅应有一条为是）"),
+            // entity.usertenant.isdefault
+            new TranslationSeedItem("entity.usertenant.isdefault", "zh-HK", "是否默认租户", "是否默认登录租户（字典 sys_yes_no；同一用户仅应有一条为是）"),
 
-            // entity.userTenant.user
-            new TranslationSeedItem("entity.userTenant.user", "en-US", "用户", "用户（多对一）"),
-            // entity.userTenant.user
-            new TranslationSeedItem("entity.userTenant.user", "ja-JP", "用户", "用户（多对一）"),
-            // entity.userTenant.user
-            new TranslationSeedItem("entity.userTenant.user", "zh-CN", "用户", "用户（多对一）"),
-            // entity.userTenant.user
-            new TranslationSeedItem("entity.userTenant.user", "zh-HK", "用户", "用户（多对一）"),
+            // entity.usertenant.user
+            new TranslationSeedItem("entity.usertenant.user", "en-US", "用户", "用户（多对一）"),
+            // entity.usertenant.user
+            new TranslationSeedItem("entity.usertenant.user", "ja-JP", "用户", "用户（多对一）"),
+            // entity.usertenant.user
+            new TranslationSeedItem("entity.usertenant.user", "zh-CN", "用户", "用户（多对一）"),
+            // entity.usertenant.user
+            new TranslationSeedItem("entity.usertenant.user", "zh-HK", "用户", "用户（多对一）"),
 
-            // entity.userTenant.tenant
-            new TranslationSeedItem("entity.userTenant.tenant", "en-US", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
-            // entity.userTenant.tenant
-            new TranslationSeedItem("entity.userTenant.tenant", "ja-JP", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
-            // entity.userTenant.tenant
-            new TranslationSeedItem("entity.userTenant.tenant", "zh-CN", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
-            // entity.userTenant.tenant
-            new TranslationSeedItem("entity.userTenant.tenant", "zh-HK", "可访问租户", "可访问租户（多对一，按 <see cref=\"TenantCode\"/> 关联）"),
+            // entity.usertenant.tenant
+            new TranslationSeedItem("entity.usertenant.tenant", "en-US", "可访问租户", "可访问租户（多对一，按 TenantCode 关联）"),
+            // entity.usertenant.tenant
+            new TranslationSeedItem("entity.usertenant.tenant", "ja-JP", "可访问租户", "可访问租户（多对一，按 TenantCode 关联）"),
+            // entity.usertenant.tenant
+            new TranslationSeedItem("entity.usertenant.tenant", "zh-CN", "可访问租户", "可访问租户（多对一，按 TenantCode 关联）"),
+            // entity.usertenant.tenant
+            new TranslationSeedItem("entity.usertenant.tenant", "zh-HK", "可访问租户", "可访问租户（多对一，按 TenantCode 关联）"),
         };
     }
 
@@ -143,8 +142,8 @@ public class TaktUserTenantI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Identity;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 1;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

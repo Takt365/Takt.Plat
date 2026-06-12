@@ -12147,32 +12147,68 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.menu.type.2
             ("dict.sys.menu.type.2", "zh-HK", "按钮", "菜单类型.按钮"),
 
-            // dict.sys.message.group.chat
-            ("dict.sys.message.group.chat", "en-US", "chat", "消息分组.聊天"),
-            // dict.sys.message.group.chat
-            ("dict.sys.message.group.chat", "ja-JP", "chat", "消息分组.聊天"),
-            // dict.sys.message.group.chat
-            ("dict.sys.message.group.chat", "zh-CN", "聊天", "消息分组.聊天"),
-            // dict.sys.message.group.chat
-            ("dict.sys.message.group.chat", "zh-HK", "聊天", "消息分组.聊天"),
+            // dict.sys.message.group.collaboration
+            ("dict.sys.message.group.collaboration", "en-US", "collaboration", "消息分组.协同"),
+            // dict.sys.message.group.collaboration
+            ("dict.sys.message.group.collaboration", "ja-JP", "collaboration", "消息分组.协同"),
+            // dict.sys.message.group.collaboration
+            ("dict.sys.message.group.collaboration", "zh-CN", "协同", "消息分组.协同"),
+            // dict.sys.message.group.collaboration
+            ("dict.sys.message.group.collaboration", "zh-HK", "協同", "消息分组.协同"),
 
-            // dict.sys.message.group.notification
-            ("dict.sys.message.group.notification", "en-US", "notification", "消息分组.通知"),
-            // dict.sys.message.group.notification
-            ("dict.sys.message.group.notification", "ja-JP", "notification", "消息分组.通知"),
-            // dict.sys.message.group.notification
-            ("dict.sys.message.group.notification", "zh-CN", "通知", "消息分组.通知"),
-            // dict.sys.message.group.notification
-            ("dict.sys.message.group.notification", "zh-HK", "通知", "消息分组.通知"),
+            // dict.sys.message.group.officialdoc
+            ("dict.sys.message.group.officialdoc", "en-US", "official document", "消息分组.公文"),
+            // dict.sys.message.group.officialdoc
+            ("dict.sys.message.group.officialdoc", "ja-JP", "official document", "消息分组.公文"),
+            // dict.sys.message.group.officialdoc
+            ("dict.sys.message.group.officialdoc", "zh-CN", "公文", "消息分组.公文"),
+            // dict.sys.message.group.officialdoc
+            ("dict.sys.message.group.officialdoc", "zh-HK", "公文", "消息分组.公文"),
 
-            // dict.sys.message.group.alert
-            ("dict.sys.message.group.alert", "en-US", "alert", "消息分组.提醒"),
-            // dict.sys.message.group.alert
-            ("dict.sys.message.group.alert", "ja-JP", "alert", "消息分组.提醒"),
-            // dict.sys.message.group.alert
-            ("dict.sys.message.group.alert", "zh-CN", "提醒", "消息分组.提醒"),
-            // dict.sys.message.group.alert
-            ("dict.sys.message.group.alert", "zh-HK", "提醒", "消息分组.提醒"),
+            // dict.sys.message.group.document
+            ("dict.sys.message.group.document", "en-US", "document", "消息分组.文档"),
+            // dict.sys.message.group.document
+            ("dict.sys.message.group.document", "ja-JP", "document", "消息分组.文档"),
+            // dict.sys.message.group.document
+            ("dict.sys.message.group.document", "zh-CN", "文档", "消息分组.文档"),
+            // dict.sys.message.group.document
+            ("dict.sys.message.group.document", "zh-HK", "文檔", "消息分组.文档"),
+
+            // dict.sys.message.group.announcement
+            ("dict.sys.message.group.announcement", "en-US", "announcement", "消息分组.公告"),
+            // dict.sys.message.group.announcement
+            ("dict.sys.message.group.announcement", "ja-JP", "announcement", "消息分组.公告"),
+            // dict.sys.message.group.announcement
+            ("dict.sys.message.group.announcement", "zh-CN", "公告", "消息分组.公告"),
+            // dict.sys.message.group.announcement
+            ("dict.sys.message.group.announcement", "zh-HK", "公告", "消息分组.公告"),
+
+            // dict.sys.message.group.other
+            ("dict.sys.message.group.other", "en-US", "other", "消息分组.其他"),
+            // dict.sys.message.group.other
+            ("dict.sys.message.group.other", "ja-JP", "other", "消息分组.其他"),
+            // dict.sys.message.group.other
+            ("dict.sys.message.group.other", "zh-CN", "其他", "消息分组.其他"),
+            // dict.sys.message.group.other
+            ("dict.sys.message.group.other", "zh-HK", "其他", "消息分组.其他"),
+
+            // dict.sys.message.group.message
+            ("dict.sys.message.group.message", "en-US", "message", "消息分组.消息"),
+            // dict.sys.message.group.message
+            ("dict.sys.message.group.message", "ja-JP", "message", "消息分组.消息"),
+            // dict.sys.message.group.message
+            ("dict.sys.message.group.message", "zh-CN", "消息", "消息分组.消息"),
+            // dict.sys.message.group.message
+            ("dict.sys.message.group.message", "zh-HK", "消息", "消息分组.消息"),
+
+            // dict.sys.message.group.reminder
+            ("dict.sys.message.group.reminder", "en-US", "reminder", "消息分组.提醒"),
+            // dict.sys.message.group.reminder
+            ("dict.sys.message.group.reminder", "ja-JP", "reminder", "消息分组.提醒"),
+            // dict.sys.message.group.reminder
+            ("dict.sys.message.group.reminder", "zh-CN", "提醒", "消息分组.提醒"),
+            // dict.sys.message.group.reminder
+            ("dict.sys.message.group.reminder", "zh-HK", "提醒", "消息分组.提醒"),
 
             // dict.sys.message.type.text
             ("dict.sys.message.type.text", "en-US", "text", "消息类型.文本"),
@@ -12209,6 +12245,24 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.message.type.takt365", "zh-CN", "系统消息", "消息类型.系统消息"),
             // dict.sys.message.type.takt365
             ("dict.sys.message.type.takt365", "zh-HK", "系统消息", "消息类型.系统消息"),
+
+            // dict.sys.message.type.video
+            ("dict.sys.message.type.video", "en-US", "video", "消息类型.视频"),
+            // dict.sys.message.type.video
+            ("dict.sys.message.type.video", "ja-JP", "video", "消息类型.视频"),
+            // dict.sys.message.type.video
+            ("dict.sys.message.type.video", "zh-CN", "视频", "消息类型.视频"),
+            // dict.sys.message.type.video
+            ("dict.sys.message.type.video", "zh-HK", "视频", "消息类型.视频"),
+
+            // dict.sys.message.type.voice
+            ("dict.sys.message.type.voice", "en-US", "voice", "消息类型.语音"),
+            // dict.sys.message.type.voice
+            ("dict.sys.message.type.voice", "ja-JP", "voice", "消息类型.语音"),
+            // dict.sys.message.type.voice
+            ("dict.sys.message.type.voice", "zh-CN", "语音", "消息类型.语音"),
+            // dict.sys.message.type.voice
+            ("dict.sys.message.type.voice", "zh-HK", "语音", "消息类型.语音"),
 
             // dict.sys.news.category.0
             ("dict.sys.news.category.0", "en-US", "公司新闻", "新闻分类.公司新闻"),
@@ -13091,6 +13145,76 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.yes.no.0", "zh-CN", "否", "是否.否"),
             // dict.sys.yes.no.0
             ("dict.sys.yes.no.0", "zh-HK", "否", "是否.否"),
+
+            // dict.helpdesk.ticket.status.0
+            ("dict.helpdesk.ticket.status.0", "en-US", "Open", "工单状态.新建"),
+            ("dict.helpdesk.ticket.status.0", "ja-JP", "新規", "工单状态.新建"),
+            ("dict.helpdesk.ticket.status.0", "zh-CN", "新建", "工单状态.新建"),
+            ("dict.helpdesk.ticket.status.0", "zh-HK", "新建", "工单状态.新建"),
+            ("dict.helpdesk.ticket.status.1", "en-US", "Assigned", "工单状态.已指派"),
+            ("dict.helpdesk.ticket.status.1", "ja-JP", "割当済", "工单状态.已指派"),
+            ("dict.helpdesk.ticket.status.1", "zh-CN", "已指派", "工单状态.已指派"),
+            ("dict.helpdesk.ticket.status.1", "zh-HK", "已指派", "工单状态.已指派"),
+            ("dict.helpdesk.ticket.status.2", "en-US", "In Progress", "工单状态.处理中"),
+            ("dict.helpdesk.ticket.status.2", "ja-JP", "処理中", "工单状态.处理中"),
+            ("dict.helpdesk.ticket.status.2", "zh-CN", "处理中", "工单状态.处理中"),
+            ("dict.helpdesk.ticket.status.2", "zh-HK", "處理中", "工单状态.处理中"),
+            ("dict.helpdesk.ticket.status.3", "en-US", "Waiting for Requester", "工单状态.等待用户回复"),
+            ("dict.helpdesk.ticket.status.3", "ja-JP", "ユーザー返信待ち", "工单状态.等待用户回复"),
+            ("dict.helpdesk.ticket.status.3", "zh-CN", "等待用户回复", "工单状态.等待用户回复"),
+            ("dict.helpdesk.ticket.status.3", "zh-HK", "等待用戶回覆", "工单状态.等待用户回复"),
+            ("dict.helpdesk.ticket.status.4", "en-US", "Resolved", "工单状态.已解决"),
+            ("dict.helpdesk.ticket.status.4", "ja-JP", "解決済", "工单状态.已解决"),
+            ("dict.helpdesk.ticket.status.4", "zh-CN", "已解决", "工单状态.已解决"),
+            ("dict.helpdesk.ticket.status.4", "zh-HK", "已解決", "工单状态.已解决"),
+            ("dict.helpdesk.ticket.status.5", "en-US", "Closed", "工单状态.已关闭"),
+            ("dict.helpdesk.ticket.status.5", "ja-JP", "クローズ", "工单状态.已关闭"),
+            ("dict.helpdesk.ticket.status.5", "zh-CN", "已关闭", "工单状态.已关闭"),
+            ("dict.helpdesk.ticket.status.5", "zh-HK", "已關閉", "工单状态.已关闭"),
+            ("dict.helpdesk.ticket.status.6", "en-US", "Reopened", "工单状态.重新打开"),
+            ("dict.helpdesk.ticket.status.6", "ja-JP", "再オープン", "工单状态.重新打开"),
+            ("dict.helpdesk.ticket.status.6", "zh-CN", "重新打开", "工单状态.重新打开"),
+            ("dict.helpdesk.ticket.status.6", "zh-HK", "重新打開", "工单状态.重新打开"),
+            ("dict.helpdesk.ticket.source.0", "en-US", "Portal", "工单来源.门户"),
+            ("dict.helpdesk.ticket.source.0", "ja-JP", "ポータル", "工单来源.门户"),
+            ("dict.helpdesk.ticket.source.0", "zh-CN", "门户网站", "工单来源.门户"),
+            ("dict.helpdesk.ticket.source.0", "zh-HK", "門戶網站", "工单来源.门户"),
+            ("dict.helpdesk.ticket.source.1", "en-US", "Email", "工单来源.邮件"),
+            ("dict.helpdesk.ticket.source.1", "ja-JP", "メール", "工单来源.邮件"),
+            ("dict.helpdesk.ticket.source.1", "zh-CN", "邮件", "工单来源.邮件"),
+            ("dict.helpdesk.ticket.source.1", "zh-HK", "郵件", "工单来源.邮件"),
+            ("dict.helpdesk.ticket.source.2", "en-US", "Phone", "工单来源.电话"),
+            ("dict.helpdesk.ticket.source.2", "ja-JP", "電話", "工单来源.电话"),
+            ("dict.helpdesk.ticket.source.2", "zh-CN", "电话", "工单来源.电话"),
+            ("dict.helpdesk.ticket.source.2", "zh-HK", "電話", "工单来源.电话"),
+            ("dict.helpdesk.ticket.source.3", "en-US", "API", "工单来源.API"),
+            ("dict.helpdesk.ticket.source.3", "ja-JP", "API", "工单来源.API"),
+            ("dict.helpdesk.ticket.source.3", "zh-CN", "API接入", "工单来源.API"),
+            ("dict.helpdesk.ticket.source.3", "zh-HK", "API接入", "工单来源.API"),
+            ("dict.sys.warrantytype.0", "en-US", "Manufacturer Warranty", "保修类型.原厂保修"),
+            ("dict.sys.warrantytype.0", "ja-JP", "メーカー標準保証", "保修类型.原厂保修"),
+            ("dict.sys.warrantytype.0", "zh-CN", "原厂保修", "保修类型.原厂保修"),
+            ("dict.sys.warrantytype.0", "zh-HK", "原廠標準保修", "保修类型.原厂保修"),
+            ("dict.sys.warrantytype.1", "en-US", "Extended Warranty", "保修类型.延长保修"),
+            ("dict.sys.warrantytype.1", "ja-JP", "延長保証", "保修类型.延长保修"),
+            ("dict.sys.warrantytype.1", "zh-CN", "延长保修", "保修类型.延长保修"),
+            ("dict.sys.warrantytype.1", "zh-HK", "延長保修", "保修类型.延长保修"),
+            ("dict.sys.warrantytype.2", "en-US", "On-Site Warranty", "保修类型.上门保修"),
+            ("dict.sys.warrantytype.2", "ja-JP", "オンサイト保証", "保修类型.上门保修"),
+            ("dict.sys.warrantytype.2", "zh-CN", "上门保修", "保修类型.上门保修"),
+            ("dict.sys.warrantytype.2", "zh-HK", "上門保修", "保修类型.上门保修"),
+            ("dict.sys.warrantytype.3", "en-US", "Depot Repair", "保修类型.寄修保修"),
+            ("dict.sys.warrantytype.3", "ja-JP", "送付修理", "保修类型.寄修保修"),
+            ("dict.sys.warrantytype.3", "zh-CN", "寄修保修", "保修类型.寄修保修"),
+            ("dict.sys.warrantytype.3", "zh-HK", "寄修保修", "保修类型.寄修保修"),
+            ("dict.sys.warrantytype.4", "en-US", "Maintenance Contract", "保修类型.维保合同"),
+            ("dict.sys.warrantytype.4", "ja-JP", "保守契約", "保修类型.维保合同"),
+            ("dict.sys.warrantytype.4", "zh-CN", "维保合同", "保修类型.维保合同"),
+            ("dict.sys.warrantytype.4", "zh-HK", "維保合同", "保修类型.维保合同"),
+            ("dict.sys.warrantytype.5", "en-US", "Paid Warranty", "保修类型.付费保养"),
+            ("dict.sys.warrantytype.5", "ja-JP", "有償保証", "保修类型.付费保养"),
+            ("dict.sys.warrantytype.5", "zh-CN", "付费保养", "保修类型.付费保养"),
+            ("dict.sys.warrantytype.5", "zh-HK", "付費保修", "保修类型.付费保养"),
         };
     }
 
@@ -13106,8 +13230,8 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

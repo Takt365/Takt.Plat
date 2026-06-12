@@ -94,7 +94,7 @@ public class TaktConnectHub : Hub
                 ConnectionId = connectionId ?? string.Empty,
                 UserName = userName,
                 UserId = userId,
-                OnlineStatus = TaktOnlineStatus.Online,
+                OnlineStatus = 0,
                 ConnectIp = connectIp,
                 ConnectLocation = connectLocation,
                 UserAgent = userAgent,
@@ -113,7 +113,6 @@ public class TaktConnectHub : Hub
             await Clients.Caller.SendAsync("OnlineMessage", new
             {
                 Message = $"欢迎 {userName} 上线！连接成功，当前时间：{connectTime:yyyy-MM-dd HH:mm:ss}",
-                MessageType = TaktMessageType.Heartbeat,
                 UserName = userName,
                 UserId = userIdStr,
                 ConnectTime = connectTime,
@@ -190,7 +189,7 @@ public class TaktConnectHub : Hub
                 disconnectLocation = online.ConnectLocation;
                 online.DisconnectTime = disconnectTime;
                 online.ConnectionDuration = (int)(disconnectTime - online.ConnectTime).TotalSeconds;
-                online.OnlineStatus = TaktOnlineStatus.Offline;
+                online.OnlineStatus = 1;
                 await _onlineRepository.UpdateAsync(online);
             }
 
@@ -268,7 +267,7 @@ public class TaktConnectHub : Hub
             userId,
             userName);
         var onlines = await _onlineRepository.GetListAsync(
-            o => o.OnlineStatus == TaktOnlineStatus.Online && o.CompanyCode == companyCode);
+            o => o.OnlineStatus == 0 && o.CompanyCode == companyCode);
         return onlines.Select(u => (object)new
         {
             UserName = u.UserName,
@@ -338,7 +337,7 @@ public class TaktConnectHub : Hub
     /// </summary>
     /// <param name="userAgent">User-Agent 字符串</param>
     /// <returns>设备类型（PC、Mobile、Tablet 等）</returns>
-    private static TaktDeviceType? ParseDeviceType(string? userAgent)
+    private static int? ParseDeviceType(string? userAgent)
     {
         if (string.IsNullOrEmpty(userAgent))
         {
@@ -348,15 +347,15 @@ public class TaktConnectHub : Hub
         var ua = userAgent.ToLowerInvariant();
         if (ua.Contains("tablet") || ua.Contains("ipad"))
         {
-            return TaktDeviceType.Tablet;
+            return 3;
         }
 
         if (ua.Contains("mobile") || ua.Contains("android") || ua.Contains("iphone"))
         {
-            return TaktDeviceType.Mobile;
+            return 2;
         }
 
-        return TaktDeviceType.Pc;
+        return 1;
     }
 
     /// <summary>
@@ -364,7 +363,7 @@ public class TaktConnectHub : Hub
     /// </summary>
     /// <param name="userAgent">User-Agent 字符串</param>
     /// <returns>浏览器类型</returns>
-    private static TaktBrowserType? ParseBrowserType(string? userAgent)
+    private static int? ParseBrowserType(string? userAgent)
     {
         if (string.IsNullOrEmpty(userAgent))
         {
@@ -374,25 +373,25 @@ public class TaktConnectHub : Hub
         var ua = userAgent.ToLowerInvariant();
         if (ua.Contains("chrome") && !ua.Contains("edg"))
         {
-            return TaktBrowserType.Chrome;
+            return 1;
         }
 
         if (ua.Contains("firefox"))
         {
-            return TaktBrowserType.Firefox;
+            return 2;
         }
 
         if (ua.Contains("safari") && !ua.Contains("chrome"))
         {
-            return TaktBrowserType.Safari;
+            return 3;
         }
 
         if (ua.Contains("edg"))
         {
-            return TaktBrowserType.Edge;
+            return 4;
         }
 
-        return TaktBrowserType.Unknown;
+        return 0;
     }
 
     /// <summary>
@@ -400,7 +399,7 @@ public class TaktConnectHub : Hub
     /// </summary>
     /// <param name="userAgent">User-Agent 字符串</param>
     /// <returns>操作系统</returns>
-    private static TaktOperatingSystem? ParseOperatingSystem(string? userAgent)
+    private static int? ParseOperatingSystem(string? userAgent)
     {
         if (string.IsNullOrEmpty(userAgent))
         {
@@ -410,29 +409,29 @@ public class TaktConnectHub : Hub
         var ua = userAgent.ToLowerInvariant();
         if (ua.Contains("windows"))
         {
-            return TaktOperatingSystem.Windows;
+            return 1;
         }
 
         if (ua.Contains("mac os") || ua.Contains("macos"))
         {
-            return TaktOperatingSystem.MacOS;
+            return 2;
         }
 
         if (ua.Contains("linux"))
         {
-            return TaktOperatingSystem.Linux;
+            return 3;
         }
 
         if (ua.Contains("android"))
         {
-            return TaktOperatingSystem.Android;
+            return 4;
         }
 
         if (ua.Contains("ios") || ua.Contains("iphone") || ua.Contains("ipad"))
         {
-            return TaktOperatingSystem.IOS;
+            return 5;
         }
 
-        return TaktOperatingSystem.Unknown;
+        return 0;
     }
 }

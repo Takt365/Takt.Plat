@@ -75,7 +75,7 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "profit_center_status", ColumnDescription = "利润中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus ProfitCenterStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int ProfitCenterStatus { get; set; } = 1;
     /// <summary>
     /// 生效日期
     /// </summary>

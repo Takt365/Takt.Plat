@@ -12,7 +12,7 @@
 
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { getDictDataAll } from '@/api/foundation/data-dict-all';
+import { getDictDataAll } from '@/api/foundation/dict-data';
 import type { TaktDictSelectFieldNames, TaktDictSelectOption, TaktSelectOption } from '@/types/common';
 import { createLogger } from '@/utils/logger';
 
@@ -102,7 +102,7 @@ export const useDictDataStore = defineStore('dict-data', () => {
   }
 
   /**
-   * 加载全部字典数据（GET TaktDataDictAlls，按 dictTypeCode 分组）
+   * 加载全部字典数据（GET TaktDictDatas/all，按 dictTypeCode 分组）
    */
   async function loadAllDictDataAsync(): Promise<void> {
     if (loaded.value) {

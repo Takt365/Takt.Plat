@@ -4,7 +4,7 @@
 // 文件名称：TaktPermissionAttribute.cs
 // 创建时间：2026-05-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：API 权限特性，用于标记控制器或操作所需的权限标识
+// 功能描述：API 权限特性（Constants 层 Attribute；权限码为 string，非枚举）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

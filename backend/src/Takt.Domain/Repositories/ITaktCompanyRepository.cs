@@ -204,7 +204,7 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     Task<int> GetMaxIntAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, int>> fieldSelector);
 
     /// <summary>
-    /// 执行只读 SQL 并返回动态行（调用方须先经 <see cref="Takt.Shared.Validation.TaktSqlExecutorValidator"/> 校验）
+    /// 执行只读 SQL 并返回动态行（调用方须先经 TaktSqlExecutorValidator 校验）
     /// </summary>
     /// <param name="sql">SQL 文本</param>
     /// <param name="parameters">命名参数（可选）</param>

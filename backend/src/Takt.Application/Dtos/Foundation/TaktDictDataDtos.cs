@@ -4,7 +4,7 @@
 // 文件名称：TaktDictDataDtos.cs
 // 创建时间：2026-06-02
 // 创建人：Takt365(Auto Generated)
-// 功能描述：DictData 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDictData 生成，请按需审阅）
+// 功能描述：DictData 模块 DTO（含租户全量字典 TaktDataDictAllDto；generate-dtos 排除，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,6 +15,7 @@ using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Enums;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Dtos.Foundation;
 
@@ -90,7 +91,7 @@ public class TaktDictDataDto : TaktTenantDtoBase
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 
     /// <summary>
     /// 排序号
@@ -169,7 +170,7 @@ public class TaktDictDataQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsDefault { get; set; }
+    public int? IsDefault { get; set; }
 
     /// <summary>
     /// 排序号
@@ -259,7 +260,7 @@ public class TaktDictDataCreateDto
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 
     /// <summary>
     /// 排序号
@@ -380,7 +381,7 @@ public class TaktDictDataTemplateDto
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsDefault { get; set; }
+    public int? IsDefault { get; set; }
 
     /// <summary>
     /// 排序号
@@ -453,7 +454,7 @@ public class TaktDictDataImportDto
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsDefault { get; set; }
+    public int? IsDefault { get; set; }
 
     /// <summary>
     /// 排序号
@@ -537,7 +538,7 @@ public class TaktDictDataExportDto
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 
     /// <summary>
     /// 排序号
@@ -558,4 +559,20 @@ public class TaktDictDataExportDto
     /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
+}
+
+// ========================================
+// 租户全量字典 DTO
+// ========================================
+
+/// <summary>
+/// 租户下全部字典数据响应 DTO
+/// 对应前端 DataDictAll；Items 为扁平列表，含 DictTypeCode 供前端分组
+/// </summary>
+public class TaktDataDictAllDto
+{
+    /// <summary>
+    /// 字典项列表（已按 DictTypeCode、SortOrder 排序）
+    /// </summary>
+    public List<TaktSelectOption> Items { get; set; } = new();
 }

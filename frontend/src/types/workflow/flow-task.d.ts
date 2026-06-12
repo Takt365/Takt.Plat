@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/workflow
 // 文件名称：flow-task.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：workflow 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -104,7 +104,7 @@ export interface FlowTask extends CompanyDtoBase {
   isAddSign: number;
 
   /**
-   * 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+   * 加签记录 ID（TaktFlowAddSign）
    */
   addSignId?: string;
 
@@ -229,7 +229,7 @@ export interface FlowTaskQuery extends TaktPagedQuery {
   isAddSign?: number;
 
   /**
-   * 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+   * 加签记录 ID（TaktFlowAddSign）
    */
   addSignId?: string;
 
@@ -353,7 +353,7 @@ export interface FlowTaskCreate {
   isAddSign: number;
 
   /**
-   * 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+   * 加签记录 ID（TaktFlowAddSign）
    */
   addSignId?: string;
 
@@ -500,7 +500,7 @@ export interface FlowTaskTemplate {
   isAddSign?: number;
 
   /**
-   * 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+   * 加签记录 ID（TaktFlowAddSign）
    */
   addSignId?: string;
 
@@ -594,7 +594,7 @@ export interface FlowTaskImport {
   isAddSign?: number;
 
   /**
-   * 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+   * 加签记录 ID（TaktFlowAddSign）
    */
   addSignId?: string;
 
@@ -698,7 +698,7 @@ export interface FlowTaskExport {
   isAddSign: number;
 
   /**
-   * 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+   * 加签记录 ID（TaktFlowAddSign）
    */
   addSignId?: string;
 

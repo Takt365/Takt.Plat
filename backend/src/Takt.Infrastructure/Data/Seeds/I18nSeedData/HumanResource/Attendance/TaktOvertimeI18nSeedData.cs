@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktOvertimeI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOvertime 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance;
@@ -76,7 +75,7 @@ public class TaktOvertimeI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktOvertime 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.overtime._self / entity.overtime.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.overtime._self / entity.overtime.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetOvertimeTranslations()
     {
@@ -191,13 +190,13 @@ public class TaktOvertimeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.overtime.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
 
             // entity.overtime.flowinstanceid
-            new TranslationSeedItem("entity.overtime.flowinstanceid", "en-US", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>）"),
+            new TranslationSeedItem("entity.overtime.flowinstanceid", "en-US", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
             // entity.overtime.flowinstanceid
-            new TranslationSeedItem("entity.overtime.flowinstanceid", "ja-JP", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>）"),
+            new TranslationSeedItem("entity.overtime.flowinstanceid", "ja-JP", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
             // entity.overtime.flowinstanceid
-            new TranslationSeedItem("entity.overtime.flowinstanceid", "zh-CN", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>）"),
+            new TranslationSeedItem("entity.overtime.flowinstanceid", "zh-CN", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
             // entity.overtime.flowinstanceid
-            new TranslationSeedItem("entity.overtime.flowinstanceid", "zh-HK", "流程实例ID", "流程实例 ID（<see cref=\"Workflow.TaktFlowInstance\"/>）"),
+            new TranslationSeedItem("entity.overtime.flowinstanceid", "zh-HK", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
 
             // entity.overtime.handlingby
             new TranslationSeedItem("entity.overtime.handlingby", "en-US", "经办人", "经办人（关联 TaktEmployee）"),
@@ -260,8 +259,8 @@ public class TaktOvertimeI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

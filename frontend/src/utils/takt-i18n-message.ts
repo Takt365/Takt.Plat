@@ -118,11 +118,15 @@ export function translateLocaleMessage(
 export function buildNestedLocaleMessages(flatMessages: Record<string, string>): TaktLocaleMessageTree {
   const root: TaktLocaleMessageTree = {};
 
-  Object.entries(flatMessages).forEach(([key, text]) => {
-    if (!key || text === undefined || text === null) {
-      return;
-    }
+  const sortedEntries = Object.entries(flatMessages)
+    .filter(([key, text]) => Boolean(key) && text !== undefined && text !== null)
+    .sort(([leftKey], [rightKey]) => {
+      const leftDepth = leftKey.split('.').filter(Boolean).length;
+      const rightDepth = rightKey.split('.').filter(Boolean).length;
+      return rightDepth - leftDepth;
+    });
 
+  sortedEntries.forEach(([key, text]) => {
     const segments = key.split('.').filter(Boolean);
 
     if (segments.length === 0 || segments.length > TAKT_MAX_I18N_KEY_SEGMENTS) {
@@ -135,6 +139,10 @@ export function buildNestedLocaleMessages(flatMessages: Record<string, string>):
       const isLeaf = index === segments.length - 1;
 
       if (isLeaf) {
+        const existing = node[segment];
+        if (typeof existing === 'object' && existing !== null) {
+          return;
+        }
         node[segment] = text;
         return;
       }

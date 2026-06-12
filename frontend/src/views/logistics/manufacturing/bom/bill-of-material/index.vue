@@ -2,13 +2,14 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/bill-of-material -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt物料清单实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt物料清单管理页：上主下从（底部明细独立CRUD）+ 弹窗级联（主表与子表 Tab 一次保存） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-bom-bill-of-material">
+  <div class="logistics-manufacturing-bom-bill-of-material flex flex-col min-h-0 h-full">
+    <div class="master-section flex flex-col min-h-0 flex-1">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +31,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -65,42 +66,9 @@
       :row-key="getBillOfMaterialId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
-    >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.billOfMaterialItem._self') }}</div>
-          <a-table
-            v-if="hasBillOfMaterialItemRows(record)"
-            :columns="billOfMaterialItemExpandColumns"
-            :data-source="getBillOfMaterialItemRows(record)"
-            :row-key="(row: BillOfMaterialItem, index?: number) => row?.billOfMaterialItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.billOfMaterialChangeLog._self') }}</div>
-          <a-table
-            v-if="hasBillOfMaterialChangeLogRows(record)"
-            :columns="billOfMaterialChangeLogExpandColumns"
-            :data-source="getBillOfMaterialChangeLogRows(record)"
-            :row-key="(row: BillOfMaterialChangeLog, index?: number) => row?.billOfMaterialChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
-      </template>
-    </TaktSingleTable>
+    />
 
     <!-- 分页组件 -->
     <TaktPagination
@@ -110,17 +78,27 @@
       @change="handlePaginationChange"
       @show-size-change="handlePaginationSizeChange"
     />
+    </div>
 
-    <!-- 新增/编辑对话框 -->
+    <!-- 底部：BOM 明细独立 CRUD（上主下从） -->
+    <BillOfMaterialItemPanel ref="itemPanelRef" />
+
+    <!-- 新增/编辑对话框（主表 + 子表级联 Save） -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
+      <a-alert
+        type="info"
+        show-icon
+        class="mb-3"
+        :message="t('logistics.manufacturing.bom.bill-of-material.page.modalCascadeHint')"
+      />
       <BillOfMaterialForm
         ref="formRef"
         :form-data="formData"
@@ -405,11 +383,9 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import BillOfMaterialForm from './components/bill-of-material-form.vue'
+import BillOfMaterialItemPanel from './components/bill-of-material-item-panel.vue'
+import { provideBillOfMaterialMasterContext } from './composables/use-bill-of-material-master-context'
 import { getBillOfMaterialList, getBillOfMaterialById, createBillOfMaterial, updateBillOfMaterial, deleteBillOfMaterialById, deleteBillOfMaterialBatch, getBillOfMaterialTemplate, importBillOfMaterial, exportBillOfMaterial } from '@/api/logistics/manufacturing/bom/bill-of-material'
-import * as billOfMaterialItemApi from '@/api/logistics/manufacturing/bom/bill-of-material-item'
-import * as billOfMaterialChangeLogApi from '@/api/logistics/manufacturing/bom/bill-of-material-change-log'
-import type { BillOfMaterialItem, BillOfMaterialItemQuery } from '@/types/logistics/manufacturing/bom/bill-of-material-item'
-import type { BillOfMaterialChangeLog, BillOfMaterialChangeLogQuery } from '@/types/logistics/manufacturing/bom/bill-of-material-change-log'
 import type { BillOfMaterial, BillOfMaterialQuery, BillOfMaterialCreate, BillOfMaterialUpdate } from '@/types/logistics/manufacturing/bom/bill-of-material'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -417,6 +393,10 @@ import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+/** 主表选中行上下文（底部明细面板读取） */
+const { selectedMasterRow } = provideBillOfMaterialMasterContext()
+/** 底部 BOM 明细面板 ref */
+const itemPanelRef = ref<InstanceType<typeof BillOfMaterialItemPanel> | null>(null)
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktBillOfMaterial')
 /** 列表快捷查询占位文案 */
@@ -521,132 +501,16 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
-
 /** 页面挂载后加载分页列表 */
 onMounted(() => {
   loadData()
 })
 
-/** 展开行预览：billOfMaterialItem 列 */
-const billOfMaterialItemExpandColumns = computed(() => [
-  {
-    title: t('entity.billOfMaterialItem.billofmaterialname'),
-    dataIndex: 'billOfMaterialName',
-    key: 'billOfMaterialName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialItem.bomcode'),
-    dataIndex: 'bomCode',
-    key: 'bomCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialItem.materialid'),
-    dataIndex: 'materialId',
-    key: 'materialId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialItem.materialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialItem.materialcode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialItem.usagequantity'),
-    dataIndex: 'usageQuantity',
-    key: 'usageQuantity',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialItem.materialunit'),
-    dataIndex: 'materialUnit',
-    key: 'materialUnit',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：billOfMaterialChangeLog 列 */
-const billOfMaterialChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.billOfMaterialChangeLog.billofmaterialname'),
-    dataIndex: 'billOfMaterialName',
-    key: 'billOfMaterialName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.bomcode'),
-    dataIndex: 'bomCode',
-    key: 'bomCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.bom'),
-    dataIndex: 'bom',
-    key: 'bom',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 billOfMaterialItem 子表缓存 */
-function getBillOfMaterialItemRows(record: BillOfMaterial): BillOfMaterialItem[] {
-  return (record as any)?.items ?? []
+/** 同步主表选中行到底部明细上下文并刷新子表 */
+function syncMasterSelection(record: BillOfMaterial | null) {
+  selectedMasterRow.value = record
+  itemPanelRef.value?.reload()
 }
-
-/** 主表行是否已加载 billOfMaterialItem 子表 */
-function hasBillOfMaterialItemRows(record: BillOfMaterial): boolean {
-  return getBillOfMaterialItemRows(record).length > 0
-}
-
-/** 读取主表行上的 billOfMaterialChangeLog 子表缓存 */
-function getBillOfMaterialChangeLogRows(record: BillOfMaterial): BillOfMaterialChangeLog[] {
-  return (record as any)?.changeLogs ?? []
-}
-
-/** 主表行是否已加载 billOfMaterialChangeLog 子表 */
-function hasBillOfMaterialChangeLogRows(record: BillOfMaterial): boolean {
-  return getBillOfMaterialChangeLogRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadBillOfMaterialDetail(record: BillOfMaterial): Promise<BillOfMaterial | null> {
@@ -666,82 +530,6 @@ async function loadBillOfMaterialDetail(record: BillOfMaterial): Promise<BillOfM
     return null
   }
 }
-/** 懒加载 billOfMaterialItem 子表（BillOfMaterialItemQuery + billOfMaterialItemApi，与主表 BillOfMaterialQuery 分离） */
-async function loadBillOfMaterialItemForBillOfMaterial(record: BillOfMaterial): Promise<BillOfMaterialItem[]> {
-  const masterId = getBillOfMaterialId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: BillOfMaterialItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      billOfMaterialId: masterId,
-    }
-    const result = await billOfMaterialItemApi.getBillOfMaterialItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getBillOfMaterialId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as BillOfMaterial
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 billOfMaterialChangeLog 子表（BillOfMaterialChangeLogQuery + billOfMaterialChangeLogApi，与主表 BillOfMaterialQuery 分离） */
-async function loadBillOfMaterialChangeLogForBillOfMaterial(record: BillOfMaterial): Promise<BillOfMaterialChangeLog[]> {
-  const masterId = getBillOfMaterialId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: BillOfMaterialChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      billOfMaterialId: masterId,
-    }
-    const result = await billOfMaterialChangeLogApi.getBillOfMaterialChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getBillOfMaterialId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as BillOfMaterial
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureBillOfMaterialChildrenLoaded(record: BillOfMaterial) {
-  if (!hasBillOfMaterialItemRows(record)) {
-    await loadBillOfMaterialItemForBillOfMaterial(record)
-  }
-  if (!hasBillOfMaterialChangeLogRows(record)) {
-    await loadBillOfMaterialChangeLogForBillOfMaterial(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: BillOfMaterial) {
-  const key = getBillOfMaterialId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureBillOfMaterialChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
-
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -936,34 +724,31 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    syncMasterSelection(rows.length === 1 ? (rows[0] ?? null) : null)
   },
   onSelect: (record: BillOfMaterial, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getBillOfMaterialId(selectedRow.value) === getBillOfMaterialId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: BillOfMaterial[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
 
-/** 行点击切换选中（与 rowSelection 联动） */
+/** 行点击：单选当前行并加载底部明细（对齐 Vue.NetCore MES_Bom_Main.rowClick） */
 const onClickRow = (record: BillOfMaterial) => ({
   onClick: () => {
     const key = getBillOfMaterialId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getBillOfMaterialId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
+    selectedRowKeys.value = [key]
+    selectedRows.value = [record]
+    selectedRow.value = record
+    syncMasterSelection(record)
   }
 })
 
@@ -992,6 +777,9 @@ async function loadData() {
     loading.value = false
   }
 }
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
@@ -1271,5 +1059,9 @@ function handlePaginationSizeChange(_current: number, size: number) {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
+}
+.master-section {
+  min-height: 280px;
 }
 </style>

@@ -120,7 +120,7 @@ public class TaktSqlTranslationRowItem
     public int SortOrder { get; set; }
 }
 
-/// <summary>按钮菜单 SQL 单行（<c>takt_identity_menu</c>，<c>menu_type=2</c>），供 menu_and_translation.sql；<c>parent_id</c> 为页面菜单 <see cref="TaktGenTableTemplateModel.SqlMenuId"/>。</summary>
+/// <summary>按钮菜单 SQL 单行（<c>takt_identity_menu</c>，<c>menu_type=2</c>），供 menu_and_translation.sql；<c>parent_id</c> 为页面菜单 TaktGenTableTemplateModel.SqlMenuId。</summary>
 public class TaktSqlMenuButtonRowItem
 {
     public long Id { get; set; }
@@ -133,7 +133,7 @@ public class TaktSqlMenuButtonRowItem
 
 /// <summary>
 /// 代码生成模板上下文：表配置 + 列配置列表，模板中可使用 Table 与 Columns。
-/// 使用 <see cref="From"/> 从 <see cref="TaktGenTable"/>、<see cref="TaktGenTableColumn"/> 构建，充分利用两实体全部字段。
+/// 使用 From 从 TaktGenTable、TaktGenTableColumn 构建，充分利用两实体全部字段。
 /// </summary>
 public class TaktGenTemplateContext
 {
@@ -148,7 +148,7 @@ public class TaktGenTemplateContext
     public List<TaktGenColumnTemplateModel> Columns { get; set; } = new();
 
     /// <summary>
-    /// 从 Domain 实体构建模板上下文，充分利用 <see cref="TaktGenTable"/> 与 <see cref="TaktGenTableColumn"/> 全部字段。
+    /// 从 Domain 实体构建模板上下文，充分利用 TaktGenTable 与 TaktGenTableColumn 全部字段。
     /// </summary>
     /// <param name="table">代码生成表配置实体</param>
     /// <param name="columns">该表下的字段配置列表（可为空）</param>
@@ -170,7 +170,7 @@ public class TaktGenTemplateContext
 }
 
 /// <summary>
-/// 表级模板模型，与 <see cref="TaktGenTable"/> 实体字段一一对应，便于 Scriban 绑定并充分利用实体全部属性。
+/// 表级模板模型，与 TaktGenTable 实体字段一一对应，便于 Scriban 绑定并充分利用实体全部属性。
 /// </summary>
 public class TaktGenTableTemplateModel
 {
@@ -345,12 +345,12 @@ public class TaktGenTableTemplateModel
     /// <summary>排序字段驼峰（供前端 API 使用，如 CreatedAt→createdAt）</summary>
     public string TsSortField { get; set; } = string.Empty;
 
-    /// <summary>与 <see cref="TaktGenTable.PermsPrefix"/> 一致，来自生成表配置（数据库原样）。</summary>
+    /// <summary>与 TaktGenTable.PermsPrefix 一致，来自生成表配置（数据库原样）。</summary>
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
     /// 由库表列 <c>perms_prefix</c>（同模型中的 <c>PermsPrefix</c> 属性）规范化得到的三段基点：领域:目录:实体（小写、冒号分隔）。模板中完整权限码一律为「本属性 + 冒号 + key」（如再拼 <c>:list</c>、<c>:update</c>）。
-    /// 计算顺序：<b>先处理 PermsPrefix</b>；仅当其为空或未解析出任何段时，才用 <see cref="GenModuleName"/> 与实体类名推导；非空时只规范化前缀字符串，不以模块名覆盖用户已填段。
+    /// 计算顺序：<b>先处理 PermsPrefix</b>；仅当其为空或未解析出任何段时，才用 GenModuleName 与实体类名推导；非空时只规范化前缀字符串，不以模块名覆盖用户已填段。
     /// </summary>
     public string PermsPrefixCanonical { get; set; } = string.Empty;
 
@@ -635,7 +635,7 @@ public class TaktGenTableTemplateModel
         return char.ToLowerInvariant(sortField[0]) + sortField[1..];
     }
 
-    /// <summary>从 <see cref="TaktGenTable.PermsPrefix"/> 解析时，若误将第四段 key 写入前缀则剥离用。</summary>
+    /// <summary>从 TaktGenTable.PermsPrefix 解析时，若误将第四段 key 写入前缀则剥离用。</summary>
     private static readonly HashSet<string> KnownPermissionKeySuffixes = new(StringComparer.OrdinalIgnoreCase)
     {
         "list", "query", "create", "update", "delete", "import", "export", "page",
@@ -646,7 +646,7 @@ public class TaktGenTableTemplateModel
         !string.IsNullOrEmpty(segment) && KnownPermissionKeySuffixes.Contains(segment);
 
     /// <summary>
-    /// 由表配置 <paramref name="permsPrefix"/> 得到 <see cref="PermsPrefixCanonical"/>（三段、小写、冒号分隔）。<b>非空时仅解析本参数</b>；仅当其为空或未得到任何段时，才用 <paramref name="genModuleName"/> 与 <paramref name="entityClassName"/> 推导。完整权限码 = 返回值 + ":" + key。
+    /// 由表配置 <paramref name="permsPrefix"/> 得到 PermsPrefixCanonical（三段、小写、冒号分隔）。<b>非空时仅解析本参数</b>；仅当其为空或未得到任何段时，才用 <paramref name="genModuleName"/> 与 <paramref name="entityClassName"/> 推导。完整权限码 = 返回值 + ":" + key。
     /// </summary>
     private static string BuildPermsPrefixCanonical(string? permsPrefix, string? genModuleName, string? entityClassName)
     {
@@ -724,8 +724,8 @@ public class TaktGenTableTemplateModel
     }
 
     /// <summary>
-    /// 与属性 <see cref="PermsPrefixCanonical"/> 的计算规则同源（私有 <c>BuildPermsPrefixCanonical</c>）。
-    /// 供导入表等工作流在 <see cref="TaktGenTable.PermsPrefix"/> 为空时写入推荐的三段基点（领域:目录:实体，小写冒号）。
+    /// 与属性 PermsPrefixCanonical 的计算规则同源（私有 <c>BuildPermsPrefixCanonical</c>）。
+    /// 供导入表等工作流在 TaktGenTable.PermsPrefix 为空时写入推荐的三段基点（领域:目录:实体，小写冒号）。
     /// </summary>
     /// <param name="permsPrefix">与库表 <c>perms_prefix</c> 一致；传 <see langword="null"/> 或空白表示仅按模块名与实体类名推导。</param>
     /// <param name="genModuleName">生成模块名（如 <c>logistics_materials</c>）。</param>
@@ -1218,7 +1218,7 @@ public class TaktGenTableTemplateModel
     }
 
     /// <summary>
-    /// 从 <see cref="TaktGenTable"/> 实体构建表级模板模型。
+    /// 从 TaktGenTable 实体构建表级模板模型。
     /// </summary>
     public static TaktGenTableTemplateModel From(TaktGenTable table)
     {
@@ -1427,7 +1427,7 @@ public class TaktGenTableTemplateModel
 }
 
 /// <summary>
-/// 列级模板模型，与 <see cref="TaktGenTableColumn"/> 实体字段一一对应，供 Scriban 列循环使用并充分利用实体全部属性。
+/// 列级模板模型，与 TaktGenTableColumn 实体字段一一对应，供 Scriban 列循环使用并充分利用实体全部属性。
 /// </summary>
 public class TaktGenColumnTemplateModel
 {
@@ -1523,7 +1523,7 @@ public class TaktGenColumnTemplateModel
     }
 
     /// <summary>
-    /// 从 <see cref="TaktGenTableColumn"/> 实体构建列级模板模型。
+    /// 从 TaktGenTableColumn 实体构建列级模板模型。
     /// </summary>
     /// <param name="column">代码生成字段配置实体</param>
     /// <returns>列级模板模型，供 Scriban 列循环使用</returns>

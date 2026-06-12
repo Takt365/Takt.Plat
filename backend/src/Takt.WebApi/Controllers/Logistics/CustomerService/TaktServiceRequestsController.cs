@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.CustomerService
 // 文件名称：TaktServiceRequestsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务请求控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Logistics.CustomerService;
 /// 服务请求控制器
 /// 提供服务请求的 REST API
 /// </summary>
-[ApiModule(TaktModule.Logistics, "后勤管理")]
+[ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "服务请求")]
 public class TaktServiceRequestsController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:service:servicerequest:list", "服务请求列表")]
+    [TaktPermission("logistics:service:request:list", "服务请求列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetServiceRequestListAsync([FromQuery] TaktServiceRequestQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="id">服务请求ID</param>
     /// <returns>服务请求DTO</returns>
-    [TaktPermission("logistics:service:servicerequest:query", "服务请求详情")]
+    [TaktPermission("logistics:service:request:query", "服务请求详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetServiceRequestByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// 获取服务请求选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:service:servicerequest:query", "服务请求选项")]
+    [TaktPermission("logistics:service:request:query", "服务请求选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetServiceRequestOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>服务请求DTO</returns>
-    [TaktPermission("logistics:service:servicerequest:create", "创建服务请求")]
+    [TaktPermission("logistics:service:request:create", "创建服务请求")]
     [HttpPost]
     public async Task<IActionResult> CreateServiceRequestAsync([FromBody] TaktServiceRequestCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// <param name="id">服务请求ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>服务请求DTO</returns>
-    [TaktPermission("logistics:service:servicerequest:update", "更新服务请求")]
+    [TaktPermission("logistics:service:request:update", "更新服务请求")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateServiceRequestAsync(long id, [FromBody] TaktServiceRequestUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="id">服务请求ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:service:servicerequest:delete", "删除服务请求")]
+    [TaktPermission("logistics:service:request:delete", "删除服务请求")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteServiceRequestByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:service:servicerequest:delete", "批量删除服务请求")]
+    [TaktPermission("logistics:service:request:delete", "批量删除服务请求")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteServiceRequestBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>服务请求DTO</returns>
-    [TaktPermission("logistics:service:servicerequest:update", "更新服务请求状态")]
+    [TaktPermission("logistics:service:request:update", "更新服务请求状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateServiceRequestStatusAsync([FromBody] TaktServiceRequestStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>服务请求DTO</returns>
-    [TaktPermission("logistics:service:servicerequest:update", "更新服务请求排序")]
+    [TaktPermission("logistics:service:request:update", "更新服务请求排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateServiceRequestSortAsync([FromBody] TaktServiceRequestSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:service:servicerequest:import", "获取服务请求导入模板")]
+    [TaktPermission("logistics:service:request:import", "获取服务请求导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetServiceRequestTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:service:servicerequest:import", "导入服务请求")]
+    [TaktPermission("logistics:service:request:import", "导入服务请求")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportServiceRequestAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktServiceRequestsController : TaktControllerBase
     /// 导出服务请求
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:service:servicerequest:export", "导出服务请求")]
+    [TaktPermission("logistics:service:request:export", "导出服务请求")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportServiceRequestAsync([FromQuery] TaktServiceRequestQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

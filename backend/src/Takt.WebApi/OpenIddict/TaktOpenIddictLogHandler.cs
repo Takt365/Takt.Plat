@@ -13,7 +13,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Takt.Application.Services.Identity;
-using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.WebApi.Logging;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -121,10 +120,10 @@ public sealed class TaktOpenIddictLogHandler
     #region 登录日志
 
     /// <summary>
-    /// 写入认证登录日志（委托 <see cref="ITaktAuthLoginLogHandler"/>）
+    /// 写入认证登录日志（委托 ITaktAuthLoginLogHandler）
     /// </summary>
     /// <param name="httpContext">HTTP 上下文</param>
-    /// <param name="phase">流程阶段（<see cref="TaktAuthLoginPhases"/>）</param>
+    /// <param name="phase">流程阶段（TaktAuthLoginPhases）</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="username">用户名或 client_id</param>
@@ -139,7 +138,7 @@ public sealed class TaktOpenIddictLogHandler
         string tenantCode,
         string? companyCode,
         string username,
-        string loginType,
+        TaktLoginType loginType,
         TaktLoginResult loginResult,
         string? loginMessage = null,
         long? userId = null,

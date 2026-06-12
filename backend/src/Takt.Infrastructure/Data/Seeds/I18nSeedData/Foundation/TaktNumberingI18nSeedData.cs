@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktNumberingI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNumbering 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation;
@@ -76,7 +75,7 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktNumbering 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.numbering._self / entity.numbering.{{field}}；ResourceGroup=TaktModule.Foundation；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.numbering._self / entity.numbering.{{field}}；ResourceGroup=8；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetNumberingTranslations()
     {
@@ -218,13 +217,13 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
 
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "en-US", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "ja-JP", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "ja-JP", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "zh-HK", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
 
             // entity.numbering.description
             new TranslationSeedItem("entity.numbering.description", "en-US", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）"),
@@ -251,8 +250,8 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

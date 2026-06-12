@@ -15,6 +15,7 @@ using Mapster;
 using Microsoft.Extensions.Localization;
 using SqlSugar;
 using Takt.Application.Dtos.Identity;
+using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Entities.Identity;
@@ -35,6 +36,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     private readonly ITaktTenantRepository<TaktUser> _userRepository;
     private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktRbacService _rbacService;
+    private readonly ITaktPermissionService _permissionService;
+    private readonly ITaktDictDataService _dictDataService;
 
     /// <summary>
     /// 构造函数
@@ -42,12 +45,16 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     /// <param name="userRepository">用户仓储</param>
     /// <param name="employeeRepository">员工仓储</param>
     /// <param name="rbacService">RBAC 关联分配服务</param>
+    /// <param name="permissionService">权限服务</param>
+    /// <param name="dictDataService">字典数据服务</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktUserService(
         ITaktTenantRepository<TaktUser> userRepository,
         ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktRbacService rbacService,
+        ITaktPermissionService permissionService,
+        ITaktDictDataService dictDataService,
         ITaktUserContext userContext,
         ITaktLocalizationService localizationService)
         : base(userContext, localizationService)
@@ -55,6 +62,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         _userRepository = userRepository;
         _employeeRepository = employeeRepository;
         _rbacService = rbacService;
+        _permissionService = permissionService;
+        _dictDataService = dictDataService;
     }
 
     // ========================================
@@ -123,12 +132,30 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     /// <returns>用户选项列表</returns>
     public async Task<List<TaktSelectOption>> GetUserOptionsAsync()
     {
+        EnsureThreeLayerContext();
         var users = await _userRepository.GetListAsync(u => u.TenantCode == CurrentTenantCode);
-        return users.Select(u => new TaktSelectOption
+        var options = new List<TaktSelectOption>();
+        foreach (var user in users)
         {
-            DictValue = u.Id.ToString(),
-            DictLabel = $"{u.Username} ({u.Nickname})"
-        }).ToList();
+            if (user.Id <= 0)
+            {
+                continue;
+            }
+
+            if (!await _permissionService.HasCompanyAccessAsync(user.Id, CurrentTenantCode, CurrentCompanyCode))
+            {
+                continue;
+            }
+
+            options.Add(new TaktSelectOption
+            {
+                DictValue = user.Id.ToString(),
+                DictLabel = $"{user.Username} ({user.Nickname})",
+                ExtValue = user.Username,
+            });
+        }
+
+        return options;
     }
 
     /// <summary>
@@ -156,7 +183,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         // 3. 创建实体
         var entity = dto.Adapt<TaktUser>();
         entity.TenantCode = CurrentTenantCode;
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         entity.PasswordHash = TaktEncryptHelper.HashPassword(dto.PasswordHash);
         entity.CreatedBy = CurrentUserId ?? 0;
         entity.CreatedAt = DateTime.Now;
@@ -255,7 +282,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             }
 
             // 3. 保护规则校验：内置用户不可删
-            if (entity.IsBuiltIn == TaktYesNo.Yes)
+            if (entity.IsBuiltIn == 1)
             {
                 ThrowBusinessException("内置用户不允许删除");
             }
@@ -265,7 +292,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
 
             // 4. 软删除：设置 IsDeleted = 1，并同步更新 UserStatus = Disabled
             entity.IsDeleted = 1;
-            entity.UserStatus = TaktCommonStatus.Disabled;
+            entity.UserStatus = 0;
 
             await _userRepository.UpdateAsync(entity);
 
@@ -309,7 +336,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             }
 
             // 2. 保护规则校验：内置用户不可删
-            if (entities.Any(e => e.IsBuiltIn == TaktYesNo.Yes))
+            if (entities.Any(e => e.IsBuiltIn == 1))
             {
                 ThrowBusinessException("内置用户不允许删除");
             }
@@ -324,7 +351,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             foreach (var entity in entities)
             {
                 entity.IsDeleted = 1;
-                entity.UserStatus = TaktCommonStatus.Disabled;
+                entity.UserStatus = 0;
             }
 
             await _userRepository.UpdateRangeAsync(entities);
@@ -358,7 +385,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         }
 
         // 业务规则：禁止禁用内置用户
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.UserStatus == TaktCommonStatus.Disabled)
+        if (entity.IsBuiltIn == 1 && dto.UserStatus == 0)
         {
             ThrowBusinessException("不允许禁用内置用户");
         }
@@ -400,7 +427,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             ThrowBusinessException("无权限重置此用户密码");
         }
 
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             ThrowBusinessException("不允许重置内置用户密码");
         }
@@ -509,7 +536,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             };
         }
 
-        if (user.IsBuiltIn == TaktYesNo.Yes)
+        if (user.IsBuiltIn == 1)
         {
             return new TaktForgotPasswordResultDto
             {
@@ -607,6 +634,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 return (0, 0, errors);
             }
 
+            var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no");
             var entitiesToInsert = new List<TaktUser>();
 
             for (int i = 0; i < importData.Count; i++)
@@ -672,14 +700,22 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                         continue;
                     }
 
+                    if (!dictSnapshot.TryResolveImportCode("sys_user_type", row.UserType, row.UserTypeName, out var userType, out var dictError)
+                        || !dictSnapshot.TryResolveImportCode("sys_yes_no", row.UserStatus, row.StatusName, out var userStatus, out dictError))
+                    {
+                        errors.Add($"第{rowNumber}行：{dictError}");
+                        fail++;
+                        continue;
+                    }
+
                     // 添加到待插入列表
                     var entity = new TaktUser
                     {
                         Username = row.Username,
                         Nickname = row.Nickname,
-                        UserType = row.UserType,
+                        UserType = userType,
                         EmployeeId = row.EmployeeId > 0 ? row.EmployeeId : employee.Id,
-                        UserStatus = row.UserStatus,
+                        UserStatus = userStatus,
                         PasswordHash = TaktEncryptHelper.HashPassword(plainPassword),
                         TenantCode = CurrentTenantCode,
                         CreatedBy = CurrentUserId ?? 0,
@@ -734,43 +770,33 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 fileName ?? "用户导出.xlsx");
         }
 
-        var exportData = new List<TaktUserExportDto>();
+        var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no");
+        var employeeIds = list
+            .Where(u => u.EmployeeId > 0)
+            .Select(u => u.EmployeeId)
+            .Distinct()
+            .ToList();
+        var employees = employeeIds.Count > 0
+            ? await _employeeRepository.GetListAsync(e => employeeIds.Contains(e.Id))
+            : [];
+        var employeeNameMap = employees.ToDictionary(e => e.Id, e => e.Name ?? string.Empty);
+        var userIds = list.Select(u => u.Id).ToList();
+        var roleNamesMap = await _rbacService.GetUserRoleNamesMapAsync(userIds);
+        var exportData = new List<TaktUserExportDto>(list.Count);
 
         foreach (var user in list)
         {
             var exportDto = user.Adapt<TaktUserExportDto>();
-            exportDto.UserTypeName = user.UserType switch
+            exportDto.UserTypeName = dictSnapshot.GetName("sys_user_type", user.UserType, string.Empty);
+            exportDto.StatusName = dictSnapshot.GetName("sys_yes_no", user.UserStatus, string.Empty);
+            if (user.EmployeeId > 0 && employeeNameMap.TryGetValue(user.EmployeeId, out var employeeName))
             {
-                TaktUserType.Normal => "普通用户",
-                TaktUserType.Admin => "管理员",
-                TaktUserType.SuperAdmin => "超级管理员",
-                _ => "未知"
-            };
-            exportDto.StatusName = user.UserStatus switch
-            {
-                TaktCommonStatus.Enabled => "启用",
-                TaktCommonStatus.Disabled => "禁用",
-                _ => "未知"
-            };
-
-            // 填充员工姓名
-            if (user.EmployeeId > 0)
-            {
-                var employee = await _employeeRepository.GetByIdAsync(user.EmployeeId);
-                if (employee != null)
-                {
-                    exportDto.EmployeeName = employee.Name;
-                }
+                exportDto.EmployeeName = employeeName;
             }
-
-            var userRoles = await _rbacService.GetUserRoleIdsAsync(user.Id);
-            if (userRoles.Count > 0)
+            if (roleNamesMap.TryGetValue(user.Id, out var roleNames))
             {
-                exportDto.RoleNames = string.Join(", ", userRoles
-                    .Select(ur => ur.RoleName)
-                    .Where(name => !string.IsNullOrWhiteSpace(name)));
+                exportDto.RoleNames = roleNames;
             }
-
             exportData.Add(exportDto);
         }
 

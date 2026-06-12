@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Attendance
 // 文件名称：TaktOvertimeItemsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：加班明细控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.HumanResource.Attendance;
 /// 加班明细控制器
 /// 提供加班明细的 REST API
 /// </summary>
-[ApiModule(TaktModule.HumanResource, "考勤管理")]
+[ApiModule(5, "考勤管理")]
 [Route("api/[controller]", Name = "加班明细")]
 public class TaktOvertimeItemsController : TaktControllerBase
 {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/conference-center
 // 文件名称：conference-participant.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 会议参与人子实体
+ * 会议参与人子实体 合并邀请、角色、出席确认与签到/签退于同一行
  * 对应前端 TaktConferenceParticipantDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 ConferenceParticipant
@@ -29,7 +29,7 @@ export interface ConferenceParticipant extends CompanyDtoBase {
   conferenceParticipantId: string;
 
   /**
-   * 会议 ID
+   * 会议 ID（主子表关系）
    */
   conferenceId: string;
 
@@ -54,7 +54,7 @@ export interface ConferenceParticipant extends CompanyDtoBase {
   participantRole: number;
 
   /**
-   * 出席状态
+   * 出席状态（待确认/已接受/已拒绝/已签到/缺席）
    */
   attendanceStatus: number;
 
@@ -67,6 +67,11 @@ export interface ConferenceParticipant extends CompanyDtoBase {
    * 签退时间
    */
   checkOutTime?: string;
+
+  /**
+   * 签到方式
+   */
+  checkInMethod: number;
 
   /**
    * 会议（主表） （主表：TaktConference）
@@ -94,7 +99,7 @@ export interface ConferenceParticipantQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 会议 ID
+   * 会议 ID（主子表关系）
    */
   conferenceId?: string;
 
@@ -114,7 +119,7 @@ export interface ConferenceParticipantQuery extends TaktPagedQuery {
   participantRole?: number;
 
   /**
-   * 出席状态
+   * 出席状态（待确认/已接受/已拒绝/已签到/缺席）
    */
   attendanceStatus?: number;
 
@@ -137,6 +142,11 @@ export interface ConferenceParticipantQuery extends TaktPagedQuery {
    * 签退时间（范围查询-结束）
    */
   checkOutTimeEnd?: string;
+
+  /**
+   * 签到方式
+   */
+  checkInMethod?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -183,7 +193,7 @@ export interface ConferenceParticipantCreate {
   companyDefaultCulture: string;
 
   /**
-   * 会议 ID
+   * 会议 ID（主子表关系）
    */
   conferenceId: string;
 
@@ -203,7 +213,7 @@ export interface ConferenceParticipantCreate {
   participantRole: number;
 
   /**
-   * 出席状态
+   * 出席状态（待确认/已接受/已拒绝/已签到/缺席）
    */
   attendanceStatus: number;
 
@@ -216,6 +226,11 @@ export interface ConferenceParticipantCreate {
    * 签退时间
    */
   checkOutTime?: string;
+
+  /**
+   * 签到方式
+   */
+  checkInMethod: number;
 
   /**
    * 扩展字段JSON
@@ -257,7 +272,7 @@ export interface ConferenceParticipantStatus {
   conferenceParticipantId: string;
 
   /**
-   * 出席状态
+   * 出席状态（待确认/已接受/已拒绝/已签到/缺席）
    */
   attendanceStatus: number;
 
@@ -281,7 +296,7 @@ export interface ConferenceParticipantTemplate {
   companyCode?: string;
 
   /**
-   * 会议 ID
+   * 会议 ID（主子表关系）
    */
   conferenceId?: string;
 
@@ -301,9 +316,14 @@ export interface ConferenceParticipantTemplate {
   participantRole?: number;
 
   /**
-   * 出席状态
+   * 出席状态（待确认/已接受/已拒绝/已签到/缺席）
    */
   attendanceStatus?: number;
+
+  /**
+   * 签到方式
+   */
+  checkInMethod?: number;
 
   /**
    * 扩展字段JSON
@@ -340,7 +360,7 @@ export interface ConferenceParticipantImport {
   companyDefaultCulture?: string;
 
   /**
-   * 会议 ID
+   * 会议 ID（主子表关系）
    */
   conferenceId?: string;
 
@@ -360,9 +380,14 @@ export interface ConferenceParticipantImport {
   participantRole?: number;
 
   /**
-   * 出席状态
+   * 出席状态（待确认/已接受/已拒绝/已签到/缺席）
    */
   attendanceStatus?: number;
+
+  /**
+   * 签到方式
+   */
+  checkInMethod?: number;
 
   /**
    * 扩展字段JSON
@@ -394,7 +419,7 @@ export interface ConferenceParticipantExport {
   companyCode: string;
 
   /**
-   * 会议 ID
+   * 会议 ID（主子表关系）
    */
   conferenceId: string;
 
@@ -414,7 +439,7 @@ export interface ConferenceParticipantExport {
   participantRole: number;
 
   /**
-   * 出席状态
+   * 出席状态（待确认/已接受/已拒绝/已签到/缺席）
    */
   attendanceStatus: number;
 
@@ -427,6 +452,11 @@ export interface ConferenceParticipantExport {
    * 签退时间
    */
   checkOutTime?: string;
+
+  /**
+   * 签到方式
+   */
+  checkInMethod: number;
 
   /**
    * 扩展字段JSON

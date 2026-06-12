@@ -22,7 +22,7 @@ export function getFileExtension(fileName: string): string {
 
 /**
  * 根据文件扩展名获取文件分类
- * 与后端 TaktFileUploadService.GetFileCategory 逻辑保持一致
+ * 与后端 TaktFileHelper.GetFileCategory 逻辑保持一致
  * @param fileExtension 文件扩展名（不包含点）
  * @returns 文件分类（0=文档，1=图片，2=视频，3=音频，4=压缩包）
  */
@@ -65,7 +65,7 @@ export function getFileCategoryByFileName(fileName: string): number {
 
 /**
  * 根据文件扩展名获取MIME类型
- * 与后端 TaktFileUploadService.GetMimeType 逻辑保持一致
+ * 与后端 TaktFileHelper.GetMimeType 逻辑保持一致
  * @param fileExtension 文件扩展名（不包含点）
  * @returns MIME类型
  */

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostCenterService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心应用服务实现
 // 
@@ -96,7 +96,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     public async Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _costCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostCenterStatus == TaktCommonStatus.Enabled);
+        var list = await _costCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostCenterStatus == 1);
         return BuildCostCenterTreeOptions(list, 0);
     }
 
@@ -136,7 +136,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         var list = await _costCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.CostCenterStatus == TaktCommonStatus.Enabled).ToList();
+            : list.Where(x => x.CostCenterStatus == 1).ToList();
         return BuildCostCenterTree(filtered, parentId);
     }
 
@@ -398,6 +398,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             exp = exp.And(x =>
                 (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
                 || (x.CostCenterName != null && x.CostCenterName.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.CostCenterType).Contains(keywords)
                 || SqlFunc.ToString(x.ManagerId).Contains(keywords)
@@ -424,6 +425,16 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         if (!string.IsNullOrEmpty(queryDto?.CostCenterName))
         {
             exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(queryDto.CostCenterName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ShortName))
+        {
+            exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(queryDto.ShortName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CostCenterDesc))
+        {
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.CostCenterDesc));
         }
 
         if (queryDto?.ParentId.HasValue == true)

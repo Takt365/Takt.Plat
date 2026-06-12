@@ -11,7 +11,6 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.DocumentCenter;
 
@@ -46,7 +45,7 @@ public class TaktDocumentChangeLog : TaktCompanyEntityBase
     /// 变更类型
     /// </summary>
     [SugarColumn(ColumnName = "change_type", ColumnDescription = "变更类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktDocumentChangeType ChangeType { get; set; } = TaktDocumentChangeType.Create;
+    public int ChangeType { get; set; } = 0;
     /// <summary>
     /// 变更内容摘要
     /// </summary>

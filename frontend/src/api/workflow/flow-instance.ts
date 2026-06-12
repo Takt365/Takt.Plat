@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/workflow
 // 文件名称：flow-instance.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：workflow 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   FlowInstance,
   FlowInstanceCreate,
+  FlowInstanceEditPayload,
   FlowInstanceStatus,
   FlowInstanceUpdate
 } from '@/types/workflow/flow-instance';
@@ -75,10 +76,10 @@ export function createFlowInstance(dto: FlowInstanceCreate): Promise<FlowInstanc
 /**
  * 更新流程实例
  * @param {string} id 流程实例ID
- * @param {FlowInstanceUpdate} dto 更新DTO
+ * @param {FlowInstanceUpdate | FlowInstanceEditPayload} dto 更新 DTO
  * @returns {Promise<FlowInstance>} 流程实例DTO
  */
-export function updateFlowInstance(id: string, dto: FlowInstanceUpdate): Promise<FlowInstance> {
+export function updateFlowInstance(id: string, dto: FlowInstanceUpdate | FlowInstanceEditPayload): Promise<FlowInstance> {
   return request<FlowInstance>({
     url: `${FLOW_INSTANCE_API_BASE}/${id}`,
     method: 'put',

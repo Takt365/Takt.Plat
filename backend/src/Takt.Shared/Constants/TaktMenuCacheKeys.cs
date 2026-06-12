@@ -4,7 +4,7 @@
 // 文件名称：TaktMenuCacheKeys.cs
 // 创建时间：2026-05-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：菜单缓存键命名（租户维度）
+// 功能描述：菜单 Redis 缓存键前缀与键名拼接（仅 string const/方法，非枚举）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,7 +13,7 @@
 namespace Takt.Shared.Constants;
 
 /// <summary>
-/// 菜单缓存键（供 <see cref="Takt.Application.Services.Identity.TaktMenuService"/> 使用）
+/// 菜单缓存键（供 TaktMenuService 使用）
 /// </summary>
 public static class TaktMenuCacheKeys
 {

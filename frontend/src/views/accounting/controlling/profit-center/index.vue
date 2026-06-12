@@ -164,6 +164,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('shortName')">
+      <a-form-item :label="t('entity.profitCenter.shortname')">
+        <a-input
+          v-model:value="advancedQueryForm.shortName"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.profitCenter.shortname') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('profitCenterDesc')">
+      <a-form-item :label="t('entity.profitCenter.profitcenterdesc')">
+        <a-input
+          v-model:value="advancedQueryForm.profitCenterDesc"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.profitCenter.profitcenterdesc') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('parentId')">
       <a-form-item :label="t('entity.profitCenter.parentid')">
         <a-input
@@ -444,6 +462,8 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   profitCenterCode: '',
   profitCenterName: '',
+  shortName: '',
+  profitCenterDesc: '',
   parentId: '',
   managerId: '',
   managerName: '',
@@ -466,6 +486,8 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'profitCenterCode', label: t('entity.profitCenter.code') },
   { key: 'profitCenterName', label: t('entity.profitCenter.name') },
+  { key: 'shortName', label: t('entity.profitCenter.shortname') },
+  { key: 'profitCenterDesc', label: t('entity.profitCenter.profitcenterdesc') },
   { key: 'parentId', label: t('entity.profitCenter.parentid') },
   { key: 'managerId', label: t('entity.profitCenter.managerid') },
   { key: 'managerName', label: t('entity.profitCenter.managername') },
@@ -656,6 +678,8 @@ function matchesProfitCenterRightQuery(record: Record<string, unknown>): boolean
   }
   if (advancedQueryForm.value.profitCenterCode && !String(record.profitCenterCode ?? '').includes(String(advancedQueryForm.value.profitCenterCode))) return false
   if (advancedQueryForm.value.profitCenterName && !String(record.profitCenterName ?? '').includes(String(advancedQueryForm.value.profitCenterName))) return false
+  if (advancedQueryForm.value.shortName && !String(record.shortName ?? '').includes(String(advancedQueryForm.value.shortName))) return false
+  if (advancedQueryForm.value.profitCenterDesc && !String(record.profitCenterDesc ?? '').includes(String(advancedQueryForm.value.profitCenterDesc))) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
   if (advancedQueryForm.value.managerId && !String(record.managerId ?? '').includes(String(advancedQueryForm.value.managerId))) return false
   if (advancedQueryForm.value.managerName && !String(record.managerName ?? '').includes(String(advancedQueryForm.value.managerName))) return false
@@ -716,6 +740,8 @@ function buildProfitCenterUpdateDto(
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     profitCenterCode: profitCenter.profitCenterCode,
     profitCenterName: profitCenter.profitCenterName,
+    shortName: profitCenter.shortName,
+    profitCenterDesc: profitCenter.profitCenterDesc,
     parentId: overrides.parentId,
     managerId: profitCenter.managerId,
     managerName: profitCenter.managerName,
@@ -870,6 +896,24 @@ watchEffect(() => {
     width: 160,
     resizable: true,
     ellipsis: true,
+  },
+  {
+    title: t('entity.profitCenter.shortname'),
+    dataIndex: 'shortName',
+    key: 'shortName',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'shortName') ?? ''
+  },
+  {
+    title: t('entity.profitCenter.profitcenterdesc'),
+    dataIndex: 'profitCenterDesc',
+    key: 'profitCenterDesc',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'profitCenterDesc') ?? ''
   },
   {
     title: t('entity.profitCenter.parentid'),
@@ -1028,7 +1072,8 @@ async function loadData() {
   }
 }
 
-/** 右侧查询（客户端过滤，不请求接口） */
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 const handleSearch = () => {
   tableCurrentPage.value = 1
 }
@@ -1039,6 +1084,8 @@ const handleReset = () => {
   advancedQueryForm.value = {
   profitCenterCode: '',
   profitCenterName: '',
+  shortName: '',
+  profitCenterDesc: '',
   parentId: '',
   managerId: '',
   managerName: '',
@@ -1228,6 +1275,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   profitCenterCode: '',
   profitCenterName: '',
+  shortName: '',
+  profitCenterDesc: '',
   parentId: '',
   managerId: '',
   managerName: '',

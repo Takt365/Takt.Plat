@@ -14,25 +14,24 @@
   <div class="workflow-todo">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowinstance.processname'), t('entity.flowinstance.processtitle')].join(t('common.page.action.or')) })"
+      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowInstance.processname'), t('entity.flowInstance.processtitle')].join(t('common.tip.or')) })"
       :loading="loading"
-      @search="loadTodo"
+      @search="handleSearch"
       @reset="handleReset"
     />
     <TaktToolsBar
-      export-permission="workflow:todo:export"
       :show-create="false"
       :show-update="false"
       :show-delete="false"
       :show-refresh="true"
-      :show-export="true"
+      :show-export="false"
       :show-fullscreen="true"
-      :show-advanced-query="false"
-      :show-column-setting="false"
+      :show-advanced-query="true"
+      :show-column-setting="true"
       :refresh-loading="loading"
-      :export-loading="exportLoading"
-      @refresh="loadTodo"
-      @export="handleExport"
+      @refresh="handleRefresh"
+      @advanced-query="handleAdvancedQuery"
+      @column-setting="handleColumnSetting"
     />
     <TaktSingleTable
       entity-scope="company"
@@ -42,48 +41,11 @@
       :loading="loading"
       :stripe="true"
       :row-key="getTodoRowKey"
+      :large-screen-column-count="7"
+      :small-screen-column-count="4"
       @change="handleTableChange"
-    >
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'action'">
-          <a-space wrap>
-            <a-button
-              v-permission="'workflow:todo:approve'"
-              type="link"
-              size="small"
-              @click="handleApprove(asFlowTodoItem(record), true)"
-            >
-              {{ t('common.page.button.pass') }}
-            </a-button>
-            <a-button
-              v-permission="'workflow:todo:approve'"
-              type="link"
-              size="small"
-              danger
-              @click="handleApprove(asFlowTodoItem(record), false)"
-            >
-              {{ t('common.page.button.reject') }}
-            </a-button>
-            <a-button
-              v-permission="'workflow:todo:transfer'"
-              type="link"
-              size="small"
-              @click="openTransfer(asFlowTodoItem(record))"
-            >
-              {{ t('common.page.button.transfer') }}
-            </a-button>
-            <a-button
-              v-permission="'workflow:todo:addsign'"
-              type="link"
-              size="small"
-              @click="openAddSign(asFlowTodoItem(record))"
-            >
-              {{ t('common.page.button.addsign') }}
-            </a-button>
-          </a-space>
-        </template>
-      </template>
-    </TaktSingleTable>
+      @resize-column="handleResizeColumn"
+    />
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -104,10 +66,10 @@
       <div class="todo-modal__sections">
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.taskFormContent') }}
+            {{ t('workflow.instance.page.taskFormContent') }}
           </div>
           <TaskFormContent :detail="taskDetail" />
-          <FlowPendingAddApproversPanel
+          <takt-flow-pending-add-approvers-panel
             :detail="taskDetail"
             :allow-reduce="!!taskDetail?.canVerify"
             @refresh="reloadTaskDetailInModal"
@@ -118,19 +80,19 @@
           class="todo-modal__section"
         >
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.cashierPayoutMethod') }}
+            {{ t('workflow.todo.page.cashierPayoutMethod') }}
           </div>
           <a-select
             v-model:value="cashierPayoutChannel"
             :options="cashierPayoutOptions"
             allow-clear
-            :placeholder="t('workflow.instance.cashierPayoutRequired')"
+            :placeholder="t('workflow.todo.page.cashierPayoutRequired')"
             style="width: 100%"
           />
         </div>
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.taskApproveAction') }}
+            {{ t('workflow.todo.page.taskApproveAction') }}
           </div>
           <ApproveForm
             ref="approveFormRef"
@@ -152,10 +114,10 @@
       <div class="todo-modal__sections">
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.taskFormContent') }}
+            {{ t('workflow.instance.page.taskFormContent') }}
           </div>
           <TaskFormContent :detail="taskDetail" />
-          <FlowPendingAddApproversPanel
+          <takt-flow-pending-add-approvers-panel
             :detail="taskDetail"
             :allow-reduce="!!taskDetail?.canVerify"
             @refresh="reloadTaskDetailInModal"
@@ -163,7 +125,7 @@
         </div>
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.taskApproveAction') }}
+            {{ t('workflow.todo.page.taskApproveAction') }}
           </div>
           <TransferForm
             ref="transferFormRef"
@@ -186,10 +148,10 @@
       <div class="todo-modal__sections">
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.taskFormContent') }}
+            {{ t('workflow.instance.page.taskFormContent') }}
           </div>
           <TaskFormContent :detail="taskDetail" />
-          <FlowPendingAddApproversPanel
+          <takt-flow-pending-add-approvers-panel
             :detail="taskDetail"
             :allow-reduce="!!taskDetail?.canVerify"
             @refresh="reloadTaskDetailInModal"
@@ -197,7 +159,7 @@
         </div>
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.taskApproveAction') }}
+            {{ t('workflow.todo.page.taskApproveAction') }}
           </div>
           <AddSignForm
             ref="addSignFormRef"
@@ -207,6 +169,52 @@
         </div>
       </div>
     </TaktModal>
+
+    <!-- 高级查询抽屉 -->
+    <TaktQueryDrawer
+      v-model:open="advancedQueryVisible"
+      :form-model="advancedQueryForm"
+      @submit="handleAdvancedQuerySubmit"
+      @reset="handleAdvancedQueryReset"
+    >
+      <a-form-item :label="t('entity.flowInstance.instancecode')">
+        <a-input v-model:value="advancedQueryForm.instanceCode" allow-clear />
+      </a-form-item>
+      <a-form-item :label="t('entity.flowInstance.processkey')">
+        <a-input v-model:value="advancedQueryForm.processKey" allow-clear />
+      </a-form-item>
+      <a-form-item :label="t('entity.flowInstance.processname')">
+        <a-input v-model:value="advancedQueryForm.processName" allow-clear />
+      </a-form-item>
+      <a-form-item :label="t('entity.flowInstance.processtitle')">
+        <a-input v-model:value="advancedQueryForm.processTitle" allow-clear />
+      </a-form-item>
+      <a-form-item :label="t('entity.flowTask.taskname')">
+        <a-input v-model:value="advancedQueryForm.taskName" allow-clear />
+      </a-form-item>
+      <a-form-item :label="t('entity.flowInstance.startusername')">
+        <a-input v-model:value="advancedQueryForm.startUserName" allow-clear />
+      </a-form-item>
+      <a-form-item :label="t('entity.flowInstance.starttime')">
+        <a-range-picker
+          v-model:value="startTimeRange"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+    </TaktQueryDrawer>
+
+    <!-- 列设置抽屉 -->
+    <TaktColumnDrawer
+      entity-scope="company"
+      v-model:open="columnSettingVisible"
+      :columns="columns"
+      :checked-keys="visibleColumnKeys"
+      :action-column-key="'action'"
+      @update:checked-keys="handleColumnKeysChange"
+      @reset="handleColumnSettingReset"
+    />
   </div>
 </template>
 
@@ -216,68 +224,150 @@
  */
 import { ref, reactive, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
+import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { buildFlowTodoQuery, getFlowEngineTodoList, getFlowEngineInstanceById, completeFlowEngineTask, transferFlowEngineTask, addFlowEngineApprovers } from '@/api/workflow/flow-engine'
-import { exportFlowTask } from '@/api/workflow/flow-task'
+import { CreateActionColumn } from '@/components/business/takt-action-column/index'
+import {
+  RiCheckboxCircleLine,
+  RiCloseCircleLine,
+  RiUserShared2Line,
+  RiUserAddLine
+} from '@remixicon/vue'
+import { getFlowEngineTodoList, getFlowEngineTodoById, completeFlowEngineTask, transferFlowEngineTask, addFlowEngineApprovers } from '@/api/workflow/flow-engine'
 import { getUserOptions } from '@/api/identity/user'
 import ApproveForm from './components/flow-approve-form.vue'
 import TransferForm from './components/flow-transfer-form.vue'
 import AddSignForm from './components/flow-add-sign-form.vue'
 import TaskFormContent from './components/flow-task-form-content.vue'
-import FlowPendingAddApproversPanel from '@/views/workflow/components/flow-pending-add-approvers-panel.vue'
-import type { FlowTodoTableRow, FlowInstanceDetailView, FlowAddApproverItem } from '@/types/workflow/flow-engine'
+import type { FlowTodoItem, FlowInstanceDetail, FlowAddApproverItem, FlowTodoQuery } from '@/types/workflow/flow-engine'
 import type { TaktSelectOption } from '@/types/common'
+import { useWorkflowSignalRRefresh, WORKFLOW_TABLE_NAMES } from '@/composables/use-workflow-signalr-refresh'
+import { useWorkflowTodoCountStore } from '@/stores/workflow/todo-count'
 const toErrorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error))
 
 const { t } = useI18n()
+
+/** 与 `TaktSingleTable` 的 `@resize-column` 第二参数一致（`ResizableColumn`） */
+type TaktResizeColumn = { width?: string | number } & Record<string, unknown>
 
 /** 与种子 ProcessContent 节点 id 一致：出纳确认付款方式 */
 const CASHIER_ROUTE_NODE_ID = 'cashier_route'
 
 /** 当前任务节点 ID */
-function getTaskNodeId(detail: FlowInstanceDetailView | null): string | undefined {
+function getTaskNodeId(detail: FlowInstanceDetail | null): string | undefined {
   return detail?.currentActivityId
 }
 
 const cashierPayoutChannel = ref<number | undefined>(undefined)
 const cashierPayoutOptions = computed(() => [
-  { value: 1, label: t('workflow.instance.cashierPayoutBank') },
-  { value: 2, label: t('workflow.instance.cashierPayoutCash') },
-  { value: 3, label: t('workflow.instance.cashierPayoutRepay') }
+  { value: 1, label: t('workflow.todo.page.cashierPayoutBank') },
+  { value: 2, label: t('workflow.todo.page.cashierPayoutCash') },
+  { value: 3, label: t('workflow.todo.page.cashierPayoutRepay') }
 ])
 
 const loading = ref(false)
-const exportLoading = ref(false)
 const queryKeyword = ref('')
-const dataSource = ref<FlowTodoTableRow[]>([])
+const advancedQueryVisible = ref(false)
+const columnSettingVisible = ref(false)
+const advancedQueryForm = ref({
+  instanceCode: '',
+  processKey: '',
+  processName: '',
+  processTitle: '',
+  taskName: '',
+  startUserName: ''
+})
+/** 发起时间范围（高级查询） */
+const startTimeRange = ref<[string, string] | undefined>(undefined)
+const dataSource = ref<FlowTodoItem[]>([])
 const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
+/** 列可见键（未启用列设置时保持空数组，展示全部列） */
+const visibleColumnKeys = ref<string[]>([])
 
-const columns = [
-  { title: '流程名称', dataIndex: 'processName', key: 'processName', width: 120 },
-  { title: '标题', dataIndex: 'processTitle', key: 'processTitle', ellipsis: true },
-  { title: '当前节点', dataIndex: 'nodeName', key: 'nodeName', width: 100 },
-  { title: '发起人', dataIndex: 'startUserName', key: 'startUserName', width: 90 },
-  { title: '发起时间', dataIndex: 'startTime', key: 'startTime', width: 170 },
-  { title: '操作', key: 'action', width: 260, fixed: 'right' as const }
-]
+const columns = computed<TableColumnsType>(() => [
+  { title: t('entity.flowInstance.instancecode'), dataIndex: 'instanceCode', key: 'instanceCode', width: 200, resizable: true, ellipsis: true },
+  { title: t('entity.flowInstance.processname'), dataIndex: 'processName', key: 'processName', width: 120, resizable: true, ellipsis: true },
+  { title: t('entity.flowInstance.processtitle'), dataIndex: 'processTitle', key: 'processTitle', ellipsis: true, resizable: true },
+  { title: t('entity.flowTask.taskname'), dataIndex: 'taskName', key: 'taskName', width: 100, resizable: true, ellipsis: true },
+  { title: t('entity.flowInstance.startusername'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true, ellipsis: true },
+  { title: t('entity.flowInstance.starttime'), dataIndex: 'startTime', key: 'startTime', width: 170, resizable: true },
+  CreateActionColumn<FlowTodoItem>({
+    width: 148,
+    actions: [
+      {
+        key: 'pass',
+        label: t('common.page.button.pass'),
+        shape: 'plain',
+        icon: RiCheckboxCircleLine,
+        permission: 'workflow:todo:approve',
+        onClick: (record) => handleApprove(record, true)
+      },
+      {
+        key: 'reject',
+        label: t('common.page.button.reject'),
+        shape: 'plain',
+        icon: RiCloseCircleLine,
+        permission: 'workflow:todo:approve',
+        onClick: (record) => handleApprove(record, false)
+      },
+      {
+        key: 'transfer',
+        label: t('common.page.button.transfer'),
+        shape: 'plain',
+        icon: RiUserShared2Line,
+        permission: 'workflow:todo:transfer',
+        onClick: (record) => openTransfer(record)
+      },
+      {
+        key: 'addsign',
+        label: t('common.page.button.addsign'),
+        shape: 'plain',
+        icon: RiUserAddLine,
+        permission: 'workflow:todo:addsign',
+        onClick: (record) => openAddSign(record)
+      }
+    ]
+  })
+])
 
-/** 将 a-table bodyCell 的 record 断言为 FlowTodoTableRow */
-function asFlowTodoItem(r: Record<string, unknown>): FlowTodoTableRow {
-  return r as unknown as FlowTodoTableRow
+/** 表格列 key（列宽拖拽） */
+function getColumnKey(col: TaktResizeColumn): string {
+  const key = col.key ?? col.dataIndex ?? col.title
+  return key != null ? String(key) : ''
 }
 
-/** 待办行 key：取 instanceId 字符串 */
+/** 组装列表查询 DTO（关键词 + 高级查询，对齐 FlowTodoQuery） */
+function buildFlowTodoQuery(): FlowTodoQuery {
+  const query: FlowTodoQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value
+  }
+  const kw = queryKeyword.value.trim()
+  if (kw) query.keyWords = kw
+  const f = advancedQueryForm.value
+  if (f.instanceCode.trim()) query.instanceCode = f.instanceCode.trim()
+  if (f.processKey.trim()) query.processKey = f.processKey.trim()
+  if (f.processName.trim()) query.processName = f.processName.trim()
+  if (f.processTitle.trim()) query.processTitle = f.processTitle.trim()
+  if (f.taskName.trim()) query.taskName = f.taskName.trim()
+  if (f.startUserName.trim()) query.startUserName = f.startUserName.trim()
+  if (startTimeRange.value?.[0]) query.startTimeStart = startTimeRange.value[0]
+  if (startTimeRange.value?.[1]) query.startTimeEnd = startTimeRange.value[1]
+  return query
+}
+
+/** 待办行 key：取 flowInstanceId 字符串 */
 function getTodoRowKey(record: unknown): string {
-  if (!record || typeof record !== 'object' || !('instanceId' in record)) return ''
-  const row = record as { instanceId?: unknown }
-  return row.instanceId != null ? String(row.instanceId) : ''
+  if (!record || typeof record !== 'object' || !('flowInstanceId' in record)) return ''
+  const row = record as { flowInstanceId?: unknown }
+  return row.flowInstanceId != null ? String(row.flowInstanceId) : ''
 }
 
 const modalVisible = ref(false)
-const currentTask = ref<FlowTodoTableRow | null>(null)
-const taskDetail = ref<FlowInstanceDetailView | null>(null)
+const currentTask = ref<FlowTodoItem | null>(null)
+const taskDetail = ref<FlowInstanceDetail | null>(null)
 const approveFormRef = ref<InstanceType<typeof ApproveForm> | null>(null)
 const completeForm = reactive({
   comment: '',
@@ -288,8 +378,8 @@ const completeForm = reactive({
 const userOptions = ref<TaktSelectOption[]>([])
 const transferVisible = ref(false)
 const addSignVisible = ref(false)
-const currentTransferTask = ref<FlowTodoTableRow | null>(null)
-const currentAddSignTask = ref<FlowTodoTableRow | null>(null)
+const currentTransferTask = ref<FlowTodoItem | null>(null)
+const currentAddSignTask = ref<FlowTodoItem | null>(null)
 const transferFormRef = ref<InstanceType<typeof TransferForm> | null>(null)
 const transferForm = reactive<{
   toUserId?: string
@@ -310,9 +400,7 @@ const addSignForm = reactive({
 async function loadTodo() {
   loading.value = true
   try {
-    const res = await getFlowEngineTodoList(
-      buildFlowTodoQuery(currentPage.value, pageSize.value, queryKeyword.value)
-    )
+    const res = await getFlowEngineTodoList(buildFlowTodoQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } finally {
@@ -320,11 +408,79 @@ async function loadTodo() {
   }
 }
 
-/** 重置关键词、页码并重新拉取待办 */
-function handleReset() {
-  queryKeyword.value = ''
+/** 查询：页码置 1 并重新拉取 */
+function handleSearch() {
   currentPage.value = 1
   loadTodo()
+}
+
+/** 重置关键词、高级查询、页码并重新拉取 */
+function handleReset() {
+  queryKeyword.value = ''
+  advancedQueryForm.value = {
+    instanceCode: '',
+    processKey: '',
+    processName: '',
+    processTitle: '',
+    taskName: '',
+    startUserName: ''
+  }
+  startTimeRange.value = undefined
+  currentPage.value = 1
+  loadTodo()
+}
+
+/** 打开高级查询抽屉 */
+function handleAdvancedQuery() {
+  advancedQueryVisible.value = true
+}
+
+/** 高级查询提交 */
+function handleAdvancedQuerySubmit() {
+  currentPage.value = 1
+  loadTodo()
+  advancedQueryVisible.value = false
+}
+
+/** 高级查询重置 */
+function handleAdvancedQueryReset() {
+  advancedQueryForm.value = {
+    instanceCode: '',
+    processKey: '',
+    processName: '',
+    processTitle: '',
+    taskName: '',
+    startUserName: ''
+  }
+  startTimeRange.value = undefined
+}
+
+/** 打开列设置抽屉 */
+function handleColumnSetting() {
+  columnSettingVisible.value = true
+}
+
+/** 列设置勾选变化 */
+function handleColumnKeysChange(keys: (string | number)[]) {
+  visibleColumnKeys.value = keys.map((k) => String(k))
+}
+
+/** 列设置重置 */
+function handleColumnSettingReset() {
+  visibleColumnKeys.value = []
+}
+
+/** 刷新列表 */
+function handleRefresh() {
+  loadTodo()
+}
+
+/** 列宽拖拽 */
+function handleResizeColumn(w: number, col: TaktResizeColumn) {
+  const column = columns.value.find((c) => getColumnKey(c as TaktResizeColumn) === getColumnKey(col))
+  if (column && 'width' in column) {
+    ;(column as { width?: number }).width = w
+  }
 }
 
 /** 表格变化占位（分页由 TaktPagination 处理） */
@@ -348,13 +504,13 @@ function handlePaginationSizeChange(current: number, size: number) {
 
 /** 减签后刷新弹窗内实例详情并刷新待办列表 */
 async function reloadTaskDetailInModal() {
-  const id = taskDetail.value?.instanceId
+  const id = taskDetail.value?.flowInstanceId
   if (id == null) return
   try {
-    taskDetail.value = await getFlowEngineInstanceById(id, 'todo')
+    taskDetail.value = await getFlowEngineTodoById(id)
     await loadTodo()
   } catch {
-    message.error(t('common.page.msg.loadFail'))
+    message.error(t('common.feedback.load.data.failed'))
   }
 }
 
@@ -365,7 +521,7 @@ async function closeApproveModal() {
 }
 
 /** 打开审批弹窗：设置当前任务、办结表单、拉取实例详情 */
-async function handleApprove(record: FlowTodoTableRow, pass: boolean) {
+async function handleApprove(record: FlowTodoItem, pass: boolean) {
   currentTask.value = record
   completeForm.comment = ''
   completeForm.approved = pass
@@ -373,7 +529,7 @@ async function handleApprove(record: FlowTodoTableRow, pass: boolean) {
   cashierPayoutChannel.value = undefined
   taskDetail.value = null
   try {
-    taskDetail.value = await getFlowEngineInstanceById(record.instanceId, 'todo')
+    taskDetail.value = await getFlowEngineTodoById(record.flowInstanceId)
     const fd = taskDetail.value?.frmData?.trim()
     if (fd) {
       try {
@@ -401,7 +557,7 @@ async function handleApproveOk() {
     getTaskNodeId(detail) === CASHIER_ROUTE_NODE_ID &&
     cashierPayoutChannel.value == null
   ) {
-    message.warning(t('workflow.instance.cashierPayoutRequired'))
+    message.warning(t('workflow.todo.page.cashierPayoutRequired'))
     return
   }
   let frmDataPayload: string | undefined
@@ -413,7 +569,7 @@ async function handleApproveOk() {
       base.payoutChannel = cashierPayoutChannel.value as number
       frmDataPayload = JSON.stringify(base)
     } catch {
-      message.error(t('common.page.msg.loadFail'))
+      message.error(t('common.feedback.load.data.failed'))
       return
     }
   }
@@ -427,7 +583,7 @@ async function handleApproveOk() {
       nodeRejectStep?: string
       frmData?: string
     } = {
-      flowInstanceId: currentTask.value.instanceId,
+      flowInstanceId: currentTask.value.flowInstanceId,
       instanceCode: currentTask.value.instanceCode,
       approved: completeForm.approved
     }
@@ -435,39 +591,14 @@ async function handleApproveOk() {
     if (completeForm.nodeRejectStep) payload.nodeRejectStep = completeForm.nodeRejectStep
     if (frmDataPayload) payload.frmData = frmDataPayload
     await completeFlowEngineTask(payload)
-    message.success('已提交')
+    message.success(t('common.feedback.success'))
     modalVisible.value = false
     taskDetail.value = null
     loadTodo()
   } catch (error: unknown) {
-    message.error(toErrorMessage(error) || '提交失败')
+    message.error(toErrorMessage(error) || t('common.feedback.failed'))
   } finally {
     loading.value = false
-  }
-}
-
-/** 导出待办为 Excel 并触发下载 */
-async function handleExport() {
-  try {
-    exportLoading.value = true
-    const blob = await exportFlowTask({ ...buildFlowTodoQuery(1, 500, queryKeyword.value), taskStatus: 0, sheetName: 'FlowTodo' })
-    const ts = new Date()
-    const pad = (n: number, w = 2) => String(n).padStart(w, '0')
-    const fileName = `待办_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = fileName
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success('导出成功')
-  } catch (error: unknown) {
-    message.error(toErrorMessage(error) || '导出失败')
-  } finally {
-    exportLoading.value = false
   }
 }
 
@@ -477,7 +608,7 @@ async function ensureUserOptions() {
     try {
       userOptions.value = await getUserOptions()
     } catch {
-      message.error('加载用户列表失败')
+      message.error(t('common.feedback.load.data.failed'))
     }
   }
 }
@@ -495,14 +626,14 @@ function closeAddSignModal() {
 }
 
 /** 打开转办弹窗：设置当前任务、拉取实例详情、拉取用户选项 */
-async function openTransfer(record: FlowTodoTableRow) {
+async function openTransfer(record: FlowTodoItem) {
   currentTransferTask.value = record
   delete transferForm.toUserId
   transferForm.toUserName = ''
   delete transferForm.comment
   taskDetail.value = null
   try {
-    taskDetail.value = await getFlowEngineInstanceById(record.instanceId, 'todo')
+    taskDetail.value = await getFlowEngineTodoById(record.flowInstanceId)
   } catch {
     taskDetail.value = null
   }
@@ -517,26 +648,26 @@ async function handleTransferOk() {
   loading.value = true
   try {
     await transferFlowEngineTask({
-      flowInstanceId: currentTransferTask.value.instanceId,
+      flowInstanceId: currentTransferTask.value.flowInstanceId,
       instanceCode: currentTransferTask.value.instanceCode,
       toUserId: transferForm.toUserId,
       toUserName: transferForm.toUserName,
       comment: transferForm.comment || undefined
     })
-    message.success('转办成功')
+    message.success(t('common.feedback.action.success', { action: t('common.page.button.transfer') }))
     transferVisible.value = false
     currentTransferTask.value = null
     taskDetail.value = null
     loadTodo()
   } catch (error: unknown) {
-    message.error(toErrorMessage(error) || '转办失败')
+    message.error(toErrorMessage(error) || t('common.feedback.failed'))
   } finally {
     loading.value = false
   }
 }
 
 /** 打开加签弹窗：设置当前任务、拉取实例详情、拉取用户选项 */
-async function openAddSign(record: FlowTodoTableRow) {
+async function openAddSign(record: FlowTodoItem) {
   currentAddSignTask.value = record
   addSignForm.approverIds = []
   addSignForm.approveType = 'sequential'
@@ -544,7 +675,7 @@ async function openAddSign(record: FlowTodoTableRow) {
   addSignForm.returnToSignNode = false
   taskDetail.value = null
   try {
-    taskDetail.value = await getFlowEngineInstanceById(record.instanceId, 'todo')
+    taskDetail.value = await getFlowEngineTodoById(record.flowInstanceId)
   } catch {
     taskDetail.value = null
   }
@@ -570,7 +701,7 @@ async function handleAddSignOk() {
       returnToSignNode: boolean
       reason?: string
     } = {
-      flowInstanceId: currentAddSignTask.value.instanceId,
+      flowInstanceId: currentAddSignTask.value.flowInstanceId,
       instanceCode: currentAddSignTask.value.instanceCode,
       approvers,
       approveType: addSignForm.approveType,
@@ -578,19 +709,23 @@ async function handleAddSignOk() {
     }
     if (addSignForm.reason) payload.reason = addSignForm.reason
     await addFlowEngineApprovers(payload)
-    message.success('加签成功')
+    message.success(t('common.feedback.action.success', { action: t('common.page.button.addsign') }))
     addSignVisible.value = false
     currentAddSignTask.value = null
     taskDetail.value = null
     loadTodo()
   } catch (error: unknown) {
-    message.error(toErrorMessage(error) || '加签失败')
+    message.error(toErrorMessage(error) || t('common.feedback.failed'))
   } finally {
     loading.value = false
   }
 }
 
-onMounted(() => loadTodo())
+onMounted(() => {
+  void useWorkflowTodoCountStore().refreshTodoCountAsync()
+  loadTodo()
+})
+useWorkflowSignalRRefresh(loadTodo, WORKFLOW_TABLE_NAMES.todo)
 </script>
 
 <style scoped lang="css">

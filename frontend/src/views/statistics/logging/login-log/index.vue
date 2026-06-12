@@ -109,109 +109,109 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('username')">
-      <a-form-item :label="t('entity.loginLog.username')">
+      <a-form-item :label="t('entity.loginlog.username')">
         <a-input
           v-model:value="advancedQueryForm.username"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.username') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.username') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('loginType')">
-      <a-form-item :label="t('entity.loginLog.logintype')">
-        <a-input
+      <a-form-item :label="t('entity.loginlog.logintype')">
+        <a-input-number
           v-model:value="advancedQueryForm.loginType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.logintype') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.logintype') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('browser')">
-      <a-form-item :label="t('entity.loginLog.browser')">
-        <a-input
+      <a-form-item :label="t('entity.loginlog.browser')">
+        <a-input-number
           v-model:value="advancedQueryForm.browser"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.browser') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.browser') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('os')">
-      <a-form-item :label="t('entity.loginLog.os')">
-        <a-input
+      <a-form-item :label="t('entity.loginlog.os')">
+        <a-input-number
           v-model:value="advancedQueryForm.os"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.os') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.os') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('userAgent')">
-      <a-form-item :label="t('entity.loginLog.useragent')">
+      <a-form-item :label="t('entity.loginlog.useragent')">
         <a-input
           v-model:value="advancedQueryForm.userAgent"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.useragent') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.useragent') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('loginResult')">
-      <a-form-item :label="t('entity.loginLog.loginresult')">
+      <a-form-item :label="t('entity.loginlog.loginresult')">
         <a-input-number
           v-model:value="advancedQueryForm.loginResult"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginresult') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginresult') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('loginMessage')">
-      <a-form-item :label="t('entity.loginLog.loginmessage')">
+      <a-form-item :label="t('entity.loginlog.loginmessage')">
         <a-input
           v-model:value="advancedQueryForm.loginMessage"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginmessage') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginmessage') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('loginIp')">
-      <a-form-item :label="t('entity.loginLog.loginip')">
+      <a-form-item :label="t('entity.loginlog.loginip')">
         <a-input
           v-model:value="advancedQueryForm.loginIp"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginip') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginip') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('loginLocation')">
-      <a-form-item :label="t('entity.loginLog.loginlocation')">
+      <a-form-item :label="t('entity.loginlog.loginlocation')">
         <a-input
           v-model:value="advancedQueryForm.loginLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.loginlocation') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.loginlocation') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('logoutAtStart')">
-      <a-form-item :label="t('entity.loginLog.logoutatstart')">
+      <a-form-item :label="t('entity.loginlog.logoutatstart')">
         <a-input
           v-model:value="advancedQueryForm.logoutAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.logoutatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.logoutatstart') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('logoutAtEnd')">
-      <a-form-item :label="t('entity.loginLog.logoutatend')">
+      <a-form-item :label="t('entity.loginlog.logoutatend')">
         <a-input
           v-model:value="advancedQueryForm.logoutAtEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.logoutatend') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.logoutatend') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sessionDuration')">
-      <a-form-item :label="t('entity.loginLog.sessionduration')">
+      <a-form-item :label="t('entity.loginlog.sessionduration')">
         <a-input-number
           v-model:value="advancedQueryForm.sessionDuration"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginLog.sessionduration') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.loginlog.sessionduration') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -298,7 +298,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktLoginLog')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.loginLog._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.loginlog._self') })
 )
 
 /** 快捷查询关键字 */
@@ -334,9 +334,9 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   username: '',
-  loginType: '',
-  browser: '',
-  os: '',
+  loginType: undefined as number | undefined,
+  browser: undefined as number | undefined,
+  os: undefined as number | undefined,
   userAgent: '',
   loginResult: undefined as number | undefined,
   loginMessage: '',
@@ -352,18 +352,18 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'username', label: t('entity.loginLog.username') },
-  { key: 'loginType', label: t('entity.loginLog.logintype') },
-  { key: 'browser', label: t('entity.loginLog.browser') },
-  { key: 'os', label: t('entity.loginLog.os') },
-  { key: 'userAgent', label: t('entity.loginLog.useragent') },
-  { key: 'loginResult', label: t('entity.loginLog.loginresult') },
-  { key: 'loginMessage', label: t('entity.loginLog.loginmessage') },
-  { key: 'loginIp', label: t('entity.loginLog.loginip') },
-  { key: 'loginLocation', label: t('entity.loginLog.loginlocation') },
-  { key: 'logoutAtStart', label: t('entity.loginLog.logoutatstart') },
-  { key: 'logoutAtEnd', label: t('entity.loginLog.logoutatend') },
-  { key: 'sessionDuration', label: t('entity.loginLog.sessionduration') },
+  { key: 'username', label: t('entity.loginlog.username') },
+  { key: 'loginType', label: t('entity.loginlog.logintype') },
+  { key: 'browser', label: t('entity.loginlog.browser') },
+  { key: 'os', label: t('entity.loginlog.os') },
+  { key: 'userAgent', label: t('entity.loginlog.useragent') },
+  { key: 'loginResult', label: t('entity.loginlog.loginresult') },
+  { key: 'loginMessage', label: t('entity.loginlog.loginmessage') },
+  { key: 'loginIp', label: t('entity.loginlog.loginip') },
+  { key: 'loginLocation', label: t('entity.loginlog.loginlocation') },
+  { key: 'logoutAtStart', label: t('entity.loginlog.logoutatstart') },
+  { key: 'logoutAtEnd', label: t('entity.loginlog.logoutatend') },
+  { key: 'sessionDuration', label: t('entity.loginlog.sessionduration') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
@@ -406,7 +406,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginLogId') ?? ''
   },
   {
-    title: t('entity.loginLog.username'),
+    title: t('entity.loginlog.username'),
     dataIndex: 'username',
     key: 'username',
     width: 120,
@@ -415,7 +415,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'username') ?? ''
   },
   {
-    title: t('entity.loginLog.logintype'),
+    title: t('entity.loginlog.logintype'),
     dataIndex: 'loginType',
     key: 'loginType',
     width: 120,
@@ -424,7 +424,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginType') ?? ''
   },
   {
-    title: t('entity.loginLog.browser'),
+    title: t('entity.loginlog.browser'),
     dataIndex: 'browser',
     key: 'browser',
     width: 120,
@@ -433,7 +433,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'browser') ?? ''
   },
   {
-    title: t('entity.loginLog.os'),
+    title: t('entity.loginlog.os'),
     dataIndex: 'os',
     key: 'os',
     width: 120,
@@ -442,7 +442,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'os') ?? ''
   },
   {
-    title: t('entity.loginLog.useragent'),
+    title: t('entity.loginlog.useragent'),
     dataIndex: 'userAgent',
     key: 'userAgent',
     width: 120,
@@ -451,7 +451,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'userAgent') ?? ''
   },
   {
-    title: t('entity.loginLog.loginresult'),
+    title: t('entity.loginlog.loginresult'),
     dataIndex: 'loginResult',
     key: 'loginResult',
     width: 120,
@@ -460,7 +460,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginResult') ?? ''
   },
   {
-    title: t('entity.loginLog.loginmessage'),
+    title: t('entity.loginlog.loginmessage'),
     dataIndex: 'loginMessage',
     key: 'loginMessage',
     width: 120,
@@ -469,7 +469,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginMessage') ?? ''
   },
   {
-    title: t('entity.loginLog.loginip'),
+    title: t('entity.loginlog.loginip'),
     dataIndex: 'loginIp',
     key: 'loginIp',
     width: 120,
@@ -478,7 +478,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginIp') ?? ''
   },
   {
-    title: t('entity.loginLog.loginlocation'),
+    title: t('entity.loginlog.loginlocation'),
     dataIndex: 'loginLocation',
     key: 'loginLocation',
     width: 120,
@@ -487,7 +487,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'loginLocation') ?? ''
   },
   {
-    title: t('entity.loginLog.logoutat'),
+    title: t('entity.loginlog.logoutat'),
     dataIndex: 'logoutAt',
     key: 'logoutAt',
     width: 120,
@@ -496,7 +496,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLoginLogField(record, 'logoutAt') ?? ''
   },
   {
-    title: t('entity.loginLog.sessionduration'),
+    title: t('entity.loginlog.sessionduration'),
     dataIndex: 'sessionDuration',
     key: 'sessionDuration',
     width: 120,
@@ -599,6 +599,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -610,9 +613,9 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   username: '',
-  loginType: '',
-  browser: '',
-  os: '',
+  loginType: undefined as number | undefined,
+  browser: undefined as number | undefined,
+  os: undefined as number | undefined,
   userAgent: '',
   loginResult: undefined as number | undefined,
   loginMessage: '',
@@ -632,13 +635,13 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.loginLog._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.loginlog._self') })
   formData.value = {}
   formVisible.value = true
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: LoginLog) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.loginLog._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.loginlog._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -648,7 +651,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.loginLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.loginlog._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -666,10 +669,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateLoginLog(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.loginLog._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.loginlog._self') }))
     } else {
       await createLoginLog(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.loginLog._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.loginlog._self') }))
     }
     formVisible.value = false
     loadData()
@@ -714,10 +717,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.loginLog._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.loginlog._self') }))
   } catch (error: any) {
     logger.error('[LoginLog] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.loginLog._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.loginlog._self') }))
   } finally {
     loading.value = false
   }
@@ -726,12 +729,12 @@ async function handleExport() {
 async function handleDeleteOne(record: LoginLog) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.loginLog._self'), name: t('common.tip.this.target', { target: t('entity.loginLog._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.loginlog._self'), name: t('common.tip.this.target', { target: t('entity.loginlog._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteLoginLogById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.loginLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.loginlog._self') }))
       loadData()
     }
   })
@@ -739,18 +742,18 @@ async function handleDeleteOne(record: LoginLog) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.loginLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.loginlog._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.loginLog._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.loginlog._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteLoginLogBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.loginLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.loginlog._self') }))
       loadData()
     }
   })
@@ -770,9 +773,9 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   username: '',
-  loginType: '',
-  browser: '',
-  os: '',
+  loginType: undefined as number | undefined,
+  browser: undefined as number | undefined,
+  os: undefined as number | undefined,
   userAgent: '',
   loginResult: undefined as number | undefined,
   loginMessage: '',

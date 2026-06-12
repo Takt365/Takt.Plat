@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktTenantService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：租户应用服务实现
 // 
@@ -100,7 +100,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
     public async Task<List<TaktSelectOption>> GetTenantOptionsAsync()
     {
         var list = await _tenantRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.TenantStatus == TaktCommonStatus.Enabled,
+            x => x.TenantCode == CurrentTenantCode && x.TenantStatus == 1,
             x => x.TenantName,
             false);
         return list.Select(e => new TaktSelectOption
@@ -118,7 +118,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
     public async Task<TaktTenantDto> CreateTenantAsync(TaktTenantCreateDto dto)
     {
         var entity = dto.Adapt<TaktTenant>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         entity = await _tenantRepository.CreateAsync(entity);
         if (dto.UserIds != null)
         {
@@ -181,7 +181,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
         {
             throw new TaktBusinessException("租户不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置租户不允许删除");
         }
@@ -204,7 +204,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
         {
             return;
         }
-        if (await _tenantRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _tenantRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置租户不允许删除");
         }
@@ -226,7 +226,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
         {
             throw new TaktBusinessException("租户不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.TenantStatus != TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == 1 && dto.TenantStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置租户");
         }
@@ -270,7 +270,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
             try
             {
                 var entity = rows[i].Adapt<TaktTenant>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 await _tenantRepository.CreateAsync(entity);
                 success += 1;
             }

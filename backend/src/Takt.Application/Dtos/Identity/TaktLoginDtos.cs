@@ -201,7 +201,7 @@ public class TaktLoginResponseDto
     /// <summary>
     /// 用户类型
     /// </summary>
-    public TaktUserType UserType { get; set; }
+    public int UserType { get; set; }
 
     /// <summary>
     /// 角色列表
@@ -272,16 +272,16 @@ public class TaktUserInfoResponseDto
     /// <summary>
     /// 用户类型
     /// </summary>
-    public TaktUserType UserType { get; set; }
+    public int UserType { get; set; }
 
     /// <summary>
     /// 用户类型名称
     /// </summary>
     public string UserTypeName => UserType switch
     {
-        TaktUserType.Normal => "普通用户",
-        TaktUserType.Admin => "管理员",
-        TaktUserType.SuperAdmin => "超级管理员",
+        0 => "普通用户",
+        1 => "管理员",
+        2 => "超级管理员",
         _ => "未知"
     };
 

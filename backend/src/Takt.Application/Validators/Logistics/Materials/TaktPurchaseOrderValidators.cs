@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktPurchaseOrderValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseOrder 生成，请按需审阅）
 // 
@@ -32,22 +32,22 @@ public class TaktPurchaseOrderCreateValidator : AbstractValidator<TaktPurchaseOr
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.PurchaseOrderCode)
             .NotEmpty().WithMessage("采购订单编码不能为空")
-            .MaximumLength(10).WithMessage("采购订单编码长度不能超过10个字符");
+            .MaximumLength(40).WithMessage("采购订单编码长度不能超过40个字符");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("供应商编码不能为空")
-            .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("供应商编码长度不能超过40个字符");
         RuleFor(x => x.SupplierName)
             .NotEmpty().WithMessage("供应商名称不能为空")
-            .MaximumLength(200).WithMessage("供应商名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("供应商名称长度不能超过40个字符");
         RuleFor(x => x.PurchaseGroup)
             .MaximumLength(50).WithMessage("采购组代码长度不能超过50个字符");
         RuleFor(x => x.OrderStatus)
@@ -95,21 +95,21 @@ public class TaktPurchaseOrderImportValidator : AbstractValidator<TaktPurchaseOr
     public TaktPurchaseOrderImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.PurchaseOrderCode)
             .NotEmpty().WithMessage("采购订单编码不能为空")
-            .MaximumLength(10).WithMessage("采购订单编码长度不能超过10个字符");
+            .MaximumLength(40).WithMessage("采购订单编码长度不能超过40个字符");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("供应商编码不能为空")
-            .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("供应商编码长度不能超过40个字符");
         RuleFor(x => x.SupplierName)
             .NotEmpty().WithMessage("供应商名称不能为空")
-            .MaximumLength(200).WithMessage("供应商名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("供应商名称长度不能超过40个字符");
         RuleFor(x => x.PurchaseGroup)
             .MaximumLength(50).WithMessage("采购组代码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.PurchaseGroup));
         RuleFor(x => x.OrderStatus)

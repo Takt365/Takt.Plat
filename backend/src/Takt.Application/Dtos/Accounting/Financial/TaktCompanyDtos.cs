@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktCompanyDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Company 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCompany 生成，请按需审阅）
 // 
@@ -49,22 +49,22 @@ public class TaktCompanyDto : TaktTenantDtoBase
     /// <summary>
     /// 公司类型
     /// </summary>
-    public TaktCompanyType CompanyType { get; set; }
+    public int CompanyType { get; set; }
 
     /// <summary>
     /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
     /// </summary>
-    public TaktEnterpriseNature EnterpriseNature { get; set; }
+    public int EnterpriseNature { get; set; }
 
     /// <summary>
     /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
     /// </summary>
-    public TaktIndustryAttribute IndustryAttribute { get; set; }
+    public int IndustryAttribute { get; set; }
 
     /// <summary>
     /// 企业规模（统计上大中小微型划分代码 1–4）
     /// </summary>
-    public TaktEnterpriseScale EnterpriseScale { get; set; }
+    public int EnterpriseScale { get; set; }
 
     /// <summary>
     /// 经营范围
@@ -189,7 +189,7 @@ public class TaktCompanyDto : TaktTenantDtoBase
     /// <summary>
     /// 存续状态（市场主体登记状态）
     /// </summary>
-    public TaktCompanyExistenceStatus CompanyExistence { get; set; }
+    public int CompanyExistence { get; set; }
 
     /// <summary>
     /// 关联工厂编码（如 0001、C100）
@@ -209,7 +209,7 @@ public class TaktCompanyDto : TaktTenantDtoBase
     /// <summary>
     /// 公司状态
     /// </summary>
-    public TaktCommonStatus CompanyStatus { get; set; }
+    public int CompanyStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -258,22 +258,22 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     /// <summary>
     /// 公司类型
     /// </summary>
-    public TaktCompanyType? CompanyType { get; set; }
+    public int? CompanyType { get; set; }
 
     /// <summary>
     /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
     /// </summary>
-    public TaktEnterpriseNature? EnterpriseNature { get; set; }
+    public int? EnterpriseNature { get; set; }
 
     /// <summary>
     /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
     /// </summary>
-    public TaktIndustryAttribute? IndustryAttribute { get; set; }
+    public int? IndustryAttribute { get; set; }
 
     /// <summary>
     /// 企业规模（统计上大中小微型划分代码 1–4）
     /// </summary>
-    public TaktEnterpriseScale? EnterpriseScale { get; set; }
+    public int? EnterpriseScale { get; set; }
 
     /// <summary>
     /// 经营范围
@@ -408,7 +408,7 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     /// <summary>
     /// 存续状态（市场主体登记状态）
     /// </summary>
-    public TaktCompanyExistenceStatus? CompanyExistence { get; set; }
+    public int? CompanyExistence { get; set; }
 
     /// <summary>
     /// 关联工厂编码（如 0001、C100）
@@ -428,7 +428,7 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     /// <summary>
     /// 公司状态
     /// </summary>
-    public TaktCommonStatus? CompanyStatus { get; set; }
+    public int? CompanyStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -485,22 +485,22 @@ public class TaktCompanyCreateDto
     /// <summary>
     /// 公司类型
     /// </summary>
-    public TaktCompanyType CompanyType { get; set; }
+    public int CompanyType { get; set; }
 
     /// <summary>
     /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
     /// </summary>
-    public TaktEnterpriseNature EnterpriseNature { get; set; }
+    public int EnterpriseNature { get; set; }
 
     /// <summary>
     /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
     /// </summary>
-    public TaktIndustryAttribute IndustryAttribute { get; set; }
+    public int IndustryAttribute { get; set; }
 
     /// <summary>
     /// 企业规模（统计上大中小微型划分代码 1–4）
     /// </summary>
-    public TaktEnterpriseScale EnterpriseScale { get; set; }
+    public int EnterpriseScale { get; set; }
 
     /// <summary>
     /// 经营范围
@@ -642,7 +642,7 @@ public class TaktCompanyCreateDto
     /// <summary>
     /// 存续状态（市场主体登记状态）
     /// </summary>
-    public TaktCompanyExistenceStatus CompanyExistence { get; set; }
+    public int CompanyExistence { get; set; }
 
     /// <summary>
     /// 关联工厂编码（如 0001、C100）
@@ -665,7 +665,7 @@ public class TaktCompanyCreateDto
     /// <summary>
     /// 公司状态
     /// </summary>
-    public TaktCommonStatus CompanyStatus { get; set; }
+    public int CompanyStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -735,7 +735,7 @@ public class TaktCompanyStatusDto
     /// 公司状态
     /// </summary>
     [Required(ErrorMessage = "公司状态不能为空")]
-    public TaktCommonStatus CompanyStatus { get; set; }
+    public int CompanyStatus { get; set; }
 }
 
 // ========================================
@@ -789,22 +789,22 @@ public class TaktCompanyTemplateDto
     /// <summary>
     /// 公司类型
     /// </summary>
-    public TaktCompanyType? CompanyType { get; set; }
+    public int? CompanyType { get; set; }
 
     /// <summary>
     /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
     /// </summary>
-    public TaktEnterpriseNature? EnterpriseNature { get; set; }
+    public int? EnterpriseNature { get; set; }
 
     /// <summary>
     /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
     /// </summary>
-    public TaktIndustryAttribute? IndustryAttribute { get; set; }
+    public int? IndustryAttribute { get; set; }
 
     /// <summary>
     /// 企业规模（统计上大中小微型划分代码 1–4）
     /// </summary>
-    public TaktEnterpriseScale? EnterpriseScale { get; set; }
+    public int? EnterpriseScale { get; set; }
 
     /// <summary>
     /// 经营范围
@@ -871,22 +871,22 @@ public class TaktCompanyImportDto
     /// <summary>
     /// 公司类型
     /// </summary>
-    public TaktCompanyType? CompanyType { get; set; }
+    public int? CompanyType { get; set; }
 
     /// <summary>
     /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
     /// </summary>
-    public TaktEnterpriseNature? EnterpriseNature { get; set; }
+    public int? EnterpriseNature { get; set; }
 
     /// <summary>
     /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
     /// </summary>
-    public TaktIndustryAttribute? IndustryAttribute { get; set; }
+    public int? IndustryAttribute { get; set; }
 
     /// <summary>
     /// 企业规模（统计上大中小微型划分代码 1–4）
     /// </summary>
-    public TaktEnterpriseScale? EnterpriseScale { get; set; }
+    public int? EnterpriseScale { get; set; }
 
     /// <summary>
     /// 经营范围
@@ -959,22 +959,22 @@ public class TaktCompanyExportDto
     /// <summary>
     /// 公司类型
     /// </summary>
-    public TaktCompanyType CompanyType { get; set; }
+    public int CompanyType { get; set; }
 
     /// <summary>
     /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
     /// </summary>
-    public TaktEnterpriseNature EnterpriseNature { get; set; }
+    public int EnterpriseNature { get; set; }
 
     /// <summary>
     /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
     /// </summary>
-    public TaktIndustryAttribute IndustryAttribute { get; set; }
+    public int IndustryAttribute { get; set; }
 
     /// <summary>
     /// 企业规模（统计上大中小微型划分代码 1–4）
     /// </summary>
-    public TaktEnterpriseScale EnterpriseScale { get; set; }
+    public int EnterpriseScale { get; set; }
 
     /// <summary>
     /// 经营范围
@@ -1099,7 +1099,7 @@ public class TaktCompanyExportDto
     /// <summary>
     /// 存续状态（市场主体登记状态）
     /// </summary>
-    public TaktCompanyExistenceStatus CompanyExistence { get; set; }
+    public int CompanyExistence { get; set; }
 
     /// <summary>
     /// 关联工厂编码（如 0001、C100）
@@ -1119,7 +1119,7 @@ public class TaktCompanyExportDto
     /// <summary>
     /// 公司状态
     /// </summary>
-    public TaktCommonStatus CompanyStatus { get; set; }
+    public int CompanyStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）

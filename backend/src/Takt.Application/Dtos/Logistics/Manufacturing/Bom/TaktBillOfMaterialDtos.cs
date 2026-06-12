@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterial 生成，请按需审阅）
 // 
@@ -128,7 +128,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public List<TaktBillOfMaterialItemDto>? Items { get; set; }
 
     /// <summary>
-    /// BOM变更记录列表（外键在子表 <see cref="TaktBillOfMaterialChangeLog.BillOfMaterialId"/>）
+    /// BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）
     /// （子表：TaktBillOfMaterialChangeLog）
     /// </summary>
     public List<TaktBillOfMaterialChangeLogDto>? ChangeLogs { get; set; }
@@ -396,7 +396,7 @@ public class TaktBillOfMaterialCreateDto
     public List<TaktBillOfMaterialItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// BOM变更记录列表（外键在子表 <see cref="TaktBillOfMaterialChangeLog.BillOfMaterialId"/>）（子表，级联保存）
+    /// BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
     /// </summary>
     public List<TaktBillOfMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
 

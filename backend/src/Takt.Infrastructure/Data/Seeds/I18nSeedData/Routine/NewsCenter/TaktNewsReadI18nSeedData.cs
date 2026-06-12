@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsReadI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsRead 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter;
 
 /// <summary>
-/// TaktNewsRead 实体国际化翻译种子（键前缀 entity.newsRead.*）
+/// TaktNewsRead 实体国际化翻译种子（键前缀 entity.newsread.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktNewsReadI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktNewsReadI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 newsRead 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 newsread 实体翻译...", tenantCode);
 
         foreach (var item in GetNewsReadTranslations())
         {
@@ -76,65 +75,65 @@ public class TaktNewsReadI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktNewsRead 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.newsRead._self / entity.newsRead.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.newsread._self / entity.newsread.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetNewsReadTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.newsRead._self
-            new TranslationSeedItem("entity.newsRead._self", "en-US", "News Read Information", "实体名称"),
-            // entity.newsRead._self
-            new TranslationSeedItem("entity.newsRead._self", "ja-JP", "新闻中心阅读记录信息", "实体名称"),
-            // entity.newsRead._self
-            new TranslationSeedItem("entity.newsRead._self", "zh-CN", "新闻中心阅读记录信息", "实体名称"),
-            // entity.newsRead._self
-            new TranslationSeedItem("entity.newsRead._self", "zh-HK", "新闻中心阅读记录信息", "实体名称"),
+            // entity.newsread._self
+            new TranslationSeedItem("entity.newsread._self", "en-US", "News Read Information", "实体名称"),
+            // entity.newsread._self
+            new TranslationSeedItem("entity.newsread._self", "ja-JP", "新闻中心阅读记录信息", "实体名称"),
+            // entity.newsread._self
+            new TranslationSeedItem("entity.newsread._self", "zh-CN", "新闻中心阅读记录信息", "实体名称"),
+            // entity.newsread._self
+            new TranslationSeedItem("entity.newsread._self", "zh-HK", "新闻中心阅读记录信息", "实体名称"),
 
-            // entity.newsRead.newsid
-            new TranslationSeedItem("entity.newsRead.newsid", "en-US", "新闻ID", "新闻 ID"),
-            // entity.newsRead.newsid
-            new TranslationSeedItem("entity.newsRead.newsid", "ja-JP", "新闻ID", "新闻 ID"),
-            // entity.newsRead.newsid
-            new TranslationSeedItem("entity.newsRead.newsid", "zh-CN", "新闻ID", "新闻 ID"),
-            // entity.newsRead.newsid
-            new TranslationSeedItem("entity.newsRead.newsid", "zh-HK", "新闻ID", "新闻 ID"),
+            // entity.newsread.newsid
+            new TranslationSeedItem("entity.newsread.newsid", "en-US", "新闻ID", "新闻 ID"),
+            // entity.newsread.newsid
+            new TranslationSeedItem("entity.newsread.newsid", "ja-JP", "新闻ID", "新闻 ID"),
+            // entity.newsread.newsid
+            new TranslationSeedItem("entity.newsread.newsid", "zh-CN", "新闻ID", "新闻 ID"),
+            // entity.newsread.newsid
+            new TranslationSeedItem("entity.newsread.newsid", "zh-HK", "新闻ID", "新闻 ID"),
 
-            // entity.newsRead.userid
-            new TranslationSeedItem("entity.newsRead.userid", "en-US", "用户ID", "用户 ID"),
-            // entity.newsRead.userid
-            new TranslationSeedItem("entity.newsRead.userid", "ja-JP", "用户ID", "用户 ID"),
-            // entity.newsRead.userid
-            new TranslationSeedItem("entity.newsRead.userid", "zh-CN", "用户ID", "用户 ID"),
-            // entity.newsRead.userid
-            new TranslationSeedItem("entity.newsRead.userid", "zh-HK", "用户ID", "用户 ID"),
+            // entity.newsread.userid
+            new TranslationSeedItem("entity.newsread.userid", "en-US", "用户ID", "用户 ID"),
+            // entity.newsread.userid
+            new TranslationSeedItem("entity.newsread.userid", "ja-JP", "用户ID", "用户 ID"),
+            // entity.newsread.userid
+            new TranslationSeedItem("entity.newsread.userid", "zh-CN", "用户ID", "用户 ID"),
+            // entity.newsread.userid
+            new TranslationSeedItem("entity.newsread.userid", "zh-HK", "用户ID", "用户 ID"),
 
-            // entity.newsRead.username
-            new TranslationSeedItem("entity.newsRead.username", "en-US", "用户姓名", "用户姓名"),
-            // entity.newsRead.username
-            new TranslationSeedItem("entity.newsRead.username", "ja-JP", "用户姓名", "用户姓名"),
-            // entity.newsRead.username
-            new TranslationSeedItem("entity.newsRead.username", "zh-CN", "用户姓名", "用户姓名"),
-            // entity.newsRead.username
-            new TranslationSeedItem("entity.newsRead.username", "zh-HK", "用户姓名", "用户姓名"),
+            // entity.newsread.username
+            new TranslationSeedItem("entity.newsread.username", "en-US", "用户姓名", "用户姓名"),
+            // entity.newsread.username
+            new TranslationSeedItem("entity.newsread.username", "ja-JP", "用户姓名", "用户姓名"),
+            // entity.newsread.username
+            new TranslationSeedItem("entity.newsread.username", "zh-CN", "用户姓名", "用户姓名"),
+            // entity.newsread.username
+            new TranslationSeedItem("entity.newsread.username", "zh-HK", "用户姓名", "用户姓名"),
 
-            // entity.newsRead.readtime
-            new TranslationSeedItem("entity.newsRead.readtime", "en-US", "阅读时间", "阅读时间"),
-            // entity.newsRead.readtime
-            new TranslationSeedItem("entity.newsRead.readtime", "ja-JP", "阅读时间", "阅读时间"),
-            // entity.newsRead.readtime
-            new TranslationSeedItem("entity.newsRead.readtime", "zh-CN", "阅读时间", "阅读时间"),
-            // entity.newsRead.readtime
-            new TranslationSeedItem("entity.newsRead.readtime", "zh-HK", "阅读时间", "阅读时间"),
+            // entity.newsread.readtime
+            new TranslationSeedItem("entity.newsread.readtime", "en-US", "阅读时间", "阅读时间"),
+            // entity.newsread.readtime
+            new TranslationSeedItem("entity.newsread.readtime", "ja-JP", "阅读时间", "阅读时间"),
+            // entity.newsread.readtime
+            new TranslationSeedItem("entity.newsread.readtime", "zh-CN", "阅读时间", "阅读时间"),
+            // entity.newsread.readtime
+            new TranslationSeedItem("entity.newsread.readtime", "zh-HK", "阅读时间", "阅读时间"),
 
-            // entity.newsRead.news
-            new TranslationSeedItem("entity.newsRead.news", "en-US", "新闻", "新闻（主表）"),
-            // entity.newsRead.news
-            new TranslationSeedItem("entity.newsRead.news", "ja-JP", "新闻", "新闻（主表）"),
-            // entity.newsRead.news
-            new TranslationSeedItem("entity.newsRead.news", "zh-CN", "新闻", "新闻（主表）"),
-            // entity.newsRead.news
-            new TranslationSeedItem("entity.newsRead.news", "zh-HK", "新闻", "新闻（主表）"),
+            // entity.newsread.news
+            new TranslationSeedItem("entity.newsread.news", "en-US", "新闻", "新闻（主表）"),
+            // entity.newsread.news
+            new TranslationSeedItem("entity.newsread.news", "ja-JP", "新闻", "新闻（主表）"),
+            // entity.newsread.news
+            new TranslationSeedItem("entity.newsread.news", "zh-CN", "新闻", "新闻（主表）"),
+            // entity.newsread.news
+            new TranslationSeedItem("entity.newsread.news", "zh-HK", "新闻", "新闻（主表）"),
         };
     }
 
@@ -152,8 +151,8 @@ public class TaktNewsReadI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictDataI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictData 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation;
 
 /// <summary>
-/// TaktDictData 实体国际化翻译种子（键前缀 entity.dictData.*）
+/// TaktDictData 实体国际化翻译种子（键前缀 entity.dictdata.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 dictData 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 dictdata 实体翻译...", tenantCode);
 
         foreach (var item in GetDictDataTranslations())
         {
@@ -76,128 +75,128 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktDictData 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.dictData._self / entity.dictData.{{field}}；ResourceGroup=TaktModule.Foundation；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.dictdata._self / entity.dictdata.{{field}}；ResourceGroup=8；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetDictDataTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.dictData._self
-            new TranslationSeedItem("entity.dictData._self", "en-US", "Dict Data Information", "实体名称"),
-            // entity.dictData._self
-            new TranslationSeedItem("entity.dictData._self", "ja-JP", "字典数据信息", "实体名称"),
-            // entity.dictData._self
-            new TranslationSeedItem("entity.dictData._self", "zh-CN", "字典数据信息", "实体名称"),
-            // entity.dictData._self
-            new TranslationSeedItem("entity.dictData._self", "zh-HK", "字典数据信息", "实体名称"),
+            // entity.dictdata._self
+            new TranslationSeedItem("entity.dictdata._self", "en-US", "Dict Data Information", "实体名称"),
+            // entity.dictdata._self
+            new TranslationSeedItem("entity.dictdata._self", "ja-JP", "字典数据信息", "实体名称"),
+            // entity.dictdata._self
+            new TranslationSeedItem("entity.dictdata._self", "zh-CN", "字典数据信息", "实体名称"),
+            // entity.dictdata._self
+            new TranslationSeedItem("entity.dictdata._self", "zh-HK", "字典数据信息", "实体名称"),
 
-            // entity.dictData.dicttypeid
-            new TranslationSeedItem("entity.dictData.dicttypeid", "en-US", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
-            // entity.dictData.dicttypeid
-            new TranslationSeedItem("entity.dictData.dicttypeid", "ja-JP", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
-            // entity.dictData.dicttypeid
-            new TranslationSeedItem("entity.dictData.dicttypeid", "zh-CN", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
-            // entity.dictData.dicttypeid
-            new TranslationSeedItem("entity.dictData.dicttypeid", "zh-HK", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
+            // entity.dictdata.dicttypeid
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "en-US", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
+            // entity.dictdata.dicttypeid
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "ja-JP", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
+            // entity.dictdata.dicttypeid
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "zh-CN", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
+            // entity.dictdata.dicttypeid
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "zh-HK", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）"),
 
-            // entity.dictData.dicttypecode
-            new TranslationSeedItem("entity.dictData.dicttypecode", "en-US", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
-            // entity.dictData.dicttypecode
-            new TranslationSeedItem("entity.dictData.dicttypecode", "ja-JP", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
-            // entity.dictData.dicttypecode
-            new TranslationSeedItem("entity.dictData.dicttypecode", "zh-CN", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
-            // entity.dictData.dicttypecode
-            new TranslationSeedItem("entity.dictData.dicttypecode", "zh-HK", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            // entity.dictdata.dicttypecode
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "en-US", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            // entity.dictdata.dicttypecode
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "ja-JP", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            // entity.dictdata.dicttypecode
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-CN", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            // entity.dictdata.dicttypecode
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-HK", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
 
-            // entity.dictData.dictlabel
-            new TranslationSeedItem("entity.dictData.dictlabel", "en-US", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
-            // entity.dictData.dictlabel
-            new TranslationSeedItem("entity.dictData.dictlabel", "ja-JP", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
-            // entity.dictData.dictlabel
-            new TranslationSeedItem("entity.dictData.dictlabel", "zh-CN", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
-            // entity.dictData.dictlabel
-            new TranslationSeedItem("entity.dictData.dictlabel", "zh-HK", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
+            // entity.dictdata.dictlabel
+            new TranslationSeedItem("entity.dictdata.dictlabel", "en-US", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
+            // entity.dictdata.dictlabel
+            new TranslationSeedItem("entity.dictdata.dictlabel", "ja-JP", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
+            // entity.dictdata.dictlabel
+            new TranslationSeedItem("entity.dictdata.dictlabel", "zh-CN", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
+            // entity.dictdata.dictlabel
+            new TranslationSeedItem("entity.dictdata.dictlabel", "zh-HK", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）"),
 
-            // entity.dictData.dictvalue
-            new TranslationSeedItem("entity.dictData.dictvalue", "en-US", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
-            // entity.dictData.dictvalue
-            new TranslationSeedItem("entity.dictData.dictvalue", "ja-JP", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
-            // entity.dictData.dictvalue
-            new TranslationSeedItem("entity.dictData.dictvalue", "zh-CN", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
-            // entity.dictData.dictvalue
-            new TranslationSeedItem("entity.dictData.dictvalue", "zh-HK", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
+            // entity.dictdata.dictvalue
+            new TranslationSeedItem("entity.dictdata.dictvalue", "en-US", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
+            // entity.dictdata.dictvalue
+            new TranslationSeedItem("entity.dictdata.dictvalue", "ja-JP", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
+            // entity.dictdata.dictvalue
+            new TranslationSeedItem("entity.dictdata.dictvalue", "zh-CN", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
+            // entity.dictdata.dictvalue
+            new TranslationSeedItem("entity.dictdata.dictvalue", "zh-HK", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
 
-            // entity.dictData.i18nkey
-            new TranslationSeedItem("entity.dictData.i18nkey", "en-US", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
-            // entity.dictData.i18nkey
-            new TranslationSeedItem("entity.dictData.i18nkey", "ja-JP", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
-            // entity.dictData.i18nkey
-            new TranslationSeedItem("entity.dictData.i18nkey", "zh-CN", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
-            // entity.dictData.i18nkey
-            new TranslationSeedItem("entity.dictData.i18nkey", "zh-HK", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
+            // entity.dictdata.i18nkey
+            new TranslationSeedItem("entity.dictdata.i18nkey", "en-US", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
+            // entity.dictdata.i18nkey
+            new TranslationSeedItem("entity.dictdata.i18nkey", "ja-JP", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
+            // entity.dictdata.i18nkey
+            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-CN", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
+            // entity.dictdata.i18nkey
+            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-HK", "国际化翻译键", "国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）"),
 
-            // entity.dictData.extlabel
-            new TranslationSeedItem("entity.dictData.extlabel", "en-US", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
-            // entity.dictData.extlabel
-            new TranslationSeedItem("entity.dictData.extlabel", "ja-JP", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
-            // entity.dictData.extlabel
-            new TranslationSeedItem("entity.dictData.extlabel", "zh-CN", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
-            // entity.dictData.extlabel
-            new TranslationSeedItem("entity.dictData.extlabel", "zh-HK", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            // entity.dictdata.extlabel
+            new TranslationSeedItem("entity.dictdata.extlabel", "en-US", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            // entity.dictdata.extlabel
+            new TranslationSeedItem("entity.dictdata.extlabel", "ja-JP", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            // entity.dictdata.extlabel
+            new TranslationSeedItem("entity.dictdata.extlabel", "zh-CN", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            // entity.dictdata.extlabel
+            new TranslationSeedItem("entity.dictdata.extlabel", "zh-HK", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
 
-            // entity.dictData.extvalue
-            new TranslationSeedItem("entity.dictData.extvalue", "en-US", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
-            // entity.dictData.extvalue
-            new TranslationSeedItem("entity.dictData.extvalue", "ja-JP", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
-            // entity.dictData.extvalue
-            new TranslationSeedItem("entity.dictData.extvalue", "zh-CN", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
-            // entity.dictData.extvalue
-            new TranslationSeedItem("entity.dictData.extvalue", "zh-HK", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            // entity.dictdata.extvalue
+            new TranslationSeedItem("entity.dictdata.extvalue", "en-US", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            // entity.dictdata.extvalue
+            new TranslationSeedItem("entity.dictdata.extvalue", "ja-JP", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            // entity.dictdata.extvalue
+            new TranslationSeedItem("entity.dictdata.extvalue", "zh-CN", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            // entity.dictdata.extvalue
+            new TranslationSeedItem("entity.dictdata.extvalue", "zh-HK", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
 
-            // entity.dictData.listclass
-            new TranslationSeedItem("entity.dictData.listclass", "en-US", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
-            // entity.dictData.listclass
-            new TranslationSeedItem("entity.dictData.listclass", "ja-JP", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
-            // entity.dictData.listclass
-            new TranslationSeedItem("entity.dictData.listclass", "zh-CN", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
-            // entity.dictData.listclass
-            new TranslationSeedItem("entity.dictData.listclass", "zh-HK", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
+            // entity.dictdata.listclass
+            new TranslationSeedItem("entity.dictdata.listclass", "en-US", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
+            // entity.dictdata.listclass
+            new TranslationSeedItem("entity.dictdata.listclass", "ja-JP", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
+            // entity.dictdata.listclass
+            new TranslationSeedItem("entity.dictdata.listclass", "zh-CN", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
+            // entity.dictdata.listclass
+            new TranslationSeedItem("entity.dictdata.listclass", "zh-HK", "列表样式类", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),
 
-            // entity.dictData.cssclass
-            new TranslationSeedItem("entity.dictData.cssclass", "en-US", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
-            // entity.dictData.cssclass
-            new TranslationSeedItem("entity.dictData.cssclass", "ja-JP", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
-            // entity.dictData.cssclass
-            new TranslationSeedItem("entity.dictData.cssclass", "zh-CN", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
-            // entity.dictData.cssclass
-            new TranslationSeedItem("entity.dictData.cssclass", "zh-HK", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
+            // entity.dictdata.cssclass
+            new TranslationSeedItem("entity.dictdata.cssclass", "en-US", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
+            // entity.dictdata.cssclass
+            new TranslationSeedItem("entity.dictdata.cssclass", "ja-JP", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
+            // entity.dictdata.cssclass
+            new TranslationSeedItem("entity.dictdata.cssclass", "zh-CN", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
+            // entity.dictdata.cssclass
+            new TranslationSeedItem("entity.dictdata.cssclass", "zh-HK", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
 
-            // entity.dictData.isdefault
-            new TranslationSeedItem("entity.dictData.isdefault", "en-US", "是否默认项", "是否默认项（1=是，0=否）"),
-            // entity.dictData.isdefault
-            new TranslationSeedItem("entity.dictData.isdefault", "ja-JP", "是否默认项", "是否默认项（1=是，0=否）"),
-            // entity.dictData.isdefault
-            new TranslationSeedItem("entity.dictData.isdefault", "zh-CN", "是否默认项", "是否默认项（1=是，0=否）"),
-            // entity.dictData.isdefault
-            new TranslationSeedItem("entity.dictData.isdefault", "zh-HK", "是否默认项", "是否默认项（1=是，0=否）"),
+            // entity.dictdata.isdefault
+            new TranslationSeedItem("entity.dictdata.isdefault", "en-US", "是否默认项", "是否默认项（1=是，0=否）"),
+            // entity.dictdata.isdefault
+            new TranslationSeedItem("entity.dictdata.isdefault", "ja-JP", "是否默认项", "是否默认项（1=是，0=否）"),
+            // entity.dictdata.isdefault
+            new TranslationSeedItem("entity.dictdata.isdefault", "zh-CN", "是否默认项", "是否默认项（1=是，0=否）"),
+            // entity.dictdata.isdefault
+            new TranslationSeedItem("entity.dictdata.isdefault", "zh-HK", "是否默认项", "是否默认项（1=是，0=否）"),
 
-            // entity.dictData.sortorder
-            new TranslationSeedItem("entity.dictData.sortorder", "en-US", "排序号", "排序号"),
-            // entity.dictData.sortorder
-            new TranslationSeedItem("entity.dictData.sortorder", "ja-JP", "排序号", "排序号"),
-            // entity.dictData.sortorder
-            new TranslationSeedItem("entity.dictData.sortorder", "zh-CN", "排序号", "排序号"),
-            // entity.dictData.sortorder
-            new TranslationSeedItem("entity.dictData.sortorder", "zh-HK", "排序号", "排序号"),
+            // entity.dictdata.sortorder
+            new TranslationSeedItem("entity.dictdata.sortorder", "en-US", "排序号", "排序号"),
+            // entity.dictdata.sortorder
+            new TranslationSeedItem("entity.dictdata.sortorder", "ja-JP", "排序号", "排序号"),
+            // entity.dictdata.sortorder
+            new TranslationSeedItem("entity.dictdata.sortorder", "zh-CN", "排序号", "排序号"),
+            // entity.dictdata.sortorder
+            new TranslationSeedItem("entity.dictdata.sortorder", "zh-HK", "排序号", "排序号"),
 
-            // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "en-US", "字典类型", "字典类型（多对一关联）"),
-            // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "ja-JP", "字典类型", "字典类型（多对一关联）"),
-            // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "zh-CN", "字典类型", "字典类型（多对一关联）"),
-            // entity.dictData.dicttype
-            new TranslationSeedItem("entity.dictData.dicttype", "zh-HK", "字典类型", "字典类型（多对一关联）"),
+            // entity.dictdata.dicttype
+            new TranslationSeedItem("entity.dictdata.dicttype", "en-US", "字典类型", "字典类型（多对一关联）"),
+            // entity.dictdata.dicttype
+            new TranslationSeedItem("entity.dictdata.dicttype", "ja-JP", "字典类型", "字典类型（多对一关联）"),
+            // entity.dictdata.dicttype
+            new TranslationSeedItem("entity.dictdata.dicttype", "zh-CN", "字典类型", "字典类型（多对一关联）"),
+            // entity.dictdata.dicttype
+            new TranslationSeedItem("entity.dictdata.dicttype", "zh-HK", "字典类型", "字典类型（多对一关联）"),
         };
     }
 
@@ -215,8 +214,8 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

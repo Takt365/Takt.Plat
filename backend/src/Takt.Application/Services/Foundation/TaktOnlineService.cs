@@ -12,6 +12,7 @@
 
 using System.Linq.Expressions;
 using Mapster;
+using SqlSugar;
 using Takt.Application.Dtos.Foundation;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
@@ -30,24 +31,20 @@ namespace Takt.Application.Services.Foundation;
 public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
 {
     private readonly ITaktCompanyRepository<TaktOnline> _onlineRepository;
-    private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="onlineRepository">在线用户仓储</param>
-    /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktOnlineService(
         ITaktCompanyRepository<TaktOnline> onlineRepository,
-        ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _onlineRepository = onlineRepository;
-        _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
@@ -102,26 +99,6 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
     }
 
     /// <summary>
-    /// 创建在线用户
-    /// </summary>
-    /// <param name="dto">创建DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktOnlineDto> CreateOnlineAsync(TaktOnlineCreateDto dto)
-    {
-        var entity = dto.Adapt<TaktOnline>();
-        var isUnique_ix_online_connection_id_unique = await _uniqueValidator.IsUniqueAsync(
-            _onlineRepository,
-            x => x.ConnectionId == entity.ConnectionId);
-        if (!isUnique_ix_online_connection_id_unique)
-        {
-            throw new TaktBusinessException("在线用户的ConnectionId已存在");
-        }
-        entity.ConnectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(entity.ConnectIp, entity.ConnectLocation);
-        entity = await _onlineRepository.CreateAsync(entity);
-        return await GetOnlineByIdAsync(entity.Id) ?? entity.Adapt<TaktOnlineDto>();
-    }
-
-    /// <summary>
     /// 注册 SignalR 在线会话（同租户+公司+用户复用主记录；其它仍 Online 的会话标为离线）
     /// </summary>
     /// <param name="dto">连接信息</param>
@@ -151,7 +128,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
         if (userRecords.Count > 0)
         {
             entity = userRecords
-                .OrderByDescending(online => online.OnlineStatus == TaktOnlineStatus.Online)
+                .OrderByDescending(online => online.OnlineStatus == 0)
                 .ThenByDescending(online => online.ConnectTime)
                 .First();
 
@@ -159,7 +136,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
 
             entity.ConnectionId = dto.ConnectionId.Trim();
             entity.UserName = dto.UserName.Trim();
-            entity.OnlineStatus = TaktOnlineStatus.Online;
+            entity.OnlineStatus = 0;
             entity.ConnectIp = dto.ConnectIp;
             entity.ConnectLocation = connectLocation;
             entity.UserAgent = dto.UserAgent;
@@ -180,25 +157,6 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
         }
 
         return await GetOnlineByIdAsync(entity.Id) ?? entity.Adapt<TaktOnlineDto>();
-    }
-
-    /// <summary>
-    /// 更新在线用户
-    /// </summary>
-    /// <param name="id">在线用户ID</param>
-    /// <param name="dto">更新DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktOnlineDto> UpdateOnlineAsync(long id, TaktOnlineUpdateDto dto)
-    {
-        var entity = await _onlineRepository.GetByIdAsync(id);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("在线用户不存在");
-        }
-        dto.Adapt(entity);
-        entity.ConnectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(entity.ConnectIp, entity.ConnectLocation);
-        await _onlineRepository.UpdateAsync(entity);
-        return await GetOnlineByIdAsync(id) ?? throw new TaktBusinessException("在线用户不存在");
     }
 
     /// <summary>
@@ -318,13 +276,13 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
             online.TenantCode == CurrentTenantCode
             && online.CompanyCode == CurrentCompanyCode
             && online.UserName == normalizedUserName
-            && online.OnlineStatus == TaktOnlineStatus.Online);
+            && online.OnlineStatus == 0);
 
         var durationRecords = await _onlineRepository.GetListAsync(online =>
             online.TenantCode == CurrentTenantCode
             && online.CompanyCode == CurrentCompanyCode
             && online.UserName == normalizedUserName
-            && (online.OnlineStatus == TaktOnlineStatus.Online
+            && (online.OnlineStatus == 0
                 || (online.DisconnectTime.HasValue && online.DisconnectTime.Value >= monthStart)));
 
         var currentDurationSeconds = onlineUsers.Sum(online => (long)(now - online.ConnectTime).TotalSeconds);
@@ -365,7 +323,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
         var disconnectTime = DateTime.Now;
         foreach (var stale in userRecords.Where(online => online.Id != primaryRecordId))
         {
-            if (stale.OnlineStatus != TaktOnlineStatus.Online)
+            if (stale.OnlineStatus != 0)
             {
                 continue;
             }
@@ -382,14 +340,14 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
     /// <param name="disconnectTime">断开时间</param>
     private static void ApplyOfflineSessionState(TaktOnline online, DateTime disconnectTime)
     {
-        if (online.OnlineStatus != TaktOnlineStatus.Online)
+        if (online.OnlineStatus != 0)
         {
             return;
         }
 
         online.DisconnectTime = disconnectTime;
         online.ConnectionDuration = (int)(disconnectTime - online.ConnectTime).TotalSeconds;
-        online.OnlineStatus = TaktOnlineStatus.Offline;
+        online.OnlineStatus = 1;
     }
 
     /// <summary>
@@ -404,7 +362,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
         long totalSeconds = 0;
         foreach (var online in records)
         {
-            var sessionEnd = online.OnlineStatus == TaktOnlineStatus.Online
+            var sessionEnd = online.OnlineStatus == 0
                 ? now
                 : online.DisconnectTime ?? now;
             if (sessionEnd <= rangeStart)
@@ -426,36 +384,141 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
     /// <summary>
     /// 构建在线用户查询表达式
     /// </summary>
-    private Expression<Func<TaktOnline, bool>> QueryExpression(TaktOnlineQueryDto queryDto)
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>查询表达式</returns>
+    private static Expression<Func<TaktOnline, bool>> QueryExpression(TaktOnlineQueryDto? queryDto)
     {
-        return online => online.TenantCode == CurrentTenantCode
-                    && online.CompanyCode == CurrentCompanyCode
-                    && (string.IsNullOrEmpty(queryDto.KeyWords)
-                        || (online.ConnectionId != null && online.ConnectionId.Contains(queryDto.KeyWords))
-                        || (online.UserName != null && online.UserName.Contains(queryDto.KeyWords))
-                        || (online.ConnectIp != null && online.ConnectIp.Contains(queryDto.KeyWords))
-                        || (online.ConnectLocation != null && online.ConnectLocation.Contains(queryDto.KeyWords))
-                        || (online.UserAgent != null && online.UserAgent.Contains(queryDto.KeyWords)))
-                    && (string.IsNullOrEmpty(queryDto.ConnectionId) || (online.ConnectionId != null && online.ConnectionId.Contains(queryDto.ConnectionId)))
-                    && (string.IsNullOrEmpty(queryDto.UserName) || (online.UserName != null && online.UserName.Contains(queryDto.UserName)))
-                    && (!queryDto.UserId.HasValue || online.UserId == queryDto.UserId.Value)
-                    && (!queryDto.OnlineStatus.HasValue || online.OnlineStatus == queryDto.OnlineStatus.Value)
-                    && (string.IsNullOrEmpty(queryDto.ConnectIp) || (online.ConnectIp != null && online.ConnectIp.Contains(queryDto.ConnectIp)))
-                    && (string.IsNullOrEmpty(queryDto.ConnectLocation) || (online.ConnectLocation != null && online.ConnectLocation.Contains(queryDto.ConnectLocation)))
-                    && (string.IsNullOrEmpty(queryDto.UserAgent) || (online.UserAgent != null && online.UserAgent.Contains(queryDto.UserAgent)))
-                    && (!queryDto.DeviceType.HasValue || online.DeviceType == queryDto.DeviceType)
-                    && (!queryDto.BrowserType.HasValue || online.BrowserType == queryDto.BrowserType)
-                    && (!queryDto.OperatingSystem.HasValue || online.OperatingSystem == queryDto.OperatingSystem)
-                    && (!queryDto.ConnectionDuration.HasValue || online.ConnectionDuration == queryDto.ConnectionDuration.Value)
-                    && (string.IsNullOrEmpty(queryDto.ExtFieldJson) || (online.ExtFieldJson != null && online.ExtFieldJson.Contains(queryDto.ExtFieldJson)))
-                    && (string.IsNullOrEmpty(queryDto.Remark) || (online.Remark != null && online.Remark.Contains(queryDto.Remark)))
-                    && (!queryDto.ConnectTimeStart.HasValue || online.ConnectTime >= queryDto.ConnectTimeStart.Value)
-                    && (!queryDto.ConnectTimeEnd.HasValue || online.ConnectTime <= queryDto.ConnectTimeEnd.Value)
-                    && (!queryDto.LastActiveTimeStart.HasValue || online.LastActiveTime >= queryDto.LastActiveTimeStart.Value)
-                    && (!queryDto.LastActiveTimeEnd.HasValue || online.LastActiveTime <= queryDto.LastActiveTimeEnd.Value)
-                    && (!queryDto.DisconnectTimeStart.HasValue || online.DisconnectTime >= queryDto.DisconnectTimeStart.Value)
-                    && (!queryDto.DisconnectTimeEnd.HasValue || online.DisconnectTime <= queryDto.DisconnectTimeEnd.Value)
-                    && (!queryDto.CreatedAtStart.HasValue || online.CreatedAt >= queryDto.CreatedAtStart.Value)
-                    && (!queryDto.CreatedAtEnd.HasValue || online.CreatedAt <= queryDto.CreatedAtEnd.Value);
+        var exp = Expressionable.Create<TaktOnline>();
+
+        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        {
+            var keywords = queryDto.KeyWords;
+            exp = exp.And(x =>
+                (x.ConnectionId != null && x.ConnectionId.Contains(keywords))
+                || (x.UserName != null && x.UserName.Contains(keywords))
+                || SqlFunc.ToString(x.UserId).Contains(keywords)
+                || SqlFunc.ToString(x.OnlineStatus).Contains(keywords)
+                || (x.ConnectIp != null && x.ConnectIp.Contains(keywords))
+                || (x.ConnectLocation != null && x.ConnectLocation.Contains(keywords))
+                || (x.UserAgent != null && x.UserAgent.Contains(keywords))
+                || SqlFunc.ToString(x.DeviceType).Contains(keywords)
+                || SqlFunc.ToString(x.BrowserType).Contains(keywords)
+                || SqlFunc.ToString(x.OperatingSystem).Contains(keywords)
+                || SqlFunc.ToString(x.ConnectionDuration).Contains(keywords)
+                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
+                || SqlFunc.ToString(x.ConnectTime).Contains(keywords)
+                || SqlFunc.ToString(x.LastActiveTime).Contains(keywords)
+                || SqlFunc.ToString(x.DisconnectTime).Contains(keywords)
+                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
+            );
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ConnectionId))
+        {
+            exp = exp.And(x => x.ConnectionId != null && x.ConnectionId.Contains(queryDto.ConnectionId));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.UserName))
+        {
+            exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
+        }
+
+        if (queryDto?.UserId.HasValue == true)
+        {
+            exp = exp.And(x => x.UserId == queryDto.UserId);
+        }
+
+        if (queryDto?.OnlineStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.OnlineStatus == queryDto.OnlineStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ConnectIp))
+        {
+            exp = exp.And(x => x.ConnectIp != null && x.ConnectIp.Contains(queryDto.ConnectIp));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ConnectLocation))
+        {
+            exp = exp.And(x => x.ConnectLocation != null && x.ConnectLocation.Contains(queryDto.ConnectLocation));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.UserAgent))
+        {
+            exp = exp.And(x => x.UserAgent != null && x.UserAgent.Contains(queryDto.UserAgent));
+        }
+
+        if (queryDto?.DeviceType.HasValue == true)
+        {
+            exp = exp.And(x => x.DeviceType == queryDto.DeviceType);
+        }
+
+        if (queryDto?.BrowserType.HasValue == true)
+        {
+            exp = exp.And(x => x.BrowserType == queryDto.BrowserType);
+        }
+
+        if (queryDto?.OperatingSystem.HasValue == true)
+        {
+            exp = exp.And(x => x.OperatingSystem == queryDto.OperatingSystem);
+        }
+
+        if (queryDto?.ConnectionDuration.HasValue == true)
+        {
+            exp = exp.And(x => x.ConnectionDuration == queryDto.ConnectionDuration);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        {
+            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        {
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+        }
+
+        if (queryDto?.ConnectTimeStart.HasValue == true)
+        {
+            exp = exp.And(x => x.ConnectTime >= queryDto.ConnectTimeStart);
+        }
+
+        if (queryDto?.ConnectTimeEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.ConnectTime <= queryDto.ConnectTimeEnd);
+        }
+
+        if (queryDto?.LastActiveTimeStart.HasValue == true)
+        {
+            exp = exp.And(x => x.LastActiveTime >= queryDto.LastActiveTimeStart);
+        }
+
+        if (queryDto?.LastActiveTimeEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.LastActiveTime <= queryDto.LastActiveTimeEnd);
+        }
+
+        if (queryDto?.DisconnectTimeStart.HasValue == true)
+        {
+            exp = exp.And(x => x.DisconnectTime >= queryDto.DisconnectTimeStart);
+        }
+
+        if (queryDto?.DisconnectTimeEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.DisconnectTime <= queryDto.DisconnectTimeEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+        }
+
+        return exp.ToExpression();
     }
 }

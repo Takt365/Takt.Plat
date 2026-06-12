@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktStandardOperationTimeI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardOperationTime 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom;
 
 /// <summary>
-/// TaktStandardOperationTime 实体国际化翻译种子（键前缀 entity.standardOperationTime.*）
+/// TaktStandardOperationTime 实体国际化翻译种子（键前缀 entity.standardoperationtime.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktStandardOperationTimeI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktStandardOperationTimeI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 standardOperationTime 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 standardoperationtime 实体翻译...", tenantCode);
 
         foreach (var item in GetStandardOperationTimeTranslations())
         {
@@ -76,128 +75,128 @@ public class TaktStandardOperationTimeI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktStandardOperationTime 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.standardOperationTime._self / entity.standardOperationTime.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.standardoperationtime._self / entity.standardoperationtime.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetStandardOperationTimeTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.standardOperationTime._self
-            new TranslationSeedItem("entity.standardOperationTime._self", "en-US", "Standard Operation Time Information", "实体名称"),
-            // entity.standardOperationTime._self
-            new TranslationSeedItem("entity.standardOperationTime._self", "ja-JP", "标准工序时间信息", "实体名称"),
-            // entity.standardOperationTime._self
-            new TranslationSeedItem("entity.standardOperationTime._self", "zh-CN", "标准工序时间信息", "实体名称"),
-            // entity.standardOperationTime._self
-            new TranslationSeedItem("entity.standardOperationTime._self", "zh-HK", "标准工序时间信息", "实体名称"),
+            // entity.standardoperationtime._self
+            new TranslationSeedItem("entity.standardoperationtime._self", "en-US", "Standard Operation Time Information", "实体名称"),
+            // entity.standardoperationtime._self
+            new TranslationSeedItem("entity.standardoperationtime._self", "ja-JP", "标准工序时间信息", "实体名称"),
+            // entity.standardoperationtime._self
+            new TranslationSeedItem("entity.standardoperationtime._self", "zh-CN", "标准工序时间信息", "实体名称"),
+            // entity.standardoperationtime._self
+            new TranslationSeedItem("entity.standardoperationtime._self", "zh-HK", "标准工序时间信息", "实体名称"),
 
-            // entity.standardOperationTime.plantcode
-            new TranslationSeedItem("entity.standardOperationTime.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.standardOperationTime.plantcode
-            new TranslationSeedItem("entity.standardOperationTime.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.standardOperationTime.plantcode
-            new TranslationSeedItem("entity.standardOperationTime.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.standardOperationTime.plantcode
-            new TranslationSeedItem("entity.standardOperationTime.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.standardoperationtime.plantcode
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.standardoperationtime.plantcode
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.standardoperationtime.plantcode
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.standardoperationtime.plantcode
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.standardOperationTime.materialcode
-            new TranslationSeedItem("entity.standardOperationTime.materialcode", "en-US", "物料编码", "物料编码"),
-            // entity.standardOperationTime.materialcode
-            new TranslationSeedItem("entity.standardOperationTime.materialcode", "ja-JP", "物料编码", "物料编码"),
-            // entity.standardOperationTime.materialcode
-            new TranslationSeedItem("entity.standardOperationTime.materialcode", "zh-CN", "物料编码", "物料编码"),
-            // entity.standardOperationTime.materialcode
-            new TranslationSeedItem("entity.standardOperationTime.materialcode", "zh-HK", "物料编码", "物料编码"),
+            // entity.standardoperationtime.materialcode
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "en-US", "物料编码", "物料编码"),
+            // entity.standardoperationtime.materialcode
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "ja-JP", "物料编码", "物料编码"),
+            // entity.standardoperationtime.materialcode
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "zh-CN", "物料编码", "物料编码"),
+            // entity.standardoperationtime.materialcode
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "zh-HK", "物料编码", "物料编码"),
 
-            // entity.standardOperationTime.workcenter
-            new TranslationSeedItem("entity.standardOperationTime.workcenter", "en-US", "工作中心", "工作中心"),
-            // entity.standardOperationTime.workcenter
-            new TranslationSeedItem("entity.standardOperationTime.workcenter", "ja-JP", "工作中心", "工作中心"),
-            // entity.standardOperationTime.workcenter
-            new TranslationSeedItem("entity.standardOperationTime.workcenter", "zh-CN", "工作中心", "工作中心"),
-            // entity.standardOperationTime.workcenter
-            new TranslationSeedItem("entity.standardOperationTime.workcenter", "zh-HK", "工作中心", "工作中心"),
+            // entity.standardoperationtime.workcenter
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "en-US", "工作中心", "工作中心"),
+            // entity.standardoperationtime.workcenter
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "ja-JP", "工作中心", "工作中心"),
+            // entity.standardoperationtime.workcenter
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "zh-CN", "工作中心", "工作中心"),
+            // entity.standardoperationtime.workcenter
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "zh-HK", "工作中心", "工作中心"),
 
-            // entity.standardOperationTime.operationdesc
-            new TranslationSeedItem("entity.standardOperationTime.operationdesc", "en-US", "工序描述", "工序描述"),
-            // entity.standardOperationTime.operationdesc
-            new TranslationSeedItem("entity.standardOperationTime.operationdesc", "ja-JP", "工序描述", "工序描述"),
-            // entity.standardOperationTime.operationdesc
-            new TranslationSeedItem("entity.standardOperationTime.operationdesc", "zh-CN", "工序描述", "工序描述"),
-            // entity.standardOperationTime.operationdesc
-            new TranslationSeedItem("entity.standardOperationTime.operationdesc", "zh-HK", "工序描述", "工序描述"),
+            // entity.standardoperationtime.operationdesc
+            new TranslationSeedItem("entity.standardoperationtime.operationdesc", "en-US", "工序描述", "工序描述"),
+            // entity.standardoperationtime.operationdesc
+            new TranslationSeedItem("entity.standardoperationtime.operationdesc", "ja-JP", "工序描述", "工序描述"),
+            // entity.standardoperationtime.operationdesc
+            new TranslationSeedItem("entity.standardoperationtime.operationdesc", "zh-CN", "工序描述", "工序描述"),
+            // entity.standardoperationtime.operationdesc
+            new TranslationSeedItem("entity.standardoperationtime.operationdesc", "zh-HK", "工序描述", "工序描述"),
 
-            // entity.standardOperationTime.standardminutes
-            new TranslationSeedItem("entity.standardOperationTime.standardminutes", "en-US", "标准工时", "标准工时（分钟）"),
-            // entity.standardOperationTime.standardminutes
-            new TranslationSeedItem("entity.standardOperationTime.standardminutes", "ja-JP", "标准工时", "标准工时（分钟）"),
-            // entity.standardOperationTime.standardminutes
-            new TranslationSeedItem("entity.standardOperationTime.standardminutes", "zh-CN", "标准工时", "标准工时（分钟）"),
-            // entity.standardOperationTime.standardminutes
-            new TranslationSeedItem("entity.standardOperationTime.standardminutes", "zh-HK", "标准工时", "标准工时（分钟）"),
+            // entity.standardoperationtime.standardminutes
+            new TranslationSeedItem("entity.standardoperationtime.standardminutes", "en-US", "标准工时", "标准工时（分钟）"),
+            // entity.standardoperationtime.standardminutes
+            new TranslationSeedItem("entity.standardoperationtime.standardminutes", "ja-JP", "标准工时", "标准工时（分钟）"),
+            // entity.standardoperationtime.standardminutes
+            new TranslationSeedItem("entity.standardoperationtime.standardminutes", "zh-CN", "标准工时", "标准工时（分钟）"),
+            // entity.standardoperationtime.standardminutes
+            new TranslationSeedItem("entity.standardoperationtime.standardminutes", "zh-HK", "标准工时", "标准工时（分钟）"),
 
-            // entity.standardOperationTime.timeunit
-            new TranslationSeedItem("entity.standardOperationTime.timeunit", "en-US", "工时单位", "工时单位"),
-            // entity.standardOperationTime.timeunit
-            new TranslationSeedItem("entity.standardOperationTime.timeunit", "ja-JP", "工时单位", "工时单位"),
-            // entity.standardOperationTime.timeunit
-            new TranslationSeedItem("entity.standardOperationTime.timeunit", "zh-CN", "工时单位", "工时单位"),
-            // entity.standardOperationTime.timeunit
-            new TranslationSeedItem("entity.standardOperationTime.timeunit", "zh-HK", "工时单位", "工时单位"),
+            // entity.standardoperationtime.timeunit
+            new TranslationSeedItem("entity.standardoperationtime.timeunit", "en-US", "工时单位", "工时单位"),
+            // entity.standardoperationtime.timeunit
+            new TranslationSeedItem("entity.standardoperationtime.timeunit", "ja-JP", "工时单位", "工时单位"),
+            // entity.standardoperationtime.timeunit
+            new TranslationSeedItem("entity.standardoperationtime.timeunit", "zh-CN", "工时单位", "工时单位"),
+            // entity.standardoperationtime.timeunit
+            new TranslationSeedItem("entity.standardoperationtime.timeunit", "zh-HK", "工时单位", "工时单位"),
 
-            // entity.standardOperationTime.standardshorts
-            new TranslationSeedItem("entity.standardOperationTime.standardshorts", "en-US", "标准点数", "标准点数"),
-            // entity.standardOperationTime.standardshorts
-            new TranslationSeedItem("entity.standardOperationTime.standardshorts", "ja-JP", "标准点数", "标准点数"),
-            // entity.standardOperationTime.standardshorts
-            new TranslationSeedItem("entity.standardOperationTime.standardshorts", "zh-CN", "标准点数", "标准点数"),
-            // entity.standardOperationTime.standardshorts
-            new TranslationSeedItem("entity.standardOperationTime.standardshorts", "zh-HK", "标准点数", "标准点数"),
+            // entity.standardoperationtime.standardshorts
+            new TranslationSeedItem("entity.standardoperationtime.standardshorts", "en-US", "标准点数", "标准点数"),
+            // entity.standardoperationtime.standardshorts
+            new TranslationSeedItem("entity.standardoperationtime.standardshorts", "ja-JP", "标准点数", "标准点数"),
+            // entity.standardoperationtime.standardshorts
+            new TranslationSeedItem("entity.standardoperationtime.standardshorts", "zh-CN", "标准点数", "标准点数"),
+            // entity.standardoperationtime.standardshorts
+            new TranslationSeedItem("entity.standardoperationtime.standardshorts", "zh-HK", "标准点数", "标准点数"),
 
-            // entity.standardOperationTime.pointsunit
-            new TranslationSeedItem("entity.standardOperationTime.pointsunit", "en-US", "点数单位", "点数单位"),
-            // entity.standardOperationTime.pointsunit
-            new TranslationSeedItem("entity.standardOperationTime.pointsunit", "ja-JP", "点数单位", "点数单位"),
-            // entity.standardOperationTime.pointsunit
-            new TranslationSeedItem("entity.standardOperationTime.pointsunit", "zh-CN", "点数单位", "点数单位"),
-            // entity.standardOperationTime.pointsunit
-            new TranslationSeedItem("entity.standardOperationTime.pointsunit", "zh-HK", "点数单位", "点数单位"),
+            // entity.standardoperationtime.pointsunit
+            new TranslationSeedItem("entity.standardoperationtime.pointsunit", "en-US", "点数单位", "点数单位"),
+            // entity.standardoperationtime.pointsunit
+            new TranslationSeedItem("entity.standardoperationtime.pointsunit", "ja-JP", "点数单位", "点数单位"),
+            // entity.standardoperationtime.pointsunit
+            new TranslationSeedItem("entity.standardoperationtime.pointsunit", "zh-CN", "点数单位", "点数单位"),
+            // entity.standardoperationtime.pointsunit
+            new TranslationSeedItem("entity.standardoperationtime.pointsunit", "zh-HK", "点数单位", "点数单位"),
 
-            // entity.standardOperationTime.pointstominutesrate
-            new TranslationSeedItem("entity.standardOperationTime.pointstominutesrate", "en-US", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
-            // entity.standardOperationTime.pointstominutesrate
-            new TranslationSeedItem("entity.standardOperationTime.pointstominutesrate", "ja-JP", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
-            // entity.standardOperationTime.pointstominutesrate
-            new TranslationSeedItem("entity.standardOperationTime.pointstominutesrate", "zh-CN", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
-            // entity.standardOperationTime.pointstominutesrate
-            new TranslationSeedItem("entity.standardOperationTime.pointstominutesrate", "zh-HK", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
+            // entity.standardoperationtime.pointstominutesrate
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "en-US", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
+            // entity.standardoperationtime.pointstominutesrate
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "ja-JP", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
+            // entity.standardoperationtime.pointstominutesrate
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "zh-CN", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
+            // entity.standardoperationtime.pointstominutesrate
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "zh-HK", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
 
-            // entity.standardOperationTime.convertedminutes
-            new TranslationSeedItem("entity.standardOperationTime.convertedminutes", "en-US", "转换工时", "转换后标准工时（分钟）"),
-            // entity.standardOperationTime.convertedminutes
-            new TranslationSeedItem("entity.standardOperationTime.convertedminutes", "ja-JP", "转换工时", "转换后标准工时（分钟）"),
-            // entity.standardOperationTime.convertedminutes
-            new TranslationSeedItem("entity.standardOperationTime.convertedminutes", "zh-CN", "转换工时", "转换后标准工时（分钟）"),
-            // entity.standardOperationTime.convertedminutes
-            new TranslationSeedItem("entity.standardOperationTime.convertedminutes", "zh-HK", "转换工时", "转换后标准工时（分钟）"),
+            // entity.standardoperationtime.convertedminutes
+            new TranslationSeedItem("entity.standardoperationtime.convertedminutes", "en-US", "转换工时", "转换后标准工时（分钟）"),
+            // entity.standardoperationtime.convertedminutes
+            new TranslationSeedItem("entity.standardoperationtime.convertedminutes", "ja-JP", "转换工时", "转换后标准工时（分钟）"),
+            // entity.standardoperationtime.convertedminutes
+            new TranslationSeedItem("entity.standardoperationtime.convertedminutes", "zh-CN", "转换工时", "转换后标准工时（分钟）"),
+            // entity.standardoperationtime.convertedminutes
+            new TranslationSeedItem("entity.standardoperationtime.convertedminutes", "zh-HK", "转换工时", "转换后标准工时（分钟）"),
 
-            // entity.standardOperationTime.effectivedate
-            new TranslationSeedItem("entity.standardOperationTime.effectivedate", "en-US", "生效日期", "生效日期"),
-            // entity.standardOperationTime.effectivedate
-            new TranslationSeedItem("entity.standardOperationTime.effectivedate", "ja-JP", "生效日期", "生效日期"),
-            // entity.standardOperationTime.effectivedate
-            new TranslationSeedItem("entity.standardOperationTime.effectivedate", "zh-CN", "生效日期", "生效日期"),
-            // entity.standardOperationTime.effectivedate
-            new TranslationSeedItem("entity.standardOperationTime.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            // entity.standardoperationtime.effectivedate
+            new TranslationSeedItem("entity.standardoperationtime.effectivedate", "en-US", "生效日期", "生效日期"),
+            // entity.standardoperationtime.effectivedate
+            new TranslationSeedItem("entity.standardoperationtime.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            // entity.standardoperationtime.effectivedate
+            new TranslationSeedItem("entity.standardoperationtime.effectivedate", "zh-CN", "生效日期", "生效日期"),
+            // entity.standardoperationtime.effectivedate
+            new TranslationSeedItem("entity.standardoperationtime.effectivedate", "zh-HK", "生效日期", "生效日期"),
 
-            // entity.standardOperationTime.expirydate
-            new TranslationSeedItem("entity.standardOperationTime.expirydate", "en-US", "失效日期", "失效日期"),
-            // entity.standardOperationTime.expirydate
-            new TranslationSeedItem("entity.standardOperationTime.expirydate", "ja-JP", "失效日期", "失效日期"),
-            // entity.standardOperationTime.expirydate
-            new TranslationSeedItem("entity.standardOperationTime.expirydate", "zh-CN", "失效日期", "失效日期"),
-            // entity.standardOperationTime.expirydate
-            new TranslationSeedItem("entity.standardOperationTime.expirydate", "zh-HK", "失效日期", "失效日期"),
+            // entity.standardoperationtime.expirydate
+            new TranslationSeedItem("entity.standardoperationtime.expirydate", "en-US", "失效日期", "失效日期"),
+            // entity.standardoperationtime.expirydate
+            new TranslationSeedItem("entity.standardoperationtime.expirydate", "ja-JP", "失效日期", "失效日期"),
+            // entity.standardoperationtime.expirydate
+            new TranslationSeedItem("entity.standardoperationtime.expirydate", "zh-CN", "失效日期", "失效日期"),
+            // entity.standardoperationtime.expirydate
+            new TranslationSeedItem("entity.standardoperationtime.expirydate", "zh-HK", "失效日期", "失效日期"),
         };
     }
 
@@ -215,8 +214,8 @@ public class TaktStandardOperationTimeI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

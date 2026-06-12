@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -46,7 +45,7 @@ public class TaktNumbering : TaktCompanyEntityBase
     /// 单据类型
     /// </summary>
     [SugarColumn(ColumnName = "document_type", ColumnDescription = "单据类型", ColumnDataType = "int", IsNullable = false)]
-    public TaktDocumentType DocumentType { get; set; }
+    public int DocumentType { get; set; }
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空）
@@ -115,13 +114,13 @@ public class TaktNumbering : TaktCompanyEntityBase
     /// 是否内置（0=否，1=是，系统内置的不可删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus Status { get; set; } = TaktCommonStatus.Enabled;
+    public int Status { get; set; } = 1;
 
     /// <summary>
     /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）

@@ -4,7 +4,7 @@
 // 文件名称：online.ts
 // 创建时间：2026-05-25
 // 创建人：Takt365(Auto Generated)
-// 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
+// 功能描述：在线用户 CRUD + SignalR 强退/统计推送 API
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,11 +17,13 @@ import type {
 } from '@/types/common';
 import type {
   Online,
-  OnlineCreate,
+  OnlineBroadcastPush,
+  OnlineForceKick,
+  OnlineForceKickBatch,
+  OnlinePushStatisticsRequest,
   OnlineQuery,
   OnlineStatistics,
   OnlineStatus,
-  OnlineUpdate,
 } from '@/types/foundation/online';
 
 /**
@@ -56,33 +58,6 @@ export function getOnlineById(id: string): Promise<Online> {
   return request<Online>({
     url: `${ONLINE_API_BASE}/${id}`,
     method: 'get',
-  });
-}
-
-/**
- * 创建在线用户
- * @param {OnlineCreate} dto 创建参数
- * @returns {Promise<Online>} 在线用户
- */
-export function createOnline(dto: OnlineCreate): Promise<Online> {
-  return request<Online>({
-    url: `${ONLINE_API_BASE}`,
-    method: 'post',
-    data: dto,
-  });
-}
-
-/**
- * 更新在线用户
- * @param {string} id 在线用户ID
- * @param {OnlineUpdate} dto 更新参数
- * @returns {Promise<Online>} 在线用户
- */
-export function updateOnline(id: string, dto: OnlineUpdate): Promise<Online> {
-  return request<Online>({
-    url: `${ONLINE_API_BASE}/${id}`,
-    method: 'put',
-    data: dto,
   });
 }
 
@@ -151,6 +126,76 @@ export function getOnlineStatistics(): Promise<OnlineStatistics> {
   return request<OnlineStatistics>({
     url: `${ONLINE_API_BASE}/statistics`,
     method: 'get',
+  });
+}
+
+// ========================================
+// SignalR 推送调度
+// ========================================
+
+/**
+ * 强制踢出在线用户（强退）
+ * @param {string} onlineId 在线用户 ID
+ * @param {OnlineForceKick} [dto] 强退参数
+ * @returns {Promise<void>} 操作结果
+ */
+export function forceKickOnlineById(onlineId: string, dto?: OnlineForceKick): Promise<void> {
+  return request({
+    url: `${ONLINE_API_BASE}/${onlineId}/force-kick`,
+    method: 'post',
+    data: dto ?? {},
+  });
+}
+
+/**
+ * 批量强制踢出在线用户
+ * @param {OnlineForceKickBatch} dto 批量强退参数
+ * @returns {Promise<void>} 操作结果
+ */
+export function forceKickOnlineBatch(dto: OnlineForceKickBatch): Promise<void> {
+  return request({
+    url: `${ONLINE_API_BASE}/force-kick/batch`,
+    method: 'post',
+    data: dto,
+  });
+}
+
+/**
+ * 向在线用户广播消息
+ * @param {OnlineBroadcastPush} dto 广播内容
+ * @returns {Promise<void>} 操作结果
+ */
+export function pushBroadcastMessage(dto: OnlineBroadcastPush): Promise<void> {
+  return request({
+    url: `${ONLINE_API_BASE}/messages/broadcast`,
+    method: 'post',
+    data: dto,
+  });
+}
+
+/**
+ * 向指定用户推送最新在线统计
+ * @param {OnlinePushStatisticsRequest} dto 目标用户
+ * @returns {Promise<void>} 操作结果
+ */
+export function pushOnlineStatistics(dto: OnlinePushStatisticsRequest): Promise<void> {
+  return request({
+    url: `${ONLINE_API_BASE}/statistics/online/push`,
+    method: 'post',
+    data: dto,
+  });
+}
+
+/**
+ * 向指定用户推送最新消息统计
+ * @param {OnlinePushStatisticsRequest} dto 目标用户
+ * @returns {Promise<void>} 操作结果
+ */
+export function pushMessageStatistics(dto: OnlinePushStatisticsRequest): Promise<void> {
+  return request({
+    url: `${ONLINE_API_BASE}/statistics/message/push`,
+    method: 'post',
+    data: dto,
   });
 }
 

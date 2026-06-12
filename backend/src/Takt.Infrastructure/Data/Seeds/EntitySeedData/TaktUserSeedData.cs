@@ -124,11 +124,11 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 Username = username,
                 Nickname = nickname,
-                UserType = username == "admin" ? TaktUserType.SuperAdmin : TaktUserType.Normal,
+                UserType = username == "admin" ? 2 : 0,
                 PasswordHash = passwordHash,
                 EmployeeId = employee.Id,
-                IsBuiltIn = TaktYesNo.Yes,
-                UserStatus = TaktCommonStatus.Enabled,
+                IsBuiltIn = 1,
+                UserStatus = 1,
                 PasswordExpireDays = username == "admin" ? 90 : 30,
                 LoginCount = 0,
                 LoginFailCount = 0,
@@ -141,10 +141,10 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
         {
             // 存在:更新记录
             user.Nickname = nickname;
-            user.UserType = username == "admin" ? TaktUserType.SuperAdmin : TaktUserType.Normal;
+            user.UserType = username == "admin" ? 2 : 0;
             user.EmployeeId = employee.Id;
-            user.IsBuiltIn = TaktYesNo.Yes;
-            user.UserStatus = TaktCommonStatus.Enabled;
+            user.IsBuiltIn = 1;
+            user.UserStatus = 1;
             user.PasswordExpireDays = username == "admin" ? 90 : 30;
             user.DefaultCulture = "en-US";
 

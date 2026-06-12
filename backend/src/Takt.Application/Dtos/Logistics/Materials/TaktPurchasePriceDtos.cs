@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPurchasePriceDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePrice 生成，请按需审阅）
 // 
@@ -69,7 +69,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus PriceStatus { get; set; }
+    public int PriceStatus { get; set; }
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）
@@ -78,7 +78,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public List<TaktPurchasePriceItemDto>? Items { get; set; }
 
     /// <summary>
-    /// 采购价格变更记录列表（外键在子表 <see cref="TaktPurchasePriceChangeLog.PriceId"/>）
+    /// 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）
     /// （子表：TaktPurchasePriceChangeLog）
     /// </summary>
     public List<TaktPurchasePriceChangeLogDto>? ChangeLogs { get; set; }
@@ -148,7 +148,7 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? PriceStatus { get; set; }
+    public int? PriceStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -231,7 +231,7 @@ public class TaktPurchasePriceCreateDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus PriceStatus { get; set; }
+    public int PriceStatus { get; set; }
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
@@ -239,7 +239,7 @@ public class TaktPurchasePriceCreateDto
     public List<TaktPurchasePriceItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 采购价格变更记录列表（外键在子表 <see cref="TaktPurchasePriceChangeLog.PriceId"/>）（子表，级联保存）
+    /// 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）（子表，级联保存）
     /// </summary>
     public List<TaktPurchasePriceChangeLogCreateDto>? ChangeLogs { get; set; }
 
@@ -296,7 +296,7 @@ public class TaktPurchasePriceStatusDto
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "价格状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus PriceStatus { get; set; }
+    public int PriceStatus { get; set; }
 }
 
 // ========================================
@@ -341,7 +341,7 @@ public class TaktPurchasePriceTemplateDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? PriceStatus { get; set; }
+    public int? PriceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -398,7 +398,7 @@ public class TaktPurchasePriceImportDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? PriceStatus { get; set; }
+    public int? PriceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -466,7 +466,7 @@ public class TaktPurchasePriceExportDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus PriceStatus { get; set; }
+    public int PriceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

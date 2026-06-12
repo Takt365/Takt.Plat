@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowVariableI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowVariable 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow;
 
 /// <summary>
-/// TaktFlowVariable 实体国际化翻译种子（键前缀 entity.flowVariable.*）
+/// TaktFlowVariable 实体国际化翻译种子（键前缀 entity.flowvariable.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktFlowVariableI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktFlowVariableI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 flowVariable 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 flowvariable 实体翻译...", tenantCode);
 
         foreach (var item in GetFlowVariableTranslations())
         {
@@ -76,92 +75,92 @@ public class TaktFlowVariableI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktFlowVariable 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.flowVariable._self / entity.flowVariable.{{field}}；ResourceGroup=TaktModule.Workflow；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.flowvariable._self / entity.flowvariable.{{field}}；ResourceGroup=6；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetFlowVariableTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.flowVariable._self
-            new TranslationSeedItem("entity.flowVariable._self", "en-US", "Flow Variable Information", "实体名称"),
-            // entity.flowVariable._self
-            new TranslationSeedItem("entity.flowVariable._self", "ja-JP", "流程变量信息", "实体名称"),
-            // entity.flowVariable._self
-            new TranslationSeedItem("entity.flowVariable._self", "zh-CN", "流程变量信息", "实体名称"),
-            // entity.flowVariable._self
-            new TranslationSeedItem("entity.flowVariable._self", "zh-HK", "流程变量信息", "实体名称"),
+            // entity.flowvariable._self
+            new TranslationSeedItem("entity.flowvariable._self", "en-US", "Flow Variable Information", "实体名称"),
+            // entity.flowvariable._self
+            new TranslationSeedItem("entity.flowvariable._self", "ja-JP", "流程变量信息", "实体名称"),
+            // entity.flowvariable._self
+            new TranslationSeedItem("entity.flowvariable._self", "zh-CN", "流程变量信息", "实体名称"),
+            // entity.flowvariable._self
+            new TranslationSeedItem("entity.flowvariable._self", "zh-HK", "流程变量信息", "实体名称"),
 
-            // entity.flowVariable.instanceid
-            new TranslationSeedItem("entity.flowVariable.instanceid", "en-US", "流程实例ID", "流程实例 ID"),
-            // entity.flowVariable.instanceid
-            new TranslationSeedItem("entity.flowVariable.instanceid", "ja-JP", "流程实例ID", "流程实例 ID"),
-            // entity.flowVariable.instanceid
-            new TranslationSeedItem("entity.flowVariable.instanceid", "zh-CN", "流程实例ID", "流程实例 ID"),
-            // entity.flowVariable.instanceid
-            new TranslationSeedItem("entity.flowVariable.instanceid", "zh-HK", "流程实例ID", "流程实例 ID"),
+            // entity.flowvariable.instanceid
+            new TranslationSeedItem("entity.flowvariable.instanceid", "en-US", "流程实例ID", "流程实例 ID"),
+            // entity.flowvariable.instanceid
+            new TranslationSeedItem("entity.flowvariable.instanceid", "ja-JP", "流程实例ID", "流程实例 ID"),
+            // entity.flowvariable.instanceid
+            new TranslationSeedItem("entity.flowvariable.instanceid", "zh-CN", "流程实例ID", "流程实例 ID"),
+            // entity.flowvariable.instanceid
+            new TranslationSeedItem("entity.flowvariable.instanceid", "zh-HK", "流程实例ID", "流程实例 ID"),
 
-            // entity.flowVariable.taskid
-            new TranslationSeedItem("entity.flowVariable.taskid", "en-US", "任务ID", "任务 ID（任务级变量时填写）"),
-            // entity.flowVariable.taskid
-            new TranslationSeedItem("entity.flowVariable.taskid", "ja-JP", "任务ID", "任务 ID（任务级变量时填写）"),
-            // entity.flowVariable.taskid
-            new TranslationSeedItem("entity.flowVariable.taskid", "zh-CN", "任务ID", "任务 ID（任务级变量时填写）"),
-            // entity.flowVariable.taskid
-            new TranslationSeedItem("entity.flowVariable.taskid", "zh-HK", "任务ID", "任务 ID（任务级变量时填写）"),
+            // entity.flowvariable.taskid
+            new TranslationSeedItem("entity.flowvariable.taskid", "en-US", "任务ID", "任务 ID（任务级变量时填写）"),
+            // entity.flowvariable.taskid
+            new TranslationSeedItem("entity.flowvariable.taskid", "ja-JP", "任务ID", "任务 ID（任务级变量时填写）"),
+            // entity.flowvariable.taskid
+            new TranslationSeedItem("entity.flowvariable.taskid", "zh-CN", "任务ID", "任务 ID（任务级变量时填写）"),
+            // entity.flowvariable.taskid
+            new TranslationSeedItem("entity.flowvariable.taskid", "zh-HK", "任务ID", "任务 ID（任务级变量时填写）"),
 
-            // entity.flowVariable.variablename
-            new TranslationSeedItem("entity.flowVariable.variablename", "en-US", "变量名", "变量名"),
-            // entity.flowVariable.variablename
-            new TranslationSeedItem("entity.flowVariable.variablename", "ja-JP", "变量名", "变量名"),
-            // entity.flowVariable.variablename
-            new TranslationSeedItem("entity.flowVariable.variablename", "zh-CN", "变量名", "变量名"),
-            // entity.flowVariable.variablename
-            new TranslationSeedItem("entity.flowVariable.variablename", "zh-HK", "变量名", "变量名"),
+            // entity.flowvariable.variablename
+            new TranslationSeedItem("entity.flowvariable.variablename", "en-US", "变量名", "变量名"),
+            // entity.flowvariable.variablename
+            new TranslationSeedItem("entity.flowvariable.variablename", "ja-JP", "变量名", "变量名"),
+            // entity.flowvariable.variablename
+            new TranslationSeedItem("entity.flowvariable.variablename", "zh-CN", "变量名", "变量名"),
+            // entity.flowvariable.variablename
+            new TranslationSeedItem("entity.flowvariable.variablename", "zh-HK", "变量名", "变量名"),
 
-            // entity.flowVariable.variabletype
-            new TranslationSeedItem("entity.flowVariable.variabletype", "en-US", "变量类型", "变量类型"),
-            // entity.flowVariable.variabletype
-            new TranslationSeedItem("entity.flowVariable.variabletype", "ja-JP", "变量类型", "变量类型"),
-            // entity.flowVariable.variabletype
-            new TranslationSeedItem("entity.flowVariable.variabletype", "zh-CN", "变量类型", "变量类型"),
-            // entity.flowVariable.variabletype
-            new TranslationSeedItem("entity.flowVariable.variabletype", "zh-HK", "变量类型", "变量类型"),
+            // entity.flowvariable.variabletype
+            new TranslationSeedItem("entity.flowvariable.variabletype", "en-US", "变量类型", "变量类型"),
+            // entity.flowvariable.variabletype
+            new TranslationSeedItem("entity.flowvariable.variabletype", "ja-JP", "变量类型", "变量类型"),
+            // entity.flowvariable.variabletype
+            new TranslationSeedItem("entity.flowvariable.variabletype", "zh-CN", "变量类型", "变量类型"),
+            // entity.flowvariable.variabletype
+            new TranslationSeedItem("entity.flowvariable.variabletype", "zh-HK", "变量类型", "变量类型"),
 
-            // entity.flowVariable.textvalue
-            new TranslationSeedItem("entity.flowVariable.textvalue", "en-US", "文本值", "文本值（JSON 变量存此列）"),
-            // entity.flowVariable.textvalue
-            new TranslationSeedItem("entity.flowVariable.textvalue", "ja-JP", "文本值", "文本值（JSON 变量存此列）"),
-            // entity.flowVariable.textvalue
-            new TranslationSeedItem("entity.flowVariable.textvalue", "zh-CN", "文本值", "文本值（JSON 变量存此列）"),
-            // entity.flowVariable.textvalue
-            new TranslationSeedItem("entity.flowVariable.textvalue", "zh-HK", "文本值", "文本值（JSON 变量存此列）"),
+            // entity.flowvariable.textvalue
+            new TranslationSeedItem("entity.flowvariable.textvalue", "en-US", "文本值", "文本值（JSON 变量存此列）"),
+            // entity.flowvariable.textvalue
+            new TranslationSeedItem("entity.flowvariable.textvalue", "ja-JP", "文本值", "文本值（JSON 变量存此列）"),
+            // entity.flowvariable.textvalue
+            new TranslationSeedItem("entity.flowvariable.textvalue", "zh-CN", "文本值", "文本值（JSON 变量存此列）"),
+            // entity.flowvariable.textvalue
+            new TranslationSeedItem("entity.flowvariable.textvalue", "zh-HK", "文本值", "文本值（JSON 变量存此列）"),
 
-            // entity.flowVariable.longvalue
-            new TranslationSeedItem("entity.flowVariable.longvalue", "en-US", "长整型值", "长整型值"),
-            // entity.flowVariable.longvalue
-            new TranslationSeedItem("entity.flowVariable.longvalue", "ja-JP", "长整型值", "长整型值"),
-            // entity.flowVariable.longvalue
-            new TranslationSeedItem("entity.flowVariable.longvalue", "zh-CN", "长整型值", "长整型值"),
-            // entity.flowVariable.longvalue
-            new TranslationSeedItem("entity.flowVariable.longvalue", "zh-HK", "长整型值", "长整型值"),
+            // entity.flowvariable.longvalue
+            new TranslationSeedItem("entity.flowvariable.longvalue", "en-US", "长整型值", "长整型值"),
+            // entity.flowvariable.longvalue
+            new TranslationSeedItem("entity.flowvariable.longvalue", "ja-JP", "长整型值", "长整型值"),
+            // entity.flowvariable.longvalue
+            new TranslationSeedItem("entity.flowvariable.longvalue", "zh-CN", "长整型值", "长整型值"),
+            // entity.flowvariable.longvalue
+            new TranslationSeedItem("entity.flowvariable.longvalue", "zh-HK", "长整型值", "长整型值"),
 
-            // entity.flowVariable.doublevalue
-            new TranslationSeedItem("entity.flowVariable.doublevalue", "en-US", "双精度值", "双精度值"),
-            // entity.flowVariable.doublevalue
-            new TranslationSeedItem("entity.flowVariable.doublevalue", "ja-JP", "双精度值", "双精度值"),
-            // entity.flowVariable.doublevalue
-            new TranslationSeedItem("entity.flowVariable.doublevalue", "zh-CN", "双精度值", "双精度值"),
-            // entity.flowVariable.doublevalue
-            new TranslationSeedItem("entity.flowVariable.doublevalue", "zh-HK", "双精度值", "双精度值"),
+            // entity.flowvariable.doublevalue
+            new TranslationSeedItem("entity.flowvariable.doublevalue", "en-US", "双精度值", "双精度值"),
+            // entity.flowvariable.doublevalue
+            new TranslationSeedItem("entity.flowvariable.doublevalue", "ja-JP", "双精度值", "双精度值"),
+            // entity.flowvariable.doublevalue
+            new TranslationSeedItem("entity.flowvariable.doublevalue", "zh-CN", "双精度值", "双精度值"),
+            // entity.flowvariable.doublevalue
+            new TranslationSeedItem("entity.flowvariable.doublevalue", "zh-HK", "双精度值", "双精度值"),
 
-            // entity.flowVariable.instance
-            new TranslationSeedItem("entity.flowVariable.instance", "en-US", "所属流程实例", "所属流程实例"),
-            // entity.flowVariable.instance
-            new TranslationSeedItem("entity.flowVariable.instance", "ja-JP", "所属流程实例", "所属流程实例"),
-            // entity.flowVariable.instance
-            new TranslationSeedItem("entity.flowVariable.instance", "zh-CN", "所属流程实例", "所属流程实例"),
-            // entity.flowVariable.instance
-            new TranslationSeedItem("entity.flowVariable.instance", "zh-HK", "所属流程实例", "所属流程实例"),
+            // entity.flowvariable.instance
+            new TranslationSeedItem("entity.flowvariable.instance", "en-US", "所属流程实例", "所属流程实例"),
+            // entity.flowvariable.instance
+            new TranslationSeedItem("entity.flowvariable.instance", "ja-JP", "所属流程实例", "所属流程实例"),
+            // entity.flowvariable.instance
+            new TranslationSeedItem("entity.flowvariable.instance", "zh-CN", "所属流程实例", "所属流程实例"),
+            // entity.flowvariable.instance
+            new TranslationSeedItem("entity.flowvariable.instance", "zh-HK", "所属流程实例", "所属流程实例"),
         };
     }
 
@@ -179,8 +178,8 @@ public class TaktFlowVariableI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Workflow;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 6;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

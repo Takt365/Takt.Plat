@@ -16,7 +16,7 @@ using Takt.Shared.Helpers;
 namespace Takt.Application.Dtos.Identity;
 
 /// <summary>
-/// 角色-公司关联列表 DTO（对应 <see cref="Takt.Domain.Entities.Identity.TaktRoleCompany"/>）
+/// 角色-公司关联列表 DTO（对应 TaktRoleCompany）
 /// </summary>
 public class TaktRoleCompanyDto : TaktCompanyDtoBase
 {

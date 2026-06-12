@@ -17,7 +17,7 @@ using Takt.Shared.Helpers;
 namespace Takt.Application.Dtos.Identity;
 
 /// <summary>
-/// 用户-公司关联列表 DTO（对应 <see cref="Takt.Domain.Entities.Identity.TaktUserCompany"/>）
+/// 用户-公司关联列表 DTO（对应 TaktUserCompany 实体）
 /// </summary>
 public class TaktUserCompanyDto : TaktCompanyDtoBase
 {
@@ -42,5 +42,5 @@ public class TaktUserCompanyDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否默认登录公司
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 }

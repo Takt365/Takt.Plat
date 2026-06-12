@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktDeltaLogValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DeltaLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktDeltaLog 生成，请按需审阅）
 // 
@@ -12,6 +12,7 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Statistics.Logging;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Statistics.Logging;
 
@@ -39,8 +40,7 @@ public class TaktDeltaLogCreateValidator : AbstractValidator<TaktDeltaLogCreateD
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.OperType)
-            .NotEmpty().WithMessage("操作类型不能为空")
-            .MaximumLength(50).WithMessage("操作类型长度不能超过50个字符");
+            .IsInEnum().WithMessage("操作类型无效");
         RuleFor(x => x.TableName)
             .NotEmpty().WithMessage("数据库表名不能为空")
             .MaximumLength(200).WithMessage("数据库表名长度不能超过200个字符");

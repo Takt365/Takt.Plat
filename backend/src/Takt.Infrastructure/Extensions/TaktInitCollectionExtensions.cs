@@ -27,9 +27,9 @@ public static class TaktInitCollectionExtensions
 {
     /// <summary>
     /// 执行 Takt 启动初始化：
-    /// 1. <see cref="TaktOpenIddictContext"/> — 认证库
-    /// 2. <see cref="TaktSqlSugarContext"/> — 租户业务库与数据表（<c>InitDb</c>）
-    /// 3. <see cref="TaktSeedContext"/> — 业务种子（<c>SeedData</c>）
+    /// 1. TaktOpenIddictContext — 认证库
+    /// 2. TaktSqlSugarContext — 租户业务库与数据表（<c>InitDb</c>）
+    /// 3. TaktSeedContext — 业务种子（<c>SeedData</c>）
     /// </summary>
     /// <param name="app">Web 应用</param>
     /// <param name="initOptions">Init 配置</param>

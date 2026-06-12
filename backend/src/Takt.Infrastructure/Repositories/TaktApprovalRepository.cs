@@ -531,14 +531,15 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
     // ========================================
 
     /// <summary>
-    /// 提交审批
+    /// 提交审批（已废弃，请使用 TaktFlowEngine.StartFlowInstanceAsync）
     /// </summary>
+    [Obsolete("凡审批必走 TaktFlowEngine；请调用 ITaktFlowEngineService.StartFlowInstanceAsync 并回写 FlowInstanceId")]
     public virtual async Task<bool> SubmitForApprovalAsync(long id, long submitterId)
     {
         var rows = await Db.Updateable<TEntity>()
             .SetColumns(x => new TEntity
             {
-                ApprovalStatus = TaktApprovalStatus.InProgress,
+                ApprovalStatus = 1,
                 InitiatorId = submitterId,
                 InitiatedAt = DateTime.Now,
                 UpdatedBy = submitterId,
@@ -547,21 +548,22 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
             .Where(x => x.Id == id)
             .Where(x => x.TenantCode == CurrentTenantCode)
             .Where(x => x.CompanyCode == CurrentCompanyCode)
-            .Where(x => x.ApprovalStatus == TaktApprovalStatus.Pending)
+            .Where(x => x.ApprovalStatus == 0)
             .ExecuteCommandAsync();
 
         return rows > 0;
     }
 
     /// <summary>
-    /// 审批通过
+    /// 审批通过（已废弃，请使用 TaktFlowEngine.CompleteFlowInstanceTaskAsync）
     /// </summary>
+    [Obsolete("凡审批必走 TaktFlowEngine；请通过待办 Complete 并在业务层回写 ApprovalStatus")]
     public virtual async Task<bool> ApproveAsync(long id, long approverId, string? opinion = null)
     {
         var rows = await Db.Updateable<TEntity>()
             .SetColumns(x => new TEntity
             {
-                ApprovalStatus = TaktApprovalStatus.Approved,
+                ApprovalStatus = 2,
                 ApprovalOpinion = opinion,
                 ApprovedBy = approverId,
                 ApprovedAt = DateTime.Now,
@@ -571,21 +573,22 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
             .Where(x => x.Id == id)
             .Where(x => x.TenantCode == CurrentTenantCode)
             .Where(x => x.CompanyCode == CurrentCompanyCode)
-            .Where(x => x.ApprovalStatus == TaktApprovalStatus.InProgress)
+            .Where(x => x.ApprovalStatus == 1)
             .ExecuteCommandAsync();
 
         return rows > 0;
     }
 
     /// <summary>
-    /// 审批驳回
+    /// 审批驳回（已废弃，请使用 TaktFlowEngine.CompleteFlowInstanceTaskAsync）
     /// </summary>
+    [Obsolete("凡审批必走 TaktFlowEngine；请通过待办 Complete 并在业务层回写 ApprovalStatus")]
     public virtual async Task<bool> RejectAsync(long id, long approverId, string opinion)
     {
         var rows = await Db.Updateable<TEntity>()
             .SetColumns(x => new TEntity
             {
-                ApprovalStatus = TaktApprovalStatus.Rejected,
+                ApprovalStatus = 3,
                 ApprovalOpinion = opinion,
                 ApprovedBy = approverId,
                 ApprovedAt = DateTime.Now,
@@ -595,21 +598,22 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
             .Where(x => x.Id == id)
             .Where(x => x.TenantCode == CurrentTenantCode)
             .Where(x => x.CompanyCode == CurrentCompanyCode)
-            .Where(x => x.ApprovalStatus == TaktApprovalStatus.InProgress)
+            .Where(x => x.ApprovalStatus == 1)
             .ExecuteCommandAsync();
 
         return rows > 0;
     }
 
     /// <summary>
-    /// 撤销审批
+    /// 撤销审批（已废弃，请使用 TaktFlowEngine.RevokeFlowInstanceAsync）
     /// </summary>
+    [Obsolete("凡审批必走 TaktFlowEngine；请调用 ITaktFlowEngineService.RevokeFlowInstanceAsync")]
     public virtual async Task<bool> CancelApprovalAsync(long id, long cancellerId, string? opinion = null)
     {
         var rows = await Db.Updateable<TEntity>()
             .SetColumns(x => new TEntity
             {
-                ApprovalStatus = TaktApprovalStatus.Cancelled,
+                ApprovalStatus = 4,
                 ApprovalOpinion = opinion,
                 UpdatedBy = cancellerId,
                 UpdatedAt = DateTime.Now
@@ -617,8 +621,8 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
             .Where(x => x.Id == id)
             .Where(x => x.TenantCode == CurrentTenantCode)
             .Where(x => x.CompanyCode == CurrentCompanyCode)
-            .Where(x => x.ApprovalStatus == TaktApprovalStatus.InProgress ||
-                        x.ApprovalStatus == TaktApprovalStatus.Pending)
+            .Where(x => x.ApprovalStatus == 1 ||
+                        x.ApprovalStatus == 0)
             .ExecuteCommandAsync();
 
         return rows > 0;

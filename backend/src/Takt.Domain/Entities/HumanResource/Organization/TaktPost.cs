@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Organization;
 
@@ -48,13 +47,13 @@ public class TaktPost : TaktCompanyEntityBase
     /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
     /// </summary>
     [SugarColumn(ColumnName = "post_type", ColumnDescription = "岗位类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktPostType PostType { get; set; } = TaktPostType.Technical;
+    public int PostType { get; set; } = 1;
 
     /// <summary>
     /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
     /// </summary>
     [SugarColumn(ColumnName = "post_level", ColumnDescription = "岗位职级", ColumnDataType = "int", IsNullable = true)]
-    public TaktPostLevel? PostLevel { get; set; }
+    public int? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -108,14 +107,14 @@ public class TaktPost : TaktCompanyEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "post_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus PostStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int PostStatus { get; set; } = 1;
 
     /// <summary>
     /// 是否内置（1=是，0=否）
     /// 种子岗位为内置，不允许删除
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 排序号

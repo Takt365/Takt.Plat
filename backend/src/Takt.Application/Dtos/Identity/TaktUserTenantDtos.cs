@@ -17,7 +17,7 @@ using Takt.Shared.Helpers;
 namespace Takt.Application.Dtos.Identity;
 
 /// <summary>
-/// 用户-租户关联列表 DTO（对应 <see cref="Takt.Domain.Entities.Identity.TaktUserTenant"/>）
+/// 用户-租户关联列表 DTO（对应 TaktUserTenant）
 /// </summary>
 public class TaktUserTenantDto : TaktTenantDtoBase
 {
@@ -42,5 +42,5 @@ public class TaktUserTenantDto : TaktTenantDtoBase
     /// <summary>
     /// 是否默认登录租户
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 }

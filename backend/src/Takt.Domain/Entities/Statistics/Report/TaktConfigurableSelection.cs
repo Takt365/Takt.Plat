@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Report;
 
@@ -56,7 +55,7 @@ public class TaktConfigurableSelection : TaktCompanyEntityBase
     /// 比较运算符
     /// </summary>
     [SugarColumn(ColumnName = "filter_operator", ColumnDescription = "比较运算符", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktConfigurableFilterOperator FilterOperator { get; set; } = TaktConfigurableFilterOperator.Equal;
+    public int FilterOperator { get; set; } = 1;
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -74,7 +73,7 @@ public class TaktConfigurableSelection : TaktCompanyEntityBase
     /// 是否必填（0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_required", ColumnDescription = "是否必填", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsRequired { get; set; } = TaktYesNo.No;
+    public int IsRequired { get; set; } = 0;
 
     /// <summary>
     /// 排序号（Selection Screen 展示顺序）

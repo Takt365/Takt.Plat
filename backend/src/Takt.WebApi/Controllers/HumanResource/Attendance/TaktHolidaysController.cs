@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Attendance
 // 文件名称：TaktHolidaysController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：假日信息控制器
 // 
@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.HumanResource.Attendance;
 using Takt.Application.Services.HumanResource.Attendance;
@@ -21,7 +22,7 @@ namespace Takt.WebApi.Controllers.HumanResource.Attendance;
 /// 假日信息控制器
 /// 提供假日信息的 REST API
 /// </summary>
-[ApiModule(TaktModule.HumanResource, "考勤管理")]
+[ApiModule(5, "考勤管理")]
 [Route("api/[controller]", Name = "假日信息")]
 public class TaktHolidaysController : TaktControllerBase
 {
@@ -242,6 +243,32 @@ public class TaktHolidaysController : TaktControllerBase
         {
             var (resultFileName, fileContent) = await _holidayService.ExportHolidayAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 登录前预览：指定租户与公司下的当日假日主题（未签发 OAuth 访问令牌，非匿名登录）
+    /// </summary>
+    /// <param name="tenantCode">租户编码（与 X-Tenant-Code、登录页输入一致）</param>
+    /// <param name="companyCode">公司编码（由 session/login-preview-locale 解析）</param>
+    /// <returns>假日主题 DTO（字段对齐 TaktHoliday 实体）</returns>
+    [AllowAnonymous]
+    [HttpGet("theme")]
+    public async Task<IActionResult> GetHolidayThemeAsync([FromQuery] string tenantCode, [FromQuery] string companyCode)
+    {
+        try
+        {
+            var tenantError = ValidateLoginPreviewTenantHeader(tenantCode);
+            if (tenantError != null)
+            {
+                return tenantError;
+            }
+            var result = await _holidayService.GetHolidayThemeAsync(tenantCode, companyCode);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

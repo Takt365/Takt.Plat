@@ -59,7 +59,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
         TaktLogger.Information("正在为租户 {TenantCode} 初始化用户-公司关联数据...", tenantCode);
 
         var companies = await companyRepository.GetListAsync(
-            c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+            c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
 
         if (companies == null || companies.Count == 0)
         {
@@ -88,7 +88,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
         }
 
         var users = await userRepository.GetListAsync(
-            u => u.TenantCode == tenantCode && u.UserStatus == TaktCommonStatus.Enabled);
+            u => u.TenantCode == tenantCode && u.UserStatus == 1);
 
         foreach (var user in users)
         {
@@ -148,7 +148,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
             return (0, 0);
         }
 
-        var isDefaultValue = isDefault ? TaktYesNo.Yes : TaktYesNo.No;
+        var isDefaultValue = isDefault ? 1 : 0;
         var link = await userCompanyRepository.FirstAsync(uc =>
             uc.TenantCode == tenantCode
             && uc.UserId == user.Id

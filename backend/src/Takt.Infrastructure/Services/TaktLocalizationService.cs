@@ -22,13 +22,13 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktLocalizationService"/> 实现
-/// 按 <see cref="TaktLocalizationOptions.UseDatabaseLocalization"/> 优先查库，未命中时回退 resx
+/// ITaktLocalizationService 实现
+/// 按 TaktLocalizationOptions.UseDatabaseLocalization 优先查库，未命中时回退 resx
 /// </summary>
 public class TaktLocalizationService : ITaktLocalizationService
 {
     /// <summary>
-    /// 本地化资源程序集定位（用于 <see cref="IStringLocalizerFactory.Create"/>）
+    /// 本地化资源程序集定位（用于 IStringLocalizerFactory.Create）
     /// </summary>
     private static readonly string LocalizationResourceLocation =
         typeof(TaktLocalizationService).Assembly.FullName
@@ -276,7 +276,7 @@ public class TaktLocalizationService : ITaktLocalizationService
     /// <summary>
     /// 获取后端本地化器
     /// </summary>
-    /// <returns>后端 <see cref="IStringLocalizer"/></returns>
+    /// <returns>后端 IStringLocalizer</returns>
     private IStringLocalizer GetBackendLocalizer()
     {
         _backendLocalizer ??= _localizerFactory.Create("TaktCommon", LocalizationResourceLocation);
@@ -286,7 +286,7 @@ public class TaktLocalizationService : ITaktLocalizationService
     /// <summary>
     /// 获取前端本地化器
     /// </summary>
-    /// <returns>前端 <see cref="IStringLocalizer"/></returns>
+    /// <returns>前端 IStringLocalizer</returns>
     private IStringLocalizer GetFrontendLocalizer()
     {
         _frontendLocalizer ??= _localizerFactory.Create("TaktCommon", LocalizationResourceLocation);
@@ -296,7 +296,7 @@ public class TaktLocalizationService : ITaktLocalizationService
     /// <summary>
     /// 获取验证本地化器
     /// </summary>
-    /// <returns>验证 <see cref="IStringLocalizer"/></returns>
+    /// <returns>验证 IStringLocalizer</returns>
     private IStringLocalizer GetValidationLocalizer()
     {
         _validationLocalizer ??= _localizerFactory.Create("TaktCommon", LocalizationResourceLocation);

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostCenterDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostCenter 生成，请按需审阅）
 // 
@@ -45,6 +45,16 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     /// 成本中心名称
     /// </summary>
     public string CostCenterName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心描述
+    /// </summary>
+    public string? CostCenterDesc { get; set; } = string.Empty;
 
     /// <summary>
     /// 父级 ID（0 表示根节点）
@@ -92,7 +102,7 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus CostCenterStatus { get; set; }
+    public int CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -158,6 +168,16 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 成本中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心描述
+    /// </summary>
+    public string? CostCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID（0 表示根节点）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -203,7 +223,7 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? CostCenterStatus { get; set; }
+    public int? CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -288,6 +308,16 @@ public class TaktCostCenterCreateDto
     public string CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 成本中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心描述
+    /// </summary>
+    public string? CostCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID（0 表示根节点）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -333,7 +363,7 @@ public class TaktCostCenterCreateDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus CostCenterStatus { get; set; }
+    public int CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -403,7 +433,7 @@ public class TaktCostCenterStatusDto
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "成本中心状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus CostCenterStatus { get; set; }
+    public int CostCenterStatus { get; set; }
 }
 
 // ========================================
@@ -460,6 +490,16 @@ public class TaktCostCenterTemplateDto
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 成本中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心描述
+    /// </summary>
+    public string? CostCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID（0 表示根节点）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -505,7 +545,7 @@ public class TaktCostCenterTemplateDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? CostCenterStatus { get; set; }
+    public int? CostCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -555,6 +595,16 @@ public class TaktCostCenterImportDto
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 成本中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心描述
+    /// </summary>
+    public string? CostCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID（0 表示根节点）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -600,7 +650,7 @@ public class TaktCostCenterImportDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? CostCenterStatus { get; set; }
+    public int? CostCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -651,6 +701,16 @@ public class TaktCostCenterExportDto
     public string CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 成本中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心描述
+    /// </summary>
+    public string? CostCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID（0 表示根节点）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -696,7 +756,7 @@ public class TaktCostCenterExportDto
     /// <summary>
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus CostCenterStatus { get; set; }
+    public int CostCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期

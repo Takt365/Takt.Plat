@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktOperLogDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：OperLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOperLog 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Logging;
 
@@ -46,9 +47,9 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     public string? OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（如：新增、删除、修改、查询、导出）
+    /// 操作类型（HTTP 审计推导）
     /// </summary>
-    public string? OperType { get; set; } = string.Empty;
+    public TaktHttpAuditOperType OperType { get; set; }
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -76,9 +77,9 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     public string? JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作状态（0=成功，1=失败）
+    /// 操作状态（0=失败，1=成功）
     /// </summary>
-    public int OperStatus { get; set; } = 0;
+    public TaktExecuteStatus OperStatus { get; set; }
 
     /// <summary>
     /// 错误消息（失败时）
@@ -91,7 +92,7 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 
@@ -138,9 +139,9 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（如：新增、删除、修改、查询、导出）
+    /// 操作类型（HTTP 审计推导）
     /// </summary>
-    public string? OperType { get; set; } = string.Empty;
+    public TaktHttpAuditOperType? OperType { get; set; }
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -168,9 +169,9 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作状态（0=成功，1=失败）
+    /// 操作状态（0=失败，1=成功）
     /// </summary>
-    public int? OperStatus { get; set; }
+    public TaktExecuteStatus? OperStatus { get; set; }
 
     /// <summary>
     /// 错误消息（失败时）
@@ -183,7 +184,7 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 
@@ -259,9 +260,9 @@ public class TaktOperLogCreateDto
     public string? OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（如：新增、删除、修改、查询、导出）
+    /// 操作类型（HTTP 审计推导）
     /// </summary>
-    public string? OperType { get; set; } = string.Empty;
+    public TaktHttpAuditOperType OperType { get; set; }
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -289,9 +290,9 @@ public class TaktOperLogCreateDto
     public string? JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作状态（0=成功，1=失败）
+    /// 操作状态（0=失败，1=成功）
     /// </summary>
-    public int OperStatus { get; set; } = 0;
+    public TaktExecuteStatus OperStatus { get; set; }
 
     /// <summary>
     /// 错误消息（失败时）
@@ -304,7 +305,7 @@ public class TaktOperLogCreateDto
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 
@@ -368,10 +369,10 @@ public class TaktOperLogStatusDto
     public long OperLogId { get; set; }
 
     /// <summary>
-    /// 操作状态（0=成功，1=失败）
+    /// 操作状态（0=失败，1=成功）
     /// </summary>
-    [Required(ErrorMessage = "操作状态（0=成功，1=失败）不能为空")]
-    public int OperStatus { get; set; } = 0;
+    [Required(ErrorMessage = "操作状态（0=失败，1=成功）不能为空")]
+    public TaktExecuteStatus OperStatus { get; set; }
 }
 
 // ========================================
@@ -406,9 +407,9 @@ public class TaktOperLogExportDto
     public string? OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（如：新增、删除、修改、查询、导出）
+    /// 操作类型（HTTP 审计推导）
     /// </summary>
-    public string? OperType { get; set; } = string.Empty;
+    public TaktHttpAuditOperType OperType { get; set; }
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -436,9 +437,9 @@ public class TaktOperLogExportDto
     public string? JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作状态（0=成功，1=失败）
+    /// 操作状态（0=失败，1=成功）
     /// </summary>
-    public int OperStatus { get; set; } = 0;
+    public TaktExecuteStatus OperStatus { get; set; }
 
     /// <summary>
     /// 错误消息（失败时）
@@ -451,7 +452,7 @@ public class TaktOperLogExportDto
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 

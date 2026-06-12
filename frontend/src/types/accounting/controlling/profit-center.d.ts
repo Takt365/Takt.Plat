@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：profit-center.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -37,6 +37,16 @@ export interface ProfitCenter extends CompanyDtoBase {
    * 利润中心名称
    */
   profitCenterName: string;
+
+  /**
+   * 利润中心简称
+   */
+  shortName?: string;
+
+  /**
+   * 利润中心描述
+   */
+  profitCenterDesc?: string;
 
   /**
    * 父级 ID
@@ -137,6 +147,16 @@ export interface ProfitCenterQuery extends TaktPagedQuery {
    * 利润中心名称
    */
   profitCenterName?: string;
+
+  /**
+   * 利润中心简称
+   */
+  shortName?: string;
+
+  /**
+   * 利润中心描述
+   */
+  profitCenterDesc?: string;
 
   /**
    * 父级 ID
@@ -256,6 +276,16 @@ export interface ProfitCenterCreate {
    * 利润中心名称
    */
   profitCenterName: string;
+
+  /**
+   * 利润中心简称
+   */
+  shortName?: string;
+
+  /**
+   * 利润中心描述
+   */
+  profitCenterDesc?: string;
 
   /**
    * 父级 ID
@@ -405,6 +435,16 @@ export interface ProfitCenterTemplate {
   profitCenterName?: string;
 
   /**
+   * 利润中心简称
+   */
+  shortName?: string;
+
+  /**
+   * 利润中心描述
+   */
+  profitCenterDesc?: string;
+
+  /**
    * 父级 ID
    */
   parentId?: string;
@@ -494,6 +534,16 @@ export interface ProfitCenterImport {
   profitCenterName?: string;
 
   /**
+   * 利润中心简称
+   */
+  shortName?: string;
+
+  /**
+   * 利润中心描述
+   */
+  profitCenterDesc?: string;
+
+  /**
    * 父级 ID
    */
   parentId?: string;
@@ -576,6 +626,16 @@ export interface ProfitCenterExport {
    * 利润中心名称
    */
   profitCenterName: string;
+
+  /**
+   * 利润中心简称
+   */
+  shortName?: string;
+
+  /**
+   * 利润中心描述
+   */
+  profitCenterDesc?: string;
 
   /**
    * 父级 ID

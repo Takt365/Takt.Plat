@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：quartz-log.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -14,10 +14,6 @@ import type {
   CompanyDtoBase,
   TaktPagedQuery
 } from '@/types/common';
-
-import type {
-  QuartzTask
-} from '@/types/foundation/quartz-task';
 
 /**
  * Quartz 任务执行日志实体
@@ -50,7 +46,7 @@ export interface QuartzLog extends CompanyDtoBase {
   /**
    * 任务组名（执行时快照）
    */
-  jobGroup: string;
+  jobGroup: number;
 
   /**
    * 任务类型（1=程序集 2=网络请求 3=SQL语句）
@@ -135,7 +131,7 @@ export interface QuartzLogQuery extends TaktPagedQuery {
   /**
    * 任务组名（执行时快照）
    */
-  jobGroup?: string;
+  jobGroup?: number;
 
   /**
    * 任务类型（1=程序集 2=网络请求 3=SQL语句）
@@ -244,7 +240,7 @@ export interface QuartzLogCreate {
   /**
    * 任务组名（执行时快照）
    */
-  jobGroup: string;
+  jobGroup: number;
 
   /**
    * 任务类型（1=程序集 2=网络请求 3=SQL语句）
@@ -367,7 +363,7 @@ export interface QuartzLogExport {
   /**
    * 任务组名（执行时快照）
    */
-  jobGroup: string;
+  jobGroup: number;
 
   /**
    * 任务类型（1=程序集 2=网络请求 3=SQL语句）

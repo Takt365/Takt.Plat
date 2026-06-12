@@ -97,7 +97,7 @@ public class TaktFlowApproverResolverService
                 continue;
             }
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null || user.TenantCode != tenantCode || user.UserStatus != TaktCommonStatus.Enabled)
+            if (user == null || user.TenantCode != tenantCode || user.UserStatus != 1)
             {
                 continue;
             }
@@ -202,7 +202,7 @@ public class TaktFlowApproverResolverService
         foreach (var userId in userIds)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null || user.UserStatus != TaktCommonStatus.Enabled)
+            if (user == null || user.UserStatus != 1)
             {
                 continue;
             }
@@ -242,7 +242,7 @@ public class TaktFlowApproverResolverService
             if (dept.HeadUserId > 0)
             {
                 var head = await _userRepository.GetByIdAsync(dept.HeadUserId);
-                if (head != null && head.UserStatus == TaktCommonStatus.Enabled)
+                if (head != null && head.UserStatus == 1)
                 {
                     result.Add(new TaktFlowResolvedApprover
                     {
@@ -304,7 +304,7 @@ public class TaktFlowApproverResolverService
             x => x.TenantCode == tenantCode
                 && x.CompanyCode == companyCode
                 && x.EmployeeId == employeeId
-                && x.ApprovalStatus == TaktApprovalStatus.Approved,
+                && x.ApprovalStatus == 2,
             x => x.CreatedAt,
             true);
         var latest = joinedList.FirstOrDefault();
@@ -337,6 +337,6 @@ public class TaktFlowApproverResolverService
     private async Task<TaktUser?> GetUserByEmployeeIdAsync(long employeeId, string tenantCode)
     {
         return await _userRepository.FirstAsync(x =>
-            x.TenantCode == tenantCode && x.EmployeeId == employeeId && x.UserStatus == TaktCommonStatus.Enabled);
+            x.TenantCode == tenantCode && x.EmployeeId == employeeId && x.UserStatus == 1);
     }
 }

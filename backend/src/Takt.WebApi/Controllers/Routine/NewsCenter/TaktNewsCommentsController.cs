@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsCommentsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心评论控制器
 // 
@@ -13,7 +13,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Routine.NewsCenter;
 using Takt.Application.Services.Routine.NewsCenter;
-using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Routine.NewsCenter;
 
@@ -21,7 +20,7 @@ namespace Takt.WebApi.Controllers.Routine.NewsCenter;
 /// 新闻中心评论控制器
 /// 提供新闻中心评论的 REST API
 /// </summary>
-[ApiModule(TaktModule.Routine, "日常事务")]
+[ApiModule(2, "日常事务")]
 [Route("api/[controller]", Name = "新闻中心评论")]
 public class TaktNewsCommentsController : TaktControllerBase
 {
@@ -102,7 +101,7 @@ public class TaktNewsCommentsController : TaktControllerBase
     /// <summary>
     /// 获取新闻中心评论树形列表
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
     /// <returns>树形数据</returns>
     [TaktPermission("routine:newscenter:newscomment:query", "新闻中心评论树")]
     [HttpGet("tree")]

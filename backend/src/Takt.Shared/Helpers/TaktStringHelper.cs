@@ -20,7 +20,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt字符串帮助类
 /// </summary>
-/// <remarks>无状态纯函数集合；<see cref="GenerateRandomString"/> 使用密码学随机源，输出随调用变化。</remarks>
+/// <remarks>无状态纯函数集合；GenerateRandomString 使用密码学随机源，输出随调用变化。</remarks>
 public static class TaktStringHelper
 {
     /// <summary>
@@ -355,19 +355,19 @@ public static class TaktStringHelper
     }
 
     /// <summary>
-    /// 掩码处理（隐藏部分字符，与 <see cref="TaktMaskHelper.Mask"/> 对齐）。
+    /// 掩码处理（隐藏部分字符，与 TaktMaskHelper.Mask 对齐）。
     /// </summary>
     public static string Mask(string input, int startVisible = 3, int endVisible = 4, char maskChar = '*')
         => TaktMaskHelper.Mask(input, startVisible, endVisible, maskChar);
 
     /// <summary>
-    /// 掩码邮箱（与 <see cref="TaktMaskHelper.MaskEmail"/> 对齐）。
+    /// 掩码邮箱（与 TaktMaskHelper.MaskEmail 对齐）。
     /// </summary>
     public static string MaskEmail(string email, char maskChar = '*')
         => TaktMaskHelper.MaskEmail(email, maskChar);
 
     /// <summary>
-    /// 掩码手机号（与 <see cref="TaktMaskHelper.MaskPhone"/> 对齐）。
+    /// 掩码手机号（与 TaktMaskHelper.MaskPhone 对齐）。
     /// </summary>
     public static string MaskPhone(string phone, char maskChar = '*')
         => TaktMaskHelper.MaskPhone(phone, 3, 4, maskChar);

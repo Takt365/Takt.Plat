@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities.Statistics.Logging;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -53,7 +52,7 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
     [SugarColumn(ColumnName = "task_type", ColumnDescription = "任务类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktQuartzTaskType TaskType { get; set; } = TaktQuartzTaskType.Assembly;
+    public int TaskType { get; set; } = 1;
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -89,7 +88,7 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     /// 触发器类型（0=Simple 1=Cron）
     /// </summary>
     [SugarColumn(ColumnName = "trigger_type", ColumnDescription = "触发器类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktQuartzTriggerType TriggerType { get; set; } = TaktQuartzTriggerType.Cron;
+    public int TriggerType { get; set; } = 1;
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -101,7 +100,7 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     /// 执行间隔时间（秒，触发器类型为 Simple 时使用）
     /// </summary>
     [SugarColumn(ColumnName = "interval_seconds", ColumnDescription = "执行间隔时间（秒）", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IntervalSeconds { get; set; }
+    public int IntervalSeconds { get; set; } = 0;
 
     /// <summary>
     /// 执行参数
@@ -110,22 +109,22 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     public string? ExecuteParams { get; set; }
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（0=正常 1=暂停）
     /// </summary>
     [SugarColumn(ColumnName = "task_status", ColumnDescription = "任务状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktQuartzTaskStatus TaskStatus { get; set; } = TaktQuartzTaskStatus.Normal;
+    public int TaskStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否允许并发执行（0=禁止，1=允许）
+    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "concurrent", ColumnDescription = "是否并发", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo Concurrent { get; set; } = TaktYesNo.No;
+    public int Concurrent { get; set; } = 0;
 
     /// <summary>
-    /// Misfire 策略
+    /// Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）
     /// </summary>
     [SugarColumn(ColumnName = "misfire_policy", ColumnDescription = "Misfire策略", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktQuartzMisfirePolicy MisfirePolicy { get; set; } = TaktQuartzMisfirePolicy.Default;
+    public int MisfirePolicy { get; set; } = 0;
 
     /// <summary>
     /// 首次执行时间（调度生效开始时间）
@@ -137,7 +136,7 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     /// 执行次数
     /// </summary>
     [SugarColumn(ColumnName = "execute_count", ColumnDescription = "执行次数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ExecuteCount { get; set; }
+    public int ExecuteCount { get; set; } = 0;
 
     /// <summary>
     /// 上次执行时间

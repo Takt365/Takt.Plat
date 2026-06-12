@@ -11,6 +11,7 @@
 // ========================================
 
 using Takt.Shared.Models.Foundation;
+using Takt.Shared.Models.Workflow;
 
 namespace Takt.Domain.Interfaces;
 
@@ -24,8 +25,9 @@ public interface ITaktSignalRDispatchService
     /// </summary>
     /// <param name="onlineId">在线用户记录 ID</param>
     /// <param name="reason">强退原因</param>
+    /// <param name="connectionId">SignalR 连接 ID（主键查无记录时回退定位）</param>
     /// <returns>任务</returns>
-    Task ForceKickOnlineAsync(long onlineId, string? reason = null);
+    Task ForceKickOnlineAsync(long onlineId, string? reason = null, string? connectionId = null);
 
     /// <summary>
     /// 批量强制踢出在线用户
@@ -66,4 +68,40 @@ public interface ITaktSignalRDispatchService
     /// <param name="userId">用户 ID</param>
     /// <returns>任务</returns>
     Task PushMessageStatisticsToUserAsync(string companyCode, string userName, long? userId = null);
+
+    /// <summary>
+    /// 推送流程定义变更到公司内在线客户端
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushFlowSchemeChangedAsync(TaktSignalRFlowSchemeChangedPush push);
+
+    /// <summary>
+    /// 向指定用户推送流程实例推进事件
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <param name="targetUserName">目标用户名</param>
+    /// <returns>任务</returns>
+    Task PushFlowInstanceProgressedToUserAsync(TaktSignalRFlowInstanceProgressedPush push, string targetUserName);
+
+    /// <summary>
+    /// 向指定用户推送最新待办数量
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushFlowTodoCountToUserAsync(TaktSignalRFlowTodoCountPush push);
+
+    /// <summary>
+    /// 推送定时任务定义变更到公司内在线客户端
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushQuartzTaskChangedAsync(TaktSignalRQuartzTaskChangedPush push);
+
+    /// <summary>
+    /// 推送定时任务执行完成到公司内在线客户端
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushQuartzTaskExecutedAsync(TaktSignalRQuartzTaskExecutedPush push);
 }

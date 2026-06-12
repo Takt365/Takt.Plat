@@ -10,7 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using System.Text.Json;
+using Newtonsoft.Json.Serialization;
 using Takt.Shared.Enums;
 using Takt.Shared.Models.Logging;
 using Takt.Shared.Options;
@@ -20,7 +20,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// 统一日志格式化器
 /// </summary>
-/// <remarks>无状态；<c>JsonOptions</c> 为只读序列化配置。</remarks>
+/// <remarks>无状态；<c>JsonSettings</c> 为只读序列化配置。</remarks>
 public static class TaktLogFormatter
 {
     /// <summary>
@@ -35,10 +35,13 @@ public static class TaktLogFormatter
     public const string DefaultFileOutputTemplate =
         "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    /// <summary>
+    /// 批量上报 JSON 序列化配置（Newtonsoft.Json；camelCase、无缩进）
+    /// </summary>
+    private static readonly JsonSerializerSettings JsonSettings = new()
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        WriteIndented = false
+        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+        Formatting = Formatting.None
     };
 
     /// <summary>
@@ -232,7 +235,7 @@ public static class TaktLogFormatter
             Entries = entries.ToList()
         };
 
-        return JsonSerializer.Serialize(payload, JsonOptions);
+        return JsonConvert.SerializeObject(payload, JsonSettings);
     }
 
     /// <summary>
@@ -259,6 +262,12 @@ public static class TaktLogFormatter
         return (items.Take(maxSample).ToList(), items.Count);
     }
 
+    /// <summary>
+    /// 将非空字符串写入 Serilog 属性字典（跳过 null/空白，避免输出空占位）
+    /// </summary>
+    /// <param name="properties">目标属性字典</param>
+    /// <param name="key">属性键</param>
+    /// <param name="value">属性值；为空或仅空白时不写入</param>
     private static void AddIfNotEmpty(Dictionary<string, object?> properties, string key, string? value)
     {
         if (!string.IsNullOrWhiteSpace(value))

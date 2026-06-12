@@ -43,7 +43,7 @@ public class TaktDictType : TaktTenantEntityBase
     /// 数据源（0=表数据，1=SQL脚本）
     /// </summary>
     [SugarColumn(ColumnName = "data_source", ColumnDescription = "数据源", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktDataSource DataSource { get; set; } = TaktDataSource.TableData;
+    public int DataSource { get; set; } = 0;
 
     /// <summary>
     /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用）
@@ -63,13 +63,13 @@ public class TaktDictType : TaktTenantEntityBase
     /// 内置字典不允许删除和修改核心字段
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;    
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "dict_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus DictStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int DictStatus { get; set; } = 1;
 
 
     // ========================================

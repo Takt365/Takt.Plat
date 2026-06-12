@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableFieldDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableField 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableField 生成，请按需审阅）
 // 
@@ -70,12 +70,12 @@ public class TaktConfigurableFieldDto : TaktCompanyDtoBase
     /// <summary>
     /// 聚合函数（无分组时为 None）
     /// </summary>
-    public TaktConfigurableAggregateFunc AggregateFunc { get; set; }
+    public int AggregateFunc { get; set; }
 
     /// <summary>
     /// 是否输出（0=隐藏 1=显示）
     /// </summary>
-    public TaktYesNo IsVisible { get; set; }
+    public int IsVisible { get; set; }
 
     /// <summary>
     /// 排序号（SELECT 列顺序）
@@ -139,12 +139,12 @@ public class TaktConfigurableFieldQueryDto : TaktPagedQuery
     /// <summary>
     /// 聚合函数（无分组时为 None）
     /// </summary>
-    public TaktConfigurableAggregateFunc? AggregateFunc { get; set; }
+    public int? AggregateFunc { get; set; }
 
     /// <summary>
     /// 是否输出（0=隐藏 1=显示）
     /// </summary>
-    public TaktYesNo? IsVisible { get; set; }
+    public int? IsVisible { get; set; }
 
     /// <summary>
     /// 排序号（SELECT 列顺序）
@@ -228,12 +228,12 @@ public class TaktConfigurableFieldCreateDto
     /// <summary>
     /// 聚合函数（无分组时为 None）
     /// </summary>
-    public TaktConfigurableAggregateFunc AggregateFunc { get; set; }
+    public int AggregateFunc { get; set; }
 
     /// <summary>
     /// 是否输出（0=隐藏 1=显示）
     /// </summary>
-    public TaktYesNo IsVisible { get; set; }
+    public int IsVisible { get; set; }
 
     /// <summary>
     /// 排序号（SELECT 列顺序）
@@ -344,12 +344,12 @@ public class TaktConfigurableFieldTemplateDto
     /// <summary>
     /// 聚合函数（无分组时为 None）
     /// </summary>
-    public TaktConfigurableAggregateFunc? AggregateFunc { get; set; }
+    public int? AggregateFunc { get; set; }
 
     /// <summary>
     /// 是否输出（0=隐藏 1=显示）
     /// </summary>
-    public TaktYesNo? IsVisible { get; set; }
+    public int? IsVisible { get; set; }
 
     /// <summary>
     /// 排序号（SELECT 列顺序）
@@ -417,12 +417,12 @@ public class TaktConfigurableFieldImportDto
     /// <summary>
     /// 聚合函数（无分组时为 None）
     /// </summary>
-    public TaktConfigurableAggregateFunc? AggregateFunc { get; set; }
+    public int? AggregateFunc { get; set; }
 
     /// <summary>
     /// 是否输出（0=隐藏 1=显示）
     /// </summary>
-    public TaktYesNo? IsVisible { get; set; }
+    public int? IsVisible { get; set; }
 
     /// <summary>
     /// 排序号（SELECT 列顺序）
@@ -491,12 +491,12 @@ public class TaktConfigurableFieldExportDto
     /// <summary>
     /// 聚合函数（无分组时为 None）
     /// </summary>
-    public TaktConfigurableAggregateFunc AggregateFunc { get; set; }
+    public int AggregateFunc { get; set; }
 
     /// <summary>
     /// 是否输出（0=隐藏 1=显示）
     /// </summary>
-    public TaktYesNo IsVisible { get; set; }
+    public int IsVisible { get; set; }
 
     /// <summary>
     /// 排序号（SELECT 列顺序）

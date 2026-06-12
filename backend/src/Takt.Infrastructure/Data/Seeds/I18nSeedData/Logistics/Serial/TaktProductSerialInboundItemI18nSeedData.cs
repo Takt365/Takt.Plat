@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktProductSerialInboundItemI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductSerialInboundItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial;
 
 /// <summary>
-/// TaktProductSerialInboundItem 实体国际化翻译种子（键前缀 entity.productSerialInboundItem.*）
+/// TaktProductSerialInboundItem 实体国际化翻译种子（键前缀 entity.productserialinbounditem.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktProductSerialInboundItemI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktProductSerialInboundItemI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 productSerialInboundItem 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 productserialinbounditem 实体翻译...", tenantCode);
 
         foreach (var item in GetProductSerialInboundItemTranslations())
         {
@@ -76,74 +75,74 @@ public class TaktProductSerialInboundItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktProductSerialInboundItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.productSerialInboundItem._self / entity.productSerialInboundItem.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.productserialinbounditem._self / entity.productserialinbounditem.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetProductSerialInboundItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.productSerialInboundItem._self
-            new TranslationSeedItem("entity.productSerialInboundItem._self", "en-US", "Product Serial Inbound Item Information", "实体名称"),
-            // entity.productSerialInboundItem._self
-            new TranslationSeedItem("entity.productSerialInboundItem._self", "ja-JP", "产品序列号入库明细信息", "实体名称"),
-            // entity.productSerialInboundItem._self
-            new TranslationSeedItem("entity.productSerialInboundItem._self", "zh-CN", "产品序列号入库明细信息", "实体名称"),
-            // entity.productSerialInboundItem._self
-            new TranslationSeedItem("entity.productSerialInboundItem._self", "zh-HK", "产品序列号入库明细信息", "实体名称"),
+            // entity.productserialinbounditem._self
+            new TranslationSeedItem("entity.productserialinbounditem._self", "en-US", "Product Serial Inbound Item Information", "实体名称"),
+            // entity.productserialinbounditem._self
+            new TranslationSeedItem("entity.productserialinbounditem._self", "ja-JP", "产品序列号入库明细信息", "实体名称"),
+            // entity.productserialinbounditem._self
+            new TranslationSeedItem("entity.productserialinbounditem._self", "zh-CN", "产品序列号入库明细信息", "实体名称"),
+            // entity.productserialinbounditem._self
+            new TranslationSeedItem("entity.productserialinbounditem._self", "zh-HK", "产品序列号入库明细信息", "实体名称"),
 
-            // entity.productSerialInboundItem.inboundid
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundid", "en-US", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.productSerialInboundItem.inboundid
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundid", "ja-JP", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.productSerialInboundItem.inboundid
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundid", "zh-CN", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.productSerialInboundItem.inboundid
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundid", "zh-HK", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.productserialinbounditem.inboundid
+            new TranslationSeedItem("entity.productserialinbounditem.inboundid", "en-US", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.productserialinbounditem.inboundid
+            new TranslationSeedItem("entity.productserialinbounditem.inboundid", "ja-JP", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.productserialinbounditem.inboundid
+            new TranslationSeedItem("entity.productserialinbounditem.inboundid", "zh-CN", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.productserialinbounditem.inboundid
+            new TranslationSeedItem("entity.productserialinbounditem.inboundid", "zh-HK", "入库ID", "入库ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
-            // entity.productSerialInboundItem.inboundno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundno", "en-US", "入库单号", "入库单号（冗余字段，便于查询）"),
-            // entity.productSerialInboundItem.inboundno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundno", "ja-JP", "入库单号", "入库单号（冗余字段，便于查询）"),
-            // entity.productSerialInboundItem.inboundno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundno", "zh-CN", "入库单号", "入库单号（冗余字段，便于查询）"),
-            // entity.productSerialInboundItem.inboundno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundno", "zh-HK", "入库单号", "入库单号（冗余字段，便于查询）"),
+            // entity.productserialinbounditem.inboundno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundno", "en-US", "入库单号", "入库单号（冗余字段，便于查询）"),
+            // entity.productserialinbounditem.inboundno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundno", "ja-JP", "入库单号", "入库单号（冗余字段，便于查询）"),
+            // entity.productserialinbounditem.inboundno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundno", "zh-CN", "入库单号", "入库单号（冗余字段，便于查询）"),
+            // entity.productserialinbounditem.inboundno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundno", "zh-HK", "入库单号", "入库单号（冗余字段，便于查询）"),
 
-            // entity.productSerialInboundItem.linenumber
-            new TranslationSeedItem("entity.productSerialInboundItem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.productSerialInboundItem.linenumber
-            new TranslationSeedItem("entity.productSerialInboundItem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.productSerialInboundItem.linenumber
-            new TranslationSeedItem("entity.productSerialInboundItem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.productSerialInboundItem.linenumber
-            new TranslationSeedItem("entity.productSerialInboundItem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.productserialinbounditem.linenumber
+            new TranslationSeedItem("entity.productserialinbounditem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.productserialinbounditem.linenumber
+            new TranslationSeedItem("entity.productserialinbounditem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.productserialinbounditem.linenumber
+            new TranslationSeedItem("entity.productserialinbounditem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.productserialinbounditem.linenumber
+            new TranslationSeedItem("entity.productserialinbounditem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
 
-            // entity.productSerialInboundItem.inboundserialno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundserialno", "en-US", "入库序列号", "入库序列号（唯一索引）"),
-            // entity.productSerialInboundItem.inboundserialno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundserialno", "ja-JP", "入库序列号", "入库序列号（唯一索引）"),
-            // entity.productSerialInboundItem.inboundserialno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundserialno", "zh-CN", "入库序列号", "入库序列号（唯一索引）"),
-            // entity.productSerialInboundItem.inboundserialno
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundserialno", "zh-HK", "入库序列号", "入库序列号（唯一索引）"),
+            // entity.productserialinbounditem.inboundserialno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundserialno", "en-US", "入库序列号", "入库序列号（唯一索引）"),
+            // entity.productserialinbounditem.inboundserialno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundserialno", "ja-JP", "入库序列号", "入库序列号（唯一索引）"),
+            // entity.productserialinbounditem.inboundserialno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundserialno", "zh-CN", "入库序列号", "入库序列号（唯一索引）"),
+            // entity.productserialinbounditem.inboundserialno
+            new TranslationSeedItem("entity.productserialinbounditem.inboundserialno", "zh-HK", "入库序列号", "入库序列号（唯一索引）"),
 
-            // entity.productSerialInboundItem.inboundtime
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundtime", "en-US", "入库时间", "入库时间"),
-            // entity.productSerialInboundItem.inboundtime
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundtime", "ja-JP", "入库时间", "入库时间"),
-            // entity.productSerialInboundItem.inboundtime
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundtime", "zh-CN", "入库时间", "入库时间"),
-            // entity.productSerialInboundItem.inboundtime
-            new TranslationSeedItem("entity.productSerialInboundItem.inboundtime", "zh-HK", "入库时间", "入库时间"),
+            // entity.productserialinbounditem.inboundtime
+            new TranslationSeedItem("entity.productserialinbounditem.inboundtime", "en-US", "入库时间", "入库时间"),
+            // entity.productserialinbounditem.inboundtime
+            new TranslationSeedItem("entity.productserialinbounditem.inboundtime", "ja-JP", "入库时间", "入库时间"),
+            // entity.productserialinbounditem.inboundtime
+            new TranslationSeedItem("entity.productserialinbounditem.inboundtime", "zh-CN", "入库时间", "入库时间"),
+            // entity.productserialinbounditem.inboundtime
+            new TranslationSeedItem("entity.productserialinbounditem.inboundtime", "zh-HK", "入库时间", "入库时间"),
 
-            // entity.productSerialInboundItem.inbound
-            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "en-US", "入库主表", "入库主表"),
-            // entity.productSerialInboundItem.inbound
-            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "ja-JP", "入库主表", "入库主表"),
-            // entity.productSerialInboundItem.inbound
-            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "zh-CN", "入库主表", "入库主表"),
-            // entity.productSerialInboundItem.inbound
-            new TranslationSeedItem("entity.productSerialInboundItem.inbound", "zh-HK", "入库主表", "入库主表"),
+            // entity.productserialinbounditem.inbound
+            new TranslationSeedItem("entity.productserialinbounditem.inbound", "en-US", "入库主表", "入库主表"),
+            // entity.productserialinbounditem.inbound
+            new TranslationSeedItem("entity.productserialinbounditem.inbound", "ja-JP", "入库主表", "入库主表"),
+            // entity.productserialinbounditem.inbound
+            new TranslationSeedItem("entity.productserialinbounditem.inbound", "zh-CN", "入库主表", "入库主表"),
+            // entity.productserialinbounditem.inbound
+            new TranslationSeedItem("entity.productserialinbounditem.inbound", "zh-HK", "入库主表", "入库主表"),
         };
     }
 
@@ -161,8 +160,8 @@ public class TaktProductSerialInboundItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

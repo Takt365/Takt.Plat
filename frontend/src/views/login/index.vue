@@ -54,6 +54,8 @@
 /**
  * 登录页壳：视图切换、布局与展示区；主表单见 `login-form.vue`
  */
+import { message } from 'ant-design-vue';
+import { TAKT_LOGOUT_FLASH_STORAGE_KEY } from '@/bootstrap/takt-event-handlers';
 import { useLocaleStore } from '@/stores/foundation/locale';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { useUserStore } from '@/stores/identity/user';
@@ -123,6 +125,28 @@ onBeforeMount(() => {
 
   tenantStore.clearTenant();
   useLocaleStore().resetLocaleForLoginPage();
+});
+
+onMounted(() => {
+  if (typeof sessionStorage === 'undefined') {
+    return;
+  }
+  const raw = sessionStorage.getItem(TAKT_LOGOUT_FLASH_STORAGE_KEY);
+  if (!raw) {
+    return;
+  }
+  sessionStorage.removeItem(TAKT_LOGOUT_FLASH_STORAGE_KEY);
+  try {
+    const parsed = JSON.parse(raw) as { type?: string; message?: string };
+    const content = parsed.message?.trim();
+    if (!content) {
+      return;
+    }
+    const type = parsed.type === 'warning' ? 'warning' : 'error';
+    message[type](content);
+  } catch {
+    // 非法 flash 数据忽略
+  }
 });
 
 </script>

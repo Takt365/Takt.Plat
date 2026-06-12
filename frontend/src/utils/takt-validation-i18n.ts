@@ -11,7 +11,7 @@
 // ========================================
 
 /** 格式不正确 */
-export const VALIDATION_INVALID_FORMAT_I18N_KEY = 'common.validation.invalid.format';
+export const VALIDATION_INVALID_FORMAT_I18N_KEY = 'common.validation.format.invalid';
 
 /** 不能为空 */
 export const VALIDATION_REQUIRED_I18N_KEY = 'common.validation.required';

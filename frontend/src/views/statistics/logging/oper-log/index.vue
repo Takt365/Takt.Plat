@@ -109,118 +109,118 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('userName')">
-      <a-form-item :label="t('entity.operLog.username')">
+      <a-form-item :label="t('entity.operlog.username')">
         <a-input
           v-model:value="advancedQueryForm.userName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.username') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.username') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operModule')">
-      <a-form-item :label="t('entity.operLog.opermodule')">
+      <a-form-item :label="t('entity.operlog.opermodule')">
         <a-input
           v-model:value="advancedQueryForm.operModule"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.opermodule') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opermodule') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operType')">
-      <a-form-item :label="t('entity.operLog.opertype')">
-        <a-input
+      <a-form-item :label="t('entity.operlog.opertype')">
+        <a-input-number
           v-model:value="advancedQueryForm.operType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.opertype') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opertype') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operMethod')">
-      <a-form-item :label="t('entity.operLog.opermethod')">
+      <a-form-item :label="t('entity.operlog.opermethod')">
         <a-input
           v-model:value="advancedQueryForm.operMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.opermethod') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opermethod') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestMethod')">
-      <a-form-item :label="t('entity.operLog.requestmethod')">
+      <a-form-item :label="t('entity.operlog.requestmethod')">
         <a-input
           v-model:value="advancedQueryForm.requestMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.requestmethod') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.requestmethod') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operUrl')">
-      <a-form-item :label="t('entity.operLog.operurl')">
+      <a-form-item :label="t('entity.operlog.operurl')">
         <a-input
           v-model:value="advancedQueryForm.operUrl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operurl') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operurl') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestParam')">
-      <a-form-item :label="t('entity.operLog.requestparam')">
+      <a-form-item :label="t('entity.operlog.requestparam')">
         <a-input
           v-model:value="advancedQueryForm.requestParam"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.requestparam') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.requestparam') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('jsonResult')">
-      <a-form-item :label="t('entity.operLog.jsonresult')">
+      <a-form-item :label="t('entity.operlog.jsonresult')">
         <a-input
           v-model:value="advancedQueryForm.jsonResult"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.jsonresult') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.jsonresult') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operStatus')">
-      <a-form-item :label="t('entity.operLog.operstatus')">
+      <a-form-item :label="t('entity.operlog.operstatus')">
         <a-input-number
           v-model:value="advancedQueryForm.operStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operstatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operstatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('errorMsg')">
-      <a-form-item :label="t('entity.operLog.errormsg')">
+      <a-form-item :label="t('entity.operlog.errormsg')">
         <a-input
           v-model:value="advancedQueryForm.errorMsg"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.errormsg') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.errormsg') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operIp')">
-      <a-form-item :label="t('entity.operLog.operip')">
+      <a-form-item :label="t('entity.operlog.operip')">
         <a-input
           v-model:value="advancedQueryForm.operIp"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operip') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operip') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operLocation')">
-      <a-form-item :label="t('entity.operLog.operlocation')">
+      <a-form-item :label="t('entity.operlog.operlocation')">
         <a-input
           v-model:value="advancedQueryForm.operLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operlocation') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operlocation') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operTimeStart')">
-      <a-form-item :label="t('entity.operLog.opertimestart')">
+      <a-form-item :label="t('entity.operlog.opertimestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.operTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.operLog.opertimestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.operlog.opertimestart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -228,10 +228,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operTimeEnd')">
-      <a-form-item :label="t('entity.operLog.opertimeend')">
+      <a-form-item :label="t('entity.operlog.opertimeend')">
         <a-date-picker
           v-model:value="advancedQueryForm.operTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.operLog.opertimeend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.operlog.opertimeend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -239,10 +239,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('elapsedTime')">
-      <a-form-item :label="t('entity.operLog.elapsedtime')">
+      <a-form-item :label="t('entity.operlog.elapsedtime')">
         <a-input-number
           v-model:value="advancedQueryForm.elapsedTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.elapsedtime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.elapsedtime') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -329,7 +329,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktOperLog')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.operLog._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.operlog._self') })
 )
 
 /** 快捷查询关键字 */
@@ -366,7 +366,7 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   userName: '',
   operModule: '',
-  operType: '',
+  operType: undefined as number | undefined,
   operMethod: '',
   requestMethod: '',
   operUrl: '',
@@ -386,21 +386,21 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'userName', label: t('entity.operLog.username') },
-  { key: 'operModule', label: t('entity.operLog.opermodule') },
-  { key: 'operType', label: t('entity.operLog.opertype') },
-  { key: 'operMethod', label: t('entity.operLog.opermethod') },
-  { key: 'requestMethod', label: t('entity.operLog.requestmethod') },
-  { key: 'operUrl', label: t('entity.operLog.operurl') },
-  { key: 'requestParam', label: t('entity.operLog.requestparam') },
-  { key: 'jsonResult', label: t('entity.operLog.jsonresult') },
-  { key: 'operStatus', label: t('entity.operLog.operstatus') },
-  { key: 'errorMsg', label: t('entity.operLog.errormsg') },
-  { key: 'operIp', label: t('entity.operLog.operip') },
-  { key: 'operLocation', label: t('entity.operLog.operlocation') },
-  { key: 'operTimeStart', label: t('entity.operLog.opertimestart') },
-  { key: 'operTimeEnd', label: t('entity.operLog.opertimeend') },
-  { key: 'elapsedTime', label: t('entity.operLog.elapsedtime') },
+  { key: 'userName', label: t('entity.operlog.username') },
+  { key: 'operModule', label: t('entity.operlog.opermodule') },
+  { key: 'operType', label: t('entity.operlog.opertype') },
+  { key: 'operMethod', label: t('entity.operlog.opermethod') },
+  { key: 'requestMethod', label: t('entity.operlog.requestmethod') },
+  { key: 'operUrl', label: t('entity.operlog.operurl') },
+  { key: 'requestParam', label: t('entity.operlog.requestparam') },
+  { key: 'jsonResult', label: t('entity.operlog.jsonresult') },
+  { key: 'operStatus', label: t('entity.operlog.operstatus') },
+  { key: 'errorMsg', label: t('entity.operlog.errormsg') },
+  { key: 'operIp', label: t('entity.operlog.operip') },
+  { key: 'operLocation', label: t('entity.operlog.operlocation') },
+  { key: 'operTimeStart', label: t('entity.operlog.opertimestart') },
+  { key: 'operTimeEnd', label: t('entity.operlog.opertimeend') },
+  { key: 'elapsedTime', label: t('entity.operlog.elapsedtime') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
@@ -443,7 +443,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operLogId') ?? ''
   },
   {
-    title: t('entity.operLog.username'),
+    title: t('entity.operlog.username'),
     dataIndex: 'userName',
     key: 'userName',
     width: 120,
@@ -452,7 +452,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'userName') ?? ''
   },
   {
-    title: t('entity.operLog.opermodule'),
+    title: t('entity.operlog.opermodule'),
     dataIndex: 'operModule',
     key: 'operModule',
     width: 120,
@@ -461,7 +461,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operModule') ?? ''
   },
   {
-    title: t('entity.operLog.opertype'),
+    title: t('entity.operlog.opertype'),
     dataIndex: 'operType',
     key: 'operType',
     width: 120,
@@ -470,7 +470,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operType') ?? ''
   },
   {
-    title: t('entity.operLog.opermethod'),
+    title: t('entity.operlog.opermethod'),
     dataIndex: 'operMethod',
     key: 'operMethod',
     width: 120,
@@ -479,7 +479,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operMethod') ?? ''
   },
   {
-    title: t('entity.operLog.requestmethod'),
+    title: t('entity.operlog.requestmethod'),
     dataIndex: 'requestMethod',
     key: 'requestMethod',
     width: 120,
@@ -488,7 +488,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'requestMethod') ?? ''
   },
   {
-    title: t('entity.operLog.operurl'),
+    title: t('entity.operlog.operurl'),
     dataIndex: 'operUrl',
     key: 'operUrl',
     width: 120,
@@ -497,7 +497,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operUrl') ?? ''
   },
   {
-    title: t('entity.operLog.requestparam'),
+    title: t('entity.operlog.requestparam'),
     dataIndex: 'requestParam',
     key: 'requestParam',
     width: 120,
@@ -506,7 +506,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'requestParam') ?? ''
   },
   {
-    title: t('entity.operLog.jsonresult'),
+    title: t('entity.operlog.jsonresult'),
     dataIndex: 'jsonResult',
     key: 'jsonResult',
     width: 120,
@@ -515,7 +515,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'jsonResult') ?? ''
   },
   {
-    title: t('entity.operLog.operstatus'),
+    title: t('entity.operlog.operstatus'),
     dataIndex: 'operStatus',
     key: 'operStatus',
     width: 120,
@@ -524,7 +524,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operStatus') ?? ''
   },
   {
-    title: t('entity.operLog.errormsg'),
+    title: t('entity.operlog.errormsg'),
     dataIndex: 'errorMsg',
     key: 'errorMsg',
     width: 120,
@@ -533,7 +533,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'errorMsg') ?? ''
   },
   {
-    title: t('entity.operLog.operip'),
+    title: t('entity.operlog.operip'),
     dataIndex: 'operIp',
     key: 'operIp',
     width: 120,
@@ -542,7 +542,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operIp') ?? ''
   },
   {
-    title: t('entity.operLog.operlocation'),
+    title: t('entity.operlog.operlocation'),
     dataIndex: 'operLocation',
     key: 'operLocation',
     width: 120,
@@ -551,7 +551,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operLocation') ?? ''
   },
   {
-    title: t('entity.operLog.opertime'),
+    title: t('entity.operlog.opertime'),
     dataIndex: 'operTime',
     key: 'operTime',
     width: 120,
@@ -560,7 +560,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOperLogField(record, 'operTime') ?? ''
   },
   {
-    title: t('entity.operLog.elapsedtime'),
+    title: t('entity.operlog.elapsedtime'),
     dataIndex: 'elapsedTime',
     key: 'elapsedTime',
     width: 120,
@@ -663,6 +663,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -675,7 +678,7 @@ function handleReset() {
   advancedQueryForm.value = {
   userName: '',
   operModule: '',
-  operType: '',
+  operType: undefined as number | undefined,
   operMethod: '',
   requestMethod: '',
   operUrl: '',
@@ -699,13 +702,13 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.operLog._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.operlog._self') })
   formData.value = {}
   formVisible.value = true
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: OperLog) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.operLog._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.operlog._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -715,7 +718,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.operLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.operlog._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -733,10 +736,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateOperLog(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.operLog._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.operlog._self') }))
     } else {
       await createOperLog(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.operLog._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.operlog._self') }))
     }
     formVisible.value = false
     loadData()
@@ -781,10 +784,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.operLog._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.operlog._self') }))
   } catch (error: any) {
     logger.error('[OperLog] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.operLog._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.operlog._self') }))
   } finally {
     loading.value = false
   }
@@ -793,12 +796,12 @@ async function handleExport() {
 async function handleDeleteOne(record: OperLog) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.operLog._self'), name: t('common.tip.this.target', { target: t('entity.operLog._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.operlog._self'), name: t('common.tip.this.target', { target: t('entity.operlog._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteOperLogById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.operLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.operlog._self') }))
       loadData()
     }
   })
@@ -806,18 +809,18 @@ async function handleDeleteOne(record: OperLog) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.operLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.operlog._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.operLog._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.operlog._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteOperLogBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.operLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.operlog._self') }))
       loadData()
     }
   })
@@ -838,7 +841,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   userName: '',
   operModule: '',
-  operType: '',
+  operType: undefined as number | undefined,
   operMethod: '',
   requestMethod: '',
   operUrl: '',

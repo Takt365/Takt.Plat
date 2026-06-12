@@ -25,11 +25,13 @@
       delete-permission="humanresource:attendance:overtime:delete"
       import-permission="humanresource:attendance:overtime:import"
       export-permission="humanresource:attendance:overtime:export"
+      start-flow-permission="humanresource:attendance:overtime:update"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
+      :show-start-flow="true"
       :show-expand="true"
       :show-advanced-query="true"
       :show-column-setting="true"
@@ -41,10 +43,13 @@
       :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
+      :start-flow-disabled="submitApprovalDisabled"
+      :start-flow-loading="submitApprovalLoading"
       :refresh-loading="loading"
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
+      @start-flow="handleSubmitApproval"
       @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
@@ -491,7 +496,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import OvertimeForm from './components/overtime-form.vue'
-import { getOvertimeList, getOvertimeById, createOvertime, updateOvertime, deleteOvertimeById, deleteOvertimeBatch, getOvertimeTemplate, importOvertime, exportOvertime } from '@/api/human-resource/attendance/overtime'
+import { getOvertimeList, getOvertimeById, createOvertime, updateOvertime, deleteOvertimeById, deleteOvertimeBatch, getOvertimeTemplate, importOvertime, exportOvertime, submitOvertimeForApproval } from '@/api/human-resource/attendance/overtime'
 import * as overtimeItemApi from '@/api/human-resource/attendance/overtime-item'
 import type { OvertimeItem, OvertimeItemQuery } from '@/types/human-resource/attendance/overtime-item'
 import type { Overtime, OvertimeQuery, OvertimeCreate, OvertimeUpdate } from '@/types/human-resource/attendance/overtime'
@@ -620,6 +625,16 @@ const entityIdName = 'overtimeId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
+/** 提交审批：须单行且状态为草稿或已驳回 */
+const submitApprovalDisabled = computed(() => {
+  if (selectedRows.value.length !== 1) {
+    return true
+  }
+  const status = Number(getOvertimeField(selectedRows.value[0], 'overtimeStatus'))
+  return status !== 0 && status !== 3
+})
+/** 提交审批 loading */
+const submitApprovalLoading = ref(false)
 
 /** 主子表展开行 keys（手风琴，仅一行展开） */
 const expandedRowKeys = ref<string[]>([])
@@ -1015,6 +1030,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -1199,6 +1217,28 @@ async function handleDeleteOne(record: Overtime) {
     }
   })
 }
+/** 提交加班审批（发起工作流） */
+async function handleSubmitApproval() {
+  if (submitApprovalDisabled.value || selectedRows.value.length !== 1) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.startflow'), entity: t('entity.overtime._self') }))
+    return
+  }
+  const id = getOvertimeId(selectedRows.value[0])
+  if (!id) {
+    return
+  }
+  submitApprovalLoading.value = true
+  try {
+    await submitOvertimeForApproval(id)
+    message.success(t('common.feedback.updated', { target: t('entity.overtime._self') }))
+    await loadData()
+  } catch (err: unknown) {
+    message.error(err instanceof Error ? err.message : t('common.feedback.failed'))
+  } finally {
+    submitApprovalLoading.value = false
+  }
+}
+
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {

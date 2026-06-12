@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktStandardWageRatesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工资率控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Accounting.Controlling;
 /// 标准工资率控制器
 /// 提供标准工资率的 REST API
 /// </summary>
-[ApiModule(TaktModule.Accounting, "管控会计")]
+[ApiModule(3, "管控会计")]
 [Route("api/[controller]", Name = "标准工资率")]
 public class TaktStandardWageRatesController : TaktControllerBase
 {

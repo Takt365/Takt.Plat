@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Cost
 // 文件名称：TaktQualityOperationOutgoingValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityOperationOutgoing 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQualityOperationOutgoing 生成，请按需审阅）
 // 
@@ -31,15 +31,15 @@ public class TaktQualityOperationOutgoingCreateValidator : AbstractValidator<Tak
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.QualityOperationId)
             .GreaterThanOrEqualTo(0).WithMessage("品质业务主表ID不能为负数");
         RuleFor(x => x.QualityOperationCode)
             .NotEmpty().WithMessage("品质业务编码不能为空")
-            .MaximumLength(30).WithMessage("品质业务编码长度不能超过30个字符");
+            .MaximumLength(40).WithMessage("品质业务编码长度不能超过40个字符");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -81,14 +81,14 @@ public class TaktQualityOperationOutgoingImportValidator : AbstractValidator<Tak
     public TaktQualityOperationOutgoingImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.QualityOperationId)
             .GreaterThanOrEqualTo(0).WithMessage("品质业务主表ID不能为负数");
         RuleFor(x => x.QualityOperationCode)
             .NotEmpty().WithMessage("品质业务编码不能为空")
-            .MaximumLength(30).WithMessage("品质业务编码长度不能超过30个字符");
+            .MaximumLength(40).WithMessage("品质业务编码长度不能超过40个字符");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

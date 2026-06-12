@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktSelfServiceDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SelfService 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSelfService 生成，请按需审阅）
 // 
@@ -64,7 +64,7 @@ public class TaktSelfServiceDto : TaktCompanyDtoBase
     /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus SelfServiceStatus { get; set; }
+    public int SelfServiceStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -121,7 +121,7 @@ public class TaktSelfServiceQueryDto : TaktPagedQuery
     /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? SelfServiceStatus { get; set; }
+    public int? SelfServiceStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -202,7 +202,7 @@ public class TaktSelfServiceCreateDto
     /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus SelfServiceStatus { get; set; }
+    public int SelfServiceStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -262,7 +262,7 @@ public class TaktSelfServiceStatusDto
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "自助服务状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus SelfServiceStatus { get; set; }
+    public int SelfServiceStatus { get; set; }
 }
 
 // ========================================
@@ -336,7 +336,7 @@ public class TaktSelfServiceTemplateDto
     /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? SelfServiceStatus { get; set; }
+    public int? SelfServiceStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -403,7 +403,7 @@ public class TaktSelfServiceImportDto
     /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? SelfServiceStatus { get; set; }
+    public int? SelfServiceStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -471,7 +471,7 @@ public class TaktSelfServiceExportDto
     /// <summary>
     /// 自助服务状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus SelfServiceStatus { get; set; }
+    public int SelfServiceStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）

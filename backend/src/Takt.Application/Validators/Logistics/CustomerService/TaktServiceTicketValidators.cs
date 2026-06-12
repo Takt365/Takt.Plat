@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.CustomerService
 // 文件名称：TaktServiceTicketValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceTicket 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktServiceTicket 生成，请按需审阅）
 // 
@@ -31,36 +31,36 @@ public class TaktServiceTicketCreateValidator : AbstractValidator<TaktServiceTic
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.ServiceTicketCode)
             .NotEmpty().WithMessage("服务工单编码不能为空")
-            .MaximumLength(50).WithMessage("服务工单编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("服务工单编码长度不能超过40个字符");
         RuleFor(x => x.ClientId)
             .GreaterThanOrEqualTo(0).WithMessage("客户端ID不能为负数");
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
-            .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("客户端编码长度不能超过40个字符");
         RuleFor(x => x.ClientName)
             .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
+            .MaximumLength(40).WithMessage("客户端名称长度不能超过40个字符");
         RuleFor(x => x.ServiceRequestId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务请求ID不能为负数");
         RuleFor(x => x.ServiceRequestCode)
-            .MaximumLength(50).WithMessage("关联服务请求单号长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("关联服务请求单号长度不能超过40个字符");
         RuleFor(x => x.ServiceOrderId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务订单ID不能为负数");
         RuleFor(x => x.ServiceOrderCode)
-            .MaximumLength(50).WithMessage("关联服务订单编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("关联服务订单编码长度不能超过40个字符");
         RuleFor(x => x.ServiceContractId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务合同ID不能为负数");
         RuleFor(x => x.ServiceContractCode)
-            .MaximumLength(50).WithMessage("关联服务合同编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("关联服务合同编码长度不能超过40个字符");
         RuleFor(x => x.TicketSubject)
             .NotEmpty().WithMessage("工单主题不能为空")
             .MaximumLength(200).WithMessage("工单主题长度不能超过200个字符");
@@ -73,7 +73,7 @@ public class TaktServiceTicketCreateValidator : AbstractValidator<TaktServiceTic
         RuleFor(x => x.AssignedEmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("指派服务人员工ID不能为负数");
         RuleFor(x => x.AssignedEmployeeName)
-            .MaximumLength(50).WithMessage("指派服务人员姓名长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("指派服务人员姓名长度不能超过40个字符");
         RuleFor(x => x.AcceptedBy)
             .MaximumLength(50).WithMessage("验收人长度不能超过50个字符");
         RuleFor(x => x.SortOrder)
@@ -119,35 +119,35 @@ public class TaktServiceTicketImportValidator : AbstractValidator<TaktServiceTic
     public TaktServiceTicketImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.ServiceTicketCode)
             .NotEmpty().WithMessage("服务工单编码不能为空")
-            .MaximumLength(50).WithMessage("服务工单编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("服务工单编码长度不能超过40个字符");
         RuleFor(x => x.ClientId)
             .GreaterThanOrEqualTo(0).WithMessage("客户端ID不能为负数");
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
-            .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("客户端编码长度不能超过40个字符");
         RuleFor(x => x.ClientName)
             .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
+            .MaximumLength(40).WithMessage("客户端名称长度不能超过40个字符");
         RuleFor(x => x.ServiceRequestId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务请求ID不能为负数");
         RuleFor(x => x.ServiceRequestCode)
-            .MaximumLength(50).WithMessage("关联服务请求单号长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ServiceRequestCode));
+            .MaximumLength(40).WithMessage("关联服务请求单号长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ServiceRequestCode));
         RuleFor(x => x.ServiceOrderId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务订单ID不能为负数");
         RuleFor(x => x.ServiceOrderCode)
-            .MaximumLength(50).WithMessage("关联服务订单编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ServiceOrderCode));
+            .MaximumLength(40).WithMessage("关联服务订单编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ServiceOrderCode));
         RuleFor(x => x.ServiceContractId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务合同ID不能为负数");
         RuleFor(x => x.ServiceContractCode)
-            .MaximumLength(50).WithMessage("关联服务合同编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ServiceContractCode));
+            .MaximumLength(40).WithMessage("关联服务合同编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ServiceContractCode));
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

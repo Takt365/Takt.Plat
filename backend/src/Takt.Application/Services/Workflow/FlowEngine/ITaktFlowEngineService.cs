@@ -51,11 +51,16 @@ public interface ITaktFlowEngineService
     /// <returns>分页</returns>
     Task<TaktPagedResult<TaktFlowTodoItemDto>> GetFlowInstanceTodoListAsync(TaktFlowTodoQueryDto query);
     /// <summary>
+    /// 当前用户待办数量
+    /// </summary>
+    /// <returns>待办数量 DTO</returns>
+    Task<TaktFlowTodoCountDto> GetFlowInstanceTodoCountAsync();
+    /// <summary>
     /// 我发起的流程
     /// </summary>
     /// <param name="query">查询</param>
     /// <returns>分页</returns>
-    Task<TaktPagedResult<TaktFlowInstanceListItemDto>> GetFlowInstanceMyListAsync(TaktFlowMyInstanceQueryDto query);
+    Task<TaktPagedResult<TaktFlowInstanceListItemDto>> GetFlowInstanceMyListAsync(TaktFlowTodoQueryDto query);
     /// <summary>
     /// 已办流程
     /// </summary>
@@ -116,4 +121,16 @@ public interface ITaktFlowEngineService
     /// <param name="dto">参数</param>
     /// <returns>任务</returns>
     Task UndoFlowInstanceVerificationAsync(TaktFlowInstanceOperateDto dto);
+
+    /// <summary>
+    /// 可发起流程方案列表（已发布、最新版、未挂起）
+    /// </summary>
+    /// <returns>方案摘要列表</returns>
+    Task<List<TaktFlowStartableSchemeDto>> GetStartableSchemeListAsync();
+
+    /// <summary>
+    /// 审批业务表白名单（TaktApprovalEntityBase 物理表名）
+    /// </summary>
+    /// <returns>表名列表</returns>
+    IReadOnlyList<string> GetApprovalFlowTableNames();
 }

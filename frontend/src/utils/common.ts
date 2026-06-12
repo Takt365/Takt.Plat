@@ -71,7 +71,7 @@ export const TAKT_REMIX_ICON_LG_CLASS = 'takt-remix-icon-lg' as const;
 export const TAKT_REMIX_ICON_XL_CLASS = 'takt-remix-icon-xl' as const;
 
 /**
- * 菜单类型（与后端 Takt.Shared.Enums.TaktMenuType 一致）
+ * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
  */
 export enum TaktMenuType {
   /** 目录（侧栏分组） */

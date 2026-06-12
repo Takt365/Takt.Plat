@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Report;
 
@@ -47,7 +46,7 @@ public class TaktConfigurableSource : TaktCompanyEntityBase
     /// 是否主表（驱动 FROM 的第一张表）
     /// </summary>
     [SugarColumn(ColumnName = "is_primary", ColumnDescription = "是否主表", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsPrimary { get; set; } = TaktYesNo.No;
+    public int IsPrimary { get; set; } = 0;
 
     /// <summary>
     /// 排序号（多表 FROM 顺序）

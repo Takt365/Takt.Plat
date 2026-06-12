@@ -13,7 +13,11 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import * as signalR from '@microsoft/signalr';
-import { notification } from 'ant-design-vue';
+import { notify, showPrivateMessageNotify } from '@/utils/notification';
+import {
+  HEADER_ONLINE_AUTO_READ_MS,
+  useHeaderNotificationStore,
+} from '@/stores/navigation/header-notification';
 import type { SignalRMessageWithId } from '@/types/common';
 import type {
   BroadcastMessage,
@@ -23,7 +27,7 @@ import type {
 } from '@/types/foundation/signal-r';
 import type { MessageStatistics } from '@/types/foundation/message';
 import type { OnlineStatistics } from '@/types/foundation/online';
-import { TaktMessageReadStatus } from '@/utils/foundation-enums';
+import { TaktReadStatus } from '@/utils/common-enums';
 import { getMessageStatistics } from '@/api/foundation/message';
 import { getOnlineStatistics } from '@/api/foundation/online';
 import { useTenantStore } from '@/stores/identity/tenant';
@@ -31,6 +35,18 @@ import { taktSignalRManager } from '@/utils/takt-signalr';
 import { EventBus } from '@/utils/event-bus';
 import { createLogger } from '@/utils/logger';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import { useWorkflowTodoCountStore } from '@/stores/workflow/todo-count';
+import { WORKFLOW_TABLE_NAMES } from '@/composables/use-workflow-signalr-refresh';
+import { QUARTZ_TABLE_NAME } from '@/composables/use-quartz-signalr-refresh';
+import type {
+  FlowInstanceProgressedEvent,
+  FlowSchemeChangedEvent,
+  FlowTodoCountUpdatedEvent,
+} from '@/types/workflow/signal-r';
+import type {
+  QuartzTaskChangedEvent,
+  QuartzTaskExecutedEvent,
+} from '@/types/foundation/quartz-signal-r';
 import {
   STORE_I18N_FEEDBACK_CONNECT_SUCCESS,
   STORE_I18N_FEEDBACK_SIGNALR_ERROR,
@@ -38,6 +54,65 @@ import {
 } from '@/utils/takt-store-i18n';
 
 const signalrStoreLogger = createLogger('signalr-store');
+
+/**
+ * 双 Hub 均已连接时补拉工作流待办数量（首连 / 断线重连）
+ * @returns {Promise<void>}
+ */
+async function refreshWorkflowTodoCountAfterHubConnectedAsync(): Promise<void> {
+  await useWorkflowTodoCountStore().refreshTodoCountAsync().catch((error: unknown) => {
+    signalrStoreLogger.warn('重连后补拉待办数量失败', { action: 'refreshWorkflowTodoCount' }, error);
+  });
+}
+
+/**
+ * 分发工作流 SignalR 事件到 EventBus
+ * @param schemeEvent 方案变更
+ * @param instanceEvent 实例推进
+ * @param todoCountEvent 待办计数
+ * @returns {void}
+ */
+function dispatchWorkflowSignalREvents(
+  schemeEvent?: FlowSchemeChangedEvent,
+  instanceEvent?: FlowInstanceProgressedEvent,
+  todoCountEvent?: FlowTodoCountUpdatedEvent,
+): void {
+  if (schemeEvent) {
+    EventBus.emit('workflow:scheme:changed', schemeEvent);
+    EventBus.emit('table:refresh', { tableName: WORKFLOW_TABLE_NAMES.scheme });
+  }
+  if (instanceEvent) {
+    EventBus.emit('workflow:instance:progressed', instanceEvent);
+    EventBus.emit('table:refresh', { tableName: WORKFLOW_TABLE_NAMES.todo });
+    EventBus.emit('table:refresh', { tableName: WORKFLOW_TABLE_NAMES.my });
+    EventBus.emit('table:refresh', { tableName: WORKFLOW_TABLE_NAMES.processed });
+    EventBus.emit('table:refresh', { tableName: WORKFLOW_TABLE_NAMES.instance });
+  }
+  if (todoCountEvent) {
+    useWorkflowTodoCountStore().applyTodoCountFromSignalR(todoCountEvent);
+    EventBus.emit('workflow:todo:count-updated', todoCountEvent);
+  }
+}
+
+/**
+ * 分发 Quartz SignalR 事件到 EventBus
+ * @param changedEvent 定义变更
+ * @param executedEvent 执行完成
+ * @returns {void}
+ */
+function dispatchQuartzSignalREvents(
+  changedEvent?: QuartzTaskChangedEvent,
+  executedEvent?: QuartzTaskExecutedEvent,
+): void {
+  if (changedEvent) {
+    EventBus.emit('foundation:quartz-task:changed', changedEvent);
+    EventBus.emit('table:refresh', { tableName: QUARTZ_TABLE_NAME });
+  }
+  if (executedEvent) {
+    EventBus.emit('foundation:quartz-task:executed', executedEvent);
+    EventBus.emit('table:refresh', { tableName: QUARTZ_TABLE_NAME });
+  }
+}
 
 /**
  * SignalR 状态管理
@@ -131,8 +206,30 @@ export const useSignalRStore = defineStore('signalr', () => {
    * 连接 SignalR
    */
   async function connectSignalRAsync(): Promise<void> {
-    if (connecting.value || isConnected.value) {
+    if (connecting.value) {
       return;
+    }
+
+    const actualState = taktSignalRManager.getConnectionState();
+    const actuallyConnected =
+      actualState.connectHub === signalR.HubConnectionState.Connected
+      && actualState.notificationHub === signalR.HubConnectionState.Connected;
+
+    if (actuallyConnected) {
+      syncConnectionState();
+      void useHeaderNotificationStore().hydratePersistedUnreadAsync().catch((error: unknown) => {
+        signalrStoreLogger.warn('同步落库未读至通知中心失败', { action: 'hydratePersistedUnread' }, error);
+      });
+      return;
+    }
+
+    if (isConnected.value && !actuallyConnected) {
+      signalrStoreLogger.warn('SignalR 缓存状态与 Hub 实际状态不一致，强制重连', {
+        action: 'connect',
+        cached: { connectHub: connectHubState.value, notificationHub: notificationHubState.value },
+        actual: actualState,
+      });
+      await disconnectSignalRAsync();
     }
 
     const tenantStore = useTenantStore();
@@ -149,21 +246,54 @@ export const useSignalRStore = defineStore('signalr', () => {
 
     try {
       await taktSignalRManager.connectSignalRHubsAsync({
+        onConnectionStateChange: (state) => {
+          connectHubState.value = state.connectHub;
+          notificationHubState.value = state.notificationHub;
+          if (
+            state.connectHub === signalR.HubConnectionState.Disconnected
+            || state.notificationHub === signalR.HubConnectionState.Disconnected
+          ) {
+            signalrStoreLogger.warn('SignalR Hub 已断开，等待自动重连或手动刷新', {
+              action: 'connectionStateChange',
+              state,
+            });
+            return;
+          }
+          if (
+            state.connectHub === signalR.HubConnectionState.Connected
+            && state.notificationHub === signalR.HubConnectionState.Connected
+          ) {
+            void refreshWorkflowTodoCountAfterHubConnectedAsync();
+          }
+        },
         onReceiveMessage: (msg) => {
           messages.value.push(msg);
-
-          EventBus.emit('notification:show', {
-            type: 'info',
-            message: `${msg.fromUserName}: ${msg.messageContent}`,
+          const sender = msg.fromUserName?.trim() || '?';
+          const body = msg.messageContent?.trim() || '';
+          if (!body && !msg.messageTitle?.trim()) {
+            signalrStoreLogger.warn('收到空内容私信', { action: 'receiveMessage', msg });
+          }
+          showPrivateMessageNotify({
+            sender,
+            content: body,
+            title: msg.messageTitle?.trim(),
+            messageId: msg.messageId,
+            sendTime: msg.sendTime,
+          });
+          EventBus.emit('foundation:message:received', msg);
+          signalrStoreLogger.info('私信已送达客户端', {
+            action: 'receiveMessage',
+            fromUserName: msg.fromUserName,
+            messageId: msg.messageId,
           });
         },
         onReceiveBroadcast: (msg) => {
           broadcastMessages.value.push(msg);
-
-          EventBus.emit('notification:show', {
+          notify({
             type: 'info',
-            message: msg.messageContent,
-            description: msg.messageTitle,
+            message: msg.messageTitle?.trim() || translateLocaleMessage('common.page.signalr.newMessage'),
+            description: msg.messageContent,
+            duration: 5,
           });
         },
         onMessageRead: (event) => {
@@ -172,17 +302,37 @@ export const useSignalRStore = defineStore('signalr', () => {
           );
 
           if (target) {
-            target.readStatus = TaktMessageReadStatus.Read;
+            target.readStatus = TaktReadStatus.Read;
           }
+          useHeaderNotificationStore().markPersistedReadByMessageId(String(event.messageId));
         },
         onOnlineStatisticsUpdated: applyOnlineStatistics,
         onMessageStatisticsUpdated: applyMessageStatistics,
+        onFlowSchemeChanged: (event) => {
+          dispatchWorkflowSignalREvents(event);
+        },
+        onFlowInstanceProgressed: (event) => {
+          dispatchWorkflowSignalREvents(undefined, event);
+        },
+        onFlowTodoCountUpdated: (event) => {
+          dispatchWorkflowSignalREvents(undefined, undefined, event);
+        },
+        onQuartzTaskChanged: (event) => {
+          dispatchQuartzSignalREvents(event);
+        },
+        onQuartzTaskExecuted: (event) => {
+          dispatchQuartzSignalREvents(undefined, event);
+        },
         onOnlineMessage: (event) => {
-          notification.success({
+          notify({
+            type: 'success',
             message: translateLocaleMessage(STORE_I18N_FEEDBACK_CONNECT_SUCCESS),
             description: String(event.message ?? ''),
-            placement: 'topRight',
             duration: 5,
+            center: {
+              kind: 'online',
+              autoMarkReadAfterMs: HEADER_ONLINE_AUTO_READ_MS,
+            },
           });
         },
         onUserConnected: () => {
@@ -217,6 +367,10 @@ export const useSignalRStore = defineStore('signalr', () => {
       void refreshMessageStatisticsAsync().catch((error: unknown) => {
         signalrStoreLogger.warn('获取消息统计失败', { action: 'refreshMessageStatistics' }, error);
       });
+
+      void useHeaderNotificationStore().hydratePersistedUnreadAsync().catch((error: unknown) => {
+        signalrStoreLogger.warn('同步落库未读至通知中心失败', { action: 'hydratePersistedUnread' }, error);
+      });
     } catch (error) {
       EventBus.emit('notification:show', {
         type: 'error',
@@ -249,6 +403,7 @@ export const useSignalRStore = defineStore('signalr', () => {
     unreadCount.value = 0;
     onlineStatistics.value = null;
     messageStatistics.value = null;
+    useWorkflowTodoCountStore().resetTodoCount();
   }
 
   /**
@@ -290,6 +445,7 @@ export const useSignalRStore = defineStore('signalr', () => {
     messages.value = [];
     broadcastMessages.value = [];
     connecting.value = false;
+    useWorkflowTodoCountStore().resetTodoCount();
   }
 
   return {

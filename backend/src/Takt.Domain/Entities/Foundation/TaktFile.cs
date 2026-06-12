@@ -81,13 +81,13 @@ public class TaktFile : TaktCompanyEntityBase
     /// 文件分类（字典 sys_file_category）
     /// </summary>
     [SugarColumn(ColumnName = "file_category", ColumnDescription = "文件分类", ColumnDataType = "int", IsNullable = false, DefaultValue = "5")]
-    public TaktFileCategory FileCategory { get; set; } = TaktFileCategory.Other;
+    public int FileCategory { get; set; } = 5;
 
     /// <summary>
     /// 存储方式（字典 sys_storage_type）
     /// </summary>
     [SugarColumn(ColumnName = "storage_type", ColumnDescription = "存储方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktFileStorageType StorageType { get; set; } = TaktFileStorageType.Local;
+    public int StorageType { get; set; } = 0;
 
     /// <summary>
     /// 存储配置（JSON，OSS/FTP 等扩展配置）
@@ -117,13 +117,13 @@ public class TaktFile : TaktCompanyEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "file_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus FileStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int FileStatus { get; set; } = 1;
 
     /// <summary>
     /// 是否公开（字典 sys_is_public；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
     [SugarColumn(ColumnName = "is_public", ColumnDescription = "是否公开", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktFilePublicAccess IsPublic { get; set; } = TaktFilePublicAccess.Public;
+    public int IsPublic { get; set; } = 0;
 
     /// <summary>
     /// 文件描述

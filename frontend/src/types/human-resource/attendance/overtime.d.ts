@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：overtime.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -84,7 +84,7 @@ export interface Overtime extends ApprovalDtoBase {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -209,7 +209,7 @@ export interface OvertimeQuery extends TaktPagedQuery {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -373,7 +373,7 @@ export interface OvertimeCreate {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -496,7 +496,7 @@ export interface OvertimeTemplate {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -580,7 +580,7 @@ export interface OvertimeImport {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -679,7 +679,7 @@ export interface OvertimeExport {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 

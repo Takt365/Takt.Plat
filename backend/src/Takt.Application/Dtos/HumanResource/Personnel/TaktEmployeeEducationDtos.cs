@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeEducation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeEducation 生成，请按需审阅）
 // 
@@ -85,7 +85,7 @@ public class TaktEmployeeEducationDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否最高学历（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsHighest { get; set; }
+    public int IsHighest { get; set; }
 
 }
 
@@ -163,7 +163,7 @@ public class TaktEmployeeEducationQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否最高学历（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsHighest { get; set; }
+    public int? IsHighest { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -255,7 +255,7 @@ public class TaktEmployeeEducationCreateDto
     /// <summary>
     /// 是否最高学历（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsHighest { get; set; }
+    public int IsHighest { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -342,7 +342,7 @@ public class TaktEmployeeEducationTemplateDto
     /// <summary>
     /// 是否最高学历（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsHighest { get; set; }
+    public int? IsHighest { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -410,7 +410,7 @@ public class TaktEmployeeEducationImportDto
     /// <summary>
     /// 是否最高学历（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsHighest { get; set; }
+    public int? IsHighest { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -489,7 +489,7 @@ public class TaktEmployeeEducationExportDto
     /// <summary>
     /// 是否最高学历（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsHighest { get; set; }
+    public int IsHighest { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

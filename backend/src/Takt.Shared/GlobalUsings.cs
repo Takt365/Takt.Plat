@@ -14,6 +14,7 @@ global using System.Linq;
 global using System.Security.Cryptography;
 global using System.Text;
 global using SqlSugar;
+global using Newtonsoft.Json;
 global using Org.BouncyCastle.Crypto;
 global using Org.BouncyCastle.Crypto.Generators;
 global using Org.BouncyCastle.Crypto.Parameters;

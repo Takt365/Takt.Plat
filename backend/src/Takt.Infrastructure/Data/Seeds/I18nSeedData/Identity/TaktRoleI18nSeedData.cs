@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRole 实体字段国际化种子（已对齐前端 locales：src/locales/identity/role）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity;
@@ -76,7 +75,7 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktRole 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.role._self / entity.role.{{field}}；ResourceGroup=TaktModule.Identity；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.role._self / entity.role.{{field}}；ResourceGroup=1；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetRoleTranslations()
     {
@@ -110,13 +109,13 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.role.name", "zh-HK", "角色名称", "角色名称"),
 
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "en-US", "数据权限范围", "数据权限范围（见 <see cref=\"TaktDataScope\"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "en-US", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "ja-JP", "数据权限范围", "数据权限范围（见 <see cref=\"TaktDataScope\"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "ja-JP", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "zh-CN", "数据权限范围", "数据权限范围（见 <see cref=\"TaktDataScope\"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "zh-CN", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "zh-HK", "数据权限范围", "数据权限范围（见 <see cref=\"TaktDataScope\"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "zh-HK", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
 
             // entity.role.sortorder
             new TranslationSeedItem("entity.role.sortorder", "en-US", "排序号", "排序号"),
@@ -128,22 +127,22 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.role.sortorder", "zh-HK", "排序号", "排序号"),
 
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+            new TranslationSeedItem("entity.role.isbuiltin", "en-US", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+            new TranslationSeedItem("entity.role.isbuiltin", "ja-JP", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 种子角色为内置，不允许删除"),
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-HK", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
 
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.role.status", "en-US", "状态", "状态（字典 sys_normal_disable）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "ja-JP", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.role.status", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.role.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.role.status", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
 
             // entity.role.description
             new TranslationSeedItem("entity.role.description", "en-US", "角色描述", "角色描述"),
@@ -206,8 +205,8 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Identity;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 1;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

@@ -67,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.quartztaskid')"
+                :label="t('entity.quartzlog.quartztaskid')"
                 name="quartzTaskId"
               >
                 <a-input
                   v-model:value="formState.quartzTaskId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.quartztaskid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.quartztaskid') })"
                   size="small"
                   allow-clear
                 />
@@ -80,12 +80,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.taskname')"
+                :label="t('entity.quartzlog.taskname')"
                 name="taskName"
               >
                 <a-input
                   v-model:value="formState.taskName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.taskname') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.taskname') })"
                   size="small"
                   allow-clear
                 />
@@ -93,40 +93,38 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.jobgroup')"
+                :label="t('entity.quartzlog.jobgroup')"
                 name="jobGroup"
               >
-                <a-input
+                <a-input-number
                   v-model:value="formState.jobGroup"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.jobgroup') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.jobgroup') })"
                   size="small"
-                  allow-clear
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.tasktype')"
+                :label="t('entity.quartzlog.tasktype')"
                 name="taskType"
               >
                 <a-input-number
                   v-model:value="formState.taskType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.tasktype') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.tasktype') })"
                   size="small"
-                  :min="1"
-                  :max="3"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executetime')"
+                :label="t('entity.quartzlog.executetime')"
                 name="executeTime"
               >
                 <a-input
                   v-model:value="formState.executeTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executetime') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executetime') })"
                   size="small"
                   allow-clear
                 />
@@ -134,26 +132,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executeduration')"
+                :label="t('entity.quartzlog.executeduration')"
                 name="executeDuration"
               >
-                <a-input-number
+                <a-input
                   v-model:value="formState.executeDuration"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeduration') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeduration') })"
                   size="small"
-                  :min="0"
-                  style="width: 100%"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executeparams')"
+                :label="t('entity.quartzlog.executeparams')"
                 name="executeParams"
               >
                 <a-input
                   v-model:value="formState.executeParams"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeparams') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeparams') })"
                   size="small"
                   allow-clear
                 />
@@ -171,12 +168,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executemessage')"
+                :label="t('entity.quartzlog.executemessage')"
                 name="executeMessage"
               >
                 <a-input
                   v-model:value="formState.executeMessage"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executemessage') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executemessage') })"
                   size="small"
                   allow-clear
                 />
@@ -184,12 +181,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.errorinfo')"
+                :label="t('entity.quartzlog.errorinfo')"
                 name="errorInfo"
               >
                 <a-input
                   v-model:value="formState.errorInfo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.errorinfo') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.errorinfo') })"
                   size="small"
                   allow-clear
                 />
@@ -197,12 +194,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executeip')"
+                :label="t('entity.quartzlog.executeip')"
                 name="executeIp"
               >
                 <a-input
                   v-model:value="formState.executeIp"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeip') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeip') })"
                   size="small"
                   allow-clear
                 />
@@ -210,12 +207,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executehost')"
+                :label="t('entity.quartzlog.executehost')"
                 name="executeHost"
               >
                 <a-input
                   v-model:value="formState.executeHost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executehost') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executehost') })"
                   size="small"
                   allow-clear
                 />
@@ -223,15 +220,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzLog.executestatus')"
+                :label="t('entity.quartzlog.executestatus')"
                 name="executeStatus"
               >
                 <a-input-number
                   v-model:value="formState.executeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executestatus') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executestatus') })"
                   size="small"
-                  :min="0"
-                  :max="1"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -360,51 +355,49 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   quartzTaskId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.quartztaskid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.quartztaskid') }),
       trigger: 'blur'
     }
   ],
   taskName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.taskname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.taskname') }),
       trigger: 'blur'
     }
   ],
   jobGroup: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.jobgroup') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.quartzlog.jobgroup') }),
+      trigger: 'change'
     }
   ],
   taskType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzLog.tasktype') }),
-      trigger: 'change'
-    }
-  ],
-  executeStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzLog.executestatus') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.quartzlog.tasktype') }),
       trigger: 'change'
     }
   ],
   executeTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executetime') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executetime') }),
       trigger: 'blur'
     }
   ],
   executeDuration: [
     {
       required: true,
-      type: 'number',
-      min: 0,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzLog.executeduration') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeduration') }),
+      trigger: 'blur'
+    }
+  ],
+  executeStatus: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.quartzlog.executestatus') }),
       trigger: 'change'
     }
   ],

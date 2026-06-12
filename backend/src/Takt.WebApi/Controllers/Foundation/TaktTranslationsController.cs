@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktTranslationsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：翻译控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Foundation;
 /// 翻译控制器
 /// 提供翻译的 REST API
 /// </summary>
-[ApiModule(TaktModule.Foundation, "基础设置")]
+[ApiModule(8, "基础设置")]
 [Route("api/[controller]", Name = "翻译")]
 public class TaktTranslationsController : TaktControllerBase
 {
@@ -278,6 +278,26 @@ public class TaktTranslationsController : TaktControllerBase
         {
             var count = await _translationService.SaveTranslationTransposedBatchAsync(dto);
             return Success(count, $"已保存 {count} 条");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取指定区域文化的前端扁平翻译消息
+    /// </summary>
+    /// <param name="cultureCode">区域文化编码 BCP47（如 zh-CN）</param>
+    /// <returns>扁平 i18n 键值</returns>
+    [AllowAnonymous]
+    [HttpGet("messages")]
+    public async Task<IActionResult> GetTranslationMessagesAsync([FromQuery] string cultureCode)
+    {
+        try
+        {
+            var result = await _translationService.GetTranslationMessagesAsync(cultureCode);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

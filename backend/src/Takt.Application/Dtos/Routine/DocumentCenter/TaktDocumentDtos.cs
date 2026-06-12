@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.DocumentCenter
 // 文件名称：TaktDocumentDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Document 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDocument 生成，请按需审阅）
 // 
@@ -49,17 +49,17 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// <summary>
     /// 文档分类
     /// </summary>
-    public TaktDocumentCategory DocumentCategory { get; set; }
+    public int DocumentCategory { get; set; }
 
     /// <summary>
     /// 文档状态
     /// </summary>
-    public TaktDocumentStatus DocumentStatus { get; set; }
+    public int DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
     /// </summary>
-    public TaktDocumentConfidentialLevel ConfidentialLevel { get; set; }
+    public int ConfidentialLevel { get; set; }
 
     /// <summary>
     /// 当前版本号
@@ -153,7 +153,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 排序号
@@ -232,17 +232,17 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     /// <summary>
     /// 文档分类
     /// </summary>
-    public TaktDocumentCategory? DocumentCategory { get; set; }
+    public int? DocumentCategory { get; set; }
 
     /// <summary>
     /// 文档状态
     /// </summary>
-    public TaktDocumentStatus? DocumentStatus { get; set; }
+    public int? DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
     /// </summary>
-    public TaktDocumentConfidentialLevel? ConfidentialLevel { get; set; }
+    public int? ConfidentialLevel { get; set; }
 
     /// <summary>
     /// 当前版本号
@@ -351,7 +351,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo? IsTop { get; set; }
+    public int? IsTop { get; set; }
 
     /// <summary>
     /// 排序号
@@ -386,7 +386,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -480,17 +480,17 @@ public class TaktDocumentCreateDto
     /// <summary>
     /// 文档分类
     /// </summary>
-    public TaktDocumentCategory DocumentCategory { get; set; }
+    public int DocumentCategory { get; set; }
 
     /// <summary>
     /// 文档状态
     /// </summary>
-    public TaktDocumentStatus DocumentStatus { get; set; }
+    public int DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
     /// </summary>
-    public TaktDocumentConfidentialLevel ConfidentialLevel { get; set; }
+    public int ConfidentialLevel { get; set; }
 
     /// <summary>
     /// 当前版本号
@@ -585,7 +585,7 @@ public class TaktDocumentCreateDto
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 排序号
@@ -681,7 +681,7 @@ public class TaktDocumentStatusDto
     /// 文档状态
     /// </summary>
     [Required(ErrorMessage = "文档状态不能为空")]
-    public TaktDocumentStatus DocumentStatus { get; set; }
+    public int DocumentStatus { get; set; }
 }
 
 // ========================================
@@ -740,17 +740,17 @@ public class TaktDocumentTemplateDto
     /// <summary>
     /// 文档分类
     /// </summary>
-    public TaktDocumentCategory? DocumentCategory { get; set; }
+    public int? DocumentCategory { get; set; }
 
     /// <summary>
     /// 文档状态
     /// </summary>
-    public TaktDocumentStatus? DocumentStatus { get; set; }
+    public int? DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
     /// </summary>
-    public TaktDocumentConfidentialLevel? ConfidentialLevel { get; set; }
+    public int? ConfidentialLevel { get; set; }
 
     /// <summary>
     /// 当前版本号
@@ -833,17 +833,17 @@ public class TaktDocumentImportDto
     /// <summary>
     /// 文档分类
     /// </summary>
-    public TaktDocumentCategory? DocumentCategory { get; set; }
+    public int? DocumentCategory { get; set; }
 
     /// <summary>
     /// 文档状态
     /// </summary>
-    public TaktDocumentStatus? DocumentStatus { get; set; }
+    public int? DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
     /// </summary>
-    public TaktDocumentConfidentialLevel? ConfidentialLevel { get; set; }
+    public int? ConfidentialLevel { get; set; }
 
     /// <summary>
     /// 当前版本号
@@ -922,17 +922,17 @@ public class TaktDocumentExportDto
     /// <summary>
     /// 文档分类
     /// </summary>
-    public TaktDocumentCategory DocumentCategory { get; set; }
+    public int DocumentCategory { get; set; }
 
     /// <summary>
     /// 文档状态
     /// </summary>
-    public TaktDocumentStatus DocumentStatus { get; set; }
+    public int DocumentStatus { get; set; }
 
     /// <summary>
     /// 密级
     /// </summary>
-    public TaktDocumentConfidentialLevel ConfidentialLevel { get; set; }
+    public int ConfidentialLevel { get; set; }
 
     /// <summary>
     /// 当前版本号
@@ -1026,7 +1026,7 @@ public class TaktDocumentExportDto
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 排序号

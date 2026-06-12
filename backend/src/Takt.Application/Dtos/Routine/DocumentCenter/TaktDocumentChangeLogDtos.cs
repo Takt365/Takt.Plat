@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.DocumentCenter
 // 文件名称：TaktDocumentChangeLogDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DocumentChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDocumentChangeLog 生成，请按需审阅）
 // 
@@ -60,7 +60,7 @@ public class TaktDocumentChangeLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 变更类型
     /// </summary>
-    public TaktDocumentChangeType ChangeType { get; set; }
+    public int ChangeType { get; set; }
 
     /// <summary>
     /// 变更内容摘要
@@ -129,7 +129,7 @@ public class TaktDocumentChangeLogQueryDto : TaktPagedQuery
     /// <summary>
     /// 变更类型
     /// </summary>
-    public TaktDocumentChangeType? ChangeType { get; set; }
+    public int? ChangeType { get; set; }
 
     /// <summary>
     /// 变更内容摘要
@@ -215,7 +215,7 @@ public class TaktDocumentChangeLogCreateDto
     /// <summary>
     /// 变更类型
     /// </summary>
-    public TaktDocumentChangeType ChangeType { get; set; }
+    public int ChangeType { get; set; }
 
     /// <summary>
     /// 变更内容摘要
@@ -309,7 +309,7 @@ public class TaktDocumentChangeLogExportDto
     /// <summary>
     /// 变更类型
     /// </summary>
-    public TaktDocumentChangeType ChangeType { get; set; }
+    public int ChangeType { get; set; }
 
     /// <summary>
     /// 变更内容摘要

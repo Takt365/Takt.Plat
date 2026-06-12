@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceParticipant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter;
 
 /// <summary>
-/// TaktConferenceParticipant 实体国际化翻译种子（键前缀 entity.conferenceParticipant.*）
+/// TaktConferenceParticipant 实体国际化翻译种子（键前缀 entity.conferenceparticipant.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 conferenceParticipant 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 conferenceparticipant 实体翻译...", tenantCode);
 
         foreach (var item in GetConferenceParticipantTranslations())
         {
@@ -76,92 +75,101 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConferenceParticipant 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.conferenceParticipant._self / entity.conferenceParticipant.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.conferenceparticipant._self / entity.conferenceparticipant.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetConferenceParticipantTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.conferenceParticipant._self
-            new TranslationSeedItem("entity.conferenceParticipant._self", "en-US", "Conference Participant Information", "实体名称"),
-            // entity.conferenceParticipant._self
-            new TranslationSeedItem("entity.conferenceParticipant._self", "ja-JP", "会议参与人子信息", "实体名称"),
-            // entity.conferenceParticipant._self
-            new TranslationSeedItem("entity.conferenceParticipant._self", "zh-CN", "会议参与人子信息", "实体名称"),
-            // entity.conferenceParticipant._self
-            new TranslationSeedItem("entity.conferenceParticipant._self", "zh-HK", "会议参与人子信息", "实体名称"),
+            // entity.conferenceparticipant._self
+            new TranslationSeedItem("entity.conferenceparticipant._self", "en-US", "Conference Participant Information", "实体名称"),
+            // entity.conferenceparticipant._self
+            new TranslationSeedItem("entity.conferenceparticipant._self", "ja-JP", "会议参与人子信息", "实体名称"),
+            // entity.conferenceparticipant._self
+            new TranslationSeedItem("entity.conferenceparticipant._self", "zh-CN", "会议参与人子信息", "实体名称"),
+            // entity.conferenceparticipant._self
+            new TranslationSeedItem("entity.conferenceparticipant._self", "zh-HK", "会议参与人子信息", "实体名称"),
 
-            // entity.conferenceParticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceParticipant.conferenceid", "en-US", "会议ID", "会议 ID"),
-            // entity.conferenceParticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceParticipant.conferenceid", "ja-JP", "会议ID", "会议 ID"),
-            // entity.conferenceParticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceParticipant.conferenceid", "zh-CN", "会议ID", "会议 ID"),
-            // entity.conferenceParticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceParticipant.conferenceid", "zh-HK", "会议ID", "会议 ID"),
+            // entity.conferenceparticipant.conferenceid
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "en-US", "会议ID", "会议 ID"),
+            // entity.conferenceparticipant.conferenceid
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "ja-JP", "会议ID", "会议 ID"),
+            // entity.conferenceparticipant.conferenceid
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "zh-CN", "会议ID", "会议 ID"),
+            // entity.conferenceparticipant.conferenceid
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "zh-HK", "会议ID", "会议 ID"),
 
-            // entity.conferenceParticipant.userid
-            new TranslationSeedItem("entity.conferenceParticipant.userid", "en-US", "用户ID", "用户 ID"),
-            // entity.conferenceParticipant.userid
-            new TranslationSeedItem("entity.conferenceParticipant.userid", "ja-JP", "用户ID", "用户 ID"),
-            // entity.conferenceParticipant.userid
-            new TranslationSeedItem("entity.conferenceParticipant.userid", "zh-CN", "用户ID", "用户 ID"),
-            // entity.conferenceParticipant.userid
-            new TranslationSeedItem("entity.conferenceParticipant.userid", "zh-HK", "用户ID", "用户 ID"),
+            // entity.conferenceparticipant.userid
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "en-US", "用户ID", "用户 ID"),
+            // entity.conferenceparticipant.userid
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "ja-JP", "用户ID", "用户 ID"),
+            // entity.conferenceparticipant.userid
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "zh-CN", "用户ID", "用户 ID"),
+            // entity.conferenceparticipant.userid
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "zh-HK", "用户ID", "用户 ID"),
 
-            // entity.conferenceParticipant.username
-            new TranslationSeedItem("entity.conferenceParticipant.username", "en-US", "用户姓名", "用户姓名"),
-            // entity.conferenceParticipant.username
-            new TranslationSeedItem("entity.conferenceParticipant.username", "ja-JP", "用户姓名", "用户姓名"),
-            // entity.conferenceParticipant.username
-            new TranslationSeedItem("entity.conferenceParticipant.username", "zh-CN", "用户姓名", "用户姓名"),
-            // entity.conferenceParticipant.username
-            new TranslationSeedItem("entity.conferenceParticipant.username", "zh-HK", "用户姓名", "用户姓名"),
+            // entity.conferenceparticipant.username
+            new TranslationSeedItem("entity.conferenceparticipant.username", "en-US", "用户姓名", "用户姓名"),
+            // entity.conferenceparticipant.username
+            new TranslationSeedItem("entity.conferenceparticipant.username", "ja-JP", "用户姓名", "用户姓名"),
+            // entity.conferenceparticipant.username
+            new TranslationSeedItem("entity.conferenceparticipant.username", "zh-CN", "用户姓名", "用户姓名"),
+            // entity.conferenceparticipant.username
+            new TranslationSeedItem("entity.conferenceparticipant.username", "zh-HK", "用户姓名", "用户姓名"),
 
-            // entity.conferenceParticipant.participantrole
-            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "en-US", "参与角色", "参与角色"),
-            // entity.conferenceParticipant.participantrole
-            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "ja-JP", "参与角色", "参与角色"),
-            // entity.conferenceParticipant.participantrole
-            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "zh-CN", "参与角色", "参与角色"),
-            // entity.conferenceParticipant.participantrole
-            new TranslationSeedItem("entity.conferenceParticipant.participantrole", "zh-HK", "参与角色", "参与角色"),
+            // entity.conferenceparticipant.participantrole
+            new TranslationSeedItem("entity.conferenceparticipant.participantrole", "en-US", "参与角色", "参与角色"),
+            // entity.conferenceparticipant.participantrole
+            new TranslationSeedItem("entity.conferenceparticipant.participantrole", "ja-JP", "参与角色", "参与角色"),
+            // entity.conferenceparticipant.participantrole
+            new TranslationSeedItem("entity.conferenceparticipant.participantrole", "zh-CN", "参与角色", "参与角色"),
+            // entity.conferenceparticipant.participantrole
+            new TranslationSeedItem("entity.conferenceparticipant.participantrole", "zh-HK", "参与角色", "参与角色"),
 
-            // entity.conferenceParticipant.attendancestatus
-            new TranslationSeedItem("entity.conferenceParticipant.attendancestatus", "en-US", "出席状态", "出席状态"),
-            // entity.conferenceParticipant.attendancestatus
-            new TranslationSeedItem("entity.conferenceParticipant.attendancestatus", "ja-JP", "出席状态", "出席状态"),
-            // entity.conferenceParticipant.attendancestatus
-            new TranslationSeedItem("entity.conferenceParticipant.attendancestatus", "zh-CN", "出席状态", "出席状态"),
-            // entity.conferenceParticipant.attendancestatus
-            new TranslationSeedItem("entity.conferenceParticipant.attendancestatus", "zh-HK", "出席状态", "出席状态"),
+            // entity.conferenceparticipant.attendancestatus
+            new TranslationSeedItem("entity.conferenceparticipant.attendancestatus", "en-US", "出席状态", "出席状态"),
+            // entity.conferenceparticipant.attendancestatus
+            new TranslationSeedItem("entity.conferenceparticipant.attendancestatus", "ja-JP", "出席状态", "出席状态"),
+            // entity.conferenceparticipant.attendancestatus
+            new TranslationSeedItem("entity.conferenceparticipant.attendancestatus", "zh-CN", "出席状态", "出席状态"),
+            // entity.conferenceparticipant.attendancestatus
+            new TranslationSeedItem("entity.conferenceparticipant.attendancestatus", "zh-HK", "出席状态", "出席状态"),
 
-            // entity.conferenceParticipant.checkintime
-            new TranslationSeedItem("entity.conferenceParticipant.checkintime", "en-US", "签到时间", "签到时间"),
-            // entity.conferenceParticipant.checkintime
-            new TranslationSeedItem("entity.conferenceParticipant.checkintime", "ja-JP", "签到时间", "签到时间"),
-            // entity.conferenceParticipant.checkintime
-            new TranslationSeedItem("entity.conferenceParticipant.checkintime", "zh-CN", "签到时间", "签到时间"),
-            // entity.conferenceParticipant.checkintime
-            new TranslationSeedItem("entity.conferenceParticipant.checkintime", "zh-HK", "签到时间", "签到时间"),
+            // entity.conferenceparticipant.checkintime
+            new TranslationSeedItem("entity.conferenceparticipant.checkintime", "en-US", "签到时间", "签到时间"),
+            // entity.conferenceparticipant.checkintime
+            new TranslationSeedItem("entity.conferenceparticipant.checkintime", "ja-JP", "签到时间", "签到时间"),
+            // entity.conferenceparticipant.checkintime
+            new TranslationSeedItem("entity.conferenceparticipant.checkintime", "zh-CN", "签到时间", "签到时间"),
+            // entity.conferenceparticipant.checkintime
+            new TranslationSeedItem("entity.conferenceparticipant.checkintime", "zh-HK", "签到时间", "签到时间"),
 
-            // entity.conferenceParticipant.checkouttime
-            new TranslationSeedItem("entity.conferenceParticipant.checkouttime", "en-US", "签退时间", "签退时间"),
-            // entity.conferenceParticipant.checkouttime
-            new TranslationSeedItem("entity.conferenceParticipant.checkouttime", "ja-JP", "签退时间", "签退时间"),
-            // entity.conferenceParticipant.checkouttime
-            new TranslationSeedItem("entity.conferenceParticipant.checkouttime", "zh-CN", "签退时间", "签退时间"),
-            // entity.conferenceParticipant.checkouttime
-            new TranslationSeedItem("entity.conferenceParticipant.checkouttime", "zh-HK", "签退时间", "签退时间"),
+            // entity.conferenceparticipant.checkouttime
+            new TranslationSeedItem("entity.conferenceparticipant.checkouttime", "en-US", "签退时间", "签退时间"),
+            // entity.conferenceparticipant.checkouttime
+            new TranslationSeedItem("entity.conferenceparticipant.checkouttime", "ja-JP", "签退时间", "签退时间"),
+            // entity.conferenceparticipant.checkouttime
+            new TranslationSeedItem("entity.conferenceparticipant.checkouttime", "zh-CN", "签退时间", "签退时间"),
+            // entity.conferenceparticipant.checkouttime
+            new TranslationSeedItem("entity.conferenceparticipant.checkouttime", "zh-HK", "签退时间", "签退时间"),
 
-            // entity.conferenceParticipant.conference
-            new TranslationSeedItem("entity.conferenceParticipant.conference", "en-US", "会议", "会议（主表）"),
-            // entity.conferenceParticipant.conference
-            new TranslationSeedItem("entity.conferenceParticipant.conference", "ja-JP", "会议", "会议（主表）"),
-            // entity.conferenceParticipant.conference
-            new TranslationSeedItem("entity.conferenceParticipant.conference", "zh-CN", "会议", "会议（主表）"),
-            // entity.conferenceParticipant.conference
-            new TranslationSeedItem("entity.conferenceParticipant.conference", "zh-HK", "会议", "会议（主表）"),
+            // entity.conferenceparticipant.checkinmethod
+            new TranslationSeedItem("entity.conferenceparticipant.checkinmethod", "en-US", "签到方式", "签到方式（0=手动，1=扫码，2=人脸等）"),
+            // entity.conferenceparticipant.checkinmethod
+            new TranslationSeedItem("entity.conferenceparticipant.checkinmethod", "ja-JP", "签到方式", "签到方式（0=手动，1=扫码，2=人脸等）"),
+            // entity.conferenceparticipant.checkinmethod
+            new TranslationSeedItem("entity.conferenceparticipant.checkinmethod", "zh-CN", "签到方式", "签到方式（0=手动，1=扫码，2=人脸等）"),
+            // entity.conferenceparticipant.checkinmethod
+            new TranslationSeedItem("entity.conferenceparticipant.checkinmethod", "zh-HK", "签到方式", "签到方式（0=手动，1=扫码，2=人脸等）"),
+
+            // entity.conferenceparticipant.conference
+            new TranslationSeedItem("entity.conferenceparticipant.conference", "en-US", "会议", "会议（主表）"),
+            // entity.conferenceparticipant.conference
+            new TranslationSeedItem("entity.conferenceparticipant.conference", "ja-JP", "会议", "会议（主表）"),
+            // entity.conferenceparticipant.conference
+            new TranslationSeedItem("entity.conferenceparticipant.conference", "zh-CN", "会议", "会议（主表）"),
+            // entity.conferenceparticipant.conference
+            new TranslationSeedItem("entity.conferenceparticipant.conference", "zh-HK", "会议", "会议（主表）"),
         };
     }
 
@@ -179,8 +187,8 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

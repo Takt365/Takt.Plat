@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableSourceDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableSource 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableSource 生成，请按需审阅）
 // 
@@ -60,7 +60,7 @@ public class TaktConfigurableSourceDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否主表（驱动 FROM 的第一张表）
     /// </summary>
-    public TaktYesNo IsPrimary { get; set; }
+    public int IsPrimary { get; set; }
 
     /// <summary>
     /// 排序号（多表 FROM 顺序）
@@ -114,7 +114,7 @@ public class TaktConfigurableSourceQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否主表（驱动 FROM 的第一张表）
     /// </summary>
-    public TaktYesNo? IsPrimary { get; set; }
+    public int? IsPrimary { get; set; }
 
     /// <summary>
     /// 排序号（多表 FROM 顺序）
@@ -187,7 +187,7 @@ public class TaktConfigurableSourceCreateDto
     /// <summary>
     /// 是否主表（驱动 FROM 的第一张表）
     /// </summary>
-    public TaktYesNo IsPrimary { get; set; }
+    public int IsPrimary { get; set; }
 
     /// <summary>
     /// 排序号（多表 FROM 顺序）
@@ -288,7 +288,7 @@ public class TaktConfigurableSourceTemplateDto
     /// <summary>
     /// 是否主表（驱动 FROM 的第一张表）
     /// </summary>
-    public TaktYesNo? IsPrimary { get; set; }
+    public int? IsPrimary { get; set; }
 
     /// <summary>
     /// 排序号（多表 FROM 顺序）
@@ -346,7 +346,7 @@ public class TaktConfigurableSourceImportDto
     /// <summary>
     /// 是否主表（驱动 FROM 的第一张表）
     /// </summary>
-    public TaktYesNo? IsPrimary { get; set; }
+    public int? IsPrimary { get; set; }
 
     /// <summary>
     /// 排序号（多表 FROM 顺序）
@@ -405,7 +405,7 @@ public class TaktConfigurableSourceExportDto
     /// <summary>
     /// 是否主表（驱动 FROM 的第一张表）
     /// </summary>
-    public TaktYesNo IsPrimary { get; set; }
+    public int IsPrimary { get; set; }
 
     /// <summary>
     /// 排序号（多表 FROM 顺序）

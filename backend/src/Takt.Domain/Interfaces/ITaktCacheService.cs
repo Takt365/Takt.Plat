@@ -10,6 +10,8 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Takt.Shared.Models.Foundation;
+
 namespace Takt.Domain.Interfaces;
 
 /// <summary>
@@ -61,4 +63,18 @@ public interface ITaktCacheService
         Func<Task<T>> factory,
         TimeSpan? absoluteExpiration = null,
         CancellationToken cancellationToken = default) where T : class;
+
+    /// <summary>
+    /// 检查缓存键是否存在于内存或分布式层
+    /// </summary>
+    /// <param name="key">缓存键</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>存在返回 true</returns>
+    Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 获取进程内业务 MemoryCache 运行时统计
+    /// </summary>
+    /// <returns>统计快照</returns>
+    TaktCacheMemoryStatisticsSnapshot GetMemoryStatistics();
 }

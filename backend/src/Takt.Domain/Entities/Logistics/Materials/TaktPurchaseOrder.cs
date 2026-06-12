@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Logistics.Materials;
@@ -128,7 +127,7 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "order_status", ColumnDescription = "订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus OrderStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int OrderStatus { get; set; } = 1;
 
     /// <summary>
     /// 交货状态（0=未交货，1=部分交货，2=全部交货）

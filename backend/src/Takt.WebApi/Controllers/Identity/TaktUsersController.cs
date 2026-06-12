@@ -20,7 +20,7 @@ namespace Takt.WebApi.Controllers.Identity;
 /// <summary>
 /// 用户管理控制器
 /// </summary>
-[ApiModule(TaktModule.Identity, "身份认证")]
+[ApiModule(1, "身份认证")]
 [Route("api/[controller]", Name = "用户管理")]
 public class TaktUsersController : TaktControllerBase
 {

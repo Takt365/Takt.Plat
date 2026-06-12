@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Models;
 
@@ -46,7 +47,7 @@ public class TaktUserDto : TaktTenantDtoBase
     /// <summary>
     /// 用户类型
     /// </summary>
-    public TaktUserType UserType { get; set; }
+    public int UserType { get; set; }
 
     /// <summary>
     /// 密码哈希值（加密后，不返回明文）
@@ -67,7 +68,7 @@ public class TaktUserDto : TaktTenantDtoBase
     /// <summary>
     /// 状态
     /// </summary>
-    public TaktCommonStatus UserStatus { get; set; }
+    public int UserStatus { get; set; }
 
     /// <summary>
     /// 最后登录时间
@@ -143,7 +144,7 @@ public class TaktUserQueryDto : TaktPagedQuery
     /// <summary>
     /// 用户类型
     /// </summary>
-    public TaktUserType? UserType { get; set; }
+    public int? UserType { get; set; }
 
     /// <summary>
     /// 关联的员工ID
@@ -154,7 +155,7 @@ public class TaktUserQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态
     /// </summary>
-    public TaktCommonStatus? UserStatus { get; set; }
+    public int? UserStatus { get; set; }
 
     /// <summary>
     /// 默认区域文化编码（模糊查询）
@@ -210,7 +211,7 @@ public class TaktCreateUserDto
     /// <summary>
     /// 用户类型
     /// </summary>
-    public TaktUserType UserType { get; set; } = TaktUserType.Normal;
+    public int UserType { get; set; } = 0;
 
     /// <summary>
     /// 密码哈希值（加密后的密码）
@@ -226,7 +227,7 @@ public class TaktCreateUserDto
     /// <summary>
     /// 状态
     /// </summary>
-    public TaktCommonStatus UserStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int UserStatus { get; set; } = 1;
 
     /// <summary>
     /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
@@ -291,7 +292,7 @@ public class TaktUserStatusDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus UserStatus { get; set; }
+    public int UserStatus { get; set; }
 }
 
 // ========================================
@@ -408,9 +409,14 @@ public class TaktUserTemplateDto
     public string? Nickname { get; set; }
 
     /// <summary>
-    /// 用户类型（Normal=普通用户，Admin=管理员，SuperAdmin=超级管理员）
+    /// 用户类型数值（Excel 填 0/1/2；与 UserTypeName 二选一，文本列优先）
     /// </summary>
-    public TaktUserType UserType { get; set; } = TaktUserType.Normal;
+    public int UserType { get; set; } = 0;
+
+    /// <summary>
+    /// 用户类型名称（Excel 填文本时优先；字典 sys_user_type DictLabel）
+    /// </summary>
+    public string? UserTypeName { get; set; }
 
     /// <summary>
     /// 初始密码（Excel 填明文；留空时导入使用系统默认密码）
@@ -424,9 +430,14 @@ public class TaktUserTemplateDto
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 状态（Enabled=启用，Disabled=禁用）
+    /// 状态数值（Excel 填 0/1；与 StatusName 二选一，文本列优先）
     /// </summary>
-    public TaktCommonStatus UserStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int UserStatus { get; set; } = 1;
+
+    /// <summary>
+    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no DictLabel）
+    /// </summary>
+    public string? StatusName { get; set; }
 
     /// <summary>
     /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
@@ -469,9 +480,14 @@ public class TaktUserImportDto
     public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户类型（Normal=普通用户，Admin=管理员，SuperAdmin=超级管理员）
+    /// 用户类型数值（Excel 填 0/1/2；与 UserTypeName 二选一，文本列优先）
     /// </summary>
-    public TaktUserType UserType { get; set; } = TaktUserType.Normal;
+    public int UserType { get; set; } = 0;
+
+    /// <summary>
+    /// 用户类型名称（Excel 填文本时优先；字典 sys_user_type DictLabel）
+    /// </summary>
+    public string? UserTypeName { get; set; }
 
     /// <summary>
     /// 初始密码（Excel 填明文；留空时导入使用系统默认密码）
@@ -485,9 +501,14 @@ public class TaktUserImportDto
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 状态（Enabled=启用，Disabled=禁用）
+    /// 状态数值（Excel 填 0/1；与 StatusName 二选一，文本列优先）
     /// </summary>
-    public TaktCommonStatus UserStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int UserStatus { get; set; } = 1;
+
+    /// <summary>
+    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no DictLabel）
+    /// </summary>
+    public string? StatusName { get; set; }
 
     /// <summary>
     /// 默认区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
@@ -539,11 +560,12 @@ public class TaktUserExportDto
     /// <summary>
     /// 用户类型
     /// </summary>
-    public TaktUserType UserType { get; set; }
+    public int UserType { get; set; }
 
     /// <summary>
-    /// 用户类型名称（导出用）
+    /// 用户类型名称（导出用；字典 sys_user_type）
     /// </summary>
+    [TaktDictType("sys_user_type")]
     public string UserTypeName { get; set; } = string.Empty;
 
     /// <summary>
@@ -565,11 +587,12 @@ public class TaktUserExportDto
     /// <summary>
     /// 状态
     /// </summary>
-    public TaktCommonStatus UserStatus { get; set; }
+    public int UserStatus { get; set; }
 
     /// <summary>
-    /// 状态名称（导出用）
+    /// 状态名称（导出用；字典 sys_yes_no）
     /// </summary>
+    [TaktDictType("sys_yes_no")]
     public string StatusName { get; set; } = string.Empty;
 
     /// <summary>

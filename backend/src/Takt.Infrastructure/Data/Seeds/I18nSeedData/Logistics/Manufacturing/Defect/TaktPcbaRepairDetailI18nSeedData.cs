@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepairDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect;
 
 /// <summary>
-/// TaktPcbaRepairDetail 实体国际化翻译种子（键前缀 entity.pcbaRepairDetail.*）
+/// TaktPcbaRepairDetail 实体国际化翻译种子（键前缀 entity.pcbarepairdetail.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 pcbaRepairDetail 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 pcbarepairdetail 实体翻译...", tenantCode);
 
         foreach (var item in GetPcbaRepairDetailTranslations())
         {
@@ -76,155 +75,155 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPcbaRepairDetail 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.pcbaRepairDetail._self / entity.pcbaRepairDetail.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.pcbarepairdetail._self / entity.pcbarepairdetail.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetPcbaRepairDetailTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.pcbaRepairDetail._self
-            new TranslationSeedItem("entity.pcbaRepairDetail._self", "en-US", "Pcba Repair Detail Information", "实体名称"),
-            // entity.pcbaRepairDetail._self
-            new TranslationSeedItem("entity.pcbaRepairDetail._self", "ja-JP", "PCBA改修明细信息", "实体名称"),
-            // entity.pcbaRepairDetail._self
-            new TranslationSeedItem("entity.pcbaRepairDetail._self", "zh-CN", "PCBA改修明细信息", "实体名称"),
-            // entity.pcbaRepairDetail._self
-            new TranslationSeedItem("entity.pcbaRepairDetail._self", "zh-HK", "PCBA改修明细信息", "实体名称"),
+            // entity.pcbarepairdetail._self
+            new TranslationSeedItem("entity.pcbarepairdetail._self", "en-US", "Pcba Repair Detail Information", "实体名称"),
+            // entity.pcbarepairdetail._self
+            new TranslationSeedItem("entity.pcbarepairdetail._self", "ja-JP", "PCBA改修明细信息", "实体名称"),
+            // entity.pcbarepairdetail._self
+            new TranslationSeedItem("entity.pcbarepairdetail._self", "zh-CN", "PCBA改修明细信息", "实体名称"),
+            // entity.pcbarepairdetail._self
+            new TranslationSeedItem("entity.pcbarepairdetail._self", "zh-HK", "PCBA改修明细信息", "实体名称"),
 
-            // entity.pcbaRepairDetail.pcbarepairid
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepairid", "en-US", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.pcbaRepairDetail.pcbarepairid
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepairid", "ja-JP", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.pcbaRepairDetail.pcbarepairid
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepairid", "zh-CN", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.pcbaRepairDetail.pcbarepairid
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepairid", "zh-HK", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbarepairdetail.pcbarepairid
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepairid", "en-US", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbarepairdetail.pcbarepairid
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepairid", "ja-JP", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbarepairdetail.pcbarepairid
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepairid", "zh-CN", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbarepairdetail.pcbarepairid
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepairid", "zh-HK", "PCBA改修ID", "PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
 
-            // entity.pcbaRepairDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodordercode", "en-US", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.pcbaRepairDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodordercode", "ja-JP", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.pcbaRepairDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.pcbaRepairDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodordercode", "zh-HK", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbarepairdetail.prodordercode
+            new TranslationSeedItem("entity.pcbarepairdetail.prodordercode", "en-US", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbarepairdetail.prodordercode
+            new TranslationSeedItem("entity.pcbarepairdetail.prodordercode", "ja-JP", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbarepairdetail.prodordercode
+            new TranslationSeedItem("entity.pcbarepairdetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbarepairdetail.prodordercode
+            new TranslationSeedItem("entity.pcbarepairdetail.prodordercode", "zh-HK", "生产工单号", "生产工单号（冗余字段,便于查询）"),
 
-            // entity.pcbaRepairDetail.linenumber
-            new TranslationSeedItem("entity.pcbaRepairDetail.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.pcbaRepairDetail.linenumber
-            new TranslationSeedItem("entity.pcbaRepairDetail.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.pcbaRepairDetail.linenumber
-            new TranslationSeedItem("entity.pcbaRepairDetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.pcbaRepairDetail.linenumber
-            new TranslationSeedItem("entity.pcbaRepairDetail.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbarepairdetail.linenumber
+            new TranslationSeedItem("entity.pcbarepairdetail.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbarepairdetail.linenumber
+            new TranslationSeedItem("entity.pcbarepairdetail.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbarepairdetail.linenumber
+            new TranslationSeedItem("entity.pcbarepairdetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbarepairdetail.linenumber
+            new TranslationSeedItem("entity.pcbarepairdetail.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
 
-            // entity.pcbaRepairDetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbaboardtype", "en-US", "PCBA板别", "PCBA板别"),
-            // entity.pcbaRepairDetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbaboardtype", "ja-JP", "PCBA板别", "PCBA板别"),
-            // entity.pcbaRepairDetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbaboardtype", "zh-CN", "PCBA板别", "PCBA板别"),
-            // entity.pcbaRepairDetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbaboardtype", "zh-HK", "PCBA板别", "PCBA板别"),
+            // entity.pcbarepairdetail.pcbaboardtype
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "en-US", "PCBA板别", "PCBA板别"),
+            // entity.pcbarepairdetail.pcbaboardtype
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "ja-JP", "PCBA板别", "PCBA板别"),
+            // entity.pcbarepairdetail.pcbaboardtype
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "zh-CN", "PCBA板别", "PCBA板别"),
+            // entity.pcbarepairdetail.pcbaboardtype
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "zh-HK", "PCBA板别", "PCBA板别"),
 
-            // entity.pcbaRepairDetail.prodactualqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodactualqty", "en-US", "生产实绩", "生产实绩"),
-            // entity.pcbaRepairDetail.prodactualqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodactualqty", "ja-JP", "生产实绩", "生产实绩"),
-            // entity.pcbaRepairDetail.prodactualqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodactualqty", "zh-CN", "生产实绩", "生产实绩"),
-            // entity.pcbaRepairDetail.prodactualqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodactualqty", "zh-HK", "生产实绩", "生产实绩"),
+            // entity.pcbarepairdetail.prodactualqty
+            new TranslationSeedItem("entity.pcbarepairdetail.prodactualqty", "en-US", "生产实绩", "生产实绩"),
+            // entity.pcbarepairdetail.prodactualqty
+            new TranslationSeedItem("entity.pcbarepairdetail.prodactualqty", "ja-JP", "生产实绩", "生产实绩"),
+            // entity.pcbarepairdetail.prodactualqty
+            new TranslationSeedItem("entity.pcbarepairdetail.prodactualqty", "zh-CN", "生产实绩", "生产实绩"),
+            // entity.pcbarepairdetail.prodactualqty
+            new TranslationSeedItem("entity.pcbarepairdetail.prodactualqty", "zh-HK", "生产实绩", "生产实绩"),
 
-            // entity.pcbaRepairDetail.prodline
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodline", "en-US", "生产线", "生产线"),
-            // entity.pcbaRepairDetail.prodline
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodline", "ja-JP", "生产线", "生产线"),
-            // entity.pcbaRepairDetail.prodline
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodline", "zh-CN", "生产线", "生产线"),
-            // entity.pcbaRepairDetail.prodline
-            new TranslationSeedItem("entity.pcbaRepairDetail.prodline", "zh-HK", "生产线", "生产线"),
+            // entity.pcbarepairdetail.prodline
+            new TranslationSeedItem("entity.pcbarepairdetail.prodline", "en-US", "生产线", "生产线"),
+            // entity.pcbarepairdetail.prodline
+            new TranslationSeedItem("entity.pcbarepairdetail.prodline", "ja-JP", "生产线", "生产线"),
+            // entity.pcbarepairdetail.prodline
+            new TranslationSeedItem("entity.pcbarepairdetail.prodline", "zh-CN", "生产线", "生产线"),
+            // entity.pcbarepairdetail.prodline
+            new TranslationSeedItem("entity.pcbarepairdetail.prodline", "zh-HK", "生产线", "生产线"),
 
-            // entity.pcbaRepairDetail.cardno
-            new TranslationSeedItem("entity.pcbaRepairDetail.cardno", "en-US", "卡号", "卡号"),
-            // entity.pcbaRepairDetail.cardno
-            new TranslationSeedItem("entity.pcbaRepairDetail.cardno", "ja-JP", "卡号", "卡号"),
-            // entity.pcbaRepairDetail.cardno
-            new TranslationSeedItem("entity.pcbaRepairDetail.cardno", "zh-CN", "卡号", "卡号"),
-            // entity.pcbaRepairDetail.cardno
-            new TranslationSeedItem("entity.pcbaRepairDetail.cardno", "zh-HK", "卡号", "卡号"),
+            // entity.pcbarepairdetail.cardno
+            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "en-US", "卡号", "卡号"),
+            // entity.pcbarepairdetail.cardno
+            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "ja-JP", "卡号", "卡号"),
+            // entity.pcbarepairdetail.cardno
+            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "zh-CN", "卡号", "卡号"),
+            // entity.pcbarepairdetail.cardno
+            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "zh-HK", "卡号", "卡号"),
 
-            // entity.pcbaRepairDetail.defectsymptom
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectsymptom", "en-US", "不良症状", "不良症状"),
-            // entity.pcbaRepairDetail.defectsymptom
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectsymptom", "ja-JP", "不良症状", "不良症状"),
-            // entity.pcbaRepairDetail.defectsymptom
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectsymptom", "zh-CN", "不良症状", "不良症状"),
-            // entity.pcbaRepairDetail.defectsymptom
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectsymptom", "zh-HK", "不良症状", "不良症状"),
+            // entity.pcbarepairdetail.defectsymptom
+            new TranslationSeedItem("entity.pcbarepairdetail.defectsymptom", "en-US", "不良症状", "不良症状"),
+            // entity.pcbarepairdetail.defectsymptom
+            new TranslationSeedItem("entity.pcbarepairdetail.defectsymptom", "ja-JP", "不良症状", "不良症状"),
+            // entity.pcbarepairdetail.defectsymptom
+            new TranslationSeedItem("entity.pcbarepairdetail.defectsymptom", "zh-CN", "不良症状", "不良症状"),
+            // entity.pcbarepairdetail.defectsymptom
+            new TranslationSeedItem("entity.pcbarepairdetail.defectsymptom", "zh-HK", "不良症状", "不良症状"),
 
-            // entity.pcbaRepairDetail.defectengineering
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectengineering", "en-US", "检出工程", "检出工程"),
-            // entity.pcbaRepairDetail.defectengineering
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectengineering", "ja-JP", "检出工程", "检出工程"),
-            // entity.pcbaRepairDetail.defectengineering
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectengineering", "zh-CN", "检出工程", "检出工程"),
-            // entity.pcbaRepairDetail.defectengineering
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectengineering", "zh-HK", "检出工程", "检出工程"),
+            // entity.pcbarepairdetail.defectengineering
+            new TranslationSeedItem("entity.pcbarepairdetail.defectengineering", "en-US", "检出工程", "检出工程"),
+            // entity.pcbarepairdetail.defectengineering
+            new TranslationSeedItem("entity.pcbarepairdetail.defectengineering", "ja-JP", "检出工程", "检出工程"),
+            // entity.pcbarepairdetail.defectengineering
+            new TranslationSeedItem("entity.pcbarepairdetail.defectengineering", "zh-CN", "检出工程", "检出工程"),
+            // entity.pcbarepairdetail.defectengineering
+            new TranslationSeedItem("entity.pcbarepairdetail.defectengineering", "zh-HK", "检出工程", "检出工程"),
 
-            // entity.pcbaRepairDetail.defectreason
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectreason", "en-US", "不良原因", "不良原因"),
-            // entity.pcbaRepairDetail.defectreason
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectreason", "ja-JP", "不良原因", "不良原因"),
-            // entity.pcbaRepairDetail.defectreason
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectreason", "zh-CN", "不良原因", "不良原因"),
-            // entity.pcbaRepairDetail.defectreason
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectreason", "zh-HK", "不良原因", "不良原因"),
+            // entity.pcbarepairdetail.defectreason
+            new TranslationSeedItem("entity.pcbarepairdetail.defectreason", "en-US", "不良原因", "不良原因"),
+            // entity.pcbarepairdetail.defectreason
+            new TranslationSeedItem("entity.pcbarepairdetail.defectreason", "ja-JP", "不良原因", "不良原因"),
+            // entity.pcbarepairdetail.defectreason
+            new TranslationSeedItem("entity.pcbarepairdetail.defectreason", "zh-CN", "不良原因", "不良原因"),
+            // entity.pcbarepairdetail.defectreason
+            new TranslationSeedItem("entity.pcbarepairdetail.defectreason", "zh-HK", "不良原因", "不良原因"),
 
-            // entity.pcbaRepairDetail.defectqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectqty", "en-US", "不良数量", "不良数量"),
-            // entity.pcbaRepairDetail.defectqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectqty", "ja-JP", "不良数量", "不良数量"),
-            // entity.pcbaRepairDetail.defectqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectqty", "zh-CN", "不良数量", "不良数量"),
-            // entity.pcbaRepairDetail.defectqty
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectqty", "zh-HK", "不良数量", "不良数量"),
+            // entity.pcbarepairdetail.defectqty
+            new TranslationSeedItem("entity.pcbarepairdetail.defectqty", "en-US", "不良数量", "不良数量"),
+            // entity.pcbarepairdetail.defectqty
+            new TranslationSeedItem("entity.pcbarepairdetail.defectqty", "ja-JP", "不良数量", "不良数量"),
+            // entity.pcbarepairdetail.defectqty
+            new TranslationSeedItem("entity.pcbarepairdetail.defectqty", "zh-CN", "不良数量", "不良数量"),
+            // entity.pcbarepairdetail.defectqty
+            new TranslationSeedItem("entity.pcbarepairdetail.defectqty", "zh-HK", "不良数量", "不良数量"),
 
-            // entity.pcbaRepairDetail.defectresponsibility
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectresponsibility", "en-US", "责任归属", "责任归属"),
-            // entity.pcbaRepairDetail.defectresponsibility
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectresponsibility", "ja-JP", "责任归属", "责任归属"),
-            // entity.pcbaRepairDetail.defectresponsibility
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectresponsibility", "zh-CN", "责任归属", "责任归属"),
-            // entity.pcbaRepairDetail.defectresponsibility
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectresponsibility", "zh-HK", "责任归属", "责任归属"),
+            // entity.pcbarepairdetail.defectresponsibility
+            new TranslationSeedItem("entity.pcbarepairdetail.defectresponsibility", "en-US", "责任归属", "责任归属"),
+            // entity.pcbarepairdetail.defectresponsibility
+            new TranslationSeedItem("entity.pcbarepairdetail.defectresponsibility", "ja-JP", "责任归属", "责任归属"),
+            // entity.pcbarepairdetail.defectresponsibility
+            new TranslationSeedItem("entity.pcbarepairdetail.defectresponsibility", "zh-CN", "责任归属", "责任归属"),
+            // entity.pcbarepairdetail.defectresponsibility
+            new TranslationSeedItem("entity.pcbarepairdetail.defectresponsibility", "zh-HK", "责任归属", "责任归属"),
 
-            // entity.pcbaRepairDetail.defectnature
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectnature", "en-US", "不良性质", "不良性质"),
-            // entity.pcbaRepairDetail.defectnature
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectnature", "ja-JP", "不良性质", "不良性质"),
-            // entity.pcbaRepairDetail.defectnature
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectnature", "zh-CN", "不良性质", "不良性质"),
-            // entity.pcbaRepairDetail.defectnature
-            new TranslationSeedItem("entity.pcbaRepairDetail.defectnature", "zh-HK", "不良性质", "不良性质"),
+            // entity.pcbarepairdetail.defectnature
+            new TranslationSeedItem("entity.pcbarepairdetail.defectnature", "en-US", "不良性质", "不良性质"),
+            // entity.pcbarepairdetail.defectnature
+            new TranslationSeedItem("entity.pcbarepairdetail.defectnature", "ja-JP", "不良性质", "不良性质"),
+            // entity.pcbarepairdetail.defectnature
+            new TranslationSeedItem("entity.pcbarepairdetail.defectnature", "zh-CN", "不良性质", "不良性质"),
+            // entity.pcbarepairdetail.defectnature
+            new TranslationSeedItem("entity.pcbarepairdetail.defectnature", "zh-HK", "不良性质", "不良性质"),
 
-            // entity.pcbaRepairDetail.repairoperator
-            new TranslationSeedItem("entity.pcbaRepairDetail.repairoperator", "en-US", "修理员", "修理员"),
-            // entity.pcbaRepairDetail.repairoperator
-            new TranslationSeedItem("entity.pcbaRepairDetail.repairoperator", "ja-JP", "修理员", "修理员"),
-            // entity.pcbaRepairDetail.repairoperator
-            new TranslationSeedItem("entity.pcbaRepairDetail.repairoperator", "zh-CN", "修理员", "修理员"),
-            // entity.pcbaRepairDetail.repairoperator
-            new TranslationSeedItem("entity.pcbaRepairDetail.repairoperator", "zh-HK", "修理员", "修理员"),
+            // entity.pcbarepairdetail.repairoperator
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "en-US", "修理员", "修理员"),
+            // entity.pcbarepairdetail.repairoperator
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "ja-JP", "修理员", "修理员"),
+            // entity.pcbarepairdetail.repairoperator
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "zh-CN", "修理员", "修理员"),
+            // entity.pcbarepairdetail.repairoperator
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "zh-HK", "修理员", "修理员"),
 
-            // entity.pcbaRepairDetail.pcbarepair
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "en-US", "PCBA改修日报", "PCBA改修日报（主表）"),
-            // entity.pcbaRepairDetail.pcbarepair
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "ja-JP", "PCBA改修日报", "PCBA改修日报（主表）"),
-            // entity.pcbaRepairDetail.pcbarepair
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "zh-CN", "PCBA改修日报", "PCBA改修日报（主表）"),
-            // entity.pcbaRepairDetail.pcbarepair
-            new TranslationSeedItem("entity.pcbaRepairDetail.pcbarepair", "zh-HK", "PCBA改修日报", "PCBA改修日报（主表）"),
+            // entity.pcbarepairdetail.pcbarepair
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepair", "en-US", "PCBA改修日报", "PCBA改修日报（主表）"),
+            // entity.pcbarepairdetail.pcbarepair
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepair", "ja-JP", "PCBA改修日报", "PCBA改修日报（主表）"),
+            // entity.pcbarepairdetail.pcbarepair
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepair", "zh-CN", "PCBA改修日报", "PCBA改修日报（主表）"),
+            // entity.pcbarepairdetail.pcbarepair
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbarepair", "zh-HK", "PCBA改修日报", "PCBA改修日报（主表）"),
         };
     }
 
@@ -242,8 +241,8 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

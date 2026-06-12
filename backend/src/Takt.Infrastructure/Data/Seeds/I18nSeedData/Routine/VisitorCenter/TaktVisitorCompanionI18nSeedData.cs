@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.VisitorCenter
 // 文件名称：TaktVisitorCompanionI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVisitorCompanion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.VisitorCenter;
 
 /// <summary>
-/// TaktVisitorCompanion 实体国际化翻译种子（键前缀 entity.visitorCompanion.*）
+/// TaktVisitorCompanion 实体国际化翻译种子（键前缀 entity.visitorcompanion.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 visitorCompanion 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 visitorcompanion 实体翻译...", tenantCode);
 
         foreach (var item in GetVisitorCompanionTranslations())
         {
@@ -76,65 +75,65 @@ public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktVisitorCompanion 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.visitorCompanion._self / entity.visitorCompanion.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.visitorcompanion._self / entity.visitorcompanion.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetVisitorCompanionTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.visitorCompanion._self
-            new TranslationSeedItem("entity.visitorCompanion._self", "en-US", "Visitor Companion Information", "实体名称"),
-            // entity.visitorCompanion._self
-            new TranslationSeedItem("entity.visitorCompanion._self", "ja-JP", "来访人员子信息", "实体名称"),
-            // entity.visitorCompanion._self
-            new TranslationSeedItem("entity.visitorCompanion._self", "zh-CN", "来访人员子信息", "实体名称"),
-            // entity.visitorCompanion._self
-            new TranslationSeedItem("entity.visitorCompanion._self", "zh-HK", "来访人员子信息", "实体名称"),
+            // entity.visitorcompanion._self
+            new TranslationSeedItem("entity.visitorcompanion._self", "en-US", "Visitor Companion Information", "实体名称"),
+            // entity.visitorcompanion._self
+            new TranslationSeedItem("entity.visitorcompanion._self", "ja-JP", "来访人员子信息", "实体名称"),
+            // entity.visitorcompanion._self
+            new TranslationSeedItem("entity.visitorcompanion._self", "zh-CN", "来访人员子信息", "实体名称"),
+            // entity.visitorcompanion._self
+            new TranslationSeedItem("entity.visitorcompanion._self", "zh-HK", "来访人员子信息", "实体名称"),
 
-            // entity.visitorCompanion.visitorid
-            new TranslationSeedItem("entity.visitorCompanion.visitorid", "en-US", "来访记录ID", "来访记录 ID"),
-            // entity.visitorCompanion.visitorid
-            new TranslationSeedItem("entity.visitorCompanion.visitorid", "ja-JP", "来访记录ID", "来访记录 ID"),
-            // entity.visitorCompanion.visitorid
-            new TranslationSeedItem("entity.visitorCompanion.visitorid", "zh-CN", "来访记录ID", "来访记录 ID"),
-            // entity.visitorCompanion.visitorid
-            new TranslationSeedItem("entity.visitorCompanion.visitorid", "zh-HK", "来访记录ID", "来访记录 ID"),
+            // entity.visitorcompanion.visitorid
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "en-US", "来访记录ID", "来访记录 ID"),
+            // entity.visitorcompanion.visitorid
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "ja-JP", "来访记录ID", "来访记录 ID"),
+            // entity.visitorcompanion.visitorid
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "zh-CN", "来访记录ID", "来访记录 ID"),
+            // entity.visitorcompanion.visitorid
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "zh-HK", "来访记录ID", "来访记录 ID"),
 
-            // entity.visitorCompanion.department
-            new TranslationSeedItem("entity.visitorCompanion.department", "en-US", "部门", "部门"),
-            // entity.visitorCompanion.department
-            new TranslationSeedItem("entity.visitorCompanion.department", "ja-JP", "部门", "部门"),
-            // entity.visitorCompanion.department
-            new TranslationSeedItem("entity.visitorCompanion.department", "zh-CN", "部门", "部门"),
-            // entity.visitorCompanion.department
-            new TranslationSeedItem("entity.visitorCompanion.department", "zh-HK", "部门", "部门"),
+            // entity.visitorcompanion.department
+            new TranslationSeedItem("entity.visitorcompanion.department", "en-US", "部门", "部门"),
+            // entity.visitorcompanion.department
+            new TranslationSeedItem("entity.visitorcompanion.department", "ja-JP", "部门", "部门"),
+            // entity.visitorcompanion.department
+            new TranslationSeedItem("entity.visitorcompanion.department", "zh-CN", "部门", "部门"),
+            // entity.visitorcompanion.department
+            new TranslationSeedItem("entity.visitorcompanion.department", "zh-HK", "部门", "部门"),
 
-            // entity.visitorCompanion.jobtitle
-            new TranslationSeedItem("entity.visitorCompanion.jobtitle", "en-US", "职称", "职称"),
-            // entity.visitorCompanion.jobtitle
-            new TranslationSeedItem("entity.visitorCompanion.jobtitle", "ja-JP", "职称", "职称"),
-            // entity.visitorCompanion.jobtitle
-            new TranslationSeedItem("entity.visitorCompanion.jobtitle", "zh-CN", "职称", "职称"),
-            // entity.visitorCompanion.jobtitle
-            new TranslationSeedItem("entity.visitorCompanion.jobtitle", "zh-HK", "职称", "职称"),
+            // entity.visitorcompanion.jobtitle
+            new TranslationSeedItem("entity.visitorcompanion.jobtitle", "en-US", "职称", "职称"),
+            // entity.visitorcompanion.jobtitle
+            new TranslationSeedItem("entity.visitorcompanion.jobtitle", "ja-JP", "职称", "职称"),
+            // entity.visitorcompanion.jobtitle
+            new TranslationSeedItem("entity.visitorcompanion.jobtitle", "zh-CN", "职称", "职称"),
+            // entity.visitorcompanion.jobtitle
+            new TranslationSeedItem("entity.visitorcompanion.jobtitle", "zh-HK", "职称", "职称"),
 
-            // entity.visitorCompanion.companionname
-            new TranslationSeedItem("entity.visitorCompanion.companionname", "en-US", "来访人员姓名", "来访人员姓名"),
-            // entity.visitorCompanion.companionname
-            new TranslationSeedItem("entity.visitorCompanion.companionname", "ja-JP", "来访人员姓名", "来访人员姓名"),
-            // entity.visitorCompanion.companionname
-            new TranslationSeedItem("entity.visitorCompanion.companionname", "zh-CN", "来访人员姓名", "来访人员姓名"),
-            // entity.visitorCompanion.companionname
-            new TranslationSeedItem("entity.visitorCompanion.companionname", "zh-HK", "来访人员姓名", "来访人员姓名"),
+            // entity.visitorcompanion.companionname
+            new TranslationSeedItem("entity.visitorcompanion.companionname", "en-US", "来访人员姓名", "来访人员姓名"),
+            // entity.visitorcompanion.companionname
+            new TranslationSeedItem("entity.visitorcompanion.companionname", "ja-JP", "来访人员姓名", "来访人员姓名"),
+            // entity.visitorcompanion.companionname
+            new TranslationSeedItem("entity.visitorcompanion.companionname", "zh-CN", "来访人员姓名", "来访人员姓名"),
+            // entity.visitorcompanion.companionname
+            new TranslationSeedItem("entity.visitorcompanion.companionname", "zh-HK", "来访人员姓名", "来访人员姓名"),
 
-            // entity.visitorCompanion.visitor
-            new TranslationSeedItem("entity.visitorCompanion.visitor", "en-US", "来访记录", "来访记录（主表）"),
-            // entity.visitorCompanion.visitor
-            new TranslationSeedItem("entity.visitorCompanion.visitor", "ja-JP", "来访记录", "来访记录（主表）"),
-            // entity.visitorCompanion.visitor
-            new TranslationSeedItem("entity.visitorCompanion.visitor", "zh-CN", "来访记录", "来访记录（主表）"),
-            // entity.visitorCompanion.visitor
-            new TranslationSeedItem("entity.visitorCompanion.visitor", "zh-HK", "来访记录", "来访记录（主表）"),
+            // entity.visitorcompanion.visitor
+            new TranslationSeedItem("entity.visitorcompanion.visitor", "en-US", "来访记录", "来访记录（主表）"),
+            // entity.visitorcompanion.visitor
+            new TranslationSeedItem("entity.visitorcompanion.visitor", "ja-JP", "来访记录", "来访记录（主表）"),
+            // entity.visitorcompanion.visitor
+            new TranslationSeedItem("entity.visitorcompanion.visitor", "zh-CN", "来访记录", "来访记录（主表）"),
+            // entity.visitorcompanion.visitor
+            new TranslationSeedItem("entity.visitorcompanion.visitor", "zh-HK", "来访记录", "来访记录（主表）"),
         };
     }
 
@@ -152,8 +151,8 @@ public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

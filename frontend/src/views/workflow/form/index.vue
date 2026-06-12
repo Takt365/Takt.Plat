@@ -14,7 +14,7 @@
   <div class="workflow-form">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowform.formcode'), t('entity.flowform.formname')].join(t('common.page.action.or')) })"
+      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowForm.formcode'), t('entity.flowForm.formname')].join(t('common.tip.or')) })"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -24,9 +24,13 @@
       create-permission="workflow:form:create"
       update-permission="workflow:form:update"
       delete-permission="workflow:form:delete"
+      import-permission="workflow:form:import"
+      export-permission="workflow:form:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
+      :show-import="true"
+      :show-export="true"
       :show-refresh="true"
       :show-fullscreen="true"
       :show-advanced-query="true"
@@ -36,10 +40,13 @@
       :create-loading="loading"
       :update-loading="loading"
       :delete-loading="loading"
+      :export-loading="loading"
       :refresh-loading="loading"
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
+      @import="handleImport"
+      @export="handleExport"
       @refresh="handleRefresh"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
@@ -62,20 +69,28 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'formCategory'">
-          <a-tag>{{ formatCategory(record.formCategory) }}</a-tag>
+          <TaktDictTag
+            :value="record.formCategory"
+            dict-type="sys_form_category"
+          />
         </template>
         <template v-else-if="column.key === 'formType'">
-          <a-tag color="blue">
-            {{ formatType(record.formType) }}
-          </a-tag>
+          <TaktDictTag
+            :value="record.formType"
+            dict-type="sys_form_type"
+          />
         </template>
         <template v-else-if="column.key === 'isDatasource'">
-          {{ record[column.key as keyof FlowForm] === 1 ? t('common.page.button.yes') : t('common.page.button.no') }}
+          <TaktDictTag
+            :value="record.isDatasource"
+            dict-type="sys_yes_no"
+          />
         </template>
         <template v-else-if="column.key === 'formStatus'">
-          <a-tag :color="record.formStatus === 1 ? 'green' : record.formStatus === 2 ? 'red' : 'default'">
-            {{ formatStatus(record.formStatus) }}
-          </a-tag>
+          <TaktDictTag
+            :value="record.formStatus"
+            dict-type="sys_scheme_status"
+          />
         </template>
       </template>
     </TaktSingleTable>
@@ -109,30 +124,43 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.flowform.formcode')">
+      <a-form-item :label="t('entity.flowForm.formcode')">
         <a-input v-model:value="advancedQueryForm.formCode" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowform.formname')">
+      <a-form-item :label="t('entity.flowForm.formname')">
         <a-input v-model:value="advancedQueryForm.formName" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowform.formstatus')">
-        <a-select
-          v-model:value="advancedQueryForm.formStatus"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowform.formstatus') })"
+      <a-form-item :label="t('entity.flowForm.formstatus')">
+        <TaktSelect
+          v-model="advancedQueryForm.formStatus"
+          dict-type="sys_scheme_status"
+          style="width: 100%"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowForm.formstatus') })"
           allow-clear
-        >
-          <a-select-option :value="0">
-            {{ t('common.page.button.draft') }}
-          </a-select-option>
-          <a-select-option :value="1">
-            {{ t('common.page.button.publish') }}
-          </a-select-option>
-          <a-select-option :value="2">
-            {{ t('common.page.button.disable') }}
-          </a-select-option>
-        </a-select>
+        />
       </a-form-item>
     </TaktQueryDrawer>
+
+    <TaktModal
+      v-model:open="importVisible"
+      :title="t('common.dialog.title.import', { entity: t('entity.flowForm._self') })"
+      :width="600"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleImportCancel"
+    >
+      <TaktImportFile
+        entity-i18n-key="entity.flowForm._self"
+        file-type="xlsx"
+        :sheet-name="excelNames.sheet"
+        :template-file-name="excelNames.fileBase"
+        :download-template="handleDownloadTemplate"
+        :import-file="handleImportFile"
+        :max-size="10"
+        :max-rows="1000"
+        @success="handleImportSuccess"
+      />
+    </TaktModal>
 
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
@@ -165,17 +193,27 @@ import {
   createFlowForm,
   updateFlowForm,
   deleteFlowFormById,
-  deleteFlowFormBatch
+  deleteFlowFormBatch,
+  updateFlowFormStatus,
+  getFlowFormTemplate,
+  importFlowForm,
+  exportFlowForm
 } from '@/api/workflow/flow-form'
+import { taktExcelEntityNames } from '@/utils/naming'
+import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import type {
   FlowForm,
   FlowFormQuery,
   FlowFormCreate,
   FlowFormUpdate
 } from '@/types/workflow/flow-form'
-import { RiEditLine, RiDeleteBinLine, RiBrushLine } from '@remixicon/vue'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
+import { RiEditLine, RiDeleteBinLine, RiBrushLine, RiPlayLine, RiStopLine } from '@remixicon/vue'
 
 const { t } = useI18n()
+const tenantStore = useTenantStore()
+const userStore = useUserStore()
 const loading = ref(false)
 const queryKeyword = ref('')
 const dataSource = ref<FlowForm[]>([])
@@ -197,6 +235,10 @@ const advancedQueryForm = ref<{ formCode: string; formName: string; formStatus: 
 })
 const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
+/** 导入弹窗可见 */
+const importVisible = ref(false)
+/** Excel 导入导出文件名 */
+const excelNames = taktExcelEntityNames('flowForm', t('entity.flowForm._self'))
 
 type FlowFormColumn = {
   key?: string | number
@@ -233,6 +275,9 @@ function getSorterInfo(sorter: unknown): TableSorterInfo {
 }
 
 const form = reactive<FlowFormCreate & { flowFormId?: string }>({
+  tenantCode: '',
+  companyCode: '',
+  companyDefaultCulture: '',
   formCode: '',
   formName: '',
   formCategory: 0,
@@ -247,6 +292,15 @@ const form = reactive<FlowFormCreate & { flowFormId?: string }>({
   sortOrder: 0,
   formStatus: 0
 })
+
+/** 同步租户/公司隔离字段（与生成表单 applyScopeDefaults 一致） */
+function syncFormScopeDefaults(force = false) {
+  if (force || !form.tenantCode) form.tenantCode = tenantStore.tenantCode
+  if (force || !form.companyCode) form.companyCode = tenantStore.companyCode
+  if (force || !form.companyDefaultCulture) {
+    form.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  }
+}
 
 const getFormId = (record: unknown): string => {
   if (!record || typeof record !== 'object' || !('flowFormId' in record)) return ''
@@ -266,7 +320,7 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left'
   },
   {
-    title: t('entity.flowform.formcode'),
+    title: t('entity.flowForm.formcode'),
     dataIndex: 'formCode',
     key: 'formCode',
     width: 140,
@@ -274,7 +328,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowform.formname'),
+    title: t('entity.flowForm.formname'),
     dataIndex: 'formName',
     key: 'formName',
     width: 160,
@@ -282,37 +336,37 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowform.formcategory'),
+    title: t('entity.flowForm.formcategory'),
     dataIndex: 'formCategory',
     key: 'formCategory',
     width: 100
   },
   {
-    title: t('entity.flowform.formtype'),
+    title: t('entity.flowForm.formtype'),
     dataIndex: 'formType',
     key: 'formType',
     width: 120
   },
   {
-    title: t('entity.flowform.formversion'),
+    title: t('entity.flowForm.formversion'),
     dataIndex: 'formVersion',
     key: 'formVersion',
     width: 90
   },
   {
-    title: t('entity.flowform.isdatasource'),
+    title: t('entity.flowForm.isdatasource'),
     dataIndex: 'isDatasource',
     key: 'isDatasource',
     width: 80
   },
   {
-    title: t('entity.flowform.sortOrder'),
+    title: t('entity.flowForm.sortorder'),
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 80
   },
   {
-    title: t('entity.flowform.formstatus'),
+    title: t('entity.flowForm.formstatus'),
     dataIndex: 'formStatus',
     key: 'formStatus',
     width: 90
@@ -320,7 +374,7 @@ const columns = computed<TableColumnsType>(() => [
   CreateActionColumn({
     actions: [
       {
-        key: 'edit',
+        key: 'update',
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
@@ -334,6 +388,24 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiBrushLine,
         permission: 'workflow:form:design',
         onClick: (_record: FlowForm, _index: number) => handleDesign(_record)
+      },
+      {
+        key: 'publish',
+        label: t('common.page.button.publish'),
+        shape: 'plain',
+        icon: RiPlayLine,
+        permission: 'workflow:form:update',
+        visible: (record: FlowForm) => record.formStatus !== 1,
+        onClick: (record: FlowForm) => handleFormStatusChange(record, 1)
+      },
+      {
+        key: 'disable',
+        label: t('common.page.button.disable'),
+        shape: 'plain',
+        icon: RiStopLine,
+        permission: 'workflow:form:update',
+        visible: (record: FlowForm) => record.formStatus === 1,
+        onClick: (record: FlowForm) => handleFormStatusChange(record, 2)
       },
       {
         key: 'delete',
@@ -376,27 +448,6 @@ const onClickRow = (record: FlowForm) => ({
   }
 })
 
-/** 表单分类数字转展示文案（0 通用 / 1 业务 / 2 系统） */
-function formatCategory(category: number): string {
-  if (category === 1) return t('workflow.form.category.business')
-  if (category === 2) return t('workflow.form.category.system')
-  return t('workflow.form.category.general')
-}
-
-/** 表单类型数字转展示文案（0 动态 / 1 静态 / 2 自定义） */
-function formatType(type: number): string {
-  if (type === 1) return t('workflow.form.type.static')
-  if (type === 2) return t('workflow.form.type.custom')
-  return t('workflow.form.type.dynamic')
-}
-
-/** 表单状态数字转展示文案（0 草稿 / 1 已发布 / 2 已停用） */
-function formatStatus(status: number): string {
-  if (status === 1) return t('common.page.button.publish')
-  if (status === 2) return t('common.page.button.disable')
-  return t('common.page.button.draft')
-}
-
 /** 拉取流程表单列表（分页），结果写入 dataSource 与 total */
 async function loadData() {
   try {
@@ -414,7 +465,7 @@ async function loadData() {
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.loadFail')))
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
     dataSource.value = []
     total.value = 0
   } finally {
@@ -422,7 +473,8 @@ async function loadData() {
   }
 }
 
-/** 查询：页码置 1 并重新拉取列表 */
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 function handleSearch() {
   currentPage.value = 1
   loadData()
@@ -495,6 +547,82 @@ function handleRefresh() {
   loadData()
 }
 
+/** 打开导入弹窗 */
+function handleImport() {
+  importVisible.value = true
+}
+
+/** 下载导入模板 */
+async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
+  const res = await getFlowFormTemplate(sheetName, fileName)
+  return (res as { data?: Blob })?.data ?? res
+}
+
+/** 上传并导入 Excel */
+async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+  return await importFlowForm(file, sheetName)
+}
+
+/** 导入成功回调 */
+function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+  loadData()
+  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+}
+
+/** 关闭导入弹窗 */
+function handleImportCancel() {
+  importVisible.value = false
+}
+
+/** 导出当前查询条件下的 Excel */
+async function handleExport() {
+  try {
+    loading.value = true
+    const query: FlowFormQuery = {
+      pageIndex: 1,
+      pageSize: 10000
+    }
+    const formCode = queryKeyword.value || advancedQueryForm.value.formCode
+    const formName = queryKeyword.value || advancedQueryForm.value.formName
+    if (formCode) query.formCode = formCode
+    if (formName) query.formName = formName
+    if (advancedQueryForm.value.formStatus != null) query.formStatus = advancedQueryForm.value.formStatus
+    const blob = await exportFlowForm(query, excelNames.sheet, excelNames.fileBase)
+    const fileName = resolveExportDownloadFileName(blob, excelNames.fileBase)
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+    message.success(t('common.feedback.export.success'))
+  } catch (error: unknown) {
+    message.error(getErrorMessage(error, t('common.feedback.export.failed')))
+  } finally {
+    loading.value = false
+  }
+}
+
+/**
+ * 更新表单发布状态
+ * @param record 表单行
+ * @param formStatus 目标状态（1 发布 / 2 停用）
+ */
+async function handleFormStatusChange(record: FlowForm, formStatus: number) {
+  try {
+    loading.value = true
+    await updateFlowFormStatus({ flowFormId: record.flowFormId, formStatus })
+    message.success(formStatus === 1 ? t('workflow.form.page.publishSuccess') : t('workflow.form.page.disableSuccess'))
+    loadData()
+  } catch (error: unknown) {
+    message.error(getErrorMessage(error, t('common.feedback.failed')))
+  } finally {
+    loading.value = false
+  }
+}
+
 /** 列宽拖拽后更新对应列的 width */
 function handleResizeColumn(w: number, col: FlowFormColumn) {
   const column = columns.value.find((c) => getColumnKey(c as FlowFormColumn) === getColumnKey(col))
@@ -517,11 +645,12 @@ function resetForm() {
   form.relatedFormField = ''
   form.sortOrder = 0
   form.formStatus = 0
+  syncFormScopeDefaults(true)
 }
 
 /** 新增：仅此时重置表单数据；打开弹窗后 nextTick 再重置子组件步骤与内部状态。 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.flowform._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.flowForm._self') })
   resetForm()
   formVisible.value = true
   nextTick(() => formFormRef.value?.resetSteps?.())
@@ -529,11 +658,14 @@ function handleCreate() {
 
 /** 编辑：拉取详情回填 form，再打开弹窗，nextTick 后重置子组件步骤与内部状态（子组件会按 form 重新拉取数据源/表/列）。 */
 async function handleEdit(record: FlowForm) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.flowform._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.flowForm._self') })
   formLoading.value = true
   try {
     const detail = await getFlowFormById(String(record.flowFormId))
     form.flowFormId = detail.flowFormId
+    form.tenantCode = detail.tenantCode
+    form.companyCode = detail.companyCode
+    form.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
     form.formCode = detail.formCode
     form.formName = detail.formName
     form.formCategory = detail.formCategory
@@ -550,7 +682,7 @@ async function handleEdit(record: FlowForm) {
     formVisible.value = true
     nextTick(() => formFormRef.value?.resetSteps?.())
   } catch {
-    message.error(t('workflow.form.loadDetailFailed'))
+    message.error(t('workflow.form.page.loadDetailFailed'))
   } finally {
     formLoading.value = false
   }
@@ -564,7 +696,7 @@ function handleDesign(record: FlowForm) {
 /** 更新：若有选中行则编辑该行，否则提示请选择 */
 function handleUpdate() {
   if (selectedRow.value) handleEdit(selectedRow.value)
-  else message.warning(t('common.page.action.warnSelectToAction', { action: t('common.page.button.edit'), entity: t('entity.flowform._self') }))
+  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowForm._self') }))
 }
 
 /** 单条删除：二次确认后调用 deleteById 并刷新列表 */
@@ -572,18 +704,18 @@ function handleDeleteOne(record: FlowForm) {
   const name = record.formName || getFormId(record)
   Modal.confirm({
     centered: true,
-    title: t('common.page.action.confirmDelete'),
-    content: t('common.page.confirm.deleteEntity', { entity: t('entity.flowform._self'), name }),
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowForm._self'), name }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
         await deleteFlowFormById(record.flowFormId)
-        message.success(t('common.page.msg.deleteSuccess'))
+        message.success(t('common.feedback.deleted'))
         loadData()
       } catch (error: unknown) {
-        message.error(getErrorMessage(error, t('common.page.msg.deleteFail')))
+        message.error(getErrorMessage(error, t('common.feedback.delete.failed')))
       } finally {
         loading.value = false
       }
@@ -594,26 +726,26 @@ function handleDeleteOne(record: FlowForm) {
 /** 批量删除：无选中则提示；有选中则二次确认后 deleteBatch 并刷新 */
 function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.page.action.warnSelectToAction', { action: t('common.page.button.delete'), entity: t('entity.flowform._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowForm._self') }))
     return
   }
   Modal.confirm({
     centered: true,
-    title: t('common.page.action.confirmDelete'),
-    content: t('common.page.confirm.deleteCountEntity', { count: selectedRows.value.length, entity: t('entity.flowform._self') }),
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', { count: selectedRows.value.length, entity: t('entity.flowForm._self') }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
         await deleteFlowFormBatch(selectedRowKeys.value.map(k => String(k)))
-        message.success(t('common.page.msg.deleteSuccess'))
+        message.success(t('common.feedback.deleted'))
         selectedRowKeys.value = []
         selectedRows.value = []
         selectedRow.value = null
         loadData()
       } catch (error: unknown) {
-        message.error(getErrorMessage(error, t('common.page.msg.deleteFail')))
+        message.error(getErrorMessage(error, t('common.feedback.delete.failed')))
       } finally {
         loading.value = false
       }
@@ -630,13 +762,17 @@ function handleFormCancel() {
 async function handleFormSubmit() {
   const valid = await formFormRef.value?.validateAllSteps?.()
   if (valid === false) {
-    message.warning(t('workflow.form.step.completeRequired'))
+    message.warning(t('workflow.form.page.step.completeRequired'))
     return
   }
   try {
     formLoading.value = true
     formFormRef.value?.syncDesignerToModel()
-    const payload: FlowFormCreate | FlowFormUpdate = {
+    syncFormScopeDefaults(true)
+    const payload: FlowFormCreate = {
+      tenantCode: form.tenantCode,
+      companyCode: form.companyCode,
+      companyDefaultCulture: form.companyDefaultCulture,
       formCode: form.formCode.trim(),
       formName: form.formName.trim(),
       formCategory: form.formCategory,
@@ -650,19 +786,18 @@ async function handleFormSubmit() {
       relatedFormField: form.relatedFormField?.trim() || undefined,
       sortOrder: form.sortOrder ?? 0,
       formStatus: form.formStatus
-    } as FlowFormCreate | FlowFormUpdate
+    }
     if (form.flowFormId) {
-      (payload as FlowFormUpdate).flowFormId = form.flowFormId
-      await updateFlowForm(form.flowFormId, payload as FlowFormUpdate)
-      message.success(t('common.page.msg.updateSuccess'))
+      await updateFlowForm(form.flowFormId, { ...payload, flowFormId: form.flowFormId } as FlowFormUpdate)
+      message.success(t('common.feedback.updated'))
     } else {
-      await createFlowForm(payload as FlowFormCreate)
-      message.success(t('common.page.msg.createSuccess'))
+      await createFlowForm(payload)
+      message.success(t('common.feedback.created'))
     }
     formVisible.value = false
     loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.page.msg.operateFail')))
+    message.error(getErrorMessage(error, t('common.feedback.failed')))
   } finally {
     formLoading.value = false
   }

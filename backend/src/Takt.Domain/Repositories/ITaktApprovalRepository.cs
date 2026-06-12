@@ -196,7 +196,7 @@ public interface ITaktApprovalRepository<TEntity> : ITaktUniqueExistenceReposito
     Task<int> GetMaxIntAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, int>> fieldSelector);
 
     /// <summary>
-    /// 执行只读 SQL 并返回动态行（调用方须先经 <see cref="Takt.Shared.Validation.TaktSqlExecutorValidator"/> 校验）
+    /// 执行只读 SQL 并返回动态行（调用方须先经 TaktSqlExecutorValidator 校验）
     /// </summary>
     /// <param name="sql">SQL 文本</param>
     /// <param name="parameters">命名参数（可选）</param>
@@ -227,41 +227,30 @@ public interface ITaktApprovalRepository<TEntity> : ITaktUniqueExistenceReposito
     void RollbackTran();
 
     // ========================================
-    // 审批操作
+    // 审批操作（已废弃：凡审批必走 TaktFlowEngine，禁止直接改 ApprovalStatus）
     // ========================================
 
     /// <summary>
-    /// 提交审批
+    /// 提交审批（已废弃，请使用 TaktFlowEngine.StartFlowInstanceAsync）
     /// </summary>
-    /// <param name="id">实体ID</param>
-    /// <param name="submitterId">提交人ID</param>
-    /// <returns>是否成功</returns>
+    [Obsolete("凡审批必走 TaktFlowEngine；请调用 ITaktFlowEngineService.StartFlowInstanceAsync 并回写 FlowInstanceId")]
     Task<bool> SubmitForApprovalAsync(long id, long submitterId);
 
     /// <summary>
-    /// 审批通过
+    /// 审批通过（已废弃，请使用 TaktFlowEngine.CompleteFlowInstanceTaskAsync）
     /// </summary>
-    /// <param name="id">实体ID</param>
-    /// <param name="approverId">审批人ID</param>
-    /// <param name="opinion">审批意见</param>
-    /// <returns>是否成功</returns>
+    [Obsolete("凡审批必走 TaktFlowEngine；请通过待办 Complete 并在业务层回写 ApprovalStatus")]
     Task<bool> ApproveAsync(long id, long approverId, string? opinion = null);
 
     /// <summary>
-    /// 审批驳回
+    /// 审批驳回（已废弃，请使用 TaktFlowEngine.CompleteFlowInstanceTaskAsync）
     /// </summary>
-    /// <param name="id">实体ID</param>
-    /// <param name="approverId">审批人ID</param>
-    /// <param name="opinion">驳回意见</param>
-    /// <returns>是否成功</returns>
+    [Obsolete("凡审批必走 TaktFlowEngine；请通过待办 Complete 并在业务层回写 ApprovalStatus")]
     Task<bool> RejectAsync(long id, long approverId, string opinion);
 
     /// <summary>
-    /// 撤销审批
+    /// 撤销审批（已废弃，请使用 TaktFlowEngine.RevokeFlowInstanceAsync）
     /// </summary>
-    /// <param name="id">实体ID</param>
-    /// <param name="cancellerId">撤销人ID</param>
-    /// <param name="opinion">撤销意见</param>
-    /// <returns>是否成功</returns>
+    [Obsolete("凡审批必走 TaktFlowEngine；请调用 ITaktFlowEngineService.RevokeFlowInstanceAsync")]
     Task<bool> CancelApprovalAsync(long id, long cancellerId, string? opinion = null);
 }

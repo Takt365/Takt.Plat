@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/identity
 // 文件名称：menu.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：identity 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,7 +69,7 @@ export interface Menu extends TenantDtoBase {
   isLeaf: number;
 
   /**
-   * 菜单类型（与 <see cref="Takt.Shared.Enums.TaktMenuType"/> 一致：0=目录，1=页面菜单，2=按钮）
+   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
    */
   menuType: number;
 
@@ -204,7 +204,7 @@ export interface MenuQuery extends TaktPagedQuery {
   isLeaf?: number;
 
   /**
-   * 菜单类型（与 <see cref="Takt.Shared.Enums.TaktMenuType"/> 一致：0=目录，1=页面菜单，2=按钮）
+   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
    */
   menuType?: number;
 
@@ -328,7 +328,7 @@ export interface MenuCreate {
   menuPath: string;
 
   /**
-   * 菜单类型（与 <see cref="Takt.Shared.Enums.TaktMenuType"/> 一致：0=目录，1=页面菜单，2=按钮）
+   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
    */
   menuType: number;
 
@@ -500,7 +500,7 @@ export interface MenuTemplate {
   menuPath?: string;
 
   /**
-   * 菜单类型（与 <see cref="Takt.Shared.Enums.TaktMenuType"/> 一致：0=目录，1=页面菜单，2=按钮）
+   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
    */
   menuType?: number;
 
@@ -584,7 +584,7 @@ export interface MenuImport {
   menuPath?: string;
 
   /**
-   * 菜单类型（与 <see cref="Takt.Shared.Enums.TaktMenuType"/> 一致：0=目录，1=页面菜单，2=按钮）
+   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
    */
   menuType?: number;
 
@@ -678,7 +678,7 @@ export interface MenuExport {
   isLeaf: number;
 
   /**
-   * 菜单类型（与 <see cref="Takt.Shared.Enums.TaktMenuType"/> 一致：0=目录，1=页面菜单，2=按钮）
+   * 菜单类型（字典 sys_menu_type：0=目录，1=菜单，2=按钮）
    */
   menuType: number;
 

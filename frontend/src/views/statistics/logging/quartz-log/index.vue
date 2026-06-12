@@ -109,100 +109,46 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('quartzTaskId')">
-      <a-form-item :label="t('entity.quartzLog.quartztaskid')">
+      <a-form-item :label="t('entity.quartzlog.quartztaskid')">
         <a-input
           v-model:value="advancedQueryForm.quartzTaskId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.quartztaskid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.quartztaskid') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taskName')">
-      <a-form-item :label="t('entity.quartzLog.taskname')">
+      <a-form-item :label="t('entity.quartzlog.taskname')">
         <a-input
           v-model:value="advancedQueryForm.taskName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.taskname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.taskname') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('jobGroup')">
-      <a-form-item :label="t('entity.quartzLog.jobgroup')">
-        <a-input
-          v-model:value="advancedQueryForm.jobGroup"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.jobgroup') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taskType')">
-      <a-form-item :label="t('entity.quartzLog.tasktype')">
+      <a-form-item :label="t('entity.quartzlog.jobgroup')">
         <a-input-number
-          v-model:value="advancedQueryForm.taskType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.tasktype') })"
+          v-model:value="advancedQueryForm.jobGroup"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.jobgroup') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('executeParams')">
-      <a-form-item :label="t('entity.quartzLog.executeparams')">
-        <a-input
-          v-model:value="advancedQueryForm.executeParams"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeparams') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('executeMessage')">
-      <a-form-item :label="t('entity.quartzLog.executemessage')">
-        <a-input
-          v-model:value="advancedQueryForm.executeMessage"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executemessage') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('errorInfo')">
-      <a-form-item :label="t('entity.quartzLog.errorinfo')">
-        <a-input
-          v-model:value="advancedQueryForm.errorInfo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.errorinfo') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('executeIp')">
-      <a-form-item :label="t('entity.quartzLog.executeip')">
-        <a-input
-          v-model:value="advancedQueryForm.executeIp"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeip') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('executeHost')">
-      <a-form-item :label="t('entity.quartzLog.executehost')">
-        <a-input
-          v-model:value="advancedQueryForm.executeHost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executehost') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('executeStatus')">
-      <a-form-item :label="t('entity.quartzLog.executestatus')">
+      <div v-show="isFieldVisible('taskType')">
+      <a-form-item :label="t('entity.quartzlog.tasktype')">
         <a-input-number
-          v-model:value="advancedQueryForm.executeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executestatus') })"
+          v-model:value="advancedQueryForm.taskType"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.tasktype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('executeTimeStart')">
-      <a-form-item :label="t('entity.quartzLog.executetimestart')">
+      <a-form-item :label="t('entity.quartzlog.executetimestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.executeTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartzLog.executetimestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartzlog.executetimestart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -210,10 +156,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('executeTimeEnd')">
-      <a-form-item :label="t('entity.quartzLog.executetimeend')">
+      <a-form-item :label="t('entity.quartzlog.executetimeend')">
         <a-date-picker
           v-model:value="advancedQueryForm.executeTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartzLog.executetimeend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartzlog.executetimeend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -221,10 +167,64 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('executeDuration')">
-      <a-form-item :label="t('entity.quartzLog.executeduration')">
-        <a-input-number
+      <a-form-item :label="t('entity.quartzlog.executeduration')">
+        <a-input
           v-model:value="advancedQueryForm.executeDuration"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzLog.executeduration') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeduration') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('executeParams')">
+      <a-form-item :label="t('entity.quartzlog.executeparams')">
+        <a-input
+          v-model:value="advancedQueryForm.executeParams"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeparams') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('executeMessage')">
+      <a-form-item :label="t('entity.quartzlog.executemessage')">
+        <a-input
+          v-model:value="advancedQueryForm.executeMessage"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executemessage') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('errorInfo')">
+      <a-form-item :label="t('entity.quartzlog.errorinfo')">
+        <a-input
+          v-model:value="advancedQueryForm.errorInfo"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.errorinfo') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('executeIp')">
+      <a-form-item :label="t('entity.quartzlog.executeip')">
+        <a-input
+          v-model:value="advancedQueryForm.executeIp"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeip') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('executeHost')">
+      <a-form-item :label="t('entity.quartzlog.executehost')">
+        <a-input
+          v-model:value="advancedQueryForm.executeHost"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executehost') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('executeStatus')">
+      <a-form-item :label="t('entity.quartzlog.executestatus')">
+        <a-input-number
+          v-model:value="advancedQueryForm.executeStatus"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executestatus') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -311,7 +311,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktQuartzLog')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.quartzLog._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.quartzlog._self') })
 )
 
 /** 快捷查询关键字 */
@@ -348,17 +348,17 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   quartzTaskId: '',
   taskName: '',
-  jobGroup: '',
+  jobGroup: undefined as number | undefined,
   taskType: undefined as number | undefined,
+  executeTimeStart: '',
+  executeTimeEnd: '',
+  executeDuration: '',
   executeParams: '',
   executeMessage: '',
   errorInfo: '',
   executeIp: '',
   executeHost: '',
   executeStatus: undefined as number | undefined,
-  executeTimeStart: '',
-  executeTimeEnd: '',
-  executeDuration: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extFieldJson: '',
@@ -366,19 +366,19 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'quartzTaskId', label: t('entity.quartzLog.quartztaskid') },
-  { key: 'taskName', label: t('entity.quartzLog.taskname') },
-  { key: 'jobGroup', label: t('entity.quartzLog.jobgroup') },
-  { key: 'taskType', label: t('entity.quartzLog.tasktype') },
-  { key: 'executeParams', label: t('entity.quartzLog.executeparams') },
-  { key: 'executeMessage', label: t('entity.quartzLog.executemessage') },
-  { key: 'errorInfo', label: t('entity.quartzLog.errorinfo') },
-  { key: 'executeIp', label: t('entity.quartzLog.executeip') },
-  { key: 'executeHost', label: t('entity.quartzLog.executehost') },
-  { key: 'executeStatus', label: t('entity.quartzLog.executestatus') },
-  { key: 'executeTimeStart', label: t('entity.quartzLog.executetimestart') },
-  { key: 'executeTimeEnd', label: t('entity.quartzLog.executetimeend') },
-  { key: 'executeDuration', label: t('entity.quartzLog.executeduration') },
+  { key: 'quartzTaskId', label: t('entity.quartzlog.quartztaskid') },
+  { key: 'taskName', label: t('entity.quartzlog.taskname') },
+  { key: 'jobGroup', label: t('entity.quartzlog.jobgroup') },
+  { key: 'taskType', label: t('entity.quartzlog.tasktype') },
+  { key: 'executeTimeStart', label: t('entity.quartzlog.executetimestart') },
+  { key: 'executeTimeEnd', label: t('entity.quartzlog.executetimeend') },
+  { key: 'executeDuration', label: t('entity.quartzlog.executeduration') },
+  { key: 'executeParams', label: t('entity.quartzlog.executeparams') },
+  { key: 'executeMessage', label: t('entity.quartzlog.executemessage') },
+  { key: 'errorInfo', label: t('entity.quartzlog.errorinfo') },
+  { key: 'executeIp', label: t('entity.quartzlog.executeip') },
+  { key: 'executeHost', label: t('entity.quartzlog.executehost') },
+  { key: 'executeStatus', label: t('entity.quartzlog.executestatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
@@ -421,7 +421,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'quartzLogId') ?? ''
   },
   {
-    title: t('entity.quartzLog.quartztaskid'),
+    title: t('entity.quartzlog.quartztaskid'),
     dataIndex: 'quartzTaskId',
     key: 'quartzTaskId',
     width: 120,
@@ -430,7 +430,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'quartzTaskId') ?? ''
   },
   {
-    title: t('entity.quartzLog.taskname'),
+    title: t('entity.quartzlog.taskname'),
     dataIndex: 'taskName',
     key: 'taskName',
     width: 120,
@@ -439,58 +439,103 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'taskName') ?? ''
   },
   {
-    title: t('entity.quartzLog.jobgroup'),
+    title: t('entity.quartzlog.jobgroup'),
     dataIndex: 'jobGroup',
     key: 'jobGroup',
-    width: 100,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'jobGroup') ?? ''
   },
   {
-    title: t('entity.quartzLog.tasktype'),
+    title: t('entity.quartzlog.tasktype'),
     dataIndex: 'taskType',
     key: 'taskType',
-    width: 90,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'taskType') ?? ''
   },
   {
-    title: t('entity.quartzLog.executetime'),
+    title: t('entity.quartzlog.executetime'),
     dataIndex: 'executeTime',
     key: 'executeTime',
-    width: 150,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'executeTime') ?? ''
   },
   {
-    title: t('entity.quartzLog.executeduration'),
+    title: t('entity.quartzlog.executeduration'),
     dataIndex: 'executeDuration',
     key: 'executeDuration',
-    width: 110,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'executeDuration') ?? ''
   },
   {
-    title: t('entity.quartzLog.executestatus'),
+    title: t('entity.quartzlog.executeparams'),
+    dataIndex: 'executeParams',
+    key: 'executeParams',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'executeParams') ?? ''
+  },
+  {
+    title: t('entity.quartzlog.executemessage'),
+    dataIndex: 'executeMessage',
+    key: 'executeMessage',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'executeMessage') ?? ''
+  },
+  {
+    title: t('entity.quartzlog.errorinfo'),
+    dataIndex: 'errorInfo',
+    key: 'errorInfo',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'errorInfo') ?? ''
+  },
+  {
+    title: t('entity.quartzlog.executeip'),
+    dataIndex: 'executeIp',
+    key: 'executeIp',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'executeIp') ?? ''
+  },
+  {
+    title: t('entity.quartzlog.executehost'),
+    dataIndex: 'executeHost',
+    key: 'executeHost',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'executeHost') ?? ''
+  },
+  {
+    title: t('entity.quartzlog.executestatus'),
     dataIndex: 'executeStatus',
     key: 'executeStatus',
-    width: 90,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'executeStatus') ?? ''
   },
   {
-    title: t('entity.quartzLog.errorinfo'),
-    dataIndex: 'errorInfo',
-    key: 'errorInfo',
-    width: 140,
+    title: t('entity.quartzlog.quartztask'),
+    dataIndex: 'quartzTask',
+    key: 'quartzTask',
+    width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'errorInfo') ?? ''
+    customRender: ({ record }: { record: any }) => getQuartzLogField(record, 'quartzTask') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -587,6 +632,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -599,17 +647,17 @@ function handleReset() {
   advancedQueryForm.value = {
   quartzTaskId: '',
   taskName: '',
-  jobGroup: '',
+  jobGroup: undefined as number | undefined,
   taskType: undefined as number | undefined,
+  executeTimeStart: '',
+  executeTimeEnd: '',
+  executeDuration: '',
   executeParams: '',
   executeMessage: '',
   errorInfo: '',
   executeIp: '',
   executeHost: '',
   executeStatus: undefined as number | undefined,
-  executeTimeStart: '',
-  executeTimeEnd: '',
-  executeDuration: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extFieldJson: '',
@@ -621,13 +669,13 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.quartzLog._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.quartzlog._self') })
   formData.value = {}
   formVisible.value = true
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: QuartzLog) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.quartzLog._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.quartzlog._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -637,7 +685,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.quartzLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.quartzlog._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -655,10 +703,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateQuartzLog(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.quartzLog._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.quartzlog._self') }))
     } else {
       await createQuartzLog(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.quartzLog._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.quartzlog._self') }))
     }
     formVisible.value = false
     loadData()
@@ -703,10 +751,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.quartzLog._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.quartzlog._self') }))
   } catch (error: any) {
     logger.error('[QuartzLog] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.quartzLog._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.quartzlog._self') }))
   } finally {
     loading.value = false
   }
@@ -715,12 +763,12 @@ async function handleExport() {
 async function handleDeleteOne(record: QuartzLog) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.quartzLog._self'), name: t('common.tip.this.target', { target: t('entity.quartzLog._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.quartzlog._self'), name: t('common.tip.this.target', { target: t('entity.quartzlog._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteQuartzLogById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.quartzLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.quartzlog._self') }))
       loadData()
     }
   })
@@ -728,18 +776,18 @@ async function handleDeleteOne(record: QuartzLog) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.quartzLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.quartzlog._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.quartzLog._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.quartzlog._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteQuartzLogBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.quartzLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.quartzlog._self') }))
       loadData()
     }
   })
@@ -760,17 +808,17 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   quartzTaskId: '',
   taskName: '',
-  jobGroup: '',
+  jobGroup: undefined as number | undefined,
   taskType: undefined as number | undefined,
+  executeTimeStart: '',
+  executeTimeEnd: '',
+  executeDuration: '',
   executeParams: '',
   executeMessage: '',
   errorInfo: '',
   executeIp: '',
   executeHost: '',
   executeStatus: undefined as number | undefined,
-  executeTimeStart: '',
-  executeTimeEnd: '',
-  executeDuration: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extFieldJson: '',

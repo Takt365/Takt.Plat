@@ -24,7 +24,6 @@ using OpenIddict.Abstractions;
 using Takt.Application.Dtos.Identity;
 using Takt.Application.Services.Identity;
 using Takt.Domain.Interfaces;
-using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Options;
 using Takt.WebApi.Controllers;
@@ -37,7 +36,7 @@ namespace Takt.WebApi.Controllers.Identity;
 /// <summary>
 /// 身份认证控制器（会话 signin、OAuth /connect/*、GET me）
 /// </summary>
-[ApiModule(TaktModule.Identity, "身份认证")]
+[ApiModule(1, "身份认证")]
 [Route("api/[controller]", Name = "身份认证")]
 public class TaktAuthsController : TaktControllerBase
 {
@@ -137,7 +136,7 @@ public class TaktAuthsController : TaktControllerBase
             var tenantRequiredMessage = GetValidationMessage(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldTenantCode);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
-                TaktLoginTypes.Password, TaktLoginResult.PasswordError, tenantRequiredMessage);
+                TaktLoginType.Password, TaktLoginResult.PasswordError, tenantRequiredMessage);
             return BadRequest(new { message = tenantRequiredMessage });
         }
 
@@ -148,7 +147,7 @@ public class TaktAuthsController : TaktControllerBase
             var tenantAccessMessage = GetLocalizedString(TaktValidationI18nKeys.PermissionTenantNoAccess);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
-                TaktLoginTypes.Password, TaktLoginResult.PasswordError, tenantAccessMessage);
+                TaktLoginType.Password, TaktLoginResult.PasswordError, tenantAccessMessage);
             return Unauthorized(new { message = tenantAccessMessage });
         }
 
@@ -158,7 +157,7 @@ public class TaktAuthsController : TaktControllerBase
             var invalidCredentialsMessage = GetValidationMessage(TaktValidationI18nKeys.Incorrect, TaktValidationI18nKeys.FieldLoginCredentials);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
-                TaktLoginTypes.Password, TaktLoginResult.PasswordError, invalidCredentialsMessage);
+                TaktLoginType.Password, TaktLoginResult.PasswordError, invalidCredentialsMessage);
             return Unauthorized(new { message = invalidCredentialsMessage });
         }
 
@@ -169,7 +168,7 @@ public class TaktAuthsController : TaktControllerBase
                 var captchaRequiredMessage = GetValidationMessage(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldCaptcha);
                 await _openIddictLogHandler.CreateLoginLogAsync(
                     HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
-                    TaktLoginTypes.Password, TaktLoginResult.CaptchaError, captchaRequiredMessage);
+                    TaktLoginType.Password, TaktLoginResult.CaptchaError, captchaRequiredMessage);
                 return BadRequest(new { message = captchaRequiredMessage, captchaRequired = true });
             }
 
@@ -183,7 +182,7 @@ public class TaktAuthsController : TaktControllerBase
                 var captchaInvalidMessage = GetValidationMessage(TaktValidationI18nKeys.NotFoundOrExpired, TaktValidationI18nKeys.FieldCaptcha);
                 await _openIddictLogHandler.CreateLoginLogAsync(
                     HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
-                    TaktLoginTypes.Password, TaktLoginResult.CaptchaError, captchaInvalidMessage);
+                    TaktLoginType.Password, TaktLoginResult.CaptchaError, captchaInvalidMessage);
                 return BadRequest(new { message = captchaInvalidMessage });
             }
         }
@@ -216,7 +215,7 @@ public class TaktAuthsController : TaktControllerBase
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.SignInSession, tenantAndCompany.TenantCode, tenantAndCompany.CompanyCode,
-            username, TaktLoginTypes.Password, TaktLoginResult.Success, "登录会话已建立", userId.Value);
+            username, TaktLoginType.Password, TaktLoginResult.Success, "登录会话已建立", userId.Value);
 
         return Ok(new { success = true });
     }
@@ -241,7 +240,7 @@ public class TaktAuthsController : TaktControllerBase
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.SignOutSession, signOutTenant, signOutCompany, signOutUsername,
-            TaktLoginTypes.SignOut, TaktLoginResult.Success, "Cookie 会话已注销");
+            TaktLoginType.SignOut, TaktLoginResult.Success, "Cookie 会话已注销");
 
         return Ok(new { success = true });
     }
@@ -263,7 +262,7 @@ public class TaktAuthsController : TaktControllerBase
             var tenantRequiredMessage = GetValidationMessage(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldTenantCode);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
-                TaktLoginTypes.VerifyPassword, TaktLoginResult.PasswordError, tenantRequiredMessage,
+                TaktLoginType.VerifyPassword, TaktLoginResult.PasswordError, tenantRequiredMessage,
                 elapsedMs: stopwatch.ElapsedMilliseconds);
             return BadRequest(new { message = tenantRequiredMessage });
         }
@@ -276,7 +275,7 @@ public class TaktAuthsController : TaktControllerBase
             var tenantAccessMessage = GetLocalizedString(TaktValidationI18nKeys.PermissionTenantNoAccess);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
-                TaktLoginTypes.VerifyPassword, TaktLoginResult.PasswordError, tenantAccessMessage,
+                TaktLoginType.VerifyPassword, TaktLoginResult.PasswordError, tenantAccessMessage,
                 elapsedMs: stopwatch.ElapsedMilliseconds);
             return Unauthorized(new { message = tenantAccessMessage });
         }
@@ -286,7 +285,7 @@ public class TaktAuthsController : TaktControllerBase
         {
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
-                TaktLoginTypes.VerifyPassword, TaktLoginResult.PasswordError, cipherError,
+                TaktLoginType.VerifyPassword, TaktLoginResult.PasswordError, cipherError,
                 elapsedMs: stopwatch.ElapsedMilliseconds);
             return BadRequest(new { message = cipherError });
         }
@@ -297,7 +296,7 @@ public class TaktAuthsController : TaktControllerBase
             var invalidCredentialsMessage = GetValidationMessage(TaktValidationI18nKeys.Incorrect, TaktValidationI18nKeys.FieldLoginCredentials);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
-                TaktLoginTypes.VerifyPassword, TaktLoginResult.PasswordError, invalidCredentialsMessage,
+                TaktLoginType.VerifyPassword, TaktLoginResult.PasswordError, invalidCredentialsMessage,
                 elapsedMs: stopwatch.ElapsedMilliseconds);
             return Unauthorized(new { message = invalidCredentialsMessage });
         }
@@ -309,7 +308,7 @@ public class TaktAuthsController : TaktControllerBase
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
-            TaktLoginTypes.VerifyPassword, TaktLoginResult.Success, "密码校验通过，已签发登录票据",
+            TaktLoginType.VerifyPassword, TaktLoginResult.Success, "密码校验通过，已签发登录票据",
             userId.Value, stopwatch.ElapsedMilliseconds);
 
         return Ok(new TaktSessionVerifyPasswordResponseDto
@@ -611,7 +610,7 @@ public class TaktAuthsController : TaktControllerBase
             var returnUrl = BuildOAuthReturnUrl();
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.OAuthAuthorize, string.Empty, null, string.Empty,
-                TaktLoginTypes.OAuthAuthorize, TaktLoginResult.PasswordError,
+                TaktLoginType.OAuthAuthorize, TaktLoginResult.PasswordError,
                 $"未建立 Cookie 会话，重定向登录页: {returnUrl}");
             var loginUrl = $"{_openIddictOptions.FrontendLoginUrl.TrimEnd('/')}?returnUrl={Uri.EscapeDataString(returnUrl)}";
             return Redirect(loginUrl);
@@ -625,7 +624,7 @@ public class TaktAuthsController : TaktControllerBase
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.OAuthAuthorize, authTenant, authCompany, authUsername,
-            TaktLoginTypes.OAuthAuthorize, TaktLoginResult.Success, "OAuth 授权成功");
+            TaktLoginType.OAuthAuthorize, TaktLoginResult.Success, "OAuth 授权成功");
 
         var oidcPrincipal = _openIddictLogHandler.CreateOpenIddictPrincipal(
             cookieAuth.Principal,
@@ -708,7 +707,7 @@ public class TaktAuthsController : TaktControllerBase
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.OidcLogout, logoutTenant, logoutCompany, logoutUsername,
-            TaktLoginTypes.SignOut, TaktLoginResult.Success, "OIDC 登出");
+            TaktLoginType.SignOut, TaktLoginResult.Success, "OIDC 登出");
 
         return SignOut(
             authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
@@ -798,7 +797,7 @@ public class TaktAuthsController : TaktControllerBase
             var clientIdMissingMessage = GetValidationMessage(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldClientId);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.ClientCredentials, string.Empty, null, string.Empty,
-                TaktLoginTypes.ClientCredentials, TaktLoginResult.PasswordError, clientIdMissingMessage);
+                TaktLoginType.ClientCredentials, TaktLoginResult.PasswordError, clientIdMissingMessage);
             throw new InvalidOperationException("The client_id is missing.");
         }
 
@@ -808,13 +807,13 @@ public class TaktAuthsController : TaktControllerBase
             var applicationNotFoundMessage = GetValidationMessage(TaktValidationI18nKeys.NotFound, TaktValidationI18nKeys.FieldApplication);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.ClientCredentials, string.Empty, null, clientId,
-                TaktLoginTypes.ClientCredentials, TaktLoginResult.PasswordError, applicationNotFoundMessage);
+                TaktLoginType.ClientCredentials, TaktLoginResult.PasswordError, applicationNotFoundMessage);
             throw new InvalidOperationException("The application cannot be found.");
         }
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.ClientCredentials, string.Empty, null, clientId,
-            TaktLoginTypes.ClientCredentials, TaktLoginResult.Success, "客户端凭证登录成功");
+            TaktLoginType.ClientCredentials, TaktLoginResult.Success, "客户端凭证登录成功");
 
         var identity = new ClaimsIdentity(
             TokenValidationParameters.DefaultAuthenticationType,
@@ -836,7 +835,7 @@ public class TaktAuthsController : TaktControllerBase
             var authorizationCodeInvalidMessage = GetValidationMessage(TaktValidationI18nKeys.NotFoundOrExpired, TaktValidationI18nKeys.FieldAuthorizationCode);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.AuthorizationCode, string.Empty, null, string.Empty,
-                TaktLoginTypes.AuthorizationCode, TaktLoginResult.PasswordError, authorizationCodeInvalidMessage);
+                TaktLoginType.AuthorizationCode, TaktLoginResult.PasswordError, authorizationCodeInvalidMessage);
             return OAuthForbid(Errors.InvalidGrant, authorizationCodeInvalidMessage);
         }
 
@@ -848,7 +847,7 @@ public class TaktAuthsController : TaktControllerBase
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.AuthorizationCode, codeTenant, codeCompany, codeUsername,
-            TaktLoginTypes.AuthorizationCode, TaktLoginResult.Success, "授权码换令牌成功");
+            TaktLoginType.AuthorizationCode, TaktLoginResult.Success, "授权码换令牌成功");
 
         return SignIn(principal.Principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
@@ -862,7 +861,7 @@ public class TaktAuthsController : TaktControllerBase
             var refreshTokenInvalidMessage = GetValidationMessage(TaktValidationI18nKeys.NotFoundOrExpired, TaktValidationI18nKeys.FieldRefreshToken);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.RefreshToken, string.Empty, null, string.Empty,
-                TaktLoginTypes.RefreshToken, TaktLoginResult.PasswordError, refreshTokenInvalidMessage);
+                TaktLoginType.RefreshToken, TaktLoginResult.PasswordError, refreshTokenInvalidMessage);
             return OAuthForbid(Errors.InvalidGrant, refreshTokenInvalidMessage);
         }
 
@@ -874,7 +873,7 @@ public class TaktAuthsController : TaktControllerBase
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.RefreshToken, refreshTenant, refreshCompany, refreshUsername,
-            TaktLoginTypes.RefreshToken, TaktLoginResult.Success, "刷新令牌成功");
+            TaktLoginType.RefreshToken, TaktLoginResult.Success, "刷新令牌成功");
 
         var newPrincipal = new ClaimsPrincipal(identity);
         newPrincipal.SetScopes(principal.Principal?.GetScopes());

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsShareI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsShare 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter;
 
 /// <summary>
-/// TaktNewsShare 实体国际化翻译种子（键前缀 entity.newsShare.*）
+/// TaktNewsShare 实体国际化翻译种子（键前缀 entity.newsshare.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 newsShare 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 newsshare 实体翻译...", tenantCode);
 
         foreach (var item in GetNewsShareTranslations())
         {
@@ -76,74 +75,74 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktNewsShare 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.newsShare._self / entity.newsShare.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.newsshare._self / entity.newsshare.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetNewsShareTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.newsShare._self
-            new TranslationSeedItem("entity.newsShare._self", "en-US", "News Share Information", "实体名称"),
-            // entity.newsShare._self
-            new TranslationSeedItem("entity.newsShare._self", "ja-JP", "新闻中心分享记录信息", "实体名称"),
-            // entity.newsShare._self
-            new TranslationSeedItem("entity.newsShare._self", "zh-CN", "新闻中心分享记录信息", "实体名称"),
-            // entity.newsShare._self
-            new TranslationSeedItem("entity.newsShare._self", "zh-HK", "新闻中心分享记录信息", "实体名称"),
+            // entity.newsshare._self
+            new TranslationSeedItem("entity.newsshare._self", "en-US", "News Share Information", "实体名称"),
+            // entity.newsshare._self
+            new TranslationSeedItem("entity.newsshare._self", "ja-JP", "新闻中心分享记录信息", "实体名称"),
+            // entity.newsshare._self
+            new TranslationSeedItem("entity.newsshare._self", "zh-CN", "新闻中心分享记录信息", "实体名称"),
+            // entity.newsshare._self
+            new TranslationSeedItem("entity.newsshare._self", "zh-HK", "新闻中心分享记录信息", "实体名称"),
 
-            // entity.newsShare.newsid
-            new TranslationSeedItem("entity.newsShare.newsid", "en-US", "新闻ID", "新闻 ID"),
-            // entity.newsShare.newsid
-            new TranslationSeedItem("entity.newsShare.newsid", "ja-JP", "新闻ID", "新闻 ID"),
-            // entity.newsShare.newsid
-            new TranslationSeedItem("entity.newsShare.newsid", "zh-CN", "新闻ID", "新闻 ID"),
-            // entity.newsShare.newsid
-            new TranslationSeedItem("entity.newsShare.newsid", "zh-HK", "新闻ID", "新闻 ID"),
+            // entity.newsshare.newsid
+            new TranslationSeedItem("entity.newsshare.newsid", "en-US", "新闻ID", "新闻 ID"),
+            // entity.newsshare.newsid
+            new TranslationSeedItem("entity.newsshare.newsid", "ja-JP", "新闻ID", "新闻 ID"),
+            // entity.newsshare.newsid
+            new TranslationSeedItem("entity.newsshare.newsid", "zh-CN", "新闻ID", "新闻 ID"),
+            // entity.newsshare.newsid
+            new TranslationSeedItem("entity.newsshare.newsid", "zh-HK", "新闻ID", "新闻 ID"),
 
-            // entity.newsShare.userid
-            new TranslationSeedItem("entity.newsShare.userid", "en-US", "分享人ID", "分享人 ID"),
-            // entity.newsShare.userid
-            new TranslationSeedItem("entity.newsShare.userid", "ja-JP", "分享人ID", "分享人 ID"),
-            // entity.newsShare.userid
-            new TranslationSeedItem("entity.newsShare.userid", "zh-CN", "分享人ID", "分享人 ID"),
-            // entity.newsShare.userid
-            new TranslationSeedItem("entity.newsShare.userid", "zh-HK", "分享人ID", "分享人 ID"),
+            // entity.newsshare.userid
+            new TranslationSeedItem("entity.newsshare.userid", "en-US", "分享人ID", "分享人 ID"),
+            // entity.newsshare.userid
+            new TranslationSeedItem("entity.newsshare.userid", "ja-JP", "分享人ID", "分享人 ID"),
+            // entity.newsshare.userid
+            new TranslationSeedItem("entity.newsshare.userid", "zh-CN", "分享人ID", "分享人 ID"),
+            // entity.newsshare.userid
+            new TranslationSeedItem("entity.newsshare.userid", "zh-HK", "分享人ID", "分享人 ID"),
 
-            // entity.newsShare.username
-            new TranslationSeedItem("entity.newsShare.username", "en-US", "分享人姓名", "分享人姓名"),
-            // entity.newsShare.username
-            new TranslationSeedItem("entity.newsShare.username", "ja-JP", "分享人姓名", "分享人姓名"),
-            // entity.newsShare.username
-            new TranslationSeedItem("entity.newsShare.username", "zh-CN", "分享人姓名", "分享人姓名"),
-            // entity.newsShare.username
-            new TranslationSeedItem("entity.newsShare.username", "zh-HK", "分享人姓名", "分享人姓名"),
+            // entity.newsshare.username
+            new TranslationSeedItem("entity.newsshare.username", "en-US", "分享人姓名", "分享人姓名"),
+            // entity.newsshare.username
+            new TranslationSeedItem("entity.newsshare.username", "ja-JP", "分享人姓名", "分享人姓名"),
+            // entity.newsshare.username
+            new TranslationSeedItem("entity.newsshare.username", "zh-CN", "分享人姓名", "分享人姓名"),
+            // entity.newsshare.username
+            new TranslationSeedItem("entity.newsshare.username", "zh-HK", "分享人姓名", "分享人姓名"),
 
-            // entity.newsShare.sharechannel
-            new TranslationSeedItem("entity.newsShare.sharechannel", "en-US", "分享渠道", "分享渠道（如 wechat、link 等）"),
-            // entity.newsShare.sharechannel
-            new TranslationSeedItem("entity.newsShare.sharechannel", "ja-JP", "分享渠道", "分享渠道（如 wechat、link 等）"),
-            // entity.newsShare.sharechannel
-            new TranslationSeedItem("entity.newsShare.sharechannel", "zh-CN", "分享渠道", "分享渠道（如 wechat、link 等）"),
-            // entity.newsShare.sharechannel
-            new TranslationSeedItem("entity.newsShare.sharechannel", "zh-HK", "分享渠道", "分享渠道（如 wechat、link 等）"),
+            // entity.newsshare.sharechannel
+            new TranslationSeedItem("entity.newsshare.sharechannel", "en-US", "分享渠道", "分享渠道（如 wechat、link 等）"),
+            // entity.newsshare.sharechannel
+            new TranslationSeedItem("entity.newsshare.sharechannel", "ja-JP", "分享渠道", "分享渠道（如 wechat、link 等）"),
+            // entity.newsshare.sharechannel
+            new TranslationSeedItem("entity.newsshare.sharechannel", "zh-CN", "分享渠道", "分享渠道（如 wechat、link 等）"),
+            // entity.newsshare.sharechannel
+            new TranslationSeedItem("entity.newsshare.sharechannel", "zh-HK", "分享渠道", "分享渠道（如 wechat、link 等）"),
 
-            // entity.newsShare.sharetime
-            new TranslationSeedItem("entity.newsShare.sharetime", "en-US", "分享时间", "分享时间"),
-            // entity.newsShare.sharetime
-            new TranslationSeedItem("entity.newsShare.sharetime", "ja-JP", "分享时间", "分享时间"),
-            // entity.newsShare.sharetime
-            new TranslationSeedItem("entity.newsShare.sharetime", "zh-CN", "分享时间", "分享时间"),
-            // entity.newsShare.sharetime
-            new TranslationSeedItem("entity.newsShare.sharetime", "zh-HK", "分享时间", "分享时间"),
+            // entity.newsshare.sharetime
+            new TranslationSeedItem("entity.newsshare.sharetime", "en-US", "分享时间", "分享时间"),
+            // entity.newsshare.sharetime
+            new TranslationSeedItem("entity.newsshare.sharetime", "ja-JP", "分享时间", "分享时间"),
+            // entity.newsshare.sharetime
+            new TranslationSeedItem("entity.newsshare.sharetime", "zh-CN", "分享时间", "分享时间"),
+            // entity.newsshare.sharetime
+            new TranslationSeedItem("entity.newsshare.sharetime", "zh-HK", "分享时间", "分享时间"),
 
-            // entity.newsShare.news
-            new TranslationSeedItem("entity.newsShare.news", "en-US", "新闻", "新闻（主表）"),
-            // entity.newsShare.news
-            new TranslationSeedItem("entity.newsShare.news", "ja-JP", "新闻", "新闻（主表）"),
-            // entity.newsShare.news
-            new TranslationSeedItem("entity.newsShare.news", "zh-CN", "新闻", "新闻（主表）"),
-            // entity.newsShare.news
-            new TranslationSeedItem("entity.newsShare.news", "zh-HK", "新闻", "新闻（主表）"),
+            // entity.newsshare.news
+            new TranslationSeedItem("entity.newsshare.news", "en-US", "新闻", "新闻（主表）"),
+            // entity.newsshare.news
+            new TranslationSeedItem("entity.newsshare.news", "ja-JP", "新闻", "新闻（主表）"),
+            // entity.newsshare.news
+            new TranslationSeedItem("entity.newsshare.news", "zh-CN", "新闻", "新闻（主表）"),
+            // entity.newsshare.news
+            new TranslationSeedItem("entity.newsshare.news", "zh-HK", "新闻", "新闻（主表）"),
         };
     }
 
@@ -161,8 +160,8 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

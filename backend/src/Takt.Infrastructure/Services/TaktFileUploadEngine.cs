@@ -23,12 +23,12 @@ using static Takt.Shared.Helpers.TaktFileHelper;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktFileUploadEngine"/> 实现：物理文件 I/O，与业务表无关，供各模块应用服务复用。
+/// ITaktFileUploadEngine 实现：物理文件 I/O，与业务表无关，供各模块应用服务复用。
 /// </summary>
 /// <remarks>
-/// 当前仅支持 <see cref="TaktFileStorageType.Local"/>（wwwroot 下相对路径存储）。
+/// 当前仅支持 0（wwwroot 下相对路径存储）。
 /// 隔离范围按租户/公司分目录；分片临时文件合并后删除。
-/// 配置来源 <see cref="TaktFileUploadOptions"/>（appsettings FileUpload 节）。
+/// 配置来源 TaktFileUploadOptions（appsettings FileUpload 节）。
 /// </remarks>
 public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngine
 {
@@ -81,20 +81,50 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(fileStream);
+        if (fileStream.CanSeek && fileStream.Length == 0)
+        {
+            ThrowBusinessException("文件流不能为空");
+        }
+
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
         var resolvedScope = ResolveScope(scope);
-        ValidateFileName(fileName);
+        var safeOriginalName = Path.GetFileName(fileName);
+        ValidateFileName(safeOriginalName);
+        var fileExtension = GetNormalizedExtension(safeOriginalName);
         if (fileStream.CanSeek && fileStream.Length > _uploadOptions.MaxFileSizeBytes)
         {
             ThrowBusinessException($"文件大小超过上限（{_uploadOptions.MaxFileSizeBytes} 字节）");
         }
 
-        var safeOriginalName = Path.GetFileName(fileName);
-        var storedFileName = GenerateUniqueFileName(safeOriginalName);
-        var relativePath = BuildStoredRelativePath(resolvedScope, storedFileName);
+        var fileCode = Guid.NewGuid().ToString("N");
+        var fileMimeType = string.IsNullOrWhiteSpace(contentType) ? GetMimeType(safeOriginalName) : contentType.Trim();
+        var fileHash = await ComputeStreamHashAsync(fileStream);
+        if (fileStream.CanSeek)
+        {
+            fileStream.Position = 0;
+        }
+
+        var finalFileName = ResolveFinalFileName(fileCode, fileExtension, resolvedScope.TargetFileName);
+        var relativePath = BuildStoredRelativePath(resolvedScope, finalFileName);
         var absolutePath = GetAbsoluteUploadPath(relativePath);
-        await WriteFileFromStreamAsync(absolutePath, fileStream, createDirectory: true, cancellationToken);
-        return await BuildStoredFileResultAsync(safeOriginalName, storedFileName, relativePath, contentType);
+        EnsureDirectoryExists(Path.GetDirectoryName(absolutePath)!);
+        await using (var fileWriteStream = new FileStream(absolutePath, FileMode.Create, FileAccess.Write, FileShare.None))
+        {
+            await fileStream.CopyToAsync(fileWriteStream, cancellationToken);
+        }
+
+        var fileSize = GetFileSize(absolutePath);
+        EnsureFileSizeWithinLimit(fileSize);
+        return BuildStoredFileResult(
+            fileCode,
+            safeOriginalName,
+            finalFileName,
+            relativePath,
+            fileSize,
+            fileMimeType,
+            fileExtension,
+            fileHash,
+            MapFileCategory(GetFileCategory(safeOriginalName)));
     }
 
     /// <summary>
@@ -118,6 +148,61 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         {
             Exists = FileExists(chunkPath),
         });
+    }
+
+    /// <summary>
+    /// 列出指定 identifier 下已落盘的分片序号（断点续传批量恢复）
+    /// </summary>
+    /// <param name="request">查询参数</param>
+    /// <param name="scope">租户/公司隔离范围</param>
+    /// <returns>已上传分片序号（升序）</returns>
+    public Task<TaktFileChunkListResult> ListUploadedChunksAsync(
+        TaktFileChunkListRequest request,
+        TaktFileUploadScope? scope = null)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var resolvedScope = ResolveScope(scope);
+        ValidateIdentifier(request.Identifier);
+        var dir = GetChunkDirectory(resolvedScope, request.Identifier);
+        var uploaded = new List<int>();
+        if (Directory.Exists(dir))
+        {
+            foreach (var partPath in Directory.GetFiles(dir, "*.part"))
+            {
+                var chunkName = Path.GetFileNameWithoutExtension(partPath);
+                if (!int.TryParse(chunkName, out var chunkNumber) || chunkNumber < 1)
+                {
+                    continue;
+                }
+
+                if (request.TotalChunks > 0 && chunkNumber > request.TotalChunks)
+                {
+                    continue;
+                }
+
+                uploaded.Add(chunkNumber);
+            }
+        }
+
+        uploaded.Sort();
+        return Task.FromResult(new TaktFileChunkListResult
+        {
+            UploadedChunkNumbers = uploaded,
+        });
+    }
+
+    /// <summary>
+    /// 取消分片上传并删除临时目录
+    /// </summary>
+    /// <param name="identifier">上传会话标识</param>
+    /// <param name="scope">租户/公司隔离范围</param>
+    public Task CancelUploadedChunksAsync(string identifier, TaktFileUploadScope? scope = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(identifier);
+        var resolvedScope = ResolveScope(scope);
+        ValidateIdentifier(identifier);
+        DeleteChunkDirectory(resolvedScope, identifier);
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -173,8 +258,11 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         EnsureChunkCountWithinLimit(request.TotalChunks);
 
         var safeOriginalName = Path.GetFileName(request.FileName);
-        var storedFileName = GenerateUniqueFileName(safeOriginalName);
-        var relativePath = BuildStoredRelativePath(resolvedScope, storedFileName);
+        ValidateFileName(safeOriginalName);
+        var fileExtension = GetNormalizedExtension(safeOriginalName);
+        var fileCode = Guid.NewGuid().ToString("N");
+        var finalFileName = ResolveFinalFileName(fileCode, fileExtension, resolvedScope.TargetFileName);
+        var relativePath = BuildStoredRelativePath(resolvedScope, finalFileName);
         var absolutePath = GetAbsoluteUploadPath(relativePath);
         EnsureDirectoryExists(Path.GetDirectoryName(absolutePath)!);
 
@@ -204,7 +292,12 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
 
         EnsureFileSizeWithinLimit(GetFileSize(absolutePath));
         DeleteChunkDirectory(resolvedScope, request.Identifier);
-        return await BuildStoredFileResultAsync(safeOriginalName, storedFileName, relativePath, null);
+        return await BuildStoredFileResultAsync(
+            safeOriginalName,
+            finalFileName,
+            relativePath,
+            null,
+            fileCode);
     }
 
     /// <summary>
@@ -225,7 +318,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     {
         ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentException.ThrowIfNullOrWhiteSpace(descriptor.FilePath);
-        if (descriptor.StorageType != TaktFileStorageType.Local)
+        if (descriptor.StorageType != 0)
         {
             ThrowBusinessException("当前存储方式暂不支持引擎读流，请使用访问地址或扩展存储驱动");
         }
@@ -260,7 +353,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(descriptor);
-        if (descriptor.StorageType != TaktFileStorageType.Local)
+        if (descriptor.StorageType != 0)
         {
             ThrowBusinessException("当前存储方式暂不支持引擎删除物理文件");
         }
@@ -291,6 +384,8 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             TenantCode = CurrentTenantCode,
             CompanyCode = CurrentCompanyCode,
             CategoryPath = scope?.CategoryPath,
+            FileUploadType = scope?.FileUploadType ?? TaktFileUploadType.Normal,
+            TargetFileName = scope?.TargetFileName,
         };
     }
 
@@ -298,59 +393,99 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// 构建存储结果（含大小、哈希、MIME、分类与访问 URL）
     /// </summary>
     /// <param name="originalName">原始文件名</param>
-    /// <param name="storedFileName">磁盘存储文件名（唯一）</param>
+    /// <param name="storedFileName">磁盘存储文件名</param>
     /// <param name="relativePath">相对 wwwroot 的存储路径</param>
     /// <param name="contentType">MIME；为空时按扩展名推断</param>
-    /// <returns>与 <see cref="TaktFile"/> 存储列对齐的结果 DTO</returns>
+    /// <param name="fileCode">文件编码；为空时不填充</param>
+    /// <param name="precomputedHash">预计算 MD5；为空时从磁盘文件计算</param>
+    /// <returns>与 TaktFile 存储列对齐的结果 DTO</returns>
     private async Task<TaktStoredFileResult> BuildStoredFileResultAsync(
         string originalName,
         string storedFileName,
         string relativePath,
-        string? contentType)
+        string? contentType,
+        string? fileCode = null,
+        string? precomputedHash = null)
     {
         var absolutePath = GetAbsoluteUploadPath(relativePath);
         var fileSize = GetFileSize(absolutePath);
         EnsureFileSizeWithinLimit(fileSize);
-        var extension = Path.GetExtension(originalName);
-        if (!string.IsNullOrEmpty(extension) && extension.StartsWith('.'))
-        {
-            extension = extension[1..];
-        }
+        var extension = GetNormalizedExtension(originalName);
+        var fileHash = precomputedHash ?? await ComputeFileHashAsync(absolutePath);
+        return BuildStoredFileResult(
+            fileCode ?? string.Empty,
+            originalName,
+            storedFileName,
+            relativePath,
+            fileSize,
+            string.IsNullOrWhiteSpace(contentType) ? GetMimeType(originalName) : contentType.Trim(),
+            extension,
+            fileHash,
+            MapFileCategory(GetFileCategory(originalName)));
+    }
 
-        return new TaktStoredFileResult
+    /// <summary>
+    /// 组装 TaktStoredFileResult（字段与 Routine.Tasks <c>FileUploadResultDto</c> 对齐）
+    /// </summary>
+    /// <param name="fileCode">文件编码</param>
+    /// <param name="originalName">原始文件名</param>
+    /// <param name="storedFileName">存储文件名</param>
+    /// <param name="relativePath">相对路径</param>
+    /// <param name="fileSize">文件大小</param>
+    /// <param name="fileMimeType">MIME 类型</param>
+    /// <param name="fileExtension">扩展名（不含点）</param>
+    /// <param name="fileHash">MD5 哈希</param>
+    /// <param name="fileCategory">文件分类</param>
+    /// <returns>存储结果</returns>
+    private static TaktStoredFileResult BuildStoredFileResult(
+        string fileCode,
+        string originalName,
+        string storedFileName,
+        string relativePath,
+        long fileSize,
+        string fileMimeType,
+        string fileExtension,
+        string fileHash,
+        int fileCategory) =>
+        new()
         {
+            FileCode = fileCode,
             FilePath = relativePath,
             FileName = storedFileName,
             FileOriginalName = originalName,
             FileSize = fileSize,
-            FileType = string.IsNullOrWhiteSpace(contentType) ? GetMimeType(originalName) : contentType.Trim(),
-            FileExtension = string.IsNullOrWhiteSpace(extension) ? string.Empty : extension,
-            FileHash = await ComputeFileHashAsync(absolutePath),
+            FileType = fileMimeType,
+            FileExtension = fileExtension,
+            FileHash = fileHash,
             AccessUrl = BuildAccessUrl(relativePath),
-            StorageType = TaktFileStorageType.Local,
+            StorageType = 0,
             StorageConfig = null,
-            FileCategory = MapFileCategory(GetFileCategory(originalName)),
+            FileCategory = fileCategory,
         };
-    }
 
     /// <summary>
-    /// 将 <see cref="TaktFileHelper.FileCategory"/> 映射为 <see cref="TaktFileCategory"/> 枚举
+    /// 将 TaktFileHelper.FileCategory 映射为 TaktFileCategory 枚举
     /// </summary>
     /// <param name="category">Helper 侧文件分类</param>
-    /// <returns>共享枚举值</returns>
-    private static TaktFileCategory MapFileCategory(FileCategory category) =>
-        (TaktFileCategory)(int)category;
+    /// <returns>实体 FileCategory 值</returns>
+    private static int MapFileCategory(FileCategory category) =>
+        (int)category;
 
     /// <summary>
-    /// 构建正式存储相对路径：upload/{tenant}/{company}/[{category}/]{yyyy/MM/dd}/{storedFileName}
+    /// 构建正式存储相对路径：{UploadRelativePath}/{tenant}/{company}/[{CategoryPath}/]{yyyy/MM/dd}/{storedFileName}
     /// </summary>
-    /// <param name="scope">租户/公司与可选业务子路径</param>
+    /// <param name="scope">租户/公司与可选业务子路径（CategoryPath 由业务/字典传入）</param>
     /// <param name="storedFileName">唯一存储文件名</param>
     /// <returns>以 / 分隔的相对路径</returns>
     private string BuildStoredRelativePath(TaktFileUploadScope scope, string storedFileName)
     {
         var dateSegment = GenerateDatePath(DateTime.Now);
-        var segments = new List<string> { _uploadOptions.UploadRelativePath, scope.TenantCode, scope.CompanyCode };
+        var segments = new List<string>
+        {
+            _uploadOptions.UploadRelativePath,
+            scope.TenantCode,
+            scope.CompanyCode,
+        };
         if (!string.IsNullOrWhiteSpace(scope.CategoryPath))
         {
             segments.Add(NormalizeCategoryPath(scope.CategoryPath));
@@ -359,6 +494,56 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
         segments.Add(dateSegment);
         segments.Add(storedFileName);
         return string.Join('/', segments);
+    }
+
+    /// <summary>
+    /// 解析最终存储文件名（<c>targetFileName</c> 或 <c>{fileCode}.{ext}</c>）
+    /// </summary>
+    /// <param name="fileCode">文件编码</param>
+    /// <param name="fileExtension">扩展名（不含点）</param>
+    /// <param name="targetFileName">目标文件名（可选）</param>
+    /// <returns>磁盘文件名</returns>
+    private static string ResolveFinalFileName(string fileCode, string fileExtension, string? targetFileName)
+    {
+        if (!string.IsNullOrWhiteSpace(targetFileName))
+        {
+            var trimmed = Path.GetFileName(targetFileName.Trim());
+            if (string.IsNullOrEmpty(Path.GetExtension(trimmed)) && !string.IsNullOrEmpty(fileExtension))
+            {
+                return $"{trimmed}.{fileExtension}";
+            }
+
+            return trimmed;
+        }
+
+        return string.IsNullOrEmpty(fileExtension)
+            ? fileCode
+            : $"{fileCode}.{fileExtension}";
+    }
+
+    /// <summary>
+    /// 获取规范化扩展名（小写、不含点）
+    /// </summary>
+    /// <param name="fileName">文件名</param>
+    /// <returns>扩展名；无扩展名时返回空串</returns>
+    private static string GetNormalizedExtension(string fileName) =>
+        Path.GetExtension(fileName)?.TrimStart('.')?.ToLowerInvariant() ?? string.Empty;
+
+    /// <summary>
+    /// 拒绝配置中的禁止扩展名（<see cref="TaktFileUploadOptions.DeniedExtensions"/>）
+    /// </summary>
+    /// <param name="fileExtension">扩展名（不含点）</param>
+    private void ValidateDeniedExtension(string fileExtension)
+    {
+        if (string.IsNullOrWhiteSpace(fileExtension) || _uploadOptions.DeniedExtensions.Length == 0)
+        {
+            return;
+        }
+
+        if (_uploadOptions.DeniedExtensions.Any(x => string.Equals(x, fileExtension, StringComparison.OrdinalIgnoreCase)))
+        {
+            ThrowBusinessException($"不允许上传 .{fileExtension} 格式文件");
+        }
     }
 
     /// <summary>
@@ -399,6 +584,23 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     }
 
     /// <summary>
+    /// 获取分片临时目录绝对路径
+    /// </summary>
+    /// <param name="scope">租户/公司隔离范围</param>
+    /// <param name="identifier">上传会话标识</param>
+    /// <returns>分片目录绝对路径</returns>
+    private string GetChunkDirectory(TaktFileUploadScope scope, string identifier)
+    {
+        var wwwroot = GetWwwRootPath(_webHostEnvironment.ContentRootPath);
+        return Path.Combine(
+            wwwroot,
+            _uploadOptions.ChunkRelativePath.Replace('/', Path.DirectorySeparatorChar),
+            scope.TenantCode,
+            scope.CompanyCode,
+            SanitizeIdentifier(identifier));
+    }
+
+    /// <summary>
     /// 获取分片 part 文件的绝对路径
     /// </summary>
     /// <param name="scope">租户/公司隔离范围</param>
@@ -407,14 +609,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <returns>{chunkDir}/{chunkNumber}.part 绝对路径</returns>
     private string GetChunkPartPath(TaktFileUploadScope scope, string identifier, int chunkNumber)
     {
-        var wwwroot = GetWwwRootPath(_webHostEnvironment.ContentRootPath);
-        var dir = Path.Combine(
-            wwwroot,
-            _uploadOptions.ChunkRelativePath.Replace('/', Path.DirectorySeparatorChar),
-            scope.TenantCode,
-            scope.CompanyCode,
-            SanitizeIdentifier(identifier));
-        return Path.Combine(dir, $"{chunkNumber}.part");
+        return Path.Combine(GetChunkDirectory(scope, identifier), $"{chunkNumber}.part");
     }
 
     /// <summary>
@@ -424,13 +619,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <param name="identifier">上传会话标识</param>
     private void DeleteChunkDirectory(TaktFileUploadScope scope, string identifier)
     {
-        var wwwroot = GetWwwRootPath(_webHostEnvironment.ContentRootPath);
-        var dir = Path.Combine(
-            wwwroot,
-            _uploadOptions.ChunkRelativePath.Replace('/', Path.DirectorySeparatorChar),
-            scope.TenantCode,
-            scope.CompanyCode,
-            SanitizeIdentifier(identifier));
+        var dir = GetChunkDirectory(scope, identifier);
         if (Directory.Exists(dir))
         {
             Directory.Delete(dir, recursive: true);
@@ -467,7 +656,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     private static string SanitizeIdentifier(string identifier) => identifier.Trim();
 
     /// <summary>
-    /// 校验文件名有效性与扩展名白名单（<see cref="TaktFileUploadOptions.AllowedExtensions"/>）
+    /// 校验文件名有效性与扩展名白名单（TaktFileUploadOptions.AllowedExtensions）
     /// </summary>
     /// <param name="fileName">原始或客户端文件名</param>
     private void ValidateFileName(string fileName)
@@ -478,12 +667,13 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
             ThrowBusinessException("文件名无效");
         }
 
+        var ext = GetNormalizedExtension(safeName);
+        ValidateDeniedExtension(ext);
         if (_uploadOptions.AllowedExtensions.Length == 0)
         {
             return;
         }
 
-        var ext = Path.GetExtension(safeName)?.TrimStart('.').ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(ext)
             || !_uploadOptions.AllowedExtensions.Any(x => string.Equals(x, ext, StringComparison.OrdinalIgnoreCase)))
         {
@@ -492,7 +682,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     }
 
     /// <summary>
-    /// 校验字节数不超过 <see cref="TaktFileUploadOptions.MaxFileSizeBytes"/>
+    /// 校验字节数不超过 TaktFileUploadOptions.MaxFileSizeBytes
     /// </summary>
     /// <param name="sizeBytes">待校验大小</param>
     private void EnsureFileSizeWithinLimit(long sizeBytes)
@@ -504,7 +694,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     }
 
     /// <summary>
-    /// 校验分片总数在 [1, <see cref="TaktFileUploadOptions.MaxChunkCount"/>] 范围内
+    /// 校验分片总数在 [1, TaktFileUploadOptions.MaxChunkCount] 范围内
     /// </summary>
     /// <param name="totalChunks">声明的总分片数</param>
     private void EnsureChunkCountWithinLimit(int totalChunks)

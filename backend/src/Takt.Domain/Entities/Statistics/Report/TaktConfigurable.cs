@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Report;
 
@@ -45,7 +44,7 @@ public class TaktConfigurable : TaktCompanyEntityBase
     /// 报表业务域（财务/人力/后勤等）
     /// </summary>
     [SugarColumn(ColumnName = "report_domain", ColumnDescription = "报表业务域", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktConfigurableDomain ReportDomain { get; set; } = TaktConfigurableDomain.General;
+    public int ReportDomain { get; set; } = 0;
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -57,7 +56,7 @@ public class TaktConfigurable : TaktCompanyEntityBase
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
     [SugarColumn(ColumnName = "distinct_rows", ColumnDescription = "是否去重", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo DistinctRows { get; set; } = TaktYesNo.No;
+    public int DistinctRows { get; set; } = 0;
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -82,7 +81,7 @@ public class TaktConfigurable : TaktCompanyEntityBase
     /// 是否内置（内置报表禁止删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -94,7 +93,7 @@ public class TaktConfigurable : TaktCompanyEntityBase
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
     [SugarColumn(ColumnName = "report_status", ColumnDescription = "报表状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus ReportStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int ReportStatus { get; set; } = 1;
 
     /// <summary>
     /// 报表描述

@@ -67,12 +67,45 @@ export function useTaktCaptchaBehavior(challenge: Ref<TaktCaptchaChallengeDto | 
     height: `${TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT}px`,
   }));
 
-  const targetIndicatorStyle = computed(() => {
+  /**
+   * 滑轨尺寸（手柄右缘 0–100% 映射与红线位置共用）
+   */
+  function getTrackMetrics() {
     const wrapperWidth = wrapperRef.value?.offsetWidth ?? designWidth.value;
-    const handleWidth = actionWidth.value;
-    const minRight = handleWidth;
+    const handleW = actionWidth.value;
+    const minRight = handleW;
     const maxRight = Math.max(minRight, wrapperWidth);
     const effectiveWidth = Math.max(1, maxRight - minRight);
+    return { handleW, wrapperWidth, minRight, maxRight, effectiveWidth };
+  }
+
+  /**
+   * 目标红线对应的手柄 left（px）；无目标时返回 null
+   */
+  function getTargetLeftPx(): number | null {
+    if (challenge.value?.targetPosition == null) {
+      return null;
+    }
+    const { effectiveWidth } = getTrackMetrics();
+    const clampedTarget = Math.min(Math.max(targetPosition.value, 0), 100);
+    return (clampedTarget / 100) * effectiveWidth;
+  }
+
+  /**
+   * 手柄可拖动的最大 left：有目标时止于红线，否则为滑轨右端
+   */
+  function getMaxDragLeft(): number {
+    const { handleW, wrapperWidth } = getTrackMetrics();
+    const trackEndLeft = Math.max(0, wrapperWidth - handleW - 6);
+    const targetLeft = getTargetLeftPx();
+    if (targetLeft != null) {
+      return Math.min(trackEndLeft, targetLeft);
+    }
+    return trackEndLeft;
+  }
+
+  const targetIndicatorStyle = computed(() => {
+    const { minRight, effectiveWidth } = getTrackMetrics();
     const clampedTarget = Math.min(Math.max(targetPosition.value, 0), 100);
     const rightX = minRight + (clampedTarget / 100) * effectiveWidth;
 
@@ -126,13 +159,11 @@ export function useTaktCaptchaBehavior(challenge: Ref<TaktCaptchaChallengeDto | 
   }
 
   /**
-   * 滑轨可达偏移量
+   * 滑轨可达偏移量（offset 为有目标时的红线 left，否则为滑轨右端）
    */
   function getOffset() {
-    const wrapperWidth = wrapperRef.value?.offsetWidth ?? designWidth.value;
-    const handleW = actionWidth.value;
-    const offset = wrapperWidth - handleW - 6;
-    return { actionWidth: handleW, offset, wrapperWidth };
+    const { handleW, wrapperWidth } = getTrackMetrics();
+    return { actionWidth: handleW, offset: getMaxDragLeft(), wrapperWidth };
   }
 
   /**
@@ -210,7 +241,7 @@ export function useTaktCaptchaBehavior(challenge: Ref<TaktCaptchaChallengeDto | 
     e.preventDefault();
     e.stopPropagation();
 
-    const { actionWidth: handleW, offset, wrapperWidth } = getOffset();
+    const { actionWidth: handleW, offset } = getOffset();
     const moveX = getEventPageX(e) - moveDistance.value;
 
     if (wrapperRef.value) {
@@ -222,30 +253,28 @@ export function useTaktCaptchaBehavior(challenge: Ref<TaktCaptchaChallengeDto | 
       });
     }
 
-    if (moveX > 0 && moveX <= offset) {
-      setActionLeft(`${moveX}px`);
-      setBarWidth(`${moveX + handleW}px`);
-    } else if (moveX > offset) {
-      const maxLeft = wrapperWidth - handleW;
-      setActionLeft(`${maxLeft}px`);
-      setBarWidth(`${maxLeft + handleW}px`);
-    }
+    const clampedLeft = Math.max(0, Math.min(moveX, offset));
+    setActionLeft(`${clampedLeft}px`);
+    setBarWidth(`${clampedLeft + handleW}px`);
   }
 
   /**
-   * 标记验证通过并移动滑块至最右
+   * 标记验证通过并将滑块停在目标红线（无目标时停于当前位置）
    */
   function markVerified(): void {
     verified.value = true;
     isDragging.value = false;
 
-    if (actionRef.value && wrapperRef.value) {
-      const wrapperWidth = wrapperRef.value.offsetWidth;
-      const handleW = actionWidth.value;
-      const maxLeft = wrapperWidth - handleW;
-      setActionLeft(`${maxLeft}px`);
-      setBarWidth(`${wrapperWidth}px`);
+    if (!actionRef.value) {
+      return;
     }
+
+    const { handleW } = getTrackMetrics();
+    const targetLeft = getTargetLeftPx();
+    const currentLeft = Number.parseFloat(actionRef.value.style.left.replace('px', '') || '0');
+    const finalLeft = targetLeft ?? currentLeft;
+    setActionLeft(`${finalLeft}px`);
+    setBarWidth(`${finalLeft + handleW}px`);
   }
 
   /**
@@ -266,14 +295,9 @@ export function useTaktCaptchaBehavior(challenge: Ref<TaktCaptchaChallengeDto | 
     }
 
     const moveX = getEventPageX(e) - moveDistance.value;
-    const { actionWidth: handleW, offset, wrapperWidth } = getOffset();
+    const { actionWidth: handleW, offset } = getOffset();
 
-    let finalLeft = moveX;
-    if (moveX < 0) {
-      finalLeft = 0;
-    } else if (moveX > offset) {
-      finalLeft = wrapperWidth - handleW;
-    }
+    const finalLeft = Math.max(0, Math.min(moveX, offset));
 
     setActionLeft(`${finalLeft}px`);
     setBarWidth(`${finalLeft + handleW}px`);

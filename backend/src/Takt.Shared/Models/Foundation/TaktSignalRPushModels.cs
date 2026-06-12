@@ -10,7 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Takt.Shared.Enums;
+using Newtonsoft.Json;
 
 namespace Takt.Shared.Models.Foundation;
 
@@ -25,8 +25,9 @@ public class TaktSignalRPrivateMessagePush
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息 ID
+    /// 消息 ID（序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long MessageId { get; set; }
 
     /// <summary>
@@ -37,6 +38,7 @@ public class TaktSignalRPrivateMessagePush
     /// <summary>
     /// 发送者用户 ID
     /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
@@ -47,6 +49,7 @@ public class TaktSignalRPrivateMessagePush
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
 
     /// <summary>
@@ -60,24 +63,19 @@ public class TaktSignalRPrivateMessagePush
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
+    /// 附件列表 JSON
+    /// </summary>
+    public string? Attachments { get; set; }
+
+    /// <summary>
     /// 消息类型
     /// </summary>
-    public TaktMessageType MessageType { get; set; } = TaktMessageType.UserMessage;
+    public int MessageType { get; set; } = 1;
 
     /// <summary>
     /// 消息分组
     /// </summary>
-    public TaktMessageGroup? MessageGroup { get; set; }
-
-    /// <summary>
-    /// 读取状态
-    /// </summary>
-    public TaktMessageReadStatus ReadStatus { get; set; }
-
-    /// <summary>
-    /// 读取时间
-    /// </summary>
-    public DateTime? ReadTime { get; set; }
+    public int? MessageGroup { get; set; }
 
     /// <summary>
     /// 发送时间
@@ -85,9 +83,14 @@ public class TaktSignalRPrivateMessagePush
     public DateTime SendTime { get; set; }
 
     /// <summary>
-    /// 扩展数据 JSON
+    /// 读取时间
     /// </summary>
-    public string? MessageExtData { get; set; }
+    public DateTime? ReadTime { get; set; }
+
+    /// <summary>
+    /// 读取状态
+    /// </summary>
+    public int ReadStatus { get; set; }
 }
 
 /// <summary>
@@ -118,12 +121,12 @@ public class TaktSignalRBroadcastPush
     /// <summary>
     /// 消息类型
     /// </summary>
-    public TaktMessageType MessageType { get; set; } = TaktMessageType.SystemNotice;
+    public int MessageType { get; set; } = 4;
 
     /// <summary>
     /// 消息分组
     /// </summary>
-    public TaktMessageGroup MessageGroup { get; set; } = TaktMessageGroup.Notification;
+    public int MessageGroup { get; set; } = 4;
 
     /// <summary>
     /// 发送时间

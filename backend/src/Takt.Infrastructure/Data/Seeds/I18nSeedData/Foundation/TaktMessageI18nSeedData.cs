@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktMessageI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktMessage 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktMessage 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/message）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation;
@@ -76,7 +75,7 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktMessage 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.message._self / entity.message.{{field}}；ResourceGroup=TaktModule.Foundation；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.message._self / entity.message.{{field}}；ResourceGroup=8；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetMessageTranslations()
     {
@@ -146,31 +145,31 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.message.content", "zh-HK", "消息内容", "消息内容"),
 
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "en-US", "消息类型", "消息类型"),
+            new TranslationSeedItem("entity.message.type", "en-US", "消息类型", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "ja-JP", "消息类型", "消息类型"),
+            new TranslationSeedItem("entity.message.type", "ja-JP", "消息类型", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "zh-CN", "消息类型", "消息类型"),
+            new TranslationSeedItem("entity.message.type", "zh-CN", "消息类型", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
             // entity.message.type
-            new TranslationSeedItem("entity.message.type", "zh-HK", "消息类型", "消息类型"),
+            new TranslationSeedItem("entity.message.type", "zh-HK", "消息类型", "消息类型（1=系统消息 2=用户消息 3=通知消息）"),
 
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "en-US", "消息分组", "消息分组"),
+            new TranslationSeedItem("entity.message.group", "en-US", "消息分组", "消息分组（可选）"),
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "ja-JP", "消息分组", "消息分组"),
+            new TranslationSeedItem("entity.message.group", "ja-JP", "消息分组", "消息分组（可选）"),
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "zh-CN", "消息分组", "消息分组"),
+            new TranslationSeedItem("entity.message.group", "zh-CN", "消息分组", "消息分组（可选）"),
             // entity.message.group
-            new TranslationSeedItem("entity.message.group", "zh-HK", "消息分组", "消息分组"),
+            new TranslationSeedItem("entity.message.group", "zh-HK", "消息分组", "消息分组（可选）"),
 
             // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "en-US", "读取状态", "读取状态"),
+            new TranslationSeedItem("entity.message.readstatus", "en-US", "读取状态", "读取状态（0=未读 1=已读）"),
             // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "ja-JP", "读取状态", "读取状态"),
+            new TranslationSeedItem("entity.message.readstatus", "ja-JP", "读取状态", "读取状态（0=未读 1=已读）"),
             // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "zh-CN", "读取状态", "读取状态"),
+            new TranslationSeedItem("entity.message.readstatus", "zh-CN", "读取状态", "读取状态（0=未读 1=已读）"),
             // entity.message.readstatus
-            new TranslationSeedItem("entity.message.readstatus", "zh-HK", "读取状态", "读取状态"),
+            new TranslationSeedItem("entity.message.readstatus", "zh-HK", "读取状态", "读取状态（0=未读 1=已读）"),
 
             // entity.message.readtime
             new TranslationSeedItem("entity.message.readtime", "en-US", "读取时间", "读取时间"),
@@ -189,6 +188,24 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.message.sendtime", "zh-CN", "发送时间", "发送时间"),
             // entity.message.sendtime
             new TranslationSeedItem("entity.message.sendtime", "zh-HK", "发送时间", "发送时间"),
+
+            // entity.message.iscc
+            new TranslationSeedItem("entity.message.iscc", "en-US", "是否抄送自审计", "是否抄送自审计（0=否，1=是）"),
+            // entity.message.iscc
+            new TranslationSeedItem("entity.message.iscc", "ja-JP", "是否抄送自审计", "是否抄送自审计（0=否，1=是）"),
+            // entity.message.iscc
+            new TranslationSeedItem("entity.message.iscc", "zh-CN", "是否抄送自审计", "是否抄送自审计（0=否，1=是）"),
+            // entity.message.iscc
+            new TranslationSeedItem("entity.message.iscc", "zh-HK", "是否抄送自审计", "是否抄送自审计（0=否，1=是）"),
+
+            // entity.message.attachments
+            new TranslationSeedItem("entity.message.attachments", "en-US", "附件", "附件路径（JSON 或逗号分隔）"),
+            // entity.message.attachments
+            new TranslationSeedItem("entity.message.attachments", "ja-JP", "附件", "附件路径（JSON 或逗号分隔）"),
+            // entity.message.attachments
+            new TranslationSeedItem("entity.message.attachments", "zh-CN", "附件", "附件路径（JSON 或逗号分隔）"),
+            // entity.message.attachments
+            new TranslationSeedItem("entity.message.attachments", "zh-HK", "附件", "附件路径（JSON 或逗号分隔）"),
 
             // entity.message.extdata
             new TranslationSeedItem("entity.message.extdata", "en-US", "消息扩展数据", "消息扩展数据（JSON）"),
@@ -215,8 +232,8 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

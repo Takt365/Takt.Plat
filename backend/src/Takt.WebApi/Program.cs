@@ -12,7 +12,7 @@
 
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using FluentValidation.AspNetCore;
+using Takt.WebApi.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
@@ -173,12 +173,17 @@ try
     builder.Services.AddTaktCache(builder.Configuration);
     builder.Services.AddTaktCaptcha(builder.Configuration);
     builder.Services.AddTaktSecurity(builder.Configuration);
-    builder.Services.AddControllers();
-    builder.Services.AddScoped<Takt.WebApi.Filters.TaktPermissionFilter>();
+    builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add<TaktValidationFilter>();
+        })
+        .AddNewtonsoftJson();
+    builder.Services.AddScoped<TaktPermissionFilter>();
+    builder.Services.AddScoped<TaktValidationFilter>();
     builder.Services.AddTaktValidators();
-    builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddTaktOpenApi();
     builder.Services.AddTaktServices(builder.Configuration);
+    builder.Services.AddTaktQuartz(builder.Configuration);
     builder.Services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders = ForwardedHeaders.XForwardedFor
@@ -197,7 +202,7 @@ try
     builder.Services.Configure<TaktInitOptions>(builder.Configuration.GetSection(TaktInitOptions.SectionName));
     
     TaktLogger.Information("  ✓ ASP.NET Core Controllers 已注册");
-    TaktLogger.Information("  ✓ FluentValidation 验证器与自动验证已注册");
+    TaktLogger.Information("  ✓ FluentValidation 验证器与 TaktValidationFilter 已注册");
     TaktLogger.Information("  ✓ OpenAPI + Scalar 文档已注册");
     TaktLogger.Information("  ✓ 业务服务已注册（用户上下文、本地化、CORS）");
     TaktLogger.Information("  ✓ 缓存服务已注册（Cache 配置：Memory / Redis）");
@@ -232,13 +237,16 @@ try
     var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
     app.UseRequestLocalization(locOptions.Value);
     
-    // 7.3 API 文档（仅开发环境）
+    // 7.3 静态文件（Scalar favicon 等 wwwroot 资源）
+    app.UseStaticFiles();
+
+    // 7.4 API 文档（仅开发环境）
     app.UseTaktOpenApi();
     
-    // 7.4 统一请求日志
+    // 7.5 统一请求日志
     app.UseTaktRequestLogging();
     
-    // 7.5 标准中间件
+    // 7.6 标准中间件
     app.UseHttpsRedirection();
     app.UseCors();
     app.UseTaktSecurity();
@@ -246,7 +254,7 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
     
-    // 7.6 路由映射
+    // 7.7 路由映射
     app.MapControllers();
     app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktConnectHub>("/hubs/TaktConnectHub");
     app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktNotificationHub>("/hubs/TaktNotificationHub");

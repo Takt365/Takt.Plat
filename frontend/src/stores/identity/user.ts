@@ -18,9 +18,9 @@ import { useTenantStore } from '@/stores/identity/tenant';
 import type { MenuTree } from '@/types/identity/menu';
 import { hasPermissionCode } from '@/utils/permission';
 import { normalizeUserInfoProfile } from '@/utils/takt-user-profile-normalize';
-import { getHolidayTheme } from '@/api/human-resource/attendance/holiday-theme';
+import { getHolidayTheme } from '@/api/human-resource/attendance/holiday';
 import { useLocaleStore } from '@/stores/foundation/locale';
-import type { HolidayTheme } from '@/types/human-resource/attendance/holiday-theme';
+import type { HolidayTheme } from '@/types/human-resource/attendance/holiday';
 import { themeColorMap, type TaktThemeColorPreset } from '@/utils/theme';
 import { useThemeColorStore } from '@/stores/common/theme-color';
 import {

@@ -15,8 +15,8 @@ using Takt.Shared.Options;
 namespace Takt.Domain.Interfaces;
 
 /// <summary>
-/// 通用 SQL 执行器（Infrastructure 由 <see cref="Takt.Infrastructure.Services.TaktSqlExecutor"/> 实现；
-/// 与 <see cref="Repositories.ITaktTenantRepository{TEntity}.QueryReadOnlySqlAsync"/> 共用同一 Ado 查询路径）
+/// 通用 SQL 执行器（Infrastructure 由 TaktSqlExecutor 实现；
+/// 与 ITaktTenantRepository{TEntity}.QueryReadOnlySqlAsync 共用同一 Ado 查询路径）
 /// </summary>
 public interface ITaktSqlExecutor
 {
@@ -25,7 +25,7 @@ public interface ITaktSqlExecutor
     /// </summary>
     /// <param name="sql">SQL 文本</param>
     /// <param name="parameters">命名参数（可选）</param>
-    /// <param name="options">执行选项；为 null 时使用 <see cref="TaktSqlExecuteOptions.ReadOnlyDefault"/></param>
+    /// <param name="options">执行选项；为 null 时使用 TaktSqlExecuteOptions.ReadOnlyDefault</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>结果行列表</returns>
     Task<IReadOnlyList<Dictionary<string, object>>> QueryAsync(

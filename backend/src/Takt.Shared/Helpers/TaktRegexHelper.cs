@@ -16,7 +16,7 @@ namespace Takt.Shared.Helpers;
 /// 规则命名与前端 regex.ts 对齐，便于前后端一致。
 /// </summary>
 /// <remarks>
-/// 正则校验失败统一使用 <c>common.validation.invalid.format</c>（{field}）；格式说明放 <c>common.tip.*</c>；字段名配合 <c>entity.*</c>。
+/// 正则校验失败统一使用 <c>common.validation.format.invalid</c>（{field}）；格式说明放 <c>common.tip.*</c>；字段名配合 <c>entity.*</c>。
 /// 仅含编译期不可变 <c>static readonly Regex</c> 常量，无运行时可变状态。
 /// </remarks>
 public static class TaktRegexHelper
@@ -50,8 +50,8 @@ public static class TaktRegexHelper
     /// <summary>日本手机号位数。</summary>
     public const int PhoneJpLength = 11;
 
-    /// <summary>格式不正确校验 I18n 键（common.validation.invalid.format）。</summary>
-    public const string InvalidFormatI18nKey = "common.validation.invalid.format";
+    /// <summary>格式不正确校验 I18n 键（common.validation.format.invalid）。</summary>
+    public const string InvalidFormatI18nKey = "common.validation.format.invalid";
 
     /// <summary>公司默认文化 zh-CN → 手机号格式说明 I18n 键（common.tip.phone.*，表单提示用）。</summary>
     public const string PhoneTipI18nKeyCn = "common.tip.phone.cn";
@@ -65,7 +65,7 @@ public static class TaktRegexHelper
     /// <summary>公司默认文化 ja-JP → 手机号格式说明 I18n 键。</summary>
     public const string PhoneTipI18nKeyJp = "common.tip.phone.jp";
     /// <summary>
-    /// 邮箱地址（RFC 5322 常用子集；长度 6–100 由 <see cref="IsValidEmail"/> 校验）。
+    /// 邮箱地址（RFC 5322 常用子集；长度 6–100 由 IsValidEmail 校验）。
     /// </summary>
     public static readonly Regex Email = new(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$", Opt);
     /// <summary>
@@ -562,7 +562,7 @@ public static class TaktRegexHelper
     public static bool IsValidTenantCode(string? value) => IsMatch(TenantCode, value);
 
     /// <summary>
-    /// 是否为有效用户昵称（可为空；非空时 2–40 位且符合 <see cref="NickName"/>）。
+    /// 是否为有效用户昵称（可为空；非空时 2–40 位且符合 NickName）。
     /// </summary>
     public static bool IsValidUserNickName(string? value)
     {

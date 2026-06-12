@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.HumanResource.Organization;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
@@ -59,7 +58,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        var companies = await companyRepository.GetListAsync(c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+        var companies = await companyRepository.GetListAsync(c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
 
         if (companies == null || companies.Count == 0)
         {
@@ -144,67 +143,67 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 获取标准岗位配置
     /// </summary>
-    private static IEnumerable<(string PostCode, string PostName, TaktPostType PostType, TaktPostLevel PostLevel, int SortOrder, string DeptCode)> GetStandardPosts(string tenantCode, string companyCode)
+    private static IEnumerable<(string PostCode, string PostName, int PostType, int PostLevel, int SortOrder, string DeptCode)> GetStandardPosts(string tenantCode, string companyCode)
     {
         // 所有公司使用统一的岗位清单，统一归属于公司级部门 D0000
         return new[]
         {
             // ===== 总经理室 =====
             // 高层管理（管理/决策层）
-            ("CHAIRMAN", "董事长", TaktPostType.Management, TaktPostLevel.Management, 1, "D0000"),
-            ("VICE_CHAIRMAN", "副董事长", TaktPostType.Management, TaktPostLevel.Management, 2, "D0000"),
-            ("GENERAL_MANAGER", "总经理", TaktPostType.Management, TaktPostLevel.Management, 3, "D0000"),
-            ("VICE_GENERAL_MANAGER", "副总经理", TaktPostType.Management, TaktPostLevel.Management, 4, "D0000"),
-            ("FACTORY_DIRECTOR", "厂长", TaktPostType.Management, TaktPostLevel.Management, 5, "D0000"),
-            ("BU_HEAD", "本部长", TaktPostType.Management, TaktPostLevel.Management, 6, "D0000"),
-            ("DEPUTY_BU_HEAD", "副本部长", TaktPostType.Management, TaktPostLevel.Management, 7, "D0000"),
-            ("DEPARTMENT_HEAD", "部长", TaktPostType.Management, TaktPostLevel.Management, 8, "D0000"),
-            ("DEPUTY_DEPARTMENT_HEAD", "副部长", TaktPostType.Management, TaktPostLevel.Management, 9, "D0000"),
+            ("CHAIRMAN", "董事长", 0, 2, 1, "D0000"),
+            ("VICE_CHAIRMAN", "副董事长", 0, 2, 2, "D0000"),
+            ("GENERAL_MANAGER", "总经理", 0, 2, 3, "D0000"),
+            ("VICE_GENERAL_MANAGER", "副总经理", 0, 2, 4, "D0000"),
+            ("FACTORY_DIRECTOR", "厂长", 0, 2, 5, "D0000"),
+            ("BU_HEAD", "本部长", 0, 2, 6, "D0000"),
+            ("DEPUTY_BU_HEAD", "副本部长", 0, 2, 7, "D0000"),
+            ("DEPARTMENT_HEAD", "部长", 0, 2, 8, "D0000"),
+            ("DEPUTY_DEPARTMENT_HEAD", "副部长", 0, 2, 9, "D0000"),
             
             // 中层管理（管理/决策层）
-            ("MANAGER", "经理", TaktPostType.Management, TaktPostLevel.Management, 10, "D0000"),
-            ("DEPUTY_MANAGER", "副经理", TaktPostType.Management, TaktPostLevel.Management, 11, "D0000"),
-            ("SECTION_CHIEF", "课长", TaktPostType.Management, TaktPostLevel.Management, 12, "D0000"),
-            ("DEPUTY_SECTION_CHIEF", "副课长", TaktPostType.Management, TaktPostLevel.Management, 13, "D0000"),
-            ("SUBSECTION_CHIEF", "股长", TaktPostType.Management, TaktPostLevel.Management, 14, "D0000"),
-            ("TEAM_LEADER", "班长", TaktPostType.Management, TaktPostLevel.Management, 15, "D0000"),
-            ("DEPUTY_TEAM_LEADER", "副班长", TaktPostType.Management, TaktPostLevel.Management, 16, "D0000"),
+            ("MANAGER", "经理", 0, 2, 10, "D0000"),
+            ("DEPUTY_MANAGER", "副经理", 0, 2, 11, "D0000"),
+            ("SECTION_CHIEF", "课长", 0, 2, 12, "D0000"),
+            ("DEPUTY_SECTION_CHIEF", "副课长", 0, 2, 13, "D0000"),
+            ("SUBSECTION_CHIEF", "股长", 0, 2, 14, "D0000"),
+            ("TEAM_LEADER", "班长", 0, 2, 15, "D0000"),
+            ("DEPUTY_TEAM_LEADER", "副班长", 0, 2, 16, "D0000"),
             
             // ===== IT部 =====
             // 专业技术（技术/骨干层）
-            ("LEVEL4_ENGINEER", "四级工程师", TaktPostType.Technical, TaktPostLevel.Technical, 20, "D0000"),
-            ("LEVEL3_ENGINEER", "三级工程师", TaktPostType.Technical, TaktPostLevel.Technical, 21, "D0000"),
-            ("LEVEL3_TECH_ENGINEER", "三级技术工程师", TaktPostType.Technical, TaktPostLevel.Technical, 22, "D0000"),
-            ("LEVEL2_ENGINEER", "二级工程师", TaktPostType.Technical, TaktPostLevel.Technical, 23, "D0000"),
-            ("LEVEL1_TECHNICIAN", "一级技术员", TaktPostType.Technical, TaktPostLevel.Technical, 24, "D0000"),
+            ("LEVEL4_ENGINEER", "四级工程师", 1, 1, 20, "D0000"),
+            ("LEVEL3_ENGINEER", "三级工程师", 1, 1, 21, "D0000"),
+            ("LEVEL3_TECH_ENGINEER", "三级技术工程师", 1, 1, 22, "D0000"),
+            ("LEVEL2_ENGINEER", "二级工程师", 1, 1, 23, "D0000"),
+            ("LEVEL1_TECHNICIAN", "一级技术员", 1, 1, 24, "D0000"),
             
             // ===== 总务部 =====
             // 专业职能（专员：技术/骨干层，多能工/检查员/仓管员：一线/基层）
-            ("LEVEL4_SPECIALIST", "四级专员", TaktPostType.Functional, TaktPostLevel.Technical, 30, "D0000"),
-            ("LEVEL3_SPECIALIST", "三级专员", TaktPostType.Functional, TaktPostLevel.Technical, 31, "D0000"),
-            ("LEVEL2_SPECIALIST", "二级专员", TaktPostType.Functional, TaktPostLevel.Technical, 32, "D0000"),
-            ("LEVEL1_SPECIALIST", "一级专员", TaktPostType.Functional, TaktPostLevel.Frontline, 33, "D0000"),
-            ("LEVEL1_CLERK", "一级事务员", TaktPostType.Functional, TaktPostLevel.Frontline, 34, "D0000"),
+            ("LEVEL4_SPECIALIST", "四级专员", 3, 1, 30, "D0000"),
+            ("LEVEL3_SPECIALIST", "三级专员", 3, 1, 31, "D0000"),
+            ("LEVEL2_SPECIALIST", "二级专员", 3, 1, 32, "D0000"),
+            ("LEVEL1_SPECIALIST", "一级专员", 3, 0, 33, "D0000"),
+            ("LEVEL1_CLERK", "一级事务员", 3, 0, 34, "D0000"),
             
             // ===== 生产部 =====
-            ("SENIOR_MULTI_SKILL_WORKER", "资深多能工", TaktPostType.Functional, TaktPostLevel.Frontline, 35, "D0000"),
-            ("LEVEL1_MULTI_SKILL_WORKER", "一级多能工", TaktPostType.Functional, TaktPostLevel.Frontline, 36, "D0000"),
-            ("LEVEL2_MULTI_SKILL_WORKER", "二级多能工", TaktPostType.Functional, TaktPostLevel.Frontline, 37, "D0000"),
-            ("LEVEL3_MULTI_SKILL_WORKER", "三级多能工", TaktPostType.Functional, TaktPostLevel.Frontline, 38, "D0000"),
-            ("OPERATOR", "作业员", TaktPostType.Operation, TaktPostLevel.Frontline, 60, "D0000"),
+            ("SENIOR_MULTI_SKILL_WORKER", "资深多能工", 3, 0, 35, "D0000"),
+            ("LEVEL1_MULTI_SKILL_WORKER", "一级多能工", 3, 0, 36, "D0000"),
+            ("LEVEL2_MULTI_SKILL_WORKER", "二级多能工", 3, 0, 37, "D0000"),
+            ("LEVEL3_MULTI_SKILL_WORKER", "三级多能工", 3, 0, 38, "D0000"),
+            ("OPERATOR", "作业员", 4, 0, 60, "D0000"),
             
             // ===== 品保部 =====
-            ("INSPECTOR", "质检员", TaktPostType.Functional, TaktPostLevel.Frontline, 39, "D0000"),
+            ("INSPECTOR", "质检员", 3, 0, 39, "D0000"),
             
             // ===== 资材部 =====
-            ("WAREHOUSE_KEEPER", "仓管员", TaktPostType.Functional, TaktPostLevel.Frontline, 40, "D0000"),
+            ("WAREHOUSE_KEEPER", "仓管员", 3, 0, 40, "D0000"),
             
             // ===== 管理部 =====
             // 后勤保障（一线/基层）
-            ("SECURITY_CAPTAIN", "保安队长", TaktPostType.Logistics, TaktPostLevel.Frontline, 50, "D0000"),
-            ("SECURITY_DEPUTY_CAPTAIN", "保安副队长", TaktPostType.Logistics, TaktPostLevel.Frontline, 51, "D0000"),
-            ("LEVEL1_SECURITY_GUARD", "一级保安员", TaktPostType.Logistics, TaktPostLevel.Frontline, 52, "D0000"),
-            ("CLEANER", "清洁工", TaktPostType.Logistics, TaktPostLevel.Frontline, 53, "D0000"),
+            ("SECURITY_CAPTAIN", "保安队长", 7, 0, 50, "D0000"),
+            ("SECURITY_DEPUTY_CAPTAIN", "保安副队长", 7, 0, 51, "D0000"),
+            ("LEVEL1_SECURITY_GUARD", "一级保安员", 7, 0, 52, "D0000"),
+            ("CLEANER", "清洁工", 7, 0, 53, "D0000"),
         };
     }
 
@@ -229,8 +228,8 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
         string companyCode,
         string postCode,
         string postName,
-        TaktPostType postType,
-        TaktPostLevel postLevel,
+        int postType,
+        int postLevel,
         int sortOrder,
         string deptCode)
     {
@@ -257,9 +256,9 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 PostName = postName,
                 PostType = postType,
                 PostLevel = postLevel,
-                PostStatus = TaktCommonStatus.Enabled,
+                PostStatus = 1,
                 SortOrder = sortOrder,
-                IsBuiltIn = TaktYesNo.Yes
+                IsBuiltIn = 1
             };
             post = await repository.CreateAsync(post);
             return (post, true);
@@ -292,16 +291,16 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 post.SortOrder = sortOrder;
                 needUpdate = true;
             }
-            if (post.IsBuiltIn != TaktYesNo.Yes)
+            if (post.IsBuiltIn != 1)
             {
-                post.IsBuiltIn = TaktYesNo.Yes;
+                post.IsBuiltIn = 1;
                 needUpdate = true;
             }
             
             // 只有数据发生变化时才更新
             if (needUpdate)
             {
-                post.PostStatus = TaktCommonStatus.Enabled;
+                post.PostStatus = 1;
                 await repository.UpdateAsync(post);
             }
             

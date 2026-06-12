@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/attendance
 // 文件名称：leave.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -121,6 +121,18 @@ export function updateLeaveStatus(dto: LeaveStatus): Promise<Leave> {
     url: `${LEAVE_API_BASE}/status`,
     method: 'put',
     data: dto,
+  });
+}
+
+/**
+ * 提交请假审批（发起工作流）
+ * @param {string} id 请假 ID
+ * @returns {Promise<Leave>} 请假 DTO
+ */
+export function submitLeaveForApproval(id: string): Promise<Leave> {
+  return request<Leave>({
+    url: `${LEAVE_API_BASE}/${id}/submit-approval`,
+    method: 'post',
   });
 }
 

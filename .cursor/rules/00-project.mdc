@@ -164,6 +164,69 @@ locales/dashboard/workspace/zh-CN.ts
 ❌ list:identity:user          （操作不在末段）
 ```
 
+### 8. 枚举与字典（强制，全实体）
+
+#### 8.1 Domain 实体禁枚举（硬约束，优先）
+
+**`Takt.Domain/Entities/**` 下所有实体属性禁止 C# `enum` 类型**（含 `Takt.Shared.Enums` 中任意枚举、`TaktYesNo`、`TaktCommonStatus`、流程/引擎专用枚举等）。
+
+| 规则 | 说明 |
+|------|------|
+| 属性类型 | **一律 `int` / `int?`**；XML 注释写清字典码或数值语义 |
+| 适用范围 | 字典项、是否、启用停用、审批态、流程实例/任务态等——**实体层无例外** |
+| 禁止 | `using Takt.Shared.Enums;` 仅因实体字段；`public TaktXxxStatus Xxx { get; set; }` |
+| 服务/引擎层 | Application、Infrastructure 可用 `Takt.Shared.Enums` 或 `TaktDictValueConstants` 比较，**赋值实体前转为 `int`** |
+| 默认值 | 与 `[SugarColumn]` 的 `DefaultValue` 一致写 C# 初值（如 `= 0`、`= 1`）；**外键 `long` 禁止 `= 0`**；树形 `ParentId`（0=根）除外 |
+| 可空 | 可选分类用 `int?`，无 `DefaultValue` 时不强加 C# 初值 |
+
+```text
+✅ public int UserStatus { get; set; } = 1;          // 字典 sys_normal_disable
+✅ public int InstanceStatus { get; set; } = 1;     // 流程态存 int，服务层用 TaktFlowInstanceStatus 比较后写入
+✅ public int IsBuiltIn { get; set; } = 0;          // 字典 sys_yes_no
+❌ public TaktYesNo IsBuiltIn { get; set; }
+❌ public TaktFlowTaskStatus TaskStatus { get; set; }
+❌ public TaktCommonStatus DeptStatus { get; set; }
+```
+
+参照：`@backend/src/Takt.Domain/Entities/Identity/TaktUser.cs`。
+
+#### 8.2 DTO / 分层与字典（实体以外）
+
+**禁止同一语义「枚举 + 字典」双重叠**；新增/改造前先判定字段归属。
+
+| 归属 | DTO / 服务类型 | 前端 | 后端比较 |
+|------|----------------|------|----------|
+| **字典项**（存在 `DictTypeCode`） | `int`；注释字典码 | `TaktSelect` / `TaktDictTag` + `dict-type` | `TaktDictValueConstants` |
+| **引擎/运行时态**（流程实例、任务、流转动作等） | DTO 用 `int`；服务/引擎内可用专用枚举 | 静态 i18n 或约定键 | 枚举或常量比较后 **Adapt/映射为 int 写实体** |
+| **固定操作**（启用/停用、是否内置等） | `int` 与 `sys_yes_no` / `sys_normal_disable` 对齐 | 开关或字典展示 | `TaktDictValueConstants` |
+| **基础设施**（日志级别、菜单类型等，非实体列） | 服务/DTO 按需；**实体列仍为 int** | 一般不提交 | `Takt.Shared.Enums` 或常量 |
+
+```text
+✅ FormCategory int + dict sys_form_category + TaktDictTag
+✅ TaktFlowEngineService 内 TaktFlowInstanceStatus 比较 → entity.InstanceStatus = (int)status
+❌ TaktFlowFormCategory 枚举 + sys_form_category 字典（同语义双轨）
+❌ 实体属性 TaktFlowInstanceStatus InstanceStatus
+❌ 列表页手写 formatCategory() 替代 TaktDictTag
+```
+
+字典对齐常量：`backend/src/Takt.Shared/Constants/TaktDictValueConstants.cs`（禁止为已有字典再建平行枚举）。
+
+**Constants 与 Enums 目录（强制，禁止混放）**：
+
+| 目录 | 仅允许 | 禁止 |
+|------|--------|------|
+| `Takt.Shared/Constants/` | `string`/`int` 字面量、`TaktDictValueConstants` 字典对齐 `const`、缓存键/ Cookie 名、Attribute 类 | `public enum`、在 static 类内嵌套 enum |
+| `Takt.Shared/Enums/` | `public enum`（引擎/运行时、基础设施强类型、上传类型等） | 与字典 `DictTypeCode` 同语义的平行枚举 |
+
+```text
+✅ TaktFileConstants.AvatarPathSegment（string）+ Enums.TaktFileUploadType（enum）
+✅ TaktDictValueConstants.NormalDisable.Enabled（int const，对齐 sys_normal_disable）
+✅ TaktLoginTypes.Password（string const，写入日志）
+✅ ApiModuleAttribute 引用 Enums.TaktModule（Attribute 在 Constants，类型在 Enums）
+❌ TaktFileConstants 内嵌 FileUploadType enum
+❌ 字典项用 enum 又在 Constants 写同语义 int const
+```
+
 ---
 
 ## 二、注释规范
@@ -188,6 +251,23 @@ locales/dashboard/workspace/zh-CN.ts
 ### 3. 代码注释风格
 
 **C#**：公共成员使用 `/// <summary>`，方法含 `<param>`、`<returns>`。
+
+**C# XML 禁用 `<see cref>`（强制，全局）**：
+
+| 规则 | 说明 |
+|------|------|
+| ❌ | **禁止**在任意 XML 注释中使用 `<see cref="…"/>`（含类、属性、接口、方法、全限定名） |
+| ❌ | 禁止用 `cref` 做交叉引用替代文字说明（如 `<see cref="TaktFlowForm.FormCode"/>`） |
+| ✅ | 用纯文字写清语义：类型名 + 字段/表名，如「关联表单 FormCode」「TaktFlowScheme 主键」「TaktFlowVariable 变量表」 |
+| ✅ | 方法参数仍用 `<param name="…">`、返回值用 `<returns>`；**不得**在 summary/param/returns 内写 `cref` |
+
+```text
+❌ 与 <see cref="TaktFlowForm.FormCode"/> 一致
+✅ 冗余快照，与关联表单 FormCode 一致
+
+❌ 对应 <see cref="ITaktFlowEngineService"/>
+✅ 对应 ITaktFlowEngineService 接口
+```
 
 **TypeScript / Vue**：导出函数完整 JSDoc（摘要、`@param {Type}`、`@returns {Type}`）；类型字段用多行块注释；❌ 禁止关键字段仅单行 `/** 说明 */`。
 
@@ -299,5 +379,5 @@ fix(dept): 修复部门唯一索引冲突
 - **权限与翻译键**：`16-permission-i18n`（Permission / I18nKey 四处一致）
 - **主子表 / 树表**：在 12-crud 之上叠加 `@.cursor/rules/10-master-detail.mdc`、`11-tree-table.mdc`
 - 新增后端接口/服务：对照 `@.cursor/rules/01-backend.mdc` 中的参照文件
-- 发现与规范冲突时，主动按规范修正，勿引入无 `Takt` 前缀的 C# 文件名或泛化方法名
+- **实体禁枚举**：`Takt.Domain/Entities/**` 属性一律 `int`/`int?`，见 §1.8.1；禁止实体使用 `Takt.Shared.Enums`
 - 发现文件出现「隔行空行」或行数异常翻倍时，**只整理空行**，不改动业务逻辑

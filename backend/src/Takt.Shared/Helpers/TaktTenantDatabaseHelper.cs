@@ -18,7 +18,7 @@ using Takt.Shared.Options;
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 租户业务库基础设施失败（缺库、缺表、连库失败）识别与 <see cref="TaktBusinessException"/> 构造
+/// 租户业务库基础设施失败（缺库、缺表、连库失败）识别与 TaktBusinessException 构造
 /// </summary>
 public static class TaktTenantDatabaseHelper
 {

@@ -19,7 +19,7 @@ namespace Takt.WebApi.Controllers.Identity;
 /// <summary>
 /// RBAC 关联分配控制器
 /// </summary>
-[ApiModule(TaktModule.Identity, "身份认证")]
+[ApiModule(1, "身份认证")]
 [Route("api/[controller]", Name = "RBAC关联")]
 public class TaktRbacsController : TaktControllerBase
 {

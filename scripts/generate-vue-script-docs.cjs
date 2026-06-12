@@ -147,7 +147,7 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 const { t } = useI18n()
 ${excelConst}/** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.${options.entityCamel}._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.${options.entityI18nSlug || options.entityCamel}._self') })
 )
 
 /** 快捷查询关键字 */

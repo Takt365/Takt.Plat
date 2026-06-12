@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Identity
 // 文件名称：TaktMenusController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单控制器
 // 
@@ -13,7 +13,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Identity;
 using Takt.Application.Services.Identity;
-using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Identity;
 
@@ -21,7 +20,7 @@ namespace Takt.WebApi.Controllers.Identity;
 /// 菜单控制器
 /// 提供菜单的 REST API
 /// </summary>
-[ApiModule(TaktModule.Identity, "身份认证")]
+[ApiModule(1, "身份认证")]
 [Route("api/[controller]", Name = "菜单")]
 public class TaktMenusController : TaktControllerBase
 {
@@ -102,7 +101,7 @@ public class TaktMenusController : TaktControllerBase
     /// <summary>
     /// 获取菜单树形列表
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
     /// <returns>树形数据</returns>
     [TaktPermission("identity:menu:query", "菜单树")]
     [HttpGet("tree")]

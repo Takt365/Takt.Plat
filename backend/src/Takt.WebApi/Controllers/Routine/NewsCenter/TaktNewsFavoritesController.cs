@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.NewsCenter
 // 文件名称：TaktNewsFavoritesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：新闻中心收藏记录控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Routine.NewsCenter;
 /// 新闻中心收藏记录控制器
 /// 提供新闻中心收藏记录的 REST API
 /// </summary>
-[ApiModule(TaktModule.Routine, "日常事务")]
+[ApiModule(2, "日常事务")]
 [Route("api/[controller]", Name = "新闻中心收藏记录")]
 public class TaktNewsFavoritesController : TaktControllerBase
 {

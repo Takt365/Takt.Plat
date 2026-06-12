@@ -120,6 +120,32 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.accountTitle.shortname')"
+                name="shortName"
+              >
+                <a-input
+                  v-model:value="formState.shortName"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.shortname') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.accountTitle.titledesc')"
+                name="titleDesc"
+              >
+                <a-textarea
+                  v-model:value="formState.titleDesc"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.titledesc') })"
+                  :rows="3"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.accountTitle.titletype')"
                 name="titleType"
               >
@@ -413,7 +439,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","titleCode","titleName","parentId","titleType","balanceDirection","titleLevel","isAuxiliary","auxiliaryType","isQuantity","isCurrency","isCash","isBank","relatedPlant","titleStatus","validFrom","validTo","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","titleCode","titleName","shortName","titleDesc","parentId","titleType","balanceDirection","titleLevel","isAuxiliary","auxiliaryType","isQuantity","isCurrency","isCash","isBank","relatedPlant","titleStatus","validFrom","validTo","sortOrder","extFieldJson","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

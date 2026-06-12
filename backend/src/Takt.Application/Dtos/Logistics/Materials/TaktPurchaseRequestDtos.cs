@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPurchaseRequestDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -95,18 +95,12 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus RequestStatus { get; set; }
+    public int RequestStatus { get; set; }
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例ID（关联 TaktFlowInstance，发起审批后由业务写入，用于审批流程）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 流程实例名称（填充字段）
@@ -125,7 +119,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public List<TaktPurchaseRequestItemDto>? Items { get; set; }
 
     /// <summary>
-    /// 采购申请变更记录列表（外键在子表 <see cref="TaktPurchaseRequestChangeLog.RequestId"/>）
+    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）
     /// （子表：TaktPurchaseRequestChangeLog）
     /// </summary>
     public List<TaktPurchaseRequestChangeLogDto>? ChangeLogs { get; set; }
@@ -216,7 +210,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? RequestStatus { get; set; }
+    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
@@ -237,7 +231,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -373,7 +367,7 @@ public class TaktPurchaseRequestCreateDto
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus RequestStatus { get; set; }
+    public int RequestStatus { get; set; }
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
@@ -397,7 +391,7 @@ public class TaktPurchaseRequestCreateDto
     public List<TaktPurchaseRequestItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 采购申请变更记录列表（外键在子表 <see cref="TaktPurchaseRequestChangeLog.RequestId"/>）（子表，级联保存）
+    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
     /// </summary>
     public List<TaktPurchaseRequestChangeLogCreateDto>? ChangeLogs { get; set; }
 
@@ -454,7 +448,7 @@ public class TaktPurchaseRequestStatusDto
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "申请状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus RequestStatus { get; set; }
+    public int RequestStatus { get; set; }
 }
 
 // ========================================
@@ -500,7 +494,7 @@ public class TaktPurchaseRequestTemplateDto
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? RequestStatus { get; set; }
+    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
@@ -574,7 +568,7 @@ public class TaktPurchaseRequestImportDto
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? RequestStatus { get; set; }
+    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
@@ -674,7 +668,7 @@ public class TaktPurchaseRequestExportDto
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus RequestStatus { get; set; }
+    public int RequestStatus { get; set; }
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）

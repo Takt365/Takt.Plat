@@ -26,7 +26,7 @@ using Takt.Shared.Enums;
 namespace Takt.Infrastructure.Extensions;
 
 /// <summary>
-/// OpenAPI / Scalar 文档扩展（按控制器 <see cref="ApiModuleAttribute"/> 自动分组）
+/// OpenAPI / Scalar 文档扩展（按控制器 ApiModuleAttribute 自动分组）
 /// </summary>
 /// <remarks>
 /// <para>路由约定：</para>
@@ -34,7 +34,7 @@ namespace Takt.Infrastructure.Extensions;
 ///   <item>OpenAPI JSON：<c>/openapi/{documentName}.json</c></item>
 ///   <item>Scalar 主页（模块下拉）：<c>/scalar</c> 或 <c>/scalar/</c></item>
 ///   <item>Scalar 单模块直达：<c>/scalar/{documentName}</c>（无模块切换下拉）</item>
-///   <item><c>{documentName}</c> 与 <see cref="ApiModuleAttribute.DocumentName"/> 一致</item>
+///   <item><c>{documentName}</c> 与 ApiModuleAttribute.DocumentName 一致</item>
 /// </list>
 /// </remarks>
 public static class TaktSwaggerCollectionExtensions
@@ -45,7 +45,7 @@ public static class TaktSwaggerCollectionExtensions
     private const string ScalarEndpointPrefix = "/scalar";
 
     /// <summary>
-    /// 注册 OpenAPI 文档（每个 <see cref="ApiModuleAttribute"/> 模块一组）
+    /// 注册 OpenAPI 文档（每个 ApiModuleAttribute 模块一组）
     /// </summary>
     /// <param name="services">服务集合</param>
     /// <returns>服务集合</returns>
@@ -91,6 +91,7 @@ public static class TaktSwaggerCollectionExtensions
         app.MapScalarApiReference(ScalarEndpointPrefix, options =>
         {
             options.WithTitle("Takt Plat API");
+            options.WithFavicon("/logo/takt.svg");
             options.WithOpenApiRoutePattern(OpenApiRoutePattern);
             options.AddDocuments(scalarDocuments);
             options.ExpandAllTags();
@@ -100,7 +101,7 @@ public static class TaktSwaggerCollectionExtensions
     }
 
     /// <summary>
-    /// 扫描入口程序集控制器上的 <see cref="ApiModuleAttribute"/>，按模块去重分组
+    /// 扫描入口程序集控制器上的 ApiModuleAttribute，按模块去重分组
     /// </summary>
     private static IReadOnlyList<ApiModuleGroup> DiscoverApiModuleGroups()
     {
@@ -191,13 +192,13 @@ public static class TaktSwaggerCollectionExtensions
     }
 
     /// <summary>
-    /// 文档名（与 <see cref="ApiModuleAttribute.DocumentName"/> 规则一致）
+    /// 文档名（与 ApiModuleAttribute.DocumentName 规则一致）
     /// </summary>
     private static string GetDocumentName(TaktModule module) =>
         module.ToString().ToLowerInvariant();
 
     /// <summary>
-    /// 模块显示名（取自 <see cref="TaktModule"/> 的 <see cref="DisplayAttribute"/>）
+    /// 模块显示名（取自 TaktModule 的 DisplayAttribute）
     /// </summary>
     private static string GetModuleDisplayName(TaktModule module)
     {

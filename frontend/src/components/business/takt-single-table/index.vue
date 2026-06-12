@@ -31,6 +31,7 @@
         }"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
+        @expand="(expanded, record) => emit('expand', expanded, record)"
       >
         <template
           v-for="(_, name) in $slots"
@@ -61,6 +62,8 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ inheritAttrs: false })
+
 import type { TableColumnsType, TableProps } from 'ant-design-vue'
 import type {
   ColumnType,
@@ -182,6 +185,7 @@ const emit = defineEmits<{
   'update:current': [page: number]
   'update:pageSize': [size: number]
   'pagination-change': [page: number, pageSize: number]
+  'expand': [expanded: boolean, record: TableRecord]
 }>()
 
 const { t } = useI18n()

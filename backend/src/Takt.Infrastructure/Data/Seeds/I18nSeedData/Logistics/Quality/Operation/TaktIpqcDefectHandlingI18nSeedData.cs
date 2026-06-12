@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIpqcDefectHandlingI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIpqcDefectHandling 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation;
 
 /// <summary>
-/// TaktIpqcDefectHandling 实体国际化翻译种子（键前缀 entity.ipqcDefectHandling.*）
+/// TaktIpqcDefectHandling 实体国际化翻译种子（键前缀 entity.ipqcdefecthandling.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktIpqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktIpqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 ipqcDefectHandling 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 ipqcdefecthandling 实体翻译...", tenantCode);
 
         foreach (var item in GetIpqcDefectHandlingTranslations())
         {
@@ -76,182 +75,182 @@ public class TaktIpqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktIpqcDefectHandling 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ipqcDefectHandling._self / entity.ipqcDefectHandling.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.ipqcdefecthandling._self / entity.ipqcdefecthandling.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetIpqcDefectHandlingTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.ipqcDefectHandling._self
-            new TranslationSeedItem("entity.ipqcDefectHandling._self", "en-US", "Ipqc Defect Handling Information", "实体名称"),
-            // entity.ipqcDefectHandling._self
-            new TranslationSeedItem("entity.ipqcDefectHandling._self", "ja-JP", "IPQC制程检验不良处理记录信息", "实体名称"),
-            // entity.ipqcDefectHandling._self
-            new TranslationSeedItem("entity.ipqcDefectHandling._self", "zh-CN", "IPQC制程检验不良处理记录信息", "实体名称"),
-            // entity.ipqcDefectHandling._self
-            new TranslationSeedItem("entity.ipqcDefectHandling._self", "zh-HK", "IPQC制程检验不良处理记录信息", "实体名称"),
+            // entity.ipqcdefecthandling._self
+            new TranslationSeedItem("entity.ipqcdefecthandling._self", "en-US", "Ipqc Defect Handling Information", "实体名称"),
+            // entity.ipqcdefecthandling._self
+            new TranslationSeedItem("entity.ipqcdefecthandling._self", "ja-JP", "IPQC制程检验不良处理记录信息", "实体名称"),
+            // entity.ipqcdefecthandling._self
+            new TranslationSeedItem("entity.ipqcdefecthandling._self", "zh-CN", "IPQC制程检验不良处理记录信息", "实体名称"),
+            // entity.ipqcdefecthandling._self
+            new TranslationSeedItem("entity.ipqcdefecthandling._self", "zh-HK", "IPQC制程检验不良处理记录信息", "实体名称"),
 
-            // entity.ipqcDefectHandling.code
-            new TranslationSeedItem("entity.ipqcDefectHandling.code", "en-US", "IPQC不良处理编码", "IPQC不良处理编码"),
-            // entity.ipqcDefectHandling.code
-            new TranslationSeedItem("entity.ipqcDefectHandling.code", "ja-JP", "IPQC不良处理编码", "IPQC不良处理编码"),
-            // entity.ipqcDefectHandling.code
-            new TranslationSeedItem("entity.ipqcDefectHandling.code", "zh-CN", "IPQC不良处理编码", "IPQC不良处理编码"),
-            // entity.ipqcDefectHandling.code
-            new TranslationSeedItem("entity.ipqcDefectHandling.code", "zh-HK", "IPQC不良处理编码", "IPQC不良处理编码"),
+            // entity.ipqcdefecthandling.code
+            new TranslationSeedItem("entity.ipqcdefecthandling.code", "en-US", "IPQC不良处理编码", "IPQC不良处理编码"),
+            // entity.ipqcdefecthandling.code
+            new TranslationSeedItem("entity.ipqcdefecthandling.code", "ja-JP", "IPQC不良处理编码", "IPQC不良处理编码"),
+            // entity.ipqcdefecthandling.code
+            new TranslationSeedItem("entity.ipqcdefecthandling.code", "zh-CN", "IPQC不良处理编码", "IPQC不良处理编码"),
+            // entity.ipqcdefecthandling.code
+            new TranslationSeedItem("entity.ipqcdefecthandling.code", "zh-HK", "IPQC不良处理编码", "IPQC不良处理编码"),
 
-            // entity.ipqcDefectHandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcorderitemid", "en-US", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.ipqcDefectHandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcorderitemid", "ja-JP", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.ipqcDefectHandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcorderitemid", "zh-CN", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.ipqcDefectHandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcorderitemid", "zh-HK", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.ipqcdefecthandling.ipqcorderitemid
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "en-US", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.ipqcdefecthandling.ipqcorderitemid
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "ja-JP", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.ipqcdefecthandling.ipqcorderitemid
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "zh-CN", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.ipqcdefecthandling.ipqcorderitemid
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "zh-HK", "IPQC检验单明细ID", "IPQC检验单明细ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
-            // entity.ipqcDefectHandling.ipqcordercode
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcordercode", "en-US", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
-            // entity.ipqcDefectHandling.ipqcordercode
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcordercode", "ja-JP", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
-            // entity.ipqcDefectHandling.ipqcordercode
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcordercode", "zh-CN", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
-            // entity.ipqcDefectHandling.ipqcordercode
-            new TranslationSeedItem("entity.ipqcDefectHandling.ipqcordercode", "zh-HK", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
+            // entity.ipqcdefecthandling.ipqcordercode
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcordercode", "en-US", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
+            // entity.ipqcdefecthandling.ipqcordercode
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcordercode", "ja-JP", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
+            // entity.ipqcdefecthandling.ipqcordercode
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcordercode", "zh-CN", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
+            // entity.ipqcdefecthandling.ipqcordercode
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcordercode", "zh-HK", "IPQC检验单编码", "IPQC检验单编码（冗余字段，便于查询）"),
 
-            // entity.ipqcDefectHandling.linenumber
-            new TranslationSeedItem("entity.ipqcDefectHandling.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.ipqcDefectHandling.linenumber
-            new TranslationSeedItem("entity.ipqcDefectHandling.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.ipqcDefectHandling.linenumber
-            new TranslationSeedItem("entity.ipqcDefectHandling.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.ipqcDefectHandling.linenumber
-            new TranslationSeedItem("entity.ipqcDefectHandling.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.ipqcdefecthandling.linenumber
+            new TranslationSeedItem("entity.ipqcdefecthandling.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.ipqcdefecthandling.linenumber
+            new TranslationSeedItem("entity.ipqcdefecthandling.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.ipqcdefecthandling.linenumber
+            new TranslationSeedItem("entity.ipqcdefecthandling.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.ipqcdefecthandling.linenumber
+            new TranslationSeedItem("entity.ipqcdefecthandling.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
 
-            // entity.ipqcDefectHandling.defecttype
-            new TranslationSeedItem("entity.ipqcDefectHandling.defecttype", "en-US", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
-            // entity.ipqcDefectHandling.defecttype
-            new TranslationSeedItem("entity.ipqcDefectHandling.defecttype", "ja-JP", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
-            // entity.ipqcDefectHandling.defecttype
-            new TranslationSeedItem("entity.ipqcDefectHandling.defecttype", "zh-CN", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
-            // entity.ipqcDefectHandling.defecttype
-            new TranslationSeedItem("entity.ipqcDefectHandling.defecttype", "zh-HK", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
+            // entity.ipqcdefecthandling.defecttype
+            new TranslationSeedItem("entity.ipqcdefecthandling.defecttype", "en-US", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
+            // entity.ipqcdefecthandling.defecttype
+            new TranslationSeedItem("entity.ipqcdefecthandling.defecttype", "ja-JP", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
+            // entity.ipqcdefecthandling.defecttype
+            new TranslationSeedItem("entity.ipqcdefecthandling.defecttype", "zh-CN", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
+            // entity.ipqcdefecthandling.defecttype
+            new TranslationSeedItem("entity.ipqcdefecthandling.defecttype", "zh-HK", "不良类型", "不良类型（0=轻微，1=一般，2=严重，3=致命）"),
 
-            // entity.ipqcDefectHandling.defectcode
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectcode", "en-US", "不良现象编码", "不良现象编码"),
-            // entity.ipqcDefectHandling.defectcode
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectcode", "ja-JP", "不良现象编码", "不良现象编码"),
-            // entity.ipqcDefectHandling.defectcode
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectcode", "zh-CN", "不良现象编码", "不良现象编码"),
-            // entity.ipqcDefectHandling.defectcode
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectcode", "zh-HK", "不良现象编码", "不良现象编码"),
+            // entity.ipqcdefecthandling.defectcode
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectcode", "en-US", "不良现象编码", "不良现象编码"),
+            // entity.ipqcdefecthandling.defectcode
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectcode", "ja-JP", "不良现象编码", "不良现象编码"),
+            // entity.ipqcdefecthandling.defectcode
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectcode", "zh-CN", "不良现象编码", "不良现象编码"),
+            // entity.ipqcdefecthandling.defectcode
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectcode", "zh-HK", "不良现象编码", "不良现象编码"),
 
-            // entity.ipqcDefectHandling.defectdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectdescription", "en-US", "不良现象描述", "不良现象描述"),
-            // entity.ipqcDefectHandling.defectdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectdescription", "ja-JP", "不良现象描述", "不良现象描述"),
-            // entity.ipqcDefectHandling.defectdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectdescription", "zh-CN", "不良现象描述", "不良现象描述"),
-            // entity.ipqcDefectHandling.defectdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectdescription", "zh-HK", "不良现象描述", "不良现象描述"),
+            // entity.ipqcdefecthandling.defectdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectdescription", "en-US", "不良现象描述", "不良现象描述"),
+            // entity.ipqcdefecthandling.defectdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectdescription", "ja-JP", "不良现象描述", "不良现象描述"),
+            // entity.ipqcdefecthandling.defectdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectdescription", "zh-CN", "不良现象描述", "不良现象描述"),
+            // entity.ipqcdefecthandling.defectdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectdescription", "zh-HK", "不良现象描述", "不良现象描述"),
 
-            // entity.ipqcDefectHandling.defectquantity
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectquantity", "en-US", "不良数量", "不良数量"),
-            // entity.ipqcDefectHandling.defectquantity
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectquantity", "ja-JP", "不良数量", "不良数量"),
-            // entity.ipqcDefectHandling.defectquantity
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectquantity", "zh-CN", "不良数量", "不良数量"),
-            // entity.ipqcDefectHandling.defectquantity
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectquantity", "zh-HK", "不良数量", "不良数量"),
+            // entity.ipqcdefecthandling.defectquantity
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectquantity", "en-US", "不良数量", "不良数量"),
+            // entity.ipqcdefecthandling.defectquantity
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectquantity", "ja-JP", "不良数量", "不良数量"),
+            // entity.ipqcdefecthandling.defectquantity
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectquantity", "zh-CN", "不良数量", "不良数量"),
+            // entity.ipqcdefecthandling.defectquantity
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectquantity", "zh-HK", "不良数量", "不良数量"),
 
-            // entity.ipqcDefectHandling.handlingmethod
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingmethod", "en-US", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
-            // entity.ipqcDefectHandling.handlingmethod
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingmethod", "ja-JP", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
-            // entity.ipqcDefectHandling.handlingmethod
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingmethod", "zh-CN", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
-            // entity.ipqcDefectHandling.handlingmethod
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingmethod", "zh-HK", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
+            // entity.ipqcdefecthandling.handlingmethod
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingmethod", "en-US", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
+            // entity.ipqcdefecthandling.handlingmethod
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingmethod", "ja-JP", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
+            // entity.ipqcdefecthandling.handlingmethod
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingmethod", "zh-CN", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
+            // entity.ipqcdefecthandling.handlingmethod
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingmethod", "zh-HK", "处理方式", "处理方式（0=返工，1=返修，2=让步接收，3=退货，4=报废，5=挑选使用）"),
 
-            // entity.ipqcDefectHandling.handlingdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingdescription", "en-US", "处理说明", "处理说明"),
-            // entity.ipqcDefectHandling.handlingdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingdescription", "ja-JP", "处理说明", "处理说明"),
-            // entity.ipqcDefectHandling.handlingdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingdescription", "zh-CN", "处理说明", "处理说明"),
-            // entity.ipqcDefectHandling.handlingdescription
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingdescription", "zh-HK", "处理说明", "处理说明"),
+            // entity.ipqcdefecthandling.handlingdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingdescription", "en-US", "处理说明", "处理说明"),
+            // entity.ipqcdefecthandling.handlingdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingdescription", "ja-JP", "处理说明", "处理说明"),
+            // entity.ipqcdefecthandling.handlingdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingdescription", "zh-CN", "处理说明", "处理说明"),
+            // entity.ipqcdefecthandling.handlingdescription
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingdescription", "zh-HK", "处理说明", "处理说明"),
 
-            // entity.ipqcDefectHandling.responsibledept
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibledept", "en-US", "责任部门", "责任部门"),
-            // entity.ipqcDefectHandling.responsibledept
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibledept", "ja-JP", "责任部门", "责任部门"),
-            // entity.ipqcDefectHandling.responsibledept
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibledept", "zh-CN", "责任部门", "责任部门"),
-            // entity.ipqcDefectHandling.responsibledept
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibledept", "zh-HK", "责任部门", "责任部门"),
+            // entity.ipqcdefecthandling.responsibledept
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibledept", "en-US", "责任部门", "责任部门"),
+            // entity.ipqcdefecthandling.responsibledept
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibledept", "ja-JP", "责任部门", "责任部门"),
+            // entity.ipqcdefecthandling.responsibledept
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibledept", "zh-CN", "责任部门", "责任部门"),
+            // entity.ipqcdefecthandling.responsibledept
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibledept", "zh-HK", "责任部门", "责任部门"),
 
-            // entity.ipqcDefectHandling.responsibleby
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibleby", "en-US", "责任人", "责任人（人员代码）"),
-            // entity.ipqcDefectHandling.responsibleby
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibleby", "ja-JP", "责任人", "责任人（人员代码）"),
-            // entity.ipqcDefectHandling.responsibleby
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibleby", "zh-CN", "责任人", "责任人（人员代码）"),
-            // entity.ipqcDefectHandling.responsibleby
-            new TranslationSeedItem("entity.ipqcDefectHandling.responsibleby", "zh-HK", "责任人", "责任人（人员代码）"),
+            // entity.ipqcdefecthandling.responsibleby
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibleby", "en-US", "责任人", "责任人（人员代码）"),
+            // entity.ipqcdefecthandling.responsibleby
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibleby", "ja-JP", "责任人", "责任人（人员代码）"),
+            // entity.ipqcdefecthandling.responsibleby
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibleby", "zh-CN", "责任人", "责任人（人员代码）"),
+            // entity.ipqcdefecthandling.responsibleby
+            new TranslationSeedItem("entity.ipqcdefecthandling.responsibleby", "zh-HK", "责任人", "责任人（人员代码）"),
 
-            // entity.ipqcDefectHandling.handlerby
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlerby", "en-US", "处理人", "处理人（人员代码）"),
-            // entity.ipqcDefectHandling.handlerby
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlerby", "ja-JP", "处理人", "处理人（人员代码）"),
-            // entity.ipqcDefectHandling.handlerby
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlerby", "zh-CN", "处理人", "处理人（人员代码）"),
-            // entity.ipqcDefectHandling.handlerby
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlerby", "zh-HK", "处理人", "处理人（人员代码）"),
+            // entity.ipqcdefecthandling.handlerby
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlerby", "en-US", "处理人", "处理人（人员代码）"),
+            // entity.ipqcdefecthandling.handlerby
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlerby", "ja-JP", "处理人", "处理人（人员代码）"),
+            // entity.ipqcdefecthandling.handlerby
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlerby", "zh-CN", "处理人", "处理人（人员代码）"),
+            // entity.ipqcdefecthandling.handlerby
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlerby", "zh-HK", "处理人", "处理人（人员代码）"),
 
-            // entity.ipqcDefectHandling.handlingat
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingat", "en-US", "处理时间", "处理时间"),
-            // entity.ipqcDefectHandling.handlingat
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingat", "ja-JP", "处理时间", "处理时间"),
-            // entity.ipqcDefectHandling.handlingat
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingat", "zh-CN", "处理时间", "处理时间"),
-            // entity.ipqcDefectHandling.handlingat
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingat", "zh-HK", "处理时间", "处理时间"),
+            // entity.ipqcdefecthandling.handlingat
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingat", "en-US", "处理时间", "处理时间"),
+            // entity.ipqcdefecthandling.handlingat
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingat", "ja-JP", "处理时间", "处理时间"),
+            // entity.ipqcdefecthandling.handlingat
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingat", "zh-CN", "处理时间", "处理时间"),
+            // entity.ipqcdefecthandling.handlingat
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingat", "zh-HK", "处理时间", "处理时间"),
 
-            // entity.ipqcDefectHandling.handlingstatus
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingstatus", "en-US", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
-            // entity.ipqcDefectHandling.handlingstatus
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingstatus", "ja-JP", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
-            // entity.ipqcDefectHandling.handlingstatus
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingstatus", "zh-CN", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
-            // entity.ipqcDefectHandling.handlingstatus
-            new TranslationSeedItem("entity.ipqcDefectHandling.handlingstatus", "zh-HK", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
+            // entity.ipqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingstatus", "en-US", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
+            // entity.ipqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingstatus", "ja-JP", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
+            // entity.ipqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingstatus", "zh-CN", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
+            // entity.ipqcdefecthandling.handlingstatus
+            new TranslationSeedItem("entity.ipqcdefecthandling.handlingstatus", "zh-HK", "处理状态", "处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）"),
 
-            // entity.ipqcDefectHandling.correctiveaction
-            new TranslationSeedItem("entity.ipqcDefectHandling.correctiveaction", "en-US", "纠正措施", "预防措施/纠正措施"),
-            // entity.ipqcDefectHandling.correctiveaction
-            new TranslationSeedItem("entity.ipqcDefectHandling.correctiveaction", "ja-JP", "纠正措施", "预防措施/纠正措施"),
-            // entity.ipqcDefectHandling.correctiveaction
-            new TranslationSeedItem("entity.ipqcDefectHandling.correctiveaction", "zh-CN", "纠正措施", "预防措施/纠正措施"),
-            // entity.ipqcDefectHandling.correctiveaction
-            new TranslationSeedItem("entity.ipqcDefectHandling.correctiveaction", "zh-HK", "纠正措施", "预防措施/纠正措施"),
+            // entity.ipqcdefecthandling.correctiveaction
+            new TranslationSeedItem("entity.ipqcdefecthandling.correctiveaction", "en-US", "纠正措施", "预防措施/纠正措施"),
+            // entity.ipqcdefecthandling.correctiveaction
+            new TranslationSeedItem("entity.ipqcdefecthandling.correctiveaction", "ja-JP", "纠正措施", "预防措施/纠正措施"),
+            // entity.ipqcdefecthandling.correctiveaction
+            new TranslationSeedItem("entity.ipqcdefecthandling.correctiveaction", "zh-CN", "纠正措施", "预防措施/纠正措施"),
+            // entity.ipqcdefecthandling.correctiveaction
+            new TranslationSeedItem("entity.ipqcdefecthandling.correctiveaction", "zh-HK", "纠正措施", "预防措施/纠正措施"),
 
-            // entity.ipqcDefectHandling.defectimages
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectimages", "en-US", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
-            // entity.ipqcDefectHandling.defectimages
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectimages", "ja-JP", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
-            // entity.ipqcDefectHandling.defectimages
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectimages", "zh-CN", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
-            // entity.ipqcDefectHandling.defectimages
-            new TranslationSeedItem("entity.ipqcDefectHandling.defectimages", "zh-HK", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
+            // entity.ipqcdefecthandling.defectimages
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectimages", "en-US", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
+            // entity.ipqcdefecthandling.defectimages
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectimages", "ja-JP", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
+            // entity.ipqcdefecthandling.defectimages
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectimages", "zh-CN", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
+            // entity.ipqcdefecthandling.defectimages
+            new TranslationSeedItem("entity.ipqcdefecthandling.defectimages", "zh-HK", "不良图片", "不良图片（JSON格式，存储不良图片URL列表）"),
 
-            // entity.ipqcDefectHandling.orderitem
-            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "en-US", "IPQC检验单明细", "IPQC检验单明细（主表）"),
-            // entity.ipqcDefectHandling.orderitem
-            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "ja-JP", "IPQC检验单明细", "IPQC检验单明细（主表）"),
-            // entity.ipqcDefectHandling.orderitem
-            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "zh-CN", "IPQC检验单明细", "IPQC检验单明细（主表）"),
-            // entity.ipqcDefectHandling.orderitem
-            new TranslationSeedItem("entity.ipqcDefectHandling.orderitem", "zh-HK", "IPQC检验单明细", "IPQC检验单明细（主表）"),
+            // entity.ipqcdefecthandling.orderitem
+            new TranslationSeedItem("entity.ipqcdefecthandling.orderitem", "en-US", "IPQC检验单明细", "IPQC检验单明细（主表）"),
+            // entity.ipqcdefecthandling.orderitem
+            new TranslationSeedItem("entity.ipqcdefecthandling.orderitem", "ja-JP", "IPQC检验单明细", "IPQC检验单明细（主表）"),
+            // entity.ipqcdefecthandling.orderitem
+            new TranslationSeedItem("entity.ipqcdefecthandling.orderitem", "zh-CN", "IPQC检验单明细", "IPQC检验单明细（主表）"),
+            // entity.ipqcdefecthandling.orderitem
+            new TranslationSeedItem("entity.ipqcdefecthandling.orderitem", "zh-HK", "IPQC检验单明细", "IPQC检验单明细（主表）"),
         };
     }
 
@@ -269,8 +268,8 @@ public class TaktIpqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

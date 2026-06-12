@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktCalendarI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCalendar 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance;
@@ -76,7 +75,7 @@ public class TaktCalendarI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCalendar 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.calendar._self / entity.calendar.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.calendar._self / entity.calendar.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetCalendarTranslations()
     {
@@ -110,22 +109,22 @@ public class TaktCalendarI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.calendar.isworkingday", "zh-HK", "是否工作日", "是否工作日（0=非工作日 1=工作日 2=调休工作日等）"),
 
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "en-US", "关联假日ID", "关联假日 ID（<see cref=\"TaktHoliday\"/>）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "en-US", "关联假日ID", "关联假日 ID（TaktHoliday）"),
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "ja-JP", "关联假日ID", "关联假日 ID（<see cref=\"TaktHoliday\"/>）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "ja-JP", "关联假日ID", "关联假日 ID（TaktHoliday）"),
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "zh-CN", "关联假日ID", "关联假日 ID（<see cref=\"TaktHoliday\"/>）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "zh-CN", "关联假日ID", "关联假日 ID（TaktHoliday）"),
             // entity.calendar.holidayid
-            new TranslationSeedItem("entity.calendar.holidayid", "zh-HK", "关联假日ID", "关联假日 ID（<see cref=\"TaktHoliday\"/>）"),
+            new TranslationSeedItem("entity.calendar.holidayid", "zh-HK", "关联假日ID", "关联假日 ID（TaktHoliday）"),
 
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "en-US", "关联班次ID", "关联班次 ID（<see cref=\"TaktWorkShift\"/>）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "en-US", "关联班次ID", "关联班次 ID（TaktWorkShift）"),
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "ja-JP", "关联班次ID", "关联班次 ID（<see cref=\"TaktWorkShift\"/>）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "ja-JP", "关联班次ID", "关联班次 ID（TaktWorkShift）"),
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "zh-CN", "关联班次ID", "关联班次 ID（<see cref=\"TaktWorkShift\"/>）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "zh-CN", "关联班次ID", "关联班次 ID（TaktWorkShift）"),
             // entity.calendar.shiftid
-            new TranslationSeedItem("entity.calendar.shiftid", "zh-HK", "关联班次ID", "关联班次 ID（<see cref=\"TaktWorkShift\"/>）"),
+            new TranslationSeedItem("entity.calendar.shiftid", "zh-HK", "关联班次ID", "关联班次 ID（TaktWorkShift）"),
 
             // entity.calendar.relatedplant
             new TranslationSeedItem("entity.calendar.relatedplant", "en-US", "关联工厂", "关联工厂（为空表示公司级通用日历）"),
@@ -152,8 +151,8 @@ public class TaktCalendarI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

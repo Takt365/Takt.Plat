@@ -11,7 +11,6 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.NewsCenter;
 
@@ -104,7 +103,7 @@ public class TaktNewsComment : TaktApprovalEntityBase
     /// 评论状态
     /// </summary>
     [SugarColumn(ColumnName = "comment_status", ColumnDescription = "评论状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktNewsCommentStatus CommentStatus { get; set; } = TaktNewsCommentStatus.Normal;
+    public int CommentStatus { get; set; } = 0;
     /// <summary>
     /// 新闻（主表）
     /// </summary>

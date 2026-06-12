@@ -60,7 +60,7 @@ alwaysApply: true
 | 动作 | 枚举 | API（引擎） | 权限码（引擎） | 规则 |
 |------|------|-------------|----------------|------|
 | **驳回** | `Reject=2` | `complete`，`approved=false`，可选 `nodeRejectStep` | `workflow:todo:approve` | 有目标节点 → 实例仍 `Running` 并重入；无 → `Rejected` |
-| **撤回** | `Revoke=3` | `revoke?instanceCode=` | `workflow:instance:revoke` | 仅发起人、仅 `Running` → `Terminated` |
+| **撤回** | `Revoke=3` | `withdraw?instanceCode=` | `workflow:instance:withdraw` | 仅发起人、仅 `Running` → `Terminated` |
 | **加签** | `AddSign=5` | `add-sign` | `workflow:todo:addsign` | `sequential`/`all`/`one`；可选 `returnToSignNode` |
 | **减签** | `ReduceSign=6` | `reduce-sign` | `workflow:todo:reducesign` | 取消加签任务 |
 | **转办** | `Transfer=4` | `transfer` | `workflow:todo:transfer` | 改 `AssigneeUserId`，原办理人 → `OwnerUserId` |
@@ -70,7 +70,7 @@ alwaysApply: true
 
 ❌ **禁止**在种子/按钮增加 `delegate`（委托）、`urge`（催办）、`return`（退回）等权限或 UI，**除非**引擎已实现对应 API（当前未实现，见 §十）。
 
-菜单按钮「撤回」与 API `revoke` 语义一致；新增代码统一用 **revoke**（后端）/ **withdraw**（仅历史菜单键时保留兼容）。
+菜单按钮「撤回」与 API `withdraw` 语义一致；权限后缀 **withdraw**（非 revoke）。**撤销**为 Generic 的 **revoke**，与工作流撤单无关，模块扩展不得重复定义。
 
 ---
 
@@ -113,7 +113,7 @@ alwaysApply: true
 | 转办 | `workflow:todo:transfer` |
 | 加签/减签 | `workflow:todo:addsign` / `workflow:todo:reducesign` |
 | 发起 | `workflow:instance:start` |
-| 撤回 | `workflow:instance:revoke` |
+| 撤回 | `workflow:instance:withdraw` |
 | 方案设计 | `workflow:scheme:design` / `workflow:scheme:publish` |
 
 ⚠️ **已知不一致**（新增勿再复制）：CRUD 控制器部分使用 `workflow:flowscheme:*`、`workflow:flowform:*`，菜单/前端用 `workflow:scheme:*`、`workflow:form:*`。新接口与 `v-permission` **以菜单种子为准**；重构时对齐控制器特性。
@@ -128,10 +128,10 @@ alwaysApply: true
 
 | 层 | 路径 | 职责 |
 |----|------|------|
-| Domain | `Takt.Domain/Entities/Workflow/` | 7 实体：`Scheme`、`Form`、`Instance`、`Task`、`Transition`、`Variable`、`AddSign` |
+| Domain | `Takt.Domain/Entities/Workflow/` | 7 实体：`Scheme`、`Form`、`Instance`、`Task`、`Transition`、`Variable`、`AddSign`；**状态/动作列一律 `int`**（见 `00-project` §1.8.1） |
 | Application | `.../Services/Workflow/` + `FlowEngine/` | CRUD 服务 + **`TaktFlowEngineService`**（唯一运行时编排） |
 | WebApi | `Controllers/Workflow/` | **`TaktFlowEngineController`**（运行时）；其余 `TaktFlow*Controller`（管理 CRUD） |
-| Shared | `TaktFlowEnums.cs` | 状态/动作/会签枚举 |
+| Shared | `TaktFlowEnums.cs` | 引擎/服务层状态/动作/会签枚举；**实体列不引用**，比较后转 `int` 写库 |
 | Seeds | `EntitySeedData/Workflow/`、`I18nSeedData/Workflow/` | 演示流程（如 Leave）、菜单、实体翻译 |
 
 ❌ 控制器内写流程推进逻辑  
@@ -177,10 +177,10 @@ alwaysApply: true
 
 | 规则 | 说明 |
 |------|------|
-| ✅ | 简单审批字段用 `TaktApprovalEntityBase.ApprovalStatus` |
-| ✅ | 多级/会签/条件/加签等 **必须**走 `TaktFlowEngine` |
-| ✅ | 实例完成/驳回/终止后，在**业务服务**中根据 `BusinessType`/`BusinessKey` 回写 |
-| ❌ | 仅在业务表改 `ApprovalStatus` 而不启动流程实例（当方案要求走引擎时） |
+| ✅ | 凡审批 **必须**走 `TaktFlowEngine`（`StartFlowInstanceAsync` + 回写 `FlowInstanceId`） |
+| ✅ | 业务表 `ApprovalStatus` 等字段仅在流程完成/驳回/终止后由**业务服务**回写 |
+| ❌ | 使用 `TaktApprovalRepository.SubmitForApprovalAsync` / `ApproveAsync` 绕过引擎 |
+| ❌ | 仅在业务表改 `ApprovalStatus` 而不启动流程实例 |
 | ❌ | 假设引擎完成时自动回写 ERP/MES（**无内置回调**，须显式实现） |
 
 参照：`TaktLeaveWorkflowSeedData.cs` + 请假业务服务。

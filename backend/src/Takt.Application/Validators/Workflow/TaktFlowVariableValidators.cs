@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Workflow
 // 文件名称：TaktFlowVariableValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowVariable 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktFlowVariable 生成，请按需审阅）
 // 
@@ -32,17 +32,17 @@ public class TaktFlowVariableCreateValidator : AbstractValidator<TaktFlowVariabl
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.InstanceId)
             .GreaterThanOrEqualTo(0).WithMessage("流程实例 ID不能为负数");
         RuleFor(x => x.TaskId)
             .GreaterThanOrEqualTo(0).WithMessage("任务 ID不能为负数");
         RuleFor(x => x.VariableName)
             .NotEmpty().WithMessage("变量名不能为空")
-            .MaximumLength(128).WithMessage("变量名长度不能超过128个字符");
+            .MaximumLength(40).WithMessage("变量名长度不能超过40个字符");
         RuleFor(x => x.VariableType)
             .IsInEnum().WithMessage("变量类型无效");
         RuleFor(x => x.ExtFieldJson)
@@ -86,16 +86,16 @@ public class TaktFlowVariableImportValidator : AbstractValidator<TaktFlowVariabl
     public TaktFlowVariableImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.InstanceId)
             .GreaterThanOrEqualTo(0).WithMessage("流程实例 ID不能为负数");
         RuleFor(x => x.TaskId)
             .GreaterThanOrEqualTo(0).WithMessage("任务 ID不能为负数");
         RuleFor(x => x.VariableName)
             .NotEmpty().WithMessage("变量名不能为空")
-            .MaximumLength(128).WithMessage("变量名长度不能超过128个字符");
+            .MaximumLength(40).WithMessage("变量名长度不能超过40个字符");
         RuleFor(x => x.VariableType)
             .IsInEnum().WithMessage("变量类型无效");
         RuleFor(x => x.ExtFieldJson)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：leave.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -79,7 +79,7 @@ export interface Leave extends ApprovalDtoBase {
   proofAttachmentsJson?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -189,7 +189,7 @@ export interface LeaveQuery extends TaktPagedQuery {
   proofAttachmentsJson?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -348,7 +348,7 @@ export interface LeaveCreate {
   proofAttachmentsJson?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -476,7 +476,7 @@ export interface LeaveTemplate {
   proofAttachmentsJson?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -570,7 +570,7 @@ export interface LeaveImport {
   proofAttachmentsJson?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 
@@ -664,7 +664,7 @@ export interface LeaveExport {
   proofAttachmentsJson?: string;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
    */
   flowInstanceId?: string;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Configurable 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurable 生成，请按需审阅）
 // 
@@ -49,7 +49,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     /// <summary>
     /// 报表业务域（财务/人力/后勤等）
     /// </summary>
-    public TaktConfigurableDomain ReportDomain { get; set; }
+    public int ReportDomain { get; set; }
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -59,7 +59,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public TaktYesNo DistinctRows { get; set; }
+    public int DistinctRows { get; set; }
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -85,7 +85,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否内置（内置报表禁止删除）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -95,7 +95,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public TaktCommonStatus ReportStatus { get; set; }
+    public int ReportStatus { get; set; }
 
     /// <summary>
     /// 报表描述
@@ -173,7 +173,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     /// <summary>
     /// 报表业务域（财务/人力/后勤等）
     /// </summary>
-    public TaktConfigurableDomain? ReportDomain { get; set; }
+    public int? ReportDomain { get; set; }
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -183,7 +183,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public TaktYesNo? DistinctRows { get; set; }
+    public int? DistinctRows { get; set; }
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -204,7 +204,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否内置（内置报表禁止删除）
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -214,7 +214,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public TaktCommonStatus? ReportStatus { get; set; }
+    public int? ReportStatus { get; set; }
 
     /// <summary>
     /// 报表描述
@@ -281,7 +281,7 @@ public class TaktConfigurableCreateDto
     /// <summary>
     /// 报表业务域（财务/人力/后勤等）
     /// </summary>
-    public TaktConfigurableDomain ReportDomain { get; set; }
+    public int ReportDomain { get; set; }
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -291,7 +291,7 @@ public class TaktConfigurableCreateDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public TaktYesNo DistinctRows { get; set; }
+    public int DistinctRows { get; set; }
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -312,7 +312,7 @@ public class TaktConfigurableCreateDto
     /// <summary>
     /// 是否内置（内置报表禁止删除）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -322,7 +322,7 @@ public class TaktConfigurableCreateDto
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public TaktCommonStatus ReportStatus { get; set; }
+    public int ReportStatus { get; set; }
 
     /// <summary>
     /// 报表描述
@@ -412,7 +412,7 @@ public class TaktConfigurableStatusDto
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
     [Required(ErrorMessage = "报表状态（0=禁用 1=启用）不能为空")]
-    public TaktCommonStatus ReportStatus { get; set; }
+    public int ReportStatus { get; set; }
 }
 
 // ========================================
@@ -471,7 +471,7 @@ public class TaktConfigurableTemplateDto
     /// <summary>
     /// 报表业务域（财务/人力/后勤等）
     /// </summary>
-    public TaktConfigurableDomain? ReportDomain { get; set; }
+    public int? ReportDomain { get; set; }
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -481,7 +481,7 @@ public class TaktConfigurableTemplateDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public TaktYesNo? DistinctRows { get; set; }
+    public int? DistinctRows { get; set; }
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -502,7 +502,7 @@ public class TaktConfigurableTemplateDto
     /// <summary>
     /// 是否内置（内置报表禁止删除）
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -512,7 +512,7 @@ public class TaktConfigurableTemplateDto
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public TaktCommonStatus? ReportStatus { get; set; }
+    public int? ReportStatus { get; set; }
 
     /// <summary>
     /// 报表描述
@@ -564,7 +564,7 @@ public class TaktConfigurableImportDto
     /// <summary>
     /// 报表业务域（财务/人力/后勤等）
     /// </summary>
-    public TaktConfigurableDomain? ReportDomain { get; set; }
+    public int? ReportDomain { get; set; }
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -574,7 +574,7 @@ public class TaktConfigurableImportDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public TaktYesNo? DistinctRows { get; set; }
+    public int? DistinctRows { get; set; }
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -595,7 +595,7 @@ public class TaktConfigurableImportDto
     /// <summary>
     /// 是否内置（内置报表禁止删除）
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -605,7 +605,7 @@ public class TaktConfigurableImportDto
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public TaktCommonStatus? ReportStatus { get; set; }
+    public int? ReportStatus { get; set; }
 
     /// <summary>
     /// 报表描述
@@ -658,7 +658,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 报表业务域（财务/人力/后勤等）
     /// </summary>
-    public TaktConfigurableDomain ReportDomain { get; set; }
+    public int ReportDomain { get; set; }
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -668,7 +668,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 是否去重行（SELECT DISTINCT）
     /// </summary>
-    public TaktYesNo DistinctRows { get; set; }
+    public int DistinctRows { get; set; }
 
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
@@ -689,7 +689,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 是否内置（内置报表禁止删除）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -699,7 +699,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 报表状态（0=禁用 1=启用）
     /// </summary>
-    public TaktCommonStatus ReportStatus { get; set; }
+    public int ReportStatus { get; set; }
 
     /// <summary>
     /// 报表描述

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：sales-price.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,7 +69,7 @@ export interface SalesPrice extends CompanyDtoBase {
   items?: SalesPriceItem[];
 
   /**
-   * 销售价格变更记录列表（外键在子表 <see cref="TaktSalesPriceChangeLog.PriceId"/>） （子表：TaktSalesPriceChangeLog）
+   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId） （子表：TaktSalesPriceChangeLog）
    */
   changeLogs?: SalesPriceChangeLog[];
 
@@ -223,7 +223,7 @@ export interface SalesPriceCreate {
   items?: SalesPriceItemCreate[];
 
   /**
-   * 销售价格变更记录列表（外键在子表 <see cref="TaktSalesPriceChangeLog.PriceId"/>）（子表，级联保存）
+   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）（子表，级联保存）
    */
   changeLogs?: SalesPriceChangeLogCreate[];
 

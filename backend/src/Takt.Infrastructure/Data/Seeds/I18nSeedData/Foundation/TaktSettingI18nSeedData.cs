@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktSettingI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSetting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation;
@@ -76,7 +75,7 @@ public class TaktSettingI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktSetting 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.setting._self / entity.setting.{{field}}；ResourceGroup=TaktModule.Foundation；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.setting._self / entity.setting.{{field}}；ResourceGroup=8；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetSettingTranslations()
     {
@@ -146,31 +145,31 @@ public class TaktSettingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.setting.valuetype", "zh-HK", "值类型", "值类型（用于前端渲染不同的输入控件）"),
 
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "en-US", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "en-US", "是否内置", "是否内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "ja-JP", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "ja-JP", "是否内置", "是否内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "zh-CN", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isbuiltin
-            new TranslationSeedItem("entity.setting.isbuiltin", "zh-HK", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.setting.isbuiltin", "zh-HK", "是否内置", "是否内置（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "en-US", "是否只读", "是否只读（0=否，1=是，只读设置不可修改）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "en-US", "是否只读", "是否只读（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "ja-JP", "是否只读", "是否只读（0=否，1=是，只读设置不可修改）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "ja-JP", "是否只读", "是否只读（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "zh-CN", "是否只读", "是否只读（0=否，1=是，只读设置不可修改）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "zh-CN", "是否只读", "是否只读（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isreadonly
-            new TranslationSeedItem("entity.setting.isreadonly", "zh-HK", "是否只读", "是否只读（0=否，1=是，只读设置不可修改）"),
+            new TranslationSeedItem("entity.setting.isreadonly", "zh-HK", "是否只读", "是否只读（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "en-US", "是否加密存储", "是否加密存储（0=否，1=是，如密码、密钥等敏感信息）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "en-US", "是否加密存储", "是否加密存储（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "ja-JP", "是否加密存储", "是否加密存储（0=否，1=是，如密码、密钥等敏感信息）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "ja-JP", "是否加密存储", "是否加密存储（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "zh-CN", "是否加密存储", "是否加密存储（0=否，1=是，如密码、密钥等敏感信息）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "zh-CN", "是否加密存储", "是否加密存储（字典 sys_yes_no；0=否 1=是）"),
             // entity.setting.isencrypted
-            new TranslationSeedItem("entity.setting.isencrypted", "zh-HK", "是否加密存储", "是否加密存储（0=否，1=是，如密码、密钥等敏感信息）"),
+            new TranslationSeedItem("entity.setting.isencrypted", "zh-HK", "是否加密存储", "是否加密存储（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.setting.sortorder
             new TranslationSeedItem("entity.setting.sortorder", "en-US", "排序号", "排序号"),
@@ -197,8 +196,8 @@ public class TaktSettingI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktTranslationDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
-// 功能描述：Translation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTranslation 生成，请按需审阅）
+// 功能描述：Translation 模块 DTO（实体 CRUD + 转置 + 前端扁平消息）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -65,12 +65,12 @@ public class TaktTranslationDto : TaktTenantDtoBase
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public TaktModule ResourceGroup { get; set; }
+    public int ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide ResourceType { get; set; }
+    public int ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -124,12 +124,12 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public TaktModule? ResourceGroup { get; set; }
+    public int? ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide? ResourceType { get; set; }
+    public int? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -198,12 +198,12 @@ public class TaktTranslationCreateDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public TaktModule ResourceGroup { get; set; }
+    public int ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide ResourceType { get; set; }
+    public int ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -280,12 +280,12 @@ public class TaktTranslationTemplateDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public TaktModule? ResourceGroup { get; set; }
+    public int? ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide? ResourceType { get; set; }
+    public int? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -338,12 +338,12 @@ public class TaktTranslationImportDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public TaktModule? ResourceGroup { get; set; }
+    public int? ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide? ResourceType { get; set; }
+    public int? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -402,12 +402,12 @@ public class TaktTranslationExportDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public TaktModule ResourceGroup { get; set; }
+    public int ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide ResourceType { get; set; }
+    public int ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -454,12 +454,12 @@ public class TaktTranslationTransposedDto
     /// <summary>
     /// 资源分组
     /// </summary>
-    public TaktModule ResourceGroup { get; set; }
+    public int ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别
     /// </summary>
-    public TaktAppSide ResourceType { get; set; }
+    public int ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释
@@ -505,12 +505,12 @@ public class TaktTranslationTransposedQueryDto : TaktPagedQuery
     /// <summary>
     /// 资源分组
     /// </summary>
-    public TaktModule? ResourceGroup { get; set; }
+    public int? ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别
     /// </summary>
-    public TaktAppSide? ResourceType { get; set; }
+    public int? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释
@@ -544,4 +544,25 @@ public class TaktTranslationTransposedBatchDto
     /// 转置行数据
     /// </summary>
     public List<TaktTranslationTransposedDto> Rows { get; set; } = new();
+}
+
+// ========================================
+// Translation 前端扁平消息 DTO
+// ========================================
+
+/// <summary>
+/// 指定区域文化下的前端扁平翻译键值（供 vue-i18n mergeLocaleMessage）
+/// 对应前端 TaktTranslationMessagesDto
+/// </summary>
+public class TaktTranslationMessagesDto
+{
+    /// <summary>
+    /// 区域文化编码（BCP47，如 zh-CN）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扁平 i18n 键值（键为 I18nKey，值为 TranslationText）
+    /// </summary>
+    public Dictionary<string, string> Messages { get; set; } = new();
 }

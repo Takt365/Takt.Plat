@@ -10,8 +10,8 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import { message } from 'ant-design-vue';
-import router from '@/router';
+import { message, Modal } from 'ant-design-vue';
+import router, { resetRouterDynamicRoutes } from '@/router';
 import { useUserStore } from '@/stores/identity/user';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { useLocaleStore } from '@/stores/foundation/locale';
@@ -21,6 +21,8 @@ import { useThemeStore } from '@/stores/common/theme';
 import { useMenuStore } from '@/stores/identity/menu';
 import { usePermissionStore } from '@/stores/identity/permission';
 import { useSignalRStore } from '@/stores/foundation/signalr';
+import { useWorkflowTodoCountStore } from '@/stores/workflow/todo-count';
+import { useHeaderNotificationStore } from '@/stores/navigation/header-notification';
 import { EventBus, type NotificationType } from '@/utils/event-bus';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 import {
@@ -33,18 +35,58 @@ import {
   STORE_I18N_TIP_SESSION_IDLE_LOGOUT,
 } from '@/utils/takt-store-i18n';
 
+/** 登出后硬跳转登录页时，在登录页展示一次性提示（sessionStorage） */
+export const TAKT_LOGOUT_FLASH_STORAGE_KEY = 'takt.logout.flash';
+
+/** 登出跳转选项 */
+interface PerformLogoutOptions {
+  /** 为 true 时使用 location.replace 整页跳转（空闲/过期场景，避免后台标签页 UI 不刷新） */
+  hardRedirect?: boolean;
+}
+
+/**
+ * 跳转登录页；硬跳转用于空闲/会话过期，避免后台标签页仅 router 切换但界面不绘制
+ * @param hard 是否整页刷新
+ */
+function redirectToLoginPage(hard: boolean): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  if (router.currentRoute.value.path === '/login' && !hard) {
+    return;
+  }
+
+  if (hard || document.hidden) {
+    const loginHref = router.resolve({ name: 'Login' }).href;
+    window.location.replace(loginHref);
+    return;
+  }
+
+  void router.replace({ name: 'Login' }).catch(() => {
+    window.location.replace('/login');
+  });
+}
+
 /**
  * 执行登出清理并跳转登录页
  * @description 重置用户/租户/字典/翻译/菜单/权限/SignalR 状态；已在 /login 时不重复 push
- * @param {string} [toastMessage] 可选提示（Ant Design Message）
+ * @param {string} [toastMessage] 可选提示（Ant Design Message）；hardRedirect 时写入 sessionStorage 供登录页展示
  * @param {NotificationType} [toastType='error'] 提示类型；空闲登出用 warning
+ * @param {PerformLogoutOptions} [options] 跳转选项
  * @returns {void}
  */
-function performLogout(toastMessage?: string, toastType: NotificationType = 'error'): void {
+function performLogout(
+  toastMessage?: string,
+  toastType: NotificationType = 'error',
+  options?: PerformLogoutOptions,
+): void {
   /** 用户身份与令牌 Store */
   const userStore = useUserStore();
   /** 当前租户/公司上下文 Store */
   const tenantStore = useTenantStore();
+
+  Modal.destroyAll();
 
   // 清除本地 token 与用户资料
   userStore.logout();
@@ -66,17 +108,23 @@ function performLogout(toastMessage?: string, toastType: NotificationType = 'err
   void useSignalRStore().disconnectSignalRAsync().catch(() => undefined);
   // 重置 Hub 连接状态与订阅
   useSignalRStore().resetSignalRState();
+  // 清空顶栏通知中心
+  useHeaderNotificationStore().resetHeaderNotifications();
 
-  /** 当前路由完整路径（含 query/hash） */
-  const currentPath = router.currentRoute.value.fullPath;
-  // 已在登录页时不重复 push，避免路由循环
-  if (currentPath !== '/login') {
-    // 跳转登录页
-    router.push('/login');
+  resetRouterDynamicRoutes();
+
+  const hardRedirect = options?.hardRedirect === true;
+
+  if (toastMessage && hardRedirect && typeof sessionStorage !== 'undefined') {
+    sessionStorage.setItem(
+      TAKT_LOGOUT_FLASH_STORAGE_KEY,
+      JSON.stringify({ type: toastType, message: toastMessage }),
+    );
   }
 
-  // 调用方传入提示文案时展示错误 Message
-  if (toastMessage) {
+  redirectToLoginPage(hardRedirect);
+
+  if (toastMessage && !hardRedirect) {
     showAntdMessage(toastType, toastMessage);
   }
 }
@@ -121,7 +169,7 @@ export async function executeIdleLogoutAsync(message?: string): Promise<void> {
   await withLogoutInProgress(async () => {
     const logoutMessage = message ?? translateLocaleMessage(STORE_I18N_TIP_SESSION_IDLE_LOGOUT);
     await runServerSignOutIfLoggedInAsync();
-    performLogout(logoutMessage, 'warning');
+    performLogout(logoutMessage, 'warning', { hardRedirect: true });
   });
 }
 
@@ -148,7 +196,7 @@ export function registerTaktEventHandlers(): void {
     }
 
     void withLogoutInProgress(async () => {
-      performLogout(logoutMessage);
+      performLogout(logoutMessage, 'error', { hardRedirect: true });
     });
   });
 
@@ -164,9 +212,10 @@ export function registerTaktEventHandlers(): void {
   });
 
   // 全局 Toast：request / Store 等非 UI 层通过 EventBus 触发
-  EventBus.on('notification:show', ({ type, message: content, description }) => {
-    // 映射为 Ant Design Message
-    showAntdMessage(type, content, description);
+  EventBus.on('notification:show', ({ type, message: content, description, silent }) => {
+    if (!silent) {
+      showAntdMessage(type, content, description);
+    }
   });
 
   // 登录成功：预热菜单、语言选项、字典、翻译与 SignalR
@@ -179,8 +228,12 @@ export function registerTaktEventHandlers(): void {
     void useDictDataStore().loadAllDictDataAsync();
     // 加载动态翻译
     void useTranslationStore().loadTranslationMessagesAsync();
-    // 建立 SignalR 连接
+    // 从落库拉取未读至通知中心（不依赖 SignalR）
+    void useHeaderNotificationStore().hydratePersistedUnreadAsync().catch(() => undefined);
+    // 建立 SignalR 连接（连接成功后 signalr store 会 HTTP 补拉待办数量）
     void useSignalRStore().connectSignalRAsync().catch(() => undefined);
+    // 首屏 HTTP 拉取待办数量（不依赖 SignalR 是否已连上）
+    void useWorkflowTodoCountStore().refreshTodoCountAsync().catch(() => undefined);
   });
 
   // 菜单刷新：force=false 保留折叠态等 UI 状态
@@ -241,4 +294,21 @@ export function registerTaktEventHandlers(): void {
     // 切换 vue-i18n locale 并持久化
     localeStore.setLocale(locale);
   });
+
+  // 页签重新可见时校验 SignalR（后端重启后 WebSocket 常已断开但 Store 仍显示已连接）
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') {
+        return;
+      }
+      const userStore = useUserStore();
+      if (!userStore.isLoggedIn) {
+        if (router.currentRoute.value.path !== '/login') {
+          window.location.replace(router.resolve({ name: 'Login' }).href);
+        }
+        return;
+      }
+      void useSignalRStore().connectSignalRAsync().catch(() => undefined);
+    });
+  }
 }

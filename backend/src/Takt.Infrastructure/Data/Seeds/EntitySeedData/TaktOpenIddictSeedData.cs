@@ -21,8 +21,8 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// <summary>
 /// OpenIddict 种子数据初始化
 /// 幂等性操作：范围不存在则创建；SPA 客户端存在则更新、不存在则创建；API 机密客户端不存在则创建
-/// 由 <see cref="Takt.Infrastructure.Data.Context.TaktOpenIddictContext.InitializeAsync"/> 在认证库建表后调用
-/// 配置来源：<see cref="TaktOpenIddictOptions"/>（appsettings OpenIddict 节）
+/// 由 TaktOpenIddictContext.InitializeAsync 在认证库建表后调用
+/// 配置来源：TaktOpenIddictOptions（appsettings OpenIddict 节）
 /// </summary>
 public class TaktOpenIddictSeedData
 {

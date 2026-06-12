@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Identity
 // 文件名称：TaktTenantDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Tenant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTenant 生成，请按需审阅）
 // 
@@ -69,12 +69,12 @@ public class TaktTenantDto : TaktTenantDtoBase
     /// <summary>
     /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus TenantStatus { get; set; }
+    public int TenantStatus { get; set; }
 
     /// <summary>
     /// 可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）
@@ -142,12 +142,12 @@ public class TaktTenantQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? TenantStatus { get; set; }
+    public int? TenantStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -219,12 +219,12 @@ public class TaktTenantCreateDto
     /// <summary>
     /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus TenantStatus { get; set; }
+    public int TenantStatus { get; set; }
 
     /// <summary>
     /// 可访问该租户的用户 ID 列表（RBAC 反向合并，分配走 ITaktRbacService）
@@ -284,7 +284,7 @@ public class TaktTenantStatusDto
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus TenantStatus { get; set; }
+    public int TenantStatus { get; set; }
 }
 
 // ========================================
@@ -324,12 +324,12 @@ public class TaktTenantTemplateDto
     /// <summary>
     /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? TenantStatus { get; set; }
+    public int? TenantStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -376,12 +376,12 @@ public class TaktTenantImportDto
     /// <summary>
     /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? TenantStatus { get; set; }
+    public int? TenantStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -444,12 +444,12 @@ public class TaktTenantExportDto
     /// <summary>
     /// 是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus TenantStatus { get; set; }
+    public int TenantStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

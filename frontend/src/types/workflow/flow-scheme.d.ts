@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/workflow
 // 文件名称：flow-scheme.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：workflow 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -89,9 +89,9 @@ export interface FlowScheme extends CompanyDtoBase {
   deploymentName?: string;
 
   /**
-   * 关联表单 ID
+   * 关联表单 ID（审批流程必填）
    */
-  formId?: string;
+  formId: string;
 
   /**
    * 关联表单 名称（填充字段）
@@ -99,9 +99,9 @@ export interface FlowScheme extends CompanyDtoBase {
   formName?: string;
 
   /**
-   * 关联表单编码
+   * 关联表单编码（审批流程必填）
    */
-  formCode?: string;
+  formCode: string;
 
   /**
    * 排序号
@@ -303,14 +303,14 @@ export interface FlowSchemeCreate {
   deploymentId?: string;
 
   /**
-   * 关联表单 ID
+   * 关联表单 ID（审批流程必填）
    */
-  formId?: string;
+  formId: string;
 
   /**
-   * 关联表单编码
+   * 关联表单编码（审批流程必填）
    */
-  formCode?: string;
+  formCode: string;
 
   /**
    * 排序号
@@ -667,5 +667,13 @@ export interface FlowSchemeExport {
    */
   createdAt: string;
 
+}
+
+/**
+ * 方案编辑弹窗表单模型（FlowSchemeCreate 字段 + 可选 flowSchemeId / processContent）
+ */
+export type FlowSchemeFormModel = Partial<FlowSchemeCreate> & {
+  flowSchemeId?: string
+  processContent?: string
 }
 

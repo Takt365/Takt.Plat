@@ -25,6 +25,7 @@
       delete-permission="routine:helpdesk:ticket:delete"
       import-permission="routine:helpdesk:ticket:import"
       export-permission="routine:helpdesk:ticket:export"
+      :left-actions="toolbarLeftActions"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -71,6 +72,26 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'ticketStatus'">
+          <TaktDictTag
+            :value="getTicketField(record, 'ticketStatus')"
+            dict-type="helpdesk_ticket_status"
+          />
+        </template>
+        <template v-else-if="column.key === 'priority'">
+          <TaktDictTag
+            :value="getTicketField(record, 'priority')"
+            dict-type="sys_priority"
+          />
+        </template>
+        <template v-else-if="column.key === 'ticketSource'">
+          <TaktDictTag
+            :value="getTicketField(record, 'ticketSource')"
+            dict-type="helpdesk_ticket_source"
+          />
+        </template>
+      </template>
       <!-- 展开行渲染 -->
       <template #expandedRowRender="{ record }">
         <div class="p-4">
@@ -165,19 +186,21 @@
       </div>
       <div v-show="isFieldVisible('ticketStatus')">
       <a-form-item :label="t('entity.ticket.status')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.ticketStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.status') })"
-          style="width: 100%"
+          dict-type="helpdesk_ticket_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.status') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priority')">
       <a-form-item :label="t('entity.ticket.priority')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.priority"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.priority') })"
-          style="width: 100%"
+          dict-type="sys_priority"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.priority') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -192,10 +215,11 @@
       </div>
       <div v-show="isFieldVisible('ticketSource')">
       <a-form-item :label="t('entity.ticket.source')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.ticketSource"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.source') })"
-          style="width: 100%"
+          dict-type="helpdesk_ticket_source"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.source') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -446,6 +470,12 @@
         @success="handleImportSuccess"
       />
     </TaktModal>
+    <!-- 工单 ITSM 工作流抽屉 -->
+    <TicketWorkflowDrawer
+      v-model:open="workflowVisible"
+      :ticket-id="workflowTicketId"
+      @changed="loadData"
+    />
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
@@ -472,18 +502,21 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import TicketForm from './components/ticket-form.vue'
-import { getTicketList, getTicketById, createTicket, updateTicket, deleteTicketById, deleteTicketBatch, getTicketTemplate, importTicket, exportTicket } from '@/api/routine/help-desk/ticket'
+import TicketWorkflowDrawer from './components/ticket-workflow-drawer.vue'
+import { getTicketList, getTicketById, submitTicket, updateTicket, deleteTicketById, deleteTicketBatch, getTicketTemplate, importTicket, exportTicket } from '@/api/routine/help-desk/ticket'
+import type { ToolBarAction } from '@/components/business/takt-tools-bar/index'
 import * as ticketChangeLogApi from '@/api/routine/help-desk/ticket-change-log'
 import type { TicketChangeLog, TicketChangeLogQuery } from '@/types/routine/help-desk/ticket-change-log'
-import type { Ticket, TicketQuery, TicketCreate, TicketUpdate } from '@/types/routine/help-desk/ticket'
+import type { Ticket, TicketQuery, TicketSubmit, TicketUpdate } from '@/types/routine/help-desk/ticket'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiCustomerService2Line } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktTicket')
+
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
   () => t('common.page.form.placeholder.search', { keyword: t('entity.ticket._self') })
@@ -517,7 +550,12 @@ const formData = ref<Partial<Ticket>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 工作流抽屉 */
+const workflowVisible = ref(false)
+/** 工作流当前工单 ID */
+const workflowTicketId = ref<string | null>(null)
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -789,7 +827,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'ticketStatus') ?? ''
   },
   {
     title: t('entity.ticket.priority'),
@@ -798,7 +835,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'priority') ?? ''
   },
   {
     title: t('entity.ticket.categorycode'),
@@ -816,7 +852,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'ticketSource') ?? ''
   },
   {
     title: t('entity.ticket.submitterid'),
@@ -992,6 +1027,14 @@ const columns = computed<TableColumnsType>(() => [
   CreateActionColumn({
     actions: [
       {
+        key: 'workflow',
+        label: t('routine.help-desk.ticket.page.workflowTitle'),
+        shape: 'plain',
+        icon: RiCustomerService2Line,
+        permission: 'routine:helpdesk:ticket:query',
+        onClick: (record: Ticket) => handleOpenWorkflow(record)
+      },
+      {
         key: 'update',
         label: t('common.page.button.edit'),
         shape: 'plain',
@@ -1084,6 +1127,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -1137,6 +1183,29 @@ function handleCreate() {
   formData.value = {}
   formVisible.value = true
 }
+/** 打开工单工作流抽屉 */
+function handleOpenWorkflow(record: Ticket): void {
+  workflowTicketId.value = getTicketId(record)
+  workflowVisible.value = true
+}
+
+/** 工具栏扩展：工单处理（选中单行） */
+const toolbarLeftActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'workflow',
+    label: t('routine.help-desk.ticket.page.workflowTitle'),
+    shape: 'plain',
+    icon: RiCustomerService2Line,
+    permission: 'routine:helpdesk:ticket:query',
+    disabled: !selectedRow.value,
+    onClick: () => {
+      if (selectedRow.value) {
+        handleOpenWorkflow(selectedRow.value)
+      }
+    },
+  },
+])
+
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: Ticket) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ticket._self') })
@@ -1172,10 +1241,18 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateTicket(id, payload as any)
+      await updateTicket(id, payload as TicketUpdate)
       message.success(t('common.feedback.updated', { target: t('entity.ticket._self') }))
     } else {
-      await createTicket(payload as any)
+      const submitDto: TicketSubmit = {
+        title: payload.title,
+        content: payload.content,
+        attachmentsJson: payload.attachmentsJson,
+        priority: payload.priority,
+        categoryCode: payload.categoryCode,
+        remark: payload.remark,
+      }
+      await submitTicket(submitDto)
       message.success(t('common.feedback.created', { target: t('entity.ticket._self') }))
     }
     formVisible.value = false

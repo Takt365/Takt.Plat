@@ -101,7 +101,7 @@ public class TaktEc : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; } = 0;
+    public long FlowInstanceId { get; set; }
 
     /// <summary>
     /// 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）

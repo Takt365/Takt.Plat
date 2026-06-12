@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Logistics.Materials;
 
@@ -62,7 +61,7 @@ public class TaktPlant : TaktTenantEntityBase
     /// 工厂类型
     /// </summary>
     [SugarColumn(ColumnName = "plant_type", ColumnDescription = "工厂类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCompanyType PlantType { get; set; } = TaktCompanyType.Manufacturing;
+    public int PlantType { get; set; } = 1;
 
     /// <summary>
     /// 关联公司代码（如 2300、2400；与公司 RelatedPlant 对称）
@@ -74,19 +73,19 @@ public class TaktPlant : TaktTenantEntityBase
     /// 企业性质（统计用登记注册类型代码，国统字〔1998〕200号）
     /// </summary>
     [SugarColumn(ColumnName = "enterprise_nature", ColumnDescription = "企业性质（登记注册类型代码）", ColumnDataType = "int", IsNullable = false, DefaultValue = "150")]
-    public TaktEnterpriseNature EnterpriseNature { get; set; } = TaktEnterpriseNature.DomesticLimitedLiability;
+    public int EnterpriseNature { get; set; } = 150;
 
     /// <summary>
     /// 行业属性（GB/T 4754-2017 国民经济行业分类门类）
     /// </summary>
     [SugarColumn(ColumnName = "industry_attribute", ColumnDescription = "行业属性（国民经济行业门类）", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
-    public TaktIndustryAttribute IndustryAttribute { get; set; } = TaktIndustryAttribute.C;
+    public int IndustryAttribute { get; set; } = 3;
 
     /// <summary>
     /// 企业规模（统计上大中小微型划分代码 1–4）
     /// </summary>
     [SugarColumn(ColumnName = "enterprise_scale", ColumnDescription = "企业规模（大中小微型代码）", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
-    public TaktEnterpriseScale EnterpriseScale { get; set; } = TaktEnterpriseScale.Medium;
+    public int EnterpriseScale { get; set; } = 2;
 
     /// <summary>
     /// 经营范围
@@ -254,13 +253,13 @@ public class TaktPlant : TaktTenantEntityBase
     /// 存续状态（市场主体登记状态）
     /// </summary>
     [SugarColumn(ColumnName = "plant_existence", ColumnDescription = "存续状态（登记状态代码）", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCompanyExistenceStatus PlantExistence { get; set; } = TaktCompanyExistenceStatus.Subsisting;
+    public int PlantExistence { get; set; } = 1;
 
     /// <summary>
     /// 工厂状态
     /// </summary>
     [SugarColumn(ColumnName = "plant_status", ColumnDescription = "工厂状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus PlantStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int PlantStatus { get; set; } = 1;
 
     /// <summary>
     /// 排序号（越小越靠前）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：purchase-order.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -139,7 +139,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   items?: PurchaseOrderItem[];
 
   /**
-   * 采购订单变更记录列表（外键在子表 <see cref="TaktPurchaseOrderChangeLog.OrderId"/>） （子表：TaktPurchaseOrderChangeLog）
+   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId） （子表：TaktPurchaseOrderChangeLog）
    */
   changeLogs?: PurchaseOrderChangeLog[];
 
@@ -438,7 +438,7 @@ export interface PurchaseOrderCreate {
   items?: PurchaseOrderItemCreate[];
 
   /**
-   * 采购订单变更记录列表（外键在子表 <see cref="TaktPurchaseOrderChangeLog.OrderId"/>）（子表，级联保存）
+   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
    */
   changeLogs?: PurchaseOrderChangeLogCreate[];
 

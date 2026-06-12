@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IpqcOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktIpqcOrder 生成，请按需审阅）
 // 
@@ -31,25 +31,25 @@ public class TaktIpqcOrderCreateValidator : AbstractValidator<TaktIpqcOrderCreat
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.SourceCode)
             .NotEmpty().WithMessage("来源单号不能为空")
-            .MaximumLength(50).WithMessage("来源单号长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("来源单号长度不能超过40个字符");
         RuleFor(x => x.IpqcOrderCode)
             .NotEmpty().WithMessage("IPQC检验单编码不能为空")
-            .MaximumLength(50).WithMessage("IPQC检验单编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("IPQC检验单编码长度不能超过40个字符");
         RuleFor(x => x.ProcessCode)
             .NotEmpty().WithMessage("工序编码不能为空")
-            .MaximumLength(50).WithMessage("工序编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("工序编码长度不能超过40个字符");
         RuleFor(x => x.ProcessName)
             .NotEmpty().WithMessage("工序名称不能为空")
-            .MaximumLength(200).WithMessage("工序名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("工序名称长度不能超过40个字符");
         RuleFor(x => x.JudgeBy)
             .MaximumLength(50).WithMessage("判定人长度不能超过50个字符");
         RuleFor(x => x.JudgeDescription)
@@ -95,24 +95,24 @@ public class TaktIpqcOrderImportValidator : AbstractValidator<TaktIpqcOrderImpor
     public TaktIpqcOrderImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.SourceCode)
             .NotEmpty().WithMessage("来源单号不能为空")
-            .MaximumLength(50).WithMessage("来源单号长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("来源单号长度不能超过40个字符");
         RuleFor(x => x.IpqcOrderCode)
             .NotEmpty().WithMessage("IPQC检验单编码不能为空")
-            .MaximumLength(50).WithMessage("IPQC检验单编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("IPQC检验单编码长度不能超过40个字符");
         RuleFor(x => x.ProcessCode)
             .NotEmpty().WithMessage("工序编码不能为空")
-            .MaximumLength(50).WithMessage("工序编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("工序编码长度不能超过40个字符");
         RuleFor(x => x.ProcessName)
             .NotEmpty().WithMessage("工序名称不能为空")
-            .MaximumLength(200).WithMessage("工序名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("工序名称长度不能超过40个字符");
         RuleFor(x => x.JudgeBy)
             .MaximumLength(50).WithMessage("判定人长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.JudgeBy));
         RuleFor(x => x.JudgeDescription)

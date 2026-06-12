@@ -21,7 +21,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt FTP帮助类
 /// </summary>
-/// <remarks>网络/文件 I/O 网关；连接配置由调用方通过 <see cref="TaktFtpOptions"/> 或 <see cref="IConfiguration"/> 显式传入。</remarks>
+/// <remarks>网络/文件 I/O 网关；连接配置由调用方通过 TaktFtpOptions 或 IConfiguration 显式传入。</remarks>
 public static class TaktFtpHelper
 {
     /// <summary>

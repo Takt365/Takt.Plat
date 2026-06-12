@@ -16,7 +16,7 @@ using SqlSugar;
 namespace Takt.Infrastructure.Repositories;
 
 /// <summary>
-/// 只读 SQL 查询内部实现（与 <see cref="TaktTenantRepository{TEntity}"/> 等共用 Ado）
+/// 只读 SQL 查询内部实现（与 TaktTenantRepository{TEntity} 等共用 Ado）
 /// </summary>
 internal static class TaktRepositoryReadOnlySql
 {

@@ -190,7 +190,7 @@ public class TaktFlowInstanceOperateDto
 }
 
 /// <summary>
-/// 待办/已办查询（分页与关键词见 <see cref="TaktPagedQuery"/>）
+/// 待办/已办查询（分页与关键词见 TaktPagedQuery）
 /// </summary>
 public class TaktFlowTodoQueryDto : TaktPagedQuery
 {
@@ -239,7 +239,7 @@ public class TaktFlowTodoQueryDto : TaktPagedQuery
 public class TaktFlowTodoItemDto
 {
     /// <summary>
-    /// 流程实例 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowInstance"/> Id）
+    /// 流程实例 ID（对应 takt_workflow_instance 主键 Id）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -267,9 +267,9 @@ public class TaktFlowTodoItemDto
     /// <summary>
     /// 发起时间
     /// </summary>
-    public DateTime? StartTime { get; set; }
+    public DateTime StartTime { get; set; }
     /// <summary>
-    /// 任务 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowTask"/> Id）
+    /// 任务 ID（适配 TaktFlowTask Id）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -309,7 +309,7 @@ public class TaktFlowHistoryItemDto
 public class TaktFlowPendingAddApproverDto
 {
     /// <summary>
-    /// 加签记录 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowAddSign"/> Id）
+    /// 加签记录 ID（适配 TaktFlowAddSign Id）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -326,7 +326,7 @@ public class TaktFlowPendingAddApproverDto
 public class TaktFlowInstanceDetailDto
 {
     /// <summary>
-    /// 流程实例 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowInstance"/> Id）
+    /// 流程实例 ID（对应 takt_workflow_instance 主键 Id）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -376,7 +376,7 @@ public class TaktFlowInstanceDetailDto
     /// <summary>
     /// 开始时间
     /// </summary>
-    public DateTime? StartTime { get; set; }
+    public DateTime StartTime { get; set; }
     /// <summary>
     /// 结束时间
     /// </summary>
@@ -405,7 +405,7 @@ public class TaktFlowInstanceDetailDto
 public class TaktFlowInstanceListItemDto
 {
     /// <summary>
-    /// 流程实例 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowInstance"/> Id）
+    /// 流程实例 ID（对应 takt_workflow_instance 主键 Id）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -442,7 +442,7 @@ public class TaktFlowInstanceListItemDto
     /// <summary>
     /// 发起时间
     /// </summary>
-    public DateTime? StartTime { get; set; }
+    public DateTime StartTime { get; set; }
     /// <summary>
     /// 表单 JSON
     /// </summary>
@@ -458,4 +458,75 @@ public class TaktFlowMyInstanceQueryDto : TaktFlowInstanceQueryDto
     /// 仅我发起
     /// </summary>
     public bool MyStartedOnly { get; set; }
+}
+
+/// <summary>
+/// 按业务表提交审批请求（配置驱动，无需业务模块专用 C# 方法）
+/// </summary>
+public class TaktFlowSubmitByTableDto
+{
+    /// <summary>
+    /// 表单 RelatedTableName（审批实体物理表名）
+    /// </summary>
+    [Required]
+    public string RelatedTableName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 业务主键
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EntityId { get; set; }
+
+    /// <summary>
+    /// 可选流程键；未传时取绑定表单且已发布的方案
+    /// </summary>
+    public string? ProcessKey { get; set; }
+}
+
+/// <summary>
+/// 可发起流程方案摘要（我的申请 / 发起弹窗）
+/// </summary>
+public class TaktFlowStartableSchemeDto
+{
+    /// <summary>
+    /// 流程键
+    /// </summary>
+    public string ProcessKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 流程名称
+    /// </summary>
+    public string ProcessName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联表单 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long FormId { get; set; }
+
+    /// <summary>
+    /// 关联表单编码
+    /// </summary>
+    public string FormCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否绑定数据源
+    /// </summary>
+    public int IsDatasource { get; set; }
+
+    /// <summary>
+    /// 关联物理表名（IsDatasource=1 时有值）
+    /// </summary>
+    public string? RelatedTableName { get; set; }
+}
+
+/// <summary>
+/// 当前用户待办数量
+/// </summary>
+public class TaktFlowTodoCountDto
+{
+    /// <summary>
+    /// 待办数量
+    /// </summary>
+    public int TodoCount { get; set; }
 }

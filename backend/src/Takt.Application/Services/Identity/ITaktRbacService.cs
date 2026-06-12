@@ -30,6 +30,13 @@ public interface ITaktRbacService
     Task<List<TaktUserRoleDto>> GetUserRoleIdsAsync(long userId);
 
     /// <summary>
+    /// 批量获取用户角色名称（导出用；UserId → 逗号分隔角色名）
+    /// </summary>
+    /// <param name="userIds">用户 ID 集合</param>
+    /// <returns>用户 ID 到角色名称的映射</returns>
+    Task<IReadOnlyDictionary<long, string>> GetUserRoleNamesMapAsync(IEnumerable<long> userIds);
+
+    /// <summary>
     /// 分配用户角色（全量覆盖）
     /// </summary>
     /// <param name="userId">用户ID</param>

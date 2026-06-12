@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktCultureI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCulture 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation;
@@ -76,7 +75,7 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCulture 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.culture._self / entity.culture.{{field}}；ResourceGroup=TaktModule.Foundation；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.culture._self / entity.culture.{{field}}；ResourceGroup=8；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetCultureTranslations()
     {
@@ -146,13 +145,13 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "是否默认语言", "是否默认语言（1=是，0=否）"),
 
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "en-US", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "en-US", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "ja-JP", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "ja-JP", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "zh-HK", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
 
             // entity.culture.translationlist
             new TranslationSeedItem("entity.culture.translationlist", "en-US", "翻译列表", "翻译列表（一对多关联）"),
@@ -179,8 +178,8 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

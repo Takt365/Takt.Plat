@@ -244,6 +244,11 @@ public static class TaktSequenceGenerator
     /// <summary>
     /// 批量生成序列
     /// </summary>
+    /// <param name="count">生成数量</param>
+    /// <param name="startFrom">起始基准值</param>
+    /// <param name="defaultStart">首条默认值</param>
+    /// <param name="step">步长</param>
+    /// <returns>序列迭代器</returns>
     private static IEnumerable<int> ComputeSequence(int count, int startFrom, int defaultStart, int step)
     {
         var current = startFrom;
@@ -254,6 +259,11 @@ public static class TaktSequenceGenerator
         }
     }
 
+    /// <summary>
+    /// 校验业务编码非空
+    /// </summary>
+    /// <param name="businessCode">业务编码</param>
+    /// <exception cref="ArgumentException"><paramref name="businessCode"/> 为空</exception>
     private static void EnsureBusinessCode(string businessCode)
     {
         if (string.IsNullOrWhiteSpace(businessCode))
@@ -262,6 +272,11 @@ public static class TaktSequenceGenerator
         }
     }
 
+    /// <summary>
+    /// 校验分组代码非空
+    /// </summary>
+    /// <param name="groupCode">分组代码</param>
+    /// <exception cref="ArgumentException"><paramref name="groupCode"/> 为空</exception>
     private static void EnsureGroupCode(string groupCode)
     {
         if (string.IsNullOrWhiteSpace(groupCode))
@@ -270,6 +285,12 @@ public static class TaktSequenceGenerator
         }
     }
 
+    /// <summary>
+    /// 校验 Id 为正数
+    /// </summary>
+    /// <param name="id">待校验 Id</param>
+    /// <param name="paramName">参数名（用于异常消息）</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="id"/> 不大于 0</exception>
     private static void EnsurePositiveId(long id, string paramName)
     {
         if (id <= 0)
@@ -278,6 +299,11 @@ public static class TaktSequenceGenerator
         }
     }
 
+    /// <summary>
+    /// 校验生成数量为正数
+    /// </summary>
+    /// <param name="count">生成数量</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> 不大于 0</exception>
     private static void EnsurePositiveCount(int count)
     {
         if (count <= 0)

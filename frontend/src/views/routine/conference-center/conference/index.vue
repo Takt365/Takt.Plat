@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/conference-center/conference -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：会议实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -30,7 +30,6 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -55,7 +54,7 @@
     <!-- 表格 -->
     <TaktSingleTable
       :columns="columns"
-      entity-scope="company"
+      entity-scope="approval"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'conferenceId'"
       table-mode="single"
@@ -80,6 +79,18 @@
             :columns="conferenceParticipantExpandColumns"
             :data-source="getConferenceParticipantRows(record)"
             :row-key="(row: ConferenceParticipant, index?: number) => row?.conferenceParticipantId || String(index ?? 0)"
+            :pagination="false"
+            size="small"
+            bordered
+            class="mb-4"
+          />
+          <a-empty v-else class="mb-4" />
+          <div class="mb-2 text-sm font-medium">{{ t('entity.conferenceAgenda._self') }}</div>
+          <a-table
+            v-if="hasConferenceAgendaRows(record)"
+            :columns="conferenceAgendaExpandColumns"
+            :data-source="getConferenceAgendaRows(record)"
+            :row-key="(row: ConferenceAgenda, index?: number) => row?.conferenceAgendaId || String(index ?? 0)"
             :pagination="false"
             size="small"
             bordered
@@ -206,6 +217,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('conferenceRoomId')">
+      <a-form-item :label="t('entity.conference.roomid')">
+        <a-input
+          v-model:value="advancedQueryForm.conferenceRoomId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomid') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('conferenceRoomName')">
+      <a-form-item :label="t('entity.conference.roomname')">
+        <a-input
+          v-model:value="advancedQueryForm.conferenceRoomName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomname') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('location')">
       <a-form-item :label="t('entity.conference.location')">
         <a-input
@@ -220,34 +249,6 @@
         <a-input
           v-model:value="advancedQueryForm.meetingLink"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.meetinglink') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('agenda')">
-      <a-form-item :label="t('entity.conference.agenda')">
-        <a-input
-          v-model:value="advancedQueryForm.agenda"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.agenda') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('content')">
-      <a-form-item :label="t('entity.conference.content')">
-        <a-textarea
-          v-model:value="advancedQueryForm.content"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.conference.content') })"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('summary')">
-      <a-form-item :label="t('entity.conference.summary')">
-        <a-input
-          v-model:value="advancedQueryForm.summary"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.summary') })"
           allow-clear
         />
       </a-form-item>
@@ -324,6 +325,71 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('approvalStatus')">
+      <a-form-item :label="t('entity.conference.approvalstatus')">
+        <a-input-number
+          v-model:value="advancedQueryForm.approvalStatus"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.approvalstatus') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatorId')">
+      <a-form-item :label="t('entity.conference.initiatorid')">
+        <a-input
+          v-model:value="advancedQueryForm.initiatorId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.initiatorid') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtStart')">
+      <a-form-item :label="t('entity.conference.initiatedatstart')">
+        <a-input
+          v-model:value="advancedQueryForm.initiatedAtStart"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.initiatedatstart') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtEnd')">
+      <a-form-item :label="t('entity.conference.initiatedatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.initiatedAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.initiatedatend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedBy')">
+      <a-form-item :label="t('entity.conference.approvedby')">
+        <a-input
+          v-model:value="advancedQueryForm.approvedBy"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.approvedby') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedAtStart')">
+      <a-form-item :label="t('entity.conference.approvedatstart')">
+        <a-input
+          v-model:value="advancedQueryForm.approvedAtStart"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.approvedatstart') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedAtEnd')">
+      <a-form-item :label="t('entity.conference.approvedatend')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.approvedAtEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.approvedatend') })"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="t('common.page.entity.createdatstart')">
         <a-date-picker
@@ -396,7 +462,7 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'conferenceId'"
       :action-column-key="'action'"
-      entity-scope="company"
+      entity-scope="approval"
       table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
@@ -406,7 +472,7 @@
 
 <script setup lang="ts">
 /**
- * 会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 会议实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/conference-center/conference
  */
 import { ref, computed, onMounted } from 'vue'
@@ -418,6 +484,7 @@ import ConferenceForm from './components/conference-form.vue'
 import { getConferenceList, getConferenceById, createConference, updateConference, deleteConferenceById, deleteConferenceBatch, getConferenceTemplate, importConference, exportConference } from '@/api/routine/conference-center/conference'
 import * as conferenceParticipantApi from '@/api/routine/conference-center/conference-participant'
 import type { ConferenceParticipant, ConferenceParticipantQuery } from '@/types/routine/conference-center/conference-participant'
+import type { ConferenceAgenda } from '@/types/routine/conference-center/conference-agenda'
 import type { Conference, ConferenceQuery, ConferenceCreate, ConferenceUpdate } from '@/types/routine/conference-center/conference'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -472,11 +539,10 @@ const advancedQueryForm = ref({
   startTimeEnd: '',
   endTimeStart: '',
   endTimeEnd: '',
+  conferenceRoomId: '',
+  conferenceRoomName: '',
   location: '',
   meetingLink: '',
-  agenda: '',
-  content: '',
-  summary: '',
   tags: '',
   organizerId: '',
   organizerName: '',
@@ -485,6 +551,13 @@ const advancedQueryForm = ref({
   maxParticipants: undefined as number | undefined,
   reminderMinutes: undefined as number | undefined,
   flowInstanceId: '',
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
   extFieldJson: '',
@@ -500,11 +573,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'startTimeEnd', label: t('entity.conference.starttimeend') },
   { key: 'endTimeStart', label: t('entity.conference.endtimestart') },
   { key: 'endTimeEnd', label: t('entity.conference.endtimeend') },
+  { key: 'conferenceRoomId', label: t('entity.conference.roomid') },
+  { key: 'conferenceRoomName', label: t('entity.conference.roomname') },
   { key: 'location', label: t('entity.conference.location') },
   { key: 'meetingLink', label: t('entity.conference.meetinglink') },
-  { key: 'agenda', label: t('entity.conference.agenda') },
-  { key: 'content', label: t('entity.conference.content') },
-  { key: 'summary', label: t('entity.conference.summary') },
   { key: 'tags', label: t('entity.conference.tags') },
   { key: 'organizerId', label: t('entity.conference.organizerid') },
   { key: 'organizerName', label: t('entity.conference.organizername') },
@@ -513,6 +585,13 @@ const queryFieldsMeta = computed(() => [
   { key: 'maxParticipants', label: t('entity.conference.maxparticipants') },
   { key: 'reminderMinutes', label: t('entity.conference.reminderminutes') },
   { key: 'flowInstanceId', label: t('entity.conference.flowinstanceid') },
+  { key: 'approvalStatus', label: t('entity.conference.approvalstatus') },
+  { key: 'initiatorId', label: t('entity.conference.initiatorid') },
+  { key: 'initiatedAtStart', label: t('entity.conference.initiatedatstart') },
+  { key: 'initiatedAtEnd', label: t('entity.conference.initiatedatend') },
+  { key: 'approvedBy', label: t('entity.conference.approvedby') },
+  { key: 'approvedAtStart', label: t('entity.conference.approvedatstart') },
+  { key: 'approvedAtEnd', label: t('entity.conference.approvedatend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
@@ -593,6 +672,11 @@ const conferenceParticipantExpandColumns = computed(() => [
   },
 ])
 
+/** 展开行预览：conferenceAgenda 列 */
+const conferenceAgendaExpandColumns = computed(() => [
+
+])
+
 /** 读取主表行上的 conferenceParticipant 子表缓存 */
 function getConferenceParticipantRows(record: Conference): ConferenceParticipant[] {
   return (record as any)?.participants ?? []
@@ -601,6 +685,16 @@ function getConferenceParticipantRows(record: Conference): ConferenceParticipant
 /** 主表行是否已加载 conferenceParticipant 子表 */
 function hasConferenceParticipantRows(record: Conference): boolean {
   return getConferenceParticipantRows(record).length > 0
+}
+
+/** 读取主表行上的 conferenceAgenda 子表缓存 */
+function getConferenceAgendaRows(record: Conference): ConferenceAgenda[] {
+  return (record as any)?.agendaRecords ?? []
+}
+
+/** 主表行是否已加载 conferenceAgenda 子表 */
+function hasConferenceAgendaRows(record: Conference): boolean {
+  return getConferenceAgendaRows(record).length > 0
 }
 
 
@@ -648,10 +742,19 @@ async function loadConferenceParticipantForConference(record: Conference): Promi
   }
 }
 
+/** 通过主表详情接口加载 conferenceAgenda 子表 */
+async function loadConferenceAgendaForConference(record: Conference): Promise<ConferenceAgenda[]> {
+  const detail = await loadConferenceDetail(record)
+  return detail?.agendaRecords ?? []
+}
+
 /** 展开前确保各子表已懒加载 */
 async function ensureConferenceChildrenLoaded(record: Conference) {
   if (!hasConferenceParticipantRows(record)) {
     await loadConferenceParticipantForConference(record)
+  }
+  if (!hasConferenceAgendaRows(record)) {
+    await loadConferenceAgendaForConference(record)
   }
 }
 
@@ -736,6 +839,24 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'endTime') ?? ''
   },
   {
+    title: t('entity.conference.roomid'),
+    dataIndex: 'conferenceRoomId',
+    key: 'conferenceRoomId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceRoomId') ?? ''
+  },
+  {
+    title: t('entity.conference.roomname'),
+    dataIndex: 'conferenceRoomName',
+    key: 'conferenceRoomName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceRoomName') ?? ''
+  },
+  {
     title: t('entity.conference.location'),
     dataIndex: 'location',
     key: 'location',
@@ -752,33 +873,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'meetingLink') ?? ''
-  },
-  {
-    title: t('entity.conference.agenda'),
-    dataIndex: 'agenda',
-    key: 'agenda',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'agenda') ?? ''
-  },
-  {
-    title: t('entity.conference.content'),
-    dataIndex: 'content',
-    key: 'content',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'content') ?? ''
-  },
-  {
-    title: t('entity.conference.summary'),
-    dataIndex: 'summary',
-    key: 'summary',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConferenceField(record, 'summary') ?? ''
   },
   {
     title: t('entity.conference.tags'),
@@ -860,6 +954,15 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getConferenceField(record, 'flowInstanceName') ?? ''
+  },
+  {
+    title: t('entity.conference.room'),
+    dataIndex: 'conferenceRoom',
+    key: 'conferenceRoom',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getConferenceField(record, 'conferenceRoom') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -956,6 +1059,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -974,11 +1080,10 @@ function handleReset() {
   startTimeEnd: '',
   endTimeStart: '',
   endTimeEnd: '',
+  conferenceRoomId: '',
+  conferenceRoomName: '',
   location: '',
   meetingLink: '',
-  agenda: '',
-  content: '',
-  summary: '',
   tags: '',
   organizerId: '',
   organizerName: '',
@@ -987,6 +1092,13 @@ function handleReset() {
   maxParticipants: undefined as number | undefined,
   reminderMinutes: undefined as number | undefined,
   flowInstanceId: '',
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
   extFieldJson: '',
@@ -1175,11 +1287,10 @@ function handleAdvancedQueryReset() {
   startTimeEnd: '',
   endTimeStart: '',
   endTimeEnd: '',
+  conferenceRoomId: '',
+  conferenceRoomName: '',
   location: '',
   meetingLink: '',
-  agenda: '',
-  content: '',
-  summary: '',
   tags: '',
   organizerId: '',
   organizerName: '',
@@ -1188,6 +1299,13 @@ function handleAdvancedQueryReset() {
   maxParticipants: undefined as number | undefined,
   reminderMinutes: undefined as number | undefined,
   flowInstanceId: '',
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
   extFieldJson: '',

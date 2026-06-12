@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：delta-log.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -36,7 +36,7 @@ export interface DeltaLog extends CompanyDtoBase {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType: string;
+  operType: number;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -79,7 +79,7 @@ export interface DeltaLog extends CompanyDtoBase {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 
@@ -121,7 +121,7 @@ export interface DeltaLogQuery extends TaktPagedQuery {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType?: string;
+  operType?: number;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -159,7 +159,7 @@ export interface DeltaLogQuery extends TaktPagedQuery {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 
@@ -230,7 +230,7 @@ export interface DeltaLogCreate {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType: string;
+  operType: number;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -268,7 +268,7 @@ export interface DeltaLogCreate {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 
@@ -334,7 +334,7 @@ export interface DeltaLogExport {
   /**
    * 操作类型（INSERT、UPDATE、DELETE）
    */
-  operType: string;
+  operType: number;
 
   /**
    * 数据库表名（SugarTable 物理表名）
@@ -372,7 +372,7 @@ export interface DeltaLogExport {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 

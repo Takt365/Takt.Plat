@@ -20,7 +20,7 @@ public interface ITaktGenEngine
     /// 使用给定模板内容与上下文模型渲染，返回生成后的文本。
     /// </summary>
     /// <param name="templateContent">Scriban 模板内容（如 {{ Table.EntityClassName }}、{{ for col in Columns }} 等）</param>
-    /// <param name="model">模板绑定的模型（可为 <see cref="TaktGenTemplateContext"/> 或任意可序列化对象）</param>
+    /// <param name="model">模板绑定的模型（可为 TaktGenTemplateContext 或任意可序列化对象）</param>
     /// <returns>渲染后的字符串</returns>
     /// <exception cref="TaktGenEngineException">模板解析或渲染失败时抛出</exception>
     Task<string> RenderAsync(string templateContent, object model);

@@ -12,11 +12,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, getControllerClassName, logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
+const { writeGeneratedFile, getControllerClassName, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgs } = require('./generate-script-common.cjs');
 const {
-  MANUAL_CRUD_ENTITY_SHORT_NAMES,
-  isManualCrudEntity,
+  isRbacJunctionEntity,
+  assertNotRbacJunctionEntityCli,
   shouldExcludeStandaloneService,
+  RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
 } = require('./generate-entity-exclusions.cjs');
 const { transposedClassNames } = require('./generate-transposed-support.cjs');
 const { isSharedEnumType } = require('./generate-enum-common.cjs');
@@ -33,24 +34,17 @@ const CONFIG = {
   dtosRoot: path.join(path.resolve(__dirname, '../backend/src'), 'Takt.Application', 'Dtos'),
 };
 
-/**
- * 手工维护的特殊实体（与 generate-dtos-from-entity / generate-services-from-dtos 一致）
- */
-function isSpecialEntity(entityShort) {
-  return isManualCrudEntity(entityShort);
-}
-
-/** 一级模块 → TaktModule 与默认 ApiModule 显示名 */
+/** 一级模块 → ApiModule int 与默认显示名（TaktModule 字典码，与 TaktTranslation.ResourceGroup 一致） */
 const TOP_LEVEL_MODULE = {
-  Identity: { enum: 'TaktModule.Identity', display: '身份认证' },
-  HumanResource: { enum: 'TaktModule.HumanResource', display: '人力资源' },
-  Statistics: { enum: 'TaktModule.Statistics', display: '统计看板' },
-  Routine: { enum: 'TaktModule.Routine', display: '日常事务' },
-  Accounting: { enum: 'TaktModule.Accounting', display: '财务核算' },
-  Logistics: { enum: 'TaktModule.Logistics', display: '后勤管理' },
-  Foundation: { enum: 'TaktModule.Foundation', display: '基础设置' },
-  Workflow: { enum: 'TaktModule.Workflow', display: '工作流' },
-  Code: { enum: 'TaktModule.Code', display: '代码管理' },
+  Identity: { moduleInt: 1, display: '身份认证' },
+  HumanResource: { moduleInt: 5, display: '人力资源' },
+  Statistics: { moduleInt: 9, display: '统计看板' },
+  Routine: { moduleInt: 2, display: '日常事务' },
+  Accounting: { moduleInt: 3, display: '财务核算' },
+  Logistics: { moduleInt: 4, display: '后勤管理' },
+  Foundation: { moduleInt: 8, display: '基础设置' },
+  Workflow: { moduleInt: 6, display: '工作流' },
+  Code: { moduleInt: 7, display: '代码管理' },
 };
 
 /** 二级目录 → ApiModule 子模块显示名（覆盖一级默认名） */
@@ -81,17 +75,6 @@ const ANONYMOUS_OPTIONS_METHOD_NAMES = new Set([
  */
 function isAnonymousOptionsMethod(methodName) {
   return ANONYMOUS_OPTIONS_METHOD_NAMES.has(methodName);
-}
-
-function assertNotSpecialEntityCli(entityShort) {
-  if (!isSpecialEntity(entityShort)) {
-    return;
-  }
-  console.error(
-    `❌ 实体 ${entityShort} 为手工维护的特殊模块，禁止本脚本生成控制器。`,
-  );
-  console.error(`   已排除: ${[...MANUAL_CRUD_ENTITY_SHORT_NAMES].join('、')}`);
-  process.exit(1);
 }
 
 function isInEngineDirectory(filePath) {
@@ -204,7 +187,7 @@ function shouldExcludeInterface(interfaceFile, entityName) {
     return true;
   }
   const entityShort = entityName.replace(/^Takt/, '');
-  if (isSpecialEntity(entityShort)) {
+  if (isRbacJunctionEntity(entityShort)) {
     return true;
   }
   return false;
@@ -258,6 +241,18 @@ function buildSpecialPermissionBase(pathParts, entityShort) {
     return `logistics:service:${entitySlug}`;
   }
 
+  if (domain === 'Workflow') {
+    if (entityShort === 'FlowScheme') {
+      return 'workflow:scheme';
+    }
+    if (entityShort === 'FlowForm') {
+      return 'workflow:form';
+    }
+    if (entityShort === 'FlowInstance') {
+      return 'workflow:instance';
+    }
+  }
+
   return null;
 }
 
@@ -295,18 +290,75 @@ function buildPermissionBase(pathParts, entityShort) {
     ?? buildPermissionBaseDefault(pathParts, entityShort);
 }
 
+/**
+ * 工作流运行时实体 CRUD 权限（与菜单种子、TaktFlowEngineController 对齐）
+ * @param {string} entityShort
+ * @param {string} action list|query|create|update|delete|import|export
+ * @returns {string|null}
+ */
+function resolveWorkflowRuntimePermission(entityShort, action) {
+  if (entityShort === 'FlowAddSign') {
+    const map = {
+      list: 'workflow:todo:list',
+      query: 'workflow:todo:query',
+      create: 'workflow:todo:addsign',
+      update: 'workflow:todo:addsign',
+      delete: 'workflow:todo:reducesign',
+      import: 'workflow:todo:import',
+      export: 'workflow:todo:export',
+    };
+    return map[action] ?? null;
+  }
+  if (entityShort === 'FlowTask') {
+    const map = {
+      list: 'workflow:todo:list',
+      query: 'workflow:todo:query',
+      create: 'workflow:todo:create',
+      update: 'workflow:todo:update',
+      delete: 'workflow:todo:delete',
+      approve: 'workflow:todo:approve',
+      import: 'workflow:todo:import',
+      export: 'workflow:todo:export',
+    };
+    return map[action] ?? null;
+  }
+  if (entityShort === 'FlowTransition' || entityShort === 'FlowVariable') {
+    const map = {
+      list: 'workflow:instance:list',
+      query: 'workflow:instance:query',
+      create: 'workflow:instance:create',
+      update: 'workflow:instance:update',
+      delete: 'workflow:instance:delete',
+      import: 'workflow:instance:import',
+      export: 'workflow:instance:export',
+    };
+    return map[action] ?? null;
+  }
+  return null;
+}
+
+/**
+ * @param {{ entityShort: string, permissionBase: string }} ctx
+ * @param {string} action
+ * @returns {string}
+ */
+function permissionCode(ctx, action) {
+  return resolveWorkflowRuntimePermission(ctx.entityShort, action)
+    ?? `${ctx.permissionBase}:${action}`;
+}
+
 function getApiModuleMeta(pathParts) {
   const top = pathParts[0];
   const topMeta = TOP_LEVEL_MODULE[top];
   if (!topMeta) {
-    return { enum: 'TaktModule.Foundation', display: top || '基础设置' };
+    return { moduleInt: 8, display: top || '基础设置' };
   }
   if (pathParts.length <= 1) {
-    return { enum: topMeta.enum, display: topMeta.display };
+    return { moduleInt: topMeta.moduleInt, display: topMeta.display };
   }
   const sub = pathParts[pathParts.length - 1];
   const subDisplay = SUBMODULE_DISPLAY[sub];
-  return { enum: topMeta.enum, display: subDisplay || topMeta.display };
+  return { moduleInt: topMeta.moduleInt, display: subDisplay || topMeta.display };
 }
 
 function extractInterfaceDescription(content) {
@@ -499,7 +551,7 @@ function generateListEndpoint(ctx) {
   if (!queryParam) {
     return { skipped: true, reason: '缺少 QueryDto 参数' };
   }
-  const perm = `${ctx.permissionBase}:list`;
+  const perm = permissionCode(ctx, 'list');
   const display = `${ctx.displayName}列表`;
   const code = `    /// <summary>
     /// ${ctx.summary || `获取${ctx.displayName}列表（分页）`}
@@ -525,7 +577,7 @@ function generateListEndpoint(ctx) {
 }
 
 function generateGetByIdEndpoint(ctx) {
-  const perm = `${ctx.permissionBase}:query`;
+  const perm = permissionCode(ctx, 'query');
   const code = `    /// <summary>
     /// ${ctx.summary || `根据ID获取${ctx.displayName}`}
     /// </summary>
@@ -554,7 +606,7 @@ function generateGetByIdEndpoint(ctx) {
 }
 
 function generateOptionsEndpoint(ctx) {
-  const perm = `${ctx.permissionBase}:query`;
+  const perm = permissionCode(ctx, 'query');
   const permissionAttr = isAnonymousOptionsMethod(ctx.methodName)
     ? '    [AllowAnonymous]'
     : `    [TaktPermission("${perm}", "${ctx.displayName}选项")]`;
@@ -581,7 +633,7 @@ ${permissionAttr}
 }
 
 function generateTreeOptionsEndpoint(ctx) {
-  const perm = `${ctx.permissionBase}:query`;
+  const perm = permissionCode(ctx, 'query');
   const code = `    /// <summary>
     /// ${ctx.summary || `获取${ctx.displayName}树形选项列表`}
     /// </summary>
@@ -607,7 +659,7 @@ function generateTreeOptionsEndpoint(ctx) {
 function generateTreeEndpoint(ctx) {
   const paramDecl = formatControllerParameters(ctx.params, 'query');
   const callArgs = ctx.params.map((p) => p.name).join(', ');
-  const perm = `${ctx.permissionBase}:query`;
+  const perm = permissionCode(ctx, 'query');
   const includeDisabledParam = ctx.params.find((p) => p.name === 'includeDisabled');
   const includeDisabledDoc = includeDisabledParam
     ? `\n    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>`
@@ -639,7 +691,7 @@ function generateCreateEndpoint(ctx) {
   if (!dtoParam) {
     return { skipped: true, reason: '缺少创建 DTO 参数' };
   }
-  const perm = `${ctx.permissionBase}:create`;
+  const perm = permissionCode(ctx, 'create');
   const code = `    /// <summary>
     /// ${ctx.summary || `创建${ctx.displayName}`}
     /// </summary>
@@ -668,7 +720,7 @@ function generateUpdateEndpoint(ctx) {
   if (!dtoParam) {
     return { skipped: true, reason: '缺少更新 DTO 参数' };
   }
-  const perm = `${ctx.permissionBase}:update`;
+  const perm = permissionCode(ctx, 'update');
   const code = `    /// <summary>
     /// ${ctx.summary || `更新${ctx.displayName}`}
     /// </summary>
@@ -704,7 +756,8 @@ function generateUpdateStatusEndpoint(ctx) {
   const statusSuffix = suffixMatch && suffixMatch[1] ? suffixMatch[1] : '';
   const routeSuffix = statusSuffix ? `-${statusSuffix.charAt(0).toLowerCase()}${statusSuffix.slice(1)}` : '';
   const statusLabel = statusSuffix || '状态';
-  const perm = `${ctx.permissionBase}:update`;
+  const perm = resolveWorkflowRuntimePermission(ctx.entityShort, 'approve')
+    ?? permissionCode(ctx, 'update');
   const statusValueProp = ctx.statusValueProperty;
   const enumHint =
     statusValueProp && isSharedEnumType(statusValueProp.type)
@@ -738,7 +791,7 @@ function generateUpdateSortEndpoint(ctx) {
   if (!dtoParam) {
     return { skipped: true, reason: '缺少排序 DTO' };
   }
-  const perm = `${ctx.permissionBase}:update`;
+  const perm = permissionCode(ctx, 'update');
   const code = `    /// <summary>
     /// ${ctx.summary || `更新${ctx.displayName}排序`}
     /// </summary>
@@ -763,7 +816,7 @@ function generateUpdateSortEndpoint(ctx) {
 }
 
 function generateDeleteByIdEndpoint(ctx) {
-  const perm = `${ctx.permissionBase}:delete`;
+  const perm = permissionCode(ctx, 'delete');
   const code = `    /// <summary>
     /// ${ctx.summary || `删除${ctx.displayName}`}
     /// </summary>
@@ -791,7 +844,7 @@ function generateDeleteBatchEndpoint(ctx) {
   const idsParam = ctx.params.find((p) => p.type.includes('IEnumerable') || p.type.includes('List'));
   const paramType = idsParam ? idsParam.type : 'IEnumerable<long>';
   const paramName = idsParam ? idsParam.name : 'ids';
-  const perm = `${ctx.permissionBase}:delete`;
+  const perm = permissionCode(ctx, 'delete');
   const code = `    /// <summary>
     /// ${ctx.summary || `批量删除${ctx.displayName}`}
     /// </summary>
@@ -820,7 +873,7 @@ function generateTemplateEndpoint(ctx) {
   const controllerParams = queryParams.map((p) => mapControllerQueryParam(p, 'template'));
   const paramDecl = formatControllerParameters(controllerParams, 'query');
   const callArgs = controllerParams.map((p) => p.name).join(', ');
-  const perm = `${ctx.permissionBase}:import`;
+  const perm = permissionCode(ctx, 'import');
   const code = `    /// <summary>
     /// ${ctx.summary || `获取${ctx.displayName}导入模板`}
     /// </summary>
@@ -846,7 +899,7 @@ function generateTemplateEndpoint(ctx) {
 function generateImportEndpoint(ctx) {
   const sheetParam = ctx.params.find((p) => p.name === 'sheetName');
   const sheetQuery = sheetParam ? `[FromQuery] string? ${sheetParam.name} = null` : '';
-  const perm = `${ctx.permissionBase}:import`;
+  const perm = permissionCode(ctx, 'import');
   const callArgs = sheetParam ? `stream, ${sheetParam.name}` : 'stream';
   const code = `    /// <summary>
     /// ${ctx.summary || `导入${ctx.displayName}`}
@@ -887,7 +940,7 @@ function generateExportEndpoint(ctx) {
   const controllerParams = queryParams.map((p) => mapControllerQueryParam(p, 'export'));
   const paramDecl = formatControllerParameters(controllerParams, 'query');
   const callArgs = controllerParams.map((p) => p.name).join(', ');
-  const perm = `${ctx.permissionBase}:export`;
+  const perm = permissionCode(ctx, 'export');
   const code = `    /// <summary>
     /// ${ctx.summary || `导出${ctx.displayName}`}
     /// </summary>
@@ -980,7 +1033,7 @@ function generateEndpoint(method, ctx) {
 
 function generateTransposedListEndpoint(ctx) {
   const names = transposedClassNames(ctx.entityShort);
-  const perm = `${ctx.permissionBase}:query`;
+  const perm = permissionCode(ctx, 'query');
   const code = `    /// <summary>
     /// 获取${ctx.displayName}转置列表（分页）
     /// </summary>
@@ -1103,7 +1156,7 @@ function generateController(interfaceFile, entityName, methods, options) {
   file += `/// ${displayName}控制器\n`;
   file += `/// 提供${displayName}的 REST API\n`;
   file += '/// </summary>\n';
-  file += `[ApiModule(${apiModule.enum}, "${apiModule.display}")]\n`;
+  file += `[ApiModule(${apiModule.moduleInt}, "${apiModule.display}")]\n`;
   file += `[Route("api/[controller]", Name = "${escapeCSharpString(routeDisplayName)}")]\n`;
   file += `public class ${controllerClass} : TaktControllerBase\n`;
   file += '{\n';
@@ -1204,11 +1257,11 @@ function printUsage() {
   console.log(`
 用法:
   node scripts/generate-controllers-from-services.cjs --Holiday
-  node scripts/generate-controllers-from-services.cjs --all
-  node scripts/generate-controllers-from-services.cjs --Holiday --dry-run
+  node scripts/generate-controllers-from-services.cjs --CostCenter --dry-run
   node scripts/generate-controllers-from-services.cjs --Holiday --force
 
 说明:
+  - 已禁用 --all；每次必须指定一个实体
   - 扫描 Takt.Application/Services/**/ITaktXxxService.cs（仅接口文件）
   - 输出 Takt.WebApi/Controllers/**/TaktXxxsController.cs（控制器复数，如 TaktHolidaysController、TaktUsersController）
   - 应用服务保持单数 ITaktHolidayService / TaktHolidayService（与 DDD 一致）
@@ -1223,44 +1276,8 @@ function printUsage() {
 }
 
 function parseArgs() {
-  const args = process.argv.slice(2);
-  const options = { all: false, entityPrefix: null, force: false, dryRun: false };
-  for (const arg of args) {
-    if (arg === '--force') {
-      options.force = true;
-      continue;
-    }
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-      continue;
-    }
-    if (!arg.startsWith('--')) {
-      console.error(`❌ 未知参数: ${arg}`);
-      process.exit(1);
-    }
-    const value = arg.slice(2);
-    if (value.toLowerCase() === 'all') {
-      options.all = true;
-      continue;
-    }
-    if (value.startsWith('Takt')) {
-      console.error('❌ 实体名不要带 Takt 前缀，例如 --Holiday');
-      process.exit(1);
-    }
-    if (options.entityPrefix) {
-      console.error('❌ 只能指定一个实体，或使用 --all');
-      process.exit(1);
-    }
-    options.entityPrefix = value;
-  }
-  if (!options.all && !options.entityPrefix) {
-    console.error('❌ 请指定 --all 或 --<实体名>');
-    printUsage();
-    process.exit(1);
-  }
-  if (options.entityPrefix) {
-    assertNotSpecialEntityCli(options.entityPrefix);
-  }
+  const options = parseSingleEntityGenerateArgs(printUsage);
+  assertNotRbacJunctionEntityCli(options.entityPrefix);
   return options;
 }
 
@@ -1270,11 +1287,11 @@ function parseArgs() {
 
 console.log('🚀 从服务接口生成 WebApi 控制器...\n');
 logGeneratedFileWritePolicy();
-console.log(`⏭️  排除特殊实体: ${[...MANUAL_CRUD_ENTITY_SHORT_NAMES].join('、')}\n`);
+console.log(`⏭️  跳过 RBAC 关联表: ${[...RBAC_ASSOCIATION_ENTITY_SHORT_NAMES].join('、')}\n`);
 
 try {
   const options = parseArgs();
-  const interfaceFiles = scanServiceInterfaces(options.all ? null : options.entityPrefix);
+  const interfaceFiles = scanServiceInterfaces(options.entityPrefix);
 
   if (interfaceFiles.length === 0) {
     console.error('❌ 未找到匹配的服务接口文件');

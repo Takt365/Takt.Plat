@@ -54,7 +54,7 @@ public class TaktProductSerialOutboundItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "reference_inbound_id", ColumnDescription = "关联入库ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long ReferenceInboundId { get; set; } = 0;
+    public long ReferenceInboundId { get; set; }
 
     /// <summary>
     /// 关联入库单号

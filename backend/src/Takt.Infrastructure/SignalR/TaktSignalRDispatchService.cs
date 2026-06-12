@@ -16,6 +16,7 @@ using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Models.Foundation;
+using Takt.Shared.Models.Workflow;
 using Takt.Domain.Repositories;
 using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
@@ -32,7 +33,7 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     private readonly IHubContext<TaktNotificationHub> _notificationHubContext;
     private readonly ITaktCompanyRepository<TaktOnline> _onlineRepository;
     private readonly ITaktOnlineService _onlineService;
-    private readonly ITaktMessageService _messageService;
+    private readonly Lazy<ITaktMessageService> _messageService;
 
     /// <summary>
     /// 构造函数
@@ -41,13 +42,13 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// <param name="notificationHubContext">通知 Hub 上下文</param>
     /// <param name="onlineRepository">在线用户仓储</param>
     /// <param name="onlineService">在线用户服务</param>
-    /// <param name="messageService">在线消息服务</param>
+    /// <param name="messageService">在线消息服务（延迟解析，避免与 TaktMessageService 循环依赖）</param>
     public TaktSignalRDispatchService(
         IHubContext<TaktConnectHub> connectHubContext,
         IHubContext<TaktNotificationHub> notificationHubContext,
         ITaktCompanyRepository<TaktOnline> onlineRepository,
         ITaktOnlineService onlineService,
-        ITaktMessageService messageService)
+        Lazy<ITaktMessageService> messageService)
     {
         _connectHubContext = connectHubContext;
         _notificationHubContext = notificationHubContext;
@@ -61,16 +62,13 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// </summary>
     /// <param name="onlineId">在线用户记录 ID</param>
     /// <param name="reason">强退原因</param>
+    /// <param name="connectionId">SignalR 连接 ID（主键查无记录时回退定位）</param>
     /// <returns>任务</returns>
-    public async Task ForceKickOnlineAsync(long onlineId, string? reason = null)
+    public async Task ForceKickOnlineAsync(long onlineId, string? reason = null, string? connectionId = null)
     {
-        var online = await _onlineRepository.GetByIdAsync(onlineId);
-        if (online == null)
-        {
-            throw new TaktBusinessException("在线用户不存在");
-        }
+        var online = await ResolveOnlineForForceKickAsync(onlineId, connectionId);
 
-        if (online.OnlineStatus != TaktOnlineStatus.Online)
+        if (online.OnlineStatus != 0)
         {
             throw new TaktBusinessException("该用户已不在线，无法强退");
         }
@@ -86,21 +84,22 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         };
 
         var userGroup = TaktSignalRGroupNames.UserGroup(online.CompanyCode, online.UserName);
-
-        if (!string.IsNullOrEmpty(online.ConnectionId))
+        var onlineConnectionId = online.ConnectionId?.Trim();
+        // 强退仅经 ConnectHub 推送一次（Client 与 Group 二选一，避免同连接重复投递）
+        if (!string.IsNullOrEmpty(onlineConnectionId))
         {
-            await _connectHubContext.Clients.Client(online.ConnectionId).SendAsync("ForceLogout", payload);
-            await _notificationHubContext.Clients.Client(online.ConnectionId).SendAsync("ForceLogout", payload);
+            await _connectHubContext.Clients.Client(onlineConnectionId).SendAsync("ForceLogout", payload);
         }
-
-        await _connectHubContext.Clients.Group(userGroup).SendAsync("ForceLogout", payload);
-        await _notificationHubContext.Clients.Group(userGroup).SendAsync("ForceLogout", payload);
+        else
+        {
+            await _connectHubContext.Clients.Group(userGroup).SendAsync("ForceLogout", payload);
+        }
 
         var disconnectTime = DateTime.Now;
         online.ConnectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(
             online.ConnectIp,
             online.ConnectLocation);
-        online.OnlineStatus = TaktOnlineStatus.Away;
+        online.OnlineStatus = 2;
         online.DisconnectTime = disconnectTime;
         online.ConnectionDuration = (int)(disconnectTime - online.ConnectTime).TotalSeconds;
         online.Remark = $"强退: {kickReason}";
@@ -125,7 +124,7 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         {
             try
             {
-                await ForceKickOnlineAsync(onlineId, reason);
+                await ForceKickOnlineAsync(onlineId, reason, null);
             }
             catch (TaktBusinessException ex)
             {
@@ -141,28 +140,75 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
     /// <returns>任务</returns>
     public async Task PushPrivateMessageAsync(TaktSignalRPrivateMessagePush message)
     {
+        var companyCode = message.CompanyCode?.Trim() ?? string.Empty;
+        var toUserName = message.ToUserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(toUserName))
+        {
+            throw new TaktBusinessException("私信推送缺少公司编码或接收者用户名");
+        }
+
         var payload = new
         {
             MessageId = message.MessageId.ToString(),
             message.FromUserName,
             FromUserId = message.FromUserId?.ToString(),
-            message.ToUserName,
+            ToUserName = toUserName,
             ToUserId = message.ToUserId?.ToString(),
             message.MessageTitle,
             message.MessageContent,
+            message.Attachments,
             message.MessageType,
             message.MessageGroup,
-            message.ReadStatus,
-            message.ReadTime,
             message.SendTime,
-            message.MessageExtData,
+            message.ReadTime,
+            message.ReadStatus,
         };
 
-        await _notificationHubContext.Clients
-            .Group(TaktSignalRGroupNames.UserGroup(message.CompanyCode, message.ToUserName))
-            .SendAsync("ReceiveMessage", payload);
+        var recipientUserId = message.ToUserId.HasValue && message.ToUserId.Value > 0
+            ? message.ToUserId.Value.ToString()
+            : null;
+        var targetCompanyCodes = await ResolvePrivateMessageTargetCompanyCodesAsync(companyCode, toUserName);
+        foreach (var targetCompanyCode in targetCompanyCodes)
+        {
+            var userGroup = TaktSignalRGroupNames.UserGroup(targetCompanyCode, toUserName);
+            await _notificationHubContext.Clients.Group(userGroup).SendAsync("ReceiveMessage", payload);
+            TaktSignalRLogging.LogPrivateMessagePushed(toUserName, targetCompanyCode, message.MessageId, userGroup, recipientUserId);
+            await PushMessageStatisticsToUserAsync(targetCompanyCode, toUserName, message.ToUserId);
+        }
+    }
 
-        await PushMessageStatisticsToUserAsync(message.CompanyCode, message.ToUserName, message.ToUserId);
+    /// <summary>
+    /// 解析私信推送目标公司组（优先接收者当前在线会话所在公司，否则回退消息公司）
+    /// </summary>
+    /// <param name="messageCompanyCode">消息所属公司编码</param>
+    /// <param name="toUserName">接收者登录用户名</param>
+    /// <returns>去重后的公司编码列表</returns>
+    private async Task<IReadOnlyList<string>> ResolvePrivateMessageTargetCompanyCodesAsync(
+        string messageCompanyCode,
+        string toUserName)
+    {
+        var onlineSessions = await _onlineRepository.GetListAsync(online =>
+            online.OnlineStatus == 0
+            && online.UserName == toUserName);
+        var onlineCompanyCodes = onlineSessions
+            .Select(online => online.CompanyCode?.Trim())
+            .Where(code => !string.IsNullOrWhiteSpace(code))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Cast<string>()
+            .ToList();
+        if (onlineCompanyCodes.Count == 0)
+        {
+            return new[] { messageCompanyCode };
+        }
+
+        var matchedMessageCompany = onlineCompanyCodes.FirstOrDefault(code =>
+            string.Equals(code, messageCompanyCode, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(matchedMessageCompany))
+        {
+            return new[] { matchedMessageCompany };
+        }
+
+        return onlineCompanyCodes;
     }
 
     /// <summary>
@@ -211,7 +257,6 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
 
         await _connectHubContext.Clients.Group(userGroup).SendAsync("OnlineStatisticsUpdated", payload);
-        await _notificationHubContext.Clients.Group(userGroup).SendAsync("OnlineStatisticsUpdated", payload);
         TaktSignalRLogging.LogStatisticsPushed("online", userName, companyCode);
     }
 
@@ -229,13 +274,208 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             return;
         }
 
-        var statistics = await _messageService.GetMessageStatisticsByUserNameAsync(userName, userId);
+        var statistics = await _messageService.Value.GetMessageStatisticsByUserNameAsync(userName, userId);
         var payload = ToMessageStatisticsPayload(statistics);
         var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
 
-        await _connectHubContext.Clients.Group(userGroup).SendAsync("MessageStatisticsUpdated", payload);
         await _notificationHubContext.Clients.Group(userGroup).SendAsync("MessageStatisticsUpdated", payload);
         TaktSignalRLogging.LogStatisticsPushed("message", userName, companyCode);
+    }
+
+    /// <summary>
+    /// 推送流程定义变更到公司内在线客户端
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    public async Task PushFlowSchemeChangedAsync(TaktSignalRFlowSchemeChangedPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode))
+        {
+            throw new TaktBusinessException("流程定义推送缺少公司编码");
+        }
+
+        var payload = new
+        {
+            TenantCode = push.TenantCode,
+            CompanyCode = companyCode,
+            FlowSchemeId = push.FlowSchemeId.ToString(),
+            push.ProcessKey,
+            push.ProcessName,
+            push.ChangeType,
+            push.OperatorUserName,
+            ChangedAt = push.ChangedAt,
+        };
+
+        await _notificationHubContext.Clients
+            .Group(TaktSignalRGroupNames.NotificationsGroup(companyCode))
+            .SendAsync("FlowSchemeChanged", payload);
+        TaktSignalRLogging.LogWorkflowPushed("scheme-changed", companyCode, push.ProcessKey);
+    }
+
+    /// <summary>
+    /// 向指定用户推送流程实例推进事件
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <param name="targetUserName">目标用户名</param>
+    /// <returns>任务</returns>
+    public async Task PushFlowInstanceProgressedToUserAsync(TaktSignalRFlowInstanceProgressedPush push, string targetUserName)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
+        var userName = targetUserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        {
+            return;
+        }
+
+        var payload = new
+        {
+            TenantCode = push.TenantCode,
+            CompanyCode = companyCode,
+            FlowInstanceId = push.FlowInstanceId.ToString(),
+            push.InstanceCode,
+            push.ProcessName,
+            push.InstanceStatus,
+            push.ActionType,
+            push.CurrentActivityName,
+            push.StartUserName,
+            ProgressedAt = push.ProgressedAt,
+        };
+
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        await _notificationHubContext.Clients.Group(userGroup).SendAsync("FlowInstanceProgressed", payload);
+        TaktSignalRLogging.LogWorkflowPushed("instance-progressed", companyCode, push.InstanceCode, userName);
+    }
+
+    /// <summary>
+    /// 向指定用户推送最新待办数量
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    public async Task PushFlowTodoCountToUserAsync(TaktSignalRFlowTodoCountPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
+        var userName = push.UserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        {
+            return;
+        }
+
+        var payload = new
+        {
+            TenantCode = push.TenantCode,
+            CompanyCode = companyCode,
+            UserName = userName,
+            UserId = push.UserId?.ToString(),
+            push.TodoCount,
+            UpdatedAt = push.UpdatedAt,
+        };
+
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        await _notificationHubContext.Clients.Group(userGroup).SendAsync("FlowTodoCountUpdated", payload);
+        TaktSignalRLogging.LogWorkflowPushed("todo-count", companyCode, push.TodoCount.ToString(), userName);
+    }
+
+    /// <summary>
+    /// 推送定时任务定义变更到公司内在线客户端
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    public async Task PushQuartzTaskChangedAsync(TaktSignalRQuartzTaskChangedPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode))
+        {
+            throw new TaktBusinessException("定时任务推送缺少公司编码");
+        }
+
+        var payload = new
+        {
+            TenantCode = push.TenantCode,
+            CompanyCode = companyCode,
+            QuartzTaskId = push.QuartzTaskId.ToString(),
+            push.TaskCode,
+            push.TaskName,
+            push.ChangeType,
+            push.OperatorUserName,
+            ChangedAt = push.ChangedAt,
+        };
+
+        await _notificationHubContext.Clients
+            .Group(TaktSignalRGroupNames.NotificationsGroup(companyCode))
+            .SendAsync("QuartzTaskChanged", payload);
+        TaktSignalRLogging.LogQuartzPushed("task-changed", companyCode, push.TaskCode);
+    }
+
+    /// <summary>
+    /// 推送定时任务执行完成到公司内在线客户端
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    public async Task PushQuartzTaskExecutedAsync(TaktSignalRQuartzTaskExecutedPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode))
+        {
+            throw new TaktBusinessException("定时任务执行推送缺少公司编码");
+        }
+
+        var payload = new
+        {
+            TenantCode = push.TenantCode,
+            CompanyCode = companyCode,
+            QuartzTaskId = push.QuartzTaskId.ToString(),
+            QuartzLogId = push.QuartzLogId.ToString(),
+            push.TaskCode,
+            push.TaskName,
+            push.ExecuteStatus,
+            push.ExecuteDuration,
+            push.ExecuteCount,
+            push.LastRunAt,
+            push.NextRunAt,
+            push.TriggerUserName,
+            ExecutedAt = push.ExecutedAt,
+        };
+
+        await _notificationHubContext.Clients
+            .Group(TaktSignalRGroupNames.NotificationsGroup(companyCode))
+            .SendAsync("QuartzTaskExecuted", payload);
+        TaktSignalRLogging.LogQuartzPushed("task-executed", companyCode, push.TaskCode);
+    }
+
+    /// <summary>
+    /// 解析强退目标在线记录（主键优先，可选按 ConnectionId 回退）
+    /// </summary>
+    /// <param name="onlineId">在线用户记录 ID</param>
+    /// <param name="connectionId">SignalR 连接 ID</param>
+    /// <returns>在线实体</returns>
+    /// <exception cref="TaktBusinessException">记录不存在时抛出</exception>
+    private async Task<TaktOnline> ResolveOnlineForForceKickAsync(long onlineId, string? connectionId)
+    {
+        TaktOnline? online = null;
+        if (onlineId > 0)
+        {
+            online = await _onlineRepository.GetByIdAsync(onlineId);
+        }
+
+        var normalizedConnectionId = connectionId?.Trim();
+        if (online == null && !string.IsNullOrEmpty(normalizedConnectionId))
+        {
+            var matches = await _onlineRepository.GetListAsync(o => o.ConnectionId == normalizedConnectionId);
+            online = matches.FirstOrDefault();
+        }
+
+        if (online == null)
+        {
+            throw new TaktBusinessException("在线用户不存在");
+        }
+
+        return online;
     }
 
     /// <summary>

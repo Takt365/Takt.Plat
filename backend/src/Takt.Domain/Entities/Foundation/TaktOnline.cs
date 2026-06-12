@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -50,10 +49,10 @@ public class TaktOnline : TaktCompanyEntityBase
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 在线状态
+    /// 在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）
     /// </summary>
     [SugarColumn(ColumnName = "online_status", ColumnDescription = "在线状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktOnlineStatus OnlineStatus { get; set; } = TaktOnlineStatus.Online;
+    public int OnlineStatus { get; set; } = 0;
 
     /// <summary>
     /// 连接 IP 地址
@@ -77,19 +76,19 @@ public class TaktOnline : TaktCompanyEntityBase
     /// 设备类型
     /// </summary>
     [SugarColumn(ColumnName = "device_type", ColumnDescription = "设备类型", ColumnDataType = "int", IsNullable = true)]
-    public TaktDeviceType? DeviceType { get; set; }
+    public int? DeviceType { get; set; }
 
     /// <summary>
-    /// 浏览器类型
+    /// 浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）
     /// </summary>
     [SugarColumn(ColumnName = "browser_type", ColumnDescription = "浏览器类型", ColumnDataType = "int", IsNullable = true)]
-    public TaktBrowserType? BrowserType { get; set; }
+    public int? BrowserType { get; set; }
 
     /// <summary>
-    /// 操作系统
+    /// 操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）
     /// </summary>
     [SugarColumn(ColumnName = "operating_system", ColumnDescription = "操作系统", ColumnDataType = "int", IsNullable = true)]
-    public TaktOperatingSystem? OperatingSystem { get; set; }
+    public int? OperatingSystem { get; set; }
 
     /// <summary>
     /// 连接时间

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableOrderByDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableOrderBy 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableOrderBy 生成，请按需审阅）
 // 
@@ -60,7 +60,7 @@ public class TaktConfigurableOrderByDto : TaktCompanyDtoBase
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public TaktConfigurableSortDirection SortDirection { get; set; }
+    public int SortDirection { get; set; }
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）
@@ -114,7 +114,7 @@ public class TaktConfigurableOrderByQueryDto : TaktPagedQuery
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public TaktConfigurableSortDirection? SortDirection { get; set; }
+    public int? SortDirection { get; set; }
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）
@@ -187,7 +187,7 @@ public class TaktConfigurableOrderByCreateDto
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public TaktConfigurableSortDirection SortDirection { get; set; }
+    public int SortDirection { get; set; }
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）
@@ -288,7 +288,7 @@ public class TaktConfigurableOrderByTemplateDto
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public TaktConfigurableSortDirection? SortDirection { get; set; }
+    public int? SortDirection { get; set; }
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）
@@ -346,7 +346,7 @@ public class TaktConfigurableOrderByImportDto
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public TaktConfigurableSortDirection? SortDirection { get; set; }
+    public int? SortDirection { get; set; }
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）
@@ -405,7 +405,7 @@ public class TaktConfigurableOrderByExportDto
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public TaktConfigurableSortDirection SortDirection { get; set; }
+    public int SortDirection { get; set; }
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）

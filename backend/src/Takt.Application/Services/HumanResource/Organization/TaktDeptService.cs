@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：TaktDeptService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：部门应用服务实现
 // 
@@ -105,7 +105,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     public async Task<List<TaktTreeSelectOption>> GetDeptTreeOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _deptRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DeptStatus == TaktCommonStatus.Enabled);
+        var list = await _deptRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DeptStatus == 1);
         return BuildDeptTreeOptions(list, 0);
     }
 
@@ -145,7 +145,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         var list = await _deptRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.DeptStatus == TaktCommonStatus.Enabled).ToList();
+            : list.Where(x => x.DeptStatus == 1).ToList();
         return BuildDeptTree(filtered, parentId);
     }
 
@@ -180,7 +180,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     public async Task<TaktDeptDto> CreateDeptAsync(TaktDeptCreateDto dto)
     {
         var entity = dto.Adapt<TaktDept>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         var isUnique_ix_dept_code_unique = await _uniqueValidator.IsUniqueAsync(
             _deptRepository,
             x => x.DeptCode == entity.DeptCode);
@@ -291,7 +291,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         {
             throw new TaktBusinessException("部门不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置部门不允许删除");
         }
@@ -314,7 +314,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         {
             return;
         }
-        if (await _deptRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _deptRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置部门不允许删除");
         }
@@ -336,7 +336,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         {
             throw new TaktBusinessException("部门不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.DeptStatus != TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == 1 && dto.DeptStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置部门");
         }
@@ -398,7 +398,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
             try
             {
                 var entity = rows[i].Adapt<TaktDept>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.DeptCode}";
                 if (!importSeenKeys.Add(importKey))
                 {

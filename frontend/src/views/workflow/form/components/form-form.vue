@@ -31,75 +31,75 @@
         <a-row :gutter="16">
           <a-col :span="12">
             <a-form-item
-              :label="t('entity.flowform.formcode')"
+              :label="t('entity.flowForm.formcode')"
               name="formCode"
               required
             >
               <a-input
                 v-model:value="form.formCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowform.formcode') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowForm.formcode') })"
                 :disabled="!!form.flowFormId"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item
-              :label="t('entity.flowform.formname')"
+              :label="t('entity.flowForm.formname')"
               name="formName"
               required
             >
               <a-input
                 v-model:value="form.formName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowform.formname') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowForm.formname') })"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item :label="t('entity.flowform.formcategory')">
+            <a-form-item :label="t('entity.flowForm.formcategory')">
               <TaktSelect
                 v-model="form.formCategory"
                 dict-type="sys_form_category"
                 style="width: 100%"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowform.formcategory') })"
+                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowForm.formcategory') })"
                 allow-clear
                 :show-search="true"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item :label="t('entity.flowform.formtype')">
+            <a-form-item :label="t('entity.flowForm.formtype')">
               <TaktSelect
                 v-model="form.formType"
                 dict-type="sys_form_type"
                 style="width: 100%"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowform.formtype') })"
+                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowForm.formtype') })"
                 allow-clear
                 :show-search="true"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item :label="t('entity.flowform.formversion')">
+            <a-form-item :label="t('entity.flowForm.formversion')">
               <a-input
                 v-model:value="form.formVersion"
-                :placeholder="t('workflow.form.versionPlaceholder')"
+                :placeholder="t('workflow.form.page.versionPlaceholder')"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item :label="t('entity.flowform.formstatus')">
+            <a-form-item :label="t('entity.flowForm.formstatus')">
               <TaktSelect
                 v-model="form.formStatus"
                 dict-type="sys_scheme_status"
                 style="width: 100%"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowform.formstatus') })"
+                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowForm.formstatus') })"
                 allow-clear
                 :show-search="true"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item :label="t('entity.flowform.ordernum')">
+            <a-form-item :label="t('entity.flowForm.sortorder')">
               <a-input-number
                 v-model:value="form.sortOrder"
                 :min="0"
@@ -115,16 +115,28 @@
         v-show="currentStep === 1"
         class="step-content"
       >
+        <a-form-item :label="t('workflow.form.page.isDatasourceLabel')">
+          <a-switch
+            :checked="form.isDatasource === 1"
+            :checked-children="t('common.page.button.yes')"
+            :un-checked-children="t('common.page.button.no')"
+            @change="onIsDatasourceChange"
+          />
+          <div class="text-text-secondary text-sm mt-1">
+            {{ t('workflow.form.page.isDatasourceHint') }}
+          </div>
+        </a-form-item>
         <a-row
+          v-if="form.isDatasource === 1"
           :gutter="8"
           class="form-form__ds-row"
         >
           <a-col :span="12">
-            <a-form-item :label="t('workflow.form.step.dataSource')">
+            <a-form-item :label="t('workflow.form.page.step.dataSource')">
               <TaktSelect
                 v-model="relatedDataBaseNameModel"
                 :options="databaseConfigOptions"
-                :placeholder="t('workflow.form.dataSourcePlaceholder')"
+                :placeholder="t('workflow.form.page.dataSourcePlaceholder')"
                 :allow-clear="true"
                 :show-search="true"
                 :filter-option="filterDataSourceOption"
@@ -136,11 +148,11 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item :label="t('workflow.form.step.dataTableList')">
+            <a-form-item :label="t('workflow.form.page.step.dataTableList')">
               <TaktSelect
                 v-model="relatedTableNameModel"
                 :options="databaseTableOptions"
-                :placeholder="t('workflow.form.dataTablePlaceholder')"
+                :placeholder="t('workflow.form.page.dataTablePlaceholder')"
                 :allow-clear="true"
                 :show-search="true"
                 :filter-option="filterDataTableOption"
@@ -154,11 +166,15 @@
           </a-col>
         </a-row>
         <TaktSingleTable
+          v-if="form.isDatasource === 1"
+          entity-scope="company"
           class="form-form__field-grid"
           :columns="dataTableColumns"
           :data-source="tableColumnList"
           :pagination="false"
           :stripe="true"
+          :show-row-selection="false"
+          :include-audit-fields="false"
           row-key="dbColumnName"
           :large-screen-column-count="10"
           :small-screen-column-count="5"
@@ -168,7 +184,7 @@
             <template v-if="column.key === 'csharpType'">
               <span>{{ record.csharpType }}</span>
             </template>
-            <!-- C#列名：只读显示（由列名自动生成 Pascal 大驼峰） -->
+            <!-- FrmData 字段名：camelCase（与后端 FrmData 对齐） -->
             <template v-else-if="column.key === 'csharpColumnName'">
               <span>{{ record.csharpColumnName }}</span>
             </template>
@@ -176,8 +192,8 @@
             <template v-else-if="column.key === 'isRequired'">
               <a-switch
                 :checked="record.isRequired === 0 || record.isRequired === '0'"
-                checked-children="是"
-                un-checked-children="否"
+                :checked-children="t('common.page.button.yes')"
+                :un-checked-children="t('common.page.button.no')"
                 @change="(checked) => { record.isRequired = checked ? 0 : 1 }"
               />
             </template>
@@ -186,7 +202,7 @@
               <TaktSelect
                 v-model="record.displayType"
                 dict-type="sys_display_type"
-                placeholder="显示类型"
+                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.genTableColumn.htmltype') })"
                 allow-clear
                 size="small"
                 style="width: 100%"
@@ -199,7 +215,7 @@
                 v-model="record.dictTypeCode"
                 :options="dictTypeOptions"
                 :field-names="{ label: 'dictLabel', value: 'extLabel' }"
-                placeholder="选择字典类型"
+                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.genTableColumn.dicttype') })"
                 allow-clear
                 size="small"
                 style="width: 100%"
@@ -209,16 +225,88 @@
             </template>
           </template>
         </TaktSingleTable>
-        <div class="form-form__entity-hint">
-          {{ t('workflow.form.entityTableHint') }}
+        <div
+          v-if="form.isDatasource === 1"
+          class="form-form__entity-hint"
+        >
+          {{ t('workflow.form.page.entityTableHint') }}
         </div>
+        <a-divider
+          v-if="form.isDatasource === 1"
+          orientation="left"
+        >
+          {{ t('workflow.form.page.businessBindingTitle') }}
+        </a-divider>
+        <a-row
+          v-if="form.isDatasource === 1"
+          :gutter="16"
+        >
+          <a-col :span="12">
+            <a-form-item :label="t('workflow.form.page.businessStatusColumn')">
+              <a-select
+                v-model:value="businessBinding.businessStatusColumn"
+                :options="statusColumnOptions"
+                :placeholder="t('workflow.form.page.businessStatusColumnPlaceholder')"
+                allow-clear
+                show-search
+                style="width: 100%"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item :label="t('workflow.form.page.statusInProgress')">
+              <a-input-number
+                v-model:value="businessBinding.statusInProgress"
+                :min="0"
+                style="width: 100%"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item :label="t('workflow.form.page.statusApproved')">
+              <a-input-number
+                v-model:value="businessBinding.statusApproved"
+                :min="0"
+                style="width: 100%"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item :label="t('workflow.form.page.statusRejected')">
+              <a-input-number
+                v-model:value="businessBinding.statusRejected"
+                :min="0"
+                style="width: 100%"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item :label="t('workflow.form.page.statusCancelled')">
+              <a-input-number
+                v-model:value="businessBinding.statusCancelled"
+                :min="0"
+                style="width: 100%"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item :label="t('workflow.form.page.submitAllowedStatuses')">
+              <a-select
+                v-model:value="submitAllowedStatusTags"
+                mode="tags"
+                :placeholder="t('workflow.form.page.submitAllowedStatusesPlaceholder')"
+                style="width: 100%"
+              />
+            </a-form-item>
+          </a-col>
+        </a-row>
       </div>
       <!-- 第三步（新增/编辑一致）：表单设计 -->
       <div
         v-show="currentStep === 2"
         class="step-content"
       >
-        <a-form-item :label="t('entity.flowform.formconfig')">
+        <a-form-item :label="t('entity.flowForm.formconfig')">
           <TaktFormDesigner
             :key="'form-designer-' + (form.flowFormId ?? 'new')"
             ref="designerRef"
@@ -236,21 +324,21 @@
         style="margin-right: 8px"
         @click="prev"
       >
-        {{ t('workflow.form.step.prev') }}
+        {{ t('workflow.form.page.step.prev') }}
       </a-button>
       <a-button
         v-if="currentStep < steps.length - 1"
         type="primary"
         @click="next"
       >
-        {{ t('workflow.form.step.next') }}
+        {{ t('workflow.form.page.step.next') }}
       </a-button>
       <a-button
         v-if="currentStep === steps.length - 1"
         type="primary"
         @click="handleDone"
       >
-        {{ t('workflow.form.step.done') }}
+        {{ t('workflow.form.page.step.done') }}
       </a-button>
     </div>
   </a-form>
@@ -260,9 +348,15 @@
 /**
  * 流程表单新增/编辑：步骤 1 基本信息、步骤 2 表单设计（takt-form-designer）；对外暴露 validate、getFormData。
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, reactive } from 'vue'
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import {
+  buildRelatedFormFieldJson,
+  parseRelatedFormField,
+  snakeColumnToCamelCase,
+  type TaktFlowFormBusinessBinding
+} from '@/utils/takt-flow-form-binding'
 import type { TaktSelectOption } from '@/types/common'
 import {
   getDatabaseInfoList,
@@ -286,6 +380,7 @@ interface TableColumnItem {
   isNullable?: boolean
 }
 import { getDictTypeOptions } from '@/api/foundation/dict-type'
+import { getFlowEngineApprovalTables } from '@/api/workflow/flow-engine'
 import type { FlowFormCreate } from '@/types/workflow/flow-form'
 const getStringValue = (obj: unknown, key: string): string | undefined => {
   if (!obj || typeof obj !== 'object') return undefined
@@ -364,16 +459,39 @@ function filterDataSourceOption(input: string, option?: unknown) {
   return label.includes((input ?? '').trim().toLowerCase())
 }
 
-/** 数据表下拉：选项与加载状态（依赖 form.relatedDataBaseName）；仅显示带 flow_instance_id 的表 */
+/** 审批业务表白名单（引擎 API，与 TaktApprovalEntityBase 对齐） */
+const approvalTableNames = ref<string[]>([])
+/** 是否已拉取审批表白名单 */
+let approvalTablesLoaded = false
+
+/**
+ * 拉取审批业务表白名单（仅一次）
+ */
+async function ensureApprovalTablesLoaded(): Promise<void> {
+  if (approvalTablesLoaded) return
+  try {
+    approvalTableNames.value = await getFlowEngineApprovalTables()
+  } catch {
+    approvalTableNames.value = []
+  }
+  approvalTablesLoaded = true
+}
+
+/** 数据表下拉：选项与加载状态（依赖 form.relatedDataBaseName）；仅显示审批白名单内表 */
 const databaseTableOptions = ref<{ value: string; label: string }[]>([])
 const databaseTableLoading = ref(false)
 function loadDatabaseTables() {
   const tenantCode = form.relatedDataBaseName?.trim()
   if (!tenantCode) { databaseTableOptions.value = []; return }
   databaseTableLoading.value = true
-  getDatabaseTableInfoList(tenantCode)
+  ensureApprovalTablesLoaded()
+    .then(() => getDatabaseTableInfoList(tenantCode))
     .then((list) => {
-      databaseTableOptions.value = (list ?? []).map((item) => ({
+      const allowed = approvalTableNames.value
+      const source = allowed.length
+        ? (list ?? []).filter((item) => allowed.includes(item.tableName))
+        : (list ?? [])
+      databaseTableOptions.value = source.map((item) => ({
         value: item.tableName,
         label: item.tableComment ? `${item.tableName} - ${item.tableComment}` : item.tableName
       }))
@@ -427,14 +545,78 @@ const DB_TYPE_TO_CSHARP: Record<string, string> = {
   varchar: 'string'
 }
 
-/** 下划线命名转 Pascal 大驼峰：user_name -> UserName */
-function toPascalCase(name: string | undefined): string {
-  if (!name) return ''
-  return name
-    .split(/[_\s]+/)
-    .filter(Boolean)
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('')
+/** 业务状态列下拉（含 *_status 列） */
+const statusColumnOptions = ref<{ value: string; label: string }[]>([])
+
+/** 业务状态与提交规则（写入 RelatedFormField.business） */
+const businessBinding = reactive<TaktFlowFormBusinessBinding>({})
+
+/** 允许提交的业务状态（标签输入，同步为 number[]） */
+const submitAllowedStatusTags = computed({
+  get: () => businessBinding.submitAllowedBusinessStatuses?.map((v) => String(v)) ?? [],
+  set: (tags: string[]) => {
+    businessBinding.submitAllowedBusinessStatuses = tags
+      .map((tag) => parseInt(tag, 10))
+      .filter((n) => !Number.isNaN(n))
+  }
+})
+
+/**
+ * 从库表列摘要提取业务状态列选项
+ * @param list 列摘要列表
+ */
+function extractStatusColumnOptions(list: DatabaseTableColumnInfo[]) {
+  statusColumnOptions.value = (list ?? [])
+    .filter((item) => {
+      const name = (item.databaseColumnName ?? '').toLowerCase()
+      return name === 'status' || name.endsWith('_status')
+    })
+    .map((item) => {
+      const col = item.databaseColumnName ?? ''
+      const label = item.columnComment ? `${col} - ${item.columnComment}` : col
+      return { value: col, label }
+    })
+}
+
+/** 清空业务绑定配置 */
+function resetBusinessBinding() {
+  businessBinding.businessStatusColumn = undefined
+  businessBinding.statusInProgress = undefined
+  businessBinding.statusApproved = undefined
+  businessBinding.statusRejected = undefined
+  businessBinding.statusCancelled = undefined
+  businessBinding.submitAllowedBusinessStatuses = undefined
+  statusColumnOptions.value = []
+}
+
+/**
+ * 从 RelatedFormField 还原 business 段
+ * @param json RelatedFormField JSON
+ */
+function applyBusinessBindingFromRelatedFormField(json: string | undefined) {
+  resetBusinessBinding()
+  const root = parseRelatedFormField(json)
+  if (!root.business) return
+  businessBinding.businessStatusColumn = root.business.businessStatusColumn
+  businessBinding.statusInProgress = root.business.statusInProgress
+  businessBinding.statusApproved = root.business.statusApproved
+  businessBinding.statusRejected = root.business.statusRejected
+  businessBinding.statusCancelled = root.business.statusCancelled
+  businessBinding.submitAllowedBusinessStatuses = root.business.submitAllowedBusinessStatuses
+    ? [...root.business.submitAllowedBusinessStatuses]
+    : undefined
+}
+
+/** 是否数据源开关 */
+function onIsDatasourceChange(checked: boolean) {
+  form.isDatasource = checked ? 1 : 0
+  if (!checked) {
+    form.relatedDataBaseName = ''
+    form.relatedTableName = ''
+    form.relatedFormField = ''
+    tableColumnList.value = []
+    resetBusinessBinding()
+  }
 }
 
 /** 将 introspect 列摘要映射为字段网格行 */
@@ -449,7 +631,7 @@ function mapDatabaseColumns(list: DatabaseTableColumnInfo[]): TableColumnItem[] 
     const dbType = (item.databaseDataType ?? '').toLowerCase()
     const mappedCsharp = DB_TYPE_TO_CSHARP[dbType] ?? 'string'
     const dbName = item.databaseColumnName ?? ''
-    const csharpName = toPascalCase(dbName)
+    const csharpName = snakeColumnToCamelCase(dbName)
     const notNullable = item.isNullable === false
     const isRequired = notNullable ? 0 : 1
     return {
@@ -479,15 +661,14 @@ function loadTableColumns() {
   tableColumnLoading.value = true
   getDatabaseTableColumnInfoList(tenantCode, tableName)
     .then((list) => {
+      extractStatusColumnOptions(list ?? [])
       // 编辑且已有 form.relatedFormField 字段元数据时，不覆盖（由进入第二步时从 form.relatedFormField 还原）
       if (form.flowFormId && form.relatedFormField?.trim()) {
-        try {
-          const parsed = JSON.parse(form.relatedFormField) as unknown
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            const first = parsed[0] as Record<string, unknown>
-            if (first && typeof first === 'object' && (first.dbColumnName != null || first.csharpColumnName != null)) return
-          }
-        } catch { /* ignore */ }
+        const parsedRoot = parseRelatedFormField(form.relatedFormField)
+        if (parsedRoot.fields.length > 0) {
+          const first = parsedRoot.fields[0]
+          if (first?.dbColumnName != null || first?.csharpColumnName != null) return
+        }
       }
       const cols = mapDatabaseColumns(list ?? [])
       tableColumnList.value = cols
@@ -553,25 +734,23 @@ function filterDictTypeOption(input: string, option?: unknown) {
 /** 是否编辑（有 flowFormId 为编辑，反之为新增）；编辑时表单设计器由 form.formConfig 还原 */
 const isEdit = computed(() => !!form.flowFormId)
 
-/** 编辑时进入第二步：若 form.relatedFormField 为字段元数据数组(与 syncFieldsToFormModel 一致)，则还原到字段网格 */
+/** 进入第二步：从 RelatedFormField 还原字段网格与 business 配置 */
 watch(currentStep, (step) => {
-  if (step !== 1 || !isEdit.value || !form.relatedFormField?.trim()) return
-  try {
-    const parsed = JSON.parse(form.relatedFormField) as unknown
-    if (!Array.isArray(parsed) || parsed.length === 0) return
-    const first = parsed[0] as Record<string, unknown>
-    if (!first || typeof first !== 'object' || (first.dbColumnName == null && first.csharpColumnName == null)) return
-    const list = parsed as TableColumnItem[]
-    tableColumnList.value = list
-    tableColumnOptions.value = list.map((item: TableColumnItem) => ({
-      value: pickString(item, 'dbColumnName', 'DbColumnName'),
-      label: pickString(item, 'columnDescription', 'ColumnDescription')
-        ? `${pickString(item, 'dbColumnName', 'DbColumnName')} - ${pickString(item, 'columnDescription', 'ColumnDescription')}`
-        : pickString(item, 'dbColumnName', 'DbColumnName')
-    }))
-  } catch {
-    // 非字段元数据格式，保持由 form.relatedTableName watch 触发的 loadTableColumns 结果
+  if (step !== 1 || !form.relatedFormField?.trim()) return
+  const parsedRoot = parseRelatedFormField(form.relatedFormField)
+  if (parsedRoot.fields.length > 0) {
+    const first = parsedRoot.fields[0]
+    if (first?.dbColumnName != null || first?.csharpColumnName != null) {
+      tableColumnList.value = parsedRoot.fields as TableColumnItem[]
+      tableColumnOptions.value = parsedRoot.fields.map((item) => ({
+        value: pickString(item, 'dbColumnName', 'DbColumnName'),
+        label: pickString(item, 'columnDescription', 'ColumnDescription')
+          ? `${pickString(item, 'dbColumnName', 'DbColumnName')} - ${pickString(item, 'columnDescription', 'ColumnDescription')}`
+          : pickString(item, 'dbColumnName', 'DbColumnName')
+      }))
+    }
   }
+  applyBusinessBindingFromRelatedFormField(form.relatedFormField)
 })
 const formRef = ref()
 const designerRef = ref<{ syncToModel?: () => void } | null>(null)
@@ -589,6 +768,7 @@ async function onDataTableChange() {
   try {
     tableColumnLoading.value = true
     const list = await getDatabaseTableColumnInfoList(tenantCode, tableName)
+    extractStatusColumnOptions(list ?? [])
     const cols = mapDatabaseColumns(list ?? [])
     tableColumnList.value = cols
     tableColumnOptions.value = cols.map((item) => ({
@@ -597,7 +777,7 @@ async function onDataTableChange() {
     }))
     form.formConfig = JSON.stringify(cols)
     form.isDatasource = 1
-    message.success(t('workflow.form.step.dataTableList') + '：已获取所有数据列项，下一步可还原表单')
+    message.success(t('workflow.form.page.step.dataTableLoaded'))
   } catch (err: unknown) {
     const msg =
       (typeof (err as { response?: { data?: unknown } })?.response?.data === 'string' &&
@@ -606,7 +786,7 @@ async function onDataTableChange() {
         : null) ??
       ((err as { response?: { data?: { message?: string } } }).response?.data?.message) ??
       toErrorMessage(err) ??
-      '获取表单配置失败'
+      t('workflow.form.page.loadFormConfigFailed')
     message.error(msg)
   } finally {
     tableColumnLoading.value = false
@@ -624,25 +804,25 @@ const formDesignerConfig = {
 
 /** 步骤配置（新增/编辑一致）：第一步 表单信息 → 第二步 数据源+数据表+字段网格 → 第三步 表单设计 */
 const steps = computed(() => [
-  { title: t('workflow.form.step.formInfo'), content: 0 },
-  { title: t('workflow.form.step.dataSource'), content: 1 },
-  { title: t('workflow.form.step.formDesign'), content: 2 }
+  { title: t('workflow.form.page.step.formInfo'), content: 0 },
+  { title: t('workflow.form.page.step.dataSource'), content: 1 },
+  { title: t('workflow.form.page.step.formDesign'), content: 2 }
 ])
 /** 供 a-steps 使用的 items（title 列表） */
 const stepItems = computed(() => steps.value.map(item => ({ key: item.title, title: item.title })))
 
 /** 第二步字段网格列配置：列名、描述、DB类型 等 */
 const dataTableColumns = computed(() => [
-  { title: '列名', dataIndex: 'dbColumnName', key: 'dbColumnName', width: 160 },
-  { title: '描述', dataIndex: 'columnDescription', key: 'columnDescription', width: 200 },
-  { title: 'DB类型', dataIndex: 'dataType', key: 'dataType', width: 120 },
-  { title: 'C#类型', dataIndex: 'csharpType', key: 'csharpType', width: 120 },
-  { title: 'C#列名', dataIndex: 'csharpColumnName', key: 'csharpColumnName', width: 160 },
-  { title: '长度', dataIndex: 'length', key: 'length', width: 80 },
-  { title: '精度', dataIndex: 'decimalDigits', key: 'decimalDigits', width: 80 },
-  { title: '必填', dataIndex: 'isRequired', key: 'isRequired', width: 80 },
-  { title: '显示类型', dataIndex: 'displayType', key: 'displayType', width: 120 },
-  { title: '字典', dataIndex: 'dictTypeCode', key: 'dictTypeCode', width: 160 }
+  { title: t('entity.genTableColumn.databasecolumnname'), dataIndex: 'dbColumnName', key: 'dbColumnName', width: 160 },
+  { title: t('entity.genTableColumn.columncomment'), dataIndex: 'columnDescription', key: 'columnDescription', width: 200 },
+  { title: t('entity.genTableColumn.databasedatatype'), dataIndex: 'dataType', key: 'dataType', width: 120 },
+  { title: t('entity.genTableColumn.csharpdatatype'), dataIndex: 'csharpType', key: 'csharpType', width: 120 },
+  { title: t('entity.genTableColumn.csharpcolumnname'), dataIndex: 'csharpColumnName', key: 'csharpColumnName', width: 160 },
+  { title: t('entity.genTableColumn.length'), dataIndex: 'length', key: 'length', width: 80 },
+  { title: t('entity.genTableColumn.decimaldigits'), dataIndex: 'decimalDigits', key: 'decimalDigits', width: 80 },
+  { title: t('entity.genTableColumn.isrequired'), dataIndex: 'isRequired', key: 'isRequired', width: 80 },
+  { title: t('entity.genTableColumn.htmltype'), dataIndex: 'displayType', key: 'displayType', width: 120 },
+  { title: t('entity.genTableColumn.dicttype'), dataIndex: 'dictTypeCode', key: 'dictTypeCode', width: 160 }
 ])
 
 /** 当前步骤需要校验的字段名：第一步 表单信息 必填 formCode、formName */
@@ -652,8 +832,8 @@ const stepFieldNames = computed<Record<number, string[]>>(
 
 /** 表单校验规则：formCode、formName 必填 */
 const formRules = computed(() => ({
-  formCode: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowform.formcode') }) }],
-  formName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowform.formname') }) }]
+  formCode: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowForm.formcode') }) }],
+  formName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowForm.formname') }) }]
 }))
 
 /**
@@ -678,8 +858,17 @@ function syncFieldsToFormModel() {
     }
   })
 
-  // 写入 RelatedFormField：字段元数据 JSON
-  form.relatedFormField = JSON.stringify(fieldDefs)
+  const businessPayload: TaktFlowFormBusinessBinding = {
+    businessStatusColumn: businessBinding.businessStatusColumn?.trim() || undefined,
+    statusInProgress: businessBinding.statusInProgress,
+    statusApproved: businessBinding.statusApproved,
+    statusRejected: businessBinding.statusRejected,
+    statusCancelled: businessBinding.statusCancelled,
+    submitAllowedBusinessStatuses: businessBinding.submitAllowedBusinessStatuses?.length
+      ? [...businessBinding.submitAllowedBusinessStatuses]
+      : undefined
+  }
+  form.relatedFormField = buildRelatedFormFieldJson(fieldDefs, businessPayload)
 
   // 生成 FormConfig 规则：与 FlowStartForm / FlowTaskForm 使用的 FormConfigRule 结构兼容
   const formConfigRule = fieldDefs.map((f) => {
@@ -756,7 +945,7 @@ function prev() {
 async function handleDone() {
   const ok = await validateCurrentStep()
   if (!ok) return
-  message.success(t('workflow.form.step.done'))
+  message.success(t('workflow.form.page.step.done'))
 }
 
 /**
@@ -771,10 +960,24 @@ async function validateAllSteps(): Promise<boolean> {
         await formRef.value?.validateFields(fields)
       } catch {
         currentStep.value = i
-        message.warning(t('workflow.form.step.validateFail', { step: i + 1 }))
+        message.warning(t('workflow.form.page.step.validateFail', { step: i + 1 }))
         return false
       }
     }
+  }
+  if (form.isDatasource === 1) {
+    if (!form.relatedTableName?.trim() || tableColumnList.value.length === 0) {
+      currentStep.value = 1
+      message.warning(t('workflow.form.page.requireDataTable'))
+      return false
+    }
+    syncFieldsToFormModel()
+  }
+  syncDesignerToModel()
+  if (!form.formConfig?.trim()) {
+    currentStep.value = 2
+    message.warning(t('workflow.form.page.requireFormConfig'))
+    return false
   }
   return true
 }
@@ -803,6 +1006,10 @@ function resetSteps() {
   databaseConfigLoading.value = false
   databaseTableLoading.value = false
   tableColumnLoading.value = false
+  resetBusinessBinding()
+  if (form.relatedFormField?.trim()) {
+    applyBusinessBindingFromRelatedFormField(form.relatedFormField)
+  }
 }
 
 defineExpose({

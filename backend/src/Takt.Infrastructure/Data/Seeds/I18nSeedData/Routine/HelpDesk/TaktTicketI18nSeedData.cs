@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktTicket 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktTicket 实体字段国际化种子（已对齐前端 locales：src/locales/routine/help-desk/ticket）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk;
@@ -76,7 +75,7 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTicket 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ticket._self / entity.ticket.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.ticket._self / entity.ticket.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetTicketTranslations()
     {
@@ -262,6 +261,24 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
             // entity.ticket.closedat
             new TranslationSeedItem("entity.ticket.closedat", "zh-HK", "关闭时间", "关闭时间（工单最终关闭的时间）"),
 
+            // entity.ticket.itassetid
+            new TranslationSeedItem("entity.ticket.itassetid", "en-US", "IT设备ID", "关联 IT 设备保修扩展 ID"),
+            // entity.ticket.itassetid
+            new TranslationSeedItem("entity.ticket.itassetid", "ja-JP", "IT设备ID", "关联 IT 设备保修扩展 ID"),
+            // entity.ticket.itassetid
+            new TranslationSeedItem("entity.ticket.itassetid", "zh-CN", "IT设备ID", "关联 IT 设备保修扩展 ID"),
+            // entity.ticket.itassetid
+            new TranslationSeedItem("entity.ticket.itassetid", "zh-HK", "IT设备ID", "关联 IT 设备保修扩展 ID"),
+
+            // entity.ticket.assetcode
+            new TranslationSeedItem("entity.ticket.assetcode", "en-US", "资产号码", "资产号码（冗余；与 TaktItAsset.AssetCode 一致）"),
+            // entity.ticket.assetcode
+            new TranslationSeedItem("entity.ticket.assetcode", "ja-JP", "资产号码", "资产号码（冗余；与 TaktItAsset.AssetCode 一致）"),
+            // entity.ticket.assetcode
+            new TranslationSeedItem("entity.ticket.assetcode", "zh-CN", "资产号码", "资产号码（冗余；与 TaktItAsset.AssetCode 一致）"),
+            // entity.ticket.assetcode
+            new TranslationSeedItem("entity.ticket.assetcode", "zh-HK", "资产号码", "资产号码（冗余；与 TaktItAsset.AssetCode 一致）"),
+
             // entity.ticket.flowinstanceid
             new TranslationSeedItem("entity.ticket.flowinstanceid", "en-US", "流程实例ID", "流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）"),
             // entity.ticket.flowinstanceid
@@ -341,8 +358,8 @@ public class TaktTicketI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

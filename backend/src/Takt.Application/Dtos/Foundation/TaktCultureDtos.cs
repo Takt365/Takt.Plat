@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktCultureDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Culture 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCulture 生成，请按需审阅）
 // 
@@ -64,12 +64,12 @@ public class TaktCultureDto : TaktTenantDtoBase
     /// <summary>
     /// 是否默认语言（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus LanguageStatus { get; set; }
+    public int LanguageStatus { get; set; }
 
     /// <summary>
     /// 翻译列表（一对多关联）
@@ -122,12 +122,12 @@ public class TaktCultureQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否默认语言（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsDefault { get; set; }
+    public int? IsDefault { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? LanguageStatus { get; set; }
+    public int? LanguageStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -195,12 +195,12 @@ public class TaktCultureCreateDto
     /// <summary>
     /// 是否默认语言（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus LanguageStatus { get; set; }
+    public int LanguageStatus { get; set; }
 
     /// <summary>
     /// 翻译列表（一对多关联）（子表，级联保存）
@@ -260,7 +260,7 @@ public class TaktCultureStatusDto
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus LanguageStatus { get; set; }
+    public int LanguageStatus { get; set; }
 }
 
 // ========================================
@@ -329,12 +329,12 @@ public class TaktCultureTemplateDto
     /// <summary>
     /// 是否默认语言（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsDefault { get; set; }
+    public int? IsDefault { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? LanguageStatus { get; set; }
+    public int? LanguageStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -386,12 +386,12 @@ public class TaktCultureImportDto
     /// <summary>
     /// 是否默认语言（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsDefault { get; set; }
+    public int? IsDefault { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? LanguageStatus { get; set; }
+    public int? LanguageStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -449,12 +449,12 @@ public class TaktCultureExportDto
     /// <summary>
     /// 是否默认语言（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsDefault { get; set; }
+    public int IsDefault { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus LanguageStatus { get; set; }
+    public int LanguageStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

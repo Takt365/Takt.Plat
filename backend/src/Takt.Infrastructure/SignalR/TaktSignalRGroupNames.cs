@@ -13,18 +13,18 @@
 namespace Takt.Infrastructure.SignalR;
 
 /// <summary>
-/// SignalR Hub 组名工具
+/// SignalR Hub 组名工具；推送路由：ConnectHub=在线/强退/在线统计，NotificationHub=私信/广播/消息统计（每类单 Hub 一次）
 /// </summary>
 internal static class TaktSignalRGroupNames
 {
     /// <summary>
-    /// 公司内用户组（私信、强退）
+    /// 公司内用户组（ConnectHub 强退/在线统计；NotificationHub 私信/消息统计/工作流推送）
     /// </summary>
     /// <param name="companyCode">公司编码</param>
     /// <param name="userName">用户名</param>
     /// <returns>组名</returns>
     public static string UserGroup(string companyCode, string userName) =>
-        $"Company_{companyCode}_User_{userName}";
+        $"Company_{companyCode.Trim()}_User_{userName.Trim()}";
 
     /// <summary>
     /// 公司内广播通知组

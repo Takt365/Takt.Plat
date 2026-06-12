@@ -12,7 +12,18 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
+const {
+  writeGeneratedFile,
+  logGeneratedFileWritePolicy,
+  sanitizeXmlDocPlainText,
+  pascalToCamel,
+  ENTITY_FIELD_I18N_SEGMENT,
+  ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG,
+  entityClassToSlug,
+  buildEntityI18nKey,
+  resolveTaktModuleInt,
+  TAKT_APP_SIDE_INT,
+} = require('./generate-script-common.cjs');
 
 const CONFIG = {
   backendRoot: path.resolve(__dirname, '../backend/src'),
@@ -58,29 +69,6 @@ const ENTITY_BASE_FIELDS = new Set([
   'ApprovedAt',
 ]);
 
-/**
- * 全局：属性 camelCase → I18nKey 末段（仅保留与实体属性 camelCase 不一致的历史别名）
- * 默认规则：去实体 slug 前缀后 camelCase 全小写（subscriptionStartTime → subscriptionstarttime；tenantName → name）
- */
-const ENTITY_FIELD_I18N_SEGMENT = {
-  passwordHash: 'password',
-  employeeId: 'employeeid',
-  dictCode: 'code',
-  typeCode: 'code',
-  themeCode: 'code',
-};
-
-/**
- * 按实体 slug 覆盖末段（仅 menu 等历史键与属性 camelCase 不一致时使用）
- */
-const ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG = {
-  menu: {
-    i18nKey: 'l10nkey',
-    componentPath: 'component',
-    externalUrl: 'linkurl',
-  },
-};
-
 /** frontend locales field 键别名（与 ENTITY_FIELD_I18N_SEGMENT 对齐，供静态文案回填） */
 const LOCALE_FIELD_ALIASES = {
   ...ENTITY_FIELD_I18N_SEGMENT,
@@ -108,46 +96,6 @@ function resolveTaktModule(entityNamespace) {
   const relative = entityNamespace.replace('Takt.Domain.Entities.', '');
   const top = relative.split('.')[0];
   return NAMESPACE_MODULE_MAP[top] || 'Foundation';
-}
-
-/**
- * 去掉属性名中与实体 slug 重复的前缀（tenantName + tenant → name）
- * @param {string} camelName
- * @param {string} entitySlug
- */
-function stripEntitySlugPrefixFromCamel(camelName, entitySlug) {
-  if (!entitySlug) {
-    return camelName;
-  }
-  const prefix = entitySlug.toLowerCase();
-  const lower = camelName.toLowerCase();
-  if (!lower.startsWith(prefix) || camelName.length <= prefix.length) {
-    return camelName;
-  }
-  const rest = camelName.slice(prefix.length);
-  return rest.charAt(0).toLowerCase() + rest.slice(1);
-}
-
-/**
- * 将 C# 属性 camelCase 解析为 I18nKey 末段（全小写 a-z0-9）
- * 默认：去实体 slug 前缀后 camelCase 转小写（tenantName+tenant→name；subscriptionStartTime→subscriptionstarttime）
- * @param {string} camelName _self 或属性 camelCase
- * @param {string} [entitySlug] 实体 slug（TaktTenant → tenant）
- */
-function resolveEntityFieldI18nSegment(camelName, entitySlug) {
-  if (camelName === '_self') {
-    return '_self';
-  }
-  const slugOverrides = entitySlug ? ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG[entitySlug] : null;
-  let segment =
-    slugOverrides?.[camelName] ??
-    ENTITY_FIELD_I18N_SEGMENT[camelName] ??
-    stripEntitySlugPrefixFromCamel(camelName, entitySlug);
-  segment = String(segment).toLowerCase();
-  if (!/^[a-z0-9]+$/.test(segment)) {
-    throw new Error(`I18n 键末段非法（须全小写 a-z0-9）：${camelName} → ${segment}`);
-  }
-  return segment;
 }
 
 /** @type {Set<string> | null} */
@@ -279,23 +227,9 @@ function isEntityCollectionNavigationType(csharpType) {
   return isSkippedEntityNavigationReference(inner);
 }
 
-/**
- * 生成实体翻译 I18nKey
- * 规则：entity.{实体slug}._self | entity.{实体slug}.{属性末段小写}
- * @param {string} slug 实体 slug（TaktUser → user）
- * @param {string} segment _self 或属性 camelCase
- */
-function buildEntityI18nKey(slug, segment) {
-  return `entity.${slug}.${resolveEntityFieldI18nSegment(segment, slug)}`;
-}
-
 // ========================================
 // 工具
 // ========================================
-
-function pascalToCamel(str) {
-  return str.charAt(0).toLowerCase() + str.slice(1);
-}
 
 function pascalToKebab(str) {
   return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
@@ -393,12 +327,12 @@ function normalizeEntityFieldLabel(text) {
 }
 
 /**
- * 由实体 slug 生成英文 entity.*._self 文案（如 menu → Menu Information）
- * @param {string} slug
+ * 由实体 slug 或 PascalCase 短名生成英文 entity.*._self 文案（如 AssyDefectDetail → Assy Defect Detail Information）
+ * @param {string} shortPascal 去 Takt 前缀的 PascalCase
  * @returns {string}
  */
-function slugToEnSelfLabel(slug) {
-  const spaced = slug
+function slugToEnSelfLabel(shortPascal) {
+  const spaced = shortPascal
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
   const title = spaced.charAt(0).toUpperCase() + spaced.slice(1);
@@ -408,17 +342,17 @@ function slugToEnSelfLabel(slug) {
 /**
  * 按语言生成 entity.*._self 展示名（不读 frontend page.title，不拼接 summary 全文）
  * @param {string} firstLine 实体 class summary 首行
- * @param {string} slug 实体 slug
+ * @param {string} shortPascal 去 Takt 前缀的 PascalCase 短名
  * @param {string} culture BCP47
  * @returns {string}
  */
-function buildEntitySelfLabel(firstLine, slug, culture) {
+function buildEntitySelfLabel(firstLine, shortPascal, culture) {
   const zh = buildEntitySelfLabelZh(firstLine);
   if (!zh) {
-    return culture === 'en-US' ? slugToEnSelfLabel(slug) : slug;
+    return culture === 'en-US' ? slugToEnSelfLabel(shortPascal) : shortPascal.toLowerCase();
   }
   if (culture === 'en-US') {
-    return slugToEnSelfLabel(slug);
+    return slugToEnSelfLabel(shortPascal);
   }
   return zh;
 }
@@ -427,8 +361,13 @@ function escapeCsharpString(value) {
   return (value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
-function entityClassToSlug(className) {
-  return pascalToCamel(className.replace(/^Takt/, ''));
+/**
+ * 实体类名 → 去 Takt 前缀的 PascalCase 短名（仅用于 en-US 展示文案，非 I18nKey）
+ * @param {string} className Takt 实体类名
+ * @returns {string}
+ */
+function entityClassToShortPascal(className) {
+  return className.replace(/^Takt/, '');
 }
 
 function entityClassToSeedClassName(className) {
@@ -552,6 +491,7 @@ function parseEntityFile(filePath) {
     classSummaryFirstLine,
     entityNamespace,
     slug: entityClassToSlug(className),
+    shortPascal: entityClassToShortPascal(className),
     taktModule: resolveTaktModule(entityNamespace),
     properties: parseEntityProperties(classBody),
     filePath,
@@ -628,7 +568,7 @@ function loadFrontendLocaleFields(entity) {
 function resolveEntitySelfTranslations(entity) {
   const texts = {};
   CONFIG.cultures.forEach((culture) => {
-    texts[culture] = buildEntitySelfLabel(entity.classSummaryFirstLine, entity.slug, culture);
+    texts[culture] = buildEntitySelfLabel(entity.classSummaryFirstLine, entity.shortPascal, culture);
   });
   return texts;
 }
@@ -704,7 +644,7 @@ function buildTranslationTuples(entity) {
         i18nKey,
         culture,
         text: texts[culture],
-        contextNote: prop.summary || prop.name,
+        contextNote: sanitizeXmlDocPlainText(prop.summary || prop.name),
         sortOrder,
       });
     });
@@ -743,10 +683,11 @@ function generateSeedClassContent(entity, translationData) {
   lines.push('using Takt.Domain.Entities.Foundation;');
   lines.push('using Takt.Domain.Interfaces;');
   lines.push('using Takt.Domain.Repositories;');
-  lines.push('using Takt.Shared.Enums;');
   lines.push('using Takt.Shared.Helpers;');
   lines.push('');
   lines.push(`namespace ${entity.seedNamespace};`);
+  const resourceGroupInt = resolveTaktModuleInt(entity.taktModule);
+  const resourceTypeInt = TAKT_APP_SIDE_INT.Frontend;
   lines.push('');
   lines.push('/// <summary>');
   lines.push(`/// ${entity.className} 实体国际化翻译种子（键前缀 entity.${entity.slug}.*）`);
@@ -804,7 +745,7 @@ function generateSeedClassContent(entity, translationData) {
   lines.push('');
   lines.push('    /// <summary>');
   lines.push(`    /// ${entity.className} 实体翻译列表（${CONFIG.cultures.join(' / ')}）`);
-  lines.push(`    /// I18nKey：entity.${entity.slug}._self / entity.${entity.slug}.{{field}}；ResourceGroup=TaktModule.${entity.taktModule}；ResourceType=TaktAppSide.Frontend`);
+  lines.push(`    /// I18nKey：entity.${entity.slug}._self / entity.${entity.slug}.{{field}}；ResourceGroup=${resourceGroupInt}；ResourceType=${resourceTypeInt}`);
   lines.push('    /// </summary>');
   lines.push(`    private static List<TranslationSeedItem> Get${entity.className.replace(/^Takt/, '')}Translations()`);
   lines.push('    {');
@@ -841,8 +782,8 @@ function generateSeedClassContent(entity, translationData) {
   lines.push('        translation.CultureCode = item.CultureCode;');
   lines.push('        translation.I18nKey = item.I18nKey;');
   lines.push('        translation.TranslationText = item.TranslationText;');
-  lines.push(`        translation.ResourceGroup = TaktModule.${entity.taktModule};`);
-  lines.push('        translation.ResourceType = TaktAppSide.Frontend;');
+  lines.push(`        translation.ResourceGroup = ${resourceGroupInt};`);
+  lines.push(`        translation.ResourceType = ${resourceTypeInt};`);
   lines.push('        translation.ContextNote = item.ContextNote;');
   lines.push('        translation.ExtFieldJson = null;');
   lines.push('        translation.Remark = null;');
@@ -893,7 +834,7 @@ function generateSeedClassContent(entity, translationData) {
 // 扫描与写入
 // ========================================
 
-function scanEntities(entityPrefix) {
+function scanEntities() {
   const results = [];
   function walk(dir) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
@@ -902,11 +843,7 @@ function scanEntities(entityPrefix) {
         walk(full);
         return;
       }
-      if (!entry.name.startsWith('Takt') || !entry.name.endsWith('.cs') || entry.name === 'TaktCompanyEntityBase.cs') {
-        return;
-      }
-      const short = entry.name.replace(/^Takt/, '').replace(/\.cs$/, '');
-      if (entityPrefix && short !== entityPrefix) {
+      if (!entry.name.startsWith('Takt') || !entry.name.endsWith('.cs')) {
         return;
       }
       const parsed = parseEntityFile(full);
@@ -940,10 +877,13 @@ function printUsage() {
 用法: node scripts/generate-entity-i18n-seed.cjs [参数]
 
 参数:
-  --all              扫描全部 Domain 实体并生成 *I18nSeedData.cs（不跳过任何实体）
-  --<实体名>         仅生成指定实体，如 --User、--UserRole、--Company
+  --all              显式全量（与默认行为相同，可省略）
   --force            保留兼容（已存在文件默认覆盖更新）
   --dry-run          仅打印将生成的键，不写文件
+
+说明:
+  - 本脚本始终全量扫描 Domain/Entities 下全部 Takt* 实体，无排除项
+  - 从 generate-all 传入的 --<实体名> 会被忽略（i18n 种子固定全量重建）
 
 输出:
   backend/src/Takt.Infrastructure/Data/Seeds/I18nSeedData/{与实体相同路径}/Takt{Entity}I18nSeedData.cs
@@ -951,55 +891,42 @@ function printUsage() {
       → I18nSeedData/Accounting/Financial/TaktCompanyI18nSeedData.cs
 
 翻译键规则:
-  entity.{slug}._self              实体名称（summary 首行；「实体」→「信息」；en-US 为 Slug Information）
-  entity.{slug}.{fieldSegment}     默认=属性 camelCase 去 slug 前缀后全小写（tenantName→name；userRoles→roles）
-                                   含 SugarColumn 映射字段、Takt.Shared 枚举字段、[Navigate] 导航属性
-                                   跳过：基类审计字段、无 [Navigate] 的 ORM 实体引用/集合引用
-                                   TranslationText=ColumnDescription→locales→summary 首行；ContextNote=属性 XML summary 全文
+  entity.{slug}._self              slug=类名去 Takt 后全小写（TaktAssyDefectDetail→assydefectdetail）
+  entity.{slug}.{fieldSegment}     字段末段=属性 camelCase 去 slug 前缀后全小写（defectCategory→defectcategory）
 
 语言:
   ${CONFIG.cultures.join('、')}（缺省语言文件时回退 zh-CN 文案，请人工校对）
 
 示例:
-  node scripts/generate-entity-i18n-seed.cjs --User
-  node scripts/generate-entity-i18n-seed.cjs --Company --force
-  node scripts/generate-entity-i18n-seed.cjs --all
+  node scripts/generate-entity-i18n-seed.cjs
+  node scripts/generate-entity-i18n-seed.cjs --all --dry-run
 `);
 }
 
+/**
+ * 解析 CLI：始终全量（--all）；仅识别 --force / --dry-run / --all
+ * @returns {{ force: boolean, dryRun: boolean }}
+ */
 function parseArgs() {
-  const args = process.argv.slice(2);
-  if (args.length === 0) {
-    console.error('❌ 缺少参数');
-    printUsage();
-    process.exit(1);
-  }
-  const options = { all: false, entityPrefix: null, force: false, dryRun: false };
-  args.forEach((arg) => {
+  const options = { force: false, dryRun: false };
+  for (const arg of process.argv.slice(2)) {
     if (arg === '--force') {
       options.force = true;
-      return;
+      continue;
     }
     if (arg === '--dry-run') {
       options.dryRun = true;
-      return;
+      continue;
     }
-    if (!arg.startsWith('--')) {
-      process.exit(1);
+    if (arg === '--all' || arg === '--ALL') {
+      continue;
     }
-    const v = arg.slice(2);
-    if (v.toLowerCase() === 'all') {
-      options.all = true;
-      return;
+    if (arg.startsWith('--')) {
+      console.warn(`⚠️  忽略参数 ${arg}：本脚本固定 --all 全量生成，不支持单实体过滤`);
+      continue;
     }
-    if (v.startsWith('Takt')) {
-      console.error('❌ 不要带 Takt 前缀，例如 --User');
-      process.exit(1);
-    }
-    options.entityPrefix = v;
-  });
-  if (!options.all && !options.entityPrefix) {
-    console.error('❌ 请指定 --all 或 --User 等实体名');
+    console.error(`❌ 未知参数: ${arg}`);
+    printUsage();
     process.exit(1);
   }
   return options;
@@ -1009,18 +936,20 @@ function parseArgs() {
 // 主流程
 // ========================================
 
-console.log('🚀 从实体生成 Entity I18n 种子...\n');
+console.log('🚀 从实体生成 Entity I18n 种子（全量 --all，无排除）...\n');
 logGeneratedFileWritePolicy();
 
 try {
   loadTaktEnumTypeNames();
   loadTaktEntityClassNames();
   const options = parseArgs();
-  const entities = scanEntities(options.all ? null : options.entityPrefix);
+  const entities = scanEntities();
   if (entities.length === 0) {
-    console.error('❌ 未找到匹配实体');
+    console.error('❌ 未找到任何可解析实体');
     process.exit(1);
   }
+
+  console.log(`📦 模式: 全量（--all）共 ${entities.length} 个实体\n`);
 
   let created = 0;
   let updated = 0;

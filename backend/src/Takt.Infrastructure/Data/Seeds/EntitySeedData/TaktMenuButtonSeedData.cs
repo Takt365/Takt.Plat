@@ -26,7 +26,7 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// <summary>
 /// Takt 按钮菜单种子数据。
 /// <para>
-/// 在各级页面菜单（Level1～Level5）种子执行完毕后，由 <see cref="TaktMenuSeedData"/> 调用。
+/// 在各级页面菜单（Level1～Level5）种子执行完毕后，由 TaktMenuSeedData 调用。
 /// 仅处理 <c>MenuType == 1</c> 且未删除的菜单；要求 <c>Permission</c> 非空且以 <c>:list</c> 结尾。
 /// 由 TaktMenuSeedData 统一协调调用，不直接注册为 ITaktSeedDataCoordinator。
 /// </para>
@@ -41,7 +41,7 @@ public class TaktMenuButtonSeedData
     /// 等模块仅追加特有操作按钮，生成或更新子按钮记录。
     /// </para>
     /// </summary>
-    /// <param name="serviceProvider">服务提供者，用于解析 <see cref="ITaktRepository{TaktMenu}"/>。</param>
+    /// <param name="serviceProvider">服务提供者，用于解析 ITaktRepository{TaktMenu}。</param>
     /// <param name="specifiedTenantCode">租户编码（由协调器传入）。</param>
     /// <returns>元组：(InsertCount, UpdateCount)，分别为本次新增与更新的菜单（按钮）条数。</returns>
     /// <exception cref="InvalidOperationException">当某页面菜单的 Permission 为空或不以 :list 结尾时抛出。</exception>
@@ -95,7 +95,7 @@ public class TaktMenuButtonSeedData
     /// <param name="menuRepository">菜单仓储。</param>
     /// <param name="menu">父级页面菜单实体（MenuType=1）。</param>
     /// <param name="modulePrefix">
-    /// 从 <see cref="TaktMenu.Permission"/> 解析出的模块前缀（冒号分隔第一段的小写形式）。
+    /// 从 TaktMenu.Permission 解析出的模块前缀（冒号分隔第一段的小写形式）。
     /// 若以 <c>takt</c> 开头则视为空前缀，走默认通用按钮组。
     /// </param>
     /// <returns>元组：(InsertCount, UpdateCount)，本菜单下按钮新增与更新条数。</returns>
@@ -148,7 +148,7 @@ public class TaktMenuButtonSeedData
     }
 
     /// <summary>
-    /// 从完整权限字符串中提取模块前缀（第一段），用于 <see cref="GetButtonConfig"/> 分支。
+    /// 从完整权限字符串中提取模块前缀（第一段），用于 GetButtonConfig 分支。
     /// </summary>
     /// <param name="permission">菜单权限字符串，例如 <c>identity:user:list</c>。</param>
     /// <returns>
@@ -195,58 +195,94 @@ public class TaktMenuButtonSeedData
     }
 
     /// <summary>
-    /// 通用 CRUD 按钮显示名称（含树表全场景、主子表明细全场景；末项固定为「批量」）。
+    /// 通用 CRUD 按钮显示名称（分组：CRUD → 导入导出 → 审批流 → 复制克隆 → 树表 → 明细行 → 其它；末项固定「批量」）。
+    /// 「撤销」(revoke) 与「撤回」(withdraw) 为全项目共用后缀，模块扩展不得重复定义。
     /// </summary>
     private static readonly string[] GenericButtonNames =
     {
-        "查询", "新增", "修改", "删除", "详情", "预览", "打印", "导入", "导出", "模板", "审批", "撤销", "树", "选项", "主题设置",
-        "展开", "收缩", "新增根", "新增下级", "同级新增", "插入", "编辑节点", "复制节点",
-        "删除当前", "删除本级及子级", "移动", "上移", "下移", "置顶", "置底", "提升层级", "降级层级",
-        "新增行", "插入行", "编辑行", "修改行", "删除行", "复制行", "克隆行",
-        "行上移", "行下移", "清空明细", "导入明细", "导出明细", "明细批量",
+        "查询", "新增", "修改", "删除", "详情", "预览", "打印",
+        "导入", "导出", "模板",
+        "审批", "撤销", "撤回",
         "复制", "克隆",
+        "树", "选项", "展开", "收缩", "插入", "移动", "上移", "下移",
+        "新增行", "插入行", "编辑行", "修改行", "删除行", "复制行", "克隆行", "行上移", "行下移",
+        "主题设置",
         "批量"
     };
 
-    /// <summary>通用 CRUD 按钮权限后缀（与 <see cref="GenericButtonNames"/> 一一对应；I18nKey 为 common.button.*）。</summary>
+    /// <summary>通用 CRUD 按钮权限后缀（与 GenericButtonNames 一一对应；I18nKey 为 common.button.*）。</summary>
     private static readonly string[] GenericButtonPerms =
     {
-        "query", "create", "update", "delete", "detail", "preview", "print", "import", "export", "template", "approve", "revoke", "tree", "options", "theme",
-        "expand", "collapse", "createroot", "createchild", "createsibling", "insert", "editnode", "clonenode",
-        "deletecurrent", "deletesubtree", "move", "moveup", "movedown", "movetop", "movebottom", "promote", "demote",
-        "createrow", "insertrow", "editrow", "updaterow", "deleterow", "copyrow", "clonerow",
-        "moverowup", "moverowdown", "cleardetail", "importdetail", "exportdetail", "detailbatch",
+        "query", "create", "update", "delete", "detail", "preview", "print",
+        "import", "export", "template",
+        "approve", "revoke", "withdraw",
         "copy", "clone",
+        "tree", "options", "expand", "collapse", "insert", "move", "moveup", "movedown",
+        "createrow", "insertrow", "editrow", "updaterow", "deleterow", "copyrow", "clonerow", "moverowup", "moverowdown",
+        "theme",
         "batch"
     };
 
-    /// <summary>会计模块扩展按钮（继承通用，仅追加财务操作）。</summary>
+    /// <summary>会计模块扩展按钮（分组：账期结账 → 核算记账 → 对账支付 → 报销 → 资产 → 冲销作废）。</summary>
     private static readonly string[] AccountingExtraNames =
     {
-        "核算", "记账", "结账", "对账", "支付", "折旧", "报废", "报销", "冲销", "计提", "账期", "结转", "作废"
+        "账期", "结账", "结转",
+        "核算", "记账", "计提",
+        "对账", "支付",
+        "报销",
+        "折旧", "报废",
+        "冲销", "作废"
     };
 
     private static readonly string[] AccountingExtraPerms =
     {
-        "calculate", "book", "closing", "reconcile", "payment", "depreciation", "scrap", "reimburse", "reverse", "accrual", "period", "carryforward", "void"
+        "period", "closing", "carryforward",
+        "calculate", "book", "accrual",
+        "reconcile", "payment",
+        "reimburse",
+        "depreciation", "scrap",
+        "reverse", "void"
     };
 
-    /// <summary>代码生成模块扩展按钮。</summary>
+    /// <summary>代码生成模块扩展按钮（分组：生成下载 → 同步元数据 → 初始化克隆 → 清空截断）。</summary>
     private static readonly string[] CodeExtraNames =
     {
-        "生成", "下载", "同步", "字段", "表", "数据库", "初始化", "克隆", "清空", "截断"
+        "生成", "下载",
+        "同步", "字段", "表", "数据库",
+        "初始化", "克隆",
+        "清空", "截断"
     };
 
     private static readonly string[] CodeExtraPerms =
     {
-        "generate", "download", "sync", "columns", "tables", "databases", "initialize", "clone", "empty", "truncate"
+        "generate", "download",
+        "sync", "columns", "tables", "databases",
+        "initialize", "clone",
+        "empty", "truncate"
     };
 
-    /// <summary>基础设置模块扩展按钮（敏感词过滤/替换）。</summary>
-    private static readonly string[] FoundationExtraNames = { "过滤", "替换" };
-    private static readonly string[] FoundationExtraPerms = { "filter", "replace" };
+    /// <summary>基础设置模块扩展按钮（分组：敏感词 → 在线/SignalR → 消息 → Quartz → 文件 → 重置/转置）。</summary>
+    private static readonly string[] FoundationExtraNames =
+    {
+        "过滤", "替换",
+        "强退", "统计",
+        "发送", "广播", "已读", "未读",
+        "执行", "启动", "暂停", "停止",
+        "上传", "分片", "合并", "检查", "下载",
+        "重置", "转置"
+    };
 
-    /// <summary>人力资源模块扩展按钮（入职/转正/调动/晋升/离职/返聘等）。</summary>
+    private static readonly string[] FoundationExtraPerms =
+    {
+        "filter", "replace",
+        "kick", "stats",
+        "send", "broadcast", "read", "unread",
+        "execute", "start", "pause", "stop",
+        "upload", "chunk", "merge", "check", "download",
+        "reset", "transpose"
+    };
+
+    /// <summary>人力资源模块扩展按钮（员工生命周期：入职 → 转正 → 调动 → 晋升 → 离职 → 返聘）。</summary>
     private static readonly string[] HumanResourceExtraNames =
     {
         "入职", "转正", "调动", "晋升", "离职", "返聘"
@@ -257,24 +293,31 @@ public class TaktMenuButtonSeedData
         "onboard", "regularize", "reassignment", "promote", "terminate", "rehire"
     };
 
-    /// <summary>身份认证模块扩展按钮。</summary>
+    /// <summary>身份认证模块扩展按钮（分组：授权分配 → 密码 → 账号状态 → 重置/变更）。</summary>
     private static readonly string[] IdentityExtraNames =
     {
-        "授权", "分配", "重置密码", "变更密码", "重置", "变更", "清空", "截断", "解锁", "禁用"
+        "授权", "分配",
+        "重置密码", "变更密码",
+        "解锁", "禁用",
+        "重置", "变更"
     };
 
     private static readonly string[] IdentityExtraPerms =
     {
-        "authorize", "allocate", "resetpwd", "changepwd", "reset", "change", "empty", "truncate", "unlock", "disable"
+        "authorize", "allocate",
+        "resetpwd", "changepwd",
+        "unlock", "disable",
+        "reset", "change"
     };
 
-    /// <summary>日常事务模块扩展按钮（文档/社交/文件/系统等）。</summary>
+    /// <summary>日常事务模块扩展按钮（分组：复制 → 文档流转 → 社交互动 → 文件 → 排序 → 系统 → 转置）。</summary>
     private static readonly string[] RoutineExtraNames =
     {
         "克隆", "复制",
-        "保存草稿", "删除草稿", "发送", "撤回", "转发", "回复", "已读", "未读", "传阅", "签收", "催办", "确认",
+        "保存草稿", "删除草稿", "发送", "转发", "回复", "已读", "未读", "传阅", "签收", "催办", "确认",
         "点赞", "取消点赞", "收藏", "取消收藏", "分享", "取消分享", "评论", "取消评论", "举报", "取消举报", "关注", "取消关注",
         "上传", "下载", "归档", "销毁", "版本",
+        "置顶", "置底",
         "运行", "停止", "重启", "刷新", "重置", "清空",
         "转置"
     };
@@ -282,60 +325,74 @@ public class TaktMenuButtonSeedData
     private static readonly string[] RoutineExtraPerms =
     {
         "clone", "copy",
-        "draft", "deletedraft", "send", "withdraw", "forward", "reply", "read", "unread", "circulate", "sign", "urge", "confirm",
+        "draft", "deletedraft", "send", "forward", "reply", "read", "unread", "circulate", "sign", "urge", "confirm",
         "like", "unlike", "favorite", "unfavorite", "share", "unshare", "comment", "uncomment", "flagging", "unflagging", "follow", "unfollow",
         "upload", "download", "archive", "destroy", "version",
+        "movetop", "movebottom",
         "run", "stop", "restart", "refresh", "reset", "empty",
         "transpose"
     };
 
     /// <summary>
-    /// 工作流模块扩展按钮（继承 <see cref="GenericButtonNames"/>，仅追加流程特有操作；
-    /// 显示名与 I18nKey（common.button.{perm}）与项目标准按钮表一致）。
+    /// 工作流模块扩展按钮（分组：实例发起 → 待办操作 → 实例管控 → 方案定义 → 规划项）。
+    /// 运行时与 <c>TaktFlowEngineController</c> 对齐；「撤销」(revoke)/「撤回」(withdraw) 仅 Generic 定义。
+    /// 规划项（claim/cc/return/delegate 等）引擎未实现前仅种子授权，见 09-workflow §十。
     /// </summary>
     private static readonly string[] WorkflowExtraNames =
     {
-        "暂停", "恢复", "提交", "撤回", "转办", "委托", "退回", "催办", "加签", "减签", "进度", "历史",
-        "发布", "停用", "启用", "版本", "设计", "配置", "验证",
-        "启动", "终止",
-        "字段管理", "权限设置", "数据源配置", "表单数据",
-        "流转归档", "流转清理"
+        "启动", "发起流程", "保存草稿", "提交",
+        "转办", "加签", "减签",
+        "挂起", "恢复", "终止",
+        "设计", "发布", "验证", "部署",
+        "认领", "抄送", "退回", "委托", "跳转", "跟踪开始", "跟踪", "释放", "发起人", "切换"
     };
 
-    /// <summary>工作流模块扩展按钮权限后缀（与 <see cref="WorkflowExtraNames"/> 一一对应）。</summary>
+    /// <summary>工作流模块扩展按钮权限后缀（与 WorkflowExtraNames 一一对应）。</summary>
     private static readonly string[] WorkflowExtraPerms =
     {
-        "suspend", "resume", "submit", "withdraw", "transfer", "delegate", "return", "urge", "addsign", "reducesign", "progress", "history",
-        "publish", "disable", "enable", "version", "design", "config", "validate",
-        "start", "terminate",
-        "field", "permission", "datasource", "data",
-        "archive", "clean"
+        "start", "startflow", "draft", "submit",
+        "transfer", "addsign", "reducesign",
+        "suspend", "resume", "terminate",
+        "design", "publish", "validate", "deploy",
+        "claim", "cc", "return", "delegate", "jump", "tracestart", "trace", "release", "initiator", "toggle"
     };
 
-    /// <summary>统计看板模块扩展按钮（日志清理/归档、服务监控、报表统计等）。</summary>
+    /// <summary>统计看板模块扩展按钮（分组：刷新 → 日志清理 → 归档销毁 → 导出同步 → 核算转置 → 系统控制）。</summary>
     private static readonly string[] StatisticsExtraNames =
     {
-        "刷新", "清空", "清空7天", "清空30天", "清空全部", "截断", "归档", "销毁", "清理",
-        "下载", "同步", "核算", "转置", "重置", "运行", "停止", "重启"
+        "刷新",
+        "清空", "清空7天", "清空30天", "清空全部", "清理", "截断",
+        "归档", "销毁",
+        "下载", "同步",
+        "核算", "转置",
+        "重置", "运行", "停止", "重启"
     };
 
     private static readonly string[] StatisticsExtraPerms =
     {
-        "refresh", "empty", "empty7d", "empty30d", "emptyall", "truncate", "archive", "destroy", "clean",
-        "download", "sync", "calculate", "transpose", "reset", "run", "stop", "restart"
+        "refresh",
+        "empty", "empty7d", "empty30d", "emptyall", "clean", "truncate",
+        "archive", "destroy",
+        "download", "sync",
+        "calculate", "transpose",
+        "reset", "run", "stop", "restart"
     };
 
-    /// <summary>后勤/物料模块扩展按钮（收货/发货/领用/借调/调拨/核销等，未列入主模块顺序，仍继承通用）。</summary>
+    /// <summary>后勤/物料模块扩展按钮（分组：收发货 → 库内作业 → 领借还 → 调拨核销）。</summary>
     private static readonly string[] LogisticsExtraNames =
     {
-        "收货", "发货", "退货", "移库", "盘点", "调整", "报废",
-        "领用", "借调", "归还", "报损", "调拨", "核销"
+        "收货", "发货", "退货",
+        "移库", "盘点", "调整", "报废",
+        "领用", "借调", "归还", "报损",
+        "调拨", "核销"
     };
 
     private static readonly string[] LogisticsExtraPerms =
     {
-        "receive", "shipping", "returns", "transfer", "stocktake", "adjust", "scrap",
-        "requisition", "secondment", "restore", "lossreport", "allot", "writeoff"
+        "receive", "shipping", "returns",
+        "transfer", "stocktake", "adjust", "scrap",
+        "requisition", "secondment", "restore", "lossreport",
+        "allot", "writeoff"
     };
 
     /// <summary>
@@ -364,7 +421,7 @@ public class TaktMenuButtonSeedData
 
     /// <summary>
     /// 按模块前缀返回按钮显示名称数组与权限后缀（英文）数组；两者长度一致、一一对应。
-    /// 各模块继承 <see cref="GenericButtonNames"/>，仅追加特有操作；匹配顺序：
+    /// 各模块继承 GenericButtonNames，仅追加特有操作；匹配顺序：
     /// Accounting → Code → Foundation → HumanResource → Identity → Routine → Workflow → Statistics。
     /// </summary>
     /// <param name="modulePrefix">
@@ -448,14 +505,14 @@ public class TaktMenuButtonSeedData
                 ParentId = parentId,
                 MenuType = 2,  // Button
                 Permission = permission,
-                MenuStatus = TaktCommonStatus.Enabled,
+                MenuStatus = 1,
                 IsVisible = 1,
                 SortOrder = sortOrder,
                 IsCached = 0,
                 IsExternal = 0,
                 Level = 0,  // 稍后根据父级计算
                 IsLeaf = 1,  // 按钮永远是叶子节点
-                IsBuiltIn = TaktYesNo.Yes,
+                IsBuiltIn = 1,
                 CreatedBy = 900001,
                 CreatedAt = DateTime.Now
             };
@@ -493,10 +550,10 @@ public class TaktMenuButtonSeedData
             button.MenuName = buttonName;
             button.I18nKey = menuL10nKey;
             button.Permission = permission;
-            button.MenuStatus = TaktCommonStatus.Enabled;
+            button.MenuStatus = 1;
             button.IsVisible = 1;
             button.SortOrder = sortOrder;
-            button.IsBuiltIn = TaktYesNo.Yes;
+            button.IsBuiltIn = 1;
             
             // 重新计算 Level 和 MenuPath（如果 ParentId 发生变化）
             if (button.ParentId != parentId)

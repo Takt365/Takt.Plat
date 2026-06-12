@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostElementI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostElement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling;
 
 /// <summary>
-/// TaktCostElement 实体国际化翻译种子（键前缀 entity.costElement.*）
+/// TaktCostElement 实体国际化翻译种子（键前缀 entity.costelement.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 costElement 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 costelement 实体翻译...", tenantCode);
 
         foreach (var item in GetCostElementTranslations())
         {
@@ -76,110 +75,110 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCostElement 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.costElement._self / entity.costElement.{{field}}；ResourceGroup=TaktModule.Accounting；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.costelement._self / entity.costelement.{{field}}；ResourceGroup=3；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetCostElementTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.costElement._self
-            new TranslationSeedItem("entity.costElement._self", "en-US", "Cost Element Information", "实体名称"),
-            // entity.costElement._self
-            new TranslationSeedItem("entity.costElement._self", "ja-JP", "成本要素信息", "实体名称"),
-            // entity.costElement._self
-            new TranslationSeedItem("entity.costElement._self", "zh-CN", "成本要素信息", "实体名称"),
-            // entity.costElement._self
-            new TranslationSeedItem("entity.costElement._self", "zh-HK", "成本要素信息", "实体名称"),
+            // entity.costelement._self
+            new TranslationSeedItem("entity.costelement._self", "en-US", "Cost Element Information", "实体名称"),
+            // entity.costelement._self
+            new TranslationSeedItem("entity.costelement._self", "ja-JP", "成本要素信息", "实体名称"),
+            // entity.costelement._self
+            new TranslationSeedItem("entity.costelement._self", "zh-CN", "成本要素信息", "实体名称"),
+            // entity.costelement._self
+            new TranslationSeedItem("entity.costelement._self", "zh-HK", "成本要素信息", "实体名称"),
 
-            // entity.costElement.code
-            new TranslationSeedItem("entity.costElement.code", "en-US", "成本要素编码", "成本要素编码"),
-            // entity.costElement.code
-            new TranslationSeedItem("entity.costElement.code", "ja-JP", "成本要素编码", "成本要素编码"),
-            // entity.costElement.code
-            new TranslationSeedItem("entity.costElement.code", "zh-CN", "成本要素编码", "成本要素编码"),
-            // entity.costElement.code
-            new TranslationSeedItem("entity.costElement.code", "zh-HK", "成本要素编码", "成本要素编码"),
+            // entity.costelement.code
+            new TranslationSeedItem("entity.costelement.code", "en-US", "成本要素编码", "成本要素编码"),
+            // entity.costelement.code
+            new TranslationSeedItem("entity.costelement.code", "ja-JP", "成本要素编码", "成本要素编码"),
+            // entity.costelement.code
+            new TranslationSeedItem("entity.costelement.code", "zh-CN", "成本要素编码", "成本要素编码"),
+            // entity.costelement.code
+            new TranslationSeedItem("entity.costelement.code", "zh-HK", "成本要素编码", "成本要素编码"),
 
-            // entity.costElement.name
-            new TranslationSeedItem("entity.costElement.name", "en-US", "成本要素名称", "成本要素名称"),
-            // entity.costElement.name
-            new TranslationSeedItem("entity.costElement.name", "ja-JP", "成本要素名称", "成本要素名称"),
-            // entity.costElement.name
-            new TranslationSeedItem("entity.costElement.name", "zh-CN", "成本要素名称", "成本要素名称"),
-            // entity.costElement.name
-            new TranslationSeedItem("entity.costElement.name", "zh-HK", "成本要素名称", "成本要素名称"),
+            // entity.costelement.name
+            new TranslationSeedItem("entity.costelement.name", "en-US", "成本要素名称", "成本要素名称"),
+            // entity.costelement.name
+            new TranslationSeedItem("entity.costelement.name", "ja-JP", "成本要素名称", "成本要素名称"),
+            // entity.costelement.name
+            new TranslationSeedItem("entity.costelement.name", "zh-CN", "成本要素名称", "成本要素名称"),
+            // entity.costelement.name
+            new TranslationSeedItem("entity.costelement.name", "zh-HK", "成本要素名称", "成本要素名称"),
 
-            // entity.costElement.type
-            new TranslationSeedItem("entity.costElement.type", "en-US", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
-            // entity.costElement.type
-            new TranslationSeedItem("entity.costElement.type", "ja-JP", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
-            // entity.costElement.type
-            new TranslationSeedItem("entity.costElement.type", "zh-CN", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
-            // entity.costElement.type
-            new TranslationSeedItem("entity.costElement.type", "zh-HK", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
+            // entity.costelement.type
+            new TranslationSeedItem("entity.costelement.type", "en-US", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
+            // entity.costelement.type
+            new TranslationSeedItem("entity.costelement.type", "ja-JP", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
+            // entity.costelement.type
+            new TranslationSeedItem("entity.costelement.type", "zh-CN", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
+            // entity.costelement.type
+            new TranslationSeedItem("entity.costelement.type", "zh-HK", "成本要素类型", "成本要素类型（0=初级，1=次级）"),
 
-            // entity.costElement.category
-            new TranslationSeedItem("entity.costElement.category", "en-US", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
-            // entity.costElement.category
-            new TranslationSeedItem("entity.costElement.category", "ja-JP", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
-            // entity.costElement.category
-            new TranslationSeedItem("entity.costElement.category", "zh-CN", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
-            // entity.costElement.category
-            new TranslationSeedItem("entity.costElement.category", "zh-HK", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            // entity.costelement.category
+            new TranslationSeedItem("entity.costelement.category", "en-US", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            // entity.costelement.category
+            new TranslationSeedItem("entity.costelement.category", "ja-JP", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            // entity.costelement.category
+            new TranslationSeedItem("entity.costelement.category", "zh-CN", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
+            // entity.costelement.category
+            new TranslationSeedItem("entity.costelement.category", "zh-HK", "成本要素类别", "成本要素类别（0=人工，1=材料，2=制造费用，3=其他）"),
 
-            // entity.costElement.parentid
-            new TranslationSeedItem("entity.costElement.parentid", "en-US", "父级ID", "父级 ID"),
-            // entity.costElement.parentid
-            new TranslationSeedItem("entity.costElement.parentid", "ja-JP", "父级ID", "父级 ID"),
-            // entity.costElement.parentid
-            new TranslationSeedItem("entity.costElement.parentid", "zh-CN", "父级ID", "父级 ID"),
-            // entity.costElement.parentid
-            new TranslationSeedItem("entity.costElement.parentid", "zh-HK", "父级ID", "父级 ID"),
+            // entity.costelement.parentid
+            new TranslationSeedItem("entity.costelement.parentid", "en-US", "父级ID", "父级 ID"),
+            // entity.costelement.parentid
+            new TranslationSeedItem("entity.costelement.parentid", "ja-JP", "父级ID", "父级 ID"),
+            // entity.costelement.parentid
+            new TranslationSeedItem("entity.costelement.parentid", "zh-CN", "父级ID", "父级 ID"),
+            // entity.costelement.parentid
+            new TranslationSeedItem("entity.costelement.parentid", "zh-HK", "父级ID", "父级 ID"),
 
-            // entity.costElement.level
-            new TranslationSeedItem("entity.costElement.level", "en-US", "成本要素层级", "成本要素层级"),
-            // entity.costElement.level
-            new TranslationSeedItem("entity.costElement.level", "ja-JP", "成本要素层级", "成本要素层级"),
-            // entity.costElement.level
-            new TranslationSeedItem("entity.costElement.level", "zh-CN", "成本要素层级", "成本要素层级"),
-            // entity.costElement.level
-            new TranslationSeedItem("entity.costElement.level", "zh-HK", "成本要素层级", "成本要素层级"),
+            // entity.costelement.level
+            new TranslationSeedItem("entity.costelement.level", "en-US", "成本要素层级", "成本要素层级"),
+            // entity.costelement.level
+            new TranslationSeedItem("entity.costelement.level", "ja-JP", "成本要素层级", "成本要素层级"),
+            // entity.costelement.level
+            new TranslationSeedItem("entity.costelement.level", "zh-CN", "成本要素层级", "成本要素层级"),
+            // entity.costelement.level
+            new TranslationSeedItem("entity.costelement.level", "zh-HK", "成本要素层级", "成本要素层级"),
 
-            // entity.costElement.status
-            new TranslationSeedItem("entity.costElement.status", "en-US", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
-            // entity.costElement.status
-            new TranslationSeedItem("entity.costElement.status", "ja-JP", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
-            // entity.costElement.status
-            new TranslationSeedItem("entity.costElement.status", "zh-CN", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
-            // entity.costElement.status
-            new TranslationSeedItem("entity.costElement.status", "zh-HK", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "en-US", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "ja-JP", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "zh-CN", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
+            // entity.costelement.status
+            new TranslationSeedItem("entity.costelement.status", "zh-HK", "成本要素状态", "成本要素状态（1=启用，0=禁用）"),
 
-            // entity.costElement.validfrom
-            new TranslationSeedItem("entity.costElement.validfrom", "en-US", "生效日期", "生效日期"),
-            // entity.costElement.validfrom
-            new TranslationSeedItem("entity.costElement.validfrom", "ja-JP", "生效日期", "生效日期"),
-            // entity.costElement.validfrom
-            new TranslationSeedItem("entity.costElement.validfrom", "zh-CN", "生效日期", "生效日期"),
-            // entity.costElement.validfrom
-            new TranslationSeedItem("entity.costElement.validfrom", "zh-HK", "生效日期", "生效日期"),
+            // entity.costelement.validfrom
+            new TranslationSeedItem("entity.costelement.validfrom", "en-US", "生效日期", "生效日期"),
+            // entity.costelement.validfrom
+            new TranslationSeedItem("entity.costelement.validfrom", "ja-JP", "生效日期", "生效日期"),
+            // entity.costelement.validfrom
+            new TranslationSeedItem("entity.costelement.validfrom", "zh-CN", "生效日期", "生效日期"),
+            // entity.costelement.validfrom
+            new TranslationSeedItem("entity.costelement.validfrom", "zh-HK", "生效日期", "生效日期"),
 
-            // entity.costElement.validto
-            new TranslationSeedItem("entity.costElement.validto", "en-US", "失效日期", "失效日期"),
-            // entity.costElement.validto
-            new TranslationSeedItem("entity.costElement.validto", "ja-JP", "失效日期", "失效日期"),
-            // entity.costElement.validto
-            new TranslationSeedItem("entity.costElement.validto", "zh-CN", "失效日期", "失效日期"),
-            // entity.costElement.validto
-            new TranslationSeedItem("entity.costElement.validto", "zh-HK", "失效日期", "失效日期"),
+            // entity.costelement.validto
+            new TranslationSeedItem("entity.costelement.validto", "en-US", "失效日期", "失效日期"),
+            // entity.costelement.validto
+            new TranslationSeedItem("entity.costelement.validto", "ja-JP", "失效日期", "失效日期"),
+            // entity.costelement.validto
+            new TranslationSeedItem("entity.costelement.validto", "zh-CN", "失效日期", "失效日期"),
+            // entity.costelement.validto
+            new TranslationSeedItem("entity.costelement.validto", "zh-HK", "失效日期", "失效日期"),
 
-            // entity.costElement.sortorder
-            new TranslationSeedItem("entity.costElement.sortorder", "en-US", "排序号", "排序号"),
-            // entity.costElement.sortorder
-            new TranslationSeedItem("entity.costElement.sortorder", "ja-JP", "排序号", "排序号"),
-            // entity.costElement.sortorder
-            new TranslationSeedItem("entity.costElement.sortorder", "zh-CN", "排序号", "排序号"),
-            // entity.costElement.sortorder
-            new TranslationSeedItem("entity.costElement.sortorder", "zh-HK", "排序号", "排序号"),
+            // entity.costelement.sortorder
+            new TranslationSeedItem("entity.costelement.sortorder", "en-US", "排序号", "排序号"),
+            // entity.costelement.sortorder
+            new TranslationSeedItem("entity.costelement.sortorder", "ja-JP", "排序号", "排序号"),
+            // entity.costelement.sortorder
+            new TranslationSeedItem("entity.costelement.sortorder", "zh-CN", "排序号", "排序号"),
+            // entity.costelement.sortorder
+            new TranslationSeedItem("entity.costelement.sortorder", "zh-HK", "排序号", "排序号"),
         };
     }
 
@@ -197,8 +196,8 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Accounting;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 3;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

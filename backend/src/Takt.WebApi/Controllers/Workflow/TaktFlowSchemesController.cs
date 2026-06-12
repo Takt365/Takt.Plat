@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Workflow
 // 文件名称：TaktFlowSchemesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程定义控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Workflow;
 /// 流程定义控制器
 /// 提供流程定义的 REST API
 /// </summary>
-[ApiModule(TaktModule.Workflow, "工作流")]
+[ApiModule(6, "工作流")]
 [Route("api/[controller]", Name = "流程定义")]
 public class TaktFlowSchemesController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("workflow:flowscheme:list", "流程定义列表")]
+    [TaktPermission("workflow:scheme:list", "流程定义列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetFlowSchemeListAsync([FromQuery] TaktFlowSchemeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程定义ID</param>
     /// <returns>流程定义DTO</returns>
-    [TaktPermission("workflow:flowscheme:query", "流程定义详情")]
+    [TaktPermission("workflow:scheme:query", "流程定义详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFlowSchemeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// 获取流程定义选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("workflow:flowscheme:query", "流程定义选项")]
+    [TaktPermission("workflow:scheme:query", "流程定义选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetFlowSchemeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>流程定义DTO</returns>
-    [TaktPermission("workflow:flowscheme:create", "创建流程定义")]
+    [TaktPermission("workflow:scheme:create", "创建流程定义")]
     [HttpPost]
     public async Task<IActionResult> CreateFlowSchemeAsync([FromBody] TaktFlowSchemeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// <param name="id">流程定义ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>流程定义DTO</returns>
-    [TaktPermission("workflow:flowscheme:update", "更新流程定义")]
+    [TaktPermission("workflow:scheme:update", "更新流程定义")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFlowSchemeAsync(long id, [FromBody] TaktFlowSchemeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程定义ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowscheme:delete", "删除流程定义")]
+    [TaktPermission("workflow:scheme:delete", "删除流程定义")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFlowSchemeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowscheme:delete", "批量删除流程定义")]
+    [TaktPermission("workflow:scheme:delete", "批量删除流程定义")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteFlowSchemeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -183,9 +183,9 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// <summary>
     /// 更新流程定义状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktFlowSchemeStatus 枚举）</param>
+    /// <param name="dto">状态 DTO（processStatus 与字典 sys_scheme_status 一致）</param>
     /// <returns>流程定义DTO</returns>
-    [TaktPermission("workflow:flowscheme:update", "更新流程定义状态")]
+    [TaktPermission("workflow:scheme:update", "更新流程定义状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateFlowSchemeStatusAsync([FromBody] TaktFlowSchemeStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>流程定义DTO</returns>
-    [TaktPermission("workflow:flowscheme:update", "更新流程定义排序")]
+    [TaktPermission("workflow:scheme:update", "更新流程定义排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateFlowSchemeSortAsync([FromBody] TaktFlowSchemeSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowscheme:import", "获取流程定义导入模板")]
+    [TaktPermission("workflow:scheme:import", "获取流程定义导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetFlowSchemeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("workflow:flowscheme:import", "导入流程定义")]
+    [TaktPermission("workflow:scheme:import", "导入流程定义")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportFlowSchemeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// 导出流程定义
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowscheme:export", "导出流程定义")]
+    [TaktPermission("workflow:scheme:export", "导出流程定义")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportFlowSchemeAsync([FromQuery] TaktFlowSchemeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

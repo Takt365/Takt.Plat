@@ -87,6 +87,50 @@ export function getMenuAccordionOpenKeys(keys: string[], parentByKey: Map<string
 }
 
 /**
+ * 移除 openKeys 中「祖先未展开」的孤儿 key（收起父级时同步收起全部子孙 SubMenu）
+ * @param keys 当前 openKeys
+ * @param parentByKey key → 父 key
+ */
+export function pruneOpenKeysWithoutAncestors(
+  keys: string[],
+  parentByKey: Map<string, string | null>
+): string[] {
+  if (keys.length === 0) {
+    return [];
+  }
+
+  const keySet = new Set(keys);
+  return keys.filter((key) => {
+    let parent = parentByKey.get(key) ?? null;
+    while (parent) {
+      if (!keySet.has(parent)) {
+        return false;
+      }
+      parent = parentByKey.get(parent) ?? null;
+    }
+    return true;
+  });
+}
+
+/**
+ * 规范化用户操作后的 openKeys：先级联收拢孤儿 key，再应用手风琴
+ * @param keys 当前 openKeys
+ * @param parentByKey key → 父 key
+ * @param accordion 是否手风琴（只保留最后展开分支的祖先链）
+ */
+export function normalizeMenuOpenKeys(
+  keys: string[],
+  parentByKey: Map<string, string | null>,
+  accordion: boolean
+): string[] {
+  let next = pruneOpenKeysWithoutAncestors(keys, parentByKey);
+  if (accordion && next.length > 1) {
+    next = getMenuAccordionOpenKeys(next, parentByKey);
+  }
+  return next;
+}
+
+/**
  * 按当前路由 path 解析应展开的父级 SubMenu keys（与 formatMenuItems 的 key 规则一致）
  * @param items Ant Design Menu items
  * @param path 当前路由 path

@@ -18,22 +18,22 @@
     :rules="formRules"
   >
     <a-form-item
-      :label="t('entity.flowinstance.processtitle')"
+      :label="t('entity.flowInstance.processtitle')"
       name="processTitle"
     >
       <a-input
         v-model:value="form.processTitle"
-        :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowinstance.processtitle') })"
+        :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowInstance.processtitle') })"
       />
     </a-form-item>
     <a-form-item
-      :label="t('entity.flowinstance.frmdata')"
+      :label="t('entity.flowInstance.frmdata')"
       name="frmData"
     >
       <a-textarea
         v-model:value="form.frmData"
         :rows="6"
-        :placeholder="t('workflow.instance.frmDataPlaceholder')"
+        :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowInstance.frmdata') })"
       />
     </a-form-item>
   </a-form>

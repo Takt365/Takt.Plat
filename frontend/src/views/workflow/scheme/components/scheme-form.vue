@@ -35,23 +35,23 @@
         v-show="currentStep === 1"
         class="step-content"
       >
-        <a-form-item :label="t('workflow.scheme.linkForm')">
+        <a-form-item :label="t('workflow.scheme.page.linkForm')">
           <a-radio-group
             v-model:value="linkFormMode"
             class="scheme-form__form-radio"
           >
             <a-radio value="link">
-              {{ t('workflow.scheme.linkFormOptionLink') }}
+              {{ t('workflow.scheme.page.linkFormOptionLink') }}
             </a-radio>
             <a-radio value="new">
-              {{ t('workflow.scheme.linkFormOptionNew') }}
+              {{ t('workflow.scheme.page.linkFormOptionNew') }}
             </a-radio>
           </a-radio-group>
         </a-form-item>
         <!-- 关联表单：表单选择器 -->
         <a-form-item
           v-if="linkFormMode === 'link'"
-          :label="t('workflow.scheme.linkForm')"
+          :label="t('workflow.scheme.page.linkForm')"
           name="formCode"
         >
           <a-spin :spinning="formListLoading">
@@ -59,7 +59,7 @@
               <a-select
                 v-model:value="formSelectValue"
                 style="width: 100%"
-                :placeholder="t('workflow.scheme.selectFormPlaceholder')"
+                :placeholder="t('workflow.scheme.page.selectFormPlaceholder')"
                 allow-clear
                 show-search
                 :filter-option="filterFormOption"
@@ -80,18 +80,39 @@
               v-else-if="!formListLoading"
               class="scheme-form__no-form"
             >
-              <span class="scheme-form__hint">{{ t('workflow.scheme.noFormHint') }}</span>
+              <span class="scheme-form__hint">{{ t('workflow.scheme.page.noFormHint') }}</span>
             </div>
           </a-spin>
         </a-form-item>
+        <template v-if="linkFormMode === 'new'">
+          <a-form-item
+            :label="t('workflow.scheme.page.newFormCode')"
+            required
+          >
+            <a-input
+              v-model:value="newFormCode"
+              :placeholder="t('workflow.scheme.page.newFormCodePlaceholder')"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('workflow.scheme.page.newFormName')"
+            required
+          >
+            <a-input
+              v-model:value="newFormName"
+              :placeholder="t('workflow.scheme.page.newFormNamePlaceholder')"
+            />
+          </a-form-item>
+        </template>
         <!-- 表单设计器：关联与新建均在此展示/设计 -->
         <div class="scheme-form__form-designer-section">
           <div class="scheme-form__form-designer-section__title">
-            {{ linkFormMode === 'link' ? t('workflow.scheme.linkFormOptionLink') : t('workflow.scheme.linkFormOptionNew') }}
+            {{ linkFormMode === 'link' ? t('workflow.scheme.page.linkFormOptionLink') : t('workflow.scheme.page.linkFormOptionNew') }}
           </div>
           <div class="scheme-form__form-designer-section__body">
             <TaktFormDesigner
-              :key="'form-designer-' + linkFormMode + '-' + (form.formId ?? formSelectValue ?? 'new')"
+              ref="formDesignerRef"
+              :key="'form-designer-' + linkFormMode + '-' + (form.formId ?? formSelectValue ?? newFormCode ?? 'new')"
               v-model="formDesignConfig"
               height="480px"
               :designer-config="formDesignerConfig"
@@ -106,7 +127,7 @@
       >
         <div class="scheme-designer-section">
           <div class="scheme-designer-section__title">
-            {{ isEdit ? t('workflow.scheme.designerLabelEdit') : t('workflow.scheme.designerLabel') }}
+            {{ isEdit ? t('workflow.scheme.page.designerLabelEdit') : t('workflow.scheme.page.designerLabel') }}
           </div>
           <div class="scheme-designer-section__body">
             <TaktFlowAntflowDesigner
@@ -125,21 +146,21 @@
         style="margin-right: 8px"
         @click="prev"
       >
-        {{ t('workflow.scheme.step.prev') }}
+        {{ t('workflow.scheme.page.step.prev') }}
       </a-button>
       <a-button
         v-if="currentStep < steps.length - 1"
         type="primary"
         @click="next"
       >
-        {{ t('workflow.scheme.step.next') }}
+        {{ t('workflow.scheme.page.step.next') }}
       </a-button>
       <a-button
         v-if="currentStep === steps.length - 1"
         type="primary"
         @click="handleDone"
       >
-        {{ t('workflow.scheme.step.done') }}
+        {{ t('workflow.scheme.page.step.done') }}
       </a-button>
     </div>
   </a-form>
@@ -152,11 +173,15 @@ import { useI18n } from 'vue-i18n'
 import TaktFlowAntflowDesigner from '@/components/business/takt-flow-antflow-designer/index.vue'
 import TaktFlowBasicSetting from '@/components/business/takt-flow-antflow-designer/basic-setting/takt-flow-basic-setting.vue'
 import TaktFormDesigner from '@/components/business/takt-form-designer/index.vue'
-import { getFlowFormList, getFlowFormById } from '@/api/workflow/flow-form'
+import { getFlowFormList, getFlowFormById, createFlowForm, updateFlowForm } from '@/api/workflow/flow-form'
 import type { FlowSchemeFormModel } from '@/types/workflow/flow-scheme'
-import type { FlowForm } from '@/types/workflow/flow-form'
+import type { FlowForm, FlowFormUpdate } from '@/types/workflow/flow-form'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 const { t } = useI18n()
+const tenantStore = useTenantStore()
+const userStore = useUserStore()
 
 // 父组件传入的表单数据（含 flowSchemeId 表示编辑）
 interface Props {
@@ -174,12 +199,17 @@ const currentStep = ref(0)
 const formRef = ref()
 // 流程设计器实例
 const flowDesignerRef = ref<InstanceType<typeof TaktFlowAntflowDesigner> | null>(null)
+// 关联表单设计器实例
+const formDesignerRef = ref<InstanceType<typeof TaktFormDesigner> | null>(null)
+// 新建表单编码与名称
+const newFormCode = ref('')
+const newFormName = ref('')
 
 // 步骤配置：1 流程信息、2 关联表单、3 流程设计
 const steps = computed(() => [
-  { title: t('workflow.scheme.step.step1FlowInfo'), content: 0 },
-  { title: t('workflow.scheme.step.step2SelectForm'), content: 1 },
-  { title: t('workflow.scheme.step.step3FlowDesign'), content: 2 }
+  { title: t('workflow.scheme.page.step.step1FlowInfo'), content: 0 },
+  { title: t('workflow.scheme.page.step.step2SelectForm'), content: 1 },
+  { title: t('workflow.scheme.page.step.step3FlowDesign'), content: 2 }
 ])
 const stepItems = computed(() => steps.value.map(item => ({ key: item.title, title: item.title })))
 
@@ -263,8 +293,11 @@ const loadFormList = async () => {
 }
 
 watch(linkFormMode, mode => {
-  if (mode === 'new') formDesignConfig.value = ''
-  else if (form.formId) loadFormDetailIntoDesigner()
+  if (mode === 'new') {
+    formDesignConfig.value = ''
+    newFormCode.value = form.processKey ? `${form.processKey}_form` : ''
+    newFormName.value = form.processName ? `${form.processName}表单` : ''
+  } else if (form.formId) loadFormDetailIntoDesigner()
   else formDesignConfig.value = ''
 })
 
@@ -281,8 +314,8 @@ const stepFieldNames: Record<number, string[]> = {
 }
 
 const formRules = computed(() => ({
-  processKey: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowscheme.processkey') }) }],
-  processName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowscheme.processname') }) }]
+  processKey: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowScheme.processkey') }) }],
+  processName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowScheme.processname') }) }]
 }))
 
 // 校验当前步骤需校验的字段，通过返回 true
@@ -313,7 +346,100 @@ const prev = () => {
 const handleDone = async () => {
   const ok = await validateCurrentStep()
   if (!ok) return
-  message.success(t('workflow.scheme.step.done'))
+  message.success(t('workflow.scheme.page.step.done'))
+}
+
+/**
+ * 校验步骤 2（关联/新建表单）
+ * @returns 是否通过
+ */
+function validateFormLinkStep(): boolean {
+  formDesignerRef.value?.syncToModel?.()
+  const config = formDesignConfig.value?.trim()
+  if (!config) {
+    currentStep.value = 1
+    message.warning(t('workflow.scheme.page.formConfigRequired'))
+    return false
+  }
+  if (linkFormMode.value === 'link') {
+    if (!form.formId || !form.formCode?.trim()) {
+      currentStep.value = 1
+      message.warning(t('workflow.scheme.page.linkFormRequired'))
+      return false
+    }
+    return true
+  }
+  if (!newFormCode.value?.trim() || !newFormName.value?.trim()) {
+    currentStep.value = 1
+    message.warning(t('workflow.scheme.page.newFormRequired'))
+    return false
+  }
+  return true
+}
+
+/**
+ * 将关联/新建表单设计器内容持久化到 FlowForm（保存方案前调用）
+ * @returns 是否成功
+ */
+async function persistFormBeforeSchemeSave(): Promise<boolean> {
+  if (!validateFormLinkStep()) return false
+  formDesignerRef.value?.syncToModel?.()
+  const config = formDesignConfig.value.trim()
+  const companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  try {
+    if (linkFormMode.value === 'new') {
+      const created = await createFlowForm({
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture,
+        formCode: newFormCode.value.trim(),
+        formName: newFormName.value.trim(),
+        formCategory: 1,
+        formType: 0,
+        formConfig: config,
+        formVersion: 'v1.0.0',
+        isDatasource: 0,
+        sortOrder: 0,
+        formStatus: 1
+      })
+      form.formId = created.flowFormId
+      form.formCode = created.formCode
+      formSelectValue.value = created.formCode
+      linkFormMode.value = 'link'
+      await loadFormList()
+      return true
+    }
+    if (!form.formId) {
+      message.warning(t('workflow.scheme.page.linkFormRequired'))
+      return false
+    }
+    const detail = await getFlowFormById(String(form.formId))
+    const updateDto: FlowFormUpdate = {
+      flowFormId: detail.flowFormId,
+      tenantCode: detail.tenantCode,
+      companyCode: detail.companyCode,
+      companyDefaultCulture,
+      formCode: detail.formCode,
+      formName: detail.formName,
+      formCategory: detail.formCategory,
+      formType: detail.formType,
+      formConfig: config,
+      formTemplate: detail.formTemplate,
+      formVersion: detail.formVersion,
+      isDatasource: detail.isDatasource,
+      relatedDataBaseName: detail.relatedDataBaseName,
+      relatedTableName: detail.relatedTableName,
+      relatedFormField: detail.relatedFormField,
+      sortOrder: detail.sortOrder,
+      formStatus: detail.formStatus
+    }
+    await updateFlowForm(detail.flowFormId, updateDto)
+    return true
+  } catch (error: unknown) {
+    logger.error('[Scheme Form] 持久化关联表单失败:', error)
+    message.error(t('common.feedback.failed'))
+    return false
+  }
 }
 
 // 校验所有步骤；未通过时切换到对应步骤并返回 false
@@ -325,10 +451,11 @@ const validateAllSteps = async (): Promise<boolean> => {
         await formRef.value?.validateFields(fields)
       } catch {
         currentStep.value = i
-        message.warning(t('workflow.scheme.step.validateFail', { step: i + 1 }))
+        message.warning(t('workflow.scheme.page.step.validateFail', { step: i + 1 }))
         return false
       }
     }
+    if (i === 1 && !validateFormLinkStep()) return false
   }
   const pc = form.processContent?.trim()
   if (pc && flowDesignerRef.value?.validateDesign) {
@@ -341,12 +468,15 @@ const validateAllSteps = async (): Promise<boolean> => {
 // 重置当前步骤为 0
 const resetSteps = () => {
   currentStep.value = 0
+  newFormCode.value = ''
+  newFormName.value = ''
 }
 
 defineExpose({
   currentStep,
   validateAllSteps,
-  resetSteps
+  resetSteps,
+  persistFormBeforeSchemeSave
 })
 </script>
 

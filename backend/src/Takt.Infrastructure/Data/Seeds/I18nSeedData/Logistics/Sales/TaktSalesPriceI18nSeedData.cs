@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPrice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales;
 
 /// <summary>
-/// TaktSalesPrice 实体国际化翻译种子（键前缀 entity.salesPrice.*）
+/// TaktSalesPrice 实体国际化翻译种子（键前缀 entity.salesprice.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktSalesPriceI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktSalesPriceI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 salesPrice 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 salesprice 实体翻译...", tenantCode);
 
         foreach (var item in GetSalesPriceTranslations())
         {
@@ -76,101 +75,101 @@ public class TaktSalesPriceI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktSalesPrice 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.salesPrice._self / entity.salesPrice.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.salesprice._self / entity.salesprice.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetSalesPriceTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.salesPrice._self
-            new TranslationSeedItem("entity.salesPrice._self", "en-US", "Sales Price Information", "实体名称"),
-            // entity.salesPrice._self
-            new TranslationSeedItem("entity.salesPrice._self", "ja-JP", "Takt销售价格信息", "实体名称"),
-            // entity.salesPrice._self
-            new TranslationSeedItem("entity.salesPrice._self", "zh-CN", "Takt销售价格信息", "实体名称"),
-            // entity.salesPrice._self
-            new TranslationSeedItem("entity.salesPrice._self", "zh-HK", "Takt销售价格信息", "实体名称"),
+            // entity.salesprice._self
+            new TranslationSeedItem("entity.salesprice._self", "en-US", "Sales Price Information", "实体名称"),
+            // entity.salesprice._self
+            new TranslationSeedItem("entity.salesprice._self", "ja-JP", "Takt销售价格信息", "实体名称"),
+            // entity.salesprice._self
+            new TranslationSeedItem("entity.salesprice._self", "zh-CN", "Takt销售价格信息", "实体名称"),
+            // entity.salesprice._self
+            new TranslationSeedItem("entity.salesprice._self", "zh-HK", "Takt销售价格信息", "实体名称"),
 
-            // entity.salesPrice.plantcode
-            new TranslationSeedItem("entity.salesPrice.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.salesPrice.plantcode
-            new TranslationSeedItem("entity.salesPrice.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.salesPrice.plantcode
-            new TranslationSeedItem("entity.salesPrice.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.salesPrice.plantcode
-            new TranslationSeedItem("entity.salesPrice.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.salesprice.plantcode
+            new TranslationSeedItem("entity.salesprice.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.salesprice.plantcode
+            new TranslationSeedItem("entity.salesprice.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.salesprice.plantcode
+            new TranslationSeedItem("entity.salesprice.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.salesprice.plantcode
+            new TranslationSeedItem("entity.salesprice.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.salesPrice.code
-            new TranslationSeedItem("entity.salesPrice.code", "en-US", "销售价格编码", "销售价格编码（唯一索引）"),
-            // entity.salesPrice.code
-            new TranslationSeedItem("entity.salesPrice.code", "ja-JP", "销售价格编码", "销售价格编码（唯一索引）"),
-            // entity.salesPrice.code
-            new TranslationSeedItem("entity.salesPrice.code", "zh-CN", "销售价格编码", "销售价格编码（唯一索引）"),
-            // entity.salesPrice.code
-            new TranslationSeedItem("entity.salesPrice.code", "zh-HK", "销售价格编码", "销售价格编码（唯一索引）"),
+            // entity.salesprice.code
+            new TranslationSeedItem("entity.salesprice.code", "en-US", "销售价格编码", "销售价格编码（唯一索引）"),
+            // entity.salesprice.code
+            new TranslationSeedItem("entity.salesprice.code", "ja-JP", "销售价格编码", "销售价格编码（唯一索引）"),
+            // entity.salesprice.code
+            new TranslationSeedItem("entity.salesprice.code", "zh-CN", "销售价格编码", "销售价格编码（唯一索引）"),
+            // entity.salesprice.code
+            new TranslationSeedItem("entity.salesprice.code", "zh-HK", "销售价格编码", "销售价格编码（唯一索引）"),
 
-            // entity.salesPrice.customercode
-            new TranslationSeedItem("entity.salesPrice.customercode", "en-US", "客户编码", "客户编码（如果为空则表示通用价格）"),
-            // entity.salesPrice.customercode
-            new TranslationSeedItem("entity.salesPrice.customercode", "ja-JP", "客户编码", "客户编码（如果为空则表示通用价格）"),
-            // entity.salesPrice.customercode
-            new TranslationSeedItem("entity.salesPrice.customercode", "zh-CN", "客户编码", "客户编码（如果为空则表示通用价格）"),
-            // entity.salesPrice.customercode
-            new TranslationSeedItem("entity.salesPrice.customercode", "zh-HK", "客户编码", "客户编码（如果为空则表示通用价格）"),
+            // entity.salesprice.customercode
+            new TranslationSeedItem("entity.salesprice.customercode", "en-US", "客户编码", "客户编码（如果为空则表示通用价格）"),
+            // entity.salesprice.customercode
+            new TranslationSeedItem("entity.salesprice.customercode", "ja-JP", "客户编码", "客户编码（如果为空则表示通用价格）"),
+            // entity.salesprice.customercode
+            new TranslationSeedItem("entity.salesprice.customercode", "zh-CN", "客户编码", "客户编码（如果为空则表示通用价格）"),
+            // entity.salesprice.customercode
+            new TranslationSeedItem("entity.salesprice.customercode", "zh-HK", "客户编码", "客户编码（如果为空则表示通用价格）"),
 
-            // entity.salesPrice.pricetype
-            new TranslationSeedItem("entity.salesPrice.pricetype", "en-US", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
-            // entity.salesPrice.pricetype
-            new TranslationSeedItem("entity.salesPrice.pricetype", "ja-JP", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
-            // entity.salesPrice.pricetype
-            new TranslationSeedItem("entity.salesPrice.pricetype", "zh-CN", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
-            // entity.salesPrice.pricetype
-            new TranslationSeedItem("entity.salesPrice.pricetype", "zh-HK", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
+            // entity.salesprice.pricetype
+            new TranslationSeedItem("entity.salesprice.pricetype", "en-US", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
+            // entity.salesprice.pricetype
+            new TranslationSeedItem("entity.salesprice.pricetype", "ja-JP", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
+            // entity.salesprice.pricetype
+            new TranslationSeedItem("entity.salesprice.pricetype", "zh-CN", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
+            // entity.salesprice.pricetype
+            new TranslationSeedItem("entity.salesprice.pricetype", "zh-HK", "价格类型", "价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）"),
 
-            // entity.salesPrice.effectivestartdate
-            new TranslationSeedItem("entity.salesPrice.effectivestartdate", "en-US", "生效日期", "生效日期"),
-            // entity.salesPrice.effectivestartdate
-            new TranslationSeedItem("entity.salesPrice.effectivestartdate", "ja-JP", "生效日期", "生效日期"),
-            // entity.salesPrice.effectivestartdate
-            new TranslationSeedItem("entity.salesPrice.effectivestartdate", "zh-CN", "生效日期", "生效日期"),
-            // entity.salesPrice.effectivestartdate
-            new TranslationSeedItem("entity.salesPrice.effectivestartdate", "zh-HK", "生效日期", "生效日期"),
+            // entity.salesprice.effectivestartdate
+            new TranslationSeedItem("entity.salesprice.effectivestartdate", "en-US", "生效日期", "生效日期"),
+            // entity.salesprice.effectivestartdate
+            new TranslationSeedItem("entity.salesprice.effectivestartdate", "ja-JP", "生效日期", "生效日期"),
+            // entity.salesprice.effectivestartdate
+            new TranslationSeedItem("entity.salesprice.effectivestartdate", "zh-CN", "生效日期", "生效日期"),
+            // entity.salesprice.effectivestartdate
+            new TranslationSeedItem("entity.salesprice.effectivestartdate", "zh-HK", "生效日期", "生效日期"),
 
-            // entity.salesPrice.effectiveenddate
-            new TranslationSeedItem("entity.salesPrice.effectiveenddate", "en-US", "失效日期", "失效日期（空表示长期有效）"),
-            // entity.salesPrice.effectiveenddate
-            new TranslationSeedItem("entity.salesPrice.effectiveenddate", "ja-JP", "失效日期", "失效日期（空表示长期有效）"),
-            // entity.salesPrice.effectiveenddate
-            new TranslationSeedItem("entity.salesPrice.effectiveenddate", "zh-CN", "失效日期", "失效日期（空表示长期有效）"),
-            // entity.salesPrice.effectiveenddate
-            new TranslationSeedItem("entity.salesPrice.effectiveenddate", "zh-HK", "失效日期", "失效日期（空表示长期有效）"),
+            // entity.salesprice.effectiveenddate
+            new TranslationSeedItem("entity.salesprice.effectiveenddate", "en-US", "失效日期", "失效日期（空表示长期有效）"),
+            // entity.salesprice.effectiveenddate
+            new TranslationSeedItem("entity.salesprice.effectiveenddate", "ja-JP", "失效日期", "失效日期（空表示长期有效）"),
+            // entity.salesprice.effectiveenddate
+            new TranslationSeedItem("entity.salesprice.effectiveenddate", "zh-CN", "失效日期", "失效日期（空表示长期有效）"),
+            // entity.salesprice.effectiveenddate
+            new TranslationSeedItem("entity.salesprice.effectiveenddate", "zh-HK", "失效日期", "失效日期（空表示长期有效）"),
 
-            // entity.salesPrice.pricestatus
-            new TranslationSeedItem("entity.salesPrice.pricestatus", "en-US", "价格状态", "价格状态（1=启用，0=禁用）"),
-            // entity.salesPrice.pricestatus
-            new TranslationSeedItem("entity.salesPrice.pricestatus", "ja-JP", "价格状态", "价格状态（1=启用，0=禁用）"),
-            // entity.salesPrice.pricestatus
-            new TranslationSeedItem("entity.salesPrice.pricestatus", "zh-CN", "价格状态", "价格状态（1=启用，0=禁用）"),
-            // entity.salesPrice.pricestatus
-            new TranslationSeedItem("entity.salesPrice.pricestatus", "zh-HK", "价格状态", "价格状态（1=启用，0=禁用）"),
+            // entity.salesprice.pricestatus
+            new TranslationSeedItem("entity.salesprice.pricestatus", "en-US", "价格状态", "价格状态（1=启用，0=禁用）"),
+            // entity.salesprice.pricestatus
+            new TranslationSeedItem("entity.salesprice.pricestatus", "ja-JP", "价格状态", "价格状态（1=启用，0=禁用）"),
+            // entity.salesprice.pricestatus
+            new TranslationSeedItem("entity.salesprice.pricestatus", "zh-CN", "价格状态", "价格状态（1=启用，0=禁用）"),
+            // entity.salesprice.pricestatus
+            new TranslationSeedItem("entity.salesprice.pricestatus", "zh-HK", "价格状态", "价格状态（1=启用，0=禁用）"),
 
-            // entity.salesPrice.items
-            new TranslationSeedItem("entity.salesPrice.items", "en-US", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
-            // entity.salesPrice.items
-            new TranslationSeedItem("entity.salesPrice.items", "ja-JP", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
-            // entity.salesPrice.items
-            new TranslationSeedItem("entity.salesPrice.items", "zh-CN", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
-            // entity.salesPrice.items
-            new TranslationSeedItem("entity.salesPrice.items", "zh-HK", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
+            // entity.salesprice.items
+            new TranslationSeedItem("entity.salesprice.items", "en-US", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
+            // entity.salesprice.items
+            new TranslationSeedItem("entity.salesprice.items", "ja-JP", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
+            // entity.salesprice.items
+            new TranslationSeedItem("entity.salesprice.items", "zh-CN", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
+            // entity.salesprice.items
+            new TranslationSeedItem("entity.salesprice.items", "zh-HK", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
 
-            // entity.salesPrice.changelogs
-            new TranslationSeedItem("entity.salesPrice.changelogs", "en-US", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 <see cref=\"TaktSalesPriceChangeLog.PriceId\"/>）"),
-            // entity.salesPrice.changelogs
-            new TranslationSeedItem("entity.salesPrice.changelogs", "ja-JP", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 <see cref=\"TaktSalesPriceChangeLog.PriceId\"/>）"),
-            // entity.salesPrice.changelogs
-            new TranslationSeedItem("entity.salesPrice.changelogs", "zh-CN", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 <see cref=\"TaktSalesPriceChangeLog.PriceId\"/>）"),
-            // entity.salesPrice.changelogs
-            new TranslationSeedItem("entity.salesPrice.changelogs", "zh-HK", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 <see cref=\"TaktSalesPriceChangeLog.PriceId\"/>）"),
+            // entity.salesprice.changelogs
+            new TranslationSeedItem("entity.salesprice.changelogs", "en-US", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）"),
+            // entity.salesprice.changelogs
+            new TranslationSeedItem("entity.salesprice.changelogs", "ja-JP", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）"),
+            // entity.salesprice.changelogs
+            new TranslationSeedItem("entity.salesprice.changelogs", "zh-CN", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）"),
+            // entity.salesprice.changelogs
+            new TranslationSeedItem("entity.salesprice.changelogs", "zh-HK", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.PriceId）"),
         };
     }
 
@@ -188,8 +187,8 @@ public class TaktSalesPriceI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

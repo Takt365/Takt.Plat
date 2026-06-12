@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：login-log.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,19 +34,19 @@ export interface LoginLog extends CompanyDtoBase {
   username: string;
 
   /**
-   * 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+   * 登录方式
    */
-  loginType?: string;
+  loginType?: number;
 
   /**
    * 浏览器类型
    */
-  browser?: string;
+  browser?: number;
 
   /**
    * 操作系统
    */
-  os?: string;
+  os?: number;
 
   /**
    * 用户代理字符串（User-Agent）
@@ -109,19 +109,19 @@ export interface LoginLogQuery extends TaktPagedQuery {
   username?: string;
 
   /**
-   * 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+   * 登录方式
    */
-  loginType?: string;
+  loginType?: number;
 
   /**
    * 浏览器类型
    */
-  browser?: string;
+  browser?: number;
 
   /**
    * 操作系统
    */
-  os?: string;
+  os?: number;
 
   /**
    * 用户代理字符串（User-Agent）
@@ -213,19 +213,19 @@ export interface LoginLogCreate {
   username: string;
 
   /**
-   * 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+   * 登录方式
    */
-  loginType?: string;
+  loginType?: number;
 
   /**
    * 浏览器类型
    */
-  browser?: string;
+  browser?: number;
 
   /**
    * 操作系统
    */
-  os?: string;
+  os?: number;
 
   /**
    * 用户代理字符串（User-Agent）
@@ -307,19 +307,19 @@ export interface LoginLogExport {
   username: string;
 
   /**
-   * 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+   * 登录方式
    */
-  loginType?: string;
+  loginType?: number;
 
   /**
    * 浏览器类型
    */
-  browser?: string;
+  browser?: number;
 
   /**
    * 操作系统
    */
-  os?: string;
+  os?: number;
 
   /**
    * 用户代理字符串（User-Agent）

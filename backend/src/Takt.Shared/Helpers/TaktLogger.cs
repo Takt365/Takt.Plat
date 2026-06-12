@@ -20,7 +20,7 @@ namespace Takt.Shared.Helpers;
 /// Takt 统一日志帮助类
 /// </summary>
 /// <remarks>
-/// 非纯工具网关：启动时 <see cref="Configure"/> 注入 <see cref="TaktLoggingOptions"/> 并委托远端上报；
+/// 非纯工具网关：启动时 Configure 注入 TaktLoggingOptions 并委托远端上报；
 /// 写日志为 I/O 副作用，级别过滤依赖已配置选项。
 /// </remarks>
 public static class TaktLogger
@@ -307,6 +307,15 @@ public static class TaktLogger
         return TaktLogReporter.FlushAsync();
     }
 
+    /// <summary>
+    /// 统一写日志：Serilog 输出 + 远端上报队列入队
+    /// </summary>
+    /// <param name="level">Serilog 日志级别</param>
+    /// <param name="exception">关联异常；无则 null</param>
+    /// <param name="messageTemplate">消息模板</param>
+    /// <param name="context">业务上下文</param>
+    /// <param name="propertyValues">模板占位参数</param>
+    /// <param name="flushReport">是否立即 flush 上报队列</param>
     private static void Write(
         LogEventLevel level,
         Exception? exception,
@@ -362,6 +371,9 @@ public static class TaktLogger
             _second = second;
         }
 
+        /// <summary>
+        /// 依次释放两个 IDisposable 资源
+        /// </summary>
         public void Dispose()
         {
             _second.Dispose();
@@ -374,6 +386,9 @@ public static class TaktLogger
     /// </summary>
     private sealed class EmptyDisposable : IDisposable
     {
+        /// <summary>
+        /// 空释放（占位，无资源需释放）
+        /// </summary>
         public void Dispose()
         {
         }

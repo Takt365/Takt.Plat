@@ -38,22 +38,22 @@ public class TaktLoginLog : TaktCompanyEntityBase
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+    /// 登录方式
     /// </summary>
-    [SugarColumn(ColumnName = "login_type", ColumnDescription = "登录方式", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
-    public string? LoginType { get; set; }
+    [SugarColumn(ColumnName = "login_type", ColumnDescription = "登录方式", ColumnDataType = "int", IsNullable = true)]
+    public TaktLoginType? LoginType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    [SugarColumn(ColumnName = "browser", ColumnDescription = "浏览器类型", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
-    public string? Browser { get; set; }
+    [SugarColumn(ColumnName = "browser", ColumnDescription = "浏览器类型", ColumnDataType = "int", IsNullable = true)]
+    public TaktBrowserType? Browser { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    [SugarColumn(ColumnName = "os", ColumnDescription = "操作系统", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
-    public string? Os { get; set; }
+    [SugarColumn(ColumnName = "os", ColumnDescription = "操作系统", ColumnDataType = "int", IsNullable = true)]
+    public TaktOperatingSystem? Os { get; set; }
 
     /// <summary>
     /// 用户代理字符串（User-Agent）

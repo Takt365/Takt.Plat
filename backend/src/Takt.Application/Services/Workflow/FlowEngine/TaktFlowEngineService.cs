@@ -12,6 +12,7 @@
 
 using SqlSugar;
 using Takt.Application.Dtos.Workflow;
+using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.Workflow;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -24,7 +25,7 @@ namespace Takt.Application.Services.Workflow.FlowEngine;
 /// <summary>
 /// 流程引擎运行时服务（唯一流程推进编排入口）
 /// 负责发起/草稿/审批办结、待办与我发起/已办查询、撤回/转办/加签/减签/挂起/恢复/终止/撤销审批
-/// 流程定义以启动时 <see cref="TaktFlowInstance.ProcessContentSnapshot"/> 快照为准；节点路由见 <see cref="TaktFlowProcessNavigator"/>
+/// 流程定义以启动时 TaktFlowInstance.ProcessContentSnapshot 快照为准；节点路由见 TaktFlowProcessNavigator
 /// </summary>
 public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
 {
@@ -34,6 +35,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     private readonly ITaktCompanyRepository<TaktFlowTransition> _flowTransitionRepository;
     private readonly ITaktCompanyRepository<TaktFlowAddSign> _flowAddSignRepository;
     private readonly TaktFlowApproverResolverService _approverResolver;
+    private readonly TaktApprovalFlowBusinessService _approvalFlowBusinessService;
+    private readonly ITaktApprovalFlowDataGateway _approvalFlowDataGateway;
+    private readonly ITaktCompanyRepository<TaktFlowForm> _flowFormRepository;
+    private readonly ITaktWorkflowSignalRNotifier _workflowSignalRNotifier;
 
     /// <summary>
     /// 初始化流程引擎服务
@@ -44,6 +49,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     /// <param name="flowTransitionRepository">流程流转记录仓储</param>
     /// <param name="flowAddSignRepository">加签记录仓储</param>
     /// <param name="approverResolver">审批人解析服务</param>
+    /// <param name="approvalFlowBusinessService">审批业务通用回写</param>
+    /// <param name="approvalFlowDataGateway">审批业务表网关</param>
+    /// <param name="flowFormRepository">流程表单仓储</param>
+    /// <param name="workflowSignalRNotifier">工作流 SignalR 推送编排</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktFlowEngineService(
@@ -53,6 +62,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         ITaktCompanyRepository<TaktFlowTransition> flowTransitionRepository,
         ITaktCompanyRepository<TaktFlowAddSign> flowAddSignRepository,
         TaktFlowApproverResolverService approverResolver,
+        TaktApprovalFlowBusinessService approvalFlowBusinessService,
+        ITaktApprovalFlowDataGateway approvalFlowDataGateway,
+        ITaktCompanyRepository<TaktFlowForm> flowFormRepository,
+        ITaktWorkflowSignalRNotifier workflowSignalRNotifier,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -63,6 +76,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         _flowTransitionRepository = flowTransitionRepository;
         _flowAddSignRepository = flowAddSignRepository;
         _approverResolver = approverResolver;
+        _approvalFlowBusinessService = approvalFlowBusinessService;
+        _approvalFlowDataGateway = approvalFlowDataGateway;
+        _flowFormRepository = flowFormRepository;
+        _workflowSignalRNotifier = workflowSignalRNotifier;
     }
 
     /// <summary>
@@ -79,8 +96,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         var userId = GetCurrentUserIdForApproval();
         var userName = CurrentUserName;
         var instance = await CreateInstanceEntityAsync(scheme, dto, userId, userName, TaktFlowInstanceStatus.Running);
+        await DispatchFlowStartedAndSyncInstanceAsync(instance);
         await RecordTransitionAsync(instance, null, null, "发起", userId, userName, TaktFlowActionType.Start, null);
         await AdvanceInstanceAsync(instance, null);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "start");
         return (await GetFlowInstanceDetailByIdAsync(instance.Id))!;
     }
 
@@ -119,11 +138,13 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             ThrowBusinessException("仅发起人可提交草稿");
         }
         instance.InstanceStatus = TaktFlowInstanceStatus.Running;
-        instance.StartTime ??= DateTime.Now;
+        instance.StartTime = DateTime.Now;
         await _flowInstanceRepository.UpdateAsync(instance);
+        await DispatchFlowStartedAndSyncInstanceAsync(instance);
         var userId = GetCurrentUserIdForApproval();
         await RecordTransitionAsync(instance, null, null, "发起", userId, CurrentUserName, TaktFlowActionType.Start, null);
         await AdvanceInstanceAsync(instance, null);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "start");
         return (await GetFlowInstanceDetailByIdAsync(instance.Id))!;
     }
 
@@ -163,6 +184,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         if (!dto.Approved)
         {
             await HandleRejectAsync(instance, pendingTask, currentNode, dto, userId);
+            await NotifyWorkflowRuntimeChangeAsync(instance, "reject");
             return;
         }
         pendingTask.TaskStatus = TaktFlowTaskStatus.Completed;
@@ -174,11 +196,13 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             var addHandled = await TryCompleteAddSignGroupAsync(instance, pendingTask);
             if (!addHandled)
             {
+                await NotifyWorkflowRuntimeChangeAsync(instance, "complete");
                 return;
             }
         }
         if (currentNode != null && !await IsNodeApprovalCompleteAsync(instance, currentNode, pendingTask))
         {
+            await NotifyWorkflowRuntimeChangeAsync(instance, "complete");
             return;
         }
         if (currentNode != null)
@@ -197,6 +221,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
                     && x.Id != pendingTask.Id);
                 if (otherPending != null)
                 {
+                    await NotifyWorkflowRuntimeChangeAsync(instance, "complete");
                     return;
                 }
             }
@@ -214,6 +239,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         if (currentNode == null)
         {
             await CompleteInstanceAsync(instance, TaktFlowInstanceStatus.Completed);
+            await NotifyWorkflowRuntimeChangeAsync(instance, "complete");
             return;
         }
         var nextNodes = TaktFlowProcessNavigator.ResolveAfterNodeCompleted(root, currentNode, instance.FrmData);
@@ -223,9 +249,26 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             {
                 await CompleteInstanceAsync(instance, TaktFlowInstanceStatus.Completed);
             }
+            await NotifyWorkflowRuntimeChangeAsync(instance, "complete");
             return;
         }
         await EnterExecutionNodesAsync(instance, root, nextNodes);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "complete");
+    }
+
+    /// <summary>
+    /// 获取当前用户待办数量（Running 实例 + Pending 任务）
+    /// </summary>
+    /// <returns>待办数量 DTO</returns>
+    public async Task<TaktFlowTodoCountDto> GetFlowInstanceTodoCountAsync()
+    {
+        EnsureThreeLayerContext();
+        var userId = GetCurrentUserIdForApproval();
+        var todoCount = await _workflowSignalRNotifier.CountTodoForUserAsync(
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            userId);
+        return new TaktFlowTodoCountDto { TodoCount = todoCount };
     }
 
     /// <summary>
@@ -272,7 +315,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
                 ProcessTitle = inst.ProcessTitle,
                 TaskName = task.TaskName ?? inst.CurrentActivityName,
                 StartUserName = inst.StartUserName,
-                StartTime = inst.StartTime,
+                StartTime = inst.StartTime ?? default,
                 FlowTaskId = task.Id
             });
         }
@@ -288,7 +331,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
     /// </summary>
     /// <param name="query">状态/关键字等筛选与分页参数</param>
     /// <returns>实例摘要分页结果</returns>
-    public async Task<TaktPagedResult<TaktFlowInstanceListItemDto>> GetFlowInstanceMyListAsync(TaktFlowMyInstanceQueryDto query)
+    public async Task<TaktPagedResult<TaktFlowInstanceListItemDto>> GetFlowInstanceMyListAsync(TaktFlowTodoQueryDto query)
     {
         EnsureThreeLayerContext();
         var userId = GetCurrentUserIdForApproval();
@@ -379,12 +422,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         instance.InstanceStatus = TaktFlowInstanceStatus.Terminated;
         instance.DeleteReason = "发起人撤回";
         instance.EndTime = DateTime.Now;
-        if (instance.StartTime.HasValue)
-        {
-            instance.DurationMs = (long)(instance.EndTime.Value - instance.StartTime.Value).TotalMilliseconds;
-        }
+        instance.DurationMs = (long)((instance.EndTime!.Value - (instance.StartTime ?? instance.EndTime.Value)).TotalMilliseconds);
         await _flowInstanceRepository.UpdateAsync(instance);
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, "撤回", userId, CurrentUserName, TaktFlowActionType.Revoke, null);
+        await DispatchFlowTerminalAsync(instance);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "revoke");
     }
 
     /// <summary>
@@ -412,6 +454,14 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         task.AssigneeUserName = dto.ToUserName;
         await _flowTaskRepository.UpdateAsync(task);
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Comment, userId, CurrentUserName, TaktFlowActionType.Transfer, dto.ToUserName);
+        await NotifyWorkflowRuntimeChangeAsync(
+            instance,
+            "transfer",
+            new[]
+            {
+                new TaktWorkflowSignalRUserTarget { UserId = userId, UserName = CurrentUserName },
+                new TaktWorkflowSignalRUserTarget { UserId = dto.ToUserId, UserName = dto.ToUserName },
+            });
     }
 
     /// <summary>
@@ -465,6 +515,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             await _flowTaskRepository.CreateAsync(task);
         }
         await RecordTransitionAsync(instance, nodeId, instance.CurrentActivityName, dto.Reason, userId, CurrentUserName, TaktFlowActionType.AddSign, null);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "addsign");
     }
 
     /// <summary>
@@ -496,6 +547,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             }
         }
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, "减签", userId, CurrentUserName, TaktFlowActionType.ReduceSign, addSign.SignUserName);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "reducesign");
     }
 
     /// <summary>
@@ -516,6 +568,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         instance.DeleteReason = dto.Reason;
         await _flowInstanceRepository.UpdateAsync(instance);
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Suspend, null);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "suspend");
     }
 
     /// <summary>
@@ -536,6 +589,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         instance.DeleteReason = null;
         await _flowInstanceRepository.UpdateAsync(instance);
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Resume, null);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "resume");
     }
 
     /// <summary>
@@ -551,12 +605,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         instance.InstanceStatus = TaktFlowInstanceStatus.Terminated;
         instance.DeleteReason = dto.Reason;
         instance.EndTime = DateTime.Now;
-        if (instance.StartTime.HasValue)
-        {
-            instance.DurationMs = (long)(instance.EndTime.Value - instance.StartTime.Value).TotalMilliseconds;
-        }
+        instance.DurationMs = (long)((instance.EndTime!.Value - (instance.StartTime ?? instance.EndTime.Value)).TotalMilliseconds);
         await _flowInstanceRepository.UpdateAsync(instance);
         await RecordTransitionAsync(instance, instance.CurrentActivityId, instance.CurrentActivityName, dto.Reason, GetCurrentUserIdForApproval(), CurrentUserName, TaktFlowActionType.Terminate, null);
+        await DispatchFlowTerminalAsync(instance);
+        await NotifyWorkflowRuntimeChangeAsync(instance, "terminate");
     }
 
     /// <summary>
@@ -598,6 +651,51 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         {
             await _flowTransitionRepository.DeleteAsync(lastTransition.Id);
         }
+        await NotifyWorkflowRuntimeChangeAsync(instance, "undo");
+    }
+
+    /// <summary>
+    /// 可发起流程方案列表（已发布、最新版、未挂起）
+    /// </summary>
+    /// <returns>方案摘要列表</returns>
+    public async Task<List<TaktFlowStartableSchemeDto>> GetStartableSchemeListAsync()
+    {
+        EnsureThreeLayerContext();
+        var schemes = await _flowSchemeRepository.GetListAsync(s =>
+            s.TenantCode == CurrentTenantCode
+            && s.CompanyCode == CurrentCompanyCode
+            && s.IsLatest == 1
+            && s.ProcessStatus == 1
+            && s.SuspensionState == (int)TaktFlowSuspensionState.Active);
+        var ordered = schemes.OrderBy(s => s.SortOrder).ThenBy(s => s.ProcessKey).ToList();
+        var formIds = ordered.Where(s => s.FormId.HasValue).Select(s => s.FormId!.Value).Distinct().ToList();
+        var forms = await _flowFormRepository.GetListAsync(f => formIds.Contains(f.Id));
+        var formMap = forms.ToDictionary(f => f.Id);
+        return ordered.Select(s =>
+        {
+            var dto = new TaktFlowStartableSchemeDto
+            {
+                ProcessKey = s.ProcessKey,
+                ProcessName = s.ProcessName,
+                FormId = s.FormId.GetValueOrDefault(),
+                FormCode = s.FormCode
+            };
+            if (s.FormId.HasValue && formMap.TryGetValue(s.FormId.Value, out var form))
+            {
+                dto.IsDatasource = form.IsDatasource;
+                dto.RelatedTableName = form.RelatedTableName;
+            }
+            return dto;
+        }).ToList();
+    }
+
+    /// <summary>
+    /// 审批业务表白名单
+    /// </summary>
+    /// <returns>物理表名列表</returns>
+    public IReadOnlyList<string> GetApprovalFlowTableNames()
+    {
+        return _approvalFlowDataGateway.GetAllowedTableNames();
     }
 
     /// <summary>
@@ -827,11 +925,9 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         }
         instance.InstanceStatus = TaktFlowInstanceStatus.Rejected;
         instance.EndTime = DateTime.Now;
-        if (instance.StartTime.HasValue)
-        {
-            instance.DurationMs = (long)(instance.EndTime.Value - instance.StartTime.Value).TotalMilliseconds;
-        }
+        instance.DurationMs = (long)((instance.EndTime!.Value - (instance.StartTime ?? instance.EndTime.Value)).TotalMilliseconds);
         await _flowInstanceRepository.UpdateAsync(instance);
+        await DispatchFlowTerminalAsync(instance);
     }
 
     /// <summary>
@@ -845,13 +941,54 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         await CancelPendingTasksAsync(instance.Id);
         instance.InstanceStatus = status;
         instance.EndTime = DateTime.Now;
-        instance.CurrentActivityId = null;
-        instance.CurrentActivityName = null;
-        if (instance.StartTime.HasValue)
-        {
-            instance.DurationMs = (long)(instance.EndTime.Value - instance.StartTime.Value).TotalMilliseconds;
-        }
+        instance.CurrentActivityId = string.Empty;
+        instance.CurrentActivityName = string.Empty;
+        instance.DurationMs = (long)((instance.EndTime!.Value - (instance.StartTime ?? instance.EndTime.Value)).TotalMilliseconds);
         await _flowInstanceRepository.UpdateAsync(instance);
+        await DispatchFlowTerminalAsync(instance);
+    }
+
+    /// <summary>
+    /// 推送工作流运行时 SignalR 变更（失败抛异常，阻断主流程）
+    /// </summary>
+    /// <param name="instance">流程实例</param>
+    /// <param name="actionType">动作类型</param>
+    /// <param name="additionalUsers">额外通知用户</param>
+    /// <returns>任务</returns>
+    /// <exception cref="TaktBusinessException">实例不存在或推送失败时抛出</exception>
+    private async Task NotifyWorkflowRuntimeChangeAsync(
+        TaktFlowInstance instance,
+        string actionType,
+        IReadOnlyCollection<TaktWorkflowSignalRUserTarget>? additionalUsers = null)
+    {
+        var fresh = await _flowInstanceRepository.GetByIdAsync(instance.Id);
+        if (fresh == null)
+        {
+            ThrowBusinessException("流程实例不存在，无法推送工作流实时通知");
+        }
+
+        await _workflowSignalRNotifier.NotifyInstanceProgressedAsync(fresh, actionType, additionalUsers);
+    }
+
+    /// <summary>
+    /// 流程启动后分发业务回调并回写 BusinessKey 等变更
+    /// </summary>
+    /// <param name="instance">流程实例</param>
+    /// <returns>异步任务</returns>
+    private async Task DispatchFlowStartedAndSyncInstanceAsync(TaktFlowInstance instance)
+    {
+        await _approvalFlowBusinessService.OnFlowStartedAsync(instance);
+        await _flowInstanceRepository.UpdateAsync(instance);
+    }
+
+    /// <summary>
+    /// 流程终态业务回写
+    /// </summary>
+    /// <param name="instance">流程实例</param>
+    /// <returns>异步任务</returns>
+    private async Task DispatchFlowTerminalAsync(TaktFlowInstance instance)
+    {
+        await _approvalFlowBusinessService.OnFlowTerminalAsync(instance);
     }
 
     /// <summary>
@@ -927,8 +1064,8 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             && x.CompanyCode == CurrentCompanyCode
             && x.ProcessKey == processKey
             && x.IsLatest == 1
-            && x.ProcessStatus == TaktFlowSchemeStatus.Published
-            && x.SuspensionState == TaktFlowSuspensionState.Active);
+            && x.ProcessStatus == 1
+            && x.SuspensionState == (int)TaktFlowSuspensionState.Active);
         if (scheme == null)
         {
             ThrowBusinessException($"流程「{processKey}」未发布或不可用");
@@ -936,6 +1073,10 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         if (string.IsNullOrWhiteSpace(scheme.ProcessContent))
         {
             ThrowBusinessException("流程设计内容为空");
+        }
+        if (scheme.FormId <= 0 || string.IsNullOrWhiteSpace(scheme.FormCode))
+        {
+            ThrowBusinessException("流程未关联表单，无法发起");
         }
         return scheme;
     }
@@ -957,17 +1098,17 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             ProcessKey = scheme.ProcessKey,
             ProcessName = scheme.ProcessName,
             DefinitionVersion = scheme.DefinitionVersion,
-            ProcessTitle = dto.ProcessTitle,
+            ProcessTitle = dto.ProcessTitle ?? string.Empty,
             InstanceStatus = status,
             StartUserId = startUserId,
-            StartUserName = startUserName,
-            StartTime = status == TaktFlowInstanceStatus.Running ? DateTime.Now : null,
-            BusinessKey = dto.BusinessKey,
-            BusinessType = dto.BusinessType,
-            FrmData = dto.FrmData,
+            StartUserName = startUserName ?? string.Empty,
+            StartTime = DateTime.Now,
+            BusinessKey = dto.BusinessKey ?? string.Empty,
+            BusinessType = string.IsNullOrWhiteSpace(dto.BusinessType) ? scheme.ProcessKey : dto.BusinessType!,
+            FrmData = dto.FrmData ?? string.Empty,
             FormId = scheme.FormId,
             FormCode = scheme.FormCode,
-            ProcessContentSnapshot = scheme.ProcessContent
+            ProcessContentSnapshot = scheme.ProcessContent ?? string.Empty
         };
         return await _flowInstanceRepository.CreateAsync(instance);
     }
@@ -1025,7 +1166,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             CurrentActivityName = entity.CurrentActivityName,
             StartUserId = entity.StartUserId,
             StartUserName = entity.StartUserName,
-            StartTime = entity.StartTime,
+            StartTime = entity.StartTime ?? default,
             FrmData = entity.FrmData
         };
     }
@@ -1069,7 +1210,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             CurrentActivityName = instance.CurrentActivityName,
             StartUserId = instance.StartUserId,
             StartUserName = instance.StartUserName,
-            StartTime = instance.StartTime,
+            StartTime = instance.StartTime ?? default,
             EndTime = instance.EndTime,
             FrmData = instance.FrmData,
             History = history,
@@ -1129,13 +1270,11 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         {
             return false;
         }
-        if (query.StartTimeStart.HasValue
-            && (instance.StartTime == null || instance.StartTime < query.StartTimeStart))
+        if (query.StartTimeStart.HasValue && instance.StartTime < query.StartTimeStart)
         {
             return false;
         }
-        if (query.StartTimeEnd.HasValue
-            && (instance.StartTime == null || instance.StartTime > query.StartTimeEnd))
+        if (query.StartTimeEnd.HasValue && instance.StartTime > query.StartTimeEnd)
         {
             return false;
         }
@@ -1192,6 +1331,73 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
         {
             var status = query.InstanceStatus.Value;
             exp = exp.And(x => x.InstanceStatus == status);
+        }
+        if (!string.IsNullOrWhiteSpace(query.StartUserName))
+        {
+            var userName = query.StartUserName;
+            exp = exp.And(x => x.StartUserName != null && x.StartUserName.Contains(userName));
+        }
+        if (query.StartTimeStart.HasValue)
+        {
+            var start = query.StartTimeStart.Value;
+            exp = exp.And(x => x.StartTime != null && x.StartTime >= start);
+        }
+        if (query.StartTimeEnd.HasValue)
+        {
+            var end = query.StartTimeEnd.Value;
+            exp = exp.And(x => x.StartTime != null && x.StartTime <= end);
+        }
+        if (!string.IsNullOrWhiteSpace(query.KeyWords))
+        {
+            var kw = query.KeyWords;
+            exp = exp.And(x =>
+                x.InstanceCode.Contains(kw)
+                || (x.ProcessKey != null && x.ProcessKey.Contains(kw))
+                || (x.ProcessName != null && x.ProcessName.Contains(kw))
+                || (x.ProcessTitle != null && x.ProcessTitle.Contains(kw)));
+        }
+        return exp;
+    }
+
+    /// <summary>
+    /// 为「我的流程」列表追加查询条件（与待办/已办共用 TaktFlowTodoQueryDto）
+    /// </summary>
+    /// <param name="exp">表达式</param>
+    /// <param name="query">查询 DTO</param>
+    /// <returns>追加条件后的表达式</returns>
+    private static Expressionable<TaktFlowInstance> ApplyFlowInstanceListQuery(
+        Expressionable<TaktFlowInstance> exp,
+        TaktFlowTodoQueryDto query)
+    {
+        if (!string.IsNullOrWhiteSpace(query.InstanceCode))
+        {
+            var code = query.InstanceCode;
+            exp = exp.And(x => x.InstanceCode.Contains(code));
+        }
+        if (!string.IsNullOrWhiteSpace(query.ProcessKey))
+        {
+            var key = query.ProcessKey;
+            exp = exp.And(x => x.ProcessKey != null && x.ProcessKey.Contains(key));
+        }
+        if (!string.IsNullOrWhiteSpace(query.ProcessName))
+        {
+            var name = query.ProcessName;
+            exp = exp.And(x => x.ProcessName != null && x.ProcessName.Contains(name));
+        }
+        if (!string.IsNullOrWhiteSpace(query.ProcessTitle))
+        {
+            var title = query.ProcessTitle;
+            exp = exp.And(x => x.ProcessTitle != null && x.ProcessTitle.Contains(title));
+        }
+        if (query.ProcessDefinitionId.HasValue)
+        {
+            var defId = query.ProcessDefinitionId.Value;
+            exp = exp.And(x => x.ProcessDefinitionId == defId);
+        }
+        if (!string.IsNullOrWhiteSpace(query.TaskName))
+        {
+            var taskName = query.TaskName;
+            exp = exp.And(x => x.CurrentActivityName != null && x.CurrentActivityName.Contains(taskName));
         }
         if (!string.IsNullOrWhiteSpace(query.StartUserName))
         {

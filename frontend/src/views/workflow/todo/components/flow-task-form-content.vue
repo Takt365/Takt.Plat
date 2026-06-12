@@ -17,7 +17,7 @@
         v-if="detail.processTitle"
         class="flow-task-form-content__title"
       >
-        <span class="flow-task-form-content__label">{{ t('entity.flowinstance.processtitle') }}：</span>
+        <span class="flow-task-form-content__label">{{ t('entity.flowInstance.processtitle') }}</span>
         <span>{{ detail.processTitle }}</span>
       </div>
       <div class="flow-task-form-content__body">
@@ -46,7 +46,7 @@
           v-else
           class="flow-task-form-content__empty"
         >
-          {{ t('workflow.instance.startFlowForm.formDataLabel') }}（空）
+          {{ t('workflow.my.page.startFlowForm.formDataLabel') }}{{ t('workflow.instance.page.formDataEmpty') }}
         </div>
       </div>
     </template>
@@ -54,33 +54,32 @@
       v-else
       class="flow-task-form-content__empty"
     >
-      {{ t('workflow.instance.noData') }}
+      {{ t('common.status.empty') }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * 待办任务表单内容（只读）：根据实例 formCode 拉取 formConfig，用 form-create 渲染 frmData；无 formConfig 时展示 frmData 原文。
+ * 待办任务表单内容（只读）：引擎详情含 processDefinitionId，经方案 CRUD 取 formConfig 渲染 frmData；否则展示 frmData 原文。
  */
 import { ref, computed, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getFlowSchemeByProcessKey } from '@/api/workflow/flow-scheme'
-import { getFlowFormById, getFlowFormByCode } from '@/api/workflow/flow-form'
+import { getFlowFormById } from '@/api/workflow/flow-form'
+import { getFlowSchemeById } from '@/api/workflow/flow-scheme'
 import { getEmployeeOptions } from '@/api/human-resource/personnel/employee'
 import { FORM_CREATE_DEFAULT_OPTION } from '@/utils/constants/form-create'
-import type { FlowInstanceDetailView } from '@/types/workflow/flow-engine'
+import type { FlowInstanceDetail } from '@/types/workflow/flow-engine'
 import type { FlowForm } from '@/types/workflow/flow-form'
-import type { FlowScheme } from '@/types/workflow/flow-scheme'
 
 const { t } = useI18n()
 
 /** form-create 规则类型 */
 type FormConfigRule = Record<string, unknown>[]
 
-/** 父组件传入的实例详情（含 processTitle、frmData、formCode 等） */
+/** 父组件传入的引擎实例详情（含 processDefinitionId、frmData 等） */
 interface Props {
-  detail: FlowInstanceDetailView | null
+  detail: FlowInstanceDetail | null
 }
 
 const props = defineProps<Props>()
@@ -120,7 +119,7 @@ async function enrichFormConfigWithEmployeeOptions(rule: FormConfigRule): Promis
   return copy
 }
 
-/** 根据 detail（formId/formCode/processKey）拉取表单配置，解析为 form-create 规则并写入 formConfigRule */
+/** 根据引擎详情 processDefinitionId → 方案 formId 拉取表单配置 */
 async function loadFormConfig() {
   const d = props.detail
   formConfigRule.value = []
@@ -128,25 +127,15 @@ async function loadFormConfig() {
   formConfigLoading.value = true
   try {
     let flowForm: FlowForm | null = null
-    if (d.formId) flowForm = await getFlowFormById(String(d.formId))
-    else if (d.formCode?.trim()) flowForm = await getFlowFormByCode(d.formCode.trim())
-    if (!flowForm && d.processKey?.trim()) {
+    const schemeId = d.processDefinitionId?.trim()
+    if (schemeId) {
       try {
-        const scheme: FlowScheme = await getFlowSchemeByProcessKey(d.processKey.trim())
-        if (scheme.formId) flowForm = await getFlowFormById(String(scheme.formId))
-        else if (scheme.formCode?.trim()) flowForm = await getFlowFormByCode(scheme.formCode.trim())
+        const scheme = await getFlowSchemeById(schemeId)
+        if (scheme?.formId) {
+          flowForm = await getFlowFormById(String(scheme.formId))
+        }
       } catch {
         // ignore
-      }
-      if (!flowForm) {
-        for (const code of [`${d.processKey.toLowerCase()}_form`, d.processKey]) {
-          try {
-            flowForm = await getFlowFormByCode(code)
-            break
-          } catch {
-            // ignore
-          }
-        }
       }
     }
     const configStr = flowForm?.formConfig?.trim()

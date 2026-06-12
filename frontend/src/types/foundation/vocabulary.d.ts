@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：vocabulary.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -348,5 +348,63 @@ export interface VocabularyExport {
    */
   createdAt: string;
 
+}
+
+/**
+ * 敏感词过滤/检测请求 DTO
+ * @description 对应后端 TaktVocabularyFilterRequestDto
+ */
+export interface VocabularyFilterRequest {
+  /**
+   * 待检测或过滤的文本
+   */
+  text: string;
+
+  /**
+   * 最低过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）；为空时匹配全部启用词条
+   */
+  minFilterLevel?: number;
+}
+
+/**
+ * 敏感词过滤结果 DTO
+ * @description 对应后端 TaktVocabularyFilterResultDto
+ */
+export interface VocabularyFilterResult {
+  /**
+   * 原始文本
+   */
+  originalText: string;
+
+  /**
+   * 过滤后的文本
+   */
+  filteredText: string;
+
+  /**
+   * 是否命中敏感词
+   */
+  hasSensitiveWord: boolean;
+
+  /**
+   * 命中的敏感词列表（去重）
+   */
+  matchedWords: string[];
+}
+
+/**
+ * 敏感词检测结果 DTO（不返回替换后文本）
+ * @description 对应后端 TaktVocabularyDetectResultDto
+ */
+export interface VocabularyDetectResult {
+  /**
+   * 是否命中敏感词
+   */
+  hasSensitiveWord: boolean;
+
+  /**
+   * 命中的敏感词列表（去重）
+   */
+  matchedWords: string[];
 }
 

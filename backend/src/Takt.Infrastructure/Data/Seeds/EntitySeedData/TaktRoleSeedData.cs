@@ -86,9 +86,9 @@ public class TaktRoleSeedData : ITaktSeedDataCoordinator
     {
         return new List<(string, string, int, int)>
         {
-            ("ROLE_SUPER_ADMIN", "超级管理员", (int)TaktDataScope.All, 1),
-            ("ROLE_DEPT_ADMIN", "部门管理员", (int)TaktDataScope.Department, 2),
-            ("ROLE_EMPLOYEE", "普通员工", (int)TaktDataScope.Self, 3)
+            ("ROLE_SUPER_ADMIN", "超级管理员", (int)1, 1),
+            ("ROLE_DEPT_ADMIN", "部门管理员", (int)3, 2),
+            ("ROLE_EMPLOYEE", "普通员工", (int)4, 3)
         };
     }
 
@@ -114,8 +114,8 @@ public class TaktRoleSeedData : ITaktSeedDataCoordinator
                 RoleCode = roleCode,
                 RoleName = roleName,
                 DataScope = dataScope,
-                IsBuiltIn = TaktYesNo.Yes,
-                RoleStatus = TaktCommonStatus.Enabled,
+                IsBuiltIn = 1,
+                RoleStatus = 1,
                 SortOrder = sortOrder
             };
             role = await repository.CreateAsync(role);
@@ -126,8 +126,8 @@ public class TaktRoleSeedData : ITaktSeedDataCoordinator
             // 存在：更新记录
             role.RoleName = roleName;
             role.DataScope = dataScope;
-            role.IsBuiltIn = TaktYesNo.Yes;
-            role.RoleStatus = TaktCommonStatus.Enabled;
+            role.IsBuiltIn = 1;
+            role.RoleStatus = 1;
             role.SortOrder = sortOrder;
 
             await repository.UpdateAsync(role);

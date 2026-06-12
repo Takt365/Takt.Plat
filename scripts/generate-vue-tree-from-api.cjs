@@ -134,6 +134,7 @@ function generateTreeIndexVue(ctx, helpers) {
   const {
     entityPascal,
     entityCamel,
+    entityI18nSlug,
     entityKebab,
     modulePath,
     viewModulePath,
@@ -265,14 +266,14 @@ ${dictBodyCellExtra}
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.${entityCamel}._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.${entityI18nSlug}._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.${entityCamel}._self"
+        entity-i18n-key="entity.${entityI18nSlug}._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -677,10 +678,10 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
       parentId: pos.parentId,
       sortOrder: pos.sortOrder,
     }))
-    message.success(t('common.feedback.updated', { target: t('entity.${entityCamel}._self') }))
+    message.success(t('common.feedback.updated', { target: t('entity.${entityI18nSlug}._self') }))
     await loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.${entityCamel}._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.${entityI18nSlug}._self') })))
     await loadFull${entityPascal}Tree().catch(() => undefined)
   } finally {
     loading.value = false
@@ -831,7 +832,7 @@ ${queryInit}
 
 ${caps.hasCreate ? `/** 新增：默认 parentId 为当前左侧选中节点 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityCamel}._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityI18nSlug}._self') })
   const keys = selectedTreeKeys.value
   formData.value = {
     parentId: keys.length > 0 ? String(keys[keys.length - 1]) : '0',
@@ -841,7 +842,7 @@ function handleCreate() {
 
 ${caps.hasUpdate ? `/** 打开编辑弹窗 */
 function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityCamel}._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -851,7 +852,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityCamel}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
   }
 }` : ''}
 
@@ -870,10 +871,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
 ${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.${entityCamel}._self') }))` : ''}
+      message.success(t('common.feedback.updated', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
     } else {
 ${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.${entityCamel}._self') }))` : ''}
+      message.success(t('common.feedback.created', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
     }
     formVisible.value = false
     await loadData()
@@ -891,12 +892,12 @@ ${caps.hasDelete ? `/** 删除单行 */
 async function handleDeleteOne(record: ${entityPascal}) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.${entityCamel}._self'), name: t('common.tip.this.target', { target: t('entity.${entityCamel}._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.${entityI18nSlug}._self'), name: t('common.tip.this.target', { target: t('entity.${entityI18nSlug}._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await ${caps.apiDelete}((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityCamel}._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
       await loadData()
     }
   })
@@ -905,18 +906,18 @@ async function handleDeleteOne(record: ${entityPascal}) {
 ${caps.hasDeleteBatch ? `/** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.${entityCamel}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.${entityI18nSlug}._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.${entityCamel}._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.${entityI18nSlug}._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await ${caps.apiDeleteBatch}(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityCamel}._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
       await loadData()
     }
   })
@@ -972,10 +973,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.${entityCamel}._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.${entityI18nSlug}._self') }))
   } catch (error: unknown) {
     logger.error('[${entityPascal}] 导出失败', undefined, error)
-    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.${entityCamel}._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.${entityI18nSlug}._self') })))
   } finally {
     loading.value = false
   }
@@ -1278,6 +1279,7 @@ function generateTreeFormVue(ctx, helpers) {
   const {
     entityPascal,
     entityCamel,
+    entityI18nSlug,
     entityKebab,
     modulePath,
     viewModulePath,
@@ -1289,7 +1291,7 @@ function generateTreeFormVue(ctx, helpers) {
   const { fieldLabelTExpr, fieldPlaceholderTExpr, renderFormControl } = helpers;
   const formFields = fields.formFields.filter((f) => f.name !== 'parentId');
   const parentIdField = fields.formFields.find((f) => f.name === 'parentId')
-    || { name: 'parentId', i18nKey: `entity.${entityCamel}.parentid`, optional: false };
+    || { name: 'parentId', i18nKey: resolveFieldTranslationKey('parentId', entityI18nSlug), optional: false };
   const entityIdField = `${entityCamel}Id`;
   const treeOptionsUrl = `/api/${apiBase}/tree-options`;
   const parentIdRow = `            <a-col :span="24">
@@ -1418,13 +1420,13 @@ function processTreeApiModule(apiFilePath, options, registry) {
   const treeFieldMetaRaw = resolveTreeFieldMeta(
     bundle.interfaces,
     bundle.entityShort,
-    bundle.fullCtx.entitySlug,
+    bundle.fullCtx.entityCamel,
     bundle.fullCtx.fields.listFields,
   );
   const treeMeta = {
     ...treeFieldMetaRaw,
     searchFieldLabels: treeFieldMetaRaw.searchFields.map(
-      (f) => resolveFieldTranslationKey(f, bundle.fullCtx.entitySlug),
+      (fieldName) => resolveFieldTranslationKey(fieldName, bundle.fullCtx.entityI18nSlug),
     ),
   };
   const vueHelpers = {
@@ -1461,19 +1463,18 @@ function printTreeUsage() {
 模板: **树表 TREE**（ParentId + getXxxTree，左树右表 + TaktTreeSelect）
 
 参数:
-  --all                 扫描全部 API，仅生成树表实体
   --<实体名>            如 --CostCenter、--Dept（不带 Takt 前缀；Dept 为手工页，仍会跳过排除列表）
   --view-path <路径>    覆盖 views 输出目录
   --dry-run             仅预览
 
 说明:
+  - 已禁用 --all；每次必须指定一个实体
   - 单表 CRUD → generate-vue-crud-from-api.cjs
   - 主子表 → generate-vue-master-detail-from-api.cjs
   - 一键 → generate-vue-all-from-api.cjs
 
 示例:
   node scripts/generate-vue-tree-from-api.cjs --CostCenter
-  node scripts/generate-vue-tree-from-api.cjs --all
 `);
 }
 

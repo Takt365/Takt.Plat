@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktKnowledgeChangeLogI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktKnowledgeChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk;
 
 /// <summary>
-/// TaktKnowledgeChangeLog 实体国际化翻译种子（键前缀 entity.knowledgeChangeLog.*）
+/// TaktKnowledgeChangeLog 实体国际化翻译种子（键前缀 entity.knowledgechangelog.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktKnowledgeChangeLogI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktKnowledgeChangeLogI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 knowledgeChangeLog 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 knowledgechangelog 实体翻译...", tenantCode);
 
         foreach (var item in GetKnowledgeChangeLogTranslations())
         {
@@ -76,92 +75,92 @@ public class TaktKnowledgeChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktKnowledgeChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.knowledgeChangeLog._self / entity.knowledgeChangeLog.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.knowledgechangelog._self / entity.knowledgechangelog.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetKnowledgeChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.knowledgeChangeLog._self
-            new TranslationSeedItem("entity.knowledgeChangeLog._self", "en-US", "Knowledge Change Log Information", "实体名称"),
-            // entity.knowledgeChangeLog._self
-            new TranslationSeedItem("entity.knowledgeChangeLog._self", "ja-JP", "知识库变更日志信息", "实体名称"),
-            // entity.knowledgeChangeLog._self
-            new TranslationSeedItem("entity.knowledgeChangeLog._self", "zh-CN", "知识库变更日志信息", "实体名称"),
-            // entity.knowledgeChangeLog._self
-            new TranslationSeedItem("entity.knowledgeChangeLog._self", "zh-HK", "知识库变更日志信息", "实体名称"),
+            // entity.knowledgechangelog._self
+            new TranslationSeedItem("entity.knowledgechangelog._self", "en-US", "Knowledge Change Log Information", "实体名称"),
+            // entity.knowledgechangelog._self
+            new TranslationSeedItem("entity.knowledgechangelog._self", "ja-JP", "知识库变更日志信息", "实体名称"),
+            // entity.knowledgechangelog._self
+            new TranslationSeedItem("entity.knowledgechangelog._self", "zh-CN", "知识库变更日志信息", "实体名称"),
+            // entity.knowledgechangelog._self
+            new TranslationSeedItem("entity.knowledgechangelog._self", "zh-HK", "知识库变更日志信息", "实体名称"),
 
-            // entity.knowledgeChangeLog.knowledgeid
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgeid", "en-US", "知识ID", "知识 ID"),
-            // entity.knowledgeChangeLog.knowledgeid
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgeid", "ja-JP", "知识ID", "知识 ID"),
-            // entity.knowledgeChangeLog.knowledgeid
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgeid", "zh-CN", "知识ID", "知识 ID"),
-            // entity.knowledgeChangeLog.knowledgeid
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgeid", "zh-HK", "知识ID", "知识 ID"),
+            // entity.knowledgechangelog.knowledgeid
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "en-US", "知识ID", "知识 ID"),
+            // entity.knowledgechangelog.knowledgeid
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "ja-JP", "知识ID", "知识 ID"),
+            // entity.knowledgechangelog.knowledgeid
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "zh-CN", "知识ID", "知识 ID"),
+            // entity.knowledgechangelog.knowledgeid
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgeid", "zh-HK", "知识ID", "知识 ID"),
 
-            // entity.knowledgeChangeLog.knowledgetitle
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgetitle", "en-US", "知识标题", "知识标题（冗余）"),
-            // entity.knowledgeChangeLog.knowledgetitle
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgetitle", "ja-JP", "知识标题", "知识标题（冗余）"),
-            // entity.knowledgeChangeLog.knowledgetitle
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgetitle", "zh-CN", "知识标题", "知识标题（冗余）"),
-            // entity.knowledgeChangeLog.knowledgetitle
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledgetitle", "zh-HK", "知识标题", "知识标题（冗余）"),
+            // entity.knowledgechangelog.knowledgetitle
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgetitle", "en-US", "知识标题", "知识标题（冗余）"),
+            // entity.knowledgechangelog.knowledgetitle
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgetitle", "ja-JP", "知识标题", "知识标题（冗余）"),
+            // entity.knowledgechangelog.knowledgetitle
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgetitle", "zh-CN", "知识标题", "知识标题（冗余）"),
+            // entity.knowledgechangelog.knowledgetitle
+            new TranslationSeedItem("entity.knowledgechangelog.knowledgetitle", "zh-HK", "知识标题", "知识标题（冗余）"),
 
-            // entity.knowledgeChangeLog.changetype
-            new TranslationSeedItem("entity.knowledgeChangeLog.changetype", "en-US", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
-            // entity.knowledgeChangeLog.changetype
-            new TranslationSeedItem("entity.knowledgeChangeLog.changetype", "ja-JP", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
-            // entity.knowledgeChangeLog.changetype
-            new TranslationSeedItem("entity.knowledgeChangeLog.changetype", "zh-CN", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
-            // entity.knowledgeChangeLog.changetype
-            new TranslationSeedItem("entity.knowledgeChangeLog.changetype", "zh-HK", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
+            // entity.knowledgechangelog.changetype
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "en-US", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
+            // entity.knowledgechangelog.changetype
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "ja-JP", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
+            // entity.knowledgechangelog.changetype
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "zh-CN", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
+            // entity.knowledgechangelog.changetype
+            new TranslationSeedItem("entity.knowledgechangelog.changetype", "zh-HK", "变更类型", "变更类型（0=创建，1=更新，2=删除）"),
 
-            // entity.knowledgeChangeLog.changesummary
-            new TranslationSeedItem("entity.knowledgeChangeLog.changesummary", "en-US", "修改内容摘要", "修改内容摘要"),
-            // entity.knowledgeChangeLog.changesummary
-            new TranslationSeedItem("entity.knowledgeChangeLog.changesummary", "ja-JP", "修改内容摘要", "修改内容摘要"),
-            // entity.knowledgeChangeLog.changesummary
-            new TranslationSeedItem("entity.knowledgeChangeLog.changesummary", "zh-CN", "修改内容摘要", "修改内容摘要"),
-            // entity.knowledgeChangeLog.changesummary
-            new TranslationSeedItem("entity.knowledgeChangeLog.changesummary", "zh-HK", "修改内容摘要", "修改内容摘要"),
+            // entity.knowledgechangelog.changesummary
+            new TranslationSeedItem("entity.knowledgechangelog.changesummary", "en-US", "修改内容摘要", "修改内容摘要"),
+            // entity.knowledgechangelog.changesummary
+            new TranslationSeedItem("entity.knowledgechangelog.changesummary", "ja-JP", "修改内容摘要", "修改内容摘要"),
+            // entity.knowledgechangelog.changesummary
+            new TranslationSeedItem("entity.knowledgechangelog.changesummary", "zh-CN", "修改内容摘要", "修改内容摘要"),
+            // entity.knowledgechangelog.changesummary
+            new TranslationSeedItem("entity.knowledgechangelog.changesummary", "zh-HK", "修改内容摘要", "修改内容摘要"),
 
-            // entity.knowledgeChangeLog.changefields
-            new TranslationSeedItem("entity.knowledgeChangeLog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON 数组）"),
-            // entity.knowledgeChangeLog.changefields
-            new TranslationSeedItem("entity.knowledgeChangeLog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON 数组）"),
-            // entity.knowledgeChangeLog.changefields
-            new TranslationSeedItem("entity.knowledgeChangeLog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON 数组）"),
-            // entity.knowledgeChangeLog.changefields
-            new TranslationSeedItem("entity.knowledgeChangeLog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON 数组）"),
+            // entity.knowledgechangelog.changefields
+            new TranslationSeedItem("entity.knowledgechangelog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON 数组）"),
+            // entity.knowledgechangelog.changefields
+            new TranslationSeedItem("entity.knowledgechangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON 数组）"),
+            // entity.knowledgechangelog.changefields
+            new TranslationSeedItem("entity.knowledgechangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON 数组）"),
+            // entity.knowledgechangelog.changefields
+            new TranslationSeedItem("entity.knowledgechangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON 数组）"),
 
-            // entity.knowledgeChangeLog.changereason
-            new TranslationSeedItem("entity.knowledgeChangeLog.changereason", "en-US", "变更原因", "变更原因或备注"),
-            // entity.knowledgeChangeLog.changereason
-            new TranslationSeedItem("entity.knowledgeChangeLog.changereason", "ja-JP", "变更原因", "变更原因或备注"),
-            // entity.knowledgeChangeLog.changereason
-            new TranslationSeedItem("entity.knowledgeChangeLog.changereason", "zh-CN", "变更原因", "变更原因或备注"),
-            // entity.knowledgeChangeLog.changereason
-            new TranslationSeedItem("entity.knowledgeChangeLog.changereason", "zh-HK", "变更原因", "变更原因或备注"),
+            // entity.knowledgechangelog.changereason
+            new TranslationSeedItem("entity.knowledgechangelog.changereason", "en-US", "变更原因", "变更原因或备注"),
+            // entity.knowledgechangelog.changereason
+            new TranslationSeedItem("entity.knowledgechangelog.changereason", "ja-JP", "变更原因", "变更原因或备注"),
+            // entity.knowledgechangelog.changereason
+            new TranslationSeedItem("entity.knowledgechangelog.changereason", "zh-CN", "变更原因", "变更原因或备注"),
+            // entity.knowledgechangelog.changereason
+            new TranslationSeedItem("entity.knowledgechangelog.changereason", "zh-HK", "变更原因", "变更原因或备注"),
 
-            // entity.knowledgeChangeLog.versionatchange
-            new TranslationSeedItem("entity.knowledgeChangeLog.versionatchange", "en-US", "变更时版本号", "变更时知识版本号"),
-            // entity.knowledgeChangeLog.versionatchange
-            new TranslationSeedItem("entity.knowledgeChangeLog.versionatchange", "ja-JP", "变更时版本号", "变更时知识版本号"),
-            // entity.knowledgeChangeLog.versionatchange
-            new TranslationSeedItem("entity.knowledgeChangeLog.versionatchange", "zh-CN", "变更时版本号", "变更时知识版本号"),
-            // entity.knowledgeChangeLog.versionatchange
-            new TranslationSeedItem("entity.knowledgeChangeLog.versionatchange", "zh-HK", "变更时版本号", "变更时知识版本号"),
+            // entity.knowledgechangelog.versionatchange
+            new TranslationSeedItem("entity.knowledgechangelog.versionatchange", "en-US", "变更时版本号", "变更时知识版本号"),
+            // entity.knowledgechangelog.versionatchange
+            new TranslationSeedItem("entity.knowledgechangelog.versionatchange", "ja-JP", "变更时版本号", "变更时知识版本号"),
+            // entity.knowledgechangelog.versionatchange
+            new TranslationSeedItem("entity.knowledgechangelog.versionatchange", "zh-CN", "变更时版本号", "变更时知识版本号"),
+            // entity.knowledgechangelog.versionatchange
+            new TranslationSeedItem("entity.knowledgechangelog.versionatchange", "zh-HK", "变更时版本号", "变更时知识版本号"),
 
-            // entity.knowledgeChangeLog.knowledge
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledge", "en-US", "知识库", "知识库（主表）"),
-            // entity.knowledgeChangeLog.knowledge
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledge", "ja-JP", "知识库", "知识库（主表）"),
-            // entity.knowledgeChangeLog.knowledge
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledge", "zh-CN", "知识库", "知识库（主表）"),
-            // entity.knowledgeChangeLog.knowledge
-            new TranslationSeedItem("entity.knowledgeChangeLog.knowledge", "zh-HK", "知识库", "知识库（主表）"),
+            // entity.knowledgechangelog.knowledge
+            new TranslationSeedItem("entity.knowledgechangelog.knowledge", "en-US", "知识库", "知识库（主表）"),
+            // entity.knowledgechangelog.knowledge
+            new TranslationSeedItem("entity.knowledgechangelog.knowledge", "ja-JP", "知识库", "知识库（主表）"),
+            // entity.knowledgechangelog.knowledge
+            new TranslationSeedItem("entity.knowledgechangelog.knowledge", "zh-CN", "知识库", "知识库（主表）"),
+            // entity.knowledgechangelog.knowledge
+            new TranslationSeedItem("entity.knowledgechangelog.knowledge", "zh-HK", "知识库", "知识库（主表）"),
         };
     }
 
@@ -179,8 +178,8 @@ public class TaktKnowledgeChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

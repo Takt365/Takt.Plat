@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktSettingDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Setting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSetting 生成，请按需审阅）
 // 
@@ -59,27 +59,27 @@ public class TaktSettingDto : TaktCompanyDtoBase
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide SettingGroup { get; set; }
+    public int SettingGroup { get; set; }
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public TaktSettingValueType ValueType { get; set; }
+    public int ValueType { get; set; }
 
     /// <summary>
     /// 是否内置（0=否，1=是，系统内置的不可删除）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 是否只读（0=否，1=是，只读设置不可修改）
     /// </summary>
-    public TaktYesNo IsReadonly { get; set; }
+    public int IsReadonly { get; set; }
 
     /// <summary>
     /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
     /// </summary>
-    public TaktYesNo IsEncrypted { get; set; }
+    public int IsEncrypted { get; set; }
 
     /// <summary>
     /// 排序号
@@ -131,27 +131,27 @@ public class TaktSettingQueryDto : TaktPagedQuery
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide? SettingGroup { get; set; }
+    public int? SettingGroup { get; set; }
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public TaktSettingValueType? ValueType { get; set; }
+    public int? ValueType { get; set; }
 
     /// <summary>
     /// 是否内置（0=否，1=是，系统内置的不可删除）
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 是否只读（0=否，1=是，只读设置不可修改）
     /// </summary>
-    public TaktYesNo? IsReadonly { get; set; }
+    public int? IsReadonly { get; set; }
 
     /// <summary>
     /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
     /// </summary>
-    public TaktYesNo? IsEncrypted { get; set; }
+    public int? IsEncrypted { get; set; }
 
     /// <summary>
     /// 排序号
@@ -228,27 +228,27 @@ public class TaktSettingCreateDto
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide SettingGroup { get; set; }
+    public int SettingGroup { get; set; }
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public TaktSettingValueType ValueType { get; set; }
+    public int ValueType { get; set; }
 
     /// <summary>
     /// 是否内置（0=否，1=是，系统内置的不可删除）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 是否只读（0=否，1=是，只读设置不可修改）
     /// </summary>
-    public TaktYesNo IsReadonly { get; set; }
+    public int IsReadonly { get; set; }
 
     /// <summary>
     /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
     /// </summary>
-    public TaktYesNo IsEncrypted { get; set; }
+    public int IsEncrypted { get; set; }
 
     /// <summary>
     /// 排序号
@@ -353,27 +353,27 @@ public class TaktSettingTemplateDto
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide? SettingGroup { get; set; }
+    public int? SettingGroup { get; set; }
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public TaktSettingValueType? ValueType { get; set; }
+    public int? ValueType { get; set; }
 
     /// <summary>
     /// 是否内置（0=否，1=是，系统内置的不可删除）
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 是否只读（0=否，1=是，只读设置不可修改）
     /// </summary>
-    public TaktYesNo? IsReadonly { get; set; }
+    public int? IsReadonly { get; set; }
 
     /// <summary>
     /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
     /// </summary>
-    public TaktYesNo? IsEncrypted { get; set; }
+    public int? IsEncrypted { get; set; }
 
     /// <summary>
     /// 排序号
@@ -435,27 +435,27 @@ public class TaktSettingImportDto
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide? SettingGroup { get; set; }
+    public int? SettingGroup { get; set; }
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public TaktSettingValueType? ValueType { get; set; }
+    public int? ValueType { get; set; }
 
     /// <summary>
     /// 是否内置（0=否，1=是，系统内置的不可删除）
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 是否只读（0=否，1=是，只读设置不可修改）
     /// </summary>
-    public TaktYesNo? IsReadonly { get; set; }
+    public int? IsReadonly { get; set; }
 
     /// <summary>
     /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
     /// </summary>
-    public TaktYesNo? IsEncrypted { get; set; }
+    public int? IsEncrypted { get; set; }
 
     /// <summary>
     /// 排序号
@@ -518,27 +518,27 @@ public class TaktSettingExportDto
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public TaktAppSide SettingGroup { get; set; }
+    public int SettingGroup { get; set; }
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public TaktSettingValueType ValueType { get; set; }
+    public int ValueType { get; set; }
 
     /// <summary>
     /// 是否内置（0=否，1=是，系统内置的不可删除）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 是否只读（0=否，1=是，只读设置不可修改）
     /// </summary>
-    public TaktYesNo IsReadonly { get; set; }
+    public int IsReadonly { get; set; }
 
     /// <summary>
     /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
     /// </summary>
-    public TaktYesNo IsEncrypted { get; set; }
+    public int IsEncrypted { get; set; }
 
     /// <summary>
     /// 排序号

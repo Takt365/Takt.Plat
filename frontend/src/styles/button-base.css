@@ -31,7 +31,7 @@
 }
 
 /* @takt-generated variants-begin */
-/* 共 114 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-base.rules.css */
+/* 共 130 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-base.rules.css */
 
 /* query · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) */
 .takt-button-query {
@@ -127,6 +127,38 @@
   --takt-btn-border: var(--takt-cn-zhusha);
   --takt-btn-fg: var(--takt-btn-fg-solid);
   --takt-btn-tone: var(--takt-cn-zhusha);
+}
+
+/* pass · var(--takt-cn-zhusha) · fg var(--takt-btn-fg-solid) */
+.takt-button-pass {
+  --takt-btn-bg: var(--takt-cn-zhusha);
+  --takt-btn-border: var(--takt-cn-zhusha);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhusha);
+}
+
+/* reject · var(--takt-jp-shoujou) · fg var(--takt-btn-fg-solid) */
+.takt-button-reject {
+  --takt-btn-bg: var(--takt-jp-shoujou);
+  --takt-btn-border: var(--takt-jp-shoujou);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-shoujou);
+}
+
+/* refuse · var(--takt-jp-shoujou) · fg var(--takt-btn-fg-solid) */
+.takt-button-refuse {
+  --takt-btn-bg: var(--takt-jp-shoujou);
+  --takt-btn-border: var(--takt-jp-shoujou);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-shoujou);
+}
+
+/* specialaccept · var(--takt-cn-juhuang) · fg var(--takt-btn-fg-on-light) */
+.takt-button-specialaccept {
+  --takt-btn-bg: var(--takt-cn-juhuang);
+  --takt-btn-border: var(--takt-cn-juhuang);
+  --takt-btn-fg: var(--takt-btn-fg-on-light);
+  --takt-btn-tone: var(--takt-cn-juhuang);
 }
 
 /* revoke · var(--takt-cn-fenhong) · fg var(--takt-btn-fg-solid) */
@@ -233,6 +265,14 @@
   --takt-btn-tone: var(--takt-jp-momoji);
 }
 
+/* reducesign · var(--takt-jp-kurenai) · fg var(--takt-btn-fg-solid) */
+.takt-button-reducesign {
+  --takt-btn-bg: var(--takt-jp-kurenai);
+  --takt-btn-border: var(--takt-jp-kurenai);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kurenai);
+}
+
 /* subsign · var(--takt-jp-kurenai) · fg var(--takt-btn-fg-solid) */
 .takt-button-subsign {
   --takt-btn-bg: var(--takt-jp-kurenai);
@@ -321,12 +361,100 @@
   --takt-btn-tone: var(--takt-cn-qunqing);
 }
 
+/* startflow · var(--takt-cn-feicui) · fg var(--takt-btn-fg-solid) */
+.takt-button-startflow {
+  --takt-btn-bg: var(--takt-cn-feicui);
+  --takt-btn-border: var(--takt-cn-feicui);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-feicui);
+}
+
 /* terminate · var(--takt-cn-jiangzi) · fg var(--takt-btn-fg-solid) */
 .takt-button-terminate {
   --takt-btn-bg: var(--takt-cn-jiangzi);
   --takt-btn-border: var(--takt-cn-jiangzi);
   --takt-btn-fg: var(--takt-btn-fg-solid);
   --takt-btn-tone: var(--takt-cn-jiangzi);
+}
+
+/* claim · var(--takt-cn-lanqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-claim {
+  --takt-btn-bg: var(--takt-cn-lanqing);
+  --takt-btn-border: var(--takt-cn-lanqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lanqing);
+}
+
+/* complete · var(--takt-cn-zhusha) · fg var(--takt-btn-fg-solid) */
+.takt-button-complete {
+  --takt-btn-bg: var(--takt-cn-zhusha);
+  --takt-btn-border: var(--takt-cn-zhusha);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhusha);
+}
+
+/* cc · var(--takt-cn-zise) · fg var(--takt-btn-fg-solid) */
+.takt-button-cc {
+  --takt-btn-bg: var(--takt-cn-zise);
+  --takt-btn-border: var(--takt-cn-zise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zise);
+}
+
+/* jump · var(--takt-jp-gunjyo) · fg var(--takt-btn-fg-solid) */
+.takt-button-jump {
+  --takt-btn-bg: var(--takt-jp-gunjyo);
+  --takt-btn-border: var(--takt-jp-gunjyo);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-gunjyo);
+}
+
+/* tracestart · var(--takt-cn-qingse) · fg var(--takt-btn-fg-solid) */
+.takt-button-tracestart {
+  --takt-btn-bg: var(--takt-cn-qingse);
+  --takt-btn-border: var(--takt-cn-qingse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingse);
+}
+
+/* trace · var(--takt-cn-qingse) · fg var(--takt-btn-fg-solid) */
+.takt-button-trace {
+  --takt-btn-bg: var(--takt-cn-qingse);
+  --takt-btn-border: var(--takt-cn-qingse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingse);
+}
+
+/* release · var(--takt-cn-baolan) · fg var(--takt-btn-fg-solid) */
+.takt-button-release {
+  --takt-btn-bg: var(--takt-cn-baolan);
+  --takt-btn-border: var(--takt-cn-baolan);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-baolan);
+}
+
+/* initiator · var(--takt-cn-chengqian) · fg var(--takt-btn-fg-solid) */
+.takt-button-initiator {
+  --takt-btn-bg: var(--takt-cn-chengqian);
+  --takt-btn-border: var(--takt-cn-chengqian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-chengqian);
+}
+
+/* toggle · var(--takt-cn-zhujiao) · fg var(--takt-btn-fg-solid) */
+.takt-button-toggle {
+  --takt-btn-bg: var(--takt-cn-zhujiao);
+  --takt-btn-border: var(--takt-cn-zhujiao);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhujiao);
+}
+
+/* deploy · var(--takt-klein-blue) · fg var(--takt-btn-fg-solid) */
+.takt-button-deploy {
+  --takt-btn-bg: var(--takt-klein-blue);
+  --takt-btn-border: var(--takt-klein-blue);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-klein-blue);
 }
 
 /* field · var(--takt-cn-xueqing) · fg var(--takt-btn-fg-on-light) */

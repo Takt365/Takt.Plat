@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：用人需求控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.HumanResource.Talent;
 /// 用人需求控制器
 /// 提供用人需求的 REST API
 /// </summary>
-[ApiModule(TaktModule.HumanResource, "人力资源")]
+[ApiModule(5, "人力资源")]
 [Route("api/[controller]", Name = "用人需求")]
 public class TaktTalentStaffingRequirementsController : TaktControllerBase
 {

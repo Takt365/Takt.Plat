@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Logging;
 
@@ -46,10 +47,10 @@ public class TaktOperLog : TaktCompanyEntityBase
     public string? OperModule { get; set; }
 
     /// <summary>
-    /// 操作类型（如：新增、删除、修改、查询、导出）
+    /// 操作类型（HTTP 审计推导）
     /// </summary>
-    [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? OperType { get; set; }
+    [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public TaktHttpAuditOperType OperType { get; set; } = TaktHttpAuditOperType.Unknown;
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -82,10 +83,10 @@ public class TaktOperLog : TaktCompanyEntityBase
     public string? JsonResult { get; set; }
 
     /// <summary>
-    /// 操作状态（0=成功，1=失败）
+    /// 操作状态（0=失败，1=成功）
     /// </summary>
     [SugarColumn(ColumnName = "oper_status", ColumnDescription = "操作状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int OperStatus { get; set; }
+    public TaktExecuteStatus OperStatus { get; set; } = TaktExecuteStatus.Success;
 
     /// <summary>
     /// 错误消息（失败时）

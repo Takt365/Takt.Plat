@@ -21,9 +21,9 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Services.Captcha;
 
 /// <summary>
-/// 验证码启动初始化服务（<see cref="IHostedService"/>）。
+/// 验证码启动初始化服务（IHostedService）。
 /// 当 <c>Captcha:Enabled</c> 为 true 且 <c>Captcha:Type</c> 为 Slider 时，校验 wwwroot 下模板并补足背景图；
-/// 最后试生成一条验证码以验证 <see cref="ITaktCaptchaService"/> 可用。失败不阻断应用启动。
+/// 最后试生成一条验证码以验证 ITaktCaptchaService 可用。失败不阻断应用启动。
 /// </summary>
 public class TaktCaptchaInitializer : IHostedService
 {
@@ -136,8 +136,8 @@ public class TaktCaptchaInitializer : IHostedService
     }
 
     /// <summary>
-    /// 确保背景图目录中图片数量不少于 <see cref="TaktCaptchaBackgroundImagesOptions.MinCount"/>；
-    /// 若 <see cref="TaktCaptchaBackgroundImagesOptions.RedownloadOnStartup"/> 为 true 则先删除已有文件再下载
+    /// 确保背景图目录中图片数量不少于 TaktCaptchaBackgroundImagesOptions.MinCount；
+    /// 若 TaktCaptchaBackgroundImagesOptions.RedownloadOnStartup 为 true 则先删除已有文件再下载
     /// </summary>
     /// <param name="backgroundPath">背景图目录绝对路径（wwwroot/slide/background）</param>
     /// <param name="cancellationToken">取消令牌</param>

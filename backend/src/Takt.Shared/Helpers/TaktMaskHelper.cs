@@ -246,11 +246,22 @@ public static class TaktMaskHelper
     }
 
     /// <summary>
-    /// 脱敏日志数据。
+    /// 脱敏日志数据
     /// </summary>
+    /// <param name="data">待脱敏对象</param>
+    /// <param name="sensitiveFields">敏感字段名列表；null 时使用默认规则</param>
+    /// <returns>脱敏后的对象</returns>
     public static object? MaskForLogging(object? data, IReadOnlyList<string>? sensitiveFields = null)
         => MaskObject(data, sensitiveFields, '*');
 
+    /// <summary>
+    /// 按起止可见位数对字符串分段脱敏
+    /// </summary>
+    /// <param name="text">原文</param>
+    /// <param name="start">首部保留字符数</param>
+    /// <param name="end">尾部保留字符数</param>
+    /// <param name="maskChar">掩码字符</param>
+    /// <returns>脱敏后的字符串</returns>
     private static string MaskSegment(string? text, int start, int end, char maskChar)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -270,6 +281,13 @@ public static class TaktMaskHelper
         return visibleStart + new string(maskChar, maskLength) + visibleEnd;
     }
 
+    /// <summary>
+    /// 递归脱敏 JSON 对象节点
+    /// </summary>
+    /// <param name="obj">JSON 对象</param>
+    /// <param name="fields">敏感字段名列表</param>
+    /// <param name="maskChar">掩码字符</param>
+    /// <returns>脱敏后的 JSON 对象</returns>
     private static JsonObject MaskJsonObject(JsonObject obj, IReadOnlyList<string> fields, char maskChar)
     {
         var sanitized = new JsonObject();
@@ -297,6 +315,13 @@ public static class TaktMaskHelper
         return sanitized;
     }
 
+    /// <summary>
+    /// 递归脱敏 JSON 数组节点
+    /// </summary>
+    /// <param name="arr">JSON 数组</param>
+    /// <param name="fields">敏感字段名列表</param>
+    /// <param name="maskChar">掩码字符</param>
+    /// <returns>脱敏后的 JSON 数组</returns>
     private static JsonArray MaskJsonArray(JsonArray arr, IReadOnlyList<string> fields, char maskChar)
     {
         var sanitized = new JsonArray();
@@ -318,6 +343,13 @@ public static class TaktMaskHelper
         return sanitized;
     }
 
+    /// <summary>
+    /// 按字段语义脱敏 CLR 对象值
+    /// </summary>
+    /// <param name="lowerKey">小写字段名（用于语义匹配）</param>
+    /// <param name="value">原始值</param>
+    /// <param name="maskChar">掩码字符</param>
+    /// <returns>脱敏后的值</returns>
     private static object? MaskSensitiveValue(string lowerKey, object? value, char maskChar)
     {
         if (value is string str && !string.IsNullOrWhiteSpace(str))
@@ -327,6 +359,13 @@ public static class TaktMaskHelper
         return new string(maskChar, 3);
     }
 
+    /// <summary>
+    /// 按字段语义脱敏 JSON 节点值
+    /// </summary>
+    /// <param name="lowerKey">小写字段名（用于语义匹配）</param>
+    /// <param name="value">JSON 节点值</param>
+    /// <param name="maskChar">掩码字符</param>
+    /// <returns>脱敏后的 JSON 节点</returns>
     private static JsonNode? MaskSensitiveJsonValue(string lowerKey, JsonNode? value, char maskChar)
     {
         if (value is JsonValue jsonValue && jsonValue.TryGetValue<string>(out var str) && !string.IsNullOrWhiteSpace(str))
@@ -336,6 +375,13 @@ public static class TaktMaskHelper
         return new string(maskChar, 3);
     }
 
+    /// <summary>
+    /// 按字段名语义选择脱敏策略（手机/邮箱/身份证等）
+    /// </summary>
+    /// <param name="lowerKey">小写字段名</param>
+    /// <param name="value">原始字符串</param>
+    /// <param name="maskChar">掩码字符</param>
+    /// <returns>脱敏后的字符串</returns>
     private static string MaskSensitiveString(string lowerKey, string value, char maskChar)
     {
         if (lowerKey.Contains("phone", StringComparison.Ordinal) || lowerKey.Contains("mobile", StringComparison.Ordinal) || lowerKey.Contains("tel", StringComparison.Ordinal))

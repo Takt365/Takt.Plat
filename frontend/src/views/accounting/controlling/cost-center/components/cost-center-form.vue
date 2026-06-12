@@ -120,6 +120,32 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.costCenter.shortname')"
+                name="shortName"
+              >
+                <a-input
+                  v-model:value="formState.shortName"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costCenter.shortname') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.costCenter.costcenterdesc')"
+                name="costCenterDesc"
+              >
+                <a-textarea
+                  v-model:value="formState.costCenterDesc"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costCenter.costcenterdesc') })"
+                  :rows="3"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.costCenter.type')"
                 name="costCenterType"
               >
@@ -361,7 +387,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","costCenterCode","costCenterName","parentId","costCenterType","managerId","managerName","deptId","deptName","costCenterLevel","relatedPlant","costCenterStatus","validFrom","validTo","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","costCenterCode","costCenterName","shortName","costCenterDesc","parentId","costCenterType","managerId","managerName","deptId","deptName","costCenterLevel","relatedPlant","costCenterStatus","validFrom","validTo","sortOrder","extFieldJson","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

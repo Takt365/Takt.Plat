@@ -20,7 +20,7 @@ namespace Takt.WebApi.Controllers.Statistics.Logging;
 /// 服务器监控控制器
 /// 提供服务器硬件与应用运行状态查询 REST API
 /// </summary>
-[ApiModule(TaktModule.Statistics, "统计日志")]
+[ApiModule(9, "统计日志")]
 [Route("api/[controller]", Name = "服务器监控")]
 public class TaktServerMonitorsController : TaktControllerBase
 {

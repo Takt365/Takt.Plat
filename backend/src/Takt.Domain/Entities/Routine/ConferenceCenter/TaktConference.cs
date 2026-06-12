@@ -11,7 +11,6 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 
@@ -26,7 +25,7 @@ namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 [SugarIndex("ix_conference_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ConferenceStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_conference_start_time", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartTime), OrderByType.Asc, false)]
 [SugarIndex("ix_conference_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
-public class TaktConference : TaktCompanyEntityBase
+public class TaktConference : TaktApprovalEntityBase
 {
     /// <summary>
     /// 会议编码（租户+公司内唯一）
@@ -42,12 +41,12 @@ public class TaktConference : TaktCompanyEntityBase
     /// 会议类型
     /// </summary>
     [SugarColumn(ColumnName = "conference_type", ColumnDescription = "会议类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktConferenceType ConferenceType { get; set; } = TaktConferenceType.Internal;
+    public int ConferenceType { get; set; } = 0;
     /// <summary>
     /// 会议状态
     /// </summary>
     [SugarColumn(ColumnName = "conference_status", ColumnDescription = "会议状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktConferenceStatus ConferenceStatus { get; set; } = TaktConferenceStatus.Draft;
+    public int ConferenceStatus { get; set; } = 0;
     /// <summary>
     /// 开始时间
     /// </summary>
@@ -120,6 +119,17 @@ public class TaktConference : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "reminder_minutes", ColumnDescription = "提前提醒分钟数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReminderMinutes { get; set; } = 0;
+    /// <summary>
+    /// 会议室 ID
+    /// </summary>
+    [SugarColumn(ColumnName = "conference_room_id", ColumnDescription = "会议室ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ConferenceRoomId { get; set; }
+    /// <summary>
+    /// 会议室名称（冗余快照）
+    /// </summary>
+    [SugarColumn(ColumnName = "conference_room_name", ColumnDescription = "会议室名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? ConferenceRoomName { get; set; }
     /// <summary>
     /// 流程实例 ID（会议审批工作流）
     /// </summary>

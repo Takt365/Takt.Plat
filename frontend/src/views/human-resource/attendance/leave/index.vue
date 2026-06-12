@@ -25,11 +25,13 @@
       delete-permission="humanresource:attendance:leave:delete"
       import-permission="humanresource:attendance:leave:import"
       export-permission="humanresource:attendance:leave:export"
+      start-flow-permission="humanresource:attendance:leave:update"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
+      :show-start-flow="true"
       :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
@@ -41,10 +43,13 @@
       :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
+      :start-flow-disabled="submitApprovalDisabled"
+      :start-flow-loading="submitApprovalLoading"
       :refresh-loading="loading"
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
+      @start-flow="handleSubmitApproval"
       @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
@@ -447,7 +452,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import LeaveForm from './components/leave-form.vue'
-import { getLeaveList, getLeaveById, createLeave, updateLeave, deleteLeaveById, deleteLeaveBatch, getLeaveTemplate, importLeave, exportLeave } from '@/api/human-resource/attendance/leave'
+import { getLeaveList, getLeaveById, createLeave, updateLeave, deleteLeaveById, deleteLeaveBatch, getLeaveTemplate, importLeave, exportLeave, submitLeaveForApproval } from '@/api/human-resource/attendance/leave'
 import type { Leave, LeaveQuery, LeaveCreate, LeaveUpdate } from '@/types/human-resource/attendance/leave'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -489,6 +494,8 @@ const formTitle = ref('')
 const formData = ref<Partial<Leave>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
+/** 提交审批 loading */
+const submitApprovalLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -570,6 +577,14 @@ const entityIdName = 'leaveId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
+/** 提交审批：须单行且状态为草稿或已驳回 */
+const submitApprovalDisabled = computed(() => {
+  if (selectedRows.value.length !== 1) {
+    return true
+  }
+  const status = Number(getLeaveField(selectedRows.value[0], 'leaveStatus'))
+  return status !== 0 && status !== 3
+})
 
 
 /** 页面挂载后加载分页列表 */
@@ -831,6 +846,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -1007,6 +1025,28 @@ async function handleDeleteOne(record: Leave) {
     }
   })
 }
+/** 提交请假审批（发起工作流） */
+async function handleSubmitApproval() {
+  if (submitApprovalDisabled.value || selectedRows.value.length !== 1) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.startflow'), entity: t('entity.leave._self') }))
+    return
+  }
+  const id = getLeaveId(selectedRows.value[0])
+  if (!id) {
+    return
+  }
+  submitApprovalLoading.value = true
+  try {
+    await submitLeaveForApproval(id)
+    message.success(t('common.feedback.updated', { target: t('entity.leave._self') }))
+    await loadData()
+  } catch (err: unknown) {
+    message.error(err instanceof Error ? err.message : t('common.feedback.failed'))
+  } finally {
+    submitApprovalLoading.value = false
+  }
+}
+
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {

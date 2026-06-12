@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// TaktPcbaOutputDetail 实体国际化翻译种子（键前缀 entity.pcbaOutputDetail.*）
+/// TaktPcbaOutputDetail 实体国际化翻译种子（键前缀 entity.pcbaoutputdetail.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 pcbaOutputDetail 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 pcbaoutputdetail 实体翻译...", tenantCode);
 
         foreach (var item in GetPcbaOutputDetailTranslations())
         {
@@ -76,218 +75,218 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPcbaOutputDetail 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.pcbaOutputDetail._self / entity.pcbaOutputDetail.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.pcbaoutputdetail._self / entity.pcbaoutputdetail.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetPcbaOutputDetailTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.pcbaOutputDetail._self
-            new TranslationSeedItem("entity.pcbaOutputDetail._self", "en-US", "Pcba Output Detail Information", "实体名称"),
-            // entity.pcbaOutputDetail._self
-            new TranslationSeedItem("entity.pcbaOutputDetail._self", "ja-JP", "PCBA明细信息", "实体名称"),
-            // entity.pcbaOutputDetail._self
-            new TranslationSeedItem("entity.pcbaOutputDetail._self", "zh-CN", "PCBA明细信息", "实体名称"),
-            // entity.pcbaOutputDetail._self
-            new TranslationSeedItem("entity.pcbaOutputDetail._self", "zh-HK", "PCBA明细信息", "实体名称"),
+            // entity.pcbaoutputdetail._self
+            new TranslationSeedItem("entity.pcbaoutputdetail._self", "en-US", "Pcba Output Detail Information", "实体名称"),
+            // entity.pcbaoutputdetail._self
+            new TranslationSeedItem("entity.pcbaoutputdetail._self", "ja-JP", "PCBA明细信息", "实体名称"),
+            // entity.pcbaoutputdetail._self
+            new TranslationSeedItem("entity.pcbaoutputdetail._self", "zh-CN", "PCBA明细信息", "实体名称"),
+            // entity.pcbaoutputdetail._self
+            new TranslationSeedItem("entity.pcbaoutputdetail._self", "zh-HK", "PCBA明细信息", "实体名称"),
 
-            // entity.pcbaOutputDetail.pcbaoutputid
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutputid", "en-US", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.pcbaOutputDetail.pcbaoutputid
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutputid", "ja-JP", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.pcbaOutputDetail.pcbaoutputid
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutputid", "zh-CN", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.pcbaOutputDetail.pcbaoutputid
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutputid", "zh-HK", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbaoutputdetail.pcbaoutputid
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutputid", "en-US", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbaoutputdetail.pcbaoutputid
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutputid", "ja-JP", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbaoutputdetail.pcbaoutputid
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutputid", "zh-CN", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.pcbaoutputdetail.pcbaoutputid
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutputid", "zh-HK", "PCBA日报ID", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
 
-            // entity.pcbaOutputDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaOutputDetail.prodordercode", "en-US", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.pcbaOutputDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaOutputDetail.prodordercode", "ja-JP", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.pcbaOutputDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaOutputDetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.pcbaOutputDetail.prodordercode
-            new TranslationSeedItem("entity.pcbaOutputDetail.prodordercode", "zh-HK", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbaoutputdetail.prodordercode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "en-US", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbaoutputdetail.prodordercode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "ja-JP", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbaoutputdetail.prodordercode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.pcbaoutputdetail.prodordercode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "zh-HK", "生产工单号", "生产工单号（冗余字段,便于查询）"),
 
-            // entity.pcbaOutputDetail.linenumber
-            new TranslationSeedItem("entity.pcbaOutputDetail.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.pcbaOutputDetail.linenumber
-            new TranslationSeedItem("entity.pcbaOutputDetail.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.pcbaOutputDetail.linenumber
-            new TranslationSeedItem("entity.pcbaOutputDetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.pcbaOutputDetail.linenumber
-            new TranslationSeedItem("entity.pcbaOutputDetail.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbaoutputdetail.linenumber
+            new TranslationSeedItem("entity.pcbaoutputdetail.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbaoutputdetail.linenumber
+            new TranslationSeedItem("entity.pcbaoutputdetail.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbaoutputdetail.linenumber
+            new TranslationSeedItem("entity.pcbaoutputdetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.pcbaoutputdetail.linenumber
+            new TranslationSeedItem("entity.pcbaoutputdetail.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
 
-            // entity.pcbaOutputDetail.timeperiod
-            new TranslationSeedItem("entity.pcbaOutputDetail.timeperiod", "en-US", "生产时段", "生产时段"),
-            // entity.pcbaOutputDetail.timeperiod
-            new TranslationSeedItem("entity.pcbaOutputDetail.timeperiod", "ja-JP", "生产时段", "生产时段"),
-            // entity.pcbaOutputDetail.timeperiod
-            new TranslationSeedItem("entity.pcbaOutputDetail.timeperiod", "zh-CN", "生产时段", "生产时段"),
-            // entity.pcbaOutputDetail.timeperiod
-            new TranslationSeedItem("entity.pcbaOutputDetail.timeperiod", "zh-HK", "生产时段", "生产时段"),
+            // entity.pcbaoutputdetail.timeperiod
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "en-US", "生产时段", "生产时段"),
+            // entity.pcbaoutputdetail.timeperiod
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "ja-JP", "生产时段", "生产时段"),
+            // entity.pcbaoutputdetail.timeperiod
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段"),
+            // entity.pcbaoutputdetail.timeperiod
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "zh-HK", "生产时段", "生产时段"),
 
-            // entity.pcbaOutputDetail.shiftno
-            new TranslationSeedItem("entity.pcbaOutputDetail.shiftno", "en-US", "班组", "班组"),
-            // entity.pcbaOutputDetail.shiftno
-            new TranslationSeedItem("entity.pcbaOutputDetail.shiftno", "ja-JP", "班组", "班组"),
-            // entity.pcbaOutputDetail.shiftno
-            new TranslationSeedItem("entity.pcbaOutputDetail.shiftno", "zh-CN", "班组", "班组"),
-            // entity.pcbaOutputDetail.shiftno
-            new TranslationSeedItem("entity.pcbaOutputDetail.shiftno", "zh-HK", "班组", "班组"),
+            // entity.pcbaoutputdetail.shiftno
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "en-US", "班组", "班组"),
+            // entity.pcbaoutputdetail.shiftno
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "ja-JP", "班组", "班组"),
+            // entity.pcbaoutputdetail.shiftno
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "zh-CN", "班组", "班组"),
+            // entity.pcbaoutputdetail.shiftno
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "zh-HK", "班组", "班组"),
 
-            // entity.pcbaOutputDetail.pcbboardtype
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbboardtype", "en-US", "PCB板别", "板别（PCB板别）"),
-            // entity.pcbaOutputDetail.pcbboardtype
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbboardtype", "ja-JP", "PCB板别", "板别（PCB板别）"),
-            // entity.pcbaOutputDetail.pcbboardtype
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbboardtype", "zh-CN", "PCB板别", "板别（PCB板别）"),
-            // entity.pcbaOutputDetail.pcbboardtype
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbboardtype", "zh-HK", "PCB板别", "板别（PCB板别）"),
+            // entity.pcbaoutputdetail.pcbboardtype
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbboardtype", "en-US", "PCB板别", "板别（PCB板别）"),
+            // entity.pcbaoutputdetail.pcbboardtype
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbboardtype", "ja-JP", "PCB板别", "板别（PCB板别）"),
+            // entity.pcbaoutputdetail.pcbboardtype
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbboardtype", "zh-CN", "PCB板别", "板别（PCB板别）"),
+            // entity.pcbaoutputdetail.pcbboardtype
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbboardtype", "zh-HK", "PCB板别", "板别（PCB板别）"),
 
-            // entity.pcbaOutputDetail.panelside
-            new TranslationSeedItem("entity.pcbaOutputDetail.panelside", "en-US", "面板别", "面板别"),
-            // entity.pcbaOutputDetail.panelside
-            new TranslationSeedItem("entity.pcbaOutputDetail.panelside", "ja-JP", "面板别", "面板别"),
-            // entity.pcbaOutputDetail.panelside
-            new TranslationSeedItem("entity.pcbaOutputDetail.panelside", "zh-CN", "面板别", "面板别"),
-            // entity.pcbaOutputDetail.panelside
-            new TranslationSeedItem("entity.pcbaOutputDetail.panelside", "zh-HK", "面板别", "面板别"),
+            // entity.pcbaoutputdetail.panelside
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "en-US", "面板别", "面板别"),
+            // entity.pcbaoutputdetail.panelside
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "ja-JP", "面板别", "面板别"),
+            // entity.pcbaoutputdetail.panelside
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "zh-CN", "面板别", "面板别"),
+            // entity.pcbaoutputdetail.panelside
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "zh-HK", "面板别", "面板别"),
 
-            // entity.pcbaOutputDetail.batchqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.batchqty", "en-US", "批次数量", "批次数量"),
-            // entity.pcbaOutputDetail.batchqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.batchqty", "ja-JP", "批次数量", "批次数量"),
-            // entity.pcbaOutputDetail.batchqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.batchqty", "zh-CN", "批次数量", "批次数量"),
-            // entity.pcbaOutputDetail.batchqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.batchqty", "zh-HK", "批次数量", "批次数量"),
+            // entity.pcbaoutputdetail.batchqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.batchqty", "en-US", "批次数量", "批次数量"),
+            // entity.pcbaoutputdetail.batchqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.batchqty", "ja-JP", "批次数量", "批次数量"),
+            // entity.pcbaoutputdetail.batchqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.batchqty", "zh-CN", "批次数量", "批次数量"),
+            // entity.pcbaoutputdetail.batchqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.batchqty", "zh-HK", "批次数量", "批次数量"),
 
-            // entity.pcbaOutputDetail.dailycompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.dailycompletedqty", "en-US", "当日完成数", "当日完成数"),
-            // entity.pcbaOutputDetail.dailycompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.dailycompletedqty", "ja-JP", "当日完成数", "当日完成数"),
-            // entity.pcbaOutputDetail.dailycompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.dailycompletedqty", "zh-CN", "当日完成数", "当日完成数"),
-            // entity.pcbaOutputDetail.dailycompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.dailycompletedqty", "zh-HK", "当日完成数", "当日完成数"),
+            // entity.pcbaoutputdetail.dailycompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.dailycompletedqty", "en-US", "当日完成数", "当日完成数"),
+            // entity.pcbaoutputdetail.dailycompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.dailycompletedqty", "ja-JP", "当日完成数", "当日完成数"),
+            // entity.pcbaoutputdetail.dailycompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.dailycompletedqty", "zh-CN", "当日完成数", "当日完成数"),
+            // entity.pcbaoutputdetail.dailycompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.dailycompletedqty", "zh-HK", "当日完成数", "当日完成数"),
 
-            // entity.pcbaOutputDetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalcompletedqty", "en-US", "累计完成数", "累计完成数"),
-            // entity.pcbaOutputDetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalcompletedqty", "ja-JP", "累计完成数", "累计完成数"),
-            // entity.pcbaOutputDetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalcompletedqty", "zh-CN", "累计完成数", "累计完成数"),
-            // entity.pcbaOutputDetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalcompletedqty", "zh-HK", "累计完成数", "累计完成数"),
+            // entity.pcbaoutputdetail.totalcompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "en-US", "累计完成数", "累计完成数"),
+            // entity.pcbaoutputdetail.totalcompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "ja-JP", "累计完成数", "累计完成数"),
+            // entity.pcbaoutputdetail.totalcompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "zh-CN", "累计完成数", "累计完成数"),
+            // entity.pcbaoutputdetail.totalcompletedqty
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "zh-HK", "累计完成数", "累计完成数"),
 
-            // entity.pcbaOutputDetail.completedstatus
-            new TranslationSeedItem("entity.pcbaOutputDetail.completedstatus", "en-US", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
-            // entity.pcbaOutputDetail.completedstatus
-            new TranslationSeedItem("entity.pcbaOutputDetail.completedstatus", "ja-JP", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
-            // entity.pcbaOutputDetail.completedstatus
-            new TranslationSeedItem("entity.pcbaOutputDetail.completedstatus", "zh-CN", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
-            // entity.pcbaOutputDetail.completedstatus
-            new TranslationSeedItem("entity.pcbaOutputDetail.completedstatus", "zh-HK", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
+            // entity.pcbaoutputdetail.completedstatus
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "en-US", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
+            // entity.pcbaoutputdetail.completedstatus
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "ja-JP", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
+            // entity.pcbaoutputdetail.completedstatus
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-CN", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
+            // entity.pcbaoutputdetail.completedstatus
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-HK", "完成状态", "完成状态（0=未完成 1=部分完成 2=已完成）"),
 
-            // entity.pcbaOutputDetail.serialno
-            new TranslationSeedItem("entity.pcbaOutputDetail.serialno", "en-US", "序列号", "序列号"),
-            // entity.pcbaOutputDetail.serialno
-            new TranslationSeedItem("entity.pcbaOutputDetail.serialno", "ja-JP", "序列号", "序列号"),
-            // entity.pcbaOutputDetail.serialno
-            new TranslationSeedItem("entity.pcbaOutputDetail.serialno", "zh-CN", "序列号", "序列号"),
-            // entity.pcbaOutputDetail.serialno
-            new TranslationSeedItem("entity.pcbaOutputDetail.serialno", "zh-HK", "序列号", "序列号"),
+            // entity.pcbaoutputdetail.serialno
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "en-US", "序列号", "序列号"),
+            // entity.pcbaoutputdetail.serialno
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "ja-JP", "序列号", "序列号"),
+            // entity.pcbaoutputdetail.serialno
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-CN", "序列号", "序列号"),
+            // entity.pcbaoutputdetail.serialno
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-HK", "序列号", "序列号"),
 
-            // entity.pcbaOutputDetail.defectcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.defectcount", "en-US", "不良台数", "不良台数"),
-            // entity.pcbaOutputDetail.defectcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.defectcount", "ja-JP", "不良台数", "不良台数"),
-            // entity.pcbaOutputDetail.defectcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.defectcount", "zh-CN", "不良台数", "不良台数"),
-            // entity.pcbaOutputDetail.defectcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.defectcount", "zh-HK", "不良台数", "不良台数"),
+            // entity.pcbaoutputdetail.defectcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.defectcount", "en-US", "不良台数", "不良台数"),
+            // entity.pcbaoutputdetail.defectcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.defectcount", "ja-JP", "不良台数", "不良台数"),
+            // entity.pcbaoutputdetail.defectcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.defectcount", "zh-CN", "不良台数", "不良台数"),
+            // entity.pcbaoutputdetail.defectcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.defectcount", "zh-HK", "不良台数", "不良台数"),
 
-            // entity.pcbaOutputDetail.inputminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.inputminutes", "en-US", "投入工数", "投入工数(分钟)"),
-            // entity.pcbaOutputDetail.inputminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.inputminutes", "ja-JP", "投入工数", "投入工数(分钟)"),
-            // entity.pcbaOutputDetail.inputminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.inputminutes", "zh-CN", "投入工数", "投入工数(分钟)"),
-            // entity.pcbaOutputDetail.inputminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.inputminutes", "zh-HK", "投入工数", "投入工数(分钟)"),
+            // entity.pcbaoutputdetail.inputminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "en-US", "投入工数", "投入工数(分钟)"),
+            // entity.pcbaoutputdetail.inputminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "ja-JP", "投入工数", "投入工数(分钟)"),
+            // entity.pcbaoutputdetail.inputminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "zh-CN", "投入工数", "投入工数(分钟)"),
+            // entity.pcbaoutputdetail.inputminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "zh-HK", "投入工数", "投入工数(分钟)"),
 
-            // entity.pcbaOutputDetail.repairminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.repairminutes", "en-US", "修工数", "修工数(分钟)"),
-            // entity.pcbaOutputDetail.repairminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.repairminutes", "ja-JP", "修工数", "修工数(分钟)"),
-            // entity.pcbaOutputDetail.repairminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.repairminutes", "zh-CN", "修工数", "修工数(分钟)"),
-            // entity.pcbaOutputDetail.repairminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.repairminutes", "zh-HK", "修工数", "修工数(分钟)"),
+            // entity.pcbaoutputdetail.repairminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.repairminutes", "en-US", "修工数", "修工数(分钟)"),
+            // entity.pcbaoutputdetail.repairminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.repairminutes", "ja-JP", "修工数", "修工数(分钟)"),
+            // entity.pcbaoutputdetail.repairminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.repairminutes", "zh-CN", "修工数", "修工数(分钟)"),
+            // entity.pcbaoutputdetail.repairminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.repairminutes", "zh-HK", "修工数", "修工数(分钟)"),
 
-            // entity.pcbaOutputDetail.switchcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchcount", "en-US", "切换次数", "切换次数"),
-            // entity.pcbaOutputDetail.switchcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchcount", "ja-JP", "切换次数", "切换次数"),
-            // entity.pcbaOutputDetail.switchcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchcount", "zh-CN", "切换次数", "切换次数"),
-            // entity.pcbaOutputDetail.switchcount
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchcount", "zh-HK", "切换次数", "切换次数"),
+            // entity.pcbaoutputdetail.switchcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchcount", "en-US", "切换次数", "切换次数"),
+            // entity.pcbaoutputdetail.switchcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchcount", "ja-JP", "切换次数", "切换次数"),
+            // entity.pcbaoutputdetail.switchcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchcount", "zh-CN", "切换次数", "切换次数"),
+            // entity.pcbaoutputdetail.switchcount
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchcount", "zh-HK", "切换次数", "切换次数"),
 
-            // entity.pcbaOutputDetail.switchtime
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchtime", "en-US", "切换时间", "切换时间(分钟)"),
-            // entity.pcbaOutputDetail.switchtime
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchtime", "ja-JP", "切换时间", "切换时间(分钟)"),
-            // entity.pcbaOutputDetail.switchtime
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchtime", "zh-CN", "切换时间", "切换时间(分钟)"),
-            // entity.pcbaOutputDetail.switchtime
-            new TranslationSeedItem("entity.pcbaOutputDetail.switchtime", "zh-HK", "切换时间", "切换时间(分钟)"),
+            // entity.pcbaoutputdetail.switchtime
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchtime", "en-US", "切换时间", "切换时间(分钟)"),
+            // entity.pcbaoutputdetail.switchtime
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchtime", "ja-JP", "切换时间", "切换时间(分钟)"),
+            // entity.pcbaoutputdetail.switchtime
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchtime", "zh-CN", "切换时间", "切换时间(分钟)"),
+            // entity.pcbaoutputdetail.switchtime
+            new TranslationSeedItem("entity.pcbaoutputdetail.switchtime", "zh-HK", "切换时间", "切换时间(分钟)"),
 
-            // entity.pcbaOutputDetail.stoptime
-            new TranslationSeedItem("entity.pcbaOutputDetail.stoptime", "en-US", "切停机时间", "切停机时间(分钟)"),
-            // entity.pcbaOutputDetail.stoptime
-            new TranslationSeedItem("entity.pcbaOutputDetail.stoptime", "ja-JP", "切停机时间", "切停机时间(分钟)"),
-            // entity.pcbaOutputDetail.stoptime
-            new TranslationSeedItem("entity.pcbaOutputDetail.stoptime", "zh-CN", "切停机时间", "切停机时间(分钟)"),
-            // entity.pcbaOutputDetail.stoptime
-            new TranslationSeedItem("entity.pcbaOutputDetail.stoptime", "zh-HK", "切停机时间", "切停机时间(分钟)"),
+            // entity.pcbaoutputdetail.stoptime
+            new TranslationSeedItem("entity.pcbaoutputdetail.stoptime", "en-US", "切停机时间", "切停机时间(分钟)"),
+            // entity.pcbaoutputdetail.stoptime
+            new TranslationSeedItem("entity.pcbaoutputdetail.stoptime", "ja-JP", "切停机时间", "切停机时间(分钟)"),
+            // entity.pcbaoutputdetail.stoptime
+            new TranslationSeedItem("entity.pcbaoutputdetail.stoptime", "zh-CN", "切停机时间", "切停机时间(分钟)"),
+            // entity.pcbaoutputdetail.stoptime
+            new TranslationSeedItem("entity.pcbaoutputdetail.stoptime", "zh-HK", "切停机时间", "切停机时间(分钟)"),
 
-            // entity.pcbaOutputDetail.totalminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalminutes", "en-US", "总工数", "总工数(分钟)"),
-            // entity.pcbaOutputDetail.totalminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalminutes", "ja-JP", "总工数", "总工数(分钟)"),
-            // entity.pcbaOutputDetail.totalminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalminutes", "zh-CN", "总工数", "总工数(分钟)"),
-            // entity.pcbaOutputDetail.totalminutes
-            new TranslationSeedItem("entity.pcbaOutputDetail.totalminutes", "zh-HK", "总工数", "总工数(分钟)"),
+            // entity.pcbaoutputdetail.totalminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalminutes", "en-US", "总工数", "总工数(分钟)"),
+            // entity.pcbaoutputdetail.totalminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalminutes", "ja-JP", "总工数", "总工数(分钟)"),
+            // entity.pcbaoutputdetail.totalminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalminutes", "zh-CN", "总工数", "总工数(分钟)"),
+            // entity.pcbaoutputdetail.totalminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalminutes", "zh-HK", "总工数", "总工数(分钟)"),
 
-            // entity.pcbaOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachievedreason", "en-US", "未达成原因", "未达成原因"),
-            // entity.pcbaOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachievedreason", "ja-JP", "未达成原因", "未达成原因"),
-            // entity.pcbaOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因"),
-            // entity.pcbaOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachievedreason", "zh-HK", "未达成原因", "未达成原因"),
+            // entity.pcbaoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "en-US", "未达成原因", "未达成原因"),
+            // entity.pcbaoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "ja-JP", "未达成原因", "未达成原因"),
+            // entity.pcbaoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因"),
+            // entity.pcbaoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "zh-HK", "未达成原因", "未达成原因"),
 
-            // entity.pcbaOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachieveddescription", "en-US", "未达成说明", "未达成说明"),
-            // entity.pcbaOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachieveddescription", "ja-JP", "未达成说明", "未达成说明"),
-            // entity.pcbaOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachieveddescription", "zh-CN", "未达成说明", "未达成说明"),
-            // entity.pcbaOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.pcbaOutputDetail.unachieveddescription", "zh-HK", "未达成说明", "未达成说明"),
+            // entity.pcbaoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachieveddescription", "en-US", "未达成说明", "未达成说明"),
+            // entity.pcbaoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachieveddescription", "ja-JP", "未达成说明", "未达成说明"),
+            // entity.pcbaoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachieveddescription", "zh-CN", "未达成说明", "未达成说明"),
+            // entity.pcbaoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachieveddescription", "zh-HK", "未达成说明", "未达成说明"),
 
-            // entity.pcbaOutputDetail.pcbaoutput
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutput", "en-US", "PCBA日报", "PCBA日报（主表）"),
-            // entity.pcbaOutputDetail.pcbaoutput
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutput", "ja-JP", "PCBA日报", "PCBA日报（主表）"),
-            // entity.pcbaOutputDetail.pcbaoutput
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutput", "zh-CN", "PCBA日报", "PCBA日报（主表）"),
-            // entity.pcbaOutputDetail.pcbaoutput
-            new TranslationSeedItem("entity.pcbaOutputDetail.pcbaoutput", "zh-HK", "PCBA日报", "PCBA日报（主表）"),
+            // entity.pcbaoutputdetail.pcbaoutput
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutput", "en-US", "PCBA日报", "PCBA日报（主表）"),
+            // entity.pcbaoutputdetail.pcbaoutput
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutput", "ja-JP", "PCBA日报", "PCBA日报（主表）"),
+            // entity.pcbaoutputdetail.pcbaoutput
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutput", "zh-CN", "PCBA日报", "PCBA日报（主表）"),
+            // entity.pcbaoutputdetail.pcbaoutput
+            new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutput", "zh-HK", "PCBA日报", "PCBA日报（主表）"),
         };
     }
 
@@ -305,8 +304,8 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

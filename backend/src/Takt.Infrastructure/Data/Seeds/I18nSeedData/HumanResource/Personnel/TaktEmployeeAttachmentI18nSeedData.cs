@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeAttachmentI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel;
 
 /// <summary>
-/// TaktEmployeeAttachment 实体国际化翻译种子（键前缀 entity.employeeAttachment.*）
+/// TaktEmployeeAttachment 实体国际化翻译种子（键前缀 entity.employeeattachment.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktEmployeeAttachmentI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktEmployeeAttachmentI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeAttachment 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeattachment 实体翻译...", tenantCode);
 
         foreach (var item in GetEmployeeAttachmentTranslations())
         {
@@ -76,110 +75,110 @@ public class TaktEmployeeAttachmentI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeAttachment 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeAttachment._self / entity.employeeAttachment.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.employeeattachment._self / entity.employeeattachment.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeAttachmentTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.employeeAttachment._self
-            new TranslationSeedItem("entity.employeeAttachment._self", "en-US", "Employee Attachment Information", "实体名称"),
-            // entity.employeeAttachment._self
-            new TranslationSeedItem("entity.employeeAttachment._self", "ja-JP", "员工档案附件信息", "实体名称"),
-            // entity.employeeAttachment._self
-            new TranslationSeedItem("entity.employeeAttachment._self", "zh-CN", "员工档案附件信息", "实体名称"),
-            // entity.employeeAttachment._self
-            new TranslationSeedItem("entity.employeeAttachment._self", "zh-HK", "员工档案附件信息", "实体名称"),
+            // entity.employeeattachment._self
+            new TranslationSeedItem("entity.employeeattachment._self", "en-US", "Employee Attachment Information", "实体名称"),
+            // entity.employeeattachment._self
+            new TranslationSeedItem("entity.employeeattachment._self", "ja-JP", "员工档案附件信息", "实体名称"),
+            // entity.employeeattachment._self
+            new TranslationSeedItem("entity.employeeattachment._self", "zh-CN", "员工档案附件信息", "实体名称"),
+            // entity.employeeattachment._self
+            new TranslationSeedItem("entity.employeeattachment._self", "zh-HK", "员工档案附件信息", "实体名称"),
 
-            // entity.employeeAttachment.employeeid
-            new TranslationSeedItem("entity.employeeAttachment.employeeid", "en-US", "员工ID", "员工ID"),
-            // entity.employeeAttachment.employeeid
-            new TranslationSeedItem("entity.employeeAttachment.employeeid", "ja-JP", "员工ID", "员工ID"),
-            // entity.employeeAttachment.employeeid
-            new TranslationSeedItem("entity.employeeAttachment.employeeid", "zh-CN", "员工ID", "员工ID"),
-            // entity.employeeAttachment.employeeid
-            new TranslationSeedItem("entity.employeeAttachment.employeeid", "zh-HK", "员工ID", "员工ID"),
+            // entity.employeeattachment.employeeid
+            new TranslationSeedItem("entity.employeeattachment.employeeid", "en-US", "员工ID", "员工ID"),
+            // entity.employeeattachment.employeeid
+            new TranslationSeedItem("entity.employeeattachment.employeeid", "ja-JP", "员工ID", "员工ID"),
+            // entity.employeeattachment.employeeid
+            new TranslationSeedItem("entity.employeeattachment.employeeid", "zh-CN", "员工ID", "员工ID"),
+            // entity.employeeattachment.employeeid
+            new TranslationSeedItem("entity.employeeattachment.employeeid", "zh-HK", "员工ID", "员工ID"),
 
-            // entity.employeeAttachment.fileid
-            new TranslationSeedItem("entity.employeeAttachment.fileid", "en-US", "文件ID", "文件ID（关联文件服务）"),
-            // entity.employeeAttachment.fileid
-            new TranslationSeedItem("entity.employeeAttachment.fileid", "ja-JP", "文件ID", "文件ID（关联文件服务）"),
-            // entity.employeeAttachment.fileid
-            new TranslationSeedItem("entity.employeeAttachment.fileid", "zh-CN", "文件ID", "文件ID（关联文件服务）"),
-            // entity.employeeAttachment.fileid
-            new TranslationSeedItem("entity.employeeAttachment.fileid", "zh-HK", "文件ID", "文件ID（关联文件服务）"),
+            // entity.employeeattachment.fileid
+            new TranslationSeedItem("entity.employeeattachment.fileid", "en-US", "文件ID", "文件ID（关联文件服务）"),
+            // entity.employeeattachment.fileid
+            new TranslationSeedItem("entity.employeeattachment.fileid", "ja-JP", "文件ID", "文件ID（关联文件服务）"),
+            // entity.employeeattachment.fileid
+            new TranslationSeedItem("entity.employeeattachment.fileid", "zh-CN", "文件ID", "文件ID（关联文件服务）"),
+            // entity.employeeattachment.fileid
+            new TranslationSeedItem("entity.employeeattachment.fileid", "zh-HK", "文件ID", "文件ID（关联文件服务）"),
 
-            // entity.employeeAttachment.filecode
-            new TranslationSeedItem("entity.employeeAttachment.filecode", "en-US", "文件编码", "文件编码"),
-            // entity.employeeAttachment.filecode
-            new TranslationSeedItem("entity.employeeAttachment.filecode", "ja-JP", "文件编码", "文件编码"),
-            // entity.employeeAttachment.filecode
-            new TranslationSeedItem("entity.employeeAttachment.filecode", "zh-CN", "文件编码", "文件编码"),
-            // entity.employeeAttachment.filecode
-            new TranslationSeedItem("entity.employeeAttachment.filecode", "zh-HK", "文件编码", "文件编码"),
+            // entity.employeeattachment.filecode
+            new TranslationSeedItem("entity.employeeattachment.filecode", "en-US", "文件编码", "文件编码"),
+            // entity.employeeattachment.filecode
+            new TranslationSeedItem("entity.employeeattachment.filecode", "ja-JP", "文件编码", "文件编码"),
+            // entity.employeeattachment.filecode
+            new TranslationSeedItem("entity.employeeattachment.filecode", "zh-CN", "文件编码", "文件编码"),
+            // entity.employeeattachment.filecode
+            new TranslationSeedItem("entity.employeeattachment.filecode", "zh-HK", "文件编码", "文件编码"),
 
-            // entity.employeeAttachment.filename
-            new TranslationSeedItem("entity.employeeAttachment.filename", "en-US", "文件名称", "文件名称"),
-            // entity.employeeAttachment.filename
-            new TranslationSeedItem("entity.employeeAttachment.filename", "ja-JP", "文件名称", "文件名称"),
-            // entity.employeeAttachment.filename
-            new TranslationSeedItem("entity.employeeAttachment.filename", "zh-CN", "文件名称", "文件名称"),
-            // entity.employeeAttachment.filename
-            new TranslationSeedItem("entity.employeeAttachment.filename", "zh-HK", "文件名称", "文件名称"),
+            // entity.employeeattachment.filename
+            new TranslationSeedItem("entity.employeeattachment.filename", "en-US", "文件名称", "文件名称"),
+            // entity.employeeattachment.filename
+            new TranslationSeedItem("entity.employeeattachment.filename", "ja-JP", "文件名称", "文件名称"),
+            // entity.employeeattachment.filename
+            new TranslationSeedItem("entity.employeeattachment.filename", "zh-CN", "文件名称", "文件名称"),
+            // entity.employeeattachment.filename
+            new TranslationSeedItem("entity.employeeattachment.filename", "zh-HK", "文件名称", "文件名称"),
 
-            // entity.employeeAttachment.filepath
-            new TranslationSeedItem("entity.employeeAttachment.filepath", "en-US", "文件路径", "文件路径"),
-            // entity.employeeAttachment.filepath
-            new TranslationSeedItem("entity.employeeAttachment.filepath", "ja-JP", "文件路径", "文件路径"),
-            // entity.employeeAttachment.filepath
-            new TranslationSeedItem("entity.employeeAttachment.filepath", "zh-CN", "文件路径", "文件路径"),
-            // entity.employeeAttachment.filepath
-            new TranslationSeedItem("entity.employeeAttachment.filepath", "zh-HK", "文件路径", "文件路径"),
+            // entity.employeeattachment.filepath
+            new TranslationSeedItem("entity.employeeattachment.filepath", "en-US", "文件路径", "文件路径"),
+            // entity.employeeattachment.filepath
+            new TranslationSeedItem("entity.employeeattachment.filepath", "ja-JP", "文件路径", "文件路径"),
+            // entity.employeeattachment.filepath
+            new TranslationSeedItem("entity.employeeattachment.filepath", "zh-CN", "文件路径", "文件路径"),
+            // entity.employeeattachment.filepath
+            new TranslationSeedItem("entity.employeeattachment.filepath", "zh-HK", "文件路径", "文件路径"),
 
-            // entity.employeeAttachment.filesize
-            new TranslationSeedItem("entity.employeeAttachment.filesize", "en-US", "文件大小", "文件大小（字节）"),
-            // entity.employeeAttachment.filesize
-            new TranslationSeedItem("entity.employeeAttachment.filesize", "ja-JP", "文件大小", "文件大小（字节）"),
-            // entity.employeeAttachment.filesize
-            new TranslationSeedItem("entity.employeeAttachment.filesize", "zh-CN", "文件大小", "文件大小（字节）"),
-            // entity.employeeAttachment.filesize
-            new TranslationSeedItem("entity.employeeAttachment.filesize", "zh-HK", "文件大小", "文件大小（字节）"),
+            // entity.employeeattachment.filesize
+            new TranslationSeedItem("entity.employeeattachment.filesize", "en-US", "文件大小", "文件大小（字节）"),
+            // entity.employeeattachment.filesize
+            new TranslationSeedItem("entity.employeeattachment.filesize", "ja-JP", "文件大小", "文件大小（字节）"),
+            // entity.employeeattachment.filesize
+            new TranslationSeedItem("entity.employeeattachment.filesize", "zh-CN", "文件大小", "文件大小（字节）"),
+            // entity.employeeattachment.filesize
+            new TranslationSeedItem("entity.employeeattachment.filesize", "zh-HK", "文件大小", "文件大小（字节）"),
 
-            // entity.employeeAttachment.filetype
-            new TranslationSeedItem("entity.employeeAttachment.filetype", "en-US", "文件类型", "文件类型/MIME"),
-            // entity.employeeAttachment.filetype
-            new TranslationSeedItem("entity.employeeAttachment.filetype", "ja-JP", "文件类型", "文件类型/MIME"),
-            // entity.employeeAttachment.filetype
-            new TranslationSeedItem("entity.employeeAttachment.filetype", "zh-CN", "文件类型", "文件类型/MIME"),
-            // entity.employeeAttachment.filetype
-            new TranslationSeedItem("entity.employeeAttachment.filetype", "zh-HK", "文件类型", "文件类型/MIME"),
+            // entity.employeeattachment.filetype
+            new TranslationSeedItem("entity.employeeattachment.filetype", "en-US", "文件类型", "文件类型/MIME"),
+            // entity.employeeattachment.filetype
+            new TranslationSeedItem("entity.employeeattachment.filetype", "ja-JP", "文件类型", "文件类型/MIME"),
+            // entity.employeeattachment.filetype
+            new TranslationSeedItem("entity.employeeattachment.filetype", "zh-CN", "文件类型", "文件类型/MIME"),
+            // entity.employeeattachment.filetype
+            new TranslationSeedItem("entity.employeeattachment.filetype", "zh-HK", "文件类型", "文件类型/MIME"),
 
-            // entity.employeeAttachment.attachmenttype
-            new TranslationSeedItem("entity.employeeAttachment.attachmenttype", "en-US", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
-            // entity.employeeAttachment.attachmenttype
-            new TranslationSeedItem("entity.employeeAttachment.attachmenttype", "ja-JP", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
-            // entity.employeeAttachment.attachmenttype
-            new TranslationSeedItem("entity.employeeAttachment.attachmenttype", "zh-CN", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
-            // entity.employeeAttachment.attachmenttype
-            new TranslationSeedItem("entity.employeeAttachment.attachmenttype", "zh-HK", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
+            // entity.employeeattachment.attachmenttype
+            new TranslationSeedItem("entity.employeeattachment.attachmenttype", "en-US", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
+            // entity.employeeattachment.attachmenttype
+            new TranslationSeedItem("entity.employeeattachment.attachmenttype", "ja-JP", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
+            // entity.employeeattachment.attachmenttype
+            new TranslationSeedItem("entity.employeeattachment.attachmenttype", "zh-CN", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
+            // entity.employeeattachment.attachmenttype
+            new TranslationSeedItem("entity.employeeattachment.attachmenttype", "zh-HK", "附件类型", "附件类型（0=身份证，1=学历证，2=合同，3=照片，4=离职证明，5=其他）"),
 
-            // entity.employeeAttachment.attachmentdescription
-            new TranslationSeedItem("entity.employeeAttachment.attachmentdescription", "en-US", "附件说明", "附件说明"),
-            // entity.employeeAttachment.attachmentdescription
-            new TranslationSeedItem("entity.employeeAttachment.attachmentdescription", "ja-JP", "附件说明", "附件说明"),
-            // entity.employeeAttachment.attachmentdescription
-            new TranslationSeedItem("entity.employeeAttachment.attachmentdescription", "zh-CN", "附件说明", "附件说明"),
-            // entity.employeeAttachment.attachmentdescription
-            new TranslationSeedItem("entity.employeeAttachment.attachmentdescription", "zh-HK", "附件说明", "附件说明"),
+            // entity.employeeattachment.attachmentdescription
+            new TranslationSeedItem("entity.employeeattachment.attachmentdescription", "en-US", "附件说明", "附件说明"),
+            // entity.employeeattachment.attachmentdescription
+            new TranslationSeedItem("entity.employeeattachment.attachmentdescription", "ja-JP", "附件说明", "附件说明"),
+            // entity.employeeattachment.attachmentdescription
+            new TranslationSeedItem("entity.employeeattachment.attachmentdescription", "zh-CN", "附件说明", "附件说明"),
+            // entity.employeeattachment.attachmentdescription
+            new TranslationSeedItem("entity.employeeattachment.attachmentdescription", "zh-HK", "附件说明", "附件说明"),
 
-            // entity.employeeAttachment.sortorder
-            new TranslationSeedItem("entity.employeeAttachment.sortorder", "en-US", "排序号", "排序号"),
-            // entity.employeeAttachment.sortorder
-            new TranslationSeedItem("entity.employeeAttachment.sortorder", "ja-JP", "排序号", "排序号"),
-            // entity.employeeAttachment.sortorder
-            new TranslationSeedItem("entity.employeeAttachment.sortorder", "zh-CN", "排序号", "排序号"),
-            // entity.employeeAttachment.sortorder
-            new TranslationSeedItem("entity.employeeAttachment.sortorder", "zh-HK", "排序号", "排序号"),
+            // entity.employeeattachment.sortorder
+            new TranslationSeedItem("entity.employeeattachment.sortorder", "en-US", "排序号", "排序号"),
+            // entity.employeeattachment.sortorder
+            new TranslationSeedItem("entity.employeeattachment.sortorder", "ja-JP", "排序号", "排序号"),
+            // entity.employeeattachment.sortorder
+            new TranslationSeedItem("entity.employeeattachment.sortorder", "zh-CN", "排序号", "排序号"),
+            // entity.employeeattachment.sortorder
+            new TranslationSeedItem("entity.employeeattachment.sortorder", "zh-HK", "排序号", "排序号"),
         };
     }
 
@@ -197,8 +196,8 @@ public class TaktEmployeeAttachmentI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

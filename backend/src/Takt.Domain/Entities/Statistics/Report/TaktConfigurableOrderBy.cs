@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Report;
 
@@ -47,7 +46,7 @@ public class TaktConfigurableOrderBy : TaktCompanyEntityBase
     /// 排序方向（升序/降序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_direction", ColumnDescription = "排序方向", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktConfigurableSortDirection SortDirection { get; set; } = TaktConfigurableSortDirection.Asc;
+    public int SortDirection { get; set; } = 1;
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）

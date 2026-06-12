@@ -67,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.username')"
+                :label="t('entity.deltalog.username')"
                 name="userName"
               >
                 <a-input
                   v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.username') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.username') })"
                   size="small"
                   allow-clear
                 />
@@ -80,25 +80,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.opertype')"
+                :label="t('entity.deltalog.opertype')"
                 name="operType"
               >
-                <a-input
+                <a-input-number
                   v-model:value="formState.operType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.opertype') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.opertype') })"
                   size="small"
-                  allow-clear
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.tablename')"
+                :label="t('entity.deltalog.tablename')"
                 name="tableName"
               >
                 <a-input
                   v-model:value="formState.tableName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.tablename') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.tablename') })"
                   size="small"
                   allow-clear
                 />
@@ -106,12 +106,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.primarykeyid')"
+                :label="t('entity.deltalog.primarykeyid')"
                 name="primaryKeyId"
               >
                 <a-input
                   v-model:value="formState.primaryKeyId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.primarykeyid') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.primarykeyid') })"
                   size="small"
                   allow-clear
                 />
@@ -119,12 +119,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.beforedata')"
+                :label="t('entity.deltalog.beforedata')"
                 name="beforeData"
               >
                 <a-input
                   v-model:value="formState.beforeData"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.beforedata') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.beforedata') })"
                   size="small"
                   allow-clear
                 />
@@ -132,12 +132,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.afterdata')"
+                :label="t('entity.deltalog.afterdata')"
                 name="afterData"
               >
                 <a-input
                   v-model:value="formState.afterData"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.afterdata') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.afterdata') })"
                   size="small"
                   allow-clear
                 />
@@ -145,12 +145,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.diffdata')"
+                :label="t('entity.deltalog.diffdata')"
                 name="diffData"
               >
                 <a-input
                   v-model:value="formState.diffData"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.diffdata') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.diffdata') })"
                   size="small"
                   allow-clear
                 />
@@ -168,12 +168,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.sqlstatement')"
+                :label="t('entity.deltalog.sqlstatement')"
                 name="sqlStatement"
               >
                 <a-input
                   v-model:value="formState.sqlStatement"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.sqlstatement') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.sqlstatement') })"
                   size="small"
                   allow-clear
                 />
@@ -181,12 +181,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.operip')"
+                :label="t('entity.deltalog.operip')"
                 name="operIp"
               >
                 <a-input
                   v-model:value="formState.operIp"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.operip') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.operip') })"
                   size="small"
                   allow-clear
                 />
@@ -194,12 +194,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.operlocation')"
+                :label="t('entity.deltalog.operlocation')"
                 name="operLocation"
               >
                 <a-input
                   v-model:value="formState.operLocation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.operlocation') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.operlocation') })"
                   size="small"
                   allow-clear
                 />
@@ -207,12 +207,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.opertime')"
+                :label="t('entity.deltalog.opertime')"
                 name="operTime"
               >
                 <a-input
                   v-model:value="formState.operTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.opertime') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.opertime') })"
                   size="small"
                   allow-clear
                 />
@@ -220,12 +220,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.deltaLog.elapsedtime')"
+                :label="t('entity.deltalog.elapsedtime')"
                 name="elapsedTime"
               >
                 <a-input-number
                   v-model:value="formState.elapsedTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.elapsedtime') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.elapsedtime') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -355,35 +355,35 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.deltaLog.username') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.deltalog.username') }),
       trigger: 'blur'
     }
   ],
   operType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.deltaLog.opertype') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.deltalog.opertype') }),
+      trigger: 'change'
     }
   ],
   tableName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.deltaLog.tablename') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.deltalog.tablename') }),
       trigger: 'blur'
     }
   ],
   operTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.deltaLog.opertime') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.deltalog.opertime') }),
       trigger: 'blur'
     }
   ],
   elapsedTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.deltaLog.elapsedtime') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.deltalog.elapsedtime') }),
       trigger: 'change'
     }
   ],

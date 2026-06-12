@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktTenantI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTenant 实体字段国际化种子（已对齐前端 locales：src/locales/identity/tenant）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity;
@@ -76,7 +75,7 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTenant 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.tenant._self / entity.tenant.{{field}}；ResourceGroup=TaktModule.Identity；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.tenant._self / entity.tenant.{{field}}；ResourceGroup=1；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetTenantTranslations()
     {
@@ -146,22 +145,22 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.tenant.contactemail", "zh-HK", "联系邮箱", "联系邮箱"),
 
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "en-US", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "en-US", "是否内置", "是否内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "ja-JP", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "ja-JP", "是否内置", "是否内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-CN", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
             // entity.tenant.isbuiltin
-            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-HK", "是否内置", "是否内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除"),
+            new TranslationSeedItem("entity.tenant.isbuiltin", "zh-HK", "是否内置", "是否内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）"),
 
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.tenant.status", "en-US", "状态", "状态（字典 sys_normal_disable）"),
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "ja-JP", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.tenant.status", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.tenant.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
             // entity.tenant.status
-            new TranslationSeedItem("entity.tenant.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.tenant.status", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
 
             // entity.tenant.usertenants
             new TranslationSeedItem("entity.tenant.usertenants", "en-US", "可访问该租户的用户关联", "可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）"),
@@ -188,8 +187,8 @@ public class TaktTenantI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Identity;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 1;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

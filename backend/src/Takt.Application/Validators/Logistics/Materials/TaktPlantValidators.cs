@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktPlantValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Plant 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPlant 生成，请按需审阅）
 // 
@@ -32,16 +32,16 @@ public class TaktPlantCreateValidator : AbstractValidator<TaktPlantCreateDto>
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.PlantName)
             .NotEmpty().WithMessage("工厂名称不能为空")
-            .MaximumLength(200).WithMessage("工厂名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("工厂名称长度不能超过40个字符");
         RuleFor(x => x.PlantShortName)
             .NotEmpty().WithMessage("工厂简称不能为空")
-            .MaximumLength(50).WithMessage("工厂简称长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("工厂简称长度不能超过40个字符");
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");
@@ -114,7 +114,7 @@ public class TaktPlantCreateValidator : AbstractValidator<TaktPlantCreateDto>
             .MaximumLength(200).WithMessage("工厂网站长度不能超过200个字符");
         RuleFor(x => x.UnifiedSocialCreditCode)
             .NotEmpty().WithMessage("统一社会信用代码不能为空")
-            .MaximumLength(50).WithMessage("统一社会信用代码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("统一社会信用代码长度不能超过40个字符");
         RuleFor(x => x.TaxRegistrationNumber)
             .NotEmpty().WithMessage("税务登记号不能为空")
             .MaximumLength(50).WithMessage("税务登记号长度不能超过50个字符");
@@ -171,16 +171,16 @@ public class TaktPlantImportValidator : AbstractValidator<TaktPlantImportDto>
     public TaktPlantImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.PlantName)
             .NotEmpty().WithMessage("工厂名称不能为空")
-            .MaximumLength(200).WithMessage("工厂名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("工厂名称长度不能超过40个字符");
         RuleFor(x => x.PlantShortName)
             .NotEmpty().WithMessage("工厂简称不能为空")
-            .MaximumLength(50).WithMessage("工厂简称长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("工厂简称长度不能超过40个字符");
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");

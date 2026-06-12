@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Organization
 // 文件名称：TaktPostDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Post 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPost 生成，请按需审阅）
 // 
@@ -60,12 +60,12 @@ public class TaktPostDto : TaktCompanyDtoBase
     /// <summary>
     /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
     /// </summary>
-    public TaktPostType PostType { get; set; }
+    public int PostType { get; set; }
 
     /// <summary>
     /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
     /// </summary>
-    public TaktPostLevel? PostLevel { get; set; }
+    public int? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -110,12 +110,12 @@ public class TaktPostDto : TaktCompanyDtoBase
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus PostStatus { get; set; }
+    public int PostStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -174,12 +174,12 @@ public class TaktPostQueryDto : TaktPagedQuery
     /// <summary>
     /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
     /// </summary>
-    public TaktPostType? PostType { get; set; }
+    public int? PostType { get; set; }
 
     /// <summary>
     /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
     /// </summary>
-    public TaktPostLevel? PostLevel { get; set; }
+    public int? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -224,12 +224,12 @@ public class TaktPostQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? PostStatus { get; set; }
+    public int? PostStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -307,12 +307,12 @@ public class TaktPostCreateDto
     /// <summary>
     /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
     /// </summary>
-    public TaktPostType PostType { get; set; }
+    public int PostType { get; set; }
 
     /// <summary>
     /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
     /// </summary>
-    public TaktPostLevel? PostLevel { get; set; }
+    public int? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -357,12 +357,12 @@ public class TaktPostCreateDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus PostStatus { get; set; }
+    public int PostStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号
@@ -432,7 +432,7 @@ public class TaktPostStatusDto
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus PostStatus { get; set; }
+    public int PostStatus { get; set; }
 }
 
 // ========================================
@@ -497,12 +497,12 @@ public class TaktPostTemplateDto
     /// <summary>
     /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
     /// </summary>
-    public TaktPostType? PostType { get; set; }
+    public int? PostType { get; set; }
 
     /// <summary>
     /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
     /// </summary>
-    public TaktPostLevel? PostLevel { get; set; }
+    public int? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -537,7 +537,7 @@ public class TaktPostTemplateDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? PostStatus { get; set; }
+    public int? PostStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -590,12 +590,12 @@ public class TaktPostImportDto
     /// <summary>
     /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
     /// </summary>
-    public TaktPostType? PostType { get; set; }
+    public int? PostType { get; set; }
 
     /// <summary>
     /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
     /// </summary>
-    public TaktPostLevel? PostLevel { get; set; }
+    public int? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -630,7 +630,7 @@ public class TaktPostImportDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? PostStatus { get; set; }
+    public int? PostStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -684,12 +684,12 @@ public class TaktPostExportDto
     /// <summary>
     /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
     /// </summary>
-    public TaktPostType PostType { get; set; }
+    public int PostType { get; set; }
 
     /// <summary>
     /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
     /// </summary>
-    public TaktPostLevel? PostLevel { get; set; }
+    public int? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -734,12 +734,12 @@ public class TaktPostExportDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus PostStatus { get; set; }
+    public int PostStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子岗位为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号

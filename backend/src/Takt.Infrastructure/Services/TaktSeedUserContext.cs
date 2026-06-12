@@ -15,8 +15,8 @@ using Takt.Domain.Interfaces;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktUserContext"/> 种子数据实现
-/// 在种子初始化阶段使用，不依赖 HTTP 请求头；租户由协调器或 <see cref="Create"/> 传入
+/// ITaktUserContext 种子数据实现
+/// 在种子初始化阶段使用，不依赖 HTTP 请求头；租户由协调器或 Create 传入
 /// </summary>
 public class TaktSeedUserContext : ITaktUserContext
 {
@@ -31,7 +31,7 @@ public class TaktSeedUserContext : ITaktUserContext
     private const string SeedUserName = "SystemSeed";
 
     /// <summary>
-    /// 当前租户编码（由种子数据协调器或 <see cref="Create"/> 传入）
+    /// 当前租户编码（由种子数据协调器或 Create 传入）
     /// </summary>
     public string? TenantCode { get; set; }
 
@@ -41,7 +41,7 @@ public class TaktSeedUserContext : ITaktUserContext
     public string? CompanyCode { get; set; }
 
     /// <summary>
-    /// 请求头中的公司编码（种子阶段与 <see cref="CompanyCode"/> 一致）
+    /// 请求头中的公司编码（种子阶段与 CompanyCode 一致）
     /// </summary>
     public string? RequestCompanyCode => CompanyCode;
 

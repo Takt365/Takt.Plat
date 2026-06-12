@@ -463,7 +463,7 @@ public abstract class TaktControllerBase : ControllerBase
     }
 
     /// <summary>
-    /// 解析 <see cref="TaktLocalizedException"/> 为完整本地化文案。
+    /// 解析 TaktLocalizedException 为完整本地化文案。
     /// </summary>
     protected string ResolveLocalizedException(TaktLocalizedException lex)
     {

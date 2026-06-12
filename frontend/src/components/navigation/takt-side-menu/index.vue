@@ -20,6 +20,7 @@
     :inline-indent="menuInlineIndent"
     :class="['takt-side-menu', `menu-style-${setting.menuStyle}`]"
     @click="handleMenuClick"
+    @openChange="handleOpenChange"
   />
 </template>
 
@@ -31,7 +32,7 @@ import { useSettingStore } from '@/stores/common/setting'
 import { TAKT_MENU_INLINE_INDENT } from '@/utils/common'
 import {
   buildMenuParentKeyMap,
-  getMenuAccordionOpenKeys,
+  normalizeMenuOpenKeys,
   resolveMenuOpenKeysForPath,
 } from '@/utils/takt-menu-open-keys'
 
@@ -77,6 +78,14 @@ const handleMenuClick = (info: MenuInfo) => {
   emit('click', key)
 }
 
+/**
+ * SubMenu 展开/收拢：收起父级时级联移除子孙 openKeys（避免须逐级点击收缩）
+ * @param keys 变更后的 openKeys
+ */
+const handleOpenChange = (keys: string[]) => {
+  openKeys.value = normalizeMenuOpenKeys(keys, menuParentKeyMap.value, setting.value.menuAccordion)
+}
+
 watch(
   () => [route.path, menuItems.value] as const,
   ([path]) => {
@@ -84,19 +93,6 @@ watch(
     openKeys.value = resolveMenuOpenKeysForPath(menuItems.value, path)
   },
   { immediate: true }
-)
-
-// 手风琴：开启时只保留「最后展开项」的祖先链（目录 key 为 menuCode，不能用路径前缀判断）
-watch(
-  () => [...openKeys.value],
-  (newVal) => {
-    if (!setting.value.menuAccordion || newVal.length <= 1) return
-    const next = getMenuAccordionOpenKeys(newVal, menuParentKeyMap.value)
-    if (next.length !== newVal.length || next.some((k, i) => k !== newVal[i])) {
-      openKeys.value = next
-    }
-  },
-  { deep: true }
 )
 </script>
 

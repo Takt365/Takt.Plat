@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktOperLogService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：操作日志应用服务实现
 // 
@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Statistics.Logging;
 
@@ -225,7 +226,7 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
             exp = exp.And(x =>
                 (x.UserName != null && x.UserName.Contains(keywords))
                 || (x.OperModule != null && x.OperModule.Contains(keywords))
-                || (x.OperType != null && x.OperType.Contains(keywords))
+                || SqlFunc.ToString(x.OperType).Contains(keywords)
                 || (x.OperMethod != null && x.OperMethod.Contains(keywords))
                 || (x.RequestMethod != null && x.RequestMethod.Contains(keywords))
                 || (x.OperUrl != null && x.OperUrl.Contains(keywords))
@@ -253,9 +254,9 @@ public class TaktOperLogService : TaktServiceBase, ITaktOperLogService
             exp = exp.And(x => x.OperModule != null && x.OperModule.Contains(queryDto.OperModule));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OperType))
+        if (queryDto?.OperType.HasValue == true)
         {
-            exp = exp.And(x => x.OperType != null && x.OperType.Contains(queryDto.OperType));
+            exp = exp.And(x => x.OperType == queryDto.OperType);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.OperMethod))

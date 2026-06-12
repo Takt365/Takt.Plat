@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAccountTitleService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目应用服务实现
 // 
@@ -96,7 +96,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     public async Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _accountTitleRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TitleStatus == TaktCommonStatus.Enabled);
+        var list = await _accountTitleRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TitleStatus == 1);
         return BuildAccountTitleTreeOptions(list, 0);
     }
 
@@ -136,7 +136,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         var list = await _accountTitleRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.TitleStatus == TaktCommonStatus.Enabled).ToList();
+            : list.Where(x => x.TitleStatus == 1).ToList();
         return BuildAccountTitleTree(filtered, parentId);
     }
 
@@ -398,6 +398,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
             exp = exp.And(x =>
                 (x.TitleCode != null && x.TitleCode.Contains(keywords))
                 || (x.TitleName != null && x.TitleName.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.TitleType).Contains(keywords)
                 || SqlFunc.ToString(x.BalanceDirection).Contains(keywords)
@@ -428,6 +429,16 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         if (!string.IsNullOrEmpty(queryDto?.TitleName))
         {
             exp = exp.And(x => x.TitleName != null && x.TitleName.Contains(queryDto.TitleName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ShortName))
+        {
+            exp = exp.And(x => x.TitleName != null && x.TitleName.Contains(queryDto.ShortName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.TitleDesc))
+        {
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.TitleDesc));
         }
 
         if (queryDto?.ParentId.HasValue == true)

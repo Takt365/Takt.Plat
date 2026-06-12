@@ -33,7 +33,7 @@ public static class TaktSqlExecutorValidator
     /// 按执行选项校验 SQL 文本
     /// </summary>
     /// <param name="sql">待执行的 SQL 文本</param>
-    /// <param name="options">执行选项；为 null 时使用 <see cref="TaktSqlExecuteOptions.ReadOnlyDefault"/></param>
+    /// <param name="options">执行选项；为 null 时使用 TaktSqlExecuteOptions.ReadOnlyDefault</param>
     /// <exception cref="TaktBusinessException">SQL 为空、非只读或含禁止关键字时抛出</exception>
     public static void Validate(string sql, TaktSqlExecuteOptions? options = null)
     {

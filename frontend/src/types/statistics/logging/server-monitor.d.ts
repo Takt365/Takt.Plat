@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：server-monitor.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -38,6 +38,16 @@ export interface ServerHardware {
   cpuModel: string;
 
   /**
+   * CPU 平均使用率（%）
+   */
+  cpuUsagePercent: number;
+
+  /**
+   * 操作系统架构（RuntimeInformation.OSArchitecture，如 X64、Arm64）
+   */
+  osArchitecture: string;
+
+  /**
    * 操作系统信息
    */
   operatingSystem: string;
@@ -68,9 +78,14 @@ export interface ServerHardware {
   gpuList: GpuInfo[];
 
   /**
-   * 内存信息
+   * 内存汇总
    */
   memory: MemoryInfo;
+
+  /**
+   * 物理内存条列表
+   */
+  memoryModuleList: MemoryModule[];
 
   /**
    * 磁盘信息列表
@@ -132,9 +147,9 @@ export interface OperatingSystemLanguage {
   systemDefaultLanguage: string;
 
   /**
-   * 操作系统版本
+   * 操作系统版本（GetOsVersion：平台分发 + OSDescription 兜底）
    */
-  oSVersion: string;
+  osVersion: string;
 
   /**
    * 已安装的语言列表
@@ -214,6 +229,38 @@ export interface CpuInfo {
    */
   processorId: string;
 
+  /**
+   * 插槽标识（SocketDesignation）
+   */
+  socketDesignation: string;
+
+  /**
+   * 物理 CPU 总使用率（%）
+   */
+  usagePercent: number;
+
+  /**
+   * 各逻辑核心使用率（CpuCoreList）
+   */
+  coreList: CpuCoreInfo[];
+
+}
+
+
+/**
+ * CPU 核心使用率 DTO
+ */
+export interface CpuCoreInfo {
+  /**
+   * 逻辑核心名称
+   */
+  name: string;
+
+  /**
+   * 逻辑核心使用率（%）
+   */
+  usagePercent: number;
+
 }
 
 
@@ -281,6 +328,43 @@ export interface MemoryInfo {
    * 已用虚拟内存（字节）
    */
   usedVirtualMemory: any;
+
+}
+
+
+/**
+ * 物理内存条 DTO
+ */
+export interface MemoryModule {
+  /**
+   * 插槽 / Bank 标识
+   */
+  bankLabel: string;
+
+  /**
+   * 容量（字节）
+   */
+  capacity: any;
+
+  /**
+   * 频率（MHz）
+   */
+  speed: any;
+
+  /**
+   * 制造商
+   */
+  manufacturer: string;
+
+  /**
+   * 部件号
+   */
+  partNumber: string;
+
+  /**
+   * 序列号
+   */
+  serialNumber: string;
 
 }
 
@@ -358,15 +442,20 @@ export interface NetworkAdapter {
   /**
    * MAC 地址
    */
-  mACAddress: string;
+  macAddress: string;
 
   /**
-   * 速度（字节/秒）
+   * IPv4 地址（多个以逗号分隔）
+   */
+  ipAddress: string;
+
+  /**
+   * 速度（比特/秒）
    */
   speed: any;
 
   /**
-   * 状态
+   * 联网状态：Down / NoInternet / DnsFault / Online
    */
   status: string;
 
@@ -398,6 +487,11 @@ export interface MotherboardInfo {
    * 版本
    */
   version: string;
+
+  /**
+   * 机器 UUID（SMBIOS）
+   */
+  uuid: string;
 
 }
 
@@ -515,6 +609,11 @@ export interface AppStatus {
    * 处理器数量
    */
   processorCount: number;
+
+  /**
+   * 进程架构（RuntimeInformation.ProcessArchitecture，如 X64、Arm64）
+   */
+  processArchitecture: string;
 
 }
 

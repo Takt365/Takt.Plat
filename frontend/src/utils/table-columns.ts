@@ -70,6 +70,7 @@ export const ENTITY_BASE_FIELDS = {
     'approvalOpinion',
     'approvedBy',
     'approvedAt',
+    'flowInstanceId',
     'createdBy',
     'createdAt',
     'updatedBy',

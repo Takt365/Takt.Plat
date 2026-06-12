@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPersonnelOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// TaktPersonnelOperationRate 实体国际化翻译种子（键前缀 entity.personnelOperationRate.*）
+/// TaktPersonnelOperationRate 实体国际化翻译种子（键前缀 entity.personneloperationrate.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktPersonnelOperationRateI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktPersonnelOperationRateI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 personnelOperationRate 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 personneloperationrate 实体翻译...", tenantCode);
 
         foreach (var item in GetPersonnelOperationRateTranslations())
         {
@@ -76,290 +75,290 @@ public class TaktPersonnelOperationRateI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPersonnelOperationRate 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.personnelOperationRate._self / entity.personnelOperationRate.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.personneloperationrate._self / entity.personneloperationrate.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetPersonnelOperationRateTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.personnelOperationRate._self
-            new TranslationSeedItem("entity.personnelOperationRate._self", "en-US", "Personnel Operation Rate Information", "实体名称"),
-            // entity.personnelOperationRate._self
-            new TranslationSeedItem("entity.personnelOperationRate._self", "ja-JP", "人员稼动率信息", "实体名称"),
-            // entity.personnelOperationRate._self
-            new TranslationSeedItem("entity.personnelOperationRate._self", "zh-CN", "人员稼动率信息", "实体名称"),
-            // entity.personnelOperationRate._self
-            new TranslationSeedItem("entity.personnelOperationRate._self", "zh-HK", "人员稼动率信息", "实体名称"),
+            // entity.personneloperationrate._self
+            new TranslationSeedItem("entity.personneloperationrate._self", "en-US", "Personnel Operation Rate Information", "实体名称"),
+            // entity.personneloperationrate._self
+            new TranslationSeedItem("entity.personneloperationrate._self", "ja-JP", "人员稼动率信息", "实体名称"),
+            // entity.personneloperationrate._self
+            new TranslationSeedItem("entity.personneloperationrate._self", "zh-CN", "人员稼动率信息", "实体名称"),
+            // entity.personneloperationrate._self
+            new TranslationSeedItem("entity.personneloperationrate._self", "zh-HK", "人员稼动率信息", "实体名称"),
 
-            // entity.personnelOperationRate.plantcode
-            new TranslationSeedItem("entity.personnelOperationRate.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.personnelOperationRate.plantcode
-            new TranslationSeedItem("entity.personnelOperationRate.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.personnelOperationRate.plantcode
-            new TranslationSeedItem("entity.personnelOperationRate.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.personnelOperationRate.plantcode
-            new TranslationSeedItem("entity.personnelOperationRate.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.personneloperationrate.plantcode
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.personneloperationrate.plantcode
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.personneloperationrate.plantcode
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.personneloperationrate.plantcode
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.personnelOperationRate.timecategory
-            new TranslationSeedItem("entity.personnelOperationRate.timecategory", "en-US", "时间类别", "时间类别（1=天，2=周，3=月）"),
-            // entity.personnelOperationRate.timecategory
-            new TranslationSeedItem("entity.personnelOperationRate.timecategory", "ja-JP", "时间类别", "时间类别（1=天，2=周，3=月）"),
-            // entity.personnelOperationRate.timecategory
-            new TranslationSeedItem("entity.personnelOperationRate.timecategory", "zh-CN", "时间类别", "时间类别（1=天，2=周，3=月）"),
-            // entity.personnelOperationRate.timecategory
-            new TranslationSeedItem("entity.personnelOperationRate.timecategory", "zh-HK", "时间类别", "时间类别（1=天，2=周，3=月）"),
+            // entity.personneloperationrate.timecategory
+            new TranslationSeedItem("entity.personneloperationrate.timecategory", "en-US", "时间类别", "时间类别（1=天，2=周，3=月）"),
+            // entity.personneloperationrate.timecategory
+            new TranslationSeedItem("entity.personneloperationrate.timecategory", "ja-JP", "时间类别", "时间类别（1=天，2=周，3=月）"),
+            // entity.personneloperationrate.timecategory
+            new TranslationSeedItem("entity.personneloperationrate.timecategory", "zh-CN", "时间类别", "时间类别（1=天，2=周，3=月）"),
+            // entity.personneloperationrate.timecategory
+            new TranslationSeedItem("entity.personneloperationrate.timecategory", "zh-HK", "时间类别", "时间类别（1=天，2=周，3=月）"),
 
-            // entity.personnelOperationRate.startdate
-            new TranslationSeedItem("entity.personnelOperationRate.startdate", "en-US", "开始日期", "开始日期"),
-            // entity.personnelOperationRate.startdate
-            new TranslationSeedItem("entity.personnelOperationRate.startdate", "ja-JP", "开始日期", "开始日期"),
-            // entity.personnelOperationRate.startdate
-            new TranslationSeedItem("entity.personnelOperationRate.startdate", "zh-CN", "开始日期", "开始日期"),
-            // entity.personnelOperationRate.startdate
-            new TranslationSeedItem("entity.personnelOperationRate.startdate", "zh-HK", "开始日期", "开始日期"),
+            // entity.personneloperationrate.startdate
+            new TranslationSeedItem("entity.personneloperationrate.startdate", "en-US", "开始日期", "开始日期"),
+            // entity.personneloperationrate.startdate
+            new TranslationSeedItem("entity.personneloperationrate.startdate", "ja-JP", "开始日期", "开始日期"),
+            // entity.personneloperationrate.startdate
+            new TranslationSeedItem("entity.personneloperationrate.startdate", "zh-CN", "开始日期", "开始日期"),
+            // entity.personneloperationrate.startdate
+            new TranslationSeedItem("entity.personneloperationrate.startdate", "zh-HK", "开始日期", "开始日期"),
 
-            // entity.personnelOperationRate.enddate
-            new TranslationSeedItem("entity.personnelOperationRate.enddate", "en-US", "结束日期", "结束日期"),
-            // entity.personnelOperationRate.enddate
-            new TranslationSeedItem("entity.personnelOperationRate.enddate", "ja-JP", "结束日期", "结束日期"),
-            // entity.personnelOperationRate.enddate
-            new TranslationSeedItem("entity.personnelOperationRate.enddate", "zh-CN", "结束日期", "结束日期"),
-            // entity.personnelOperationRate.enddate
-            new TranslationSeedItem("entity.personnelOperationRate.enddate", "zh-HK", "结束日期", "结束日期"),
+            // entity.personneloperationrate.enddate
+            new TranslationSeedItem("entity.personneloperationrate.enddate", "en-US", "结束日期", "结束日期"),
+            // entity.personneloperationrate.enddate
+            new TranslationSeedItem("entity.personneloperationrate.enddate", "ja-JP", "结束日期", "结束日期"),
+            // entity.personneloperationrate.enddate
+            new TranslationSeedItem("entity.personneloperationrate.enddate", "zh-CN", "结束日期", "结束日期"),
+            // entity.personneloperationrate.enddate
+            new TranslationSeedItem("entity.personneloperationrate.enddate", "zh-HK", "结束日期", "结束日期"),
 
-            // entity.personnelOperationRate.weeknumber
-            new TranslationSeedItem("entity.personnelOperationRate.weeknumber", "en-US", "周数", "周数（1-53）"),
-            // entity.personnelOperationRate.weeknumber
-            new TranslationSeedItem("entity.personnelOperationRate.weeknumber", "ja-JP", "周数", "周数（1-53）"),
-            // entity.personnelOperationRate.weeknumber
-            new TranslationSeedItem("entity.personnelOperationRate.weeknumber", "zh-CN", "周数", "周数（1-53）"),
-            // entity.personnelOperationRate.weeknumber
-            new TranslationSeedItem("entity.personnelOperationRate.weeknumber", "zh-HK", "周数", "周数（1-53）"),
+            // entity.personneloperationrate.weeknumber
+            new TranslationSeedItem("entity.personneloperationrate.weeknumber", "en-US", "周数", "周数（1-53）"),
+            // entity.personneloperationrate.weeknumber
+            new TranslationSeedItem("entity.personneloperationrate.weeknumber", "ja-JP", "周数", "周数（1-53）"),
+            // entity.personneloperationrate.weeknumber
+            new TranslationSeedItem("entity.personneloperationrate.weeknumber", "zh-CN", "周数", "周数（1-53）"),
+            // entity.personneloperationrate.weeknumber
+            new TranslationSeedItem("entity.personneloperationrate.weeknumber", "zh-HK", "周数", "周数（1-53）"),
 
-            // entity.personnelOperationRate.monthnumber
-            new TranslationSeedItem("entity.personnelOperationRate.monthnumber", "en-US", "月份", "月份（1-12）"),
-            // entity.personnelOperationRate.monthnumber
-            new TranslationSeedItem("entity.personnelOperationRate.monthnumber", "ja-JP", "月份", "月份（1-12）"),
-            // entity.personnelOperationRate.monthnumber
-            new TranslationSeedItem("entity.personnelOperationRate.monthnumber", "zh-CN", "月份", "月份（1-12）"),
-            // entity.personnelOperationRate.monthnumber
-            new TranslationSeedItem("entity.personnelOperationRate.monthnumber", "zh-HK", "月份", "月份（1-12）"),
+            // entity.personneloperationrate.monthnumber
+            new TranslationSeedItem("entity.personneloperationrate.monthnumber", "en-US", "月份", "月份（1-12）"),
+            // entity.personneloperationrate.monthnumber
+            new TranslationSeedItem("entity.personneloperationrate.monthnumber", "ja-JP", "月份", "月份（1-12）"),
+            // entity.personneloperationrate.monthnumber
+            new TranslationSeedItem("entity.personneloperationrate.monthnumber", "zh-CN", "月份", "月份（1-12）"),
+            // entity.personneloperationrate.monthnumber
+            new TranslationSeedItem("entity.personneloperationrate.monthnumber", "zh-HK", "月份", "月份（1-12）"),
 
-            // entity.personnelOperationRate.productionline
-            new TranslationSeedItem("entity.personnelOperationRate.productionline", "en-US", "生产线", "生产线"),
-            // entity.personnelOperationRate.productionline
-            new TranslationSeedItem("entity.personnelOperationRate.productionline", "ja-JP", "生产线", "生产线"),
-            // entity.personnelOperationRate.productionline
-            new TranslationSeedItem("entity.personnelOperationRate.productionline", "zh-CN", "生产线", "生产线"),
-            // entity.personnelOperationRate.productionline
-            new TranslationSeedItem("entity.personnelOperationRate.productionline", "zh-HK", "生产线", "生产线"),
+            // entity.personneloperationrate.productionline
+            new TranslationSeedItem("entity.personneloperationrate.productionline", "en-US", "生产线", "生产线"),
+            // entity.personneloperationrate.productionline
+            new TranslationSeedItem("entity.personneloperationrate.productionline", "ja-JP", "生产线", "生产线"),
+            // entity.personneloperationrate.productionline
+            new TranslationSeedItem("entity.personneloperationrate.productionline", "zh-CN", "生产线", "生产线"),
+            // entity.personneloperationrate.productionline
+            new TranslationSeedItem("entity.personneloperationrate.productionline", "zh-HK", "生产线", "生产线"),
 
-            // entity.personnelOperationRate.productionlinename
-            new TranslationSeedItem("entity.personnelOperationRate.productionlinename", "en-US", "生产线名称", "生产线名称"),
-            // entity.personnelOperationRate.productionlinename
-            new TranslationSeedItem("entity.personnelOperationRate.productionlinename", "ja-JP", "生产线名称", "生产线名称"),
-            // entity.personnelOperationRate.productionlinename
-            new TranslationSeedItem("entity.personnelOperationRate.productionlinename", "zh-CN", "生产线名称", "生产线名称"),
-            // entity.personnelOperationRate.productionlinename
-            new TranslationSeedItem("entity.personnelOperationRate.productionlinename", "zh-HK", "生产线名称", "生产线名称"),
+            // entity.personneloperationrate.productionlinename
+            new TranslationSeedItem("entity.personneloperationrate.productionlinename", "en-US", "生产线名称", "生产线名称"),
+            // entity.personneloperationrate.productionlinename
+            new TranslationSeedItem("entity.personneloperationrate.productionlinename", "ja-JP", "生产线名称", "生产线名称"),
+            // entity.personneloperationrate.productionlinename
+            new TranslationSeedItem("entity.personneloperationrate.productionlinename", "zh-CN", "生产线名称", "生产线名称"),
+            // entity.personneloperationrate.productionlinename
+            new TranslationSeedItem("entity.personneloperationrate.productionlinename", "zh-HK", "生产线名称", "生产线名称"),
 
-            // entity.personnelOperationRate.shiftno
-            new TranslationSeedItem("entity.personnelOperationRate.shiftno", "en-US", "班次", "班次（1=早班，2=中班，3=晚班）"),
-            // entity.personnelOperationRate.shiftno
-            new TranslationSeedItem("entity.personnelOperationRate.shiftno", "ja-JP", "班次", "班次（1=早班，2=中班，3=晚班）"),
-            // entity.personnelOperationRate.shiftno
-            new TranslationSeedItem("entity.personnelOperationRate.shiftno", "zh-CN", "班次", "班次（1=早班，2=中班，3=晚班）"),
-            // entity.personnelOperationRate.shiftno
-            new TranslationSeedItem("entity.personnelOperationRate.shiftno", "zh-HK", "班次", "班次（1=早班，2=中班，3=晚班）"),
+            // entity.personneloperationrate.shiftno
+            new TranslationSeedItem("entity.personneloperationrate.shiftno", "en-US", "班次", "班次（1=早班，2=中班，3=晚班）"),
+            // entity.personneloperationrate.shiftno
+            new TranslationSeedItem("entity.personneloperationrate.shiftno", "ja-JP", "班次", "班次（1=早班，2=中班，3=晚班）"),
+            // entity.personneloperationrate.shiftno
+            new TranslationSeedItem("entity.personneloperationrate.shiftno", "zh-CN", "班次", "班次（1=早班，2=中班，3=晚班）"),
+            // entity.personneloperationrate.shiftno
+            new TranslationSeedItem("entity.personneloperationrate.shiftno", "zh-HK", "班次", "班次（1=早班，2=中班，3=晚班）"),
 
-            // entity.personnelOperationRate.planneddirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.planneddirectpersonnelcount", "en-US", "计划直接人员数量", "计划直接人员数量"),
-            // entity.personnelOperationRate.planneddirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.planneddirectpersonnelcount", "ja-JP", "计划直接人员数量", "计划直接人员数量"),
-            // entity.personnelOperationRate.planneddirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.planneddirectpersonnelcount", "zh-CN", "计划直接人员数量", "计划直接人员数量"),
-            // entity.personnelOperationRate.planneddirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.planneddirectpersonnelcount", "zh-HK", "计划直接人员数量", "计划直接人员数量"),
+            // entity.personneloperationrate.planneddirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.planneddirectpersonnelcount", "en-US", "计划直接人员数量", "计划直接人员数量"),
+            // entity.personneloperationrate.planneddirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.planneddirectpersonnelcount", "ja-JP", "计划直接人员数量", "计划直接人员数量"),
+            // entity.personneloperationrate.planneddirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.planneddirectpersonnelcount", "zh-CN", "计划直接人员数量", "计划直接人员数量"),
+            // entity.personneloperationrate.planneddirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.planneddirectpersonnelcount", "zh-HK", "计划直接人员数量", "计划直接人员数量"),
 
-            // entity.personnelOperationRate.actualdirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualdirectpersonnelcount", "en-US", "实际直接人员数量", "实际直接人员数量"),
-            // entity.personnelOperationRate.actualdirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualdirectpersonnelcount", "ja-JP", "实际直接人员数量", "实际直接人员数量"),
-            // entity.personnelOperationRate.actualdirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualdirectpersonnelcount", "zh-CN", "实际直接人员数量", "实际直接人员数量"),
-            // entity.personnelOperationRate.actualdirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualdirectpersonnelcount", "zh-HK", "实际直接人员数量", "实际直接人员数量"),
+            // entity.personneloperationrate.actualdirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualdirectpersonnelcount", "en-US", "实际直接人员数量", "实际直接人员数量"),
+            // entity.personneloperationrate.actualdirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualdirectpersonnelcount", "ja-JP", "实际直接人员数量", "实际直接人员数量"),
+            // entity.personneloperationrate.actualdirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualdirectpersonnelcount", "zh-CN", "实际直接人员数量", "实际直接人员数量"),
+            // entity.personneloperationrate.actualdirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualdirectpersonnelcount", "zh-HK", "实际直接人员数量", "实际直接人员数量"),
 
-            // entity.personnelOperationRate.plannedindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.plannedindirectpersonnelcount", "en-US", "计划间接人员数量", "计划间接人员数量"),
-            // entity.personnelOperationRate.plannedindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.plannedindirectpersonnelcount", "ja-JP", "计划间接人员数量", "计划间接人员数量"),
-            // entity.personnelOperationRate.plannedindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.plannedindirectpersonnelcount", "zh-CN", "计划间接人员数量", "计划间接人员数量"),
-            // entity.personnelOperationRate.plannedindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.plannedindirectpersonnelcount", "zh-HK", "计划间接人员数量", "计划间接人员数量"),
+            // entity.personneloperationrate.plannedindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.plannedindirectpersonnelcount", "en-US", "计划间接人员数量", "计划间接人员数量"),
+            // entity.personneloperationrate.plannedindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.plannedindirectpersonnelcount", "ja-JP", "计划间接人员数量", "计划间接人员数量"),
+            // entity.personneloperationrate.plannedindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.plannedindirectpersonnelcount", "zh-CN", "计划间接人员数量", "计划间接人员数量"),
+            // entity.personneloperationrate.plannedindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.plannedindirectpersonnelcount", "zh-HK", "计划间接人员数量", "计划间接人员数量"),
 
-            // entity.personnelOperationRate.actualindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualindirectpersonnelcount", "en-US", "实际间接人员数量", "实际间接人员数量"),
-            // entity.personnelOperationRate.actualindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualindirectpersonnelcount", "ja-JP", "实际间接人员数量", "实际间接人员数量"),
-            // entity.personnelOperationRate.actualindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualindirectpersonnelcount", "zh-CN", "实际间接人员数量", "实际间接人员数量"),
-            // entity.personnelOperationRate.actualindirectpersonnelcount
-            new TranslationSeedItem("entity.personnelOperationRate.actualindirectpersonnelcount", "zh-HK", "实际间接人员数量", "实际间接人员数量"),
+            // entity.personneloperationrate.actualindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualindirectpersonnelcount", "en-US", "实际间接人员数量", "实际间接人员数量"),
+            // entity.personneloperationrate.actualindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualindirectpersonnelcount", "ja-JP", "实际间接人员数量", "实际间接人员数量"),
+            // entity.personneloperationrate.actualindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualindirectpersonnelcount", "zh-CN", "实际间接人员数量", "实际间接人员数量"),
+            // entity.personneloperationrate.actualindirectpersonnelcount
+            new TranslationSeedItem("entity.personneloperationrate.actualindirectpersonnelcount", "zh-HK", "实际间接人员数量", "实际间接人员数量"),
 
-            // entity.personnelOperationRate.plannedworktime
-            new TranslationSeedItem("entity.personnelOperationRate.plannedworktime", "en-US", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
-            // entity.personnelOperationRate.plannedworktime
-            new TranslationSeedItem("entity.personnelOperationRate.plannedworktime", "ja-JP", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
-            // entity.personnelOperationRate.plannedworktime
-            new TranslationSeedItem("entity.personnelOperationRate.plannedworktime", "zh-CN", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
-            // entity.personnelOperationRate.plannedworktime
-            new TranslationSeedItem("entity.personnelOperationRate.plannedworktime", "zh-HK", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
+            // entity.personneloperationrate.plannedworktime
+            new TranslationSeedItem("entity.personneloperationrate.plannedworktime", "en-US", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
+            // entity.personneloperationrate.plannedworktime
+            new TranslationSeedItem("entity.personneloperationrate.plannedworktime", "ja-JP", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
+            // entity.personneloperationrate.plannedworktime
+            new TranslationSeedItem("entity.personneloperationrate.plannedworktime", "zh-CN", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
+            // entity.personneloperationrate.plannedworktime
+            new TranslationSeedItem("entity.personneloperationrate.plannedworktime", "zh-HK", "出勤时间(分钟)", "出勤时间（分钟）。员工在公司的计划工作时间，含休息、待命等。"),
 
-            // entity.personnelOperationRate.actualworktime
-            new TranslationSeedItem("entity.personnelOperationRate.actualworktime", "en-US", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
-            // entity.personnelOperationRate.actualworktime
-            new TranslationSeedItem("entity.personnelOperationRate.actualworktime", "ja-JP", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
-            // entity.personnelOperationRate.actualworktime
-            new TranslationSeedItem("entity.personnelOperationRate.actualworktime", "zh-CN", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
-            // entity.personnelOperationRate.actualworktime
-            new TranslationSeedItem("entity.personnelOperationRate.actualworktime", "zh-HK", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
+            // entity.personneloperationrate.actualworktime
+            new TranslationSeedItem("entity.personneloperationrate.actualworktime", "en-US", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
+            // entity.personneloperationrate.actualworktime
+            new TranslationSeedItem("entity.personneloperationrate.actualworktime", "ja-JP", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
+            // entity.personneloperationrate.actualworktime
+            new TranslationSeedItem("entity.personneloperationrate.actualworktime", "zh-CN", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
+            // entity.personneloperationrate.actualworktime
+            new TranslationSeedItem("entity.personneloperationrate.actualworktime", "zh-HK", "在岗作业时间(分钟)", "在岗作业时间（分钟）。员工实际在工位上执行生产任务的时间。"),
 
-            // entity.personnelOperationRate.breaktime
-            new TranslationSeedItem("entity.personnelOperationRate.breaktime", "en-US", "休息时间(分钟)", "休息时间（分钟）"),
-            // entity.personnelOperationRate.breaktime
-            new TranslationSeedItem("entity.personnelOperationRate.breaktime", "ja-JP", "休息时间(分钟)", "休息时间（分钟）"),
-            // entity.personnelOperationRate.breaktime
-            new TranslationSeedItem("entity.personnelOperationRate.breaktime", "zh-CN", "休息时间(分钟)", "休息时间（分钟）"),
-            // entity.personnelOperationRate.breaktime
-            new TranslationSeedItem("entity.personnelOperationRate.breaktime", "zh-HK", "休息时间(分钟)", "休息时间（分钟）"),
+            // entity.personneloperationrate.breaktime
+            new TranslationSeedItem("entity.personneloperationrate.breaktime", "en-US", "休息时间(分钟)", "休息时间（分钟）"),
+            // entity.personneloperationrate.breaktime
+            new TranslationSeedItem("entity.personneloperationrate.breaktime", "ja-JP", "休息时间(分钟)", "休息时间（分钟）"),
+            // entity.personneloperationrate.breaktime
+            new TranslationSeedItem("entity.personneloperationrate.breaktime", "zh-CN", "休息时间(分钟)", "休息时间（分钟）"),
+            // entity.personneloperationrate.breaktime
+            new TranslationSeedItem("entity.personneloperationrate.breaktime", "zh-HK", "休息时间(分钟)", "休息时间（分钟）"),
 
-            // entity.personnelOperationRate.idletime
-            new TranslationSeedItem("entity.personnelOperationRate.idletime", "en-US", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
-            // entity.personnelOperationRate.idletime
-            new TranslationSeedItem("entity.personnelOperationRate.idletime", "ja-JP", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
-            // entity.personnelOperationRate.idletime
-            new TranslationSeedItem("entity.personnelOperationRate.idletime", "zh-CN", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
-            // entity.personnelOperationRate.idletime
-            new TranslationSeedItem("entity.personnelOperationRate.idletime", "zh-HK", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
+            // entity.personneloperationrate.idletime
+            new TranslationSeedItem("entity.personneloperationrate.idletime", "en-US", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
+            // entity.personneloperationrate.idletime
+            new TranslationSeedItem("entity.personneloperationrate.idletime", "ja-JP", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
+            // entity.personneloperationrate.idletime
+            new TranslationSeedItem("entity.personneloperationrate.idletime", "zh-CN", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
+            // entity.personneloperationrate.idletime
+            new TranslationSeedItem("entity.personneloperationrate.idletime", "zh-HK", "空闲时间(分钟)", "空闲时间（分钟）。等料、设备调试等非作业时间。"),
 
-            // entity.personnelOperationRate.personneloperationrate
-            new TranslationSeedItem("entity.personnelOperationRate.personneloperationrate", "en-US", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
-            // entity.personnelOperationRate.personneloperationrate
-            new TranslationSeedItem("entity.personnelOperationRate.personneloperationrate", "ja-JP", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
-            // entity.personnelOperationRate.personneloperationrate
-            new TranslationSeedItem("entity.personnelOperationRate.personneloperationrate", "zh-CN", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
-            // entity.personnelOperationRate.personneloperationrate
-            new TranslationSeedItem("entity.personnelOperationRate.personneloperationrate", "zh-HK", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
+            // entity.personneloperationrate.personneloperationrate
+            new TranslationSeedItem("entity.personneloperationrate.personneloperationrate", "en-US", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
+            // entity.personneloperationrate.personneloperationrate
+            new TranslationSeedItem("entity.personneloperationrate.personneloperationrate", "ja-JP", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
+            // entity.personneloperationrate.personneloperationrate
+            new TranslationSeedItem("entity.personneloperationrate.personneloperationrate", "zh-CN", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
+            // entity.personneloperationrate.personneloperationrate
+            new TranslationSeedItem("entity.personneloperationrate.personneloperationrate", "zh-HK", "人员稼动率(%)", "人员稼动率（%）。计算公式：在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。"),
 
-            // entity.personnelOperationRate.plannedoutput
-            new TranslationSeedItem("entity.personnelOperationRate.plannedoutput", "en-US", "计划产量", "计划产量"),
-            // entity.personnelOperationRate.plannedoutput
-            new TranslationSeedItem("entity.personnelOperationRate.plannedoutput", "ja-JP", "计划产量", "计划产量"),
-            // entity.personnelOperationRate.plannedoutput
-            new TranslationSeedItem("entity.personnelOperationRate.plannedoutput", "zh-CN", "计划产量", "计划产量"),
-            // entity.personnelOperationRate.plannedoutput
-            new TranslationSeedItem("entity.personnelOperationRate.plannedoutput", "zh-HK", "计划产量", "计划产量"),
+            // entity.personneloperationrate.plannedoutput
+            new TranslationSeedItem("entity.personneloperationrate.plannedoutput", "en-US", "计划产量", "计划产量"),
+            // entity.personneloperationrate.plannedoutput
+            new TranslationSeedItem("entity.personneloperationrate.plannedoutput", "ja-JP", "计划产量", "计划产量"),
+            // entity.personneloperationrate.plannedoutput
+            new TranslationSeedItem("entity.personneloperationrate.plannedoutput", "zh-CN", "计划产量", "计划产量"),
+            // entity.personneloperationrate.plannedoutput
+            new TranslationSeedItem("entity.personneloperationrate.plannedoutput", "zh-HK", "计划产量", "计划产量"),
 
-            // entity.personnelOperationRate.actualoutput
-            new TranslationSeedItem("entity.personnelOperationRate.actualoutput", "en-US", "实际产量", "实际产量"),
-            // entity.personnelOperationRate.actualoutput
-            new TranslationSeedItem("entity.personnelOperationRate.actualoutput", "ja-JP", "实际产量", "实际产量"),
-            // entity.personnelOperationRate.actualoutput
-            new TranslationSeedItem("entity.personnelOperationRate.actualoutput", "zh-CN", "实际产量", "实际产量"),
-            // entity.personnelOperationRate.actualoutput
-            new TranslationSeedItem("entity.personnelOperationRate.actualoutput", "zh-HK", "实际产量", "实际产量"),
+            // entity.personneloperationrate.actualoutput
+            new TranslationSeedItem("entity.personneloperationrate.actualoutput", "en-US", "实际产量", "实际产量"),
+            // entity.personneloperationrate.actualoutput
+            new TranslationSeedItem("entity.personneloperationrate.actualoutput", "ja-JP", "实际产量", "实际产量"),
+            // entity.personneloperationrate.actualoutput
+            new TranslationSeedItem("entity.personneloperationrate.actualoutput", "zh-CN", "实际产量", "实际产量"),
+            // entity.personneloperationrate.actualoutput
+            new TranslationSeedItem("entity.personneloperationrate.actualoutput", "zh-HK", "实际产量", "实际产量"),
 
-            // entity.personnelOperationRate.qualifiedquantity
-            new TranslationSeedItem("entity.personnelOperationRate.qualifiedquantity", "en-US", "合格品数量", "合格品数量"),
-            // entity.personnelOperationRate.qualifiedquantity
-            new TranslationSeedItem("entity.personnelOperationRate.qualifiedquantity", "ja-JP", "合格品数量", "合格品数量"),
-            // entity.personnelOperationRate.qualifiedquantity
-            new TranslationSeedItem("entity.personnelOperationRate.qualifiedquantity", "zh-CN", "合格品数量", "合格品数量"),
-            // entity.personnelOperationRate.qualifiedquantity
-            new TranslationSeedItem("entity.personnelOperationRate.qualifiedquantity", "zh-HK", "合格品数量", "合格品数量"),
+            // entity.personneloperationrate.qualifiedquantity
+            new TranslationSeedItem("entity.personneloperationrate.qualifiedquantity", "en-US", "合格品数量", "合格品数量"),
+            // entity.personneloperationrate.qualifiedquantity
+            new TranslationSeedItem("entity.personneloperationrate.qualifiedquantity", "ja-JP", "合格品数量", "合格品数量"),
+            // entity.personneloperationrate.qualifiedquantity
+            new TranslationSeedItem("entity.personneloperationrate.qualifiedquantity", "zh-CN", "合格品数量", "合格品数量"),
+            // entity.personneloperationrate.qualifiedquantity
+            new TranslationSeedItem("entity.personneloperationrate.qualifiedquantity", "zh-HK", "合格品数量", "合格品数量"),
 
-            // entity.personnelOperationRate.defectivequantity
-            new TranslationSeedItem("entity.personnelOperationRate.defectivequantity", "en-US", "不良品数量", "不良品数量"),
-            // entity.personnelOperationRate.defectivequantity
-            new TranslationSeedItem("entity.personnelOperationRate.defectivequantity", "ja-JP", "不良品数量", "不良品数量"),
-            // entity.personnelOperationRate.defectivequantity
-            new TranslationSeedItem("entity.personnelOperationRate.defectivequantity", "zh-CN", "不良品数量", "不良品数量"),
-            // entity.personnelOperationRate.defectivequantity
-            new TranslationSeedItem("entity.personnelOperationRate.defectivequantity", "zh-HK", "不良品数量", "不良品数量"),
+            // entity.personneloperationrate.defectivequantity
+            new TranslationSeedItem("entity.personneloperationrate.defectivequantity", "en-US", "不良品数量", "不良品数量"),
+            // entity.personneloperationrate.defectivequantity
+            new TranslationSeedItem("entity.personneloperationrate.defectivequantity", "ja-JP", "不良品数量", "不良品数量"),
+            // entity.personneloperationrate.defectivequantity
+            new TranslationSeedItem("entity.personneloperationrate.defectivequantity", "zh-CN", "不良品数量", "不良品数量"),
+            // entity.personneloperationrate.defectivequantity
+            new TranslationSeedItem("entity.personneloperationrate.defectivequantity", "zh-HK", "不良品数量", "不良品数量"),
 
-            // entity.personnelOperationRate.yieldrate
-            new TranslationSeedItem("entity.personnelOperationRate.yieldrate", "en-US", "良品率(%)", "良品率（%）"),
-            // entity.personnelOperationRate.yieldrate
-            new TranslationSeedItem("entity.personnelOperationRate.yieldrate", "ja-JP", "良品率(%)", "良品率（%）"),
-            // entity.personnelOperationRate.yieldrate
-            new TranslationSeedItem("entity.personnelOperationRate.yieldrate", "zh-CN", "良品率(%)", "良品率（%）"),
-            // entity.personnelOperationRate.yieldrate
-            new TranslationSeedItem("entity.personnelOperationRate.yieldrate", "zh-HK", "良品率(%)", "良品率（%）"),
+            // entity.personneloperationrate.yieldrate
+            new TranslationSeedItem("entity.personneloperationrate.yieldrate", "en-US", "良品率(%)", "良品率（%）"),
+            // entity.personneloperationrate.yieldrate
+            new TranslationSeedItem("entity.personneloperationrate.yieldrate", "ja-JP", "良品率(%)", "良品率（%）"),
+            // entity.personneloperationrate.yieldrate
+            new TranslationSeedItem("entity.personneloperationrate.yieldrate", "zh-CN", "良品率(%)", "良品率（%）"),
+            // entity.personneloperationrate.yieldrate
+            new TranslationSeedItem("entity.personneloperationrate.yieldrate", "zh-HK", "良品率(%)", "良品率（%）"),
 
-            // entity.personnelOperationRate.workefficiency
-            new TranslationSeedItem("entity.personnelOperationRate.workefficiency", "en-US", "工作效率(%)", "工作效率（%）"),
-            // entity.personnelOperationRate.workefficiency
-            new TranslationSeedItem("entity.personnelOperationRate.workefficiency", "ja-JP", "工作效率(%)", "工作效率（%）"),
-            // entity.personnelOperationRate.workefficiency
-            new TranslationSeedItem("entity.personnelOperationRate.workefficiency", "zh-CN", "工作效率(%)", "工作效率（%）"),
-            // entity.personnelOperationRate.workefficiency
-            new TranslationSeedItem("entity.personnelOperationRate.workefficiency", "zh-HK", "工作效率(%)", "工作效率（%）"),
+            // entity.personneloperationrate.workefficiency
+            new TranslationSeedItem("entity.personneloperationrate.workefficiency", "en-US", "工作效率(%)", "工作效率（%）"),
+            // entity.personneloperationrate.workefficiency
+            new TranslationSeedItem("entity.personneloperationrate.workefficiency", "ja-JP", "工作效率(%)", "工作效率（%）"),
+            // entity.personneloperationrate.workefficiency
+            new TranslationSeedItem("entity.personneloperationrate.workefficiency", "zh-CN", "工作效率(%)", "工作效率（%）"),
+            // entity.personneloperationrate.workefficiency
+            new TranslationSeedItem("entity.personneloperationrate.workefficiency", "zh-HK", "工作效率(%)", "工作效率（%）"),
 
-            // entity.personnelOperationRate.idlereasontype
-            new TranslationSeedItem("entity.personnelOperationRate.idlereasontype", "en-US", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
-            // entity.personnelOperationRate.idlereasontype
-            new TranslationSeedItem("entity.personnelOperationRate.idlereasontype", "ja-JP", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
-            // entity.personnelOperationRate.idlereasontype
-            new TranslationSeedItem("entity.personnelOperationRate.idlereasontype", "zh-CN", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
-            // entity.personnelOperationRate.idlereasontype
-            new TranslationSeedItem("entity.personnelOperationRate.idlereasontype", "zh-HK", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
+            // entity.personneloperationrate.idlereasontype
+            new TranslationSeedItem("entity.personneloperationrate.idlereasontype", "en-US", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
+            // entity.personneloperationrate.idlereasontype
+            new TranslationSeedItem("entity.personneloperationrate.idlereasontype", "ja-JP", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
+            // entity.personneloperationrate.idlereasontype
+            new TranslationSeedItem("entity.personneloperationrate.idlereasontype", "zh-CN", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
+            // entity.personneloperationrate.idlereasontype
+            new TranslationSeedItem("entity.personneloperationrate.idlereasontype", "zh-HK", "空闲原因类型", "空闲原因类型（1=缺料，2=设备故障，3=换型调试，4=人员调配，5=其他）"),
 
-            // entity.personnelOperationRate.idlereason
-            new TranslationSeedItem("entity.personnelOperationRate.idlereason", "en-US", "空闲原因描述", "空闲原因描述"),
-            // entity.personnelOperationRate.idlereason
-            new TranslationSeedItem("entity.personnelOperationRate.idlereason", "ja-JP", "空闲原因描述", "空闲原因描述"),
-            // entity.personnelOperationRate.idlereason
-            new TranslationSeedItem("entity.personnelOperationRate.idlereason", "zh-CN", "空闲原因描述", "空闲原因描述"),
-            // entity.personnelOperationRate.idlereason
-            new TranslationSeedItem("entity.personnelOperationRate.idlereason", "zh-HK", "空闲原因描述", "空闲原因描述"),
+            // entity.personneloperationrate.idlereason
+            new TranslationSeedItem("entity.personneloperationrate.idlereason", "en-US", "空闲原因描述", "空闲原因描述"),
+            // entity.personneloperationrate.idlereason
+            new TranslationSeedItem("entity.personneloperationrate.idlereason", "ja-JP", "空闲原因描述", "空闲原因描述"),
+            // entity.personneloperationrate.idlereason
+            new TranslationSeedItem("entity.personneloperationrate.idlereason", "zh-CN", "空闲原因描述", "空闲原因描述"),
+            // entity.personneloperationrate.idlereason
+            new TranslationSeedItem("entity.personneloperationrate.idlereason", "zh-HK", "空闲原因描述", "空闲原因描述"),
 
-            // entity.personnelOperationRate.overtimehours
-            new TranslationSeedItem("entity.personnelOperationRate.overtimehours", "en-US", "加班时间(分钟)", "加班时间（分钟）"),
-            // entity.personnelOperationRate.overtimehours
-            new TranslationSeedItem("entity.personnelOperationRate.overtimehours", "ja-JP", "加班时间(分钟)", "加班时间（分钟）"),
-            // entity.personnelOperationRate.overtimehours
-            new TranslationSeedItem("entity.personnelOperationRate.overtimehours", "zh-CN", "加班时间(分钟)", "加班时间（分钟）"),
-            // entity.personnelOperationRate.overtimehours
-            new TranslationSeedItem("entity.personnelOperationRate.overtimehours", "zh-HK", "加班时间(分钟)", "加班时间（分钟）"),
+            // entity.personneloperationrate.overtimehours
+            new TranslationSeedItem("entity.personneloperationrate.overtimehours", "en-US", "加班时间(分钟)", "加班时间（分钟）"),
+            // entity.personneloperationrate.overtimehours
+            new TranslationSeedItem("entity.personneloperationrate.overtimehours", "ja-JP", "加班时间(分钟)", "加班时间（分钟）"),
+            // entity.personneloperationrate.overtimehours
+            new TranslationSeedItem("entity.personneloperationrate.overtimehours", "zh-CN", "加班时间(分钟)", "加班时间（分钟）"),
+            // entity.personneloperationrate.overtimehours
+            new TranslationSeedItem("entity.personneloperationrate.overtimehours", "zh-HK", "加班时间(分钟)", "加班时间（分钟）"),
 
-            // entity.personnelOperationRate.teamleader
-            new TranslationSeedItem("entity.personnelOperationRate.teamleader", "en-US", "班组长", "班组长"),
-            // entity.personnelOperationRate.teamleader
-            new TranslationSeedItem("entity.personnelOperationRate.teamleader", "ja-JP", "班组长", "班组长"),
-            // entity.personnelOperationRate.teamleader
-            new TranslationSeedItem("entity.personnelOperationRate.teamleader", "zh-CN", "班组长", "班组长"),
-            // entity.personnelOperationRate.teamleader
-            new TranslationSeedItem("entity.personnelOperationRate.teamleader", "zh-HK", "班组长", "班组长"),
+            // entity.personneloperationrate.teamleader
+            new TranslationSeedItem("entity.personneloperationrate.teamleader", "en-US", "班组长", "班组长"),
+            // entity.personneloperationrate.teamleader
+            new TranslationSeedItem("entity.personneloperationrate.teamleader", "ja-JP", "班组长", "班组长"),
+            // entity.personneloperationrate.teamleader
+            new TranslationSeedItem("entity.personneloperationrate.teamleader", "zh-CN", "班组长", "班组长"),
+            // entity.personneloperationrate.teamleader
+            new TranslationSeedItem("entity.personneloperationrate.teamleader", "zh-HK", "班组长", "班组长"),
 
-            // entity.personnelOperationRate.supervisor
-            new TranslationSeedItem("entity.personnelOperationRate.supervisor", "en-US", "主管", "主管"),
-            // entity.personnelOperationRate.supervisor
-            new TranslationSeedItem("entity.personnelOperationRate.supervisor", "ja-JP", "主管", "主管"),
-            // entity.personnelOperationRate.supervisor
-            new TranslationSeedItem("entity.personnelOperationRate.supervisor", "zh-CN", "主管", "主管"),
-            // entity.personnelOperationRate.supervisor
-            new TranslationSeedItem("entity.personnelOperationRate.supervisor", "zh-HK", "主管", "主管"),
+            // entity.personneloperationrate.supervisor
+            new TranslationSeedItem("entity.personneloperationrate.supervisor", "en-US", "主管", "主管"),
+            // entity.personneloperationrate.supervisor
+            new TranslationSeedItem("entity.personneloperationrate.supervisor", "ja-JP", "主管", "主管"),
+            // entity.personneloperationrate.supervisor
+            new TranslationSeedItem("entity.personneloperationrate.supervisor", "zh-CN", "主管", "主管"),
+            // entity.personneloperationrate.supervisor
+            new TranslationSeedItem("entity.personneloperationrate.supervisor", "zh-HK", "主管", "主管"),
 
-            // entity.personnelOperationRate.status
-            new TranslationSeedItem("entity.personnelOperationRate.status", "en-US", "状态", "状态（0=正常，1=停用）"),
-            // entity.personnelOperationRate.status
-            new TranslationSeedItem("entity.personnelOperationRate.status", "ja-JP", "状态", "状态（0=正常，1=停用）"),
-            // entity.personnelOperationRate.status
-            new TranslationSeedItem("entity.personnelOperationRate.status", "zh-CN", "状态", "状态（0=正常，1=停用）"),
-            // entity.personnelOperationRate.status
-            new TranslationSeedItem("entity.personnelOperationRate.status", "zh-HK", "状态", "状态（0=正常，1=停用）"),
+            // entity.personneloperationrate.status
+            new TranslationSeedItem("entity.personneloperationrate.status", "en-US", "状态", "状态（0=正常，1=停用）"),
+            // entity.personneloperationrate.status
+            new TranslationSeedItem("entity.personneloperationrate.status", "ja-JP", "状态", "状态（0=正常，1=停用）"),
+            // entity.personneloperationrate.status
+            new TranslationSeedItem("entity.personneloperationrate.status", "zh-CN", "状态", "状态（0=正常，1=停用）"),
+            // entity.personneloperationrate.status
+            new TranslationSeedItem("entity.personneloperationrate.status", "zh-HK", "状态", "状态（0=正常，1=停用）"),
         };
     }
 
@@ -377,8 +376,8 @@ public class TaktPersonnelOperationRateI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

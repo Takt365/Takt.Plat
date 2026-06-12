@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.HelpDesk
 // 文件名称：TaktKnowledgesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：知识库控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Routine.HelpDesk;
 /// 知识库控制器
 /// 提供知识库的 REST API
 /// </summary>
-[ApiModule(TaktModule.Routine, "日常事务")]
+[ApiModule(2, "日常事务")]
 [Route("api/[controller]", Name = "知识库")]
 public class TaktKnowledgesController : TaktControllerBase
 {

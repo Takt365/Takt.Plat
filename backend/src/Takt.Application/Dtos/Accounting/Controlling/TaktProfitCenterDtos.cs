@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktProfitCenterDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProfitCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProfitCenter 生成，请按需审阅）
 // 
@@ -47,6 +47,16 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
     public string ProfitCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 利润中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心描述
+    /// </summary>
+    public string? ProfitCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -87,7 +97,7 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus ProfitCenterStatus { get; set; }
+    public int ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -153,6 +163,16 @@ public class TaktProfitCenterQueryDto : TaktPagedQuery
     public string? ProfitCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 利润中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心描述
+    /// </summary>
+    public string? ProfitCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -193,7 +213,7 @@ public class TaktProfitCenterQueryDto : TaktPagedQuery
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? ProfitCenterStatus { get; set; }
+    public int? ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -278,6 +298,16 @@ public class TaktProfitCenterCreateDto
     public string ProfitCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 利润中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心描述
+    /// </summary>
+    public string? ProfitCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -318,7 +348,7 @@ public class TaktProfitCenterCreateDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus ProfitCenterStatus { get; set; }
+    public int ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -388,7 +418,7 @@ public class TaktProfitCenterStatusDto
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "利润中心状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus ProfitCenterStatus { get; set; }
+    public int ProfitCenterStatus { get; set; }
 }
 
 // ========================================
@@ -445,6 +475,16 @@ public class TaktProfitCenterTemplateDto
     public string? ProfitCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 利润中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心描述
+    /// </summary>
+    public string? ProfitCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -485,7 +525,7 @@ public class TaktProfitCenterTemplateDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? ProfitCenterStatus { get; set; }
+    public int? ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -535,6 +575,16 @@ public class TaktProfitCenterImportDto
     public string? ProfitCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 利润中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心描述
+    /// </summary>
+    public string? ProfitCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -575,7 +625,7 @@ public class TaktProfitCenterImportDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? ProfitCenterStatus { get; set; }
+    public int? ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 排序号
@@ -626,6 +676,16 @@ public class TaktProfitCenterExportDto
     public string ProfitCenterName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 利润中心简称
+    /// </summary>
+    public string? ShortName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心描述
+    /// </summary>
+    public string? ProfitCenterDesc { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -666,7 +726,7 @@ public class TaktProfitCenterExportDto
     /// <summary>
     /// 利润中心状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus ProfitCenterStatus { get; set; }
+    public int ProfitCenterStatus { get; set; }
 
     /// <summary>
     /// 生效日期

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktQuartzTaskDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzTask 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQuartzTask 生成，请按需审阅）
 // 
@@ -60,7 +60,7 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public TaktQuartzTaskType TaskType { get; set; }
+    public int TaskType { get; set; }
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -90,7 +90,7 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     /// <summary>
     /// 触发器类型（0=Simple 1=Cron）
     /// </summary>
-    public TaktQuartzTriggerType TriggerType { get; set; }
+    public int TriggerType { get; set; }
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -110,17 +110,17 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     /// <summary>
     /// 任务状态
     /// </summary>
-    public TaktQuartzTaskStatus TaskStatus { get; set; }
+    public int TaskStatus { get; set; }
 
     /// <summary>
     /// 是否允许并发执行（0=禁止，1=允许）
     /// </summary>
-    public TaktYesNo Concurrent { get; set; }
+    public int Concurrent { get; set; }
 
     /// <summary>
     /// Misfire 策略
     /// </summary>
-    public TaktQuartzMisfirePolicy MisfirePolicy { get; set; }
+    public int MisfirePolicy { get; set; }
 
     /// <summary>
     /// 首次执行时间（调度生效开始时间）
@@ -198,7 +198,7 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public TaktQuartzTaskType? TaskType { get; set; }
+    public int? TaskType { get; set; }
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -228,7 +228,7 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     /// <summary>
     /// 触发器类型（0=Simple 1=Cron）
     /// </summary>
-    public TaktQuartzTriggerType? TriggerType { get; set; }
+    public int? TriggerType { get; set; }
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -248,17 +248,17 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     /// <summary>
     /// 任务状态
     /// </summary>
-    public TaktQuartzTaskStatus? TaskStatus { get; set; }
+    public int? TaskStatus { get; set; }
 
     /// <summary>
     /// 是否允许并发执行（0=禁止，1=允许）
     /// </summary>
-    public TaktYesNo? Concurrent { get; set; }
+    public int? Concurrent { get; set; }
 
     /// <summary>
     /// Misfire 策略
     /// </summary>
-    public TaktQuartzMisfirePolicy? MisfirePolicy { get; set; }
+    public int? MisfirePolicy { get; set; }
 
     /// <summary>
     /// 首次执行时间（调度生效开始时间）（范围查询-开始）
@@ -372,7 +372,7 @@ public class TaktQuartzTaskCreateDto
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public TaktQuartzTaskType TaskType { get; set; }
+    public int TaskType { get; set; }
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -404,7 +404,7 @@ public class TaktQuartzTaskCreateDto
     /// <summary>
     /// 触发器类型（0=Simple 1=Cron）
     /// </summary>
-    public TaktQuartzTriggerType TriggerType { get; set; }
+    public int TriggerType { get; set; }
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -425,17 +425,17 @@ public class TaktQuartzTaskCreateDto
     /// <summary>
     /// 任务状态
     /// </summary>
-    public TaktQuartzTaskStatus TaskStatus { get; set; }
+    public int TaskStatus { get; set; }
 
     /// <summary>
     /// 是否允许并发执行（0=禁止，1=允许）
     /// </summary>
-    public TaktYesNo Concurrent { get; set; }
+    public int Concurrent { get; set; }
 
     /// <summary>
     /// Misfire 策略
     /// </summary>
-    public TaktQuartzMisfirePolicy MisfirePolicy { get; set; }
+    public int MisfirePolicy { get; set; }
 
     /// <summary>
     /// 首次执行时间（调度生效开始时间）
@@ -520,7 +520,7 @@ public class TaktQuartzTaskStatusDto
     /// 任务状态
     /// </summary>
     [Required(ErrorMessage = "任务状态不能为空")]
-    public TaktQuartzTaskStatus TaskStatus { get; set; }
+    public int TaskStatus { get; set; }
 }
 
 // ========================================
@@ -565,7 +565,7 @@ public class TaktQuartzTaskTemplateDto
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public TaktQuartzTaskType? TaskType { get; set; }
+    public int? TaskType { get; set; }
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -595,7 +595,7 @@ public class TaktQuartzTaskTemplateDto
     /// <summary>
     /// 触发器类型（0=Simple 1=Cron）
     /// </summary>
-    public TaktQuartzTriggerType? TriggerType { get; set; }
+    public int? TriggerType { get; set; }
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -657,7 +657,7 @@ public class TaktQuartzTaskImportDto
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public TaktQuartzTaskType? TaskType { get; set; }
+    public int? TaskType { get; set; }
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -687,7 +687,7 @@ public class TaktQuartzTaskImportDto
     /// <summary>
     /// 触发器类型（0=Simple 1=Cron）
     /// </summary>
-    public TaktQuartzTriggerType? TriggerType { get; set; }
+    public int? TriggerType { get; set; }
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -750,7 +750,7 @@ public class TaktQuartzTaskExportDto
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
     /// </summary>
-    public TaktQuartzTaskType TaskType { get; set; }
+    public int TaskType { get; set; }
 
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
@@ -780,7 +780,7 @@ public class TaktQuartzTaskExportDto
     /// <summary>
     /// 触发器类型（0=Simple 1=Cron）
     /// </summary>
-    public TaktQuartzTriggerType TriggerType { get; set; }
+    public int TriggerType { get; set; }
 
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
@@ -800,17 +800,17 @@ public class TaktQuartzTaskExportDto
     /// <summary>
     /// 任务状态
     /// </summary>
-    public TaktQuartzTaskStatus TaskStatus { get; set; }
+    public int TaskStatus { get; set; }
 
     /// <summary>
     /// 是否允许并发执行（0=禁止，1=允许）
     /// </summary>
-    public TaktYesNo Concurrent { get; set; }
+    public int Concurrent { get; set; }
 
     /// <summary>
     /// Misfire 策略
     /// </summary>
-    public TaktQuartzMisfirePolicy MisfirePolicy { get; set; }
+    public int MisfirePolicy { get; set; }
 
     /// <summary>
     /// 首次执行时间（调度生效开始时间）

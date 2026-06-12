@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Workflow;
 
@@ -62,12 +61,12 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     /// 发布状态
     /// </summary>
     [SugarColumn(ColumnName = "process_status", ColumnDescription = "发布状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktFlowSchemeStatus ProcessStatus { get; set; } = TaktFlowSchemeStatus.Draft;
+    public int ProcessStatus { get; set; } = 0;
     /// <summary>
     /// 挂起状态（1 激活，2 挂起）
     /// </summary>
     [SugarColumn(ColumnName = "suspension_state", ColumnDescription = "挂起状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktFlowSuspensionState SuspensionState { get; set; } = TaktFlowSuspensionState.Active;
+    public int SuspensionState { get; set; } = 1;
     /// <summary>
     /// 流程设计 JSON（节点、网关、条件、审批人配置）
     /// </summary>

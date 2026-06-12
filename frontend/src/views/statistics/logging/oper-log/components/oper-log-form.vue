@@ -67,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.username')"
+                :label="t('entity.operlog.username')"
                 name="userName"
               >
                 <a-input
                   v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.username') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.username') })"
                   size="small"
                   allow-clear
                 />
@@ -80,12 +80,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.opermodule')"
+                :label="t('entity.operlog.opermodule')"
                 name="operModule"
               >
                 <a-input
                   v-model:value="formState.operModule"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.opermodule') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opermodule') })"
                   size="small"
                   allow-clear
                 />
@@ -93,25 +93,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.opertype')"
+                :label="t('entity.operlog.opertype')"
                 name="operType"
               >
-                <a-input
+                <a-input-number
                   v-model:value="formState.operType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.opertype') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opertype') })"
                   size="small"
-                  allow-clear
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.opermethod')"
+                :label="t('entity.operlog.opermethod')"
                 name="operMethod"
               >
                 <a-input
                   v-model:value="formState.operMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.opermethod') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opermethod') })"
                   size="small"
                   allow-clear
                 />
@@ -119,12 +119,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.requestmethod')"
+                :label="t('entity.operlog.requestmethod')"
                 name="requestMethod"
               >
                 <a-input
                   v-model:value="formState.requestMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.requestmethod') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.requestmethod') })"
                   size="small"
                   allow-clear
                 />
@@ -132,12 +132,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.operurl')"
+                :label="t('entity.operlog.operurl')"
                 name="operUrl"
               >
                 <a-input
                   v-model:value="formState.operUrl"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operurl') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operurl') })"
                   size="small"
                   allow-clear
                 />
@@ -145,12 +145,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.requestparam')"
+                :label="t('entity.operlog.requestparam')"
                 name="requestParam"
               >
                 <a-input
                   v-model:value="formState.requestParam"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.requestparam') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.requestparam') })"
                   size="small"
                   allow-clear
                 />
@@ -168,12 +168,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.jsonresult')"
+                :label="t('entity.operlog.jsonresult')"
                 name="jsonResult"
               >
                 <a-input
                   v-model:value="formState.jsonResult"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.jsonresult') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.jsonresult') })"
                   size="small"
                   allow-clear
                 />
@@ -181,12 +181,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.operstatus')"
+                :label="t('entity.operlog.operstatus')"
                 name="operStatus"
               >
                 <a-input-number
                   v-model:value="formState.operStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operstatus') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operstatus') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -194,12 +194,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.errormsg')"
+                :label="t('entity.operlog.errormsg')"
                 name="errorMsg"
               >
                 <a-input
                   v-model:value="formState.errorMsg"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.errormsg') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.errormsg') })"
                   size="small"
                   allow-clear
                 />
@@ -207,12 +207,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.operip')"
+                :label="t('entity.operlog.operip')"
                 name="operIp"
               >
                 <a-input
                   v-model:value="formState.operIp"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operip') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operip') })"
                   size="small"
                   allow-clear
                 />
@@ -220,12 +220,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.operlocation')"
+                :label="t('entity.operlog.operlocation')"
                 name="operLocation"
               >
                 <a-input
                   v-model:value="formState.operLocation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.operlocation') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.operlocation') })"
                   size="small"
                   allow-clear
                 />
@@ -233,12 +233,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.opertime')"
+                :label="t('entity.operlog.opertime')"
                 name="operTime"
               >
                 <a-input
                   v-model:value="formState.operTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.opertime') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.opertime') })"
                   size="small"
                   allow-clear
                 />
@@ -246,12 +246,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.operLog.elapsedtime')"
+                :label="t('entity.operlog.elapsedtime')"
                 name="elapsedTime"
               >
                 <a-input-number
                   v-model:value="formState.elapsedTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operLog.elapsedtime') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.operlog.elapsedtime') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -381,28 +381,35 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.operLog.username') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.operlog.username') }),
       trigger: 'blur'
+    }
+  ],
+  operType: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.operlog.opertype') }),
+      trigger: 'change'
     }
   ],
   operStatus: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.operLog.operstatus') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.operlog.operstatus') }),
       trigger: 'change'
     }
   ],
   operTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.operLog.opertime') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.operlog.opertime') }),
       trigger: 'blur'
     }
   ],
   elapsedTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.operLog.elapsedtime') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.operlog.elapsedtime') }),
       trigger: 'change'
     }
   ],

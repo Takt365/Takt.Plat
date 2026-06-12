@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktProfitCenterService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：利润中心应用服务实现
 // 
@@ -96,7 +96,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
     public async Task<List<TaktTreeSelectOption>> GetProfitCenterTreeOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _profitCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProfitCenterStatus == TaktCommonStatus.Enabled);
+        var list = await _profitCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProfitCenterStatus == 1);
         return BuildProfitCenterTreeOptions(list, 0);
     }
 
@@ -136,7 +136,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         var list = await _profitCenterRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.ProfitCenterStatus == TaktCommonStatus.Enabled).ToList();
+            : list.Where(x => x.ProfitCenterStatus == 1).ToList();
         return BuildProfitCenterTree(filtered, parentId);
     }
 
@@ -398,6 +398,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
             exp = exp.And(x =>
                 (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
                 || (x.ProfitCenterName != null && x.ProfitCenterName.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.ManagerId).Contains(keywords)
                 || (x.ManagerName != null && x.ManagerName.Contains(keywords))
@@ -423,6 +424,16 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         if (!string.IsNullOrEmpty(queryDto?.ProfitCenterName))
         {
             exp = exp.And(x => x.ProfitCenterName != null && x.ProfitCenterName.Contains(queryDto.ProfitCenterName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ShortName))
+        {
+            exp = exp.And(x => x.ProfitCenterName != null && x.ProfitCenterName.Contains(queryDto.ShortName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ProfitCenterDesc))
+        {
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.ProfitCenterDesc));
         }
 
         if (queryDto?.ParentId.HasValue == true)

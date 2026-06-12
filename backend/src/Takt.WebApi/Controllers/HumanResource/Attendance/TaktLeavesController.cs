@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Attendance
 // 文件名称：TaktLeavesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：请假信息控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.HumanResource.Attendance;
 /// 请假信息控制器
 /// 提供请假信息的 REST API
 /// </summary>
-[ApiModule(TaktModule.HumanResource, "考勤管理")]
+[ApiModule(5, "考勤管理")]
 [Route("api/[controller]", Name = "请假信息")]
 public class TaktLeavesController : TaktControllerBase
 {
@@ -193,6 +193,26 @@ public class TaktLeavesController : TaktControllerBase
         {
             var result = await _leaveService.UpdateLeaveStatusAsync(dto);
             return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 提交请假审批（发起工作流）
+    /// </summary>
+    /// <param name="id">请假 ID</param>
+    /// <returns>请假 DTO</returns>
+    [TaktPermission("humanresource:attendance:leave:update", "提交请假审批")]
+    [HttpPost("{id}/submit-approval")]
+    public async Task<IActionResult> SubmitLeaveForApprovalAsync(long id)
+    {
+        try
+        {
+            var result = await _leaveService.SubmitLeaveForApprovalAsync(id);
+            return Success(result, "提交审批成功");
         }
         catch (Exception ex)
         {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktAssetDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Asset 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAsset 生成，请按需审阅）
 // 
@@ -46,20 +46,24 @@ public class TaktAssetDto : TaktCompanyDtoBase
     public string AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类ID
+    /// 资产规格
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long AssetCategoryId { get; set; }
+    public string? AssetSpec { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类名称
+    /// 资产描述
     /// </summary>
-    public string? AssetCategoryName { get; set; } = string.Empty;
+    public string? AssetDesc { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产大类
+    /// </summary>
+    public string AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产类型
     /// </summary>
-    public int AssetType { get; set; } = 0;
+    public string AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -150,6 +154,17 @@ public class TaktAssetDto : TaktCompanyDtoBase
     public decimal MonthlyDepreciation { get; set; }
 
     /// <summary>
+    /// 关联供应商ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? RelatedSupplierId { get; set; }
+
+    /// <summary>
+    /// 关联供应商名称
+    /// </summary>
+    public string? RelatedSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 关联生产线
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
@@ -192,20 +207,24 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public string? AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类ID
+    /// 资产规格
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? AssetCategoryId { get; set; }
+    public string? AssetSpec { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类名称
+    /// 资产描述
     /// </summary>
-    public string? AssetCategoryName { get; set; } = string.Empty;
+    public string? AssetDesc { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产大类
+    /// </summary>
+    public string? AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产类型
     /// </summary>
-    public int? AssetType { get; set; }
+    public string? AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -316,6 +335,17 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public decimal? MonthlyDepreciation { get; set; }
 
     /// <summary>
+    /// 关联供应商ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? RelatedSupplierId { get; set; }
+
+    /// <summary>
+    /// 关联供应商名称
+    /// </summary>
+    public string? RelatedSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 关联生产线
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
@@ -383,20 +413,26 @@ public class TaktAssetCreateDto
     public string AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类ID
+    /// 资产规格
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long AssetCategoryId { get; set; }
+    public string? AssetSpec { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类名称
+    /// 资产描述
     /// </summary>
-    public string? AssetCategoryName { get; set; } = string.Empty;
+    public string? AssetDesc { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产大类
+    /// </summary>
+    [Required(ErrorMessage = "资产大类不能为空")]
+    public string AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产类型
     /// </summary>
-    public int AssetType { get; set; } = 0;
+    [Required(ErrorMessage = "资产类型不能为空")]
+    public string AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -485,6 +521,17 @@ public class TaktAssetCreateDto
     /// 每月折旧金额
     /// </summary>
     public decimal MonthlyDepreciation { get; set; }
+
+    /// <summary>
+    /// 关联供应商ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? RelatedSupplierId { get; set; }
+
+    /// <summary>
+    /// 关联供应商名称
+    /// </summary>
+    public string? RelatedSupplierName { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联生产线
@@ -582,20 +629,24 @@ public class TaktAssetTemplateDto
     public string? AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类ID
+    /// 资产规格
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? AssetCategoryId { get; set; }
+    public string? AssetSpec { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类名称
+    /// 资产描述
     /// </summary>
-    public string? AssetCategoryName { get; set; } = string.Empty;
+    public string? AssetDesc { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产大类
+    /// </summary>
+    public string? AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产类型
     /// </summary>
-    public int? AssetType { get; set; }
+    public string? AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心ID
@@ -634,6 +685,17 @@ public class TaktAssetTemplateDto
     /// 资产位置
     /// </summary>
     public string? AssetLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联供应商ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? RelatedSupplierId { get; set; }
+
+    /// <summary>
+    /// 关联供应商名称
+    /// </summary>
+    public string? RelatedSupplierName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -678,20 +740,24 @@ public class TaktAssetImportDto
     public string? AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类ID
+    /// 资产规格
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? AssetCategoryId { get; set; }
+    public string? AssetSpec { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类名称
+    /// 资产描述
     /// </summary>
-    public string? AssetCategoryName { get; set; } = string.Empty;
+    public string? AssetDesc { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产大类
+    /// </summary>
+    public string? AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产类型
     /// </summary>
-    public int? AssetType { get; set; }
+    public string? AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心ID
@@ -730,6 +796,17 @@ public class TaktAssetImportDto
     /// 资产位置
     /// </summary>
     public string? AssetLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联供应商ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? RelatedSupplierId { get; set; }
+
+    /// <summary>
+    /// 关联供应商名称
+    /// </summary>
+    public string? RelatedSupplierName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -775,20 +852,24 @@ public class TaktAssetExportDto
     public string AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类ID
+    /// 资产规格
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long AssetCategoryId { get; set; }
+    public string? AssetSpec { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类名称
+    /// 资产描述
     /// </summary>
-    public string? AssetCategoryName { get; set; } = string.Empty;
+    public string? AssetDesc { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产大类
+    /// </summary>
+    public string AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产类型
     /// </summary>
-    public int AssetType { get; set; } = 0;
+    public string AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -877,6 +958,17 @@ public class TaktAssetExportDto
     /// 每月折旧金额
     /// </summary>
     public decimal MonthlyDepreciation { get; set; }
+
+    /// <summary>
+    /// 关联供应商ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? RelatedSupplierId { get; set; }
+
+    /// <summary>
+    /// 关联供应商名称
+    /// </summary>
+    public string? RelatedSupplierName { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联生产线

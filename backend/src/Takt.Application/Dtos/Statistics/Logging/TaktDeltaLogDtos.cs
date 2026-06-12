@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktDeltaLogDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DeltaLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDeltaLog 生成，请按需审阅）
 // 
@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Logging;
 
@@ -43,7 +44,7 @@ public class TaktDeltaLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 操作类型（INSERT、UPDATE、DELETE）
     /// </summary>
-    public string OperType { get; set; } = string.Empty;
+    public TaktDeltaOperType OperType { get; set; }
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -87,7 +88,7 @@ public class TaktDeltaLogDto : TaktCompanyDtoBase
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 
@@ -131,7 +132,7 @@ public class TaktDeltaLogQueryDto : TaktPagedQuery
     /// <summary>
     /// 操作类型（INSERT、UPDATE、DELETE）
     /// </summary>
-    public string? OperType { get; set; } = string.Empty;
+    public TaktDeltaOperType? OperType { get; set; }
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -170,7 +171,7 @@ public class TaktDeltaLogQueryDto : TaktPagedQuery
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 
@@ -243,8 +244,7 @@ public class TaktDeltaLogCreateDto
     /// <summary>
     /// 操作类型（INSERT、UPDATE、DELETE）
     /// </summary>
-    [Required(ErrorMessage = "操作类型（INSERT、UPDATE、DELETE）不能为空")]
-    public string OperType { get; set; } = string.Empty;
+    public TaktDeltaOperType OperType { get; set; }
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -284,7 +284,7 @@ public class TaktDeltaLogCreateDto
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 
@@ -359,7 +359,7 @@ public class TaktDeltaLogExportDto
     /// <summary>
     /// 操作类型（INSERT、UPDATE、DELETE）
     /// </summary>
-    public string OperType { get; set; } = string.Empty;
+    public TaktDeltaOperType OperType { get; set; }
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -398,7 +398,7 @@ public class TaktDeltaLogExportDto
     public string? OperIp { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+    /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
     public string? OperLocation { get; set; } = string.Empty;
 

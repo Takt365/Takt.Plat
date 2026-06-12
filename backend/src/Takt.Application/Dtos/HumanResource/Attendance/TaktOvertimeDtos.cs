@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktOvertimeDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Overtime 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOvertime 生成，请按需审阅）
 // 
@@ -90,12 +90,6 @@ public class TaktOvertimeDto : TaktApprovalDtoBase
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 流程实例 名称（填充字段）
@@ -223,7 +217,7 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -257,7 +251,7 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -393,7 +387,7 @@ public class TaktOvertimeCreateDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -531,7 +525,7 @@ public class TaktOvertimeTemplateDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -616,7 +610,7 @@ public class TaktOvertimeImportDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -722,7 +716,7 @@ public class TaktOvertimeExportDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }

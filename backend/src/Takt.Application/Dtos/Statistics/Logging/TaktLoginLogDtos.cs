@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktLoginLogDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：LoginLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktLoginLog 生成，请按需审阅）
 // 
@@ -42,19 +42,19 @@ public class TaktLoginLogDto : TaktCompanyDtoBase
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+    /// 登录方式
     /// </summary>
-    public string? LoginType { get; set; } = string.Empty;
+    public TaktLoginType? LoginType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public string? Browser { get; set; } = string.Empty;
+    public TaktBrowserType? Browser { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public string? Os { get; set; } = string.Empty;
+    public TaktOperatingSystem? Os { get; set; }
 
     /// <summary>
     /// 用户代理字符串（User-Agent）
@@ -119,19 +119,19 @@ public class TaktLoginLogQueryDto : TaktPagedQuery
     public string? Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+    /// 登录方式
     /// </summary>
-    public string? LoginType { get; set; } = string.Empty;
+    public TaktLoginType? LoginType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public string? Browser { get; set; } = string.Empty;
+    public TaktBrowserType? Browser { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public string? Os { get; set; } = string.Empty;
+    public TaktOperatingSystem? Os { get; set; }
 
     /// <summary>
     /// 用户代理字符串（User-Agent）
@@ -225,19 +225,19 @@ public class TaktLoginLogCreateDto
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+    /// 登录方式
     /// </summary>
-    public string? LoginType { get; set; } = string.Empty;
+    public TaktLoginType? LoginType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public string? Browser { get; set; } = string.Empty;
+    public TaktBrowserType? Browser { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public string? Os { get; set; } = string.Empty;
+    public TaktOperatingSystem? Os { get; set; }
 
     /// <summary>
     /// 用户代理字符串（User-Agent）
@@ -328,19 +328,19 @@ public class TaktLoginLogExportDto
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式（如：Password=账号密码，RefreshToken=刷新令牌，Sms=手机验证码，Email=邮箱验证码）
+    /// 登录方式
     /// </summary>
-    public string? LoginType { get; set; } = string.Empty;
+    public TaktLoginType? LoginType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public string? Browser { get; set; } = string.Empty;
+    public TaktBrowserType? Browser { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public string? Os { get; set; } = string.Empty;
+    public TaktOperatingSystem? Os { get; set; }
 
     /// <summary>
     /// 用户代理字符串（User-Agent）

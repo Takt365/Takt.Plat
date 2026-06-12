@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Takt 后端开发规范
 
-通用命名、文件头、XML 注释、Git 提交见 `@.cursor/rules/00-project.mdc`。架构见 `README.md`。
+通用命名、文件头、XML 注释、Git 提交见 `@.cursor/rules/00-project.mdc`（**禁止** XML 内 `<see cref>`，见 `00-project` §二 §3）。架构见 `README.md`。
 
 **标准参照**（新增 CRUD 模块时对齐）：
 - 应用服务：`@backend/src/Takt.Application/Services/Statistics/Logging/TaktLoginLogService.cs`
@@ -148,7 +148,17 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 **实体基类选型**（按隔离粒度，❌ 禁止引入 `ConfigId` / `config_id` 列）：
 - 租户级共享：`TaktTenantEntityBase`（用户、角色、菜单、字典类型、翻译等）
 - 公司级业务：`TaktCompanyEntityBase`（部门、员工、业务单据等）
-- 带审批流：`TaktApprovalEntityBase`
+- 带审批流：`TaktApprovalEntityBase`（含 `FlowInstanceId`；凡审批必走 `TaktFlowEngine`，完成后回写 `ApprovalStatus`）
+
+**Domain 实体禁枚举（硬约束，见 `00-project` §1.8.1）**：
+
+- **`Takt.Domain/Entities/**` 属性类型一律 `int` / `int?`**；禁止 `TaktYesNo`、`TaktCommonStatus`、`TaktFlow*` 等任意 C# `enum` 作为实体列类型
+- XML 注释注明字典码（如 `sys_yes_no`、`sys_normal_disable`）或数值语义（如流程态 0/1/2）
+- `DefaultValue` 与 C# 初值对齐；**外键 `long` 禁止 `= 0`**；树 `ParentId`（0=根）除外
+- Application/Infrastructure 可用 `Takt.Shared.Enums` 或 `TaktDictValueConstants` 比较，写入实体前转为 `int`
+- DTO 与实体对齐用 `int`；禁止在实体文件 `using Takt.Shared.Enums`
+
+**字典与分层**（§1.8.2）：有 `DictTypeCode` 的字段用 `int` + 字典；禁止平行枚举；后端比较用 `TaktDictValueConstants`。
 
 **新增实体检查清单**：
 1. 选定上表基类之一（定义见 `@backend/src/Takt.Domain/Entities/TaktEntityBase.cs`）
@@ -214,4 +224,4 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - 前端 `utils/` 对齐：见 `@.cursor/rules/05-utils-vue.mdc` §十
 - 工作流运行时/引擎/实体：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`
 - 全栈代码生成：见 `@.cursor/rules/15-codegen.mdc`；清单 `15-codegen`
-- 本域实现清单：`.cursor/skills/01-backend/SKILL.md`
+- 新建/审查实体：**禁止**实体属性使用 enum；一律 `int`/`int?`（`00-project` §1.8.1）

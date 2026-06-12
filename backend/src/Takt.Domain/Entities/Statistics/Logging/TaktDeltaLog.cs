@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Logging;
 
@@ -43,8 +44,8 @@ public class TaktDeltaLog : TaktCompanyEntityBase
     /// <summary>
     /// 操作类型（INSERT、UPDATE、DELETE）
     /// </summary>
-    [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string OperType { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "oper_type", ColumnDescription = "操作类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public TaktDeltaOperType OperType { get; set; }
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）

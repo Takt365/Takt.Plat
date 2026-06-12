@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesQuotationValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesQuotation 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesQuotation 生成，请按需审阅）
 // 
@@ -31,25 +31,25 @@ public class TaktSalesQuotationCreateValidator : AbstractValidator<TaktSalesQuot
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.PlantCode)
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.SalesQuotationCode)
             .NotEmpty().WithMessage("销售报价编码不能为空")
-            .MaximumLength(50).WithMessage("销售报价编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("销售报价编码长度不能超过40个字符");
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
         RuleFor(x => x.CustomerName)
             .NotEmpty().WithMessage("客户名称不能为空")
-            .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("客户名称长度不能超过40个字符");
         RuleFor(x => x.SalesBy)
             .MaximumLength(50).WithMessage("销售员长度不能超过50个字符");
         RuleFor(x => x.SalesOrderCode)
-            .MaximumLength(50).WithMessage("关联销售订单编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("关联销售订单编码长度不能超过40个字符");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -91,24 +91,24 @@ public class TaktSalesQuotationImportValidator : AbstractValidator<TaktSalesQuot
     public TaktSalesQuotationImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.SalesQuotationCode)
             .NotEmpty().WithMessage("销售报价编码不能为空")
-            .MaximumLength(50).WithMessage("销售报价编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("销售报价编码长度不能超过40个字符");
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
         RuleFor(x => x.CustomerName)
             .NotEmpty().WithMessage("客户名称不能为空")
-            .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
+            .MaximumLength(40).WithMessage("客户名称长度不能超过40个字符");
         RuleFor(x => x.SalesBy)
             .MaximumLength(50).WithMessage("销售员长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.SalesBy));
         RuleFor(x => x.SalesOrderCode)
-            .MaximumLength(50).WithMessage("关联销售订单编码长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.SalesOrderCode));
+            .MaximumLength(40).WithMessage("关联销售订单编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.SalesOrderCode));
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

@@ -17,28 +17,31 @@
       size="small"
       :column="1"
     >
-      <a-descriptions-item :label="t('entity.flowinstance.instancecode')">
+      <a-descriptions-item :label="t('entity.flowInstance.instancecode')">
         {{ detail.instanceCode }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowinstance.processname')">
+      <a-descriptions-item :label="t('entity.flowInstance.processname')">
         {{ detail.processName }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowinstance.processtitle')">
+      <a-descriptions-item :label="t('entity.flowInstance.processtitle')">
         {{ detail.processTitle }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowinstance.instancestatus')">
+      <a-descriptions-item :label="t('entity.flowInstance.instancestatus')">
         {{ statusText(detail.instanceStatus) }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowinstance.currentnodename')">
-        {{ detail.currentNodeName ?? detail.currentActivityName ?? '-' }}
+      <a-descriptions-item :label="t('entity.flowInstance.currentactivityname')">
+        {{ detail.currentActivityName ?? '-' }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowinstance.startusername')">
+      <a-descriptions-item :label="t('entity.flowInstance.startusername')">
         {{ detail.startUserName }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowinstance.starttime')">
+      <a-descriptions-item :label="t('entity.flowInstance.starttime')">
         {{ detail.startTime }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('workflow.instance.transitionHistory')">
+      <a-descriptions-item :label="t('workflow.instance.page.taskFormContent')">
+        <TaskFormContent :detail="detail" />
+      </a-descriptions-item>
+      <a-descriptions-item :label="t('entity.flowInstance.historicactivities')">
         <div
           v-for="(h, i) in historyItems"
           :key="i"
@@ -47,10 +50,10 @@
           {{ h.fromNodeName }} → {{ h.toNodeName }}（{{ h.transitionUserName }}，{{ h.transitionTime }}）
           <span v-if="h.transitionComment">：{{ h.transitionComment }}</span>
         </div>
-        <span v-if="!historyItems.length">{{ t('workflow.instance.noHistory') }}</span>
+        <span v-if="!historyItems.length">{{ t('workflow.instance.page.noHistory') }}</span>
       </a-descriptions-item>
     </a-descriptions>
-    <FlowPendingAddApproversPanel
+    <takt-flow-pending-add-approvers-panel
       :detail="detail"
       :allow-reduce="!!detail?.canVerify"
       @refresh="$emit('refresh')"
@@ -64,12 +67,12 @@
  */
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { FlowHistoryItem, FlowInstanceDetailView } from '@/types/workflow/flow-engine'
-import FlowPendingAddApproversPanel from '@/views/workflow/components/flow-pending-add-approvers-panel.vue'
+import type { FlowHistoryItem, FlowInstanceDetail } from '@/types/workflow/flow-engine'
+import TaskFormContent from '@/views/workflow/todo/components/flow-task-form-content.vue'
 
 /** 父组件传入的实例详情 */
 interface Props {
-  detail: FlowInstanceDetailView | null
+  detail: FlowInstanceDetail | null
 }
 
 const props = defineProps<Props>()
@@ -93,9 +96,9 @@ const historyItems = computed<FlowHistoryItem[]>(() => {
   return list.filter(isFlowHistoryItem)
 })
 
-/** 实例状态码转展示文案（走 i18n workflow.instance.status.*） */
+/** 实例状态码转展示文案（走 i18n workflow.instance.page.status.*） */
 function statusText(s: number) {
-  return t(`workflow.instance.status.${s}`) || t('workflow.instance.status.unknown')
+  return t(`workflow.instance.page.status.${s}`) || t('workflow.instance.page.status.unknown')
 }
 </script>
 

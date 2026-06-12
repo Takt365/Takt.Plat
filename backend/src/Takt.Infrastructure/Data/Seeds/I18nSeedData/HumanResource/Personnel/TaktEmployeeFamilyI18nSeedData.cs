@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeFamily 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel;
 
 /// <summary>
-/// TaktEmployeeFamily 实体国际化翻译种子（键前缀 entity.employeeFamily.*）
+/// TaktEmployeeFamily 实体国际化翻译种子（键前缀 entity.employeefamily.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktEmployeeFamilyI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktEmployeeFamilyI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeFamily 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeefamily 实体翻译...", tenantCode);
 
         foreach (var item in GetEmployeeFamilyTranslations())
         {
@@ -76,92 +75,92 @@ public class TaktEmployeeFamilyI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeFamily 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeFamily._self / entity.employeeFamily.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.employeefamily._self / entity.employeefamily.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeFamilyTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.employeeFamily._self
-            new TranslationSeedItem("entity.employeeFamily._self", "en-US", "Employee Family Information", "实体名称"),
-            // entity.employeeFamily._self
-            new TranslationSeedItem("entity.employeeFamily._self", "ja-JP", "员工家庭成员信息", "实体名称"),
-            // entity.employeeFamily._self
-            new TranslationSeedItem("entity.employeeFamily._self", "zh-CN", "员工家庭成员信息", "实体名称"),
-            // entity.employeeFamily._self
-            new TranslationSeedItem("entity.employeeFamily._self", "zh-HK", "员工家庭成员信息", "实体名称"),
+            // entity.employeefamily._self
+            new TranslationSeedItem("entity.employeefamily._self", "en-US", "Employee Family Information", "实体名称"),
+            // entity.employeefamily._self
+            new TranslationSeedItem("entity.employeefamily._self", "ja-JP", "员工家庭成员信息", "实体名称"),
+            // entity.employeefamily._self
+            new TranslationSeedItem("entity.employeefamily._self", "zh-CN", "员工家庭成员信息", "实体名称"),
+            // entity.employeefamily._self
+            new TranslationSeedItem("entity.employeefamily._self", "zh-HK", "员工家庭成员信息", "实体名称"),
 
-            // entity.employeeFamily.employeeid
-            new TranslationSeedItem("entity.employeeFamily.employeeid", "en-US", "员工ID", "员工ID"),
-            // entity.employeeFamily.employeeid
-            new TranslationSeedItem("entity.employeeFamily.employeeid", "ja-JP", "员工ID", "员工ID"),
-            // entity.employeeFamily.employeeid
-            new TranslationSeedItem("entity.employeeFamily.employeeid", "zh-CN", "员工ID", "员工ID"),
-            // entity.employeeFamily.employeeid
-            new TranslationSeedItem("entity.employeeFamily.employeeid", "zh-HK", "员工ID", "员工ID"),
+            // entity.employeefamily.employeeid
+            new TranslationSeedItem("entity.employeefamily.employeeid", "en-US", "员工ID", "员工ID"),
+            // entity.employeefamily.employeeid
+            new TranslationSeedItem("entity.employeefamily.employeeid", "ja-JP", "员工ID", "员工ID"),
+            // entity.employeefamily.employeeid
+            new TranslationSeedItem("entity.employeefamily.employeeid", "zh-CN", "员工ID", "员工ID"),
+            // entity.employeefamily.employeeid
+            new TranslationSeedItem("entity.employeefamily.employeeid", "zh-HK", "员工ID", "员工ID"),
 
-            // entity.employeeFamily.membername
-            new TranslationSeedItem("entity.employeeFamily.membername", "en-US", "成员姓名", "成员姓名"),
-            // entity.employeeFamily.membername
-            new TranslationSeedItem("entity.employeeFamily.membername", "ja-JP", "成员姓名", "成员姓名"),
-            // entity.employeeFamily.membername
-            new TranslationSeedItem("entity.employeeFamily.membername", "zh-CN", "成员姓名", "成员姓名"),
-            // entity.employeeFamily.membername
-            new TranslationSeedItem("entity.employeeFamily.membername", "zh-HK", "成员姓名", "成员姓名"),
+            // entity.employeefamily.membername
+            new TranslationSeedItem("entity.employeefamily.membername", "en-US", "成员姓名", "成员姓名"),
+            // entity.employeefamily.membername
+            new TranslationSeedItem("entity.employeefamily.membername", "ja-JP", "成员姓名", "成员姓名"),
+            // entity.employeefamily.membername
+            new TranslationSeedItem("entity.employeefamily.membername", "zh-CN", "成员姓名", "成员姓名"),
+            // entity.employeefamily.membername
+            new TranslationSeedItem("entity.employeefamily.membername", "zh-HK", "成员姓名", "成员姓名"),
 
-            // entity.employeeFamily.relationtype
-            new TranslationSeedItem("entity.employeeFamily.relationtype", "en-US", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
-            // entity.employeeFamily.relationtype
-            new TranslationSeedItem("entity.employeeFamily.relationtype", "ja-JP", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
-            // entity.employeeFamily.relationtype
-            new TranslationSeedItem("entity.employeeFamily.relationtype", "zh-CN", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
-            // entity.employeeFamily.relationtype
-            new TranslationSeedItem("entity.employeeFamily.relationtype", "zh-HK", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
+            // entity.employeefamily.relationtype
+            new TranslationSeedItem("entity.employeefamily.relationtype", "en-US", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
+            // entity.employeefamily.relationtype
+            new TranslationSeedItem("entity.employeefamily.relationtype", "ja-JP", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
+            // entity.employeefamily.relationtype
+            new TranslationSeedItem("entity.employeefamily.relationtype", "zh-CN", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
+            // entity.employeefamily.relationtype
+            new TranslationSeedItem("entity.employeefamily.relationtype", "zh-HK", "关系类型", "与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）"),
 
-            // entity.employeeFamily.phonenumber
-            new TranslationSeedItem("entity.employeeFamily.phonenumber", "en-US", "联系电话", "联系电话"),
-            // entity.employeeFamily.phonenumber
-            new TranslationSeedItem("entity.employeeFamily.phonenumber", "ja-JP", "联系电话", "联系电话"),
-            // entity.employeeFamily.phonenumber
-            new TranslationSeedItem("entity.employeeFamily.phonenumber", "zh-CN", "联系电话", "联系电话"),
-            // entity.employeeFamily.phonenumber
-            new TranslationSeedItem("entity.employeeFamily.phonenumber", "zh-HK", "联系电话", "联系电话"),
+            // entity.employeefamily.phonenumber
+            new TranslationSeedItem("entity.employeefamily.phonenumber", "en-US", "联系电话", "联系电话"),
+            // entity.employeefamily.phonenumber
+            new TranslationSeedItem("entity.employeefamily.phonenumber", "ja-JP", "联系电话", "联系电话"),
+            // entity.employeefamily.phonenumber
+            new TranslationSeedItem("entity.employeefamily.phonenumber", "zh-CN", "联系电话", "联系电话"),
+            // entity.employeefamily.phonenumber
+            new TranslationSeedItem("entity.employeefamily.phonenumber", "zh-HK", "联系电话", "联系电话"),
 
-            // entity.employeeFamily.workunit
-            new TranslationSeedItem("entity.employeeFamily.workunit", "en-US", "工作单位", "工作单位"),
-            // entity.employeeFamily.workunit
-            new TranslationSeedItem("entity.employeeFamily.workunit", "ja-JP", "工作单位", "工作单位"),
-            // entity.employeeFamily.workunit
-            new TranslationSeedItem("entity.employeeFamily.workunit", "zh-CN", "工作单位", "工作单位"),
-            // entity.employeeFamily.workunit
-            new TranslationSeedItem("entity.employeeFamily.workunit", "zh-HK", "工作单位", "工作单位"),
+            // entity.employeefamily.workunit
+            new TranslationSeedItem("entity.employeefamily.workunit", "en-US", "工作单位", "工作单位"),
+            // entity.employeefamily.workunit
+            new TranslationSeedItem("entity.employeefamily.workunit", "ja-JP", "工作单位", "工作单位"),
+            // entity.employeefamily.workunit
+            new TranslationSeedItem("entity.employeefamily.workunit", "zh-CN", "工作单位", "工作单位"),
+            // entity.employeefamily.workunit
+            new TranslationSeedItem("entity.employeefamily.workunit", "zh-HK", "工作单位", "工作单位"),
 
-            // entity.employeeFamily.jobtitle
-            new TranslationSeedItem("entity.employeeFamily.jobtitle", "en-US", "职务", "职务"),
-            // entity.employeeFamily.jobtitle
-            new TranslationSeedItem("entity.employeeFamily.jobtitle", "ja-JP", "职务", "职务"),
-            // entity.employeeFamily.jobtitle
-            new TranslationSeedItem("entity.employeeFamily.jobtitle", "zh-CN", "职务", "职务"),
-            // entity.employeeFamily.jobtitle
-            new TranslationSeedItem("entity.employeeFamily.jobtitle", "zh-HK", "职务", "职务"),
+            // entity.employeefamily.jobtitle
+            new TranslationSeedItem("entity.employeefamily.jobtitle", "en-US", "职务", "职务"),
+            // entity.employeefamily.jobtitle
+            new TranslationSeedItem("entity.employeefamily.jobtitle", "ja-JP", "职务", "职务"),
+            // entity.employeefamily.jobtitle
+            new TranslationSeedItem("entity.employeefamily.jobtitle", "zh-CN", "职务", "职务"),
+            // entity.employeefamily.jobtitle
+            new TranslationSeedItem("entity.employeefamily.jobtitle", "zh-HK", "职务", "职务"),
 
-            // entity.employeeFamily.birthdate
-            new TranslationSeedItem("entity.employeeFamily.birthdate", "en-US", "出生日期", "出生日期"),
-            // entity.employeeFamily.birthdate
-            new TranslationSeedItem("entity.employeeFamily.birthdate", "ja-JP", "出生日期", "出生日期"),
-            // entity.employeeFamily.birthdate
-            new TranslationSeedItem("entity.employeeFamily.birthdate", "zh-CN", "出生日期", "出生日期"),
-            // entity.employeeFamily.birthdate
-            new TranslationSeedItem("entity.employeeFamily.birthdate", "zh-HK", "出生日期", "出生日期"),
+            // entity.employeefamily.birthdate
+            new TranslationSeedItem("entity.employeefamily.birthdate", "en-US", "出生日期", "出生日期"),
+            // entity.employeefamily.birthdate
+            new TranslationSeedItem("entity.employeefamily.birthdate", "ja-JP", "出生日期", "出生日期"),
+            // entity.employeefamily.birthdate
+            new TranslationSeedItem("entity.employeefamily.birthdate", "zh-CN", "出生日期", "出生日期"),
+            // entity.employeefamily.birthdate
+            new TranslationSeedItem("entity.employeefamily.birthdate", "zh-HK", "出生日期", "出生日期"),
 
-            // entity.employeeFamily.isemergencycontact
-            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "en-US", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
-            // entity.employeeFamily.isemergencycontact
-            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "ja-JP", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
-            // entity.employeeFamily.isemergencycontact
-            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "zh-CN", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
-            // entity.employeeFamily.isemergencycontact
-            new TranslationSeedItem("entity.employeeFamily.isemergencycontact", "zh-HK", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
+            // entity.employeefamily.isemergencycontact
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "en-US", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
+            // entity.employeefamily.isemergencycontact
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "ja-JP", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
+            // entity.employeefamily.isemergencycontact
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "zh-CN", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
+            // entity.employeefamily.isemergencycontact
+            new TranslationSeedItem("entity.employeefamily.isemergencycontact", "zh-HK", "是否紧急联系人", "是否紧急联系人（1=是，0=否）"),
         };
     }
 
@@ -179,8 +178,8 @@ public class TaktEmployeeFamilyI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

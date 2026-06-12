@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.Announcement
 // 文件名称：TaktAnnouncementDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Announcement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAnnouncement 生成，请按需审阅）
 // 
@@ -44,7 +44,7 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     /// <summary>
     /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
     /// </summary>
-    public TaktAnnouncementType AnnouncementType { get; set; }
+    public int AnnouncementType { get; set; }
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -74,12 +74,12 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsScheduled { get; set; }
+    public int IsScheduled { get; set; }
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -114,7 +114,7 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     /// <summary>
     /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public TaktAnnouncementStatus AnnouncementStatus { get; set; }
+    public int AnnouncementStatus { get; set; }
 
 }
 
@@ -146,7 +146,7 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     /// <summary>
     /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
     /// </summary>
-    public TaktAnnouncementType? AnnouncementType { get; set; }
+    public int? AnnouncementType { get; set; }
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -181,12 +181,12 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsScheduled { get; set; }
+    public int? IsScheduled { get; set; }
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsTop { get; set; }
+    public int? IsTop { get; set; }
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -226,12 +226,12 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public TaktAnnouncementStatus? AnnouncementStatus { get; set; }
+    public int? AnnouncementStatus { get; set; }
 
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -319,7 +319,7 @@ public class TaktAnnouncementCreateDto
     /// <summary>
     /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
     /// </summary>
-    public TaktAnnouncementType AnnouncementType { get; set; }
+    public int AnnouncementType { get; set; }
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -350,12 +350,12 @@ public class TaktAnnouncementCreateDto
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsScheduled { get; set; }
+    public int IsScheduled { get; set; }
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -391,7 +391,7 @@ public class TaktAnnouncementCreateDto
     /// <summary>
     /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public TaktAnnouncementStatus AnnouncementStatus { get; set; }
+    public int AnnouncementStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -446,7 +446,7 @@ public class TaktAnnouncementStatusDto
     /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     [Required(ErrorMessage = "状态（0=草稿，1=已发布，2=已撤回，3=已过期）不能为空")]
-    public TaktAnnouncementStatus AnnouncementStatus { get; set; }
+    public int AnnouncementStatus { get; set; }
 }
 
 // ========================================
@@ -476,7 +476,7 @@ public class TaktAnnouncementTemplateDto
     /// <summary>
     /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
     /// </summary>
-    public TaktAnnouncementType? AnnouncementType { get; set; }
+    public int? AnnouncementType { get; set; }
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -501,12 +501,12 @@ public class TaktAnnouncementTemplateDto
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsScheduled { get; set; }
+    public int? IsScheduled { get; set; }
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsTop { get; set; }
+    public int? IsTop { get; set; }
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -568,7 +568,7 @@ public class TaktAnnouncementImportDto
     /// <summary>
     /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
     /// </summary>
-    public TaktAnnouncementType? AnnouncementType { get; set; }
+    public int? AnnouncementType { get; set; }
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -593,12 +593,12 @@ public class TaktAnnouncementImportDto
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsScheduled { get; set; }
+    public int? IsScheduled { get; set; }
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsTop { get; set; }
+    public int? IsTop { get; set; }
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -656,7 +656,7 @@ public class TaktAnnouncementExportDto
     /// <summary>
     /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
     /// </summary>
-    public TaktAnnouncementType AnnouncementType { get; set; }
+    public int AnnouncementType { get; set; }
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -686,12 +686,12 @@ public class TaktAnnouncementExportDto
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsScheduled { get; set; }
+    public int IsScheduled { get; set; }
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -726,7 +726,7 @@ public class TaktAnnouncementExportDto
     /// <summary>
     /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public TaktAnnouncementStatus AnnouncementStatus { get; set; }
+    public int AnnouncementStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

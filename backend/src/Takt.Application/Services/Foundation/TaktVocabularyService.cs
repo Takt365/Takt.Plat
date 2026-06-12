@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktVocabularyService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：敏感词应用服务实现
 // 
@@ -32,23 +32,27 @@ public class TaktVocabularyService : TaktServiceBase, ITaktVocabularyService
 {
     private readonly ITaktTenantRepository<TaktVocabulary> _vocabularyRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktVocabularyFilter _vocabularyFilter;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="vocabularyRepository">敏感词仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="vocabularyFilter">敏感词过滤器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktVocabularyService(
         ITaktTenantRepository<TaktVocabulary> vocabularyRepository,
         ITaktUniqueValidator uniqueValidator,
+        ITaktVocabularyFilter vocabularyFilter,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _vocabularyRepository = vocabularyRepository;
         _uniqueValidator = uniqueValidator;
+        _vocabularyFilter = vocabularyFilter;
     }
 
     /// <summary>
@@ -279,6 +283,38 @@ public class TaktVocabularyService : TaktServiceBase, ITaktVocabularyService
             exportData,
             sheetName ?? "敏感词数据",
             fileName ?? "敏感词导出.xlsx");
+    }
+
+    /// <summary>
+    /// 检测文本是否包含敏感词
+    /// </summary>
+    /// <param name="dto">检测请求</param>
+    /// <returns>检测结果</returns>
+    public async Task<TaktVocabularyDetectResultDto> DetectVocabularyTextAsync(TaktVocabularyFilterRequestDto dto)
+    {
+        var filterResult = await _vocabularyFilter.FilterAsync(dto.Text, dto.MinFilterLevel);
+        return new TaktVocabularyDetectResultDto
+        {
+            HasSensitiveWord = filterResult.HasSensitiveWord,
+            MatchedWords = filterResult.MatchedWords,
+        };
+    }
+
+    /// <summary>
+    /// 过滤文本中的敏感词
+    /// </summary>
+    /// <param name="dto">过滤请求</param>
+    /// <returns>过滤结果</returns>
+    public async Task<TaktVocabularyFilterResultDto> FilterVocabularyTextAsync(TaktVocabularyFilterRequestDto dto)
+    {
+        var filterResult = await _vocabularyFilter.FilterAsync(dto.Text, dto.MinFilterLevel);
+        return new TaktVocabularyFilterResultDto
+        {
+            OriginalText = filterResult.OriginalText,
+            FilteredText = filterResult.FilteredText,
+            HasSensitiveWord = filterResult.HasSensitiveWord,
+            MatchedWords = filterResult.MatchedWords,
+        };
     }
 
     // ========================================

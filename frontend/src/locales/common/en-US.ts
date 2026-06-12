@@ -27,6 +27,7 @@ export default {
     signalr: {
       connectFail: 'Real-time connection failed',
       onlineNotify: 'Real-time connection restored',
+      newMessage: 'New message',
     },
     theme: {
       switch: 'Switch theme',

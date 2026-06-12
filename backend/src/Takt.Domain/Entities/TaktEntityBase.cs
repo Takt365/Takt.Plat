@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities;
 
@@ -230,10 +229,10 @@ public abstract class TaktApprovalEntityBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 审批状态（<see cref="TaktApprovalStatus"/>）
+    /// 审批状态（0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤销，5=已终止）
     /// </summary>
     [SugarColumn(ColumnName = "approval_status", ColumnDescription = "审批状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktApprovalStatus ApprovalStatus { get; set; } = TaktApprovalStatus.Pending;
+    public int ApprovalStatus { get; set; } = 0;
 
     /// <summary>
     /// 发起人ID

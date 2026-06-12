@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktTicketDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Ticket 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTicket 生成，请按需审阅）
 // 
@@ -56,7 +56,7 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? AttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
+    /// 工单状态（见 TaktTicketStatus：0=新建，1=已指派，2=处理中，3=等待用户回复，4=已解决，5=已关闭，6=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -69,6 +69,22 @@ public class TaktTicketDto : TaktCompanyDtoBase
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
+    /// 资产名称（填充字段，来自 TaktAsset）
+    /// </summary>
+    public string? AssetName { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -184,6 +200,11 @@ public class TaktTicketDto : TaktCompanyDtoBase
     /// </summary>
     public List<TaktTicketChangeLogDto>? ChangeLogs { get; set; }
 
+    /// <summary>
+    /// 工单回复列表（会话，详情填充）
+    /// </summary>
+    public List<TaktTicketReplyDto>? Replies { get; set; }
+
 }
 
 // ========================================
@@ -240,6 +261,17 @@ public class TaktTicketQueryDto : TaktPagedQuery
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -421,7 +453,7 @@ public class TaktTicketCreateDto
     public string? AttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
+    /// 工单状态（见 TaktTicketStatus：0=新建，1=已指派，2=处理中，3=等待用户回复，4=已解决，5=已关闭，6=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -434,6 +466,17 @@ public class TaktTicketCreateDto
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
@@ -643,6 +686,17 @@ public class TaktTicketTemplateDto
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
     /// </summary>
     public int? TicketSource { get; set; }
@@ -737,6 +791,17 @@ public class TaktTicketImportDto
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
     /// </summary>
     public int? TicketSource { get; set; }
@@ -817,7 +882,7 @@ public class TaktTicketExportDto
     public string? AttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单状态（0=待处理，1=处理中，2=已解决，3=已关闭）
+    /// 工单状态（见 TaktTicketStatus：0=新建，1=已指派，2=处理中，3=等待用户回复，4=已解决，5=已关闭，6=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -830,6 +895,17 @@ public class TaktTicketExportDto
     /// 分类编码（如 incident/request 等）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode / TaktAsset.AssetCode 一致）
+    /// </summary>
+    public string? AssetCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// IT 设备保修扩展 ID（关联 TaktItAsset.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
 
     /// <summary>
     /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）

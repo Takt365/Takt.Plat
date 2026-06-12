@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.HelpDesk
 // 文件名称：ITaktTicketService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工单应用服务接口
 // 
@@ -17,7 +17,7 @@ using Takt.Shared.Options;
 namespace Takt.Application.Services.Routine.HelpDesk;
 
 /// <summary>
-/// 工单应用服务接口
+/// 工单应用服务
 /// </summary>
 public interface ITaktTicketService
 {
@@ -49,6 +49,20 @@ public interface ITaktTicketService
     Task<TaktTicketDto> CreateTicketAsync(TaktTicketCreateDto dto);
 
     /// <summary>
+    /// 门户用户提交工单
+    /// </summary>
+    /// <param name="dto">提交 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> SubmitTicketAsync(TaktTicketSubmitDto dto);
+
+    /// <summary>
+    /// 邮件/API 渠道建单
+    /// </summary>
+    /// <param name="dto">渠道建单 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> CreateTicketFromChannelAsync(TaktTicketCreateFromChannelDto dto);
+
+    /// <summary>
     /// 更新工单
     /// </summary>
     /// <param name="id">工单ID</param>
@@ -71,11 +85,74 @@ public interface ITaktTicketService
     Task DeleteTicketBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新工单状态
+    /// 更新工单状态（受状态机约束）
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktTicketDto> UpdateTicketStatusAsync(TaktTicketStatusDto dto);
+
+    /// <summary>
+    /// 指派或领取工单
+    /// </summary>
+    /// <param name="dto">指派 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> AssignTicketAsync(TaktTicketAssignDto dto);
+
+    /// <summary>
+    /// 开始处理（已指派 → 处理中）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> StartTicketProgressAsync(TaktTicketWorkflowActionDto dto);
+
+    /// <summary>
+    /// 请求用户补充信息（处理中 → 等待用户回复）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> WaitForRequesterAsync(TaktTicketWorkflowActionDto dto);
+
+    /// <summary>
+    /// 标记已解决（处理中 → 已解决）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> ResolveTicketAsync(TaktTicketWorkflowActionDto dto);
+
+    /// <summary>
+    /// 用户确认关闭（已解决 → 已关闭）
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> ConfirmCloseTicketAsync(TaktTicketWorkflowActionDto dto);
+
+    /// <summary>
+    /// 重新打开工单
+    /// </summary>
+    /// <param name="dto">动作 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktTicketDto> ReopenTicketAsync(TaktTicketWorkflowActionDto dto);
+
+    /// <summary>
+    /// 添加工单回复（用户/客服）
+    /// </summary>
+    /// <param name="dto">回复 DTO</param>
+    /// <returns>回复 DTO</returns>
+    Task<TaktTicketReplyDto> ReplyTicketAsync(TaktTicketReplyCreateDto dto);
+
+    /// <summary>
+    /// 获取工单回复列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分页结果</returns>
+    Task<TaktPagedResult<TaktTicketReplyDto>> GetTicketReplyListAsync(TaktTicketReplyQueryDto queryDto);
+
+    /// <summary>
+    /// 获取当前用户工单关联的资产汇总（按 AssetCode 聚合）
+    /// </summary>
+    /// <param name="queryDto">分页查询</param>
+    /// <returns>分页结果</returns>
+    Task<TaktPagedResult<TaktTicketMyAssetDto>> GetMyAssetListAsync(TaktTicketMyAssetQueryDto queryDto);
 
     /// <summary>
     /// 获取导入模板
@@ -101,5 +178,4 @@ public interface ITaktTicketService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportTicketAsync(TaktTicketQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
 }

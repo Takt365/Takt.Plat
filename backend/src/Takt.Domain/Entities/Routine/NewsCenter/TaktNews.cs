@@ -11,7 +11,6 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.NewsCenter;
 
@@ -38,7 +37,7 @@ public class TaktNews : TaktApprovalEntityBase
     /// 新闻分类
     /// </summary>
     [SugarColumn(ColumnName = "news_category", ColumnDescription = "新闻分类", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktNewsCategory NewsCategory { get; set; } = TaktNewsCategory.CompanyNews;
+    public int NewsCategory { get; set; } = 0;
     /// <summary>
     /// 新闻标题
     /// </summary>
@@ -68,12 +67,12 @@ public class TaktNews : TaktApprovalEntityBase
     /// 是否置顶
     /// </summary>
     [SugarColumn(ColumnName = "is_top", ColumnDescription = "是否置顶", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsTop { get; set; } = TaktYesNo.No;
+    public int IsTop { get; set; } = 0;
     /// <summary>
     /// 是否推荐
     /// </summary>
     [SugarColumn(ColumnName = "is_recommended", ColumnDescription = "是否推荐", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsRecommended { get; set; } = TaktYesNo.No;
+    public int IsRecommended { get; set; } = 0;
     /// <summary>
     /// 生效时间
     /// </summary>
@@ -156,7 +155,7 @@ public class TaktNews : TaktApprovalEntityBase
     /// 新闻状态
     /// </summary>
     [SugarColumn(ColumnName = "news_status", ColumnDescription = "新闻状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktNewsStatus NewsStatus { get; set; } = TaktNewsStatus.Draft;
+    public int NewsStatus { get; set; } = 0;
     /// <summary>
     /// 新闻附件列表（主子表关系）
     /// </summary>

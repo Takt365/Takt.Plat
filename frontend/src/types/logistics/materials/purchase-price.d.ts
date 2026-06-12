@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：purchase-price.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,7 +69,7 @@ export interface PurchasePrice extends CompanyDtoBase {
   items?: PurchasePriceItem[];
 
   /**
-   * 采购价格变更记录列表（外键在子表 <see cref="TaktPurchasePriceChangeLog.PriceId"/>） （子表：TaktPurchasePriceChangeLog）
+   * 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId） （子表：TaktPurchasePriceChangeLog）
    */
   changeLogs?: PurchasePriceChangeLog[];
 
@@ -223,7 +223,7 @@ export interface PurchasePriceCreate {
   items?: PurchasePriceItemCreate[];
 
   /**
-   * 采购价格变更记录列表（外键在子表 <see cref="TaktPurchasePriceChangeLog.PriceId"/>）（子表，级联保存）
+   * 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）（子表，级联保存）
    */
   changeLogs?: PurchasePriceChangeLogCreate[];
 

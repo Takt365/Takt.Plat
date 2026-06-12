@@ -24,6 +24,8 @@ const CONTROLLER_PLURAL_OVERRIDES = {
   TranslationMessage: 'TranslationMessages',
   HolidayTheme: 'HolidayThemes',
   DataDictAll: 'DataDictAlls',
+  Analysis: 'Analyses',
+  PerfAnalysis: 'PerfAnalyses',
 };
 
 /**
@@ -154,6 +156,87 @@ function writeGeneratedFile(filePath, content) {
 const DEFAULT_BACKEND_ROOT = path.resolve(__dirname, '../backend/src');
 
 /**
+ * 从 process.argv 解析单实体代码生成 CLI（禁止 --all）
+ * @param {string[]} args
+ * @param {() => void} [printUsage]
+ * @param {{ allowViewPath?: boolean }} [opts]
+ * @returns {{ entityPrefix: string, force: boolean, dryRun: boolean, viewPath: string|null }}
+ */
+function parseSingleEntityGenerateArgsFromArgv(args, printUsage, opts = {}) {
+  const options = { entityPrefix: null, force: false, dryRun: false, viewPath: null };
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+    if (arg === '--force') {
+      options.force = true;
+      continue;
+    }
+    if (arg === '--dry-run') {
+      options.dryRun = true;
+      continue;
+    }
+    if (opts.allowViewPath && arg === '--view-path') {
+      options.viewPath = args[i + 1] || null;
+      i += 1;
+      continue;
+    }
+    if (!arg.startsWith('--')) {
+      console.error(`❌ 未知参数: ${arg}`);
+      process.exit(1);
+    }
+    const value = arg.slice(2);
+    if (value.toLowerCase() === 'all') {
+      console.error('❌ 已禁用 --all，请指定单个实体，例如 --CostCenter');
+      process.exit(1);
+    }
+    if (value.startsWith('Takt')) {
+      console.error('❌ 实体名不要带 Takt 前缀，例如 --CostCenter');
+      process.exit(1);
+    }
+    if (options.entityPrefix) {
+      console.error('❌ 只能指定一个实体名');
+      process.exit(1);
+    }
+    options.entityPrefix = value;
+  }
+  if (!options.entityPrefix) {
+    console.error('❌ 请指定 --<实体名>，例如 --CostCenter');
+    if (printUsage) {
+      printUsage();
+    }
+    process.exit(1);
+  }
+  return options;
+}
+
+/**
+ * 解析单实体代码生成 CLI（禁止 --all）
+ * @param {() => void} [printUsage]
+ * @returns {{ entityPrefix: string, force: boolean, dryRun: boolean, viewPath: string|null }}
+ */
+function parseSingleEntityGenerateArgs(printUsage) {
+  return parseSingleEntityGenerateArgsFromArgv(process.argv.slice(2), printUsage);
+}
+
+/**
+ * 构建传递给子脚本的单实体 CLI 参数
+ * @param {{ entityPrefix: string, force?: boolean, dryRun?: boolean, viewPath?: string|null }} options
+ * @returns {string[]}
+ */
+function buildSingleEntityChildArgs(options) {
+  const args = [`--${options.entityPrefix}`];
+  if (options.force) {
+    args.push('--force');
+  }
+  if (options.dryRun) {
+    args.push('--dry-run');
+  }
+  if (options.viewPath) {
+    args.push('--view-path', options.viewPath);
+  }
+  return args;
+}
+
+/**
  * 将 DtoBase / EntityBase 名称映射为表格 entityScope
  * @param {string} baseName
  * @returns {'tenant'|'company'|'approval'}
@@ -270,6 +353,167 @@ function resolveEntityScope(entityPascal, typesContent = '', backendRoot = DEFAU
   return 'company';
 }
 
+const { stripSeeCref } = require('./xml-cref-strip.cjs');
+
+/**
+ * 将 XML 文档中的 see cref 转为可读纯文本（避免 cref 落盘到 DTO/i18n/JSDoc）
+ * @param {string} text
+ * @returns {string}
+ */
+function sanitizeXmlDocPlainText(text) {
+  if (!text) {
+    return '';
+  }
+  let result = stripSeeCref(text);
+  result = result.replace(
+    /适配\s*TaktFlowInstance\.Id/gi,
+    '对应 takt_workflow_instance 主键 Id',
+  );
+  return result.replace(/\s{2,}/g, ' ').trim();
+}
+
+/**
+ * PascalCase → camelCase
+ * @param {string} str
+ * @returns {string}
+ */
+function pascalToCamel(str) {
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
+/**
+ * 全局：属性 camelCase → I18nKey 末段（与 generate-entity-i18n-seed.cjs 一致）
+ */
+const ENTITY_FIELD_I18N_SEGMENT = {
+  passwordHash: 'password',
+  employeeId: 'employeeid',
+  dictCode: 'code',
+  typeCode: 'code',
+  themeCode: 'code',
+};
+
+/**
+ * 按实体 slug 覆盖末段（slug 须全小写）
+ */
+const ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG = {
+  menu: {
+    i18nKey: 'l10nkey',
+    componentPath: 'component',
+    externalUrl: 'linkurl',
+  },
+};
+
+/**
+ * 去掉属性名中与实体 slug 重复的前缀（tenantName + tenant → name）
+ * @param {string} camelName
+ * @param {string} entitySlug 全小写 slug
+ */
+function stripEntitySlugPrefixFromCamel(camelName, entitySlug) {
+  if (!entitySlug) {
+    return camelName;
+  }
+  const prefix = entitySlug.toLowerCase();
+  const lower = camelName.toLowerCase();
+  if (!lower.startsWith(prefix) || camelName.length <= prefix.length) {
+    return camelName;
+  }
+  const rest = camelName.slice(prefix.length);
+  return rest.charAt(0).toLowerCase() + rest.slice(1);
+}
+
+/**
+ * 将 C# 属性 camelCase 解析为 I18nKey 末段（全小写 a-z0-9）
+ * @param {string} camelName _self 或属性 camelCase
+ * @param {string} [entitySlug] 实体 slug（全小写）
+ */
+function resolveEntityFieldI18nSegment(camelName, entitySlug) {
+  if (camelName === '_self') {
+    return '_self';
+  }
+  const slugOverrides = entitySlug ? ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG[entitySlug] : null;
+  let segment =
+    slugOverrides?.[camelName] ??
+    ENTITY_FIELD_I18N_SEGMENT[camelName] ??
+    stripEntitySlugPrefixFromCamel(camelName, entitySlug);
+  segment = String(segment).toLowerCase();
+  if (!/^[a-z0-9]+$/.test(segment)) {
+    throw new Error(`I18n 键末段非法（须全小写 a-z0-9）：${camelName} → ${segment}`);
+  }
+  return segment;
+}
+
+/**
+ * 实体类名 → I18nKey 实体 slug（全小写 a-z0-9，如 TaktItAsset → itasset）
+ * @param {string} className Takt 实体类名或短名（可带 Takt 前缀）
+ */
+function entityClassToSlug(className) {
+  const short = className.replace(/^Takt/, '');
+  const slug = pascalToCamel(short).toLowerCase();
+  if (!/^[a-z0-9]+$/.test(slug)) {
+    throw new Error(`I18n 实体 slug 非法（须全小写 a-z0-9）：${className} → ${slug}`);
+  }
+  return slug;
+}
+
+/**
+ * 生成 entity.* 完整 I18nKey（与 TaktXxxI18nSeedData 一致）
+ * @param {string} slug 实体 slug（全小写）
+ * @param {string} segment _self 或属性 camelCase
+ */
+function buildEntityI18nKey(slug, segment) {
+  const normalizedSlug = String(slug).toLowerCase();
+  if (!/^[a-z0-9]+$/.test(normalizedSlug)) {
+    throw new Error(`I18n 实体 slug 非法（须全小写 a-z0-9）：${slug}`);
+  }
+  return `entity.${normalizedSlug}.${resolveEntityFieldI18nSegment(segment, normalizedSlug)}`;
+}
+
+/**
+ * entity.*._self 键
+ * @param {string} slug 实体 slug（全小写）或 Takt 类名
+ */
+function buildEntitySelfI18nKey(slug) {
+  const normalizedSlug = slug.startsWith('Takt') ? entityClassToSlug(slug) : String(slug).toLowerCase();
+  return buildEntityI18nKey(normalizedSlug, '_self');
+}
+
+/**
+ * TaktModule 数值（与 Takt.Shared.Enums.TaktModule 一致；TaktTranslation.ResourceGroup 存 int）
+ */
+const TAKT_MODULE_INT = {
+  Dashboard: 0,
+  Identity: 1,
+  Routine: 2,
+  Accounting: 3,
+  Logistics: 4,
+  HumanResource: 5,
+  Workflow: 6,
+  Code: 7,
+  Foundation: 8,
+  Statistics: 9,
+  Entity: 10,
+};
+
+/**
+ * TaktAppSide 数值（与 Takt.Shared.Enums.TaktAppSide 一致；TaktTranslation.ResourceType 存 int）
+ */
+const TAKT_APP_SIDE_INT = {
+  Frontend: 0,
+  Backend: 1,
+};
+
+/**
+ * 解析 TaktModule 名称为 int 字典码
+ * @param {string} moduleName 如 Identity、Statistics
+ * @returns {number}
+ */
+function resolveTaktModuleInt(moduleName) {
+  if (!Object.prototype.hasOwnProperty.call(TAKT_MODULE_INT, moduleName)) {
+    throw new Error(`未知 TaktModule：${moduleName}`);
+  }
+  return TAKT_MODULE_INT[moduleName];
+}
+
 /**
  * 三个实体基类字段（与 frontend/src/utils/table-columns.ts ENTITY_BASE_FIELDS 保持同步，不含 id）
  */
@@ -285,6 +529,7 @@ const ENTITY_BASE_FIELDS = {
   approval: [
     'tenantCode', 'companyCode', 'extFieldJson', 'remark',
     'approvalStatus', 'initiatorId', 'initiatedAt', 'approvalOpinion', 'approvedBy', 'approvedAt',
+    'flowInstanceId',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
   ],
 };
@@ -307,4 +552,19 @@ module.exports = {
   resolveEntityScope,
   ENTITY_BASE_FIELDS,
   DEFAULT_BACKEND_ROOT,
+  parseSingleEntityGenerateArgsFromArgv,
+  parseSingleEntityGenerateArgs,
+  buildSingleEntityChildArgs,
+  sanitizeXmlDocPlainText,
+  pascalToCamel,
+  ENTITY_FIELD_I18N_SEGMENT,
+  ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG,
+  stripEntitySlugPrefixFromCamel,
+  resolveEntityFieldI18nSegment,
+  entityClassToSlug,
+  buildEntityI18nKey,
+  buildEntitySelfI18nKey,
+  TAKT_MODULE_INT,
+  TAKT_APP_SIDE_INT,
+  resolveTaktModuleInt,
 };

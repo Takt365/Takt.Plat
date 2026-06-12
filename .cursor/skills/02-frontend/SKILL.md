@@ -16,6 +16,16 @@ Vue 3 `<script setup>` + TS | Ant Design Vue 4 `a-*` | Tailwind 4 | Pinia | vue-
 
 ❌ 大块 scoped CSS | ❌ 硬编码中文 | ❌ `getList` 无实体前缀
 
+## 目录分层（config / bootstrap / composables）
+
+| 目录 | 职责 | 禁止 |
+|------|------|------|
+| `config/` | `VITE_*` 解析、OAuth/空闲配置 | Vue 生命周期、Pinia 副作用 |
+| `bootstrap/` | `main.ts` 全局注册、登出/空闲/EventBus | 被 `composables/` import |
+| `composables/` | 全局 `useXxx`（响应式 + 生命周期） | import `bootstrap/`；纯函数应放 `utils/` |
+
+列表页：`loadData` 定义后调用 `useTableRefresh(loadData)`（与 `bootstrap` 的 `table:refresh` 事件解耦）。
+
 ## 标准 CRUD 页（前端专责）
 
 **前置（强制）**：先完成 [12-crud](../12-crud/SKILL.md) 基线清单（页面壳、API 映射、权限）。
@@ -30,7 +40,8 @@ Vue 3 `<script setup>` + TS | Ant Design Vue 4 `a-*` | Tailwind 4 | Pinia | vue-
 - [ ] 7. 权限：v-permission + ToolsBar *-permission
 - [ ] 8. locales：export default { page: {…} }；列标题 entity.*
 - [ ] 9. loading：async/await + 表格 loading
-- [ ] 10. 空行：03-format-blank-lines
+- [ ] 10. 租户/公司切换：`useTableRefresh(loadData)`（见 `13-vue-view` §2.4）
+- [ ] 11. 空行：03-format-blank-lines
 ```
 
 ## 参照模块

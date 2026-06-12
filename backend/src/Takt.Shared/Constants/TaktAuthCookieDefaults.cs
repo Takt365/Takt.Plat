@@ -4,7 +4,7 @@
 // 文件名称：TaktAuthCookieDefaults.cs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：授权码流程中浏览器会话 Cookie 认证方案名
+// 功能描述：认证 Cookie 方案名与 Cookie 名称字面量（仅 string const，非枚举）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

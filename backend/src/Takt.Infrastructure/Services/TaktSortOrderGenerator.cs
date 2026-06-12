@@ -16,7 +16,7 @@ using Takt.Shared.Helpers;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktSortOrderGenerator"/> 实现
+/// ITaktSortOrderGenerator 实现
 /// 应用服务典型用法：先 <c>repository.GetMaxIntAsync(predicate, x =&gt; x.SortOrder)</c>，再调用本生成器
 /// </summary>
 public sealed class TaktSortOrderGenerator : ITaktSortOrderGenerator

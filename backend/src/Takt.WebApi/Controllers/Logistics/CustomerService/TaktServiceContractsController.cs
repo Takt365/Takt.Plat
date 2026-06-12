@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.CustomerService
 // 文件名称：TaktServiceContractsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务合同控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Logistics.CustomerService;
 /// 服务合同控制器
 /// 提供服务合同的 REST API
 /// </summary>
-[ApiModule(TaktModule.Logistics, "后勤管理")]
+[ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "服务合同")]
 public class TaktServiceContractsController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:service:servicecontract:list", "服务合同列表")]
+    [TaktPermission("logistics:service:contract:list", "服务合同列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetServiceContractListAsync([FromQuery] TaktServiceContractQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="id">服务合同ID</param>
     /// <returns>服务合同DTO</returns>
-    [TaktPermission("logistics:service:servicecontract:query", "服务合同详情")]
+    [TaktPermission("logistics:service:contract:query", "服务合同详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetServiceContractByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// 获取服务合同选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:service:servicecontract:query", "服务合同选项")]
+    [TaktPermission("logistics:service:contract:query", "服务合同选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetServiceContractOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>服务合同DTO</returns>
-    [TaktPermission("logistics:service:servicecontract:create", "创建服务合同")]
+    [TaktPermission("logistics:service:contract:create", "创建服务合同")]
     [HttpPost]
     public async Task<IActionResult> CreateServiceContractAsync([FromBody] TaktServiceContractCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// <param name="id">服务合同ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>服务合同DTO</returns>
-    [TaktPermission("logistics:service:servicecontract:update", "更新服务合同")]
+    [TaktPermission("logistics:service:contract:update", "更新服务合同")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateServiceContractAsync(long id, [FromBody] TaktServiceContractUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="id">服务合同ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:service:servicecontract:delete", "删除服务合同")]
+    [TaktPermission("logistics:service:contract:delete", "删除服务合同")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteServiceContractByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:service:servicecontract:delete", "批量删除服务合同")]
+    [TaktPermission("logistics:service:contract:delete", "批量删除服务合同")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteServiceContractBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>服务合同DTO</returns>
-    [TaktPermission("logistics:service:servicecontract:update", "更新服务合同状态")]
+    [TaktPermission("logistics:service:contract:update", "更新服务合同状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateServiceContractStatusAsync([FromBody] TaktServiceContractStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>服务合同DTO</returns>
-    [TaktPermission("logistics:service:servicecontract:update", "更新服务合同排序")]
+    [TaktPermission("logistics:service:contract:update", "更新服务合同排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateServiceContractSortAsync([FromBody] TaktServiceContractSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:service:servicecontract:import", "获取服务合同导入模板")]
+    [TaktPermission("logistics:service:contract:import", "获取服务合同导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetServiceContractTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:service:servicecontract:import", "导入服务合同")]
+    [TaktPermission("logistics:service:contract:import", "导入服务合同")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportServiceContractAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktServiceContractsController : TaktControllerBase
     /// 导出服务合同
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:service:servicecontract:export", "导出服务合同")]
+    [TaktPermission("logistics:service:contract:export", "导出服务合同")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportServiceContractAsync([FromQuery] TaktServiceContractQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

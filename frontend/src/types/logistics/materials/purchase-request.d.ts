@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：purchase-request.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -114,7 +114,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   items?: PurchaseRequestItem[];
 
   /**
-   * 采购申请变更记录列表（外键在子表 <see cref="TaktPurchaseRequestChangeLog.RequestId"/>） （子表：TaktPurchaseRequestChangeLog）
+   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId） （子表：TaktPurchaseRequestChangeLog）
    */
   changeLogs?: PurchaseRequestChangeLog[];
 
@@ -373,7 +373,7 @@ export interface PurchaseRequestCreate {
   items?: PurchaseRequestItemCreate[];
 
   /**
-   * 采购申请变更记录列表（外键在子表 <see cref="TaktPurchaseRequestChangeLog.RequestId"/>）（子表，级联保存）
+   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
    */
   changeLogs?: PurchaseRequestChangeLogCreate[];
 

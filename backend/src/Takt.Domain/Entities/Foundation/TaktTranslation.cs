@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -55,13 +54,13 @@ public class TaktTranslation : TaktTenantEntityBase
     /// 资源分组（用于分类管理翻译）
     /// </summary>
     [SugarColumn(ColumnName = "resource_group", ColumnDescription = "资源分组", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktModule ResourceGroup { get; set; } = TaktModule.Identity;
+    public int ResourceGroup { get; set; } = 1;
 
     /// <summary>
     /// 资源类别（0=前端，1=后端）
     /// </summary>
     [SugarColumn(ColumnName = "resource_type", ColumnDescription = "资源类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktAppSide ResourceType { get; set; } = TaktAppSide.Frontend;
+    public int ResourceType { get; set; } = 0;
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）

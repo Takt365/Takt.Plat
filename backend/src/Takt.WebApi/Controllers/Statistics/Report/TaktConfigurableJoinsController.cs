@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Statistics.Report
 // 文件名称：TaktConfigurableJoinsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自定义报表关联控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Statistics.Report;
 /// 自定义报表关联控制器
 /// 提供自定义报表关联的 REST API
 /// </summary>
-[ApiModule(TaktModule.Statistics, "统计看板")]
+[ApiModule(9, "统计看板")]
 [Route("api/[controller]", Name = "自定义报表关联")]
 public class TaktConfigurableJoinsController : TaktControllerBase
 {

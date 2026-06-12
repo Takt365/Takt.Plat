@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Cost
 // 文件名称：TaktQualityFailureValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityFailure 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQualityFailure 生成，请按需审阅）
 // 
@@ -31,16 +31,16 @@ public class TaktQualityFailureCreateValidator : AbstractValidator<TaktQualityFa
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.QualityFailureCode)
             .NotEmpty().WithMessage("品质问题编码不能为空")
-            .MaximumLength(30).WithMessage("品质问题编码长度不能超过30个字符");
+            .MaximumLength(40).WithMessage("品质问题编码长度不能超过40个字符");
         RuleFor(x => x.Model)
             .NotEmpty().WithMessage("机种/产品型号不能为空")
             .MaximumLength(255).WithMessage("机种/产品型号长度不能超过255个字符");
@@ -97,15 +97,15 @@ public class TaktQualityFailureImportValidator : AbstractValidator<TaktQualityFa
     public TaktQualityFailureImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
         RuleFor(x => x.QualityFailureCode)
             .NotEmpty().WithMessage("品质问题编码不能为空")
-            .MaximumLength(30).WithMessage("品质问题编码长度不能超过30个字符");
+            .MaximumLength(40).WithMessage("品质问题编码长度不能超过40个字符");
         RuleFor(x => x.Model)
             .NotEmpty().WithMessage("机种/产品型号不能为空")
             .MaximumLength(255).WithMessage("机种/产品型号长度不能超过255个字符");

@@ -19,9 +19,9 @@ namespace Takt.WebApi.Controllers.Foundation;
 
 /// <summary>
 /// 在线消息控制器
-/// 提供在线消息的 REST API
+/// 提供在线消息查询、创建、删除、导出及已读/未读 API（消息正文创建/发送后不可修改）
 /// </summary>
-[ApiModule(TaktModule.Foundation, "基础设置")]
+[ApiModule(8, "基础设置")]
 [Route("api/[controller]", Name = "在线消息")]
 public class TaktMessagesController : TaktControllerBase
 {
@@ -48,6 +48,46 @@ public class TaktMessagesController : TaktControllerBase
         try
         {
             var result = await _messageService.GetMessageListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取当前登录用户已读消息列表（分页）
+    /// </summary>
+    /// <param name="queryDto">已读列表查询 DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("foundation:message:read", "已读消息列表")]
+    [HttpGet("read-list")]
+    public async Task<IActionResult> GetMessageReadListAsync([FromQuery] TaktMessageInboxListQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _messageService.GetMessageReadListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取当前登录用户未读消息列表（分页）
+    /// </summary>
+    /// <param name="queryDto">未读列表查询 DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("foundation:message:unread", "未读消息列表")]
+    [HttpGet("unread-list")]
+    public async Task<IActionResult> GetMessageUnreadListAsync([FromQuery] TaktMessageInboxListQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _messageService.GetMessageUnreadListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -120,19 +160,38 @@ public class TaktMessagesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新在线消息
+    /// 批量创建在线消息并 SignalR 推送给各接收者
     /// </summary>
-    /// <param name="id">在线消息ID</param>
-    /// <param name="dto">更新DTO</param>
-    /// <returns>在线消息DTO</returns>
-    [TaktPermission("foundation:message:update", "更新在线消息")]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateMessageAsync(long id, [FromBody] TaktMessageUpdateDto dto)
+    /// <param name="dto">批量创建 DTO</param>
+    /// <returns>已落库消息列表</returns>
+    [TaktPermission("foundation:message:send", "批量发送在线消息")]
+    [HttpPost("batch-send")]
+    public async Task<IActionResult> CreateAndSendMessagesAsync([FromBody] TaktMessageBatchCreateDto dto)
     {
         try
         {
-            var result = await _messageService.UpdateMessageAsync(id, dto);
-            return Success(result, "更新成功");
+            var result = await _messageService.CreateAndSendMessagesAsync(dto);
+            return Success(result, "发送成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 按消息 ID 推送给接收者（SignalR）
+    /// </summary>
+    /// <param name="id">在线消息 ID</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("foundation:message:send", "发送在线消息")]
+    [HttpPost("{id}/send")]
+    public async Task<IActionResult> SendMessageByIdAsync(long id)
+    {
+        try
+        {
+            await _messageService.SendMessageByIdAsync(id);
+            return Success("推送成功");
         }
         catch (Exception ex)
         {
@@ -181,26 +240,6 @@ public class TaktMessagesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新在线消息状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>在线消息DTO</returns>
-    [TaktPermission("foundation:message:update", "更新在线消息状态")]
-    [HttpPut("status")]
-    public async Task<IActionResult> UpdateMessageStatusAsync([FromBody] TaktMessageStatusDto dto)
-    {
-        try
-        {
-            var result = await _messageService.UpdateMessageStatusAsync(dto);
-            return Success(result, "更新成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 获取当前登录用户在线消息统计
     /// </summary>
     /// <returns>统计结果</returns>
@@ -212,6 +251,55 @@ public class TaktMessagesController : TaktControllerBase
         {
             var result = await _messageService.GetMessageStatisticsAsync();
             return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 标记在线消息为已读
+    /// </summary>
+    /// <param name="id">在线消息 ID</param>
+    /// <returns>在线消息 DTO</returns>
+    [TaktPermission("foundation:message:read", "已读")]
+    [HttpPut("{id}/read")]
+    public async Task<IActionResult> MarkMessageReadByIdAsync(long id)
+    {
+        try
+        {
+            var result = await _messageService.MarkMessageReadAsync(new TaktMessageReadDto
+            {
+                MessageId = id,
+                ReadStatus = 1,
+            });
+            return Success(result, "标记已读成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 标记在线消息为未读
+    /// </summary>
+    /// <param name="id">在线消息 ID</param>
+    /// <returns>在线消息 DTO</returns>
+    [TaktPermission("foundation:message:unread", "未读")]
+    [HttpPut("{id}/unread")]
+    public async Task<IActionResult> MarkMessageUnreadByIdAsync(long id)
+    {
+        try
+        {
+            var result = await _messageService.MarkMessageUnreadAsync(new TaktMessageUnreadDto
+            {
+                MessageId = id,
+                ReadStatus = 0,
+                ReadTime = null,
+            });
+            return Success(result, "标记未读成功");
         }
         catch (Exception ex)
         {

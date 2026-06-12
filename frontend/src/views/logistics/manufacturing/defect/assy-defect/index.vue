@@ -30,7 +30,6 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -74,7 +73,7 @@
       <!-- 展开行渲染 -->
       <template #expandedRowRender="{ record }">
         <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.assyDefectDetail._self') }}</div>
+          <div class="mb-2 text-sm font-medium">{{ t('entity.assydefectdetail._self') }}</div>
           <a-table
             v-if="hasAssyDefectDetailRows(record)"
             :columns="assyDefectDetailExpandColumns"
@@ -127,129 +126,129 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.assyDefect.plantcode')">
+      <a-form-item :label="t('entity.assydefect.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.plantcode') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodCategory')">
-      <a-form-item :label="t('entity.assyDefect.prodcategory')">
+      <a-form-item :label="t('entity.assydefect.prodcategory')">
         <a-input
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodcategory') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodcategory') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateStart')">
-      <a-form-item :label="t('entity.assyDefect.proddatestart')">
+      <a-form-item :label="t('logistics.manufacturing.defect.assy-defect.page.query.proddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyDefect.proddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('logistics.manufacturing.defect.assy-defect.page.query.proddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateEnd')">
-      <a-form-item :label="t('entity.assyDefect.proddateend')">
+      <a-form-item :label="t('logistics.manufacturing.defect.assy-defect.page.query.proddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyDefect.proddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('logistics.manufacturing.defect.assy-defect.page.query.proddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.assyDefect.prodline')">
+      <a-form-item :label="t('entity.assydefect.prodline')">
         <a-input
           v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodline') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodline') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.assyDefect.shiftno')">
+      <a-form-item :label="t('entity.assydefect.shiftno')">
         <a-input-number
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.shiftno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.shiftno') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderCode')">
-      <a-form-item :label="t('entity.assyDefect.prodordercode')">
+      <a-form-item :label="t('entity.assydefect.prodordercode')">
         <a-input
           v-model:value="advancedQueryForm.prodOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodordercode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodordercode') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderQty')">
-      <a-form-item :label="t('entity.assyDefect.prodorderqty')">
+      <a-form-item :label="t('entity.assydefect.prodorderqty')">
         <a-input-number
           v-model:value="advancedQueryForm.prodOrderQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodorderqty') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodorderqty') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('modelCode')">
-      <a-form-item :label="t('entity.assyDefect.modelcode')">
+      <a-form-item :label="t('entity.assydefect.modelcode')">
         <a-input
           v-model:value="advancedQueryForm.modelCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.modelcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.modelcode') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="t('entity.assyDefect.batchno')">
+      <a-form-item :label="t('entity.assydefect.batchno')">
         <a-input
           v-model:value="advancedQueryForm.batchNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.batchno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.batchno') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.assyDefect.materialcode')">
+      <a-form-item :label="t('entity.assydefect.materialcode')">
         <a-input
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.materialcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.materialcode') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodActualQty')">
-      <a-form-item :label="t('entity.assyDefect.prodactualqty')">
+      <a-form-item :label="t('entity.assydefect.prodactualqty')">
         <a-input-number
           v-model:value="advancedQueryForm.prodActualQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodactualqty') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodactualqty') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('goodQuantity')">
-      <a-form-item :label="t('entity.assyDefect.goodquantity')">
+      <a-form-item :label="t('entity.assydefect.goodquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.goodQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.goodquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.goodquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.assyDefect.status')">
+      <a-form-item :label="t('entity.assydefect.status')">
         <a-input-number
           v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.status') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.status') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -301,14 +300,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.assyDefect._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.assydefect._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.assyDefect._self"
+        entity-i18n-key="entity.assydefect._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -348,7 +347,7 @@ import AssyDefectForm from './components/assy-defect-form.vue'
 import { getAssyDefectList, getAssyDefectById, createAssyDefect, updateAssyDefect, deleteAssyDefectById, deleteAssyDefectBatch, getAssyDefectTemplate, importAssyDefect, exportAssyDefect } from '@/api/logistics/manufacturing/defect/assy-defect'
 import * as assyDefectDetailApi from '@/api/logistics/manufacturing/defect/assy-defect-detail'
 import type { AssyDefectDetail, AssyDefectDetailQuery } from '@/types/logistics/manufacturing/defect/assy-defect-detail'
-import type { AssyDefect, AssyDefectQuery, AssyDefectCreate, AssyDefectUpdate } from '@/types/logistics/manufacturing/defect/assy-defect'
+import type { AssyDefect, AssyDefectQuery } from '@/types/logistics/manufacturing/defect/assy-defect'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
@@ -359,7 +358,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktAssyDefect')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.assyDefect._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.assydefect._self') })
 )
 
 /** 快捷查询关键字 */
@@ -415,20 +414,20 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.assyDefect.plantcode') },
-  { key: 'prodCategory', label: t('entity.assyDefect.prodcategory') },
-  { key: 'prodDateStart', label: t('entity.assyDefect.proddatestart') },
-  { key: 'prodDateEnd', label: t('entity.assyDefect.proddateend') },
-  { key: 'prodLine', label: t('entity.assyDefect.prodline') },
-  { key: 'shiftNo', label: t('entity.assyDefect.shiftno') },
-  { key: 'prodOrderCode', label: t('entity.assyDefect.prodordercode') },
-  { key: 'prodOrderQty', label: t('entity.assyDefect.prodorderqty') },
-  { key: 'modelCode', label: t('entity.assyDefect.modelcode') },
-  { key: 'batchNo', label: t('entity.assyDefect.batchno') },
-  { key: 'materialCode', label: t('entity.assyDefect.materialcode') },
-  { key: 'prodActualQty', label: t('entity.assyDefect.prodactualqty') },
-  { key: 'goodQuantity', label: t('entity.assyDefect.goodquantity') },
-  { key: 'status', label: t('entity.assyDefect.status') },
+  { key: 'plantCode', label: t('entity.assydefect.plantcode') },
+  { key: 'prodCategory', label: t('entity.assydefect.prodcategory') },
+  { key: 'prodDateStart', label: t('logistics.manufacturing.defect.assy-defect.page.query.proddatestart') },
+  { key: 'prodDateEnd', label: t('logistics.manufacturing.defect.assy-defect.page.query.proddateend') },
+  { key: 'prodLine', label: t('entity.assydefect.prodline') },
+  { key: 'shiftNo', label: t('entity.assydefect.shiftno') },
+  { key: 'prodOrderCode', label: t('entity.assydefect.prodordercode') },
+  { key: 'prodOrderQty', label: t('entity.assydefect.prodorderqty') },
+  { key: 'modelCode', label: t('entity.assydefect.modelcode') },
+  { key: 'batchNo', label: t('entity.assydefect.batchno') },
+  { key: 'materialCode', label: t('entity.assydefect.materialcode') },
+  { key: 'prodActualQty', label: t('entity.assydefect.prodactualqty') },
+  { key: 'goodQuantity', label: t('entity.assydefect.goodquantity') },
+  { key: 'status', label: t('entity.assydefect.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
@@ -460,49 +459,49 @@ onMounted(() => {
 /** 展开行预览：assyDefectDetail 列 */
 const assyDefectDetailExpandColumns = computed(() => [
   {
-    title: t('entity.assyDefectDetail.assydefectname'),
+    title: t('entity.assydefectdetail.assydefect'),
     dataIndex: 'assyDefectName',
     key: 'assyDefectName',
     ellipsis: true,
   },
   {
-    title: t('entity.assyDefectDetail.prodordercode'),
+    title: t('entity.assydefectdetail.prodordercode'),
     dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
     ellipsis: true,
   },
   {
-    title: t('entity.assyDefectDetail.linenumber'),
+    title: t('entity.assydefectdetail.linenumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     ellipsis: true,
   },
   {
-    title: t('entity.assyDefectDetail.defectcategory'),
+    title: t('entity.assydefectdetail.defectcategory'),
     dataIndex: 'defectCategory',
     key: 'defectCategory',
     ellipsis: true,
   },
   {
-    title: t('entity.assyDefectDetail.defectqty'),
+    title: t('entity.assydefectdetail.defectqty'),
     dataIndex: 'defectQty',
     key: 'defectQty',
     ellipsis: true,
   },
   {
-    title: t('entity.assyDefectDetail.cumulativedefectqty'),
+    title: t('entity.assydefectdetail.cumulativedefectqty'),
     dataIndex: 'cumulativeDefectQty',
     key: 'cumulativeDefectQty',
     ellipsis: true,
   },
   {
-    title: t('entity.assyDefectDetail.randomcardno'),
+    title: t('entity.assydefectdetail.randomcardno'),
     dataIndex: 'randomCardNo',
     key: 'randomCardNo',
     ellipsis: true,
   },
   {
-    title: t('entity.assyDefectDetail.occurrenceengineering'),
+    title: t('entity.assydefectdetail.occurrenceengineering'),
     dataIndex: 'occurrenceEngineering',
     key: 'occurrenceEngineering',
     ellipsis: true,
@@ -572,8 +571,9 @@ async function ensureAssyDefectChildrenLoaded(record: AssyDefect) {
 }
 
 /** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: AssyDefect) {
-  const key = getAssyDefectId(record)
+async function handleExpand(expanded: boolean, record: Record<string, unknown>) {
+  const row = record as unknown as AssyDefect
+  const key = getAssyDefectId(row)
   if (!expanded || !key) {
     expandedRowKeys.value = []
     return
@@ -581,7 +581,7 @@ async function handleExpand(expanded: boolean, record: AssyDefect) {
   if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
     expandedRowKeys.value = []
   }
-  await ensureAssyDefectChildrenLoaded(record)
+  await ensureAssyDefectChildrenLoaded(row)
   expandedRowKeys.value = [key]
 }
 
@@ -598,7 +598,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'assyDefectId') ?? ''
   },
   {
-    title: t('entity.assyDefect.plantcode'),
+    title: t('entity.assydefect.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -607,7 +607,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.assyDefect.prodcategory'),
+    title: t('entity.assydefect.prodcategory'),
     dataIndex: 'prodCategory',
     key: 'prodCategory',
     width: 120,
@@ -616,7 +616,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodCategory') ?? ''
   },
   {
-    title: t('entity.assyDefect.proddate'),
+    title: t('entity.assydefect.proddate'),
     dataIndex: 'prodDate',
     key: 'prodDate',
     width: 120,
@@ -625,7 +625,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.assyDefect.prodline'),
+    title: t('entity.assydefect.prodline'),
     dataIndex: 'prodLine',
     key: 'prodLine',
     width: 120,
@@ -634,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodLine') ?? ''
   },
   {
-    title: t('entity.assyDefect.shiftno'),
+    title: t('entity.assydefect.shiftno'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -643,7 +643,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'shiftNo') ?? ''
   },
   {
-    title: t('entity.assyDefect.prodordercode'),
+    title: t('entity.assydefect.prodordercode'),
     dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
     width: 120,
@@ -652,7 +652,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodOrderCode') ?? ''
   },
   {
-    title: t('entity.assyDefect.prodorderqty'),
+    title: t('entity.assydefect.prodorderqty'),
     dataIndex: 'prodOrderQty',
     key: 'prodOrderQty',
     width: 120,
@@ -661,7 +661,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodOrderQty') ?? ''
   },
   {
-    title: t('entity.assyDefect.modelcode'),
+    title: t('entity.assydefect.modelcode'),
     dataIndex: 'modelCode',
     key: 'modelCode',
     width: 120,
@@ -670,7 +670,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'modelCode') ?? ''
   },
   {
-    title: t('entity.assyDefect.batchno'),
+    title: t('entity.assydefect.batchno'),
     dataIndex: 'batchNo',
     key: 'batchNo',
     width: 120,
@@ -679,7 +679,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'batchNo') ?? ''
   },
   {
-    title: t('entity.assyDefect.materialcode'),
+    title: t('entity.assydefect.materialcode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -688,7 +688,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.assyDefect.prodactualqty'),
+    title: t('entity.assydefect.prodactualqty'),
     dataIndex: 'prodActualQty',
     key: 'prodActualQty',
     width: 120,
@@ -697,7 +697,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodActualQty') ?? ''
   },
   {
-    title: t('entity.assyDefect.goodquantity'),
+    title: t('entity.assydefect.goodquantity'),
     dataIndex: 'goodQuantity',
     key: 'goodQuantity',
     width: 120,
@@ -706,7 +706,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'goodQuantity') ?? ''
   },
   {
-    title: t('entity.assyDefect.status'),
+    title: t('entity.assydefect.status'),
     dataIndex: 'status',
     key: 'status',
     width: 120,
@@ -809,6 +809,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -844,13 +847,13 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.assyDefect._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.assydefect._self') })
   formData.value = {}
   formVisible.value = true
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: AssyDefect) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.assyDefect._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.assydefect._self') })
   formLoading.value = true
   try {
     const detail = await loadAssyDefectDetail(record)
@@ -866,7 +869,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.assyDefect._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.assydefect._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -884,10 +887,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateAssyDefect(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.assyDefect._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.assydefect._self') }))
     } else {
       await createAssyDefect(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.assyDefect._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.assydefect._self') }))
     }
     formVisible.value = false
     loadData()
@@ -958,10 +961,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.assyDefect._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.assydefect._self') }))
   } catch (error: any) {
     logger.error('[AssyDefect] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.assyDefect._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.assydefect._self') }))
   } finally {
     loading.value = false
   }
@@ -970,12 +973,12 @@ async function handleExport() {
 async function handleDeleteOne(record: AssyDefect) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.assyDefect._self'), name: t('common.tip.this.target', { target: t('entity.assyDefect._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.assydefect._self'), name: t('common.tip.this.target', { target: t('entity.assydefect._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteAssyDefectById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.assyDefect._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.assydefect._self') }))
       loadData()
     }
   })
@@ -983,18 +986,18 @@ async function handleDeleteOne(record: AssyDefect) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.assyDefect._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.assydefect._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.assyDefect._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.assydefect._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteAssyDefectBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.assyDefect._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.assydefect._self') }))
       loadData()
     }
   })

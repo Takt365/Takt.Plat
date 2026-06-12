@@ -23,12 +23,11 @@
       create-permission="foundation:file:create"
       update-permission="foundation:file:update"
       delete-permission="foundation:file:delete"
-      import-permission="foundation:file:import"
       export-permission="foundation:file:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
-      :show-import="true"
+      :show-import="false"
       :show-export="true"
       :show-expand="false"
       :show-advanced-query="true"
@@ -45,12 +44,29 @@
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
-      @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
+    >
+      <template #right>
+        <input
+          ref="uploadInputRef"
+          type="file"
+          class="hidden"
+          @change="handleUploadChange"
+        />
+        <a-button
+          v-permission="'foundation:file:upload'"
+          class="takt-button-upload"
+          :loading="uploadLoading"
+          @click="handleUploadClick"
+        >
+          <template #icon><RiUploadLine /></template>
+          {{ t('common.page.button.upload') }}
+        </a-button>
+      </template>
+    </TaktToolsBar>
 
     <!-- 表格 -->
     <TaktSingleTable
@@ -378,27 +394,6 @@
       </template>
     </TaktQueryDrawer>
 
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.file._self') })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        entity-i18n-key="entity.file._self"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
@@ -411,6 +406,38 @@
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
+
+    <!-- 分片上传弹窗（断点续传） -->
+    <takt-modal
+      v-model:open="chunkUploadVisible"
+      :title="t('components.common.page.upload.chunkmodaltitle')"
+      :use-viewport-size="false"
+      :confirm-loading="chunkUploadLoading"
+      :ok-button-props="{ style: { display: 'none' } }"
+      :cancel-text="t('components.common.page.upload.cancel')"
+      @cancel="handleChunkUploadCancel"
+    >
+      <div class="flex flex-col gap-3">
+        <a-typography-text>{{ chunkUploadFileName }}</a-typography-text>
+        <a-progress :percent="chunkUploadPercent" :status="chunkUploadProgressStatus" />
+        <a-typography-text type="secondary">{{ chunkUploadStatusText }}</a-typography-text>
+        <div class="flex gap-2 justify-end">
+          <a-button
+            v-if="chunkUploadCanPause"
+            @click="handleChunkUploadPause"
+          >
+            {{ t('components.common.page.upload.chunkpause') }}
+          </a-button>
+          <a-button
+            v-if="chunkUploadCanResume"
+            type="primary"
+            @click="handleChunkUploadResume"
+          >
+            {{ t('components.common.page.upload.chunkresume') }}
+          </a-button>
+        </div>
+      </div>
+    </takt-modal>
   </div>
 </template>
 
@@ -425,11 +452,8 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import FileForm from './components/file-form.vue'
-import { getFileList, getFileById, createFile, updateFile, deleteFileById, deleteFileBatch, getFileTemplate, importFile, exportFile } from '@/api/foundation/file'
-import type { File, FileQuery, FileCreate, FileUpdate } from '@/types/foundation/file'
-import { taktExcelEntityNames } from '@/utils/naming'
-import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { getFileList, getFileById, createFile, updateFile, deleteFileById, deleteFileBatch, exportFile, downloadFile, uploadFile } from '@/api/foundation/file'
+import { RiEditLine, RiDeleteBinLine, RiDownloadLine, RiUploadLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -467,9 +491,51 @@ const formTitle = ref('')
 const formData = ref<Partial<File>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
+/** 文件上传 loading */
+const uploadLoading = ref(false)
+/** 隐藏文件选择 input */
+const uploadInputRef = ref<HTMLInputElement | null>(null)
+/** 分片上传弹窗 */
+const chunkUploadVisible = ref(false)
+/** 分片上传进行中 */
+const chunkUploadLoading = ref(false)
+/** 当前上传文件名 */
+const chunkUploadFileName = ref('')
+/** 分片上传进度 0-100 */
+const chunkUploadPercent = ref(0)
+/** 分片上传状态文案 */
+const chunkUploadStatusText = ref('')
+/** 分片上传器实例 */
+const chunkUploaderRef = ref<TaktFileChunkUploader | null>(null)
+/** 当前分片上传状态 */
+const chunkUploadStatus = ref<TaktFileChunkUploadStatus>(TaktFileChunkUploadStatus.Waiting)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+
+/** 分片上传进度条状态 */
+const chunkUploadProgressStatus = computed(() => {
+  if (chunkUploadStatus.value === TaktFileChunkUploadStatus.Error) {
+    return 'exception'
+  }
+  if (chunkUploadStatus.value === TaktFileChunkUploadStatus.Success) {
+    return 'success'
+  }
+  return 'active'
+})
+
+/** 是否可暂停 */
+const chunkUploadCanPause = computed(
+  () => chunkUploadStatus.value === TaktFileChunkUploadStatus.Uploading
+)
+
+/** 是否可恢复 */
+const chunkUploadCanResume = computed(
+  () =>
+    chunkUploadStatus.value === TaktFileChunkUploadStatus.Paused
+    || chunkUploadStatus.value === TaktFileChunkUploadStatus.Error
+)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   fileCode: '',
@@ -530,8 +596,6 @@ const queryFieldsMeta = computed(() => [
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
-/** 导入对话框是否打开 */
-const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
@@ -743,6 +807,14 @@ const columns = computed<TableColumnsType>(() => [
   CreateActionColumn({
     actions: [
       {
+        key: 'download',
+        label: t('common.page.button.download'),
+        shape: 'plain',
+        icon: RiDownloadLine,
+        permission: 'foundation:file:download',
+        onClick: (record: File) => handleDownload(record)
+      },
+      {
         key: 'update',
         label: t('common.page.button.edit'),
         shape: 'plain',
@@ -834,6 +906,9 @@ async function loadData() {
     loading.value = false
   }
 }
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
@@ -927,31 +1002,144 @@ async function handleFormSubmit() {
 function handleFormCancel() {
   formVisible.value = false
 }
-/** 打开导入对话框 */
-function handleImport() {
-  importVisible.value = true
+
+/** 触发文件选择 */
+function handleUploadClick() {
+  uploadInputRef.value?.click()
 }
 
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getFileTemplate(sheetName, fileName)
-  return (res as any)?.data ?? res
+/** 更新分片上传状态文案 */
+function updateChunkUploadStatusText(
+  status: TaktFileChunkUploadStatus,
+  uploaded: number,
+  total: number
+) {
+  chunkUploadStatus.value = status
+  if (status === TaktFileChunkUploadStatus.Hashing) {
+    chunkUploadStatusText.value = t('components.common.page.upload.chunkhashing')
+    return
+  }
+  if (status === TaktFileChunkUploadStatus.Merging) {
+    chunkUploadStatusText.value = t('components.common.page.upload.chunkmerging')
+    return
+  }
+  if (status === TaktFileChunkUploadStatus.Paused) {
+    chunkUploadStatusText.value = t('components.common.page.upload.chunkpaused')
+    return
+  }
+  if (total > 0) {
+    chunkUploadStatusText.value = t('components.common.page.upload.chunkuploading', {
+      uploaded,
+      total,
+    })
+  }
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importFile(file, sheetName)
+/** 整文件/分片上传（大文件自动分片+断点续传） */
+async function handleUploadChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+  if (!file) return
+
+  if (!shouldUseTaktFileChunkUpload(file.size)) {
+    uploadLoading.value = true
+    try {
+      await uploadFile(file)
+      message.success(t('common.feedback.action.success', { action: t('common.page.button.upload') }))
+      loadData()
+    } finally {
+      uploadLoading.value = false
+    }
+    return
+  }
+
+  chunkUploadFileName.value = file.name
+  chunkUploadPercent.value = 0
+  chunkUploadVisible.value = true
+  chunkUploadLoading.value = true
+  const uploader = new TaktFileChunkUploader(file, {
+    onProgress: (progress) => {
+      chunkUploadPercent.value = progress.percent
+      updateChunkUploadStatusText(
+        progress.status,
+        progress.uploadedChunks,
+        progress.totalChunks
+      )
+    },
+  })
+  chunkUploaderRef.value = uploader
+  try {
+    await uploader.start()
+    message.success(t('components.common.page.upload.fileuploadsuccess', { name: file.name }))
+    chunkUploadVisible.value = false
+    loadData()
+  } catch (error: unknown) {
+    if (error instanceof TaktFileChunkUploadPausedError) {
+      chunkUploadLoading.value = false
+      return
+    }
+    if (chunkUploadStatus.value !== TaktFileChunkUploadStatus.Cancelled) {
+      const errMsg = error instanceof Error ? error.message : String(error)
+      message.error(t('components.common.page.upload.fileuploadfail', { name: file.name }) + (errMsg ? `: ${errMsg}` : ''))
+    }
+    chunkUploadVisible.value = false
+  } finally {
+    if (chunkUploadStatus.value !== TaktFileChunkUploadStatus.Paused) {
+      chunkUploadLoading.value = false
+      chunkUploaderRef.value = null
+    }
+  }
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
-  loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+/** 暂停分片上传 */
+function handleChunkUploadPause() {
+  chunkUploaderRef.value?.pause()
 }
 
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
+/** 恢复分片上传 */
+async function handleChunkUploadResume() {
+  const uploader = chunkUploaderRef.value
+  if (!uploader) return
+  chunkUploadLoading.value = true
+  try {
+    await uploader.resume()
+    message.success(t('components.common.page.upload.fileuploadsuccess', { name: chunkUploadFileName.value }))
+    chunkUploadVisible.value = false
+    loadData()
+  } catch (error: unknown) {
+    if (error instanceof TaktFileChunkUploadPausedError) {
+      return
+    }
+    const errMsg = error instanceof Error ? error.message : String(error)
+    message.error(t('components.common.page.upload.fileuploadfail', { name: chunkUploadFileName.value }) + (errMsg ? `: ${errMsg}` : ''))
+  } finally {
+    if (chunkUploadStatus.value !== TaktFileChunkUploadStatus.Paused) {
+      chunkUploadLoading.value = false
+      chunkUploaderRef.value = null
+    }
+  }
+}
+
+/** 取消分片上传 */
+async function handleChunkUploadCancel() {
+  await chunkUploaderRef.value?.cancel()
+  chunkUploadVisible.value = false
+  chunkUploaderRef.value = null
+}
+
+/** 下载文件 */
+async function handleDownload(record: File) {
+  const id = getFileId(record)
+  if (!id) return
+  const blob = await downloadFile(id)
+  const fileName = getFileField(record, 'fileOriginalName') || getFileField(record, 'fileName') || `file-${id}`
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = fileName
+  link.click()
+  URL.revokeObjectURL(url)
 }
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {

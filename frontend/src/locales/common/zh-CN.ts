@@ -26,6 +26,7 @@ export default {
     signalr: {
       connectFail: '实时消息连接失败',
       onlineNotify: '实时消息连接已恢复',
+      newMessage: '新消息',
     },
     theme: {
       switch: '切换主题',

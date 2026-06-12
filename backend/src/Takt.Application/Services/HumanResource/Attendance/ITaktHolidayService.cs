@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：ITaktHolidayService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：假日信息应用服务接口
 // 
@@ -94,5 +94,13 @@ public interface ITaktHolidayService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportHolidayAsync(TaktHolidayQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 获取服务器当日、指定租户与公司下的假日主题色与问候信息
+    /// </summary>
+    /// <param name="tenantCode">租户编码（登录页须显式传入，与 X-Tenant-Code 一致）</param>
+    /// <param name="companyCode">公司编码（登录预览语言接口解析的默认公司）</param>
+    /// <returns>假日主题 DTO；无匹配记录时 IsHolidayToday 为 false、HolidayTheme 为空</returns>
+    Task<TaktHolidayThemeDto> GetHolidayThemeAsync(string tenantCode, string companyCode);
 
 }

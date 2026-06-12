@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：shift-schedule.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -59,7 +59,7 @@ export interface ShiftSchedule extends CompanyDtoBase {
   scheduleDate: string;
 
   /**
-   * 班次 ID（<see cref="TaktWorkShift"/>）
+   * 班次 ID（TaktWorkShift）
    */
   shiftId: string;
 
@@ -119,7 +119,7 @@ export interface ShiftScheduleQuery extends TaktPagedQuery {
   scheduleDateEnd?: string;
 
   /**
-   * 班次 ID（<see cref="TaktWorkShift"/>）
+   * 班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -193,7 +193,7 @@ export interface ShiftScheduleCreate {
   scheduleDate: string;
 
   /**
-   * 班次 ID（<see cref="TaktWorkShift"/>）
+   * 班次 ID（TaktWorkShift）
    */
   shiftId: string;
 
@@ -262,7 +262,7 @@ export interface ShiftScheduleTemplate {
   employeeId?: string;
 
   /**
-   * 班次 ID（<see cref="TaktWorkShift"/>）
+   * 班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -321,7 +321,7 @@ export interface ShiftScheduleImport {
   employeeId?: string;
 
   /**
-   * 班次 ID（<see cref="TaktWorkShift"/>）
+   * 班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -380,7 +380,7 @@ export interface ShiftScheduleExport {
   scheduleDate: string;
 
   /**
-   * 班次 ID（<see cref="TaktWorkShift"/>）
+   * 班次 ID（TaktWorkShift）
    */
   shiftId: string;
 

@@ -29,6 +29,7 @@ import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 import { STORE_I18N_TIP_SESSION_EXPIRED } from '@/utils/takt-store-i18n';
 import { EventBus, emitNotification } from '@/utils/event-bus';
 import { ensureValidAccessToken, refreshOAuthTokens } from '@/utils/oauth';
+import { isLogoutInProgress } from '@/bootstrap/takt-logout-flow';
 
 const requestLogger = createLogger('request');
 
@@ -234,9 +235,16 @@ function isTenantDatabaseErrorMessage(message: string): boolean {
  * @returns {Promise<unknown>} reject 或刷新成功后重试的响应
  */
 function rejectFromAxiosError(error: unknown): Promise<unknown> {
+  if (isLogoutInProgress()) {
+    return Promise.reject(error);
+  }
+
   const axiosError = toAxiosError(error);
   if (!axiosError) {
     if (error instanceof Error) {
+      if (error.message === 'logout in progress') {
+        return Promise.reject(error);
+      }
       requestLogger.warn('请求配置错误', { action: 'config' }, error);
       emitNotification('error', resolveHttpErrorMessage(error));
     }
@@ -381,6 +389,10 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    if (isLogoutInProgress()) {
+      return Promise.reject(new Error('logout in progress'));
+    }
+
     const userStore = useUserStore();
     const tenantStore = useTenantStore();
 

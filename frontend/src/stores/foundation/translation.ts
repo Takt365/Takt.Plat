@@ -13,7 +13,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import i18n, { mergeDynamicLocaleMessages } from '@/locales';
-import { getTranslationMessages } from '@/api/foundation/translation-message';
+import { getTranslationMessages } from '@/api/foundation/translation';
 import { resolveTaktCultureCode } from '@/utils/takt-locale-sync';
 import { useUserStore } from '@/stores/identity/user';
 import { useTenantStore } from '@/stores/identity/tenant';

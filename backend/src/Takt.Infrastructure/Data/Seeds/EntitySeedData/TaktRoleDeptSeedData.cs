@@ -48,7 +48,7 @@ public class TaktRoleDeptSeedData : ITaktSeedDataCoordinator
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var configuredCompanyCodes = configuration.RequireDatabase().CompanyCodes;
         var companies = await companyRepository.GetListAsync(
-            c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+            c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         if (companies == null || companies.Count == 0)
         {
             TaktLogger.Warning("租户 {TenantCode} 未找到启用的公司，跳过角色-部门关联种子数据初始化", tenantCode);

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：ITaktLeaveService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：请假信息应用服务接口
 // 
@@ -101,5 +101,12 @@ public interface ITaktLeaveService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportLeaveAsync(TaktLeaveQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 提交请假审批（发起 Leave 流程并关联 FlowInstanceId）
+    /// </summary>
+    /// <param name="id">请假 ID</param>
+    /// <returns>请假 DTO</returns>
+    Task<TaktLeaveDto> SubmitLeaveForApprovalAsync(long id);
 
 }

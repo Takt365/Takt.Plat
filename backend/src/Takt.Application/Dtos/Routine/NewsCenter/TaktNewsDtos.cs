@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：News 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNews 生成，请按需审阅）
 // 
@@ -44,7 +44,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public TaktNewsCategory NewsCategory { get; set; }
+    public int NewsCategory { get; set; }
 
     /// <summary>
     /// 新闻标题
@@ -74,12 +74,12 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 是否推荐
     /// </summary>
-    public TaktYesNo IsRecommended { get; set; }
+    public int IsRecommended { get; set; }
 
     /// <summary>
     /// 生效时间
@@ -122,12 +122,6 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public int AttachmentCount { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 流程实例 名称（填充字段）
     /// </summary>
     public string? FlowInstanceName { get; set; }
@@ -167,7 +161,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     /// <summary>
     /// 新闻状态
     /// </summary>
-    public TaktNewsStatus NewsStatus { get; set; }
+    public int NewsStatus { get; set; }
 
     /// <summary>
     /// 新闻附件列表（主子表关系）
@@ -235,7 +229,7 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public TaktNewsCategory? NewsCategory { get; set; }
+    public int? NewsCategory { get; set; }
 
     /// <summary>
     /// 新闻标题
@@ -265,12 +259,12 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo? IsTop { get; set; }
+    public int? IsTop { get; set; }
 
     /// <summary>
     /// 是否推荐
     /// </summary>
-    public TaktYesNo? IsRecommended { get; set; }
+    public int? IsRecommended { get; set; }
 
     /// <summary>
     /// 生效时间（范围查询-开始）
@@ -368,12 +362,12 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// <summary>
     /// 新闻状态
     /// </summary>
-    public TaktNewsStatus? NewsStatus { get; set; }
+    public int? NewsStatus { get; set; }
 
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -461,7 +455,7 @@ public class TaktNewsCreateDto
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public TaktNewsCategory NewsCategory { get; set; }
+    public int NewsCategory { get; set; }
 
     /// <summary>
     /// 新闻标题
@@ -493,12 +487,12 @@ public class TaktNewsCreateDto
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 是否推荐
     /// </summary>
-    public TaktYesNo IsRecommended { get; set; }
+    public int IsRecommended { get; set; }
 
     /// <summary>
     /// 生效时间
@@ -582,7 +576,7 @@ public class TaktNewsCreateDto
     /// <summary>
     /// 新闻状态
     /// </summary>
-    public TaktNewsStatus NewsStatus { get; set; }
+    public int NewsStatus { get; set; }
 
     /// <summary>
     /// 新闻附件列表（主子表关系）（子表，级联保存）
@@ -667,7 +661,7 @@ public class TaktNewsStatusDto
     /// 新闻状态
     /// </summary>
     [Required(ErrorMessage = "新闻状态不能为空")]
-    public TaktNewsStatus NewsStatus { get; set; }
+    public int NewsStatus { get; set; }
 }
 
 // ========================================
@@ -721,7 +715,7 @@ public class TaktNewsTemplateDto
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public TaktNewsCategory? NewsCategory { get; set; }
+    public int? NewsCategory { get; set; }
 
     /// <summary>
     /// 新闻标题
@@ -751,12 +745,12 @@ public class TaktNewsTemplateDto
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo? IsTop { get; set; }
+    public int? IsTop { get; set; }
 
     /// <summary>
     /// 是否推荐
     /// </summary>
-    public TaktYesNo? IsRecommended { get; set; }
+    public int? IsRecommended { get; set; }
 
     /// <summary>
     /// 阅读次数
@@ -813,7 +807,7 @@ public class TaktNewsImportDto
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public TaktNewsCategory? NewsCategory { get; set; }
+    public int? NewsCategory { get; set; }
 
     /// <summary>
     /// 新闻标题
@@ -843,12 +837,12 @@ public class TaktNewsImportDto
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo? IsTop { get; set; }
+    public int? IsTop { get; set; }
 
     /// <summary>
     /// 是否推荐
     /// </summary>
-    public TaktYesNo? IsRecommended { get; set; }
+    public int? IsRecommended { get; set; }
 
     /// <summary>
     /// 阅读次数
@@ -901,7 +895,7 @@ public class TaktNewsExportDto
     /// <summary>
     /// 新闻分类
     /// </summary>
-    public TaktNewsCategory NewsCategory { get; set; }
+    public int NewsCategory { get; set; }
 
     /// <summary>
     /// 新闻标题
@@ -931,12 +925,12 @@ public class TaktNewsExportDto
     /// <summary>
     /// 是否置顶
     /// </summary>
-    public TaktYesNo IsTop { get; set; }
+    public int IsTop { get; set; }
 
     /// <summary>
     /// 是否推荐
     /// </summary>
-    public TaktYesNo IsRecommended { get; set; }
+    public int IsRecommended { get; set; }
 
     /// <summary>
     /// 生效时间
@@ -1019,7 +1013,7 @@ public class TaktNewsExportDto
     /// <summary>
     /// 新闻状态
     /// </summary>
-    public TaktNewsStatus NewsStatus { get; set; }
+    public int NewsStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

@@ -53,7 +53,7 @@ public class TaktUserTenantSeedData : ITaktSeedDataCoordinator
         int updateCount = 0;
 
         var users = await userRepository.GetListAsync(
-            u => u.TenantCode == tenantCode && u.UserStatus == TaktCommonStatus.Enabled);
+            u => u.TenantCode == tenantCode && u.UserStatus == 1);
 
         foreach (var user in users)
         {
@@ -92,14 +92,14 @@ public class TaktUserTenantSeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 UserId = userId,
-                IsDefault = isDefault ? TaktYesNo.Yes : TaktYesNo.No,
+                IsDefault = isDefault ? 1 : 0,
             });
             return (1, 0);
         }
 
-        if (existing.IsDefault != (isDefault ? TaktYesNo.Yes : TaktYesNo.No))
+        if (existing.IsDefault != (isDefault ? 1 : 0))
         {
-            existing.IsDefault = isDefault ? TaktYesNo.Yes : TaktYesNo.No;
+            existing.IsDefault = isDefault ? 1 : 0;
             await userTenantRepository.UpdateAsync(existing);
             return (0, 1);
         }

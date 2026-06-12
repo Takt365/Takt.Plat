@@ -25,11 +25,13 @@
       delete-permission="routine:announcement:delete"
       import-permission="routine:announcement:import"
       export-permission="routine:announcement:export"
+      start-flow-permission="routine:announcement:update"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
+      :show-start-flow="true"
       :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
@@ -41,10 +43,13 @@
       :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
+      :start-flow-disabled="submitApprovalDisabled"
+      :start-flow-loading="submitApprovalLoading"
       :refresh-loading="loading"
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
+      @start-flow="handleSubmitApproval"
       @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
@@ -436,7 +441,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import AnnouncementForm from './components/announcement-form.vue'
-import { getAnnouncementList, getAnnouncementById, createAnnouncement, updateAnnouncement, deleteAnnouncementById, deleteAnnouncementBatch, getAnnouncementTemplate, importAnnouncement, exportAnnouncement } from '@/api/routine/announcement/announcement'
+import { getAnnouncementList, getAnnouncementById, createAnnouncement, updateAnnouncement, deleteAnnouncementById, deleteAnnouncementBatch, getAnnouncementTemplate, importAnnouncement, exportAnnouncement, submitAnnouncementForApproval } from '@/api/routine/announcement/announcement'
 import type { Announcement, AnnouncementQuery, AnnouncementCreate, AnnouncementUpdate } from '@/types/routine/announcement/announcement'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -559,7 +564,16 @@ const entityIdName = 'announcementId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
+/** 提交审批：须单行且草稿状态 */
+const submitApprovalDisabled = computed(() => {
+  if (selectedRows.value.length !== 1) {
+    return true
+  }
+  const status = Number(getAnnouncementField(selectedRows.value[0], 'announcementStatus'))
+  return status !== 0
+})
+/** 提交审批 loading */
+const submitApprovalLoading = ref(false)
 
 /** 页面挂载后加载分页列表 */
 onMounted(() => {
@@ -822,6 +836,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -998,6 +1015,28 @@ async function handleDeleteOne(record: Announcement) {
     }
   })
 }
+/** 提交公告审批（发起工作流） */
+async function handleSubmitApproval() {
+  if (submitApprovalDisabled.value || selectedRows.value.length !== 1) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.startflow'), entity: t('entity.announcement._self') }))
+    return
+  }
+  const id = getAnnouncementId(selectedRows.value[0])
+  if (!id) {
+    return
+  }
+  submitApprovalLoading.value = true
+  try {
+    await submitAnnouncementForApproval(id)
+    message.success(t('common.feedback.updated', { target: t('entity.announcement._self') }))
+    await loadData()
+  } catch (err: unknown) {
+    message.error(err instanceof Error ? err.message : t('common.feedback.failed'))
+  } finally {
+    submitApprovalLoading.value = false
+  }
+}
+
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {

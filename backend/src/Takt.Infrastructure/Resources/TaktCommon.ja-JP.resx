@@ -109,13 +109,13 @@
   <data name="common.validation.not.found" xml:space="preserve">
     <value>{field}が見つかりません</value>
   </data>
-  <data name="common.validation.not.found.or.expired" xml:space="preserve">
+  <data name="common.validation.missing.or.expired" xml:space="preserve">
     <value>{field}が存在しないか、期限切れです</value>
   </data>
   <data name="common.validation.expired" xml:space="preserve">
     <value>{field}の有効期限が切れています</value>
   </data>
-  <data name="common.validation.invalid.format" xml:space="preserve">
+  <data name="common.validation.format.invalid" xml:space="preserve">
     <value>{field}の形式が正しくありません</value>
   </data>
   <data name="common.validation.too.fast.retry" xml:space="preserve">
@@ -124,7 +124,7 @@
   <data name="common.validation.verify.failed" xml:space="preserve">
     <value>検証に合格しませんでした</value>
   </data>
-  <data name="common.field.captcha" xml:space="preserve">
+  <data name="common.field.captcha.label" xml:space="preserve">
     <value>認証コード</value>
   </data>
   <data name="common.field.tenant.code" xml:space="preserve">

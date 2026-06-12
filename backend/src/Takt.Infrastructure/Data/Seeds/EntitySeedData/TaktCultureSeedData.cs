@@ -100,8 +100,8 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
                 LanguageName = seed.LanguageName,
                 NativeName = seed.NativeName,
                 Icon = seed.Icon,
-                IsDefault = seed.IsDefault ? TaktYesNo.Yes : TaktYesNo.No,
-                LanguageStatus = TaktCommonStatus.Enabled,
+                IsDefault = seed.IsDefault ? 1 : 0,
+                LanguageStatus = 1,
                 SortOrder = seed.SortOrder,
             };
             await repository.CreateAsync(culture);
@@ -111,8 +111,8 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
         culture.LanguageName = seed.LanguageName;
         culture.NativeName = seed.NativeName;
         culture.Icon = seed.Icon;
-        culture.IsDefault = seed.IsDefault ? TaktYesNo.Yes : TaktYesNo.No;
-        culture.LanguageStatus = TaktCommonStatus.Enabled;
+        culture.IsDefault = seed.IsDefault ? 1 : 0;
+        culture.LanguageStatus = 1;
         culture.SortOrder = seed.SortOrder;
 
         await repository.UpdateAsync(culture);

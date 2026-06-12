@@ -27,11 +27,11 @@ namespace Takt.Infrastructure.Middleware;
 /// <remarks>
 /// <para>在每个 HTTP 请求生命周期内完成以下工作：</para>
 /// <list type="number">
-/// <item><description>生成短 <c>RequestId</c> 并写入 <see cref="HttpContext.Items"/>，供下游关联日志。</description></item>
-/// <item><description>基于租户/公司请求头、用户 Claims、客户端 IP 等构建 <see cref="TaktLogContext"/>，并通过 <see cref="TaktLogger.BeginScope"/> 注入 Serilog 作用域。</description></item>
-/// <item><description>记录请求开始日志；SignalR Hub 协商/WebSocket 等走 <see cref="TaktSignalRLogging"/> 专用格式。</description></item>
+/// <item><description>生成短 <c>RequestId</c> 并写入 HttpContext.Items，供下游关联日志。</description></item>
+/// <item><description>基于租户/公司请求头、用户 Claims、客户端 IP 等构建 TaktLogContext，并通过 TaktLogger.BeginScope 注入 Serilog 作用域。</description></item>
+/// <item><description>记录请求开始日志；SignalR Hub 协商/WebSocket 等走 TaktSignalRLogging 专用格式。</description></item>
 /// <item><description>在 <c>finally</c> 中统计耗时，按状态码与阈值分级输出（5xx Error、4xx Warning、&gt;1s 慢请求 Warning、Hub 完成日志、其余 Debug）。</description></item>
-/// <item><description>调用 <see cref="TaktSqlSugarAuditAop.TryPersistOperLog"/> 将符合条件的写操作 API 持久化到 <c>TaktOperLog</c>（Statistics.Logging 模块 API 与日志表 CUD 由审计 AOP 动态排除）。</description></item>
+/// <item><description>调用 TaktSqlSugarAuditAop.TryPersistOperLog 将符合条件的写操作 API 持久化到 <c>TaktOperLog</c>（Statistics.Logging 模块 API 与日志表 CUD 由审计 AOP 动态排除）。</description></item>
 /// </list>
 /// </remarks>
 public class TaktLoggingMiddleware
@@ -52,7 +52,7 @@ public class TaktLoggingMiddleware
     private readonly RequestDelegate _next;
 
     /// <summary>
-    /// 初始化 <see cref="TaktLoggingMiddleware"/> 实例
+    /// 初始化 TaktLoggingMiddleware 实例
     /// </summary>
     /// <param name="next">ASP.NET Core 请求管道中的下一个中间件</param>
     public TaktLoggingMiddleware(RequestDelegate next)
@@ -183,7 +183,7 @@ public class TaktLoggingMiddleware
     /// <param name="context">当前 HTTP 请求上下文</param>
     /// <returns>
     /// POST/PUT/PATCH 且存在请求体时的 UTF-8 文本；无正文或非写方法时返回 <see langword="null"/>。
-    /// 读取后会将 <see cref="HttpRequest.Body"/> 位置重置为 0，不影响后续模型绑定。
+    /// 读取后会将 HttpRequest.Body 位置重置为 0，不影响后续模型绑定。
     /// </returns>
     private static async Task<string?> ReadRequestBodyAsync(HttpContext context)
     {
@@ -234,7 +234,7 @@ public class TaktLoggingMiddleware
     /// <summary>
     /// 判断当前请求是否为 SignalR Hub 相关 HTTP 流量（协商、WebSocket 升级等）
     /// </summary>
-    /// <param name="path">请求路径（通常为 <see cref="PathString.Value"/>）</param>
+    /// <param name="path">请求路径（通常为 PathString.Value）</param>
     /// <returns>路径包含 <c>/hubs/</c>（不区分大小写）时为 <see langword="true"/></returns>
     private static bool IsSignalRHubRequest(string path)
     {
@@ -245,10 +245,10 @@ public class TaktLoggingMiddleware
     /// 根据 HTTP 上下文构建单次请求的结构化日志上下文
     /// </summary>
     /// <param name="context">当前 HTTP 请求上下文</param>
-    /// <param name="requestId">本次请求关联 ID（8 位十六进制，写入 <see cref="TaktLogContext.RequestId"/>）</param>
+    /// <param name="requestId">本次请求关联 ID（8 位十六进制，写入 TaktLogContext.RequestId）</param>
     /// <returns>
     /// 包含模块 <c>request</c>、动作 <c>http</c>、路由、客户端 IP、
-    /// <c>X-Tenant-Code</c> / <c>X-Company-Code</c> 请求头及当前用户标识的 <see cref="TaktLogContext"/>
+    /// <c>X-Tenant-Code</c> / <c>X-Company-Code</c> 请求头及当前用户标识的 TaktLogContext
     /// </returns>
     private static TaktLogContext BuildRequestContext(HttpContext context, string requestId)
     {

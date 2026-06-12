@@ -22,8 +22,8 @@ export const LOGIN_FIELD_TENANT_CODE_KEY = 'common.field.tenant.code';
 /** 登录凭证（common.field.login.credentials） */
 export const LOGIN_FIELD_CREDENTIALS_KEY = 'common.field.login.credentials';
 
-/** 验证码（common.field.captcha） */
-export const LOGIN_FIELD_CAPTCHA_KEY = 'common.field.captcha';
+/** 验证码（common.field.captcha.label） */
+export const LOGIN_FIELD_CAPTCHA_KEY = 'common.field.captcha.label';
 
 /** 用户名或邮箱（common.field.username.or.email） */
 export const LOGIN_FIELD_USERNAME_OR_EMAIL_KEY = 'common.field.username.or.email';

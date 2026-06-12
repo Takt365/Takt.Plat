@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-order.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -154,7 +154,7 @@ export interface ServiceOrder extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 服务工单列表（外键在子表 <see cref="TaktServiceTicket.ServiceOrderId"/>） （子表：TaktServiceTicket）
+   * 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId） （子表：TaktServiceTicket）
    */
   tickets?: ServiceTicket[];
 
@@ -478,7 +478,7 @@ export interface ServiceOrderCreate {
   sortOrder: number;
 
   /**
-   * 服务工单列表（外键在子表 <see cref="TaktServiceTicket.ServiceOrderId"/>）（子表，级联保存）
+   * 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
    */
   tickets?: ServiceTicketCreate[];
 

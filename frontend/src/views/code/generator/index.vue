@@ -481,6 +481,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /**
  * 查询：重置到第 1 页并加载
  */

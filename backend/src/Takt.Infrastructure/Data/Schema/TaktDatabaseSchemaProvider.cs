@@ -22,12 +22,12 @@ namespace Takt.Infrastructure.Data.Schema;
 
 /// <summary>
 /// 代码生成工作流数据库元数据提供者
-/// 实现 <see cref="ITaktDatabaseSchemaProvider"/>，通过 SqlSugar 对租户业务库做 Schema introspect
-/// 连接来源：<see cref="TaktConfigurationExtensions.GetTenantConnections"/>（Database:TenantCodes 配置节）
-/// 实体类型扫描：Takt.Domain 中继承 <see cref="TaktTenantEntityBase"/>、<see cref="TaktCompanyEntityBase"/>、
-/// <see cref="TaktApprovalEntityBase"/> 的非抽象类，供 CodeFirst 建表与代码生成选型
-/// 消费方：<see cref="Takt.Application.Services.Code.Database.TaktDatabaseInfoService"/>、
-/// <see cref="Takt.Application.Services.Code.Generator.GenEngine.TaktGenWorkflowService"/>
+/// 实现 ITaktDatabaseSchemaProvider，通过 SqlSugar 对租户业务库做 Schema introspect
+/// 连接来源：TaktConfigurationExtensions.GetTenantConnections（Database:TenantCodes 配置节）
+/// 实体类型扫描：Takt.Domain 中继承 TaktTenantEntityBase、TaktCompanyEntityBase、
+/// TaktApprovalEntityBase 的非抽象类，供 CodeFirst 建表与代码生成选型
+/// 消费方：TaktDatabaseInfoService、
+/// TaktGenWorkflowService
 /// </summary>
 public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 {
@@ -58,7 +58,7 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 
     /// <summary>
     /// 获取可 introspect 的租户业务库列表
-    /// 从 <see cref="TaktConfigurationExtensions.GetTenantConnections"/> 解析连接，DisplayName 取自连接串 Database= 段
+    /// 从 TaktConfigurationExtensions.GetTenantConnections 解析连接，DisplayName 取自连接串 Database= 段
     /// </summary>
     /// <returns>租户编码与数据库展示名摘要列表</returns>
     public Task<IReadOnlyList<TaktDatabaseInfo>> GetDatabasesAsync()
@@ -89,7 +89,7 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 
     /// <summary>
     /// 获取指定表的列元数据
-    /// 通过 SqlSugar 读取列定义并映射为 <see cref="TaktDatabaseTableColumnInfo"/>
+    /// 通过 SqlSugar 读取列定义并映射为 TaktDatabaseTableColumnInfo
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="tableName">物理表名（大小写不敏感由数据库/SqlSugar 决定）</param>
@@ -121,7 +121,7 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 
     /// <summary>
     /// 按实体类型在指定租户库 CodeFirst 建表
-    /// 优先从启动时扫描的 <see cref="EntityTypes"/> 解析类型，否则尝试 Type.GetType；建库后 InitTables 单表初始化
+    /// 优先从启动时扫描的 EntityTypes 解析类型，否则尝试 Type.GetType；建库后 InitTables 单表初始化
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="entityTypeFullName">实体类型全名（如 Takt.Domain.Entities.Identity.TaktUser）</param>
@@ -142,8 +142,8 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 
     /// <summary>
     /// 获取 Domain 已加载的实体基类派生类型全名
-    /// 范围：继承 <see cref="TaktTenantEntityBase"/>、<see cref="TaktCompanyEntityBase"/>、
-    /// <see cref="TaktApprovalEntityBase"/> 的非抽象类，按全名字典序
+    /// 范围：继承 TaktTenantEntityBase、TaktCompanyEntityBase、
+    /// TaktApprovalEntityBase 的非抽象类，按全名字典序
     /// </summary>
     /// <returns>可用于 CodeFirst 建表与代码生成选型的类型全名列表</returns>
     public Task<IReadOnlyList<string>> GetAvailableEntityTypeFullNamesAsync()

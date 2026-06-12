@@ -17,6 +17,7 @@ import type {
 } from '@/types/common';
 import type {
   DictData,
+  DictDataAll,
   DictDataCreate,
   DictDataSort,
   DictDataUpdate
@@ -206,4 +207,19 @@ export function exportDictData(
     },
     responseType: 'blob',
   });
+}
+
+// ========================================
+// 租户全量字典
+// ========================================
+
+/**
+ * 获取当前租户下全部字典数据（扁平列表，含 dictTypeCode）
+ * @returns {Promise<TaktSelectOption[]>} 字典项列表
+ */
+export function getDictDataAll(): Promise<TaktSelectOption[]> {
+  return request<DictDataAll>({
+    url: `${DICT_DATA_API_BASE}/all`,
+    method: 'get',
+  }).then((dto) => dto.items ?? []);
 }

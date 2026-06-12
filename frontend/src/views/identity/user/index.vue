@@ -602,6 +602,9 @@ const loadData = async () => {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 // 查询
 const handleSearch = () => {
   currentPage.value = 1
@@ -864,7 +867,7 @@ const handleUnlock = (record: User) => {
   }
   const userName = getUsername(record) || t('common.tip.this.target', { target: t('entity.user._self') })
   Modal.confirm({
-    title: t('common.tip.confirm.action.title', { action: t('common.page.button.unlock') }),
+    title: t('common.tip.confirm.title', { action: t('common.page.button.unlock') }),
     content: t('common.tip.confirm.entity.action', { action: t('common.page.button.unlock'), entity: t('entity.user._self'), name: userName }),
     okText: t('common.page.button.unlock'),
     cancelText: t('common.page.button.cancel'),

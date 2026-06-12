@@ -1,0 +1,485 @@
+<!-- ======================================== -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
+<!-- 命名空间：@/views/code/database/table-data-clone -->
+<!-- 文件名称：index.vue -->
+<!-- 功能描述：跨租户整表克隆页（一次 1~5 张表；备份窗口确认后执行） -->
+<!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
+<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
+<!-- ======================================== -->
+
+<template>
+  <div class="p-4 flex flex-col gap-4 min-h-0">
+    <a-typography-title :level="4" class="!mb-0">
+      {{ t('code.database.tableDataClone.page.title') }}
+    </a-typography-title>
+    <a-typography-text type="secondary">
+      {{ t('code.database.tableDataClone.page.subtitle') }}
+    </a-typography-text>
+
+    <a-card :title="t('code.database.tableDataClone.page.section.scope')">
+      <a-row :gutter="16">
+        <a-col :xs="24" :md="12">
+          <a-form-item :label="t('code.database.tableDataClone.page.field.sourceTenant')" required>
+            <a-select
+              v-model:value="form.sourceTenantCode"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.tableDataClone.page.field.sourceTenant') })"
+              :loading="databaseInfoLoading"
+              show-search
+              option-filter-prop="label"
+              class="w-full"
+              @change="handleSourceTenantChange"
+            >
+              <a-select-option
+                v-for="item in databaseInfoList"
+                :key="item.tenantCode"
+                :value="item.tenantCode"
+                :label="`${item.displayName} (${item.tenantCode})`"
+              >
+                {{ item.displayName }} ({{ item.tenantCode }})
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :md="12">
+          <a-form-item :label="t('code.database.tableDataClone.page.field.targetTenant')" required>
+            <a-select
+              v-model:value="form.targetTenantCode"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.tableDataClone.page.field.targetTenant') })"
+              :loading="databaseInfoLoading"
+              show-search
+              option-filter-prop="label"
+              class="w-full"
+              @change="handleTargetTenantChange"
+            >
+              <a-select-option
+                v-for="item in databaseInfoList"
+                :key="`target-${item.tenantCode}`"
+                :value="item.tenantCode"
+                :label="`${item.displayName} (${item.tenantCode})`"
+              >
+                {{ item.displayName }} ({{ item.tenantCode }})
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :md="12">
+          <a-form-item :label="t('code.database.tableDataClone.page.field.sourceDatabase')">
+            <a-input :value="sourceDatabaseName" disabled />
+          </a-form-item>
+        </a-col>
+        <a-col :xs="24" :md="12">
+          <a-form-item :label="t('code.database.tableDataClone.page.field.targetDatabase')">
+            <a-input :value="targetDatabaseName" disabled />
+          </a-form-item>
+        </a-col>
+      </a-row>
+    </a-card>
+
+    <a-card :title="t('code.database.tableDataClone.page.section.tables')">
+      <div class="flex flex-col gap-3">
+        <a-table
+          :columns="mappingColumns"
+          :data-source="tableMappings"
+          :pagination="false"
+          :row-key="(row: TableMappingRow) => row.clientKey"
+          size="small"
+          bordered
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'sourceTableName'">
+              <a-select
+                v-model:value="record.sourceTableName"
+                :placeholder="t('code.database.tableDataClone.page.field.sourceTable')"
+                :disabled="!form.sourceTenantCode"
+                :loading="isTablesLoading(form.sourceTenantCode)"
+                show-search
+                option-filter-prop="label"
+                class="w-full"
+              >
+                <a-select-option
+                  v-for="tbl in sourceTables"
+                  :key="tbl.tableName"
+                  :value="tbl.tableName"
+                  :label="tbl.tableName"
+                >
+                  {{ tbl.tableName }}
+                </a-select-option>
+              </a-select>
+            </template>
+            <template v-else-if="column.key === 'targetTableName'">
+              <a-select
+                v-model:value="record.targetTableName"
+                :placeholder="t('code.database.tableDataClone.page.field.targetTable')"
+                :disabled="!form.targetTenantCode"
+                :loading="isTablesLoading(form.targetTenantCode)"
+                show-search
+                option-filter-prop="label"
+                class="w-full"
+              >
+                <a-select-option
+                  v-for="tbl in targetTables"
+                  :key="tbl.tableName"
+                  :value="tbl.tableName"
+                  :label="tbl.tableName"
+                >
+                  {{ tbl.tableName }}
+                </a-select-option>
+              </a-select>
+            </template>
+            <template v-else-if="column.key === 'action'">
+              <a-button
+                type="link"
+                danger
+                :disabled="tableMappings.length <= 1"
+                @click="handleRemoveMappingRow(record.clientKey)"
+              >
+                {{ t('code.database.tableDataClone.page.tableMapping.removeRow') }}
+              </a-button>
+            </template>
+          </template>
+        </a-table>
+        <div class="flex items-center gap-3">
+          <a-button
+            :disabled="tableMappings.length >= MAX_TABLE_COUNT"
+            @click="handleAddMappingRow"
+          >
+            {{ t('code.database.tableDataClone.page.tableMapping.addRow') }}
+          </a-button>
+          <a-typography-text type="secondary">
+            {{ t('code.database.tableDataClone.page.tableMapping.maxHint') }}
+          </a-typography-text>
+        </div>
+      </div>
+    </a-card>
+
+    <a-card :title="t('code.database.tableDataClone.page.section.options')">
+      <a-checkbox v-model:checked="form.preserveIdentityValues">
+        {{ t('code.database.tableDataClone.page.field.preserveIdentity') }}
+      </a-checkbox>
+      <div class="mt-4">
+        <a-button
+          v-permission="'code:database:table:preview'"
+          type="primary"
+          :loading="previewLoading"
+          :disabled="!canSubmitForm"
+          @click="handleOpenBackupWindow"
+        >
+          {{ t('code.database.tableDataClone.page.action.startClone') }}
+        </a-button>
+      </div>
+    </a-card>
+
+    <a-card
+      v-if="cloneResult"
+      :title="t('code.database.tableDataClone.page.section.result')"
+    >
+      <a-descriptions bordered :column="3" size="small" class="mb-4">
+        <a-descriptions-item :label="t('code.database.tableDataClone.page.result.tableCount')">
+          {{ cloneResult.tableCount }}
+        </a-descriptions-item>
+        <a-descriptions-item :label="t('code.database.tableDataClone.page.result.totalSourceRows')">
+          {{ cloneResult.totalSourceRowCount }}
+        </a-descriptions-item>
+        <a-descriptions-item :label="t('code.database.tableDataClone.page.result.totalClonedRows')">
+          {{ cloneResult.totalClonedRowCount }}
+        </a-descriptions-item>
+      </a-descriptions>
+      <a-table
+        :columns="resultColumns"
+        :data-source="cloneResult.tables"
+        :pagination="false"
+        row-key="targetTableName"
+        size="small"
+        bordered
+      />
+    </a-card>
+
+    <takt-modal
+      v-model:open="backupModalVisible"
+      :title="t('code.database.tableDataClone.page.backupModalTitle')"
+      :use-viewport-size="false"
+      width="720px"
+      @cancel="handleCloseBackupModal"
+    >
+      <div v-if="backupPreview" class="flex flex-col gap-3">
+        <a-alert type="warning" :message="backupPreview.summaryMessage" show-icon />
+        <a-checkbox v-model:checked="backupConfirmed">
+          {{ backupPreview.confirmHint }}
+        </a-checkbox>
+        <a-collapse>
+          <a-collapse-panel
+            v-for="item in backupPreview.targets"
+            :key="item.targetTableName"
+            :header="item.targetTableName"
+          >
+            <a-alert type="warning" :message="item.warningMessage" show-icon class="mb-2" />
+            <a-typography-paragraph>{{ item.backupDescription }}</a-typography-paragraph>
+            <a-typography-paragraph>{{ item.clearDescription }}</a-typography-paragraph>
+            <a-descriptions bordered size="small" :column="1">
+              <a-descriptions-item :label="t('code.database.tableDataClone.page.result.targetRows')">
+                {{ item.targetRowCount }}
+              </a-descriptions-item>
+              <a-descriptions-item :label="t('code.database.tableDataClone.page.result.plannedBackupTable')">
+                {{ item.plannedBackupTableName }}
+              </a-descriptions-item>
+            </a-descriptions>
+          </a-collapse-panel>
+        </a-collapse>
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <a-button @click="handleCloseBackupModal">
+            {{ t('common.page.button.cancel') }}
+          </a-button>
+          <a-button
+            v-permission="'code:database:table:clone'"
+            type="primary"
+            :loading="cloneLoading"
+            :disabled="!backupConfirmed"
+            @click="handleConfirmClone"
+          >
+            {{ t('code.database.tableDataClone.page.action.confirmExecute') }}
+          </a-button>
+        </div>
+      </template>
+    </takt-modal>
+  </div>
+</template>
+
+<script setup lang="ts">
+/**
+ * 跨租户整表克隆页：配置源/目标租户与表映射 → 备份窗口 → 确认后执行
+ * @module views/code/database/table-data-clone
+ */
+import { computed, onMounted, reactive, ref } from 'vue'
+import { message } from 'ant-design-vue'
+import type { TableColumnsType } from 'ant-design-vue'
+import { useI18n } from 'vue-i18n'
+import { cloneTable, getTableClonePreview } from '@/api/code/database/table-data-clone'
+import { useDatabaseInfoCatalog } from '@/composables/use-database-info-catalog'
+import type {
+  TableClonePreview,
+  TableCloneRequest,
+  TableCloneResult,
+} from '@/types/code/database/table-data-clone'
+
+/** 单次最多克隆表数量（与后端 ITaktTableCloneService.MaxTableCountPerRequest 一致） */
+const MAX_TABLE_COUNT = 5
+
+/** 表映射行（客户端 row-key） */
+interface TableMappingRow {
+  clientKey: string
+  sourceTableName: string
+  targetTableName: string
+}
+
+/** i18n */
+const { t } = useI18n()
+
+/** 租户库/表目录 */
+const {
+  databaseInfoList,
+  databaseInfoLoading,
+  tablesByTenant,
+  loadDatabaseInfoList,
+  loadTablesForTenant,
+  resolveDatabaseDisplayName,
+  isTablesLoading,
+} = useDatabaseInfoCatalog()
+
+/** 租户与选项 */
+const form = reactive({
+  sourceTenantCode: '',
+  targetTenantCode: '',
+  preserveIdentityValues: true,
+})
+
+/** 表映射行 */
+const tableMappings = ref<TableMappingRow[]>([createMappingRow()])
+/** 备份弹窗 */
+const backupModalVisible = ref(false)
+/** 预览 loading */
+const previewLoading = ref(false)
+/** 克隆 loading */
+const cloneLoading = ref(false)
+/** 备份预览 */
+const backupPreview = ref<TableClonePreview | null>(null)
+/** 用户确认勾选 */
+const backupConfirmed = ref(false)
+/** 克隆结果 */
+const cloneResult = ref<TableCloneResult | null>(null)
+
+/** 源库展示名 */
+const sourceDatabaseName = computed(() => resolveDatabaseDisplayName(form.sourceTenantCode))
+/** 目标库展示名 */
+const targetDatabaseName = computed(() => resolveDatabaseDisplayName(form.targetTenantCode))
+/** 源租户物理表 */
+const sourceTables = computed(() => tablesByTenant.value[form.sourceTenantCode] ?? [])
+/** 目标租户物理表 */
+const targetTables = computed(() => tablesByTenant.value[form.targetTenantCode] ?? [])
+
+/** 表映射列 */
+const mappingColumns = computed<TableColumnsType>(() => [
+  {
+    title: t('code.database.tableDataClone.page.field.sourceTable'),
+    key: 'sourceTableName',
+    dataIndex: 'sourceTableName',
+  },
+  {
+    title: t('code.database.tableDataClone.page.field.targetTable'),
+    key: 'targetTableName',
+    dataIndex: 'targetTableName',
+  },
+  {
+    title: t('code.database.tableDataClone.page.tableMapping.actionColumn'),
+    key: 'action',
+    width: 100,
+  },
+])
+
+/** 结果明细列 */
+const resultColumns = computed<TableColumnsType>(() => [
+  { title: t('code.database.tableDataClone.page.field.sourceTable'), dataIndex: 'sourceTableName', key: 'sourceTableName' },
+  { title: t('code.database.tableDataClone.page.field.targetTable'), dataIndex: 'targetTableName', key: 'targetTableName' },
+  { title: t('code.database.tableDataClone.page.result.backupTable'), dataIndex: 'backupTableName', key: 'backupTableName', ellipsis: true },
+  { title: t('code.database.tableDataClone.page.result.backedUpRows'), dataIndex: 'backedUpRowCount', key: 'backedUpRowCount', width: 100 },
+  { title: t('code.database.tableDataClone.page.result.clearedRows'), dataIndex: 'clearedRowCount', key: 'clearedRowCount', width: 100 },
+  { title: t('code.database.tableDataClone.page.result.sourceRows'), dataIndex: 'sourceRowCount', key: 'sourceRowCount', width: 100 },
+  { title: t('code.database.tableDataClone.page.result.clonedRows'), dataIndex: 'clonedRowCount', key: 'clonedRowCount', width: 100 },
+])
+
+/** 是否可提交 */
+const canSubmitForm = computed(() => {
+  if (!form.sourceTenantCode || !form.targetTenantCode) return false
+  if (form.sourceTenantCode.trim() === form.targetTenantCode.trim()) return false
+  if (!sourceDatabaseName.value || !targetDatabaseName.value) return false
+  if (tableMappings.value.length < 1 || tableMappings.value.length > MAX_TABLE_COUNT) return false
+  return tableMappings.value.every((row) => row.sourceTableName.trim() && row.targetTableName.trim())
+})
+
+/**
+ * 创建空映射行
+ * @returns 映射行
+ */
+function createMappingRow(): TableMappingRow {
+  return {
+    clientKey: `client-${crypto.randomUUID()}`,
+    sourceTableName: '',
+    targetTableName: '',
+  }
+}
+
+/** 挂载加载业务库 */
+onMounted(async () => {
+  try {
+    await loadDatabaseInfoList()
+  } catch {
+    message.error(t('common.feedback.load.data.failed'))
+  }
+})
+
+/**
+ * 构建克隆请求
+ * @param confirm 是否确认备份
+ */
+function buildRequest(confirm: boolean): TableCloneRequest {
+  return {
+    sourceTenantCode: form.sourceTenantCode.trim(),
+    sourceDatabaseName: sourceDatabaseName.value.trim(),
+    targetTenantCode: form.targetTenantCode.trim(),
+    targetDatabaseName: targetDatabaseName.value.trim(),
+    tables: tableMappings.value.map((row) => ({
+      sourceTableName: row.sourceTableName.trim(),
+      targetTableName: row.targetTableName.trim(),
+    })),
+    preserveIdentityValues: form.preserveIdentityValues,
+    confirmTargetBackupAndClear: confirm,
+  }
+}
+
+/** 源租户变更 */
+async function handleSourceTenantChange() {
+  tableMappings.value.forEach((row) => { row.sourceTableName = '' })
+  if (!form.sourceTenantCode) return
+  try {
+    await loadTablesForTenant(form.sourceTenantCode)
+  } catch {
+    message.error(t('common.feedback.load.data.failed'))
+  }
+}
+
+/** 目标租户变更 */
+async function handleTargetTenantChange() {
+  tableMappings.value.forEach((row) => { row.targetTableName = '' })
+  if (!form.targetTenantCode) return
+  try {
+    await loadTablesForTenant(form.targetTenantCode)
+  } catch {
+    message.error(t('common.feedback.load.data.failed'))
+  }
+}
+
+/** 添加映射行 */
+function handleAddMappingRow() {
+  if (tableMappings.value.length >= MAX_TABLE_COUNT) return
+  tableMappings.value.push(createMappingRow())
+}
+
+/**
+ * 删除映射行
+ * @param clientKey 客户端 row-key
+ */
+function handleRemoveMappingRow(clientKey: string) {
+  if (tableMappings.value.length <= 1) return
+  tableMappings.value = tableMappings.value.filter((row) => row.clientKey !== clientKey)
+}
+
+/** 打开备份窗口 */
+async function handleOpenBackupWindow() {
+  if (!canSubmitForm.value) {
+    if (form.sourceTenantCode.trim() === form.targetTenantCode.trim()) {
+      message.warning(t('code.database.tableDataClone.page.crossTenantRequired'))
+    } else if (!tableMappings.value.every((row) => row.sourceTableName && row.targetTableName)) {
+      message.warning(t('code.database.tableDataClone.page.tableRequired'))
+    }
+    return
+  }
+  previewLoading.value = true
+  backupConfirmed.value = false
+  try {
+    backupPreview.value = await getTableClonePreview(buildRequest(false))
+    backupModalVisible.value = true
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : t('code.database.tableDataClone.page.cloneFailed')
+    message.error(msg)
+  } finally {
+    previewLoading.value = false
+  }
+}
+
+/** 关闭备份弹窗 */
+function handleCloseBackupModal() {
+  backupModalVisible.value = false
+  backupConfirmed.value = false
+}
+
+/** 确认并执行克隆 */
+async function handleConfirmClone() {
+  if (!backupConfirmed.value || !backupPreview.value) {
+    message.warning(t('code.database.tableDataClone.page.previewRequired'))
+    return
+  }
+  cloneLoading.value = true
+  try {
+    cloneResult.value = await cloneTable(buildRequest(true))
+    message.success(t('code.database.tableDataClone.page.cloneSuccess'))
+    backupModalVisible.value = false
+    backupConfirmed.value = false
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : t('code.database.tableDataClone.page.cloneFailed')
+    message.error(msg)
+  } finally {
+    cloneLoading.value = false
+  }
+}
+</script>

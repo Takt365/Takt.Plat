@@ -84,7 +84,14 @@ export default {
         fileuploadsuccess: '{name} をアップロードしました',
         fileuploadfail: '{name} のアップロードに失敗しました',
         partialuploadfail: '一部のファイルのアップロードに失敗しました',
-        preview: 'プレビュー'
+        preview: 'プレビュー',
+        chunkpause: '一時停止',
+        chunkresume: '再開',
+        chunkhashing: 'ファイル指紋を計算中…',
+        chunkuploading: 'チャンクアップロード中 ({uploaded}/{total})',
+        chunkmerging: 'ファイルをマージ中…',
+        chunkpaused: '一時停止中 — 再開をクリック',
+        chunkmodaltitle: 'ファイルアップロード'
       },
       download: {
         downloadfile: 'ファイルをダウンロード',

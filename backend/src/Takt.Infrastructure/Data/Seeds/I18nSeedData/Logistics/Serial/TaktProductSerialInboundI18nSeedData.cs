@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktProductSerialInboundI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductSerialInbound 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial;
 
 /// <summary>
-/// TaktProductSerialInbound 实体国际化翻译种子（键前缀 entity.productSerialInbound.*）
+/// TaktProductSerialInbound 实体国际化翻译种子（键前缀 entity.productserialinbound.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktProductSerialInboundI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktProductSerialInboundI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 productSerialInbound 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 productserialinbound 实体翻译...", tenantCode);
 
         foreach (var item in GetProductSerialInboundTranslations())
         {
@@ -76,101 +75,101 @@ public class TaktProductSerialInboundI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktProductSerialInbound 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.productSerialInbound._self / entity.productSerialInbound.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.productserialinbound._self / entity.productserialinbound.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetProductSerialInboundTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.productSerialInbound._self
-            new TranslationSeedItem("entity.productSerialInbound._self", "en-US", "Product Serial Inbound Information", "实体名称"),
-            // entity.productSerialInbound._self
-            new TranslationSeedItem("entity.productSerialInbound._self", "ja-JP", "产品序列号入库主表信息", "实体名称"),
-            // entity.productSerialInbound._self
-            new TranslationSeedItem("entity.productSerialInbound._self", "zh-CN", "产品序列号入库主表信息", "实体名称"),
-            // entity.productSerialInbound._self
-            new TranslationSeedItem("entity.productSerialInbound._self", "zh-HK", "产品序列号入库主表信息", "实体名称"),
+            // entity.productserialinbound._self
+            new TranslationSeedItem("entity.productserialinbound._self", "en-US", "Product Serial Inbound Information", "实体名称"),
+            // entity.productserialinbound._self
+            new TranslationSeedItem("entity.productserialinbound._self", "ja-JP", "产品序列号入库主表信息", "实体名称"),
+            // entity.productserialinbound._self
+            new TranslationSeedItem("entity.productserialinbound._self", "zh-CN", "产品序列号入库主表信息", "实体名称"),
+            // entity.productserialinbound._self
+            new TranslationSeedItem("entity.productserialinbound._self", "zh-HK", "产品序列号入库主表信息", "实体名称"),
 
-            // entity.productSerialInbound.plantcode
-            new TranslationSeedItem("entity.productSerialInbound.plantcode", "en-US", "工厂代码", "工厂代码(4位字母数字组合)"),
-            // entity.productSerialInbound.plantcode
-            new TranslationSeedItem("entity.productSerialInbound.plantcode", "ja-JP", "工厂代码", "工厂代码(4位字母数字组合)"),
-            // entity.productSerialInbound.plantcode
-            new TranslationSeedItem("entity.productSerialInbound.plantcode", "zh-CN", "工厂代码", "工厂代码(4位字母数字组合)"),
-            // entity.productSerialInbound.plantcode
-            new TranslationSeedItem("entity.productSerialInbound.plantcode", "zh-HK", "工厂代码", "工厂代码(4位字母数字组合)"),
+            // entity.productserialinbound.plantcode
+            new TranslationSeedItem("entity.productserialinbound.plantcode", "en-US", "工厂代码", "工厂代码(4位字母数字组合)"),
+            // entity.productserialinbound.plantcode
+            new TranslationSeedItem("entity.productserialinbound.plantcode", "ja-JP", "工厂代码", "工厂代码(4位字母数字组合)"),
+            // entity.productserialinbound.plantcode
+            new TranslationSeedItem("entity.productserialinbound.plantcode", "zh-CN", "工厂代码", "工厂代码(4位字母数字组合)"),
+            // entity.productserialinbound.plantcode
+            new TranslationSeedItem("entity.productserialinbound.plantcode", "zh-HK", "工厂代码", "工厂代码(4位字母数字组合)"),
 
-            // entity.productSerialInbound.inboundno
-            new TranslationSeedItem("entity.productSerialInbound.inboundno", "en-US", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
-            // entity.productSerialInbound.inboundno
-            new TranslationSeedItem("entity.productSerialInbound.inboundno", "ja-JP", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
-            // entity.productSerialInbound.inboundno
-            new TranslationSeedItem("entity.productSerialInbound.inboundno", "zh-CN", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
-            // entity.productSerialInbound.inboundno
-            new TranslationSeedItem("entity.productSerialInbound.inboundno", "zh-HK", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            // entity.productserialinbound.inboundno
+            new TranslationSeedItem("entity.productserialinbound.inboundno", "en-US", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            // entity.productserialinbound.inboundno
+            new TranslationSeedItem("entity.productserialinbound.inboundno", "ja-JP", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            // entity.productserialinbound.inboundno
+            new TranslationSeedItem("entity.productserialinbound.inboundno", "zh-CN", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
+            // entity.productserialinbound.inboundno
+            new TranslationSeedItem("entity.productserialinbound.inboundno", "zh-HK", "入库单号", "入库单号（组合唯一索引：PlantCode + InboundNo）"),
 
-            // entity.productSerialInbound.inbounddate
-            new TranslationSeedItem("entity.productSerialInbound.inbounddate", "en-US", "入库日期", "入库日期"),
-            // entity.productSerialInbound.inbounddate
-            new TranslationSeedItem("entity.productSerialInbound.inbounddate", "ja-JP", "入库日期", "入库日期"),
-            // entity.productSerialInbound.inbounddate
-            new TranslationSeedItem("entity.productSerialInbound.inbounddate", "zh-CN", "入库日期", "入库日期"),
-            // entity.productSerialInbound.inbounddate
-            new TranslationSeedItem("entity.productSerialInbound.inbounddate", "zh-HK", "入库日期", "入库日期"),
+            // entity.productserialinbound.inbounddate
+            new TranslationSeedItem("entity.productserialinbound.inbounddate", "en-US", "入库日期", "入库日期"),
+            // entity.productserialinbound.inbounddate
+            new TranslationSeedItem("entity.productserialinbound.inbounddate", "ja-JP", "入库日期", "入库日期"),
+            // entity.productserialinbound.inbounddate
+            new TranslationSeedItem("entity.productserialinbound.inbounddate", "zh-CN", "入库日期", "入库日期"),
+            // entity.productserialinbound.inbounddate
+            new TranslationSeedItem("entity.productserialinbound.inbounddate", "zh-HK", "入库日期", "入库日期"),
 
-            // entity.productSerialInbound.inboundtype
-            new TranslationSeedItem("entity.productSerialInbound.inboundtype", "en-US", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
-            // entity.productSerialInbound.inboundtype
-            new TranslationSeedItem("entity.productSerialInbound.inboundtype", "ja-JP", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
-            // entity.productSerialInbound.inboundtype
-            new TranslationSeedItem("entity.productSerialInbound.inboundtype", "zh-CN", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
-            // entity.productSerialInbound.inboundtype
-            new TranslationSeedItem("entity.productSerialInbound.inboundtype", "zh-HK", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
+            // entity.productserialinbound.inboundtype
+            new TranslationSeedItem("entity.productserialinbound.inboundtype", "en-US", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
+            // entity.productserialinbound.inboundtype
+            new TranslationSeedItem("entity.productserialinbound.inboundtype", "ja-JP", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
+            // entity.productserialinbound.inboundtype
+            new TranslationSeedItem("entity.productserialinbound.inboundtype", "zh-CN", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
+            // entity.productserialinbound.inboundtype
+            new TranslationSeedItem("entity.productserialinbound.inboundtype", "zh-HK", "入库类型", "入库类型(0=采购入库,1=生产入库,2=退货入库,3=调拨入库,4=序列号入库,5=其他)"),
 
-            // entity.productSerialInbound.warehousecode
-            new TranslationSeedItem("entity.productSerialInbound.warehousecode", "en-US", "仓库编码", "仓库编码"),
-            // entity.productSerialInbound.warehousecode
-            new TranslationSeedItem("entity.productSerialInbound.warehousecode", "ja-JP", "仓库编码", "仓库编码"),
-            // entity.productSerialInbound.warehousecode
-            new TranslationSeedItem("entity.productSerialInbound.warehousecode", "zh-CN", "仓库编码", "仓库编码"),
-            // entity.productSerialInbound.warehousecode
-            new TranslationSeedItem("entity.productSerialInbound.warehousecode", "zh-HK", "仓库编码", "仓库编码"),
+            // entity.productserialinbound.warehousecode
+            new TranslationSeedItem("entity.productserialinbound.warehousecode", "en-US", "仓库编码", "仓库编码"),
+            // entity.productserialinbound.warehousecode
+            new TranslationSeedItem("entity.productserialinbound.warehousecode", "ja-JP", "仓库编码", "仓库编码"),
+            // entity.productserialinbound.warehousecode
+            new TranslationSeedItem("entity.productserialinbound.warehousecode", "zh-CN", "仓库编码", "仓库编码"),
+            // entity.productserialinbound.warehousecode
+            new TranslationSeedItem("entity.productserialinbound.warehousecode", "zh-HK", "仓库编码", "仓库编码"),
 
-            // entity.productSerialInbound.locationcode
-            new TranslationSeedItem("entity.productSerialInbound.locationcode", "en-US", "库位编码", "库位编码"),
-            // entity.productSerialInbound.locationcode
-            new TranslationSeedItem("entity.productSerialInbound.locationcode", "ja-JP", "库位编码", "库位编码"),
-            // entity.productSerialInbound.locationcode
-            new TranslationSeedItem("entity.productSerialInbound.locationcode", "zh-CN", "库位编码", "库位编码"),
-            // entity.productSerialInbound.locationcode
-            new TranslationSeedItem("entity.productSerialInbound.locationcode", "zh-HK", "库位编码", "库位编码"),
+            // entity.productserialinbound.locationcode
+            new TranslationSeedItem("entity.productserialinbound.locationcode", "en-US", "库位编码", "库位编码"),
+            // entity.productserialinbound.locationcode
+            new TranslationSeedItem("entity.productserialinbound.locationcode", "ja-JP", "库位编码", "库位编码"),
+            // entity.productserialinbound.locationcode
+            new TranslationSeedItem("entity.productserialinbound.locationcode", "zh-CN", "库位编码", "库位编码"),
+            // entity.productserialinbound.locationcode
+            new TranslationSeedItem("entity.productserialinbound.locationcode", "zh-HK", "库位编码", "库位编码"),
 
-            // entity.productSerialInbound.totalquantity
-            new TranslationSeedItem("entity.productSerialInbound.totalquantity", "en-US", "总数量", "总数量"),
-            // entity.productSerialInbound.totalquantity
-            new TranslationSeedItem("entity.productSerialInbound.totalquantity", "ja-JP", "总数量", "总数量"),
-            // entity.productSerialInbound.totalquantity
-            new TranslationSeedItem("entity.productSerialInbound.totalquantity", "zh-CN", "总数量", "总数量"),
-            // entity.productSerialInbound.totalquantity
-            new TranslationSeedItem("entity.productSerialInbound.totalquantity", "zh-HK", "总数量", "总数量"),
+            // entity.productserialinbound.totalquantity
+            new TranslationSeedItem("entity.productserialinbound.totalquantity", "en-US", "总数量", "总数量"),
+            // entity.productserialinbound.totalquantity
+            new TranslationSeedItem("entity.productserialinbound.totalquantity", "ja-JP", "总数量", "总数量"),
+            // entity.productserialinbound.totalquantity
+            new TranslationSeedItem("entity.productserialinbound.totalquantity", "zh-CN", "总数量", "总数量"),
+            // entity.productserialinbound.totalquantity
+            new TranslationSeedItem("entity.productserialinbound.totalquantity", "zh-HK", "总数量", "总数量"),
 
-            // entity.productSerialInbound.relatedcompany
-            new TranslationSeedItem("entity.productSerialInbound.relatedcompany", "en-US", "关联公司", "关联公司"),
-            // entity.productSerialInbound.relatedcompany
-            new TranslationSeedItem("entity.productSerialInbound.relatedcompany", "ja-JP", "关联公司", "关联公司"),
-            // entity.productSerialInbound.relatedcompany
-            new TranslationSeedItem("entity.productSerialInbound.relatedcompany", "zh-CN", "关联公司", "关联公司"),
-            // entity.productSerialInbound.relatedcompany
-            new TranslationSeedItem("entity.productSerialInbound.relatedcompany", "zh-HK", "关联公司", "关联公司"),
+            // entity.productserialinbound.relatedcompany
+            new TranslationSeedItem("entity.productserialinbound.relatedcompany", "en-US", "关联公司", "关联公司"),
+            // entity.productserialinbound.relatedcompany
+            new TranslationSeedItem("entity.productserialinbound.relatedcompany", "ja-JP", "关联公司", "关联公司"),
+            // entity.productserialinbound.relatedcompany
+            new TranslationSeedItem("entity.productserialinbound.relatedcompany", "zh-CN", "关联公司", "关联公司"),
+            // entity.productserialinbound.relatedcompany
+            new TranslationSeedItem("entity.productserialinbound.relatedcompany", "zh-HK", "关联公司", "关联公司"),
 
-            // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "en-US", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
-            // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "ja-JP", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
-            // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "zh-CN", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
-            // entity.productSerialInbound.items
-            new TranslationSeedItem("entity.productSerialInbound.items", "zh-HK", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
+            // entity.productserialinbound.items
+            new TranslationSeedItem("entity.productserialinbound.items", "en-US", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
+            // entity.productserialinbound.items
+            new TranslationSeedItem("entity.productserialinbound.items", "ja-JP", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
+            // entity.productserialinbound.items
+            new TranslationSeedItem("entity.productserialinbound.items", "zh-CN", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
+            // entity.productserialinbound.items
+            new TranslationSeedItem("entity.productserialinbound.items", "zh-HK", "产品序列号入库明细列表", "产品序列号入库明细列表(主子表关系)"),
         };
     }
 
@@ -188,8 +187,8 @@ public class TaktProductSerialInboundI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

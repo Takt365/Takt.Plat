@@ -1,0 +1,573 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/types/routine/help-desk
+// 文件名称：it-asset.d.ts
+// 创建时间：2026-06-10
+// 创建人：Takt365(Auto Generated)
+// 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+import type {
+  CompanyDtoBase,
+  TaktPagedQuery
+} from '@/types/common';
+
+/**
+ * 服务台 IT 设备保修扩展实体（与财务 TaktAsset 按 AssetCode 一对一扩展）
+ * 对应前端 TaktItAssetDto
+ * 继承 TaktCompanyDtoBase
+ * 对应前端 ItAsset
+ * @description 对应后端 TaktItAssetDto
+ */
+export interface ItAsset extends CompanyDtoBase {
+  /**
+   * ItAssetID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  itAssetId: string;
+
+  /**
+   * 资产号码
+   */
+  assetCode: string;
+
+  /**
+   * 保修类型（见 TaktWarrantyType）
+   */
+  warrantyType: number;
+
+  /**
+   * 保修开始日期
+   */
+  warrantyStartDate?: string;
+
+  /**
+   * 保修到期日
+   */
+  warrantyExpiryDate?: string;
+
+  /**
+   * 保修服务商/厂商
+   */
+  warrantyProvider?: string;
+
+  /**
+   * 保修合同编号
+   */
+  warrantyContractNo?: string;
+
+  /**
+   * 服务电话
+   */
+  serviceHotline?: string;
+
+  /**
+   * 服务邮箱
+   */
+  serviceEmail?: string;
+
+  /**
+   * 维保到期日
+   */
+  maintenanceExpiryDate?: string;
+
+  /**
+   * 上次维保日期
+   */
+  lastMaintenanceDate?: string;
+
+  /**
+   * 下次维保日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
+   * 保修/维保说明
+   */
+  warrantyRemark?: string;
+
+  /**
+   * IT 设备保修变更日志列表 （子表：TaktItAssetChangeLog）
+   */
+  changeLogs?: ItAssetChangeLog[];
+
+  /**
+   * 关联工单列表（一对多；外键：本表 Id = 工单 TaktTicket.ItAssetId） （子表：TaktTicket）
+   */
+  tickets?: Ticket[];
+
+}
+
+
+/**
+ * ItAsset 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 ItAssetQuery
+ * @description 对应后端 TaktItAssetQueryDto
+ */
+export interface ItAssetQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode?: string;
+
+  /**
+   * 资产号码
+   */
+  assetCode?: string;
+
+  /**
+   * 保修类型（见 TaktWarrantyType）
+   */
+  warrantyType?: number;
+
+  /**
+   * 保修开始日期（范围查询-开始）
+   */
+  warrantyStartDateStart?: string;
+
+  /**
+   * 保修开始日期（范围查询-结束）
+   */
+  warrantyStartDateEnd?: string;
+
+  /**
+   * 保修到期日（范围查询-开始）
+   */
+  warrantyExpiryDateStart?: string;
+
+  /**
+   * 保修到期日（范围查询-结束）
+   */
+  warrantyExpiryDateEnd?: string;
+
+  /**
+   * 保修服务商/厂商
+   */
+  warrantyProvider?: string;
+
+  /**
+   * 保修合同编号
+   */
+  warrantyContractNo?: string;
+
+  /**
+   * 服务电话
+   */
+  serviceHotline?: string;
+
+  /**
+   * 服务邮箱
+   */
+  serviceEmail?: string;
+
+  /**
+   * 维保到期日（范围查询-开始）
+   */
+  maintenanceExpiryDateStart?: string;
+
+  /**
+   * 维保到期日（范围查询-结束）
+   */
+  maintenanceExpiryDateEnd?: string;
+
+  /**
+   * 上次维保日期（范围查询-开始）
+   */
+  lastMaintenanceDateStart?: string;
+
+  /**
+   * 上次维保日期（范围查询-结束）
+   */
+  lastMaintenanceDateEnd?: string;
+
+  /**
+   * 下次维保日期（范围查询-开始）
+   */
+  nextMaintenanceDateStart?: string;
+
+  /**
+   * 下次维保日期（范围查询-结束）
+   */
+  nextMaintenanceDateEnd?: string;
+
+  /**
+   * 保修/维保说明
+   */
+  warrantyRemark?: string;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建ItAsset DTO
+ * 对应前端 ItAssetCreate
+ * @description 对应后端 TaktItAssetCreateDto
+ */
+export interface ItAssetCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode: string;
+
+  /**
+   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture: string;
+
+  /**
+   * 资产号码
+   */
+  assetCode: string;
+
+  /**
+   * 保修类型（见 TaktWarrantyType）
+   */
+  warrantyType: number;
+
+  /**
+   * 保修开始日期
+   */
+  warrantyStartDate?: string;
+
+  /**
+   * 保修到期日
+   */
+  warrantyExpiryDate?: string;
+
+  /**
+   * 保修服务商/厂商
+   */
+  warrantyProvider?: string;
+
+  /**
+   * 保修合同编号
+   */
+  warrantyContractNo?: string;
+
+  /**
+   * 服务电话
+   */
+  serviceHotline?: string;
+
+  /**
+   * 服务邮箱
+   */
+  serviceEmail?: string;
+
+  /**
+   * 维保到期日
+   */
+  maintenanceExpiryDate?: string;
+
+  /**
+   * 上次维保日期
+   */
+  lastMaintenanceDate?: string;
+
+  /**
+   * 下次维保日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
+   * 保修/维保说明
+   */
+  warrantyRemark?: string;
+
+  /**
+   * IT 设备保修变更日志列表（子表，级联保存）
+   */
+  changeLogs?: ItAssetChangeLogCreate[];
+
+  /**
+   * 关联工单列表（一对多；外键：本表 Id = 工单 TaktTicket.ItAssetId）（子表，级联保存）
+   */
+  tickets?: TicketCreate[];
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新ItAsset DTO
+ * 继承 TaktItAssetCreateDto，添加 ItAssetId 字段
+ * 对应前端 ItAssetUpdate
+ * @description 对应后端 TaktItAssetUpdateDto
+ */
+export interface ItAssetUpdate extends ItAssetCreate {
+  /**
+   * ItAssetID（标识要更新的实体）
+   */
+  itAssetId: string;
+
+}
+
+
+/**
+ * ItAsset 导入模板行 DTO
+ * 对应前端 ItAssetTemplate
+ * @description 对应后端 TaktItAssetTemplateDto
+ */
+export interface ItAssetTemplate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 资产号码
+   */
+  assetCode?: string;
+
+  /**
+   * 保修类型（见 TaktWarrantyType）
+   */
+  warrantyType?: number;
+
+  /**
+   * 保修服务商/厂商
+   */
+  warrantyProvider?: string;
+
+  /**
+   * 保修合同编号
+   */
+  warrantyContractNo?: string;
+
+  /**
+   * 服务电话
+   */
+  serviceHotline?: string;
+
+  /**
+   * 服务邮箱
+   */
+  serviceEmail?: string;
+
+  /**
+   * 保修/维保说明
+   */
+  warrantyRemark?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * ItAsset 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 ItAssetImport
+ * @description 对应后端 TaktItAssetImportDto
+ */
+export interface ItAssetImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture?: string;
+
+  /**
+   * 资产号码
+   */
+  assetCode?: string;
+
+  /**
+   * 保修类型（见 TaktWarrantyType）
+   */
+  warrantyType?: number;
+
+  /**
+   * 保修服务商/厂商
+   */
+  warrantyProvider?: string;
+
+  /**
+   * 保修合同编号
+   */
+  warrantyContractNo?: string;
+
+  /**
+   * 服务电话
+   */
+  serviceHotline?: string;
+
+  /**
+   * 服务邮箱
+   */
+  serviceEmail?: string;
+
+  /**
+   * 保修/维保说明
+   */
+  warrantyRemark?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * ItAsset 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 ItAssetExport
+ * @description 对应后端 TaktItAssetExportDto
+ */
+export interface ItAssetExport {
+  /**
+   * ItAssetID
+   */
+  itAssetId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 资产号码
+   */
+  assetCode: string;
+
+  /**
+   * 保修类型（见 TaktWarrantyType）
+   */
+  warrantyType: number;
+
+  /**
+   * 保修开始日期
+   */
+  warrantyStartDate?: string;
+
+  /**
+   * 保修到期日
+   */
+  warrantyExpiryDate?: string;
+
+  /**
+   * 保修服务商/厂商
+   */
+  warrantyProvider?: string;
+
+  /**
+   * 保修合同编号
+   */
+  warrantyContractNo?: string;
+
+  /**
+   * 服务电话
+   */
+  serviceHotline?: string;
+
+  /**
+   * 服务邮箱
+   */
+  serviceEmail?: string;
+
+  /**
+   * 维保到期日
+   */
+  maintenanceExpiryDate?: string;
+
+  /**
+   * 上次维保日期
+   */
+  lastMaintenanceDate?: string;
+
+  /**
+   * 下次维保日期
+   */
+  nextMaintenanceDate?: string;
+
+  /**
+   * 保修/维保说明
+   */
+  warrantyRemark?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extFieldJson?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+  /**
+   * 创建时间
+   */
+  createdAt: string;
+
+}
+

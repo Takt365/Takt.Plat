@@ -135,6 +135,100 @@ internal static class TaktSignalRLogging
     }
 
     /// <summary>
+    /// 记录私信推送
+    /// </summary>
+    /// <param name="toUserName">接收者用户名</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="messageId">消息 ID</param>
+    /// <param name="userGroup">用户组名</param>
+    /// <param name="recipientUserId">接收者用户 ID（Clients.User 定向推送，可为 null）</param>
+    public static void LogPrivateMessagePushed(
+        string toUserName,
+        string companyCode,
+        long messageId,
+        string userGroup,
+        string? recipientUserId = null)
+    {
+        var context = new TaktLogContext
+        {
+            Module = ModuleName,
+            Action = "private-message-push",
+            Username = toUserName,
+            CompanyCode = companyCode,
+            Extra = new Dictionary<string, object?>
+            {
+                ["MessageId"] = messageId.ToString(),
+                ["UserGroup"] = userGroup,
+                ["RecipientUserId"] = recipientUserId,
+            },
+        };
+        TaktLogger.Information(
+            context,
+            "SignalR 私信已推送: MessageId={MessageId}, ToUser={ToUserName}, Group={UserGroup}, RecipientUserId={RecipientUserId}",
+            messageId,
+            toUserName,
+            userGroup,
+            recipientUserId ?? "(group)");
+    }
+
+    /// <summary>
+    /// 记录工作流推送
+    /// </summary>
+    /// <param name="eventType">事件类型</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="detail">详情</param>
+    /// <param name="userName">目标用户名</param>
+    public static void LogWorkflowPushed(string eventType, string companyCode, string detail, string? userName = null)
+    {
+        var context = new TaktLogContext
+        {
+            Module = ModuleName,
+            Action = "workflow-push",
+            Username = userName,
+            CompanyCode = companyCode,
+            Extra = new Dictionary<string, object?>
+            {
+                ["EventType"] = eventType,
+                ["Detail"] = detail,
+            },
+        };
+        TaktLogger.Information(
+            context,
+            "SignalR 工作流已推送: Type={EventType}, Company={CompanyCode}, Detail={Detail}, User={UserName}",
+            eventType,
+            companyCode,
+            detail,
+            userName ?? "(company)");
+    }
+
+    /// <summary>
+    /// 记录 Quartz 定时任务推送
+    /// </summary>
+    /// <param name="eventType">事件类型</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="detail">详情</param>
+    public static void LogQuartzPushed(string eventType, string companyCode, string detail)
+    {
+        var context = new TaktLogContext
+        {
+            Module = ModuleName,
+            Action = "quartz-push",
+            CompanyCode = companyCode,
+            Extra = new Dictionary<string, object?>
+            {
+                ["EventType"] = eventType,
+                ["Detail"] = detail,
+            },
+        };
+        TaktLogger.Information(
+            context,
+            "SignalR Quartz 已推送: Type={EventType}, Company={CompanyCode}, Detail={Detail}",
+            eventType,
+            companyCode,
+            detail);
+    }
+
+    /// <summary>
     /// 记录 Hub 相关 HTTP 请求完成（协商、WebSocket 升级等）
     /// </summary>
     /// <param name="logContext">请求级日志上下文（含 rid/tenant 等）</param>

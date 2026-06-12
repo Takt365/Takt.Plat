@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Workflow
 // 文件名称：TaktFlowSchemeService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程定义应用服务实现
 // 
@@ -33,6 +33,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
     private readonly ITaktCompanyRepository<TaktFlowScheme> _flowSchemeRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktWorkflowSignalRNotifier _workflowSignalRNotifier;
 
     /// <summary>
     /// 构造函数
@@ -40,12 +41,14 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
     /// <param name="flowSchemeRepository">流程定义仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="workflowSignalRNotifier">工作流 SignalR 推送编排</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktFlowSchemeService(
         ITaktCompanyRepository<TaktFlowScheme> flowSchemeRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
+        ITaktWorkflowSignalRNotifier workflowSignalRNotifier,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -53,6 +56,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
         _flowSchemeRepository = flowSchemeRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
+        _workflowSignalRNotifier = workflowSignalRNotifier;
     }
 
     /// <summary>
@@ -123,6 +127,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
         {
             throw new TaktBusinessException("流程定义的ProcessKey、DefinitionVersion已存在");
         }
+        EnsureSchemeFormLinked(entity.FormId.GetValueOrDefault(), entity.FormCode);
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _flowSchemeRepository.GetMaxIntAsync(
@@ -131,6 +136,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
             entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.FormId.GetValueOrDefault(), maxSort);
         }
         entity = await _flowSchemeRepository.CreateAsync(entity);
+        await NotifySchemeChangedAsync(entity, "create");
         return await GetFlowSchemeByIdAsync(entity.Id) ?? entity.Adapt<TaktFlowSchemeDto>();
     }
 
@@ -157,7 +163,9 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
         {
             throw new TaktBusinessException("流程定义的ProcessKey、DefinitionVersion已存在");
         }
+        EnsureSchemeFormLinked(entity.FormId.GetValueOrDefault(), entity.FormCode);
         await _flowSchemeRepository.UpdateAsync(entity);
+        await NotifySchemeChangedAsync(entity, "update");
         return await GetFlowSchemeByIdAsync(id) ?? throw new TaktBusinessException("流程定义不存在");
     }
 
@@ -168,10 +176,15 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
     /// <returns>任务</returns>
     public async Task DeleteFlowSchemeByIdAsync(long id)
     {
+        var entity = await _flowSchemeRepository.GetByIdAsync(id);
         var deleted = await _flowSchemeRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("流程定义不存在或已删除");
+        }
+        if (entity != null)
+        {
+            await NotifySchemeChangedAsync(entity, "delete");
         }
     }
 
@@ -205,8 +218,13 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
         {
             throw new TaktBusinessException("流程定义不存在");
         }
+        if (dto.ProcessStatus == 1)
+        {
+            EnsureSchemeFormLinked(entity.FormId.GetValueOrDefault(), entity.FormCode);
+        }
         entity.ProcessStatus = dto.ProcessStatus;
         await _flowSchemeRepository.UpdateAsync(entity);
+        await NotifySchemeChangedAsync(entity, "status");
         return await GetFlowSchemeByIdAsync(dto.FlowSchemeId) ?? throw new TaktBusinessException("流程定义不存在");
     }
 
@@ -276,6 +294,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
                 {
                     throw new TaktBusinessException("流程定义的ProcessKey、DefinitionVersion已存在");
                 }
+                EnsureSchemeFormLinked(entity.FormId.GetValueOrDefault(), entity.FormCode);
                 if (entity.SortOrder <= 0)
                 {
                     var maxSort = await _flowSchemeRepository.GetMaxIntAsync(
@@ -349,7 +368,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
                 || (x.ProcessContent != null && x.ProcessContent.Contains(keywords))
                 || (x.DeploymentId != null && x.DeploymentId.Contains(keywords))
                 || SqlFunc.ToString(x.FormId).Contains(keywords)
-                || (x.FormCode != null && x.FormCode.Contains(keywords))
+                || x.FormCode.Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -399,7 +418,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
 
         if (queryDto?.SuspensionState.HasValue == true)
         {
-            exp = exp.And(x => x.SuspensionState == queryDto.SuspensionState);
+            exp = exp.And(x => x.SuspensionState == (int)queryDto.SuspensionState.Value);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ProcessContent))
@@ -419,7 +438,7 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
 
         if (!string.IsNullOrEmpty(queryDto?.FormCode))
         {
-            exp = exp.And(x => x.FormCode != null && x.FormCode.Contains(queryDto.FormCode));
+            exp = exp.And(x => x.FormCode.Contains(queryDto.FormCode));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -448,5 +467,39 @@ public class TaktFlowSchemeService : TaktServiceBase, ITaktFlowSchemeService
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 校验流程方案已关联表单（审批流程必须绑定表单，与是否关联后台表无关）
+    /// </summary>
+    /// <param name="formId">表单 ID</param>
+    /// <param name="formCode">表单编码</param>
+    private static void EnsureSchemeFormLinked(long formId, string? formCode)
+    {
+        if (formId <= 0)
+        {
+            throw new TaktBusinessException("流程方案必须关联表单");
+        }
+        if (string.IsNullOrWhiteSpace(formCode))
+        {
+            throw new TaktBusinessException("流程方案关联表单编码不能为空");
+        }
+    }
+
+    /// <summary>
+    /// 推送流程定义 SignalR 变更（失败抛异常，阻断主流程）
+    /// </summary>
+    /// <param name="entity">流程定义实体</param>
+    /// <param name="changeType">变更类型</param>
+    /// <returns>任务</returns>
+    /// <exception cref="TaktBusinessException">推送失败或实体无效时抛出</exception>
+    private Task NotifySchemeChangedAsync(TaktFlowScheme entity, string changeType)
+    {
+        return _workflowSignalRNotifier.NotifySchemeChangedAsync(
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            entity,
+            changeType,
+            CurrentUserName);
     }
 }

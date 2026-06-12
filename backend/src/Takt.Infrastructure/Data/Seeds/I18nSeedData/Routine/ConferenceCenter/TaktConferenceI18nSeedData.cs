@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConference 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter;
@@ -76,7 +75,7 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConference 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.conference._self / entity.conference.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.conference._self / entity.conference.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetConferenceTranslations()
     {
@@ -253,6 +252,24 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
             // entity.conference.reminderminutes
             new TranslationSeedItem("entity.conference.reminderminutes", "zh-HK", "提前提醒分钟数", "提前提醒分钟数（0 表示不提醒）"),
 
+            // entity.conference.roomid
+            new TranslationSeedItem("entity.conference.roomid", "en-US", "会议室ID", "会议室 ID"),
+            // entity.conference.roomid
+            new TranslationSeedItem("entity.conference.roomid", "ja-JP", "会议室ID", "会议室 ID"),
+            // entity.conference.roomid
+            new TranslationSeedItem("entity.conference.roomid", "zh-CN", "会议室ID", "会议室 ID"),
+            // entity.conference.roomid
+            new TranslationSeedItem("entity.conference.roomid", "zh-HK", "会议室ID", "会议室 ID"),
+
+            // entity.conference.roomname
+            new TranslationSeedItem("entity.conference.roomname", "en-US", "会议室名称", "会议室名称（冗余快照）"),
+            // entity.conference.roomname
+            new TranslationSeedItem("entity.conference.roomname", "ja-JP", "会议室名称", "会议室名称（冗余快照）"),
+            // entity.conference.roomname
+            new TranslationSeedItem("entity.conference.roomname", "zh-CN", "会议室名称", "会议室名称（冗余快照）"),
+            // entity.conference.roomname
+            new TranslationSeedItem("entity.conference.roomname", "zh-HK", "会议室名称", "会议室名称（冗余快照）"),
+
             // entity.conference.flowinstanceid
             new TranslationSeedItem("entity.conference.flowinstanceid", "en-US", "流程实例ID", "流程实例 ID（会议审批工作流）"),
             // entity.conference.flowinstanceid
@@ -287,8 +304,8 @@ public class TaktConferenceI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

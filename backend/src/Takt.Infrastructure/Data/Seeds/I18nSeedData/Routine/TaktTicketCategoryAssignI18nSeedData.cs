@@ -76,7 +76,7 @@ public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTicketCategoryAssign 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ticketCategoryAssign._self / entity.ticketCategoryAssign.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.ticketCategoryAssign._self / entity.ticketCategoryAssign.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetTicketCategoryAssignTranslations()
     {
@@ -143,8 +143,8 @@ public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

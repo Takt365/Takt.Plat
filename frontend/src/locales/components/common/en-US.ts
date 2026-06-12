@@ -85,7 +85,14 @@ export default {
         fileuploadsuccess: '{name} uploaded successfully',
         fileuploadfail: '{name} failed to upload',
         partialuploadfail: 'Some files failed to upload',
-        preview: 'Preview'
+        preview: 'Preview',
+        chunkpause: 'Pause',
+        chunkresume: 'Resume',
+        chunkhashing: 'Computing file fingerprint…',
+        chunkuploading: 'Uploading chunks ({uploaded}/{total})',
+        chunkmerging: 'Merging file…',
+        chunkpaused: 'Paused — click Resume to continue',
+        chunkmodaltitle: 'File upload'
       },
       download: {
         downloadfile: 'Download file',

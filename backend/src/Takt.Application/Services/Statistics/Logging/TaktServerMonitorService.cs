@@ -11,6 +11,7 @@
 // ========================================
 
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.Configuration;
 using Takt.Application.Dtos.Statistics.Logging;
 using Takt.Domain.Interfaces;
@@ -74,7 +75,8 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
             Uptime = DateTime.Now - startTime,
             DotNetVersion = Environment.Version.ToString(),
             WorkingSet = process.WorkingSet64,
-            ProcessorCount = Environment.ProcessorCount
+            ProcessorCount = Environment.ProcessorCount,
+            ProcessArchitecture = RuntimeInformation.ProcessArchitecture.ToString()
         };
         return Task.FromResult(dto);
     }
@@ -88,7 +90,7 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
     }
 
     /// <summary>
-    /// 将 <see cref="ServerHardwareInfo"/> 映射为 API DTO
+    /// 将 ServerHardwareInfo 映射为 API DTO
     /// </summary>
     /// <param name="hardwareInfo">硬件汇总信息</param>
     /// <returns>服务器硬件信息 DTO</returns>
@@ -100,6 +102,8 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
             DriveSerialNumber = hardwareInfo.DriveSerialNumber,
             MacAddress = hardwareInfo.MacAddress,
             CpuModel = hardwareInfo.CpuModel,
+            CpuUsagePercent = hardwareInfo.CpuUsagePercent,
+            OsArchitecture = hardwareInfo.OsArchitecture,
             OperatingSystem = hardwareInfo.OperatingSystem,
             OperatingSystemLanguage = new TaktOperatingSystemLanguageDto
             {
@@ -110,7 +114,7 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
                 CurrentUICultureDisplayName = hardwareInfo.OperatingSystemLanguage.CurrentUICultureDisplayName,
                 CurrentUICultureNativeName = hardwareInfo.OperatingSystemLanguage.CurrentUICultureNativeName,
                 SystemDefaultLanguage = hardwareInfo.OperatingSystemLanguage.SystemDefaultLanguage,
-                OSVersion = hardwareInfo.OperatingSystemLanguage.OSVersion,
+                OsVersion = hardwareInfo.OperatingSystemLanguage.OsVersion,
                 InstalledLanguages = hardwareInfo.OperatingSystemLanguage.InstalledLanguages.Select(lang => new TaktInstalledLanguageDto
                 {
                     CultureCode = lang.CultureCode,
@@ -126,7 +130,8 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
                 Manufacturer = hardwareInfo.Motherboard.Manufacturer,
                 Product = hardwareInfo.Motherboard.Product,
                 SerialNumber = hardwareInfo.Motherboard.SerialNumber,
-                Version = hardwareInfo.Motherboard.Version
+                Version = hardwareInfo.Motherboard.Version,
+                Uuid = hardwareInfo.Motherboard.Uuid
             },
             Bios = new TaktBiosInfoDto
             {
@@ -141,7 +146,14 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
                 Manufacturer = cpu.Manufacturer,
                 NumberOfCores = cpu.NumberOfCores,
                 NumberOfLogicalProcessors = cpu.NumberOfLogicalProcessors,
-                ProcessorId = cpu.ProcessorId
+                ProcessorId = cpu.ProcessorId,
+                SocketDesignation = cpu.SocketDesignation,
+                UsagePercent = cpu.UsagePercent,
+                CoreList = cpu.CoreList.Select(core => new TaktCpuCoreInfoDto
+                {
+                    Name = core.Name,
+                    UsagePercent = core.UsagePercent
+                }).ToList()
             }).ToList(),
             GpuList = hardwareInfo.GpuList.Select(gpu => new TaktGpuInfoDto
             {
@@ -159,6 +171,15 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
                 AvailableVirtualMemory = hardwareInfo.Memory.AvailableVirtualMemory,
                 UsedVirtualMemory = hardwareInfo.Memory.UsedVirtualMemory
             },
+            MemoryModuleList = hardwareInfo.MemoryModuleList.Select(module => new TaktMemoryModuleDto
+            {
+                BankLabel = module.BankLabel,
+                Capacity = module.Capacity,
+                Speed = module.Speed,
+                Manufacturer = module.Manufacturer,
+                PartNumber = module.PartNumber,
+                SerialNumber = module.SerialNumber
+            }).ToList(),
             DriveList = hardwareInfo.DriveList.Select(drive => new TaktDriveInfoDto
             {
                 Name = drive.Name,
@@ -176,6 +197,7 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
                 Name = adapter.Name,
                 Description = adapter.Description,
                 MACAddress = adapter.MACAddress,
+                IpAddress = adapter.IpAddress,
                 Speed = adapter.Speed,
                 Status = adapter.Status
             }).ToList(),
@@ -185,7 +207,8 @@ public class TaktServerMonitorService : TaktServiceBase, ITaktServerMonitorServi
                 Manufacturer = system.Manufacturer,
                 Model = system.Model,
                 SerialNumber = system.SerialNumber,
-                SystemType = system.SystemType
+                SystemType = system.SystemType,
+                Uuid = system.Uuid
             }).ToList()
         };
     }

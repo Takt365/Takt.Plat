@@ -448,6 +448,7 @@ import type { QuartzLog } from '@/types/foundation/quartz-log'
 import type { QuartzTask, QuartzTaskQuery, QuartzTaskCreate, QuartzTaskUpdate } from '@/types/foundation/quartz-task'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { useQuartzSignalRRefresh } from '@/composables/use-quartz-signalr-refresh'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
@@ -941,6 +942,21 @@ async function loadData() {
     loading.value = false
   }
 }
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
+/** SignalR：任务定义变更 / 执行完成时刷新列表与展开行日志 */
+useQuartzSignalRRefresh(loadData, async (event) => {
+  const expandedKey = expandedRowKeys.value[0]
+  if (!expandedKey || expandedKey !== event.quartzTaskId) {
+    return
+  }
+  const record = dataSource.value.find((row) => getQuartzTaskId(row) === expandedKey)
+  if (record) {
+    await loadQuartzLogForQuartzTask(record)
+  }
+})
 
 /** 快捷查询 */
 function handleSearch() {

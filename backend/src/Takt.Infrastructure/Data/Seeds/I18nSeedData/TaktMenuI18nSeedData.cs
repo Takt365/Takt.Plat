@@ -173,7 +173,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.routine.conferencecenter", "zh-CN", "会议中心", "二级菜单"),
             ("menu.routine.documentcenter", "zh-CN", "文管中心", "二级菜单"),
             ("menu.routine.newscenter", "zh-CN", "新闻中心", "二级菜单"),
-            ("menu.routine.helpdesk", "zh-CN", "服务台", "二级菜单"),
             ("menu.routine.visitorcenter", "zh-CN", "访客中心", "二级菜单"),
 
             // 英文 (en-US)
@@ -181,7 +180,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.routine.conferencecenter", "en-US", "Conference Center", "Level 2 Menu"),
             ("menu.routine.documentcenter", "en-US", "Document Center", "Level 2 Menu"),
             ("menu.routine.newscenter", "en-US", "News Center", "Level 2 Menu"),
-            ("menu.routine.helpdesk", "en-US", "Help Desk", "Level 2 Menu"),
             ("menu.routine.visitorcenter", "en-US", "Visitor Center", "Level 2 Menu"),
 
             // 日文 (ja-JP)
@@ -189,7 +187,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.routine.conferencecenter", "ja-JP", "会議センター", "レベル2メニュー"),
             ("menu.routine.documentcenter", "ja-JP", "文書センター", "レベル2メニュー"),
             ("menu.routine.newscenter", "ja-JP", "ニュースセンター", "レベル2メニュー"),
-            ("menu.routine.helpdesk", "ja-JP", "ヘルプデスク", "レベル2メニュー"),
             ("menu.routine.visitorcenter", "ja-JP", "来訪者センター", "レベル2メニュー"),
 
             // 香港繁体 (zh-HK)
@@ -197,8 +194,31 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.routine.conferencecenter", "zh-HK", "會議中心", "二级菜单"),
             ("menu.routine.documentcenter", "zh-HK", "文管中心", "二级菜单"),
             ("menu.routine.newscenter", "zh-HK", "新聞中心", "二级菜单"),
-            ("menu.routine.helpdesk", "zh-HK", "服務枱", "二级菜单"),
             ("menu.routine.visitorcenter", "zh-HK", "訪客中心", "二级菜单"),
+
+            // ========================================
+            // 三级菜单（服务台）
+            // ========================================
+
+            ("menu.routine.helpdesk.myticket", "zh-CN", "我的工单", "三级菜单"),
+            ("menu.routine.helpdesk.ticket", "zh-CN", "工单管理", "三级菜单"),
+            ("menu.routine.helpdesk.knowledge", "zh-CN", "知识库", "三级菜单"),
+            ("menu.routine.helpdesk.myasset", "zh-CN", "我的资产", "三级菜单"),
+
+            ("menu.routine.helpdesk.myticket", "en-US", "My Tickets", "Level 3 Menu"),
+            ("menu.routine.helpdesk.ticket", "en-US", "Ticket", "Level 3 Menu"),
+            ("menu.routine.helpdesk.knowledge", "en-US", "Knowledge Base", "Level 3 Menu"),
+            ("menu.routine.helpdesk.myasset", "en-US", "My Assets", "Level 3 Menu"),
+
+            ("menu.routine.helpdesk.myticket", "ja-JP", "マイチケット", "レベル3メニュー"),
+            ("menu.routine.helpdesk.ticket", "ja-JP", "チケット管理", "レベル3メニュー"),
+            ("menu.routine.helpdesk.knowledge", "ja-JP", "ナレッジ", "レベル3メニュー"),
+            ("menu.routine.helpdesk.myasset", "ja-JP", "マイ資産", "レベル3メニュー"),
+
+            ("menu.routine.helpdesk.myticket", "zh-HK", "我的工單", "三级菜单"),
+            ("menu.routine.helpdesk.ticket", "zh-HK", "工單管理", "三级菜单"),
+            ("menu.routine.helpdesk.knowledge", "zh-HK", "知識庫", "三级菜单"),
+            ("menu.routine.helpdesk.myasset", "zh-HK", "我的資產", "三级菜单"),
 
             // ========================================
             // 二级菜单（财务核算）
@@ -268,36 +288,32 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.organization._self", "zh-CN", "组织管理", "二级菜单"),
             ("menu.humanresource.personnel._self", "zh-CN", "人事管理", "二级菜单"),
             ("menu.humanresource.attendance._self", "zh-CN", "考勤管理", "二级菜单"),
-            ("menu.humanresource.compensationbenefits._self", "zh-CN", "薪酬福利", "二级菜单"),
             ("menu.humanresource.performance._self", "zh-CN", "绩效管理", "二级菜单"),
-            ("menu.humanresource.trainingdevelopment._self", "zh-CN", "培训发展", "二级菜单"),
+            ("menu.humanresource.training._self", "zh-CN", "教育培训", "二级菜单"),
             ("menu.humanresource.talent._self", "zh-CN", "人才管理", "二级菜单"),
 
             // 英文 (en-US)
             ("menu.humanresource.organization._self", "en-US", "Organization", "Level 2 Menu"),
             ("menu.humanresource.personnel._self", "en-US", "Personnel", "Level 2 Menu"),
             ("menu.humanresource.attendance._self", "en-US", "Attendance", "Level 2 Menu"),
-            ("menu.humanresource.compensationbenefits._self", "en-US", "Compensation & Benefits", "Level 2 Menu"),
             ("menu.humanresource.performance._self", "en-US", "Performance", "Level 2 Menu"),
-            ("menu.humanresource.trainingdevelopment._self", "en-US", "Training & Development", "Level 2 Menu"),
+            ("menu.humanresource.training._self", "en-US", "Education & Training", "Level 2 Menu"),
             ("menu.humanresource.talent._self", "en-US", "Talent Management", "Level 2 Menu"),
 
             // 日文 (ja-JP)
             ("menu.humanresource.organization._self", "ja-JP", "組織管理", "レベル2メニュー"),
             ("menu.humanresource.personnel._self", "ja-JP", "人事管理", "レベル2メニュー"),
             ("menu.humanresource.attendance._self", "ja-JP", "勤怠管理", "レベル2メニュー"),
-            ("menu.humanresource.compensationbenefits._self", "ja-JP", "給与福利", "レベル2メニュー"),
             ("menu.humanresource.performance._self", "ja-JP", "绩效管理", "レベル2メニュー"),
-            ("menu.humanresource.trainingdevelopment._self", "ja-JP", "研修開発", "レベル2メニュー"),
+            ("menu.humanresource.training._self", "ja-JP", "教育研修", "レベル2メニュー"),
             ("menu.humanresource.talent._self", "ja-JP", "人材管理", "レベル2メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.humanresource.organization._self", "zh-HK", "組織管理", "二级菜单"),
             ("menu.humanresource.personnel._self", "zh-HK", "人事管理", "二级菜单"),
             ("menu.humanresource.attendance._self", "zh-HK", "考勤管理", "二级菜单"),
-            ("menu.humanresource.compensationbenefits._self", "zh-HK", "薪酬福利", "二级菜单"),
             ("menu.humanresource.performance._self", "zh-HK", "績效管理", "二级菜单"),
-            ("menu.humanresource.trainingdevelopment._self", "zh-HK", "培訓發展", "二级菜单"),
+            ("menu.humanresource.training._self", "zh-HK", "教育培訓", "二级菜单"),
             ("menu.humanresource.talent._self", "zh-HK", "人才管理", "二级菜单"),
 
             // ========================================
@@ -370,15 +386,27 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
 
             // 简体中文 (zh-CN)
             ("menu.code.generator", "zh-CN", "代码生成", "二级菜单"),
+            ("menu.code.database.info", "zh-CN", "数据库信息", "二级菜单"),
+            ("menu.code.database.tableclone", "zh-CN", "表克隆", "二级菜单"),
+            ("menu.code.database.dataclone", "zh-CN", "数据克隆", "二级菜单"),
 
             // 英文 (en-US)
             ("menu.code.generator", "en-US", "Code Generator", "Level 2 Menu"),
+            ("menu.code.database.info", "en-US", "Database Info", "Level 2 Menu"),
+            ("menu.code.database.tableclone", "en-US", "Table Clone", "Level 2 Menu"),
+            ("menu.code.database.dataclone", "en-US", "Data Clone", "Level 2 Menu"),
 
             // 日文 (ja-JP)
             ("menu.code.generator", "ja-JP", "コード生成", "レベル2メニュー"),
+            ("menu.code.database.info", "ja-JP", "データベース情報", "レベル2メニュー"),
+            ("menu.code.database.tableclone", "ja-JP", "テーブルクローン", "レベル2メニュー"),
+            ("menu.code.database.dataclone", "ja-JP", "データクローン", "レベル2メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.code.generator", "zh-HK", "代碼生成", "二级菜单"),
+            ("menu.code.database.info", "zh-HK", "數據庫信息", "二级菜单"),
+            ("menu.code.database.tableclone", "zh-HK", "表克隆", "二级菜单"),
+            ("menu.code.database.dataclone", "zh-HK", "數據克隆", "二级菜单"),
 
             // ========================================
             // 二级菜单（基础设置）
@@ -389,7 +417,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.foundation.dict", "zh-CN", "数据字典", "二级菜单"),
             ("menu.foundation.i18n", "zh-CN", "国际化", "二级菜单"),
             ("menu.foundation.file", "zh-CN", "文件管理", "二级菜单"),
-            ("menu.foundation.device", "zh-CN", "系统设备", "二级菜单"),
             ("menu.foundation.cache", "zh-CN", "缓存管理", "二级菜单"),
             ("menu.foundation.vocabulary", "zh-CN", "敏感词库", "二级菜单"),
             ("menu.foundation.setting", "zh-CN", "系统设置", "二级菜单"),
@@ -399,21 +426,19 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // 英文 (en-US)
             ("menu.foundation.numbering", "en-US", "Numbering", "Level 2 Menu"),
             ("menu.foundation.dict", "en-US", "Dictionary", "Level 2 Menu"),
-            ("menu.foundation.i18n", "en-US", "Internationalization", "Level 2 Menu"),
+            ("menu.foundation.i18n", "en-US", "I18n", "Level 2 Menu"),
             ("menu.foundation.file", "en-US", "File", "Level 2 Menu"),
-            ("menu.foundation.device", "en-US", "Device", "Level 2 Menu"),
             ("menu.foundation.cache", "en-US", "Cache", "Level 2 Menu"),
-            ("menu.foundation.vocabulary", "en-US", "Sensitive Vocabulary", "Level 2 Menu"),
+            ("menu.foundation.vocabulary", "en-US", "Vocabulary", "Level 2 Menu"),
             ("menu.foundation.setting", "en-US", "Setting", "Level 2 Menu"),
-            ("menu.foundation.online", "en-US", "Online Users", "Level 2 Menu"),
-            ("menu.foundation.message", "en-US", "Online Messages", "Level 2 Menu"),
+            ("menu.foundation.online", "en-US", "Online", "Level 2 Menu"),
+            ("menu.foundation.message", "en-US", "Messages", "Level 2 Menu"),
 
             // 日文 (ja-JP)
             ("menu.foundation.numbering", "ja-JP", "番号規則", "レベル2メニュー"),
             ("menu.foundation.dict", "ja-JP", "ディクショナリ", "レベル2メニュー"),
             ("menu.foundation.i18n", "ja-JP", "国際化", "レベル2メニュー"),
             ("menu.foundation.file", "ja-JP", "ファイル", "レベル2メニュー"),
-            ("menu.foundation.device", "ja-JP", "デバイス", "レベル2メニュー"),
             ("menu.foundation.cache", "ja-JP", "キャッシュ", "レベル2メニュー"),
             ("menu.foundation.vocabulary", "ja-JP", "敏感語彙", "レベル2メニュー"),
             ("menu.foundation.setting", "ja-JP", "システム設定", "レベル2メニュー"),
@@ -425,7 +450,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.foundation.dict", "zh-HK", "數據字典", "二级菜单"),
             ("menu.foundation.i18n", "zh-HK", "國際化", "二级菜单"),
             ("menu.foundation.file", "zh-HK", "文件管理", "二级菜单"),
-            ("menu.foundation.device", "zh-HK", "系統設備", "二级菜单"),
             ("menu.foundation.cache", "zh-HK", "緩存管理", "二级菜单"),
             ("menu.foundation.vocabulary", "zh-HK", "敏感詞庫", "二级菜单"),
             ("menu.foundation.setting", "zh-HK", "系統設置", "二级菜单"),
@@ -433,27 +457,7 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.foundation.message", "zh-HK", "在線消息", "二级菜单"),
 
             // ========================================
-            // 二级菜单（统计看板）
-            // ========================================
-
-            // 简体中文 (zh-CN)
-            ("menu.statistics.report._self", "zh-CN", "报表管理", "二级菜单"),
-            ("menu.statistics.logging._self", "zh-CN", "日志管理", "二级菜单"),
-
-            // 英文 (en-US)
-            ("menu.statistics.report._self", "en-US", "Report Management", "Level 2 Menu"),
-            ("menu.statistics.logging._self", "en-US", "Log Management", "Level 2 Menu"),
-
-            // 日文 (ja-JP)
-            ("menu.statistics.report._self", "ja-JP", "レポート管理", "レベル2メニュー"),
-            ("menu.statistics.logging._self", "ja-JP", "ログ管理", "レベル2メニュー"),
-
-            // 香港繁体 (zh-HK)
-            ("menu.statistics.report._self", "zh-HK", "報表管理", "二级菜单"),
-            ("menu.statistics.logging._self", "zh-HK", "日誌管理", "二级菜单"),
-
-            // ========================================
-            // 三级菜单（管理会计）
+            // 三级菜单（统计看板）
             // ========================================
 
             // 简体中文 (zh-CN)
@@ -595,22 +599,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.bom.modeldestination", "zh-HK", "機種仕向", "三级菜单"),
             ("menu.logistics.manufacturing.bom.list", "zh-HK", "物料清單", "三级菜单"),
             ("menu.logistics.manufacturing.bom.routin", "zh-HK", "工藝路線", "三级菜单"),
-
-            // ========================================
-            // 三级菜单（生产执行-工单）
-            // ========================================
-
-            // 简体中文 (zh-CN)
-            ("menu.logistics.manufacturing.workorder", "zh-CN", "工单管理", "三级菜单"),
-
-            // 英文 (en-US)
-            ("menu.logistics.manufacturing.workorder", "en-US", "Work Order", "Level 3 Menu"),
-
-            // 日文 (ja-JP)
-            ("menu.logistics.manufacturing.workorder", "ja-JP", "作業指図", "レベル3メニュー"),
-
-            // 香港繁体 (zh-HK)
-            ("menu.logistics.manufacturing.workorder", "zh-HK", "工單管理", "三级菜单"),
 
             // ========================================
             // 三级菜单（生产执行-排程）
@@ -801,24 +789,24 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.logistics.quality.cost.qualityoperation", "zh-CN", "品质业务", "三级菜单"),
-            ("menu.logistics.quality.cost.qualityfailure", "zh-CN", "品质问题", "三级菜单"),
-            ("menu.logistics.quality.cost.qualityincident", "zh-CN", "品质事故", "三级菜单"),
+            ("menu.logistics.quality.cost.operation", "zh-CN", "品质业务", "三级菜单"),
+            ("menu.logistics.quality.cost.failure", "zh-CN", "品质问题", "三级菜单"),
+            ("menu.logistics.quality.cost.incident", "zh-CN", "品质事故", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.logistics.quality.cost.qualityoperation", "en-US", "Quality Operation", "Level 3 Menu"),
-            ("menu.logistics.quality.cost.qualityfailure", "en-US", "Quality Failure", "Level 3 Menu"),
-            ("menu.logistics.quality.cost.qualityincident", "en-US", "Quality Incident", "Level 3 Menu"),
+            ("menu.logistics.quality.cost.operation", "en-US", "Quality Operation", "Level 3 Menu"),
+            ("menu.logistics.quality.cost.failure", "en-US", "Quality Failure", "Level 3 Menu"),
+            ("menu.logistics.quality.cost.incident", "en-US", "Quality Incident", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.logistics.quality.cost.qualityoperation", "ja-JP", "品質業務", "レベル3メニュー"),
-            ("menu.logistics.quality.cost.qualityfailure", "ja-JP", "品質問題", "レベル3メニュー"),
-            ("menu.logistics.quality.cost.qualityincident", "ja-JP", "品質事故", "レベル3メニュー"),
+            ("menu.logistics.quality.cost.operation", "ja-JP", "品質業務", "レベル3メニュー"),
+            ("menu.logistics.quality.cost.failure", "ja-JP", "品質問題", "レベル3メニュー"),
+            ("menu.logistics.quality.cost.incident", "ja-JP", "品質事故", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.logistics.quality.cost.qualityoperation", "zh-HK", "品質業務", "三级菜单"),
-            ("menu.logistics.quality.cost.qualityfailure", "zh-HK", "品質問題", "三级菜单"),
-            ("menu.logistics.quality.cost.qualityincident", "zh-HK", "品質事故", "三级菜单"),
+            ("menu.logistics.quality.cost.operation", "zh-HK", "品質業務", "三级菜单"),
+            ("menu.logistics.quality.cost.failure", "zh-HK", "品質問題", "三级菜单"),
+            ("menu.logistics.quality.cost.incident", "zh-HK", "品質事故", "三级菜单"),
 
             // ========================================
             // 三级菜单（质量业务）
@@ -887,34 +875,34 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // 简体中文 (zh-CN)
             ("menu.logistics.sales.customer", "zh-CN", "客户信息", "三级菜单"),
             ("menu.logistics.sales.client", "zh-CN", "顾客信息", "三级菜单"),
-            ("menu.logistics.sales.salesquotation", "zh-CN", "销售报价", "三级菜单"),
-            ("menu.logistics.sales.salesprice", "zh-CN", "销售价格", "三级菜单"),
-            ("menu.logistics.sales.salesorder", "zh-CN", "销售订单", "三级菜单"),
-            ("menu.logistics.sales.salesinvoice", "zh-CN", "销售发票", "三级菜单"),
+            ("menu.logistics.sales.quotation", "zh-CN", "销售报价", "三级菜单"),
+            ("menu.logistics.sales.price", "zh-CN", "销售价格", "三级菜单"),
+            ("menu.logistics.sales.order", "zh-CN", "销售订单", "三级菜单"),
+            ("menu.logistics.sales.invoice", "zh-CN", "销售发票", "三级菜单"),
 
             // 英文 (en-US)
             ("menu.logistics.sales.customer", "en-US", "Customer", "Level 3 Menu"),
             ("menu.logistics.sales.client", "en-US", "Client", "Level 3 Menu"),
-            ("menu.logistics.sales.salesquotation", "en-US", "Sales Quotation", "Level 3 Menu"),
-            ("menu.logistics.sales.salesprice", "en-US", "Sales Price", "Level 3 Menu"),
-            ("menu.logistics.sales.salesorder", "en-US", "Sales Order", "Level 3 Menu"),
-            ("menu.logistics.sales.salesinvoice", "en-US", "Sales Invoice", "Level 3 Menu"),
+            ("menu.logistics.sales.quotation", "en-US", "Sales Quotation", "Level 3 Menu"),
+            ("menu.logistics.sales.price", "en-US", "Sales Price", "Level 3 Menu"),
+            ("menu.logistics.sales.order", "en-US", "Sales Order", "Level 3 Menu"),
+            ("menu.logistics.sales.invoice", "en-US", "Sales Invoice", "Level 3 Menu"),
 
             // 日文 (ja-JP)
             ("menu.logistics.sales.customer", "ja-JP", "客様情報", "レベル3メニュー"),
             ("menu.logistics.sales.client", "ja-JP", "顧客情報", "レベル3メニュー"),
-            ("menu.logistics.sales.salesquotation", "ja-JP", "販売見積", "レベル3メニュー"),
-            ("menu.logistics.sales.salesprice", "ja-JP", "販売価格", "レベル3メニュー"),
-            ("menu.logistics.sales.salesorder", "ja-JP", "販売オーダ", "レベル3メニュー"),
-            ("menu.logistics.sales.salesinvoice", "ja-JP", "販売請求書", "レベル3メニュー"),
+            ("menu.logistics.sales.quotation", "ja-JP", "販売見積", "レベル3メニュー"),
+            ("menu.logistics.sales.price", "ja-JP", "販売価格", "レベル3メニュー"),
+            ("menu.logistics.sales.order", "ja-JP", "販売オーダ", "レベル3メニュー"),
+            ("menu.logistics.sales.invoice", "ja-JP", "販売請求書", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
             ("menu.logistics.sales.customer", "zh-HK", "客户信息", "三级菜单"),
             ("menu.logistics.sales.client", "zh-HK", "顧客信息", "三级菜单"),
-            ("menu.logistics.sales.salesquotation", "zh-HK", "銷售報價", "三级菜单"),
-            ("menu.logistics.sales.salesprice", "zh-HK", "銷售價格", "三级菜单"),
-            ("menu.logistics.sales.salesorder", "zh-HK", "銷售訂單", "三级菜单"),
-            ("menu.logistics.sales.salesinvoice", "zh-HK", "銷售發票", "三级菜单"),
+            ("menu.logistics.sales.quotation", "zh-HK", "銷售報價", "三级菜单"),
+            ("menu.logistics.sales.price", "zh-HK", "銷售價格", "三级菜单"),
+            ("menu.logistics.sales.order", "zh-HK", "銷售訂單", "三级菜单"),
+            ("menu.logistics.sales.invoice", "zh-HK", "銷售發票", "三级菜单"),
 
             // ========================================
             // 三级菜单（组织管理）
@@ -1001,120 +989,124 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.humanresource.attendance.overtime", "zh-HK", "加班管理", "三级菜单"),
 
             // ========================================
-            // 三级菜单（薪酬福利，与 CompensationBenefits 实体对齐）
+            // 三级菜单（薪酬管理，与 Compensation 实体对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.humanresource.compensationbenefits.benefitplan", "zh-CN", "福利方案", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.compensationbenefit", "zh-CN", "薪酬福利", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.compensationplan", "zh-CN", "薪酬方案", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.employeebenefit", "zh-CN", "员工福利", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.salaryadjustment", "zh-CN", "调薪管理", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.salarycomponent", "zh-CN", "薪资组成", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.salarystructure", "zh-CN", "薪资结构", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.taxrule", "zh-CN", "税务规则", "三级菜单"),
+            ("menu.humanresource.compensation.salaryitem", "zh-CN", "薪资项目", "三级菜单"),
+            ("menu.humanresource.compensation.payroll", "zh-CN", "薪酬体系", "三级菜单"),
+            ("menu.humanresource.compensation.payscale", "zh-CN", "薪级", "三级菜单"),
+            ("menu.humanresource.compensation.empsalary", "zh-CN", "员工定薪", "三级菜单"),
+            ("menu.humanresource.compensation.bonusplan", "zh-CN", "奖金方案", "三级菜单"),
+            ("menu.humanresource.compensation.salaryformula", "zh-CN", "薪资计算公式", "三级菜单"),
+            ("menu.humanresource.compensation.payslip", "zh-CN", "工资条", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.humanresource.compensationbenefits.benefitplan", "en-US", "Benefit Plan", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.compensationbenefit", "en-US", "Compensation Benefit", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.compensationplan", "en-US", "Compensation Plan", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.employeebenefit", "en-US", "Employee Benefit", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.salaryadjustment", "en-US", "Salary Adjustment", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.salarycomponent", "en-US", "Salary Component", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.salarystructure", "en-US", "Salary Structure", "Level 3 Menu"),
-            ("menu.humanresource.compensationbenefits.taxrule", "en-US", "Tax Rule", "Level 3 Menu"),
+            ("menu.humanresource.compensation.salaryitem", "en-US", "Salary Item", "Level 3 Menu"),
+            ("menu.humanresource.compensation.payroll", "en-US", "Payroll Scheme", "Level 3 Menu"),
+            ("menu.humanresource.compensation.payscale", "en-US", "Pay Scale", "Level 3 Menu"),
+            ("menu.humanresource.compensation.empsalary", "en-US", "Employee Salary", "Level 3 Menu"),
+            ("menu.humanresource.compensation.bonusplan", "en-US", "Bonus Plan", "Level 3 Menu"),
+            ("menu.humanresource.compensation.salaryformula", "en-US", "Salary Formula", "Level 3 Menu"),
+            ("menu.humanresource.compensation.payslip", "en-US", "Payslip", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.humanresource.compensationbenefits.benefitplan", "ja-JP", "福利方案", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.compensationbenefit", "ja-JP", "給与福利", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.compensationplan", "ja-JP", "給与方案", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.employeebenefit", "ja-JP", "従業員福利", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.salaryadjustment", "ja-JP", "昇給管理", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.salarycomponent", "ja-JP", "給与構成", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.salarystructure", "ja-JP", "給与構造", "レベル3メニュー"),
-            ("menu.humanresource.compensationbenefits.taxrule", "ja-JP", "税務規則", "レベル3メニュー"),
+            ("menu.humanresource.compensation.salaryitem", "ja-JP", "給与項目", "レベル3メニュー"),
+            ("menu.humanresource.compensation.payroll", "ja-JP", "給与体系", "レベル3メニュー"),
+            ("menu.humanresource.compensation.payscale", "ja-JP", "給与等級", "レベル3メニュー"),
+            ("menu.humanresource.compensation.empsalary", "ja-JP", "従業員定薪", "レベル3メニュー"),
+            ("menu.humanresource.compensation.bonusplan", "ja-JP", "賞与方案", "レベル3メニュー"),
+            ("menu.humanresource.compensation.salaryformula", "ja-JP", "給与計算式", "レベル3メニュー"),
+            ("menu.humanresource.compensation.payslip", "ja-JP", "給与明細", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.humanresource.compensationbenefits.benefitplan", "zh-HK", "福利方案", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.compensationbenefit", "zh-HK", "薪酬福利", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.compensationplan", "zh-HK", "薪酬方案", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.employeebenefit", "zh-HK", "員工福利", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.salaryadjustment", "zh-HK", "調薪管理", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.salarycomponent", "zh-HK", "薪資組成", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.salarystructure", "zh-HK", "薪資結構", "三级菜单"),
-            ("menu.humanresource.compensationbenefits.taxrule", "zh-HK", "稅務規則", "三级菜单"),
+            ("menu.humanresource.compensation.salaryitem", "zh-HK", "薪資項目", "三级菜单"),
+            ("menu.humanresource.compensation.payroll", "zh-HK", "薪酬體系", "三级菜单"),
+            ("menu.humanresource.compensation.payscale", "zh-HK", "薪級", "三级菜单"),
+            ("menu.humanresource.compensation.empsalary", "zh-HK", "員工定薪", "三级菜单"),
+            ("menu.humanresource.compensation.bonusplan", "zh-HK", "獎金方案", "三级菜单"),
+            ("menu.humanresource.compensation.salaryformula", "zh-HK", "薪資計算公式", "三级菜单"),
+            ("menu.humanresource.compensation.payslip", "zh-HK", "工資條", "三级菜单"),
 
             // ========================================
-            // 三级菜单（绩效管理，与 Performance 实体对齐）
+            // 三级菜单（福利管理，与 Benefits 实体对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.humanresource.performance.improvementplan", "zh-CN", "改进计划", "三级菜单"),
-            ("menu.humanresource.performance.performance", "zh-CN", "绩效记录", "三级菜单"),
-            ("menu.humanresource.performance.performancegoal", "zh-CN", "绩效目标", "三级菜单"),
-            ("menu.humanresource.performance.performanceindicator", "zh-CN", "绩效指标", "三级菜单"),
-            ("menu.humanresource.performance.performanceplan", "zh-CN", "绩效方案", "三级菜单"),
-            ("menu.humanresource.performance.performancereview", "zh-CN", "绩效评审", "三级菜单"),
-            ("menu.humanresource.performance.reviewcycle", "zh-CN", "评审周期", "三级菜单"),
+            ("menu.humanresource.benefits.benefititem", "zh-CN", "福利项目", "三级菜单"),
+            ("menu.humanresource.benefits.empbenefitplan", "zh-CN", "员工福利方案", "三级菜单"),
+            ("menu.humanresource.benefits.socialinsurance", "zh-CN", "社保公积金", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.humanresource.performance.improvementplan", "en-US", "Improvement Plan", "Level 3 Menu"),
-            ("menu.humanresource.performance.performance", "en-US", "Performance Record", "Level 3 Menu"),
-            ("menu.humanresource.performance.performancegoal", "en-US", "Performance Goal", "Level 3 Menu"),
-            ("menu.humanresource.performance.performanceindicator", "en-US", "Performance Indicator", "Level 3 Menu"),
-            ("menu.humanresource.performance.performanceplan", "en-US", "Performance Plan", "Level 3 Menu"),
-            ("menu.humanresource.performance.performancereview", "en-US", "Performance Review", "Level 3 Menu"),
-            ("menu.humanresource.performance.reviewcycle", "en-US", "Review Cycle", "Level 3 Menu"),
+            ("menu.humanresource.benefits.benefititem", "en-US", "Benefit Item", "Level 3 Menu"),
+            ("menu.humanresource.benefits.empbenefitplan", "en-US", "Employee Benefit Plan", "Level 3 Menu"),
+            ("menu.humanresource.benefits.socialinsurance", "en-US", "Social Insurance", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.humanresource.performance.improvementplan", "ja-JP", "改善計画", "レベル3メニュー"),
-            ("menu.humanresource.performance.performance", "ja-JP", "績效記録", "レベル3メニュー"),
-            ("menu.humanresource.performance.performancegoal", "ja-JP", "績效目標", "レベル3メニュー"),
-            ("menu.humanresource.performance.performanceindicator", "ja-JP", "績效指標", "レベル3メニュー"),
-            ("menu.humanresource.performance.performanceplan", "ja-JP", "績效方案", "レベル3メニュー"),
-            ("menu.humanresource.performance.performancereview", "ja-JP", "績效評価", "レベル3メニュー"),
-            ("menu.humanresource.performance.reviewcycle", "ja-JP", "評価周期", "レベル3メニュー"),
+            ("menu.humanresource.benefits.benefititem", "ja-JP", "福利項目", "レベル3メニュー"),
+            ("menu.humanresource.benefits.empbenefitplan", "ja-JP", "従業員福利方案", "レベル3メニュー"),
+            ("menu.humanresource.benefits.socialinsurance", "ja-JP", "社保・公积金", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.humanresource.performance.improvementplan", "zh-HK", "改進計劃", "三级菜单"),
-            ("menu.humanresource.performance.performance", "zh-HK", "績效記錄", "三级菜单"),
-            ("menu.humanresource.performance.performancegoal", "zh-HK", "績效目標", "三级菜单"),
-            ("menu.humanresource.performance.performanceindicator", "zh-HK", "績效指標", "三级菜单"),
-            ("menu.humanresource.performance.performanceplan", "zh-HK", "績效方案", "三级菜单"),
-            ("menu.humanresource.performance.performancereview", "zh-HK", "績效評審", "三级菜单"),
-            ("menu.humanresource.performance.reviewcycle", "zh-HK", "評審週期", "三级菜单"),
+            ("menu.humanresource.benefits.benefititem", "zh-HK", "福利項目", "三级菜单"),
+            ("menu.humanresource.benefits.empbenefitplan", "zh-HK", "員工福利方案", "三级菜单"),
+            ("menu.humanresource.benefits.socialinsurance", "zh-HK", "社保公積金", "三级菜单"),
 
             // ========================================
-            // 三级菜单（培训发展，与 TrainingDevelopment 实体对齐）
+            // 三级菜单（绩效管理，与 5 个实体对齐）
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.humanresource.trainingdevelopment.skillassessment", "zh-CN", "技能评估", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingactivity", "zh-CN", "培训活动", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingcourse", "zh-CN", "培训课程", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "zh-CN", "培训发展", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingplan", "zh-CN", "培训计划", "三级菜单"),
+            ("menu.humanresource.performance.perfcycle", "zh-CN", "绩效周期", "三级菜单"),
+            ("menu.humanresource.performance.perfscheme", "zh-CN", "绩效方案", "三级菜单"),
+            ("menu.humanresource.performance.perfobjective", "zh-CN", "绩效目标", "三级菜单"),
+            ("menu.humanresource.performance.perfassessment", "zh-CN", "绩效考核", "三级菜单"),
+            ("menu.humanresource.performance.perfanalysis", "zh-CN", "分析改进", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.humanresource.trainingdevelopment.skillassessment", "en-US", "Skill Assessment", "Level 3 Menu"),
-            ("menu.humanresource.trainingdevelopment.trainingactivity", "en-US", "Training Activity", "Level 3 Menu"),
-            ("menu.humanresource.trainingdevelopment.trainingcourse", "en-US", "Training Course", "Level 3 Menu"),
-            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "en-US", "Training Development", "Level 3 Menu"),
-            ("menu.humanresource.trainingdevelopment.trainingplan", "en-US", "Training Plan", "Level 3 Menu"),
+            ("menu.humanresource.performance.perfcycle", "en-US", "Performance Cycle", "Level 3 Menu"),
+            ("menu.humanresource.performance.perfscheme", "en-US", "Performance Scheme", "Level 3 Menu"),
+            ("menu.humanresource.performance.perfobjective", "en-US", "Performance Objective", "Level 3 Menu"),
+            ("menu.humanresource.performance.perfassessment", "en-US", "Performance Appraisal", "Level 3 Menu"),
+            ("menu.humanresource.performance.perfanalysis", "en-US", "Analysis Improvement", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.humanresource.trainingdevelopment.skillassessment", "ja-JP", "技能評価", "レベル3メニュー"),
-            ("menu.humanresource.trainingdevelopment.trainingactivity", "ja-JP", "研修活動", "レベル3メニュー"),
-            ("menu.humanresource.trainingdevelopment.trainingcourse", "ja-JP", "研修課程", "レベル3メニュー"),
-            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "ja-JP", "研修開発", "レベル3メニュー"),
-            ("menu.humanresource.trainingdevelopment.trainingplan", "ja-JP", "研修計画", "レベル3メニュー"),
+            ("menu.humanresource.performance.perfcycle", "ja-JP", "績效周期", "レベル3メニュー"),
+            ("menu.humanresource.performance.perfscheme", "ja-JP", "績效方案", "レベル3メニュー"),
+            ("menu.humanresource.performance.perfobjective", "ja-JP", "績效目標", "レベル3メニュー"),
+            ("menu.humanresource.performance.perfassessment", "ja-JP", "績效考核", "レベル3メニュー"),
+            ("menu.humanresource.performance.perfanalysis", "ja-JP", "分析改善", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.humanresource.trainingdevelopment.skillassessment", "zh-HK", "技能評估", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingactivity", "zh-HK", "培訓活動", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingcourse", "zh-HK", "培訓課程", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingdevelopment", "zh-HK", "培訓發展", "三级菜单"),
-            ("menu.humanresource.trainingdevelopment.trainingplan", "zh-HK", "培訓計劃", "三级菜单"),
+            ("menu.humanresource.performance.perfcycle", "zh-HK", "績效週期", "三级菜单"),
+            ("menu.humanresource.performance.perfscheme", "zh-HK", "績效方案", "三级菜单"),
+            ("menu.humanresource.performance.perfobjective", "zh-HK", "績效目標", "三级菜单"),
+            ("menu.humanresource.performance.perfassessment", "zh-HK", "績效考核", "三级菜单"),
+            ("menu.humanresource.performance.perfanalysis", "zh-HK", "分析改進", "三级菜单"),
+
+            // ========================================
+            // 三级菜单（教育培训，与 TrainingCourse / TrainingPlan / TrainingAttendee 对齐）
+            // ========================================
+
+            // 简体中文 (zh-CN)
+            ("menu.humanresource.training.course", "zh-CN", "培训课程", "三级菜单"),
+            ("menu.humanresource.training.plan", "zh-CN", "年度计划", "三级菜单"),
+            ("menu.humanresource.training.attendee", "zh-CN", "参训记录", "三级菜单"),
+
+            // 英文 (en-US)
+            ("menu.humanresource.training.course", "en-US", "Training Course", "Level 3 Menu"),
+            ("menu.humanresource.training.plan", "en-US", "Annual Plan", "Level 3 Menu"),
+            ("menu.humanresource.training.attendee", "en-US", "Training Attendee", "Level 3 Menu"),
+
+            // 日文 (ja-JP)
+            ("menu.humanresource.training.course", "ja-JP", "研修課程", "レベル3メニュー"),
+            ("menu.humanresource.training.plan", "ja-JP", "年度計画", "レベル3メニュー"),
+            ("menu.humanresource.training.attendee", "ja-JP", "受講記録", "レベル3メニュー"),
+
+            // 香港繁体 (zh-HK)
+            ("menu.humanresource.training.course", "zh-HK", "培訓課程", "三级菜单"),
+            ("menu.humanresource.training.plan", "zh-HK", "年度計劃", "三级菜单"),
+            ("menu.humanresource.training.attendee", "zh-HK", "參訓記錄", "三级菜单"),
 
             // ========================================
             // 三级菜单（人才管理）
@@ -1197,31 +1189,31 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.logistics.service.servicerequest", "zh-CN", "服务请求", "三级菜单"),
-            ("menu.logistics.service.servicecontract", "zh-CN", "服务合同", "三级菜单"),
-            ("menu.logistics.service.serviceorder", "zh-CN", "服务订单", "三级菜单"),
-            ("menu.logistics.service.serviceticket", "zh-CN", "服务工单", "三级菜单"),
+            ("menu.logistics.service.request", "zh-CN", "服务请求", "三级菜单"),
+            ("menu.logistics.service.contract", "zh-CN", "服务合同", "三级菜单"),
+            ("menu.logistics.service.order", "zh-CN", "服务订单", "三级菜单"),
+            ("menu.logistics.service.ticket", "zh-CN", "服务工单", "三级菜单"),
             ("menu.logistics.maintenance.repair", "zh-CN", "维修管理", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.logistics.service.servicerequest", "en-US", "Service Request", "Level 3 Menu"),
-            ("menu.logistics.service.servicecontract", "en-US", "Service Contract", "Level 3 Menu"),
-            ("menu.logistics.service.serviceorder", "en-US", "Service Order", "Level 3 Menu"),
-            ("menu.logistics.service.serviceticket", "en-US", "Service Ticket", "Level 3 Menu"),
+            ("menu.logistics.service.request", "en-US", "Service Request", "Level 3 Menu"),
+            ("menu.logistics.service.contract", "en-US", "Service Contract", "Level 3 Menu"),
+            ("menu.logistics.service.order", "en-US", "Service Order", "Level 3 Menu"),
+            ("menu.logistics.service.ticket", "en-US", "Service Ticket", "Level 3 Menu"),
             ("menu.logistics.maintenance.repair", "en-US", "Repair", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.logistics.service.servicerequest", "ja-JP", "サービス依頼", "レベル3メニュー"),
-            ("menu.logistics.service.servicecontract", "ja-JP", "サービス契約", "レベル3メニュー"),
-            ("menu.logistics.service.serviceorder", "ja-JP", "サービス受注", "レベル3メニュー"),
-            ("menu.logistics.service.serviceticket", "ja-JP", "サービス工票", "レベル3メニュー"),
+            ("menu.logistics.service.request", "ja-JP", "サービス依頼", "レベル3メニュー"),
+            ("menu.logistics.service.contract", "ja-JP", "サービス契約", "レベル3メニュー"),
+            ("menu.logistics.service.order", "ja-JP", "サービス受注", "レベル3メニュー"),
+            ("menu.logistics.service.ticket", "ja-JP", "サービス工票", "レベル3メニュー"),
             ("menu.logistics.maintenance.repair", "ja-JP", "修理管理", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.logistics.service.servicerequest", "zh-HK", "服務請求", "三级菜单"),
-            ("menu.logistics.service.servicecontract", "zh-HK", "服務合同", "三级菜单"),
-            ("menu.logistics.service.serviceorder", "zh-HK", "服務訂單", "三级菜单"),
-            ("menu.logistics.service.serviceticket", "zh-HK", "服務工單", "三级菜单"),
+            ("menu.logistics.service.request", "zh-HK", "服務請求", "三级菜单"),
+            ("menu.logistics.service.contract", "zh-HK", "服務合同", "三级菜单"),
+            ("menu.logistics.service.order", "zh-HK", "服務訂單", "三级菜单"),
+            ("menu.logistics.service.ticket", "zh-HK", "服務工單", "三级菜单"),
             ("menu.logistics.maintenance.repair", "zh-HK", "維修管理", "三级菜单"),
 
             // ========================================
@@ -1229,23 +1221,115 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // ========================================
 
             // 简体中文 (zh-CN)
-            ("menu.logistics.serial.productserialinbound", "zh-CN", "序列号入库", "三级菜单"),
-            ("menu.logistics.serial.productserialoutbound", "zh-CN", "序列号出库", "三级菜单"),
+            ("menu.logistics.serial.productserialinbound", "zh-CN", "扫描入库", "三级菜单"),
+            ("menu.logistics.serial.productserialoutbound", "zh-CN", "扫描出库", "三级菜单"),
 
             // 英文 (en-US)
-            ("menu.logistics.serial.productserialinbound", "en-US", "Serial Number Inbound", "Level 3 Menu"),
-            ("menu.logistics.serial.productserialoutbound", "en-US", "Serial Number Outbound", "Level 3 Menu"),
+            ("menu.logistics.serial.productserialinbound", "en-US", "Scan In", "Level 3 Menu"),
+            ("menu.logistics.serial.productserialoutbound", "en-US", "Scan Out", "Level 3 Menu"),
 
             // 日文 (ja-JP)
-            ("menu.logistics.serial.productserialinbound", "ja-JP", "シリアル番号入庫", "レベル3メニュー"),
-            ("menu.logistics.serial.productserialoutbound", "ja-JP", "シリアル番号出庫", "レベル3メニュー"),
+            ("menu.logistics.serial.productserialinbound", "ja-JP", "入庫スキャン", "レベル3メニュー"),
+            ("menu.logistics.serial.productserialoutbound", "ja-JP", "出庫スキャン", "レベル3メニュー"),
 
             // 香港繁体 (zh-HK)
-            ("menu.logistics.serial.productserialinbound", "zh-HK", "序列號入庫", "三级菜单"),
-            ("menu.logistics.serial.productserialoutbound", "zh-HK", "序列號出庫", "三级菜单"),
+            ("menu.logistics.serial.productserialinbound", "zh-HK", "掃描入庫", "三级菜单"),
+            ("menu.logistics.serial.productserialoutbound", "zh-HK", "掃描出庫", "三级菜单"),
 
             // ========================================
-            // 三级目录（与菜单种子 I18nKey 对齐）
+            // 二级目录（与菜单种子 I18nKey 对齐，MenuType=0）
+            // ========================================
+
+            // 简体中文 (zh-CN)
+            ("menu.routine.helpdesk._self", "zh-CN", "服务台", "二级目录"),
+            ("menu.accounting.financial._self", "zh-CN", "管理会计", "二级目录"),
+            ("menu.accounting.controlling._self", "zh-CN", "控制会计", "二级目录"),
+            ("menu.logistics.sales._self", "zh-CN", "销售管理", "二级目录"),
+            ("menu.logistics.materials._self", "zh-CN", "物料管理", "二级目录"),
+            ("menu.logistics.manufacturing._self", "zh-CN", "生产执行", "二级目录"),
+            ("menu.logistics.quality._self", "zh-CN", "质量管理", "二级目录"),
+            ("menu.logistics.service._self", "zh-CN", "客户服务", "二级目录"),
+            ("menu.logistics.maintenance._self", "zh-CN", "工厂维护", "二级目录"),
+            ("menu.logistics.serial._self", "zh-CN", "序列号管理", "二级目录"),
+            ("menu.humanresource.organization._self", "zh-CN", "组织管理", "二级目录"),
+            ("menu.humanresource.personnel._self", "zh-CN", "人事管理", "二级目录"),
+            ("menu.humanresource.attendance._self", "zh-CN", "考勤管理", "二级目录"),
+            ("menu.humanresource.compensation._self", "zh-CN", "薪酬管理", "二级目录"),
+            ("menu.humanresource.benefits._self", "zh-CN", "福利管理", "二级目录"),
+            ("menu.humanresource.performance._self", "zh-CN", "绩效管理", "二级目录"),
+            ("menu.humanresource.training._self", "zh-CN", "教育培训", "二级目录"),
+            ("menu.humanresource.talent._self", "zh-CN", "人才管理", "二级目录"),
+            ("menu.statistics.report._self", "zh-CN", "报表管理", "二级目录"),
+            ("menu.statistics.logging._self", "zh-CN", "日志管理", "二级目录"),
+
+            // 英文 (en-US)
+            ("menu.routine.helpdesk._self", "en-US", "Help Desk", "Level 2 Directory"),
+            ("menu.accounting.financial._self", "en-US", "Financial", "Level 2 Directory"),
+            ("menu.accounting.controlling._self", "en-US", "Controlling", "Level 2 Directory"),
+            ("menu.logistics.sales._self", "en-US", "Sales", "Level 2 Directory"),
+            ("menu.logistics.materials._self", "en-US", "Materials", "Level 2 Directory"),
+            ("menu.logistics.manufacturing._self", "en-US", "Manufacturing", "Level 2 Directory"),
+            ("menu.logistics.quality._self", "en-US", "Quality", "Level 2 Directory"),
+            ("menu.logistics.service._self", "en-US", "Service", "Level 2 Directory"),
+            ("menu.logistics.maintenance._self", "en-US", "Maintenance", "Level 2 Directory"),
+            ("menu.logistics.serial._self", "en-US", "Serial Number", "Level 2 Directory"),
+            ("menu.humanresource.organization._self", "en-US", "Organization", "Level 2 Directory"),
+            ("menu.humanresource.personnel._self", "en-US", "Personnel", "Level 2 Directory"),
+            ("menu.humanresource.attendance._self", "en-US", "Attendance", "Level 2 Directory"),
+            ("menu.humanresource.compensation._self", "en-US", "Compensation", "Level 2 Directory"),
+            ("menu.humanresource.benefits._self", "en-US", "Benefits", "Level 2 Directory"),
+            ("menu.humanresource.performance._self", "en-US", "Performance", "Level 2 Directory"),
+            ("menu.humanresource.training._self", "en-US", "Training", "Level 2 Directory"),
+            ("menu.humanresource.talent._self", "en-US", "Talent ", "Level 2 Directory"),
+            ("menu.statistics.report._self", "en-US", "Report", "Level 2 Directory"),
+            ("menu.statistics.logging._self", "en-US", "Logging", "Level 2 Directory"),
+
+            // 日文 (ja-JP)
+            ("menu.routine.helpdesk._self", "ja-JP", "ヘルプデスク", "レベル2ディレクトリ"),
+            ("menu.accounting.financial._self", "ja-JP", "財務会計", "レベル2ディレクトリ"),
+            ("menu.accounting.controlling._self", "ja-JP", "管理会計", "レベル2ディレクトリ"),
+            ("menu.logistics.sales._self", "ja-JP", "販売管理", "レベル2ディレクトリ"),
+            ("menu.logistics.materials._self", "ja-JP", "資材管理", "レベル2ディレクトリ"),
+            ("menu.logistics.manufacturing._self", "ja-JP", "製造実行", "レベル2ディレクトリ"),
+            ("menu.logistics.quality._self", "ja-JP", "品質管理", "レベル2ディレクトリ"),
+            ("menu.logistics.service._self", "ja-JP", "カスタマーサービス", "レベル2ディレクトリ"),
+            ("menu.logistics.maintenance._self", "ja-JP", "工場保守", "レベル2ディレクトリ"),
+            ("menu.logistics.serial._self", "ja-JP", "シリアル管理", "レベル2ディレクトリ"),
+            ("menu.humanresource.organization._self", "ja-JP", "組織管理", "レベル2ディレクトリ"),
+            ("menu.humanresource.personnel._self", "ja-JP", "人事管理", "レベル2ディレクトリ"),
+            ("menu.humanresource.attendance._self", "ja-JP", "勤怠管理", "レベル2ディレクトリ"),
+            ("menu.humanresource.compensation._self", "ja-JP", "給与管理", "レベル2ディレクトリ"),
+            ("menu.humanresource.benefits._self", "ja-JP", "福利管理", "レベル2ディレクトリ"),
+            ("menu.humanresource.performance._self", "ja-JP", "绩效管理", "レベル2ディレクトリ"),
+            ("menu.humanresource.training._self", "ja-JP", "教育研修", "レベル2ディレクトリ"),
+            ("menu.humanresource.talent._self", "ja-JP", "人材管理", "レベル2ディレクトリ"),
+            ("menu.statistics.report._self", "ja-JP", "レポート管理", "レベル2ディレクトリ"),
+            ("menu.statistics.logging._self", "ja-JP", "ログ管理", "レベル2ディレクトリ"),
+
+            // 香港繁体 (zh-HK)
+            ("menu.routine.helpdesk._self", "zh-HK", "服務枱", "二级目录"),
+            ("menu.accounting.financial._self", "zh-HK", "管理會計", "二级目录"),
+            ("menu.accounting.controlling._self", "zh-HK", "控制會計", "二级目录"),
+            ("menu.logistics.sales._self", "zh-HK", "銷售管理", "二级目录"),
+            ("menu.logistics.materials._self", "zh-HK", "物料管理", "二级目录"),
+            ("menu.logistics.manufacturing._self", "zh-HK", "生產執行", "二级目录"),
+            ("menu.logistics.quality._self", "zh-HK", "質量管理", "二级目录"),
+            ("menu.logistics.service._self", "zh-HK", "客户服務", "二级目录"),
+            ("menu.logistics.maintenance._self", "zh-HK", "工廠維護", "二级目录"),
+            ("menu.logistics.serial._self", "zh-HK", "序列號管理", "二级目录"),
+            ("menu.humanresource.organization._self", "zh-HK", "組織管理", "二级目录"),
+            ("menu.humanresource.personnel._self", "zh-HK", "人事管理", "二级目录"),
+            ("menu.humanresource.attendance._self", "zh-HK", "考勤管理", "二级目录"),
+            ("menu.humanresource.compensation._self", "zh-HK", "薪酬管理", "二级目录"),
+            ("menu.humanresource.benefits._self", "zh-HK", "福利管理", "二级目录"),
+            ("menu.humanresource.performance._self", "zh-HK", "績效管理", "二级目录"),
+            ("menu.humanresource.training._self", "zh-HK", "教育培訓", "二级目录"),
+            ("menu.humanresource.talent._self", "zh-HK", "人才管理", "二级目录"),
+            ("menu.statistics.report._self", "zh-HK", "報表管理", "二级目录"),
+            ("menu.statistics.logging._self", "zh-HK", "日誌管理", "二级目录"),
+
+            // ========================================
+            // 三级目录（与菜单种子 I18nKey 对齐，MenuType=0）
             // ========================================
 
             // 简体中文 (zh-CN)
@@ -1439,8 +1523,8 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

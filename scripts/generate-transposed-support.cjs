@@ -30,8 +30,8 @@ const TRANSPOSABLE_ENTITY_CONFIG = {
     groupKeyFields: ['I18nKey', 'ResourceGroup', 'ResourceType'],
     rowFields: [
       { name: 'I18nKey', type: 'string', summary: '国际化翻译键（转置行键）', required: true },
-      { name: 'ResourceGroup', type: 'TaktModule', summary: '资源分组' },
-      { name: 'ResourceType', type: 'TaktAppSide', summary: '资源类别' },
+      { name: 'ResourceGroup', type: 'int', summary: '资源分组（TaktModule 字典码 int）' },
+      { name: 'ResourceType', type: 'int', summary: '资源类别（TaktAppSide 字典码 int，0=前端）' },
       { name: 'ContextNote', type: 'string?', summary: '上下文注释' },
     ],
     queryFields: [
@@ -39,8 +39,8 @@ const TRANSPOSABLE_ENTITY_CONFIG = {
       { name: 'CultureCode', type: 'string?', summary: '区域文化编码' },
       { name: 'I18nKey', type: 'string?', summary: '国际化翻译键' },
       { name: 'TranslationText', type: 'string?', summary: '翻译文本' },
-      { name: 'ResourceGroup', type: 'TaktModule?', summary: '资源分组' },
-      { name: 'ResourceType', type: 'TaktAppSide?', summary: '资源类别' },
+      { name: 'ResourceGroup', type: 'int?', summary: '资源分组（TaktModule 字典码 int）' },
+      { name: 'ResourceType', type: 'int?', summary: '资源类别（TaktAppSide 字典码 int）' },
       { name: 'ContextNote', type: 'string?', summary: '上下文注释' },
     ],
     batchScopeFields: [],
@@ -238,7 +238,7 @@ function generateTransposedServiceImplementation(entityShort, desc, repoField, e
 
   const transposedQueryExpr = buildTransposedQueryExpressionBody(entityShort, dtoBase, cfg);
 
-  const cultureListPredicate = `x => x.TenantCode == CurrentTenantCode && x.${master.statusField} == TaktCommonStatus.Enabled`;
+  const cultureListPredicate = `x => x.TenantCode == CurrentTenantCode && x.${master.statusField} == 1`;
 
   const fillRowFromGroup = `            var first = g.First();
             var row = new ${names.row}

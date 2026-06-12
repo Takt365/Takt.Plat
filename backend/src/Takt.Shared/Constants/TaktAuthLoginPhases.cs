@@ -4,7 +4,7 @@
 // 文件名称：TaktAuthLoginPhases.cs
 // 创建时间：2026-05-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：认证登录流程阶段常量（统一日志处理器使用）
+// 功能描述：认证流程阶段字符串常量（日志 phase 对齐；仅 string const，非枚举）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

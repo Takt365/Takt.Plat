@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleMenuI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoleMenu 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity;
 
 /// <summary>
-/// TaktRoleMenu 实体国际化翻译种子（键前缀 entity.roleMenu.*）
+/// TaktRoleMenu 实体国际化翻译种子（键前缀 entity.rolemenu.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktRoleMenuI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktRoleMenuI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 roleMenu 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 rolemenu 实体翻译...", tenantCode);
 
         foreach (var item in GetRoleMenuTranslations())
         {
@@ -76,56 +75,56 @@ public class TaktRoleMenuI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktRoleMenu 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.roleMenu._self / entity.roleMenu.{{field}}；ResourceGroup=TaktModule.Identity；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.rolemenu._self / entity.rolemenu.{{field}}；ResourceGroup=1；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetRoleMenuTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.roleMenu._self
-            new TranslationSeedItem("entity.roleMenu._self", "en-US", "Role Menu Information", "实体名称"),
-            // entity.roleMenu._self
-            new TranslationSeedItem("entity.roleMenu._self", "ja-JP", "角色-菜单关联信息", "实体名称"),
-            // entity.roleMenu._self
-            new TranslationSeedItem("entity.roleMenu._self", "zh-CN", "角色-菜单关联信息", "实体名称"),
-            // entity.roleMenu._self
-            new TranslationSeedItem("entity.roleMenu._self", "zh-HK", "角色-菜单关联信息", "实体名称"),
+            // entity.rolemenu._self
+            new TranslationSeedItem("entity.rolemenu._self", "en-US", "Role Menu Information", "实体名称"),
+            // entity.rolemenu._self
+            new TranslationSeedItem("entity.rolemenu._self", "ja-JP", "角色-菜单关联信息", "实体名称"),
+            // entity.rolemenu._self
+            new TranslationSeedItem("entity.rolemenu._self", "zh-CN", "角色-菜单关联信息", "实体名称"),
+            // entity.rolemenu._self
+            new TranslationSeedItem("entity.rolemenu._self", "zh-HK", "角色-菜单关联信息", "实体名称"),
 
-            // entity.roleMenu.roleid
-            new TranslationSeedItem("entity.roleMenu.roleid", "en-US", "角色ID", "角色ID"),
-            // entity.roleMenu.roleid
-            new TranslationSeedItem("entity.roleMenu.roleid", "ja-JP", "角色ID", "角色ID"),
-            // entity.roleMenu.roleid
-            new TranslationSeedItem("entity.roleMenu.roleid", "zh-CN", "角色ID", "角色ID"),
-            // entity.roleMenu.roleid
-            new TranslationSeedItem("entity.roleMenu.roleid", "zh-HK", "角色ID", "角色ID"),
+            // entity.rolemenu.roleid
+            new TranslationSeedItem("entity.rolemenu.roleid", "en-US", "角色ID", "角色ID"),
+            // entity.rolemenu.roleid
+            new TranslationSeedItem("entity.rolemenu.roleid", "ja-JP", "角色ID", "角色ID"),
+            // entity.rolemenu.roleid
+            new TranslationSeedItem("entity.rolemenu.roleid", "zh-CN", "角色ID", "角色ID"),
+            // entity.rolemenu.roleid
+            new TranslationSeedItem("entity.rolemenu.roleid", "zh-HK", "角色ID", "角色ID"),
 
-            // entity.roleMenu.menuid
-            new TranslationSeedItem("entity.roleMenu.menuid", "en-US", "菜单ID", "菜单ID"),
-            // entity.roleMenu.menuid
-            new TranslationSeedItem("entity.roleMenu.menuid", "ja-JP", "菜单ID", "菜单ID"),
-            // entity.roleMenu.menuid
-            new TranslationSeedItem("entity.roleMenu.menuid", "zh-CN", "菜单ID", "菜单ID"),
-            // entity.roleMenu.menuid
-            new TranslationSeedItem("entity.roleMenu.menuid", "zh-HK", "菜单ID", "菜单ID"),
+            // entity.rolemenu.menuid
+            new TranslationSeedItem("entity.rolemenu.menuid", "en-US", "菜单ID", "菜单ID"),
+            // entity.rolemenu.menuid
+            new TranslationSeedItem("entity.rolemenu.menuid", "ja-JP", "菜单ID", "菜单ID"),
+            // entity.rolemenu.menuid
+            new TranslationSeedItem("entity.rolemenu.menuid", "zh-CN", "菜单ID", "菜单ID"),
+            // entity.rolemenu.menuid
+            new TranslationSeedItem("entity.rolemenu.menuid", "zh-HK", "菜单ID", "菜单ID"),
 
-            // entity.roleMenu.role
-            new TranslationSeedItem("entity.roleMenu.role", "en-US", "角色", "角色（多对一）"),
-            // entity.roleMenu.role
-            new TranslationSeedItem("entity.roleMenu.role", "ja-JP", "角色", "角色（多对一）"),
-            // entity.roleMenu.role
-            new TranslationSeedItem("entity.roleMenu.role", "zh-CN", "角色", "角色（多对一）"),
-            // entity.roleMenu.role
-            new TranslationSeedItem("entity.roleMenu.role", "zh-HK", "角色", "角色（多对一）"),
+            // entity.rolemenu.role
+            new TranslationSeedItem("entity.rolemenu.role", "en-US", "角色", "角色（多对一）"),
+            // entity.rolemenu.role
+            new TranslationSeedItem("entity.rolemenu.role", "ja-JP", "角色", "角色（多对一）"),
+            // entity.rolemenu.role
+            new TranslationSeedItem("entity.rolemenu.role", "zh-CN", "角色", "角色（多对一）"),
+            // entity.rolemenu.role
+            new TranslationSeedItem("entity.rolemenu.role", "zh-HK", "角色", "角色（多对一）"),
 
-            // entity.roleMenu.menu
-            new TranslationSeedItem("entity.roleMenu.menu", "en-US", "菜单", "菜单（多对一）"),
-            // entity.roleMenu.menu
-            new TranslationSeedItem("entity.roleMenu.menu", "ja-JP", "菜单", "菜单（多对一）"),
-            // entity.roleMenu.menu
-            new TranslationSeedItem("entity.roleMenu.menu", "zh-CN", "菜单", "菜单（多对一）"),
-            // entity.roleMenu.menu
-            new TranslationSeedItem("entity.roleMenu.menu", "zh-HK", "菜单", "菜单（多对一）"),
+            // entity.rolemenu.menu
+            new TranslationSeedItem("entity.rolemenu.menu", "en-US", "菜单", "菜单（多对一）"),
+            // entity.rolemenu.menu
+            new TranslationSeedItem("entity.rolemenu.menu", "ja-JP", "菜单", "菜单（多对一）"),
+            // entity.rolemenu.menu
+            new TranslationSeedItem("entity.rolemenu.menu", "zh-CN", "菜单", "菜单（多对一）"),
+            // entity.rolemenu.menu
+            new TranslationSeedItem("entity.rolemenu.menu", "zh-HK", "菜单", "菜单（多对一）"),
         };
     }
 
@@ -143,8 +142,8 @@ public class TaktRoleMenuI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Identity;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 1;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktProfitCenterI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProfitCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling;
 
 /// <summary>
-/// TaktProfitCenter 实体国际化翻译种子（键前缀 entity.profitCenter.*）
+/// TaktProfitCenter 实体国际化翻译种子（键前缀 entity.profitcenter.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 profitCenter 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 profitcenter 实体翻译...", tenantCode);
 
         foreach (var item in GetProfitCenterTranslations())
         {
@@ -76,137 +75,137 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktProfitCenter 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.profitCenter._self / entity.profitCenter.{{field}}；ResourceGroup=TaktModule.Accounting；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.profitcenter._self / entity.profitcenter.{{field}}；ResourceGroup=3；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetProfitCenterTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.profitCenter._self
-            new TranslationSeedItem("entity.profitCenter._self", "en-US", "Profit Center Information", "实体名称"),
-            // entity.profitCenter._self
-            new TranslationSeedItem("entity.profitCenter._self", "ja-JP", "利润中心信息", "实体名称"),
-            // entity.profitCenter._self
-            new TranslationSeedItem("entity.profitCenter._self", "zh-CN", "利润中心信息", "实体名称"),
-            // entity.profitCenter._self
-            new TranslationSeedItem("entity.profitCenter._self", "zh-HK", "利润中心信息", "实体名称"),
+            // entity.profitcenter._self
+            new TranslationSeedItem("entity.profitcenter._self", "en-US", "Profit Center Information", "实体名称"),
+            // entity.profitcenter._self
+            new TranslationSeedItem("entity.profitcenter._self", "ja-JP", "利润中心信息", "实体名称"),
+            // entity.profitcenter._self
+            new TranslationSeedItem("entity.profitcenter._self", "zh-CN", "利润中心信息", "实体名称"),
+            // entity.profitcenter._self
+            new TranslationSeedItem("entity.profitcenter._self", "zh-HK", "利润中心信息", "实体名称"),
 
-            // entity.profitCenter.code
-            new TranslationSeedItem("entity.profitCenter.code", "en-US", "利润中心编码", "利润中心编码"),
-            // entity.profitCenter.code
-            new TranslationSeedItem("entity.profitCenter.code", "ja-JP", "利润中心编码", "利润中心编码"),
-            // entity.profitCenter.code
-            new TranslationSeedItem("entity.profitCenter.code", "zh-CN", "利润中心编码", "利润中心编码"),
-            // entity.profitCenter.code
-            new TranslationSeedItem("entity.profitCenter.code", "zh-HK", "利润中心编码", "利润中心编码"),
+            // entity.profitcenter.code
+            new TranslationSeedItem("entity.profitcenter.code", "en-US", "利润中心编码", "利润中心编码"),
+            // entity.profitcenter.code
+            new TranslationSeedItem("entity.profitcenter.code", "ja-JP", "利润中心编码", "利润中心编码"),
+            // entity.profitcenter.code
+            new TranslationSeedItem("entity.profitcenter.code", "zh-CN", "利润中心编码", "利润中心编码"),
+            // entity.profitcenter.code
+            new TranslationSeedItem("entity.profitcenter.code", "zh-HK", "利润中心编码", "利润中心编码"),
 
-            // entity.profitCenter.name
-            new TranslationSeedItem("entity.profitCenter.name", "en-US", "利润中心名称", "利润中心名称"),
-            // entity.profitCenter.name
-            new TranslationSeedItem("entity.profitCenter.name", "ja-JP", "利润中心名称", "利润中心名称"),
-            // entity.profitCenter.name
-            new TranslationSeedItem("entity.profitCenter.name", "zh-CN", "利润中心名称", "利润中心名称"),
-            // entity.profitCenter.name
-            new TranslationSeedItem("entity.profitCenter.name", "zh-HK", "利润中心名称", "利润中心名称"),
+            // entity.profitcenter.name
+            new TranslationSeedItem("entity.profitcenter.name", "en-US", "利润中心名称", "利润中心名称"),
+            // entity.profitcenter.name
+            new TranslationSeedItem("entity.profitcenter.name", "ja-JP", "利润中心名称", "利润中心名称"),
+            // entity.profitcenter.name
+            new TranslationSeedItem("entity.profitcenter.name", "zh-CN", "利润中心名称", "利润中心名称"),
+            // entity.profitcenter.name
+            new TranslationSeedItem("entity.profitcenter.name", "zh-HK", "利润中心名称", "利润中心名称"),
 
-            // entity.profitCenter.parentid
-            new TranslationSeedItem("entity.profitCenter.parentid", "en-US", "父级ID", "父级 ID"),
-            // entity.profitCenter.parentid
-            new TranslationSeedItem("entity.profitCenter.parentid", "ja-JP", "父级ID", "父级 ID"),
-            // entity.profitCenter.parentid
-            new TranslationSeedItem("entity.profitCenter.parentid", "zh-CN", "父级ID", "父级 ID"),
-            // entity.profitCenter.parentid
-            new TranslationSeedItem("entity.profitCenter.parentid", "zh-HK", "父级ID", "父级 ID"),
+            // entity.profitcenter.parentid
+            new TranslationSeedItem("entity.profitcenter.parentid", "en-US", "父级ID", "父级 ID"),
+            // entity.profitcenter.parentid
+            new TranslationSeedItem("entity.profitcenter.parentid", "ja-JP", "父级ID", "父级 ID"),
+            // entity.profitcenter.parentid
+            new TranslationSeedItem("entity.profitcenter.parentid", "zh-CN", "父级ID", "父级 ID"),
+            // entity.profitcenter.parentid
+            new TranslationSeedItem("entity.profitcenter.parentid", "zh-HK", "父级ID", "父级 ID"),
 
-            // entity.profitCenter.managerid
-            new TranslationSeedItem("entity.profitCenter.managerid", "en-US", "负责人ID", "负责人用户 ID"),
-            // entity.profitCenter.managerid
-            new TranslationSeedItem("entity.profitCenter.managerid", "ja-JP", "负责人ID", "负责人用户 ID"),
-            // entity.profitCenter.managerid
-            new TranslationSeedItem("entity.profitCenter.managerid", "zh-CN", "负责人ID", "负责人用户 ID"),
-            // entity.profitCenter.managerid
-            new TranslationSeedItem("entity.profitCenter.managerid", "zh-HK", "负责人ID", "负责人用户 ID"),
+            // entity.profitcenter.managerid
+            new TranslationSeedItem("entity.profitcenter.managerid", "en-US", "负责人ID", "负责人用户 ID"),
+            // entity.profitcenter.managerid
+            new TranslationSeedItem("entity.profitcenter.managerid", "ja-JP", "负责人ID", "负责人用户 ID"),
+            // entity.profitcenter.managerid
+            new TranslationSeedItem("entity.profitcenter.managerid", "zh-CN", "负责人ID", "负责人用户 ID"),
+            // entity.profitcenter.managerid
+            new TranslationSeedItem("entity.profitcenter.managerid", "zh-HK", "负责人ID", "负责人用户 ID"),
 
-            // entity.profitCenter.managername
-            new TranslationSeedItem("entity.profitCenter.managername", "en-US", "负责人姓名", "负责人姓名"),
-            // entity.profitCenter.managername
-            new TranslationSeedItem("entity.profitCenter.managername", "ja-JP", "负责人姓名", "负责人姓名"),
-            // entity.profitCenter.managername
-            new TranslationSeedItem("entity.profitCenter.managername", "zh-CN", "负责人姓名", "负责人姓名"),
-            // entity.profitCenter.managername
-            new TranslationSeedItem("entity.profitCenter.managername", "zh-HK", "负责人姓名", "负责人姓名"),
+            // entity.profitcenter.managername
+            new TranslationSeedItem("entity.profitcenter.managername", "en-US", "负责人姓名", "负责人姓名"),
+            // entity.profitcenter.managername
+            new TranslationSeedItem("entity.profitcenter.managername", "ja-JP", "负责人姓名", "负责人姓名"),
+            // entity.profitcenter.managername
+            new TranslationSeedItem("entity.profitcenter.managername", "zh-CN", "负责人姓名", "负责人姓名"),
+            // entity.profitcenter.managername
+            new TranslationSeedItem("entity.profitcenter.managername", "zh-HK", "负责人姓名", "负责人姓名"),
 
-            // entity.profitCenter.deptid
-            new TranslationSeedItem("entity.profitCenter.deptid", "en-US", "所属部门ID", "所属部门 ID"),
-            // entity.profitCenter.deptid
-            new TranslationSeedItem("entity.profitCenter.deptid", "ja-JP", "所属部门ID", "所属部门 ID"),
-            // entity.profitCenter.deptid
-            new TranslationSeedItem("entity.profitCenter.deptid", "zh-CN", "所属部门ID", "所属部门 ID"),
-            // entity.profitCenter.deptid
-            new TranslationSeedItem("entity.profitCenter.deptid", "zh-HK", "所属部门ID", "所属部门 ID"),
+            // entity.profitcenter.deptid
+            new TranslationSeedItem("entity.profitcenter.deptid", "en-US", "所属部门ID", "所属部门 ID"),
+            // entity.profitcenter.deptid
+            new TranslationSeedItem("entity.profitcenter.deptid", "ja-JP", "所属部门ID", "所属部门 ID"),
+            // entity.profitcenter.deptid
+            new TranslationSeedItem("entity.profitcenter.deptid", "zh-CN", "所属部门ID", "所属部门 ID"),
+            // entity.profitcenter.deptid
+            new TranslationSeedItem("entity.profitcenter.deptid", "zh-HK", "所属部门ID", "所属部门 ID"),
 
-            // entity.profitCenter.deptname
-            new TranslationSeedItem("entity.profitCenter.deptname", "en-US", "所属部门名称", "所属部门名称"),
-            // entity.profitCenter.deptname
-            new TranslationSeedItem("entity.profitCenter.deptname", "ja-JP", "所属部门名称", "所属部门名称"),
-            // entity.profitCenter.deptname
-            new TranslationSeedItem("entity.profitCenter.deptname", "zh-CN", "所属部门名称", "所属部门名称"),
-            // entity.profitCenter.deptname
-            new TranslationSeedItem("entity.profitCenter.deptname", "zh-HK", "所属部门名称", "所属部门名称"),
+            // entity.profitcenter.deptname
+            new TranslationSeedItem("entity.profitcenter.deptname", "en-US", "所属部门名称", "所属部门名称"),
+            // entity.profitcenter.deptname
+            new TranslationSeedItem("entity.profitcenter.deptname", "ja-JP", "所属部门名称", "所属部门名称"),
+            // entity.profitcenter.deptname
+            new TranslationSeedItem("entity.profitcenter.deptname", "zh-CN", "所属部门名称", "所属部门名称"),
+            // entity.profitcenter.deptname
+            new TranslationSeedItem("entity.profitcenter.deptname", "zh-HK", "所属部门名称", "所属部门名称"),
 
-            // entity.profitCenter.level
-            new TranslationSeedItem("entity.profitCenter.level", "en-US", "利润中心层级", "利润中心层级"),
-            // entity.profitCenter.level
-            new TranslationSeedItem("entity.profitCenter.level", "ja-JP", "利润中心层级", "利润中心层级"),
-            // entity.profitCenter.level
-            new TranslationSeedItem("entity.profitCenter.level", "zh-CN", "利润中心层级", "利润中心层级"),
-            // entity.profitCenter.level
-            new TranslationSeedItem("entity.profitCenter.level", "zh-HK", "利润中心层级", "利润中心层级"),
+            // entity.profitcenter.level
+            new TranslationSeedItem("entity.profitcenter.level", "en-US", "利润中心层级", "利润中心层级"),
+            // entity.profitcenter.level
+            new TranslationSeedItem("entity.profitcenter.level", "ja-JP", "利润中心层级", "利润中心层级"),
+            // entity.profitcenter.level
+            new TranslationSeedItem("entity.profitcenter.level", "zh-CN", "利润中心层级", "利润中心层级"),
+            // entity.profitcenter.level
+            new TranslationSeedItem("entity.profitcenter.level", "zh-HK", "利润中心层级", "利润中心层级"),
 
-            // entity.profitCenter.relatedplant
-            new TranslationSeedItem("entity.profitCenter.relatedplant", "en-US", "关联工厂", "关联工厂"),
-            // entity.profitCenter.relatedplant
-            new TranslationSeedItem("entity.profitCenter.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
-            // entity.profitCenter.relatedplant
-            new TranslationSeedItem("entity.profitCenter.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.profitCenter.relatedplant
-            new TranslationSeedItem("entity.profitCenter.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
+            // entity.profitcenter.relatedplant
+            new TranslationSeedItem("entity.profitcenter.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
 
-            // entity.profitCenter.status
-            new TranslationSeedItem("entity.profitCenter.status", "en-US", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
-            // entity.profitCenter.status
-            new TranslationSeedItem("entity.profitCenter.status", "ja-JP", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
-            // entity.profitCenter.status
-            new TranslationSeedItem("entity.profitCenter.status", "zh-CN", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
-            // entity.profitCenter.status
-            new TranslationSeedItem("entity.profitCenter.status", "zh-HK", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "en-US", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "ja-JP", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "zh-CN", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
+            // entity.profitcenter.status
+            new TranslationSeedItem("entity.profitcenter.status", "zh-HK", "利润中心状态", "利润中心状态（1=启用，0=禁用）"),
 
-            // entity.profitCenter.validfrom
-            new TranslationSeedItem("entity.profitCenter.validfrom", "en-US", "生效日期", "生效日期"),
-            // entity.profitCenter.validfrom
-            new TranslationSeedItem("entity.profitCenter.validfrom", "ja-JP", "生效日期", "生效日期"),
-            // entity.profitCenter.validfrom
-            new TranslationSeedItem("entity.profitCenter.validfrom", "zh-CN", "生效日期", "生效日期"),
-            // entity.profitCenter.validfrom
-            new TranslationSeedItem("entity.profitCenter.validfrom", "zh-HK", "生效日期", "生效日期"),
+            // entity.profitcenter.validfrom
+            new TranslationSeedItem("entity.profitcenter.validfrom", "en-US", "生效日期", "生效日期"),
+            // entity.profitcenter.validfrom
+            new TranslationSeedItem("entity.profitcenter.validfrom", "ja-JP", "生效日期", "生效日期"),
+            // entity.profitcenter.validfrom
+            new TranslationSeedItem("entity.profitcenter.validfrom", "zh-CN", "生效日期", "生效日期"),
+            // entity.profitcenter.validfrom
+            new TranslationSeedItem("entity.profitcenter.validfrom", "zh-HK", "生效日期", "生效日期"),
 
-            // entity.profitCenter.validto
-            new TranslationSeedItem("entity.profitCenter.validto", "en-US", "失效日期", "失效日期"),
-            // entity.profitCenter.validto
-            new TranslationSeedItem("entity.profitCenter.validto", "ja-JP", "失效日期", "失效日期"),
-            // entity.profitCenter.validto
-            new TranslationSeedItem("entity.profitCenter.validto", "zh-CN", "失效日期", "失效日期"),
-            // entity.profitCenter.validto
-            new TranslationSeedItem("entity.profitCenter.validto", "zh-HK", "失效日期", "失效日期"),
+            // entity.profitcenter.validto
+            new TranslationSeedItem("entity.profitcenter.validto", "en-US", "失效日期", "失效日期"),
+            // entity.profitcenter.validto
+            new TranslationSeedItem("entity.profitcenter.validto", "ja-JP", "失效日期", "失效日期"),
+            // entity.profitcenter.validto
+            new TranslationSeedItem("entity.profitcenter.validto", "zh-CN", "失效日期", "失效日期"),
+            // entity.profitcenter.validto
+            new TranslationSeedItem("entity.profitcenter.validto", "zh-HK", "失效日期", "失效日期"),
 
-            // entity.profitCenter.sortorder
-            new TranslationSeedItem("entity.profitCenter.sortorder", "en-US", "排序号", "排序号"),
-            // entity.profitCenter.sortorder
-            new TranslationSeedItem("entity.profitCenter.sortorder", "ja-JP", "排序号", "排序号"),
-            // entity.profitCenter.sortorder
-            new TranslationSeedItem("entity.profitCenter.sortorder", "zh-CN", "排序号", "排序号"),
-            // entity.profitCenter.sortorder
-            new TranslationSeedItem("entity.profitCenter.sortorder", "zh-HK", "排序号", "排序号"),
+            // entity.profitcenter.sortorder
+            new TranslationSeedItem("entity.profitcenter.sortorder", "en-US", "排序号", "排序号"),
+            // entity.profitcenter.sortorder
+            new TranslationSeedItem("entity.profitcenter.sortorder", "ja-JP", "排序号", "排序号"),
+            // entity.profitcenter.sortorder
+            new TranslationSeedItem("entity.profitcenter.sortorder", "zh-CN", "排序号", "排序号"),
+            // entity.profitcenter.sortorder
+            new TranslationSeedItem("entity.profitcenter.sortorder", "zh-HK", "排序号", "排序号"),
         };
     }
 
@@ -224,8 +223,8 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Accounting;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 3;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

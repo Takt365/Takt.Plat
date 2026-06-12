@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Organization
 // 文件名称：TaktDeptsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：部门控制器
 // 
@@ -13,7 +13,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.HumanResource.Organization;
 using Takt.Application.Services.HumanResource.Organization;
-using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.HumanResource.Organization;
 
@@ -21,7 +20,7 @@ namespace Takt.WebApi.Controllers.HumanResource.Organization;
 /// 部门控制器
 /// 提供部门的 REST API
 /// </summary>
-[ApiModule(TaktModule.HumanResource, "组织管理")]
+[ApiModule(5, "组织管理")]
 [Route("api/[controller]", Name = "部门")]
 public class TaktDeptsController : TaktControllerBase
 {
@@ -102,7 +101,7 @@ public class TaktDeptsController : TaktControllerBase
     /// <summary>
     /// 获取部门树形列表
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
     /// <returns>树形数据</returns>
     [TaktPermission("humanresource:organization:dept:query", "部门树")]
     [HttpGet("tree")]

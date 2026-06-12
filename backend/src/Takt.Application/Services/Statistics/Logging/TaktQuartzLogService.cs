@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktQuartzLogService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：任务执行日志应用服务实现
 // 
@@ -226,7 +226,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             exp = exp.And(x =>
                 SqlFunc.ToString(x.QuartzTaskId).Contains(keywords)
                 || (x.TaskName != null && x.TaskName.Contains(keywords))
-                || (x.JobGroup != null && x.JobGroup.Contains(keywords))
+                || SqlFunc.ToString(x.JobGroup).Contains(keywords)
                 || SqlFunc.ToString(x.TaskType).Contains(keywords)
                 || SqlFunc.ToString(x.ExecuteDuration).Contains(keywords)
                 || (x.ExecuteParams != null && x.ExecuteParams.Contains(keywords))
@@ -252,9 +252,9 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             exp = exp.And(x => x.TaskName != null && x.TaskName.Contains(queryDto.TaskName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JobGroup))
+        if (queryDto?.JobGroup.HasValue == true)
         {
-            exp = exp.And(x => x.JobGroup != null && x.JobGroup.Contains(queryDto.JobGroup));
+            exp = exp.And(x => x.JobGroup == queryDto.JobGroup);
         }
 
         if (queryDto?.TaskType.HasValue == true)

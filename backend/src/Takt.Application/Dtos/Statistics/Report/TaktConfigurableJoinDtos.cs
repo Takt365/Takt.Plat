@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableJoinDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableJoin 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableJoin 生成，请按需审阅）
 // 
@@ -50,7 +50,7 @@ public class TaktConfigurableJoinDto : TaktCompanyDtoBase
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public TaktConfigurableJoinType JoinType { get; set; }
+    public int JoinType { get; set; }
 
     /// <summary>
     /// 左表数据源别名
@@ -114,7 +114,7 @@ public class TaktConfigurableJoinQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public TaktConfigurableJoinType? JoinType { get; set; }
+    public int? JoinType { get; set; }
 
     /// <summary>
     /// 左表数据源别名
@@ -195,7 +195,7 @@ public class TaktConfigurableJoinCreateDto
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public TaktConfigurableJoinType JoinType { get; set; }
+    public int JoinType { get; set; }
 
     /// <summary>
     /// 左表数据源别名
@@ -310,7 +310,7 @@ public class TaktConfigurableJoinTemplateDto
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public TaktConfigurableJoinType? JoinType { get; set; }
+    public int? JoinType { get; set; }
 
     /// <summary>
     /// 左表数据源别名
@@ -378,7 +378,7 @@ public class TaktConfigurableJoinImportDto
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public TaktConfigurableJoinType? JoinType { get; set; }
+    public int? JoinType { get; set; }
 
     /// <summary>
     /// 左表数据源别名
@@ -447,7 +447,7 @@ public class TaktConfigurableJoinExportDto
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public TaktConfigurableJoinType JoinType { get; set; }
+    public int JoinType { get; set; }
 
     /// <summary>
     /// 左表数据源别名

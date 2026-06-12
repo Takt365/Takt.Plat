@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Foundation;
 /// 字典数据控制器
 /// 提供字典数据的 REST API
 /// </summary>
-[ApiModule(TaktModule.Foundation, "基础设置")]
+[ApiModule(8, "基础设置")]
 [Route("api/[controller]", Name = "字典数据")]
 public class TaktDictDatasController : TaktControllerBase
 {
@@ -262,6 +262,24 @@ public class TaktDictDatasController : TaktControllerBase
         {
             var (resultFileName, fileContent) = await _dictDataService.ExportDictDataAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取当前租户下全部字典数据（登录即可访问，供前端全局字典缓存）
+    /// </summary>
+    /// <returns>扁平字典项列表</returns>
+    [HttpGet("all")]
+    public async Task<IActionResult> GetDataDictAllAsync()
+    {
+        try
+        {
+            var result = await _dictDataService.GetDataDictAllAsync();
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

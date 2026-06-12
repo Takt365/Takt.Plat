@@ -20,6 +20,20 @@ description: >-
 | 前端 API | `getXxxList`（禁止 `getList`） |
 | 主键（前端 types） | `id: string` |
 
+## 枚举 vs 字典（§1.8）
+
+### Domain 实体（硬约束）
+
+- **`Takt.Domain/Entities/**`：属性**一律 `int` / `int?`**，**禁止任何 C# enum**（含 `TaktYesNo`、`TaktCommonStatus`、流程/引擎枚举）
+- 注释写字典码或数值语义；`DefaultValue` 与 C# 初值一致；外键 `long` 禁止 `= 0`
+- 服务层可用 `Takt.Shared.Enums` 比较，写实体前转 `int`
+
+### DTO / 服务 / 前端
+
+- 有字典：`int` + `dict-type`；禁止同语义平行枚举
+- 引擎/runtime：DTO 用 `int`；引擎内可用专用枚举
+- 字典数值比较：`Takt.Shared.Constants.TaktDictValueConstants`
+
 ## 规则分层（避免重复阅读）
 
 | 层次 | 权威源 |
@@ -70,13 +84,19 @@ description: >-
 
 `<type>(<scope>): <subject>` — 如 `feat(identity): 用户列表分页查询`
 
+## C# XML 注释（强制）
+
+- ❌ **全局禁止** `<see cref="…"/>`；用纯文字写类型/字段（见 `00-project` §二 §3）
+- ✅ `summary` / `param` / `returns`；交叉引用写「TaktXxx 主键」「关联表单 FormCode」等
+
 ## 写入前必检
 
 ```
 - [ ] 空行：遵守 03-format-blank-lines（无隔行空行）
 - [ ] 命名：C# 有 Takt 前缀；方法带实体前缀
+- [ ] XML：无 <see cref>（00-project §二 §3）
 - [ ] i18n/权限：键格式符合上表
-- [ ] 溢出/工具/工作流：见下方 Skill 索引选型
+- [ ] 实体/DTO：Domain 实体禁 enum（00-project §1.8.1）
 ```
 
 ## 规则与 Skill 索引（00~16）

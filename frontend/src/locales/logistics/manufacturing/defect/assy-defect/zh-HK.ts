@@ -1,0 +1,22 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：frontend/src/locales/logistics/manufacturing/defect/assy-defect
+// 文件名称：zh-HK.ts
+// 功能描述：組立不良頁面靜態文案（引用键 logistics.manufacturing.defect.assy-defect.page.*）
+//
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+export default {
+  page: {
+    masterpanetitle: '組立不良日報（主表）',
+    detailpanetitle: '組立不良明細（選中主表行後維護）',
+    selectmasterfirst: '請先選擇一條組立不良日報主表數據',
+    modalmasterhint: '主表彈窗僅維護日報頭信息；明細請在右側分欄獨立維護。',
+    query: {
+      proddatestart: '生產日期（起）',
+      proddateend: '生產日期（止）',
+    },
+  },
+}

@@ -498,6 +498,11 @@ export interface TaktApprovalEntityBase {
   approvedAt?: string;
 
   /**
+   * 流程实例 ID（关联 takt_workflow_instance；StartFlowInstance 后由业务写入）
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建人ID
    */
   createdBy: string;

@@ -13,29 +13,74 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Workflow;
 using Takt.Application.Services.Workflow.FlowEngine;
+using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Workflow;
 
 /// <summary>
-/// 流程引擎控制器（运行时能力，对应 <see cref="ITaktFlowEngineService"/>）
+/// 流程引擎控制器（运行时能力，对应 ITaktFlowEngineService）
 /// </summary>
-[ApiModule(TaktModule.Workflow, "流程引擎")]
+[ApiModule(6, "流程引擎")]
 [Route("api/[controller]", Name = "流程引擎")]
 public class TaktFlowEngineController : TaktControllerBase
 {
     private readonly ITaktFlowEngineService _flowEngineService;
+    private readonly TaktApprovalFlowSubmitService _approvalFlowSubmitService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="flowEngineService">流程引擎服务</param>
-    public TaktFlowEngineController(ITaktFlowEngineService flowEngineService)
+    /// <param name="approvalFlowSubmitService">通用按表提交审批服务</param>
+    public TaktFlowEngineController(
+        ITaktFlowEngineService flowEngineService,
+        TaktApprovalFlowSubmitService approvalFlowSubmitService)
     {
         _flowEngineService = flowEngineService;
+        _approvalFlowSubmitService = approvalFlowSubmitService;
     }
 
-    #region 详情与列表
+    #region 待办（列表 + 详情）
+
+    /// <summary>
+    /// 获取待办列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("workflow:todo:list", "待办列表")]
+    [HttpGet("todo/list")]
+    public async Task<IActionResult> GetFlowInstanceTodoListAsync([FromQuery] TaktFlowTodoQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _flowEngineService.GetFlowInstanceTodoListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取当前用户待办数量
+    /// </summary>
+    /// <returns>待办数量</returns>
+    [TaktPermission("workflow:todo:query", "待办数量")]
+    [HttpGet("todo/count")]
+    public async Task<IActionResult> GetFlowInstanceTodoCountAsync()
+    {
+        try
+        {
+            var result = await _flowEngineService.GetFlowInstanceTodoCountAsync();
+            return Success(result);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
 
     /// <summary>
     /// 获取待办流程实例运行时详情
@@ -47,6 +92,30 @@ public class TaktFlowEngineController : TaktControllerBase
     public Task<IActionResult> GetFlowInstanceTodoDetailByIdAsync(long id) =>
         GetFlowInstanceDetailCoreAsync(id);
 
+    #endregion
+
+    #region 我的流程（列表 + 详情）
+
+    /// <summary>
+    /// 获取我发起的流程列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("workflow:my:list", "我的流程列表")]
+    [HttpGet("my/list")]
+    public async Task<IActionResult> GetFlowInstanceMyListAsync([FromQuery] TaktFlowTodoQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _flowEngineService.GetFlowInstanceMyListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
     /// <summary>
     /// 获取我发起的流程实例运行时详情
     /// </summary>
@@ -57,6 +126,30 @@ public class TaktFlowEngineController : TaktControllerBase
     public Task<IActionResult> GetFlowInstanceMyDetailByIdAsync(long id) =>
         GetFlowInstanceDetailCoreAsync(id);
 
+    #endregion
+
+    #region 已办（列表 + 详情）
+
+    /// <summary>
+    /// 获取已办流程列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("workflow:processed:list", "已办流程列表")]
+    [HttpGet("processed/list")]
+    public async Task<IActionResult> GetFlowInstanceProcessedListAsync([FromQuery] TaktFlowTodoQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _flowEngineService.GetFlowInstanceProcessedListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
     /// <summary>
     /// 获取已办流程实例运行时详情
     /// </summary>
@@ -66,6 +159,10 @@ public class TaktFlowEngineController : TaktControllerBase
     [HttpGet("processed/{id:long}")]
     public Task<IActionResult> GetFlowInstanceProcessedDetailByIdAsync(long id) =>
         GetFlowInstanceDetailCoreAsync(id);
+
+    #endregion
+
+    #region 实例管理（详情）
 
     /// <summary>
     /// 获取流程实例运行时详情（实例管理页）
@@ -99,69 +196,70 @@ public class TaktFlowEngineController : TaktControllerBase
         }
     }
 
-    /// <summary>
-    /// 获取待办列表（分页）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>分页结果</returns>
-    [TaktPermission("workflow:todo:list", "待办列表")]
-    [HttpGet("todo/list")]
-    public async Task<IActionResult> GetFlowInstanceTodoListAsync([FromQuery] TaktFlowTodoQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _flowEngineService.GetFlowInstanceTodoListAsync(queryDto);
-            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取我发起的流程列表（分页）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>分页结果</returns>
-    [TaktPermission("workflow:my:list", "我的流程列表")]
-    [HttpGet("my/list")]
-    public async Task<IActionResult> GetFlowInstanceMyListAsync([FromQuery] TaktFlowMyInstanceQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _flowEngineService.GetFlowInstanceMyListAsync(queryDto);
-            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取已办流程列表（分页）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>分页结果</returns>
-    [TaktPermission("workflow:processed:list", "已办流程列表")]
-    [HttpGet("processed/list")]
-    public async Task<IActionResult> GetFlowInstanceProcessedListAsync([FromQuery] TaktFlowTodoQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _flowEngineService.GetFlowInstanceProcessedListAsync(queryDto);
-            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
     #endregion
 
     #region 发起与草稿
+
+    /// <summary>
+    /// 可发起流程方案列表（已发布、最新版、未挂起）
+    /// </summary>
+    /// <returns>方案摘要</returns>
+    [TaktPermission("workflow:instance:start", "可发起流程列表")]
+    [HttpGet("startable-schemes")]
+    public async Task<IActionResult> GetStartableSchemeListAsync()
+    {
+        try
+        {
+            var result = await _flowEngineService.GetStartableSchemeListAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 审批业务表白名单（TaktApprovalEntityBase 物理表名）
+    /// </summary>
+    /// <returns>表名列表</returns>
+    [TaktPermission("workflow:form:list", "审批业务表白名单")]
+    [HttpGet("approval-tables")]
+    public IActionResult GetApprovalFlowTableNamesAsync()
+    {
+        try
+        {
+            var result = _flowEngineService.GetApprovalFlowTableNames();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 按业务表提交审批（配置驱动：表单 RelatedTableName + 已发布方案）
+    /// </summary>
+    /// <param name="dto">表名与业务主键</param>
+    /// <returns>流程实例详情</returns>
+    [TaktPermission("workflow:instance:start", "按业务表提交审批")]
+    [HttpPost("submit-by-table")]
+    public async Task<IActionResult> SubmitFlowApprovalByTableAsync([FromBody] TaktFlowSubmitByTableDto dto)
+    {
+        try
+        {
+            var result = await _approvalFlowSubmitService.SubmitForApprovalByTableAsync(
+                dto.RelatedTableName,
+                dto.EntityId,
+                dto.ProcessKey);
+            return Success(result, "提交成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
 
     /// <summary>
     /// 发起流程
@@ -252,8 +350,8 @@ public class TaktFlowEngineController : TaktControllerBase
     /// </summary>
     /// <param name="instanceCode">实例编码</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:instance:revoke", "撤回流程")]
-    [HttpPost("revoke")]
+    [TaktPermission("workflow:instance:withdraw", "撤回流程")]
+    [HttpPost("withdraw")]
     public async Task<IActionResult> RevokeFlowInstanceAsync([FromQuery] string instanceCode)
     {
         try

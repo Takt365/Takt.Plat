@@ -17,9 +17,10 @@ using Takt.Application.Dtos.Foundation;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
+using Takt.Shared.Exceptions;
 using Takt.Shared.Models;
+using Takt.Shared.Models.Foundation;
 using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Foundation;
@@ -292,6 +293,76 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
             exportData,
             sheetName ?? "字典数据数据",
             fileName ?? "字典数据导出.xlsx");
+    }
+
+    /// <summary>
+    /// 获取当前租户下全部字典数据（扁平列表，含 DictTypeCode）
+    /// </summary>
+    /// <returns>全部字典数据 DTO</returns>
+    public async Task<TaktDataDictAllDto> GetDataDictAllAsync()
+    {
+        var list = await _dictDataRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode,
+            x => x.SortOrder,
+            false);
+        var items = list
+            .OrderBy(x => x.DictTypeCode)
+            .ThenBy(x => x.SortOrder)
+            .Select(MapToSelectOption)
+            .ToList();
+        return new TaktDataDictAllDto
+        {
+            Items = items,
+        };
+    }
+
+    /// <summary>
+    /// 按字典类型编码批量构建双向快照（导入 GetCode / 导出 GetName）
+    /// </summary>
+    /// <param name="dictTypeCodes">字典类型编码（与种子 dict_type_code 一致）</param>
+    /// <returns>租户级预加载快照</returns>
+    public async Task<TaktDictSnapshot> CreateDictSnapshotAsync(params string[] dictTypeCodes)
+    {
+        if (dictTypeCodes == null || dictTypeCodes.Length == 0)
+        {
+            return TaktDictSnapshot.CreateFromRows(Array.Empty<(string, string, string)>());
+        }
+        var codes = dictTypeCodes
+            .Where(code => !string.IsNullOrWhiteSpace(code))
+            .Select(code => code.Trim())
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        if (codes.Length == 0)
+        {
+            return TaktDictSnapshot.CreateFromRows(Array.Empty<(string, string, string)>());
+        }
+        var list = await _dictDataRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode && codes.Contains(x.DictTypeCode),
+            x => x.SortOrder,
+            false);
+        var rows = list.Select(x => (x.DictTypeCode, x.DictValue, x.DictLabel));
+        return TaktDictSnapshot.CreateFromRows(rows, codes);
+    }
+
+    /// <summary>
+    /// 将字典数据实体映射为下拉选项
+    /// </summary>
+    /// <param name="entity">字典数据实体</param>
+    /// <returns>下拉选项</returns>
+    private static TaktSelectOption MapToSelectOption(TaktDictData entity)
+    {
+        return new TaktSelectOption
+        {
+            DictLabel = entity.DictLabel,
+            DictValue = entity.DictValue,
+            I18nKey = entity.I18nKey,
+            DictTypeCode = entity.DictTypeCode,
+            ExtLabel = entity.ExtLabel,
+            ExtValue = entity.ExtValue,
+            CssClass = entity.CssClass,
+            ListClass = entity.ListClass,
+            SortOrder = entity.SortOrder,
+        };
     }
 
     // ========================================

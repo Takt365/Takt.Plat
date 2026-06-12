@@ -47,7 +47,7 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
         var database = configuration.RequireDatabase();
         var configuredCompanyCodes = database.CompanyCodes;
         var companies = await companyRepository.GetListAsync(
-            c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+            c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         var orderedCompanies = TaktDatabaseOptions.OrderByConfiguredCodes(
             configuredCompanyCodes,
             companies,

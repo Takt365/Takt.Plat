@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/workflow
 // 文件名称：flow-instance.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：workflow 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,7 +34,7 @@ export interface FlowInstance extends CompanyDtoBase {
   instanceCode: string;
 
   /**
-   * 流程定义 ID（<see cref="TaktFlowScheme"/> Id）
+   * 流程定义 ID（TaktFlowScheme Id）
    */
   processDefinitionId: string;
 
@@ -129,7 +129,7 @@ export interface FlowInstance extends CompanyDtoBase {
   deleteReason?: string;
 
   /**
-   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 <see cref="TaktFlowVariable"/>）
+   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
    */
   frmData?: string;
 
@@ -204,7 +204,7 @@ export interface FlowInstanceQuery extends TaktPagedQuery {
   instanceCode?: string;
 
   /**
-   * 流程定义 ID（<see cref="TaktFlowScheme"/> Id）
+   * 流程定义 ID（TaktFlowScheme Id）
    */
   processDefinitionId?: string;
 
@@ -299,7 +299,7 @@ export interface FlowInstanceQuery extends TaktPagedQuery {
   deleteReason?: string;
 
   /**
-   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 <see cref="TaktFlowVariable"/>）
+   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
    */
   frmData?: string;
 
@@ -368,7 +368,7 @@ export interface FlowInstanceCreate {
   instanceCode: string;
 
   /**
-   * 流程定义 ID（<see cref="TaktFlowScheme"/> Id）
+   * 流程定义 ID（TaktFlowScheme Id）
    */
   processDefinitionId: string;
 
@@ -453,7 +453,7 @@ export interface FlowInstanceCreate {
   deleteReason?: string;
 
   /**
-   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 <see cref="TaktFlowVariable"/>）
+   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
    */
   frmData?: string;
 
@@ -519,6 +519,25 @@ export interface FlowInstanceUpdate extends FlowInstanceCreate {
 
 }
 
+/**
+ * 流程实例编辑弹窗提交 DTO（仅更新标题与表单数据）
+ * 用于 workflow/my、workflow/instance 编辑弹窗
+ */
+export interface FlowInstanceEditPayload {
+  /**
+   * FlowInstanceID
+   */
+  flowInstanceId: string;
+  /**
+   * 申请标题
+   */
+  processTitle?: string;
+  /**
+   * 表单数据 JSON
+   */
+  frmData?: string;
+}
+
 
 /**
  * FlowInstance 状态更新 DTO
@@ -561,7 +580,7 @@ export interface FlowInstanceTemplate {
   instanceCode?: string;
 
   /**
-   * 流程定义 ID（<see cref="TaktFlowScheme"/> Id）
+   * 流程定义 ID（TaktFlowScheme Id）
    */
   processDefinitionId?: string;
 
@@ -655,7 +674,7 @@ export interface FlowInstanceImport {
   instanceCode?: string;
 
   /**
-   * 流程定义 ID（<see cref="TaktFlowScheme"/> Id）
+   * 流程定义 ID（TaktFlowScheme Id）
    */
   processDefinitionId?: string;
 
@@ -744,7 +763,7 @@ export interface FlowInstanceExport {
   instanceCode: string;
 
   /**
-   * 流程定义 ID（<see cref="TaktFlowScheme"/> Id）
+   * 流程定义 ID（TaktFlowScheme Id）
    */
   processDefinitionId: string;
 
@@ -829,7 +848,7 @@ export interface FlowInstanceExport {
   deleteReason?: string;
 
   /**
-   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 <see cref="TaktFlowVariable"/>）
+   * 表单数据 JSON（前端 frmData；细粒度字段可同步至 TaktFlowVariable）
    */
   frmData?: string;
 

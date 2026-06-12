@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceOrderDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceOrder 生成，请按需审阅）
 // 
@@ -164,7 +164,7 @@ public class TaktServiceOrderDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 服务工单列表（外键在子表 <see cref="TaktServiceTicket.ServiceOrderId"/>）
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）
     /// （子表：TaktServiceTicket）
     /// </summary>
     public List<TaktServiceTicketDto>? Tickets { get; set; }
@@ -503,7 +503,7 @@ public class TaktServiceOrderCreateDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 服务工单列表（外键在子表 <see cref="TaktServiceTicket.ServiceOrderId"/>）（子表，级联保存）
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
     /// </summary>
     public List<TaktServiceTicketCreateDto>? Tickets { get; set; }
 

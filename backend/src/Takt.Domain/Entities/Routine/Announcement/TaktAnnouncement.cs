@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.Announcement;
 
@@ -38,7 +37,7 @@ public class TaktAnnouncement : TaktApprovalEntityBase
     /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
     /// </summary>
     [SugarColumn(ColumnName = "announcement_type", ColumnDescription = "公告类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktAnnouncementType AnnouncementType { get; set; } = TaktAnnouncementType.Announcement;
+    public int AnnouncementType { get; set; } = 1;
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -74,13 +73,13 @@ public class TaktAnnouncement : TaktApprovalEntityBase
     /// 是否定时发布（1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_scheduled", ColumnDescription = "是否定时发布", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsScheduled { get; set; } = TaktYesNo.No;
+    public int IsScheduled { get; set; } = 0;
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_top", ColumnDescription = "是否置顶", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsTop { get; set; } = TaktYesNo.No;
+    public int IsTop { get; set; } = 0;
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -122,5 +121,5 @@ public class TaktAnnouncement : TaktApprovalEntityBase
     /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     [SugarColumn(ColumnName = "announcement_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktAnnouncementStatus AnnouncementStatus { get; set; } = TaktAnnouncementStatus.Draft;
+    public int AnnouncementStatus { get; set; } = 0;
 }

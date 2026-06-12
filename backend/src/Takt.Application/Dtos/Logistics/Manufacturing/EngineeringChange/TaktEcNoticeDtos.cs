@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNoticeDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcNotice 生成，请按需审阅）
 // 
@@ -101,12 +101,6 @@ public class TaktEcNoticeDto : TaktApprovalDtoBase
     /// 通知状态（0=待通知 1=已通知 2=已确认 3=已驳回 4=已过期）
     /// </summary>
     public int EcNoticeStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 流程实例 名称（填充字段）
@@ -209,7 +203,7 @@ public class TaktEcNoticeQueryDto : TaktPagedQuery
     public int? EcNoticeStatus { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -217,7 +211,7 @@ public class TaktEcNoticeQueryDto : TaktPagedQuery
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -362,7 +356,7 @@ public class TaktEcNoticeCreateDto
     public int EcNoticeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -500,7 +494,7 @@ public class TaktEcNoticeTemplateDto
     public int? EcNoticeStatus { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -595,7 +589,7 @@ public class TaktEcNoticeImportDto
     public int? EcNoticeStatus { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -691,7 +685,7 @@ public class TaktEcNoticeExportDto
     public int EcNoticeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }

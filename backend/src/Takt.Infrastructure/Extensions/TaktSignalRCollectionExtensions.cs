@@ -10,11 +10,13 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Takt.Infrastructure.Services;
+using Takt.Infrastructure.SignalR;
 
 namespace Takt.Infrastructure.Extensions;
 
@@ -32,6 +34,7 @@ public static class TaktSignalRCollectionExtensions
     public static ISignalRServerBuilder AddTaktSignalR(this IServiceCollection services, IConfiguration configuration)
     {
         _ = configuration;
+        services.AddSingleton<IUserIdProvider, TaktSignalRUserIdProvider>();
 
         return services.AddSignalR(options =>
         {
@@ -40,6 +43,11 @@ public static class TaktSignalRCollectionExtensions
             options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
             options.KeepAliveInterval = TimeSpan.FromSeconds(15);
             options.AddFilter<TaktHubUserPrincipalFilter>();
+        })
+        .AddJsonProtocol(protocolOptions =>
+        {
+            protocolOptions.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            protocolOptions.PayloadSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
         });
     }
 
@@ -59,12 +67,12 @@ public static class TaktSignalRCollectionExtensions
 }
 
 /// <summary>
-/// Hub 客户端调用时将 <see cref="HubCallerContext.User"/> 挂到 <see cref="TaktUserContext.HubInvocationPrincipal"/>
+/// Hub 客户端调用时将 HubCallerContext.User 挂到 TaktUserContext.HubInvocationPrincipal
 /// </summary>
 internal sealed class TaktHubUserPrincipalFilter : IHubFilter
 {
     /// <summary>
-    /// Hub 方法调用前挂载当前连接的 ClaimsPrincipal，供 <see cref="TaktUserContext"/> 解析用户
+    /// Hub 方法调用前挂载当前连接的 ClaimsPrincipal，供 TaktUserContext 解析用户
     /// </summary>
     /// <param name="invocationContext">Hub 调用上下文</param>
     /// <param name="next">下一个过滤器或 Hub 方法委托</param>

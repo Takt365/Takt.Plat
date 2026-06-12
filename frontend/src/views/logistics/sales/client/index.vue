@@ -954,6 +954,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1

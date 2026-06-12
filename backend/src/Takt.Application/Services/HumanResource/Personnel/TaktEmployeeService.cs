@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工应用服务实现
 // 
@@ -122,7 +122,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     public async Task<TaktEmployeeDto> CreateEmployeeAsync(TaktEmployeeCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployee>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         var isUnique_ix_employee_no_unique = await _uniqueValidator.IsUniqueAsync(
             _employeeRepository,
             x => x.EmployeeNo == entity.EmployeeNo);
@@ -159,7 +159,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         var originalEmployeeStatus = entity.EmployeeStatus;
         dto.Adapt(entity);
         entity.IsBuiltIn = originalIsBuiltIn;
-        if (entity.IsBuiltIn == TaktYesNo.Yes && entity.EmployeeStatus != originalEmployeeStatus
+        if (entity.IsBuiltIn == 1 && entity.EmployeeStatus != originalEmployeeStatus
             && (entity.EmployeeStatus == 3 || entity.EmployeeStatus == 4))
         {
             throw new TaktBusinessException("不允许将内置员工设为离职或退休");
@@ -196,7 +196,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             throw new TaktBusinessException("员工不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置员工不允许删除");
         }
@@ -221,7 +221,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             return;
         }
-        if (await _employeeRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _employeeRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置员工不允许删除");
         }
@@ -284,7 +284,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             try
             {
                 var entity = rows[i].Adapt<TaktEmployee>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.EmployeeNo}";
                 if (!importSeenKeys.Add(importKey))
                 {

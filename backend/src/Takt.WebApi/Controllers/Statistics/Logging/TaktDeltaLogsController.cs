@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Statistics.Logging
 // 文件名称：TaktDeltaLogsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：差异日志控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Statistics.Logging;
 /// 差异日志控制器
 /// 提供差异日志的 REST API
 /// </summary>
-[ApiModule(TaktModule.Statistics, "统计日志")]
+[ApiModule(9, "统计日志")]
 [Route("api/[controller]", Name = "差异日志")]
 public class TaktDeltaLogsController : TaktControllerBase
 {

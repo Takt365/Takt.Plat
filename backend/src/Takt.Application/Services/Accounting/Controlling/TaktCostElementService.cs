@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostElementService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素应用服务实现
 // 
@@ -96,7 +96,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     public async Task<List<TaktTreeSelectOption>> GetCostElementTreeOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostElementStatus == TaktCommonStatus.Enabled);
+        var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CostElementStatus == 1);
         return BuildCostElementTreeOptions(list, 0);
     }
 
@@ -136,7 +136,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         var list = await _costElementRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.CostElementStatus == TaktCommonStatus.Enabled).ToList();
+            : list.Where(x => x.CostElementStatus == 1).ToList();
         return BuildCostElementTree(filtered, parentId);
     }
 
@@ -398,6 +398,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             exp = exp.And(x =>
                 (x.CostElementCode != null && x.CostElementCode.Contains(keywords))
                 || (x.CostElementName != null && x.CostElementName.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CostElementType).Contains(keywords)
                 || SqlFunc.ToString(x.CostElementCategory).Contains(keywords)
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
@@ -420,6 +421,16 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         if (!string.IsNullOrEmpty(queryDto?.CostElementName))
         {
             exp = exp.And(x => x.CostElementName != null && x.CostElementName.Contains(queryDto.CostElementName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ShortName))
+        {
+            exp = exp.And(x => x.CostElementName != null && x.CostElementName.Contains(queryDto.ShortName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CostElementDesc))
+        {
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.CostElementDesc));
         }
 
         if (queryDto?.CostElementType.HasValue == true)

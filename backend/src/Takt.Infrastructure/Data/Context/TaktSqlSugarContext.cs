@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using SqlSugar;
 using Takt.Domain.Entities;
 using Takt.Domain.Entities.Statistics.Logging;
+using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
@@ -446,16 +447,16 @@ public class TaktSqlSugarContext : IDisposable
 }
 
 /// <summary>
-/// SqlSugar 差异日志（AOP）与操作日志持久化辅助（挂接于 <see cref="TaktSqlSugarContext"/>，供三级仓储共用同一客户端）。
+/// SqlSugar 差异日志（AOP）与操作日志持久化辅助（挂接于 TaktSqlSugarContext，供三级仓储共用同一客户端）。
 /// </summary>
 /// <remarks>
 /// <para><strong>差异审计仅使用 SqlSugar 标准能力</strong>（与 EF Core ChangeTracker 同类，见官方文档「差异日志功能」）：</para>
 /// <list type="number">
-/// <item><description>3.2 批量：<see cref="RegisterGlobalDiffLogSwitch"/> 注册 <c>StaticConfig.CompleteInsertableFunc/CompleteUpdateableFunc/CompleteDeleteableFunc</c>，自动对 Insertable/Updateable/Deleteable 调用 <c>EnableDiffLogEvent</c>。</description></item>
-/// <item><description>3.1 事件：每个租户 <see cref="ConfigureClient"/> 挂接 <c>db.Aop.OnDiffLogEvent</c>，在回调中读取 <see cref="DiffLogModel"/> 的 BeforeData/AfterData/Sql/BusinessData/Time/DiffType 并写入 <see cref="TaktDeltaLog"/>。</description></item>
-/// <item><description>差异字段：<see cref="BuildDiffJson"/> 在事件内对比 Before/After 的 Columns（官方「只获取差异部分」推荐做法）。</description></item>
+/// <item><description>3.2 批量：RegisterGlobalDiffLogSwitch 注册 <c>StaticConfig.CompleteInsertableFunc/CompleteUpdateableFunc/CompleteDeleteableFunc</c>，自动对 Insertable/Updateable/Deleteable 调用 <c>EnableDiffLogEvent</c>。</description></item>
+/// <item><description>3.1 事件：每个租户 ConfigureClient 挂接 <c>db.Aop.OnDiffLogEvent</c>，在回调中读取 DiffLogModel 的 BeforeData/AfterData/Sql/BusinessData/Time/DiffType 并写入 TaktDeltaLog。</description></item>
+/// <item><description>差异字段：BuildDiffJson 在事件内对比 Before/After 的 Columns（官方「只获取差异部分」推荐做法）。</description></item>
 /// </list>
-/// <para><see cref="StatisticsLoggingEntityNamespace"/> 下实体（含 <see cref="TaktDeltaLog"/>）的 CUD 及 Statistics.Logging API 请求排除，避免审计表自写递归。</para>
+/// <para>StatisticsLoggingEntityNamespace 下实体（含 TaktDeltaLog）的 CUD 及 Statistics.Logging API 请求排除，避免审计表自写递归。</para>
 /// </remarks>
 internal static class TaktSqlSugarAuditAop
 {
@@ -543,12 +544,12 @@ internal static class TaktSqlSugarAuditAop
                 CompanyCode = httpContext.Request.Headers["X-Company-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
                 UserName = ResolveUserName(httpContext),
                 OperModule = ResolveOperModule(httpContext.Request.Path.Value),
-                OperType = ResolveOperType(httpContext.Request.Method),
+                OperType = ResolveHttpAuditOperType(httpContext.Request.Method),
                 OperMethod = httpContext.GetEndpoint()?.DisplayName,
                 RequestMethod = httpContext.Request.Method,
                 OperUrl = BuildOperUrl(httpContext),
                 RequestParam = MaskSensitiveJson(requestBody),
-                OperStatus = statusCode >= 400 ? 1 : 0,
+                OperStatus = statusCode >= 400 ? TaktExecuteStatus.Failed : TaktExecuteStatus.Success,
                 OperIp = operIp,
                 OperLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(operIp, null),
                 OperTime = DateTime.Now,
@@ -577,7 +578,7 @@ internal static class TaktSqlSugarAuditAop
     }
 
     /// <summary>
-    /// 将 SqlSugar 差异日志持久化到 <see cref="TaktDeltaLog"/> 表
+    /// 将 SqlSugar 差异日志持久化到 TaktDeltaLog 表
     /// </summary>
     /// <param name="db">SqlSugar 客户端</param>
     /// <param name="diff">差异日志模型</param>
@@ -614,7 +615,7 @@ internal static class TaktSqlSugarAuditAop
                 TenantCode = httpContext.Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
                 CompanyCode = httpContext.Request.Headers["X-Company-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
                 UserName = ResolveUserName(httpContext),
-                OperType = diff.DiffType.ToString().ToUpperInvariant(),
+                OperType = MapDiffType(diff.DiffType),
                 TableName = tableName,
                 PrimaryKeyId = ResolvePrimaryKeyId(diff),
                 BeforeData = beforeJson,
@@ -682,7 +683,7 @@ internal static class TaktSqlSugarAuditAop
     }
 
     /// <summary>
-    /// 序列化 <see cref="DiffLogModel.BusinessData"/>（EnableDiffLogEvent 传入的业务对象或字符串）
+    /// 序列化 DiffLogModel.BusinessData（EnableDiffLogEvent 传入的业务对象或字符串）
     /// </summary>
     /// <param name="businessData">SqlSugar 回调中的 BusinessData</param>
     /// <returns>JSON 或原字符串；无数据时为 null</returns>
@@ -870,17 +871,41 @@ internal static class TaktSqlSugarAuditAop
     }
 
     /// <summary>
-    /// 将 HTTP 方法映射为操作类型（INSERT/UPDATE/DELETE）
+    /// 将 HTTP 方法映射为操作日志操作类型枚举
     /// </summary>
     /// <param name="method">HTTP 方法</param>
-    /// <returns>操作类型字符串</returns>
-    private static string? ResolveOperType(string method) => method.ToUpperInvariant() switch
+    /// <returns>操作类型</returns>
+    private static TaktHttpAuditOperType ResolveHttpAuditOperType(string method) => method.ToUpperInvariant() switch
     {
-        "POST" => "INSERT",
-        "PUT" or "PATCH" => "UPDATE",
-        "DELETE" => "DELETE",
-        _ => method,
+        "POST" => TaktHttpAuditOperType.Insert,
+        "PUT" or "PATCH" => TaktHttpAuditOperType.Update,
+        "DELETE" => TaktHttpAuditOperType.Delete,
+        "GET" => TaktHttpAuditOperType.Query,
+        _ => TaktHttpAuditOperType.Unknown,
     };
+
+    /// <summary>
+    /// 将 SqlSugar DiffType 映射为差异日志操作类型枚举
+    /// </summary>
+    /// <param name="diffType">SqlSugar 差异类型</param>
+    /// <returns>差异操作类型</returns>
+    private static TaktDeltaOperType MapDiffType(DiffType diffType)
+    {
+        var name = diffType.ToString().ToUpperInvariant();
+        if (name.Contains("INSERT", StringComparison.Ordinal))
+        {
+            return TaktDeltaOperType.Insert;
+        }
+        if (name.Contains("UPDATE", StringComparison.Ordinal))
+        {
+            return TaktDeltaOperType.Update;
+        }
+        if (name.Contains("DELETE", StringComparison.Ordinal))
+        {
+            return TaktDeltaOperType.Delete;
+        }
+        return TaktDeltaOperType.Update;
+    }
 
     /// <summary>
     /// 拼接请求路径与查询字符串作为操作 URL
@@ -916,7 +941,7 @@ internal static class TaktSqlSugarAuditAop
     }
 
     /// <summary>
-    /// 是否为 <see cref="StatisticsLoggingEntityNamespace"/> 下实体（<c>Entities/Statistics/Logging</c> 目录）
+    /// 是否为 StatisticsLoggingEntityNamespace 下实体（<c>Entities/Statistics/Logging</c> 目录）
     /// </summary>
     /// <param name="entityType">实体类型</param>
     /// <returns>是统计日志实体为 true</returns>
@@ -929,7 +954,7 @@ internal static class TaktSqlSugarAuditAop
     }
 
     /// <summary>
-    /// 从 <see cref="TaktSqlSugarContext.EntityTypes"/> 扫描 Statistics.Logging 下全部实体物理表名
+    /// 从 TaktSqlSugarContext.EntityTypes 扫描 Statistics.Logging 下全部实体物理表名
     /// </summary>
     /// <returns>统计日志表名集合</returns>
     private static HashSet<string> BuildExcludedStatisticsLoggingTableNames()

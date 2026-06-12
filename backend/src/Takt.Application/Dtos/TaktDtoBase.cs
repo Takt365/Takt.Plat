@@ -162,9 +162,7 @@ public abstract class TaktCompanyDtoBase
 
 /// <summary>
 /// 审批级 DTO 基类
-/// 对应实体基类 TaktApprovalEntityBase
-/// 包含租户+公司双重隔离+审批流程相关字段
-/// 适用于需要审批的业务实体 DTO，如：请假单、报销单、采购单、合同等
+/// 对应实体基类 TaktApprovalEntityBase（含 FlowInstanceId；凡审批必走 TaktFlowEngine）
 /// 注意：不包含 Id，Id 由各具体 DTO 根据需要定义
 /// </summary>
 public abstract class TaktApprovalDtoBase
@@ -190,9 +188,9 @@ public abstract class TaktApprovalDtoBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 审批状态（<see cref="TaktApprovalStatus"/>）
+    /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus ApprovalStatus { get; set; } = TaktApprovalStatus.Pending;
+    public int ApprovalStatus { get; set; } = 0;
 
     /// <summary>
     /// 发起人ID
@@ -220,6 +218,12 @@ public abstract class TaktApprovalDtoBase
     /// 最终审批时间
     /// </summary>
     public DateTime? ApprovedAt { get; set; }
+
+    /// <summary>
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；StartFlowInstance 后由业务写入）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 创建人ID（非空；无当前用户时仓储填 999）

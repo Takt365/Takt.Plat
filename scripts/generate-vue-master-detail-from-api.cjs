@@ -39,7 +39,7 @@ function generateExpandedRowTemplate(children) {
   if (!children.length) {
     return '';
   }
-  const tables = children.map((child) => `          <div class="mb-2 text-sm font-medium">{{ t('entity.${child.childCamel}._self') }}</div>
+  const tables = children.map((child) => `          <div class="mb-2 text-sm font-medium">{{ t('entity.${child.childI18nSlug}._self') }}</div>
           <a-table
             v-if="has${child.childPascal}Rows(record)"
             :columns="${child.childCamel}ExpandColumns"
@@ -223,12 +223,12 @@ ${renderFormControl(f, 'record.', '              ')}
     return `      <!-- 子表：${child.childCamel} -->
       <a-tab-pane
         key="child-${child.fieldName}"
-        :tab="t('entity.${child.childCamel}._self')"
+        :tab="t('entity.${child.childI18nSlug}._self')"
         force-render
       >
         <div class="mb-2">
           <a-button type="primary" size="small" @click="handleAdd${child.childPascal}Row">
-            {{ t('common.page.button.create') }}{{ t('entity.${child.childCamel}._self') }}
+            {{ t('common.page.button.create') }}{{ t('entity.${child.childI18nSlug}._self') }}
           </a-button>
         </div>
         <a-table
@@ -345,6 +345,7 @@ function generateMasterDetailIndexVue(ctx) {
   const {
     entityPascal,
     entityCamel,
+    entityI18nSlug,
     entityKebab,
     modulePath,
     viewModulePath,
@@ -466,14 +467,14 @@ ${dictListCols.map((f, i) => `        <template ${i === 0 ? 'v-if' : 'v-else-if'
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.${entityCamel}._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.${entityI18nSlug}._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.${entityCamel}._self"
+        entity-i18n-key="entity.${entityI18nSlug}._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -510,20 +511,21 @@ const excelNames = taktExcelEntityNames('${caps.entityClassName}')
     queryFieldsMetaBlock,
     entityIdName: caps.entityIdName,
     entityCamel,
+    entityI18nSlug,
     excelConst,
   });
   const formStateBlock = '';
   const createHandler = caps.hasCreate ? `
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityCamel}._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityI18nSlug}._self') })
   formData.value = {}
   formVisible.value = true
 }` : '';
   const updateHandler = caps.hasUpdate ? (hasMasterDetail && caps.hasGetById ? `
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityCamel}._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
   formLoading.value = true
   try {
     const detail = await load${entityPascal}Detail(record)
@@ -539,12 +541,12 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityCamel}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
   }
 }` : `
 /** 打开编辑弹窗 */
 function handleEdit(record: ${entityPascal}) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityCamel}._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.${entityI18nSlug}._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -554,7 +556,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityCamel}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.${entityI18nSlug}._self') }))
   }
 }`) : '';
   const formSubmitHandler = (caps.hasCreate || caps.hasUpdate) ? `
@@ -572,9 +574,9 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)\n      message.success(t('common.feedback.updated', { target: t('entity.${entityCamel}._self') }))` : ''}
+${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)\n      message.success(t('common.feedback.updated', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
     } else {
-${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message.success(t('common.feedback.created', { target: t('entity.${entityCamel}._self') }))` : ''}
+${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message.success(t('common.feedback.created', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
     }
     formVisible.value = false
     loadData()
@@ -647,10 +649,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.${entityCamel}._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.${entityI18nSlug}._self') }))
   } catch (error: any) {
     logger.error('[${entityPascal}] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.${entityCamel}._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.${entityI18nSlug}._self') }))
   } finally {
     loading.value = false
   }
@@ -660,12 +662,12 @@ async function handleExport() {
 async function handleDeleteOne(record: ${entityPascal}) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.${entityCamel}._self'), name: t('common.tip.this.target', { target: t('entity.${entityCamel}._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.${entityI18nSlug}._self'), name: t('common.tip.this.target', { target: t('entity.${entityI18nSlug}._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await ${caps.apiDelete}((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityCamel}._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
       loadData()
     }
   })
@@ -674,18 +676,18 @@ async function handleDeleteOne(record: ${entityPascal}) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.${entityCamel}._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.${entityI18nSlug}._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.${entityCamel}._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.${entityI18nSlug}._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await ${caps.apiDeleteBatch}(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.${entityCamel}._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.${entityI18nSlug}._self') }))
       loadData()
     }
   })
@@ -735,7 +737,6 @@ ${caps.hasExport ? `      export-permission="${permissionPrefix}:export"` : ''}
       :show-delete="${caps.hasDelete || caps.hasDeleteBatch}"
       :show-import="${caps.hasImport && caps.hasGetTemplate}"
       :show-export="${caps.hasExport}"
-      :show-expand="${hasMasterDetail}"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -919,6 +920,9 @@ ${loadDataBody}
     loading.value = false
   }
 }
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
@@ -1246,10 +1250,12 @@ function printMasterDetailUsage() {
 模板: **主子表 Master-Detail**（OneToMany 展开行 + 表单 Tab）
 
 参数:
-  --all                 扫描全部 API
   --<实体名>            如 --DictType
   --view-path <路径>    覆盖 views 输出目录
   --dry-run             仅预览
+
+说明:
+  - 已禁用 --all；每次必须指定一个实体
 
 示例:
   node scripts/generate-vue-master-detail-from-api.cjs --DictType

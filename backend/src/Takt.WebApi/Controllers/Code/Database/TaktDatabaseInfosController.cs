@@ -19,7 +19,7 @@ namespace Takt.WebApi.Controllers.Code.Database;
 /// <summary>
 /// 数据库 introspect 控制器
 /// </summary>
-[ApiModule(TaktModule.Code, "代码管理")]
+[ApiModule(7, "代码管理")]
 [Route("api/[controller]", Name = "数据库 introspect")]
 public class TaktDatabaseInfosController : TaktControllerBase
 {
@@ -38,7 +38,7 @@ public class TaktDatabaseInfosController : TaktControllerBase
     /// 获取可 introspect 的租户业务库列表
     /// </summary>
     /// <returns>数据库摘要列表</returns>
-    [TaktPermission("code:database:databaseinfo:list", "数据库摘要列表")]
+    [TaktPermission("code:database:info:list", "数据库摘要列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetDatabaseInfoListAsync()
     {
@@ -58,7 +58,7 @@ public class TaktDatabaseInfosController : TaktControllerBase
     /// </summary>
     /// <param name="tenantCode">租户编码（3 位）</param>
     /// <returns>表摘要列表</returns>
-    [TaktPermission("code:database:databaseinfo:query", "数据库表摘要列表")]
+    [TaktPermission("code:database:info:query", "数据库表摘要列表")]
     [HttpGet("tables")]
     public async Task<IActionResult> GetDatabaseTableInfoListAsync([FromQuery] string tenantCode)
     {
@@ -79,7 +79,7 @@ public class TaktDatabaseInfosController : TaktControllerBase
     /// <param name="tenantCode">租户编码（3 位）</param>
     /// <param name="tableName">表名</param>
     /// <returns>列摘要列表</returns>
-    [TaktPermission("code:database:databaseinfo:query", "数据库表列摘要列表")]
+    [TaktPermission("code:database:info:query", "数据库表列摘要列表")]
     [HttpGet("columns")]
     public async Task<IActionResult> GetDatabaseTableColumnInfoListAsync([FromQuery] string tenantCode, [FromQuery] string tableName)
     {

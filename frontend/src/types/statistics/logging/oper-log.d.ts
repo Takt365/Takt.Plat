@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：oper-log.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,9 +39,9 @@ export interface OperLog extends CompanyDtoBase {
   operModule?: string;
 
   /**
-   * 操作类型（如：新增、删除、修改、查询、导出）
+   * 操作类型（HTTP 审计推导）
    */
-  operType?: string;
+  operType: number;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）
@@ -69,7 +69,7 @@ export interface OperLog extends CompanyDtoBase {
   jsonResult?: string;
 
   /**
-   * 操作状态（0=成功，1=失败）
+   * 操作状态（0=失败，1=成功）
    */
   operStatus: number;
 
@@ -84,7 +84,7 @@ export interface OperLog extends CompanyDtoBase {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 
@@ -129,9 +129,9 @@ export interface OperLogQuery extends TaktPagedQuery {
   operModule?: string;
 
   /**
-   * 操作类型（如：新增、删除、修改、查询、导出）
+   * 操作类型（HTTP 审计推导）
    */
-  operType?: string;
+  operType?: number;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）
@@ -159,7 +159,7 @@ export interface OperLogQuery extends TaktPagedQuery {
   jsonResult?: string;
 
   /**
-   * 操作状态（0=成功，1=失败）
+   * 操作状态（0=失败，1=成功）
    */
   operStatus?: number;
 
@@ -174,7 +174,7 @@ export interface OperLogQuery extends TaktPagedQuery {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 
@@ -248,9 +248,9 @@ export interface OperLogCreate {
   operModule?: string;
 
   /**
-   * 操作类型（如：新增、删除、修改、查询、导出）
+   * 操作类型（HTTP 审计推导）
    */
-  operType?: string;
+  operType: number;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）
@@ -278,7 +278,7 @@ export interface OperLogCreate {
   jsonResult?: string;
 
   /**
-   * 操作状态（0=成功，1=失败）
+   * 操作状态（0=失败，1=成功）
    */
   operStatus: number;
 
@@ -293,7 +293,7 @@ export interface OperLogCreate {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 
@@ -347,7 +347,7 @@ export interface OperLogStatus {
   operLogId: string;
 
   /**
-   * 操作状态（0=成功，1=失败）
+   * 操作状态（0=失败，1=成功）
    */
   operStatus: number;
 
@@ -381,9 +381,9 @@ export interface OperLogExport {
   operModule?: string;
 
   /**
-   * 操作类型（如：新增、删除、修改、查询、导出）
+   * 操作类型（HTTP 审计推导）
    */
-  operType?: string;
+  operType: number;
 
   /**
    * 操作方法（如：TaktUserService.CreateUserAsync）
@@ -411,7 +411,7 @@ export interface OperLogExport {
   jsonResult?: string;
 
   /**
-   * 操作状态（0=成功，1=失败）
+   * 操作状态（0=失败，1=成功）
    */
   operStatus: number;
 
@@ -426,7 +426,7 @@ export interface OperLogExport {
   operIp?: string;
 
   /**
-   * 操作地点（由 <see cref="OperIp"/> 解析，如：中国-广东省-深圳市）
+   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
    */
   operLocation?: string;
 

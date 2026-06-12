@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsCommentDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：NewsComment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNewsComment 生成，请按需审阅）
 // 
@@ -106,12 +106,6 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     public int CommentLevel { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（评论审核工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 流程实例 名称（填充字段）
     /// </summary>
     public string? FlowInstanceName { get; set; }
@@ -119,7 +113,7 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     /// <summary>
     /// 评论状态
     /// </summary>
-    public TaktNewsCommentStatus CommentStatus { get; set; }
+    public int CommentStatus { get; set; }
 
     /// <summary>
     /// 新闻（主表）
@@ -249,12 +243,12 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     /// <summary>
     /// 评论状态
     /// </summary>
-    public TaktNewsCommentStatus? CommentStatus { get; set; }
+    public int? CommentStatus { get; set; }
 
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -408,7 +402,7 @@ public class TaktNewsCommentCreateDto
     /// <summary>
     /// 评论状态
     /// </summary>
-    public TaktNewsCommentStatus CommentStatus { get; set; }
+    public int CommentStatus { get; set; }
 
     /// <summary>
     /// 评论点赞记录列表（主子表关系）（子表，级联保存）
@@ -468,7 +462,7 @@ public class TaktNewsCommentStatusDto
     /// 评论状态
     /// </summary>
     [Required(ErrorMessage = "评论状态不能为空")]
-    public TaktNewsCommentStatus CommentStatus { get; set; }
+    public int CommentStatus { get; set; }
 }
 
 // ========================================
@@ -753,7 +747,7 @@ public class TaktNewsCommentExportDto
     /// <summary>
     /// 评论状态
     /// </summary>
-    public TaktNewsCommentStatus CommentStatus { get; set; }
+    public int CommentStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

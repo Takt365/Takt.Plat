@@ -109,100 +109,100 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('userName')">
-      <a-form-item :label="t('entity.deltaLog.username')">
+      <a-form-item :label="t('entity.deltalog.username')">
         <a-input
           v-model:value="advancedQueryForm.userName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.username') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.username') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operType')">
-      <a-form-item :label="t('entity.deltaLog.opertype')">
-        <a-input
+      <a-form-item :label="t('entity.deltalog.opertype')">
+        <a-input-number
           v-model:value="advancedQueryForm.operType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.opertype') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.opertype') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('tableName')">
-      <a-form-item :label="t('entity.deltaLog.tablename')">
+      <a-form-item :label="t('entity.deltalog.tablename')">
         <a-input
           v-model:value="advancedQueryForm.tableName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.tablename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.tablename') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('primaryKeyId')">
-      <a-form-item :label="t('entity.deltaLog.primarykeyid')">
+      <a-form-item :label="t('entity.deltalog.primarykeyid')">
         <a-input
           v-model:value="advancedQueryForm.primaryKeyId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.primarykeyid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.primarykeyid') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('beforeData')">
-      <a-form-item :label="t('entity.deltaLog.beforedata')">
+      <a-form-item :label="t('entity.deltalog.beforedata')">
         <a-input
           v-model:value="advancedQueryForm.beforeData"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.beforedata') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.beforedata') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('afterData')">
-      <a-form-item :label="t('entity.deltaLog.afterdata')">
+      <a-form-item :label="t('entity.deltalog.afterdata')">
         <a-input
           v-model:value="advancedQueryForm.afterData"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.afterdata') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.afterdata') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('diffData')">
-      <a-form-item :label="t('entity.deltaLog.diffdata')">
+      <a-form-item :label="t('entity.deltalog.diffdata')">
         <a-input
           v-model:value="advancedQueryForm.diffData"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.diffdata') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.diffdata') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sqlStatement')">
-      <a-form-item :label="t('entity.deltaLog.sqlstatement')">
+      <a-form-item :label="t('entity.deltalog.sqlstatement')">
         <a-input
           v-model:value="advancedQueryForm.sqlStatement"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.sqlstatement') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.sqlstatement') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operIp')">
-      <a-form-item :label="t('entity.deltaLog.operip')">
+      <a-form-item :label="t('entity.deltalog.operip')">
         <a-input
           v-model:value="advancedQueryForm.operIp"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.operip') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.operip') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operLocation')">
-      <a-form-item :label="t('entity.deltaLog.operlocation')">
+      <a-form-item :label="t('entity.deltalog.operlocation')">
         <a-input
           v-model:value="advancedQueryForm.operLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.operlocation') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.operlocation') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operTimeStart')">
-      <a-form-item :label="t('entity.deltaLog.opertimestart')">
+      <a-form-item :label="t('entity.deltalog.opertimestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.operTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.deltaLog.opertimestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.deltalog.opertimestart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -210,10 +210,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operTimeEnd')">
-      <a-form-item :label="t('entity.deltaLog.opertimeend')">
+      <a-form-item :label="t('entity.deltalog.opertimeend')">
         <a-date-picker
           v-model:value="advancedQueryForm.operTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.deltaLog.opertimeend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.deltalog.opertimeend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -221,10 +221,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('elapsedTime')">
-      <a-form-item :label="t('entity.deltaLog.elapsedtime')">
+      <a-form-item :label="t('entity.deltalog.elapsedtime')">
         <a-input-number
           v-model:value="advancedQueryForm.elapsedTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltaLog.elapsedtime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.deltalog.elapsedtime') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -311,7 +311,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktDeltaLog')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.deltaLog._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.deltalog._self') })
 )
 
 /** 快捷查询关键字 */
@@ -347,7 +347,7 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   userName: '',
-  operType: '',
+  operType: undefined as number | undefined,
   tableName: '',
   primaryKeyId: '',
   beforeData: '',
@@ -366,19 +366,19 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'userName', label: t('entity.deltaLog.username') },
-  { key: 'operType', label: t('entity.deltaLog.opertype') },
-  { key: 'tableName', label: t('entity.deltaLog.tablename') },
-  { key: 'primaryKeyId', label: t('entity.deltaLog.primarykeyid') },
-  { key: 'beforeData', label: t('entity.deltaLog.beforedata') },
-  { key: 'afterData', label: t('entity.deltaLog.afterdata') },
-  { key: 'diffData', label: t('entity.deltaLog.diffdata') },
-  { key: 'sqlStatement', label: t('entity.deltaLog.sqlstatement') },
-  { key: 'operIp', label: t('entity.deltaLog.operip') },
-  { key: 'operLocation', label: t('entity.deltaLog.operlocation') },
-  { key: 'operTimeStart', label: t('entity.deltaLog.opertimestart') },
-  { key: 'operTimeEnd', label: t('entity.deltaLog.opertimeend') },
-  { key: 'elapsedTime', label: t('entity.deltaLog.elapsedtime') },
+  { key: 'userName', label: t('entity.deltalog.username') },
+  { key: 'operType', label: t('entity.deltalog.opertype') },
+  { key: 'tableName', label: t('entity.deltalog.tablename') },
+  { key: 'primaryKeyId', label: t('entity.deltalog.primarykeyid') },
+  { key: 'beforeData', label: t('entity.deltalog.beforedata') },
+  { key: 'afterData', label: t('entity.deltalog.afterdata') },
+  { key: 'diffData', label: t('entity.deltalog.diffdata') },
+  { key: 'sqlStatement', label: t('entity.deltalog.sqlstatement') },
+  { key: 'operIp', label: t('entity.deltalog.operip') },
+  { key: 'operLocation', label: t('entity.deltalog.operlocation') },
+  { key: 'operTimeStart', label: t('entity.deltalog.opertimestart') },
+  { key: 'operTimeEnd', label: t('entity.deltalog.opertimeend') },
+  { key: 'elapsedTime', label: t('entity.deltalog.elapsedtime') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
@@ -421,7 +421,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'deltaLogId') ?? ''
   },
   {
-    title: t('entity.deltaLog.username'),
+    title: t('entity.deltalog.username'),
     dataIndex: 'userName',
     key: 'userName',
     width: 120,
@@ -430,7 +430,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'userName') ?? ''
   },
   {
-    title: t('entity.deltaLog.opertype'),
+    title: t('entity.deltalog.opertype'),
     dataIndex: 'operType',
     key: 'operType',
     width: 120,
@@ -439,7 +439,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'operType') ?? ''
   },
   {
-    title: t('entity.deltaLog.tablename'),
+    title: t('entity.deltalog.tablename'),
     dataIndex: 'tableName',
     key: 'tableName',
     width: 120,
@@ -448,7 +448,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'tableName') ?? ''
   },
   {
-    title: t('entity.deltaLog.primarykeyid'),
+    title: t('entity.deltalog.primarykeyid'),
     dataIndex: 'primaryKeyId',
     key: 'primaryKeyId',
     width: 120,
@@ -457,16 +457,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'primaryKeyId') ?? ''
   },
   {
-    title: t('entity.deltaLog.primarykeyname'),
-    dataIndex: 'primaryKeyName',
-    key: 'primaryKeyName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'primaryKeyName') ?? ''
-  },
-  {
-    title: t('entity.deltaLog.beforedata'),
+    title: t('entity.deltalog.beforedata'),
     dataIndex: 'beforeData',
     key: 'beforeData',
     width: 120,
@@ -475,7 +466,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'beforeData') ?? ''
   },
   {
-    title: t('entity.deltaLog.afterdata'),
+    title: t('entity.deltalog.afterdata'),
     dataIndex: 'afterData',
     key: 'afterData',
     width: 120,
@@ -484,7 +475,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'afterData') ?? ''
   },
   {
-    title: t('entity.deltaLog.diffdata'),
+    title: t('entity.deltalog.diffdata'),
     dataIndex: 'diffData',
     key: 'diffData',
     width: 120,
@@ -493,7 +484,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'diffData') ?? ''
   },
   {
-    title: t('entity.deltaLog.sqlstatement'),
+    title: t('entity.deltalog.sqlstatement'),
     dataIndex: 'sqlStatement',
     key: 'sqlStatement',
     width: 120,
@@ -502,7 +493,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'sqlStatement') ?? ''
   },
   {
-    title: t('entity.deltaLog.operip'),
+    title: t('entity.deltalog.operip'),
     dataIndex: 'operIp',
     key: 'operIp',
     width: 120,
@@ -511,7 +502,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'operIp') ?? ''
   },
   {
-    title: t('entity.deltaLog.operlocation'),
+    title: t('entity.deltalog.operlocation'),
     dataIndex: 'operLocation',
     key: 'operLocation',
     width: 120,
@@ -520,7 +511,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'operLocation') ?? ''
   },
   {
-    title: t('entity.deltaLog.opertime'),
+    title: t('entity.deltalog.opertime'),
     dataIndex: 'operTime',
     key: 'operTime',
     width: 120,
@@ -529,7 +520,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'operTime') ?? ''
   },
   {
-    title: t('entity.deltaLog.elapsedtime'),
+    title: t('entity.deltalog.elapsedtime'),
     dataIndex: 'elapsedTime',
     key: 'elapsedTime',
     width: 120,
@@ -632,6 +623,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -643,7 +637,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   userName: '',
-  operType: '',
+  operType: undefined as number | undefined,
   tableName: '',
   primaryKeyId: '',
   beforeData: '',
@@ -666,13 +660,13 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.deltaLog._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.deltalog._self') })
   formData.value = {}
   formVisible.value = true
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: DeltaLog) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.deltaLog._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.deltalog._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -682,7 +676,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.deltaLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.deltalog._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -700,10 +694,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateDeltaLog(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.deltaLog._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.deltalog._self') }))
     } else {
       await createDeltaLog(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.deltaLog._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.deltalog._self') }))
     }
     formVisible.value = false
     loadData()
@@ -748,10 +742,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.deltaLog._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.deltalog._self') }))
   } catch (error: any) {
     logger.error('[DeltaLog] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.deltaLog._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.deltalog._self') }))
   } finally {
     loading.value = false
   }
@@ -760,12 +754,12 @@ async function handleExport() {
 async function handleDeleteOne(record: DeltaLog) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.deltaLog._self'), name: t('common.tip.this.target', { target: t('entity.deltaLog._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.deltalog._self'), name: t('common.tip.this.target', { target: t('entity.deltalog._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteDeltaLogById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.deltaLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.deltalog._self') }))
       loadData()
     }
   })
@@ -773,18 +767,18 @@ async function handleDeleteOne(record: DeltaLog) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.deltaLog._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.deltalog._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.deltaLog._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.deltalog._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteDeltaLogBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.deltaLog._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.deltalog._self') }))
       loadData()
     }
   })
@@ -804,7 +798,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   userName: '',
-  operType: '',
+  operType: undefined as number | undefined,
   tableName: '',
   primaryKeyId: '',
   beforeData: '',

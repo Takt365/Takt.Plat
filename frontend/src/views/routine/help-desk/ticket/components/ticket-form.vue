@@ -73,8 +73,9 @@
               >
                 <a-input
                   v-model:value="formState.ticketNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.no') })"
+                  :placeholder="isEditMode ? t('common.page.form.placeholder.required', { field: t('entity.ticket.no') }) : t('routine.help-desk.ticket.page.ticketNoAuto')"
                   size="small"
+                  :disabled="!isEditMode"
                   allow-clear
                 />
               </a-form-item>
@@ -123,11 +124,12 @@
                 :label="t('entity.ticket.status')"
                 name="ticketStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.ticketStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.status') })"
+                  dict-type="helpdesk_ticket_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.status') })"
                   size="small"
-                  style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -136,11 +138,11 @@
                 :label="t('entity.ticket.priority')"
                 name="priority"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.priority"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.priority') })"
+                  dict-type="sys_priority"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.priority') })"
                   size="small"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -152,6 +154,20 @@
                 <a-input
                   v-model:value="formState.categoryCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.categorycode') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.ticket.assetcode')"
+                name="assetCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.assetCode"
+                  :options="assetOptions"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.assetcode') })"
                   size="small"
                   allow-clear
                 />
@@ -172,11 +188,12 @@
                 :label="t('entity.ticket.source')"
                 name="ticketSource"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.ticketSource"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.source') })"
+                  dict-type="helpdesk_ticket_source"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.source') })"
                   size="small"
-                  style="width: 100%"
+                  :disabled="isEditMode"
                 />
               </a-form-item>
             </a-col>
@@ -189,7 +206,7 @@
                   v-model:value="formState.submitterId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.submitterid') })"
                   size="small"
-                  allow-clear
+                  readonly
                 />
               </a-form-item>
             </a-col>
@@ -202,7 +219,7 @@
                   v-model:value="formState.submitterName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.submittername') })"
                   size="small"
-                  allow-clear
+                  readonly
                 />
               </a-form-item>
             </a-col>
@@ -381,7 +398,7 @@
                   v-model:value="formState.applicantBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.applicantby') })"
                   size="small"
-                  allow-clear
+                  readonly
                 />
               </a-form-item>
             </a-col>
@@ -544,12 +561,13 @@
  * Takt工单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/ticket/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { TicketCreate, TicketChangeLogCreate, TicketChangeLog } from '@/types/routine/help-desk/ticket'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { getAssetList } from '@/api/accounting/financial/asset'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -575,12 +593,61 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
+
+/**
+ * 新增态默认：Open 状态、门户来源、当前用户为提交人
+ * @param target 表单数据
+ */
+function applyNewTicketDefaults(target: Record<string, unknown>) {
+  if (target.ticketId) {
+    return
+  }
+  if (target.ticketStatus == null) {
+    target.ticketStatus = 0
+  }
+  if (target.ticketSource == null) {
+    target.ticketSource = 0
+  }
+  if (target.priority == null) {
+    target.priority = 1
+  }
+  if (!target.submitterId && userStore.userId) {
+    target.submitterId = userStore.userId
+  }
+  if (!target.submitterName && userStore.userInfo?.userName) {
+    target.submitterName = userStore.userInfo.userName
+  }
+  if (!target.applicantBy && userStore.userId) {
+    target.applicantBy = userStore.userId
+  }
+}
+
+/** 是否编辑态（有 ticketId） */
+const isEditMode = computed(() => !!props.formData?.ticketId)
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketNo","title","content","attachmentsJson","ticketStatus","priority","categoryCode","ticketSource","submitterId","submitterName","assigneeId","assigneeName","knowledgeId","parentTicketId","firstResponseAt","firstResponseDueBy","resolvedAt","resolutionDueBy","closedAt","flowInstanceId","applicantDeptId","applicantDeptName","applicantBy","childTickets","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketNo","title","content","attachmentsJson","ticketStatus","priority","categoryCode","assetCode","ticketSource","submitterId","submitterName","assigneeId","assigneeName","knowledgeId","parentTicketId","firstResponseAt","firstResponseDueBy","resolvedAt","resolutionDueBy","closedAt","flowInstanceId","applicantDeptId","applicantDeptName","applicantBy","childTickets","extFieldJson","remark"]
+
+/** 资产号码下拉选项（value=AssetCode） */
+const assetOptions = ref<Array<{ label: string; value: string }>>([])
+
+/** 加载固定资产选项 */
+async function loadAssetOptions() {
+  try {
+    const res = await getAssetList({ pageIndex: 1, pageSize: 500 })
+    assetOptions.value = (res.data ?? [])
+      .filter((item) => item.assetCode)
+      .map((item) => ({
+        label: item.assetName ? `${item.assetName} (${item.assetCode})` : (item.assetCode ?? ''),
+        value: item.assetCode ?? '',
+      }))
+  } catch {
+    assetOptions.value = []
+  }
+}
 
 /** ticketChangeLog 子表行（表单 Tab 内嵌） */
 const childTicketChangeLogRows = ref<Record<string, unknown>[]>([])
@@ -718,6 +785,7 @@ watch(
     Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).changeLogs
     applyScopeDefaults(next)
+    applyNewTicketDefaults(next)
     Object.assign(formState, next)
     syncChildRowsFromFormData(val)
   },
@@ -731,19 +799,22 @@ watch(
     const isCreate = !props.formData?.ticketId
     if (isCreate) {
       applyScopeDefaults(formState, true)
+      applyNewTicketDefaults(formState)
     }
   },
 )
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  ticketNo: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ticket.no') }),
-      trigger: 'blur'
-    }
-  ],
+  ticketNo: isEditMode.value
+    ? [
+        {
+          required: true,
+          message: t('common.page.form.placeholder.required', { field: t('entity.ticket.no') }),
+          trigger: 'blur',
+        },
+      ]
+    : [],
   title: [
     {
       required: true,
@@ -808,6 +879,10 @@ function resetFields() {
 }
 
 defineExpose({ validate, getValues, resetFields })
+
+onMounted(() => {
+  loadAssetOptions()
+})
 </script>
 
 <style scoped lang="css">

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktManufacturerMaterialI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktManufacturerMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials;
 
 /// <summary>
-/// TaktManufacturerMaterial 实体国际化翻译种子（键前缀 entity.manufacturerMaterial.*）
+/// TaktManufacturerMaterial 实体国际化翻译种子（键前缀 entity.manufacturermaterial.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 manufacturerMaterial 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 manufacturermaterial 实体翻译...", tenantCode);
 
         foreach (var item in GetManufacturerMaterialTranslations())
         {
@@ -76,101 +75,101 @@ public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktManufacturerMaterial 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.manufacturerMaterial._self / entity.manufacturerMaterial.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.manufacturermaterial._self / entity.manufacturermaterial.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetManufacturerMaterialTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.manufacturerMaterial._self
-            new TranslationSeedItem("entity.manufacturerMaterial._self", "en-US", "Manufacturer Material Information", "实体名称"),
-            // entity.manufacturerMaterial._self
-            new TranslationSeedItem("entity.manufacturerMaterial._self", "ja-JP", "Takt制造商物料明细信息", "实体名称"),
-            // entity.manufacturerMaterial._self
-            new TranslationSeedItem("entity.manufacturerMaterial._self", "zh-CN", "Takt制造商物料明细信息", "实体名称"),
-            // entity.manufacturerMaterial._self
-            new TranslationSeedItem("entity.manufacturerMaterial._self", "zh-HK", "Takt制造商物料明细信息", "实体名称"),
+            // entity.manufacturermaterial._self
+            new TranslationSeedItem("entity.manufacturermaterial._self", "en-US", "Manufacturer Material Information", "实体名称"),
+            // entity.manufacturermaterial._self
+            new TranslationSeedItem("entity.manufacturermaterial._self", "ja-JP", "Takt制造商物料明细信息", "实体名称"),
+            // entity.manufacturermaterial._self
+            new TranslationSeedItem("entity.manufacturermaterial._self", "zh-CN", "Takt制造商物料明细信息", "实体名称"),
+            // entity.manufacturermaterial._self
+            new TranslationSeedItem("entity.manufacturermaterial._self", "zh-HK", "Takt制造商物料明细信息", "实体名称"),
 
-            // entity.manufacturerMaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturerid", "en-US", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
-            // entity.manufacturerMaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturerid", "ja-JP", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
-            // entity.manufacturerMaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturerid", "zh-CN", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
-            // entity.manufacturerMaterial.manufacturerid
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturerid", "zh-HK", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
+            // entity.manufacturermaterial.manufacturerid
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "en-US", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
+            // entity.manufacturermaterial.manufacturerid
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "ja-JP", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
+            // entity.manufacturermaterial.manufacturerid
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "zh-CN", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
+            // entity.manufacturermaterial.manufacturerid
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturerid", "zh-HK", "制造商ID", "制造商ID（关联TaktManufacturer主表）"),
 
-            // entity.manufacturerMaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturercode", "en-US", "制造商编码", "制造商编码（冗余字段，便于查询）"),
-            // entity.manufacturerMaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturercode", "ja-JP", "制造商编码", "制造商编码（冗余字段，便于查询）"),
-            // entity.manufacturerMaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturercode", "zh-CN", "制造商编码", "制造商编码（冗余字段，便于查询）"),
-            // entity.manufacturerMaterial.manufacturercode
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturercode", "zh-HK", "制造商编码", "制造商编码（冗余字段，便于查询）"),
+            // entity.manufacturermaterial.manufacturercode
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "en-US", "制造商编码", "制造商编码（冗余字段，便于查询）"),
+            // entity.manufacturermaterial.manufacturercode
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "ja-JP", "制造商编码", "制造商编码（冗余字段，便于查询）"),
+            // entity.manufacturermaterial.manufacturercode
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "zh-CN", "制造商编码", "制造商编码（冗余字段，便于查询）"),
+            // entity.manufacturermaterial.manufacturercode
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturercode", "zh-HK", "制造商编码", "制造商编码（冗余字段，便于查询）"),
 
-            // entity.manufacturerMaterial.linenumber
-            new TranslationSeedItem("entity.manufacturerMaterial.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.manufacturerMaterial.linenumber
-            new TranslationSeedItem("entity.manufacturerMaterial.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.manufacturerMaterial.linenumber
-            new TranslationSeedItem("entity.manufacturerMaterial.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.manufacturerMaterial.linenumber
-            new TranslationSeedItem("entity.manufacturerMaterial.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.manufacturermaterial.linenumber
+            new TranslationSeedItem("entity.manufacturermaterial.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.manufacturermaterial.linenumber
+            new TranslationSeedItem("entity.manufacturermaterial.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.manufacturermaterial.linenumber
+            new TranslationSeedItem("entity.manufacturermaterial.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.manufacturermaterial.linenumber
+            new TranslationSeedItem("entity.manufacturermaterial.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
 
-            // entity.manufacturerMaterial.materialtype
-            new TranslationSeedItem("entity.manufacturerMaterial.materialtype", "en-US", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
-            // entity.manufacturerMaterial.materialtype
-            new TranslationSeedItem("entity.manufacturerMaterial.materialtype", "ja-JP", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
-            // entity.manufacturerMaterial.materialtype
-            new TranslationSeedItem("entity.manufacturerMaterial.materialtype", "zh-CN", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
-            // entity.manufacturerMaterial.materialtype
-            new TranslationSeedItem("entity.manufacturerMaterial.materialtype", "zh-HK", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
+            // entity.manufacturermaterial.materialtype
+            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "en-US", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
+            // entity.manufacturermaterial.materialtype
+            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "ja-JP", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
+            // entity.manufacturermaterial.materialtype
+            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "zh-CN", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
+            // entity.manufacturermaterial.materialtype
+            new TranslationSeedItem("entity.manufacturermaterial.materialtype", "zh-HK", "物料类型", "物料类型（0=原材料，1=半成品，2=成品，3=辅料，4=包装材料，5=其他）"),
 
-            // entity.manufacturerMaterial.code
-            new TranslationSeedItem("entity.manufacturerMaterial.code", "en-US", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
-            // entity.manufacturerMaterial.code
-            new TranslationSeedItem("entity.manufacturerMaterial.code", "ja-JP", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
-            // entity.manufacturerMaterial.code
-            new TranslationSeedItem("entity.manufacturerMaterial.code", "zh-CN", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
-            // entity.manufacturerMaterial.code
-            new TranslationSeedItem("entity.manufacturerMaterial.code", "zh-HK", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
+            // entity.manufacturermaterial.code
+            new TranslationSeedItem("entity.manufacturermaterial.code", "en-US", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
+            // entity.manufacturermaterial.code
+            new TranslationSeedItem("entity.manufacturermaterial.code", "ja-JP", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
+            // entity.manufacturermaterial.code
+            new TranslationSeedItem("entity.manufacturermaterial.code", "zh-CN", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
+            // entity.manufacturermaterial.code
+            new TranslationSeedItem("entity.manufacturermaterial.code", "zh-HK", "制造商物料编码", "制造商物料编码（制造商内部的物料编号）"),
 
-            // entity.manufacturerMaterial.name
-            new TranslationSeedItem("entity.manufacturerMaterial.name", "en-US", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
-            // entity.manufacturerMaterial.name
-            new TranslationSeedItem("entity.manufacturerMaterial.name", "ja-JP", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
-            // entity.manufacturerMaterial.name
-            new TranslationSeedItem("entity.manufacturerMaterial.name", "zh-CN", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
-            // entity.manufacturerMaterial.name
-            new TranslationSeedItem("entity.manufacturerMaterial.name", "zh-HK", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
+            // entity.manufacturermaterial.name
+            new TranslationSeedItem("entity.manufacturermaterial.name", "en-US", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
+            // entity.manufacturermaterial.name
+            new TranslationSeedItem("entity.manufacturermaterial.name", "ja-JP", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
+            // entity.manufacturermaterial.name
+            new TranslationSeedItem("entity.manufacturermaterial.name", "zh-CN", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
+            // entity.manufacturermaterial.name
+            new TranslationSeedItem("entity.manufacturermaterial.name", "zh-HK", "制造商物料名称", "制造商物料名称（制造商内部的物料名称）"),
 
-            // entity.manufacturerMaterial.specification
-            new TranslationSeedItem("entity.manufacturerMaterial.specification", "en-US", "制造商物料规格", "制造商物料规格"),
-            // entity.manufacturerMaterial.specification
-            new TranslationSeedItem("entity.manufacturerMaterial.specification", "ja-JP", "制造商物料规格", "制造商物料规格"),
-            // entity.manufacturerMaterial.specification
-            new TranslationSeedItem("entity.manufacturerMaterial.specification", "zh-CN", "制造商物料规格", "制造商物料规格"),
-            // entity.manufacturerMaterial.specification
-            new TranslationSeedItem("entity.manufacturerMaterial.specification", "zh-HK", "制造商物料规格", "制造商物料规格"),
+            // entity.manufacturermaterial.specification
+            new TranslationSeedItem("entity.manufacturermaterial.specification", "en-US", "制造商物料规格", "制造商物料规格"),
+            // entity.manufacturermaterial.specification
+            new TranslationSeedItem("entity.manufacturermaterial.specification", "ja-JP", "制造商物料规格", "制造商物料规格"),
+            // entity.manufacturermaterial.specification
+            new TranslationSeedItem("entity.manufacturermaterial.specification", "zh-CN", "制造商物料规格", "制造商物料规格"),
+            // entity.manufacturermaterial.specification
+            new TranslationSeedItem("entity.manufacturermaterial.specification", "zh-HK", "制造商物料规格", "制造商物料规格"),
 
-            // entity.manufacturerMaterial.materialcode
-            new TranslationSeedItem("entity.manufacturerMaterial.materialcode", "en-US", "物料编码", "物料编码（对应的内部物料编码）"),
-            // entity.manufacturerMaterial.materialcode
-            new TranslationSeedItem("entity.manufacturerMaterial.materialcode", "ja-JP", "物料编码", "物料编码（对应的内部物料编码）"),
-            // entity.manufacturerMaterial.materialcode
-            new TranslationSeedItem("entity.manufacturerMaterial.materialcode", "zh-CN", "物料编码", "物料编码（对应的内部物料编码）"),
-            // entity.manufacturerMaterial.materialcode
-            new TranslationSeedItem("entity.manufacturerMaterial.materialcode", "zh-HK", "物料编码", "物料编码（对应的内部物料编码）"),
+            // entity.manufacturermaterial.materialcode
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "en-US", "物料编码", "物料编码（对应的内部物料编码）"),
+            // entity.manufacturermaterial.materialcode
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "ja-JP", "物料编码", "物料编码（对应的内部物料编码）"),
+            // entity.manufacturermaterial.materialcode
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "zh-CN", "物料编码", "物料编码（对应的内部物料编码）"),
+            // entity.manufacturermaterial.materialcode
+            new TranslationSeedItem("entity.manufacturermaterial.materialcode", "zh-HK", "物料编码", "物料编码（对应的内部物料编码）"),
 
-            // entity.manufacturerMaterial.manufacturer
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturer", "en-US", "导航属性：关联的制造商", "导航属性：关联的制造商"),
-            // entity.manufacturerMaterial.manufacturer
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturer", "ja-JP", "导航属性：关联的制造商", "导航属性：关联的制造商"),
-            // entity.manufacturerMaterial.manufacturer
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturer", "zh-CN", "导航属性：关联的制造商", "导航属性：关联的制造商"),
-            // entity.manufacturerMaterial.manufacturer
-            new TranslationSeedItem("entity.manufacturerMaterial.manufacturer", "zh-HK", "导航属性：关联的制造商", "导航属性：关联的制造商"),
+            // entity.manufacturermaterial.manufacturer
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturer", "en-US", "导航属性：关联的制造商", "导航属性：关联的制造商"),
+            // entity.manufacturermaterial.manufacturer
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturer", "ja-JP", "导航属性：关联的制造商", "导航属性：关联的制造商"),
+            // entity.manufacturermaterial.manufacturer
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturer", "zh-CN", "导航属性：关联的制造商", "导航属性：关联的制造商"),
+            // entity.manufacturermaterial.manufacturer
+            new TranslationSeedItem("entity.manufacturermaterial.manufacturer", "zh-HK", "导航属性：关联的制造商", "导航属性：关联的制造商"),
         };
     }
 
@@ -188,8 +187,8 @@ public class TaktManufacturerMaterialI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

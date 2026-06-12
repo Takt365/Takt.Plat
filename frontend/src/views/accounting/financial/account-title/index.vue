@@ -164,6 +164,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('shortName')">
+      <a-form-item :label="t('entity.accountTitle.shortname')">
+        <a-input
+          v-model:value="advancedQueryForm.shortName"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.shortname') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('titleDesc')">
+      <a-form-item :label="t('entity.accountTitle.titledesc')">
+        <a-input
+          v-model:value="advancedQueryForm.titleDesc"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.titledesc') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('parentId')">
       <a-form-item :label="t('entity.accountTitle.parentid')">
         <a-input
@@ -489,6 +507,8 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   titleCode: '',
   titleName: '',
+  shortName: '',
+  titleDesc: '',
   parentId: '',
   titleType: undefined as number | undefined,
   balanceDirection: undefined as number | undefined,
@@ -516,6 +536,8 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'titleCode', label: t('entity.accountTitle.titlecode') },
   { key: 'titleName', label: t('entity.accountTitle.titlename') },
+  { key: 'shortName', label: t('entity.accountTitle.shortname') },
+  { key: 'titleDesc', label: t('entity.accountTitle.titledesc') },
   { key: 'parentId', label: t('entity.accountTitle.parentid') },
   { key: 'titleType', label: t('entity.accountTitle.titletype') },
   { key: 'balanceDirection', label: t('entity.accountTitle.balancedirection') },
@@ -710,6 +732,8 @@ function matchesAccountTitleRightQuery(record: Record<string, unknown>): boolean
   }
   if (advancedQueryForm.value.titleCode && !String(record.titleCode ?? '').includes(String(advancedQueryForm.value.titleCode))) return false
   if (advancedQueryForm.value.titleName && !String(record.titleName ?? '').includes(String(advancedQueryForm.value.titleName))) return false
+  if (advancedQueryForm.value.shortName && !String(record.shortName ?? '').includes(String(advancedQueryForm.value.shortName))) return false
+  if (advancedQueryForm.value.titleDesc && !String(record.titleDesc ?? '').includes(String(advancedQueryForm.value.titleDesc))) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
   if (advancedQueryForm.value.titleType !== undefined && record.titleType !== advancedQueryForm.value.titleType) return false
   if (advancedQueryForm.value.balanceDirection !== undefined && record.balanceDirection !== advancedQueryForm.value.balanceDirection) return false
@@ -775,6 +799,8 @@ function buildAccountTitleUpdateDto(
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     titleCode: accountTitle.titleCode,
     titleName: accountTitle.titleName,
+    shortName: accountTitle.shortName,
+    titleDesc: accountTitle.titleDesc,
     parentId: overrides.parentId,
     titleType: accountTitle.titleType,
     balanceDirection: accountTitle.balanceDirection,
@@ -934,6 +960,24 @@ watchEffect(() => {
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleName') ?? ''
+  },
+  {
+    title: t('entity.accountTitle.shortname'),
+    dataIndex: 'shortName',
+    key: 'shortName',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'shortName') ?? ''
+  },
+  {
+    title: t('entity.accountTitle.titledesc'),
+    dataIndex: 'titleDesc',
+    key: 'titleDesc',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleDesc') ?? ''
   },
   {
     title: t('entity.accountTitle.parentid'),
@@ -1137,7 +1181,8 @@ async function loadData() {
   }
 }
 
-/** 右侧查询（客户端过滤，不请求接口） */
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 const handleSearch = () => {
   tableCurrentPage.value = 1
 }
@@ -1148,6 +1193,8 @@ const handleReset = () => {
   advancedQueryForm.value = {
   titleCode: '',
   titleName: '',
+  shortName: '',
+  titleDesc: '',
   parentId: '',
   titleType: undefined as number | undefined,
   balanceDirection: undefined as number | undefined,
@@ -1342,6 +1389,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   titleCode: '',
   titleName: '',
+  shortName: '',
+  titleDesc: '',
   parentId: '',
   titleType: undefined as number | undefined,
   balanceDirection: undefined as number | undefined,

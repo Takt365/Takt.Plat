@@ -13,7 +13,7 @@
 namespace Takt.Shared.Options;
 
 /// <summary>
-/// Excel 配置（<c>appsettings:Excel</c> 覆盖本类默认值；启动期 <see cref="Validate"/> 校验范围与硬上限）
+/// Excel 配置（<c>appsettings:Excel</c> 覆盖本类默认值；启动期 Validate 校验范围与硬上限）
 /// </summary>
 public class TaktExcelOptions
 {
@@ -73,12 +73,12 @@ public class TaktExcelOptions
     public string Manager { get; set; } = "Takt365";
 
     /// <summary>
-    /// 导入行数与安全边界（默认值见 <see cref="TaktExcelImportOptions"/>）
+    /// 导入行数与安全边界（默认值见 TaktExcelImportOptions）
     /// </summary>
     public TaktExcelImportOptions Import { get; set; } = new();
 
     /// <summary>
-    /// 导出行数与安全边界（默认值见 <see cref="TaktExcelExportOptions"/>）
+    /// 导出行数与安全边界（默认值见 TaktExcelExportOptions）
     /// </summary>
     public TaktExcelExportOptions Export { get; set; } = new();
 

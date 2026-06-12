@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/conference-center
 // 文件名称：conference.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -11,18 +11,18 @@
 // ========================================
 
 import type {
-  CompanyDtoBase,
+  ApprovalDtoBase,
   TaktPagedQuery
 } from '@/types/common';
 
 /**
- * 会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理
+ * 会议实体（审批单） 继承 TaktApprovalEntityBase；排期、会议室关联；参与人（含签到）、议程/纪要由子实体维护 FlowInstanceId 由业务在发起流程后写入；流程引擎 BusinessType=Conference、BusinessKey=本表 Id
  * 对应前端 TaktConferenceDto
- * 继承 TaktCompanyDtoBase
+ * 继承 TaktApprovalDtoBase
  * 对应前端 Conference
  * @description 对应后端 TaktConferenceDto
  */
-export interface Conference extends CompanyDtoBase {
+export interface Conference extends ApprovalDtoBase {
   /**
    * ConferenceID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -44,7 +44,7 @@ export interface Conference extends CompanyDtoBase {
   conferenceType: number;
 
   /**
-   * 会议状态
+   * 会议状态（草稿/已排期/进行中/已结束/已取消）
    */
   conferenceStatus: number;
 
@@ -59,7 +59,17 @@ export interface Conference extends CompanyDtoBase {
   endTime: string;
 
   /**
-   * 会议地点（线下会议室名称或地址）
+   * 会议室 ID（线下预约，可空表示外部场地或纯线上）
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余，便于列表展示）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 会议地点（外部场地或补充地址，与会议室可并存）
    */
   location?: string;
 
@@ -67,21 +77,6 @@ export interface Conference extends CompanyDtoBase {
    * 会议链接（线上会议 URL）
    */
   meetingLink?: string;
-
-  /**
-   * 会议议程
-   */
-  agenda?: string;
-
-  /**
-   * 会议内容（会议纪要正文，富文本 HTML）
-   */
-  content?: string;
-
-  /**
-   * 会议纪要摘要（用于列表展示）
-   */
-  summary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
@@ -119,7 +114,7 @@ export interface Conference extends CompanyDtoBase {
   reminderMinutes: number;
 
   /**
-   * 流程实例 ID（会议审批工作流）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；BusinessType=Conference、BusinessKey=本表 Id）
    */
   flowInstanceId?: string;
 
@@ -129,9 +124,19 @@ export interface Conference extends CompanyDtoBase {
   flowInstanceName?: string;
 
   /**
+   * 会议室 （主表：TaktConferenceRoom）
+   */
+  conferenceRoom?: ConferenceRoom;
+
+  /**
    * 参与人列表（主子表关系） （子表：TaktConferenceParticipant）
    */
   participants?: ConferenceParticipant[];
+
+  /**
+   * 议程/纪要列表（主子表关系） （子表：TaktConferenceAgenda）
+   */
+  agendaRecords?: ConferenceAgenda[];
 
 }
 
@@ -169,7 +174,7 @@ export interface ConferenceQuery extends TaktPagedQuery {
   conferenceType?: number;
 
   /**
-   * 会议状态
+   * 会议状态（草稿/已排期/进行中/已结束/已取消）
    */
   conferenceStatus?: number;
 
@@ -194,7 +199,17 @@ export interface ConferenceQuery extends TaktPagedQuery {
   endTimeEnd?: string;
 
   /**
-   * 会议地点（线下会议室名称或地址）
+   * 会议室 ID（线下预约，可空表示外部场地或纯线上）
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余，便于列表展示）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 会议地点（外部场地或补充地址，与会议室可并存）
    */
   location?: string;
 
@@ -202,21 +217,6 @@ export interface ConferenceQuery extends TaktPagedQuery {
    * 会议链接（线上会议 URL）
    */
   meetingLink?: string;
-
-  /**
-   * 会议议程
-   */
-  agenda?: string;
-
-  /**
-   * 会议内容（会议纪要正文，富文本 HTML）
-   */
-  content?: string;
-
-  /**
-   * 会议纪要摘要（用于列表展示）
-   */
-  summary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
@@ -254,9 +254,44 @@ export interface ConferenceQuery extends TaktPagedQuery {
   reminderMinutes?: number;
 
   /**
-   * 流程实例 ID（会议审批工作流）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；BusinessType=Conference、BusinessKey=本表 Id）
    */
   flowInstanceId?: string;
+
+  /**
+   * 审批状态（TaktApprovalStatus）
+   */
+  approvalStatus?: number;
+
+  /**
+   * 发起人ID
+   */
+  initiatorId?: string;
+
+  /**
+   * 发起时间（范围查询-开始）
+   */
+  initiatedAtStart?: string;
+
+  /**
+   * 发起时间（范围查询-结束）
+   */
+  initiatedAtEnd?: string;
+
+  /**
+   * 最终审批人ID
+   */
+  approvedBy?: string;
+
+  /**
+   * 最终审批时间（范围查询-开始）
+   */
+  approvedAtStart?: string;
+
+  /**
+   * 最终审批时间（范围查询-结束）
+   */
+  approvedAtEnd?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -318,7 +353,7 @@ export interface ConferenceCreate {
   conferenceType: number;
 
   /**
-   * 会议状态
+   * 会议状态（草稿/已排期/进行中/已结束/已取消）
    */
   conferenceStatus: number;
 
@@ -333,7 +368,17 @@ export interface ConferenceCreate {
   endTime: string;
 
   /**
-   * 会议地点（线下会议室名称或地址）
+   * 会议室 ID（线下预约，可空表示外部场地或纯线上）
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余，便于列表展示）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 会议地点（外部场地或补充地址，与会议室可并存）
    */
   location?: string;
 
@@ -341,21 +386,6 @@ export interface ConferenceCreate {
    * 会议链接（线上会议 URL）
    */
   meetingLink?: string;
-
-  /**
-   * 会议议程
-   */
-  agenda?: string;
-
-  /**
-   * 会议内容（会议纪要正文，富文本 HTML）
-   */
-  content?: string;
-
-  /**
-   * 会议纪要摘要（用于列表展示）
-   */
-  summary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
@@ -393,7 +423,7 @@ export interface ConferenceCreate {
   reminderMinutes: number;
 
   /**
-   * 流程实例 ID（会议审批工作流）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；BusinessType=Conference、BusinessKey=本表 Id）
    */
   flowInstanceId?: string;
 
@@ -401,6 +431,11 @@ export interface ConferenceCreate {
    * 参与人列表（主子表关系）（子表，级联保存）
    */
   participants?: ConferenceParticipantCreate[];
+
+  /**
+   * 议程/纪要列表（主子表关系）（子表，级联保存）
+   */
+  agendaRecords?: ConferenceAgendaCreate[];
 
   /**
    * 扩展字段JSON
@@ -442,7 +477,7 @@ export interface ConferenceStatus {
   conferenceId: string;
 
   /**
-   * 会议状态
+   * 会议状态（草稿/已排期/进行中/已结束/已取消）
    */
   conferenceStatus: number;
 
@@ -481,12 +516,22 @@ export interface ConferenceTemplate {
   conferenceType?: number;
 
   /**
-   * 会议状态
+   * 会议状态（草稿/已排期/进行中/已结束/已取消）
    */
   conferenceStatus?: number;
 
   /**
-   * 会议地点（线下会议室名称或地址）
+   * 会议室 ID（线下预约，可空表示外部场地或纯线上）
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余，便于列表展示）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 会议地点（外部场地或补充地址，与会议室可并存）
    */
   location?: string;
 
@@ -494,21 +539,6 @@ export interface ConferenceTemplate {
    * 会议链接（线上会议 URL）
    */
   meetingLink?: string;
-
-  /**
-   * 会议议程
-   */
-  agenda?: string;
-
-  /**
-   * 会议内容（会议纪要正文，富文本 HTML）
-   */
-  content?: string;
-
-  /**
-   * 会议纪要摘要（用于列表展示）
-   */
-  summary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
@@ -524,6 +554,11 @@ export interface ConferenceTemplate {
    * 组织人姓名
    */
   organizerName?: string;
+
+  /**
+   * 主办部门 ID
+   */
+  deptId?: string;
 
   /**
    * 扩展字段JSON
@@ -575,12 +610,22 @@ export interface ConferenceImport {
   conferenceType?: number;
 
   /**
-   * 会议状态
+   * 会议状态（草稿/已排期/进行中/已结束/已取消）
    */
   conferenceStatus?: number;
 
   /**
-   * 会议地点（线下会议室名称或地址）
+   * 会议室 ID（线下预约，可空表示外部场地或纯线上）
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余，便于列表展示）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 会议地点（外部场地或补充地址，与会议室可并存）
    */
   location?: string;
 
@@ -588,21 +633,6 @@ export interface ConferenceImport {
    * 会议链接（线上会议 URL）
    */
   meetingLink?: string;
-
-  /**
-   * 会议议程
-   */
-  agenda?: string;
-
-  /**
-   * 会议内容（会议纪要正文，富文本 HTML）
-   */
-  content?: string;
-
-  /**
-   * 会议纪要摘要（用于列表展示）
-   */
-  summary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
@@ -618,6 +648,11 @@ export interface ConferenceImport {
    * 组织人姓名
    */
   organizerName?: string;
+
+  /**
+   * 主办部门 ID
+   */
+  deptId?: string;
 
   /**
    * 扩展字段JSON
@@ -644,11 +679,6 @@ export interface ConferenceExport {
   conferenceId: string;
 
   /**
-   * 公司代码
-   */
-  companyCode: string;
-
-  /**
    * 会议编码（租户+公司内唯一）
    */
   conferenceCode: string;
@@ -664,7 +694,7 @@ export interface ConferenceExport {
   conferenceType: number;
 
   /**
-   * 会议状态
+   * 会议状态（草稿/已排期/进行中/已结束/已取消）
    */
   conferenceStatus: number;
 
@@ -679,7 +709,17 @@ export interface ConferenceExport {
   endTime: string;
 
   /**
-   * 会议地点（线下会议室名称或地址）
+   * 会议室 ID（线下预约，可空表示外部场地或纯线上）
+   */
+  conferenceRoomId?: string;
+
+  /**
+   * 会议室名称（冗余，便于列表展示）
+   */
+  conferenceRoomName?: string;
+
+  /**
+   * 会议地点（外部场地或补充地址，与会议室可并存）
    */
   location?: string;
 
@@ -687,21 +727,6 @@ export interface ConferenceExport {
    * 会议链接（线上会议 URL）
    */
   meetingLink?: string;
-
-  /**
-   * 会议议程
-   */
-  agenda?: string;
-
-  /**
-   * 会议内容（会议纪要正文，富文本 HTML）
-   */
-  content?: string;
-
-  /**
-   * 会议纪要摘要（用于列表展示）
-   */
-  summary?: string;
 
   /**
    * 标签（逗号分隔或 JSON 数组存储）
@@ -739,7 +764,7 @@ export interface ConferenceExport {
   reminderMinutes: number;
 
   /**
-   * 流程实例 ID（会议审批工作流）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；BusinessType=Conference、BusinessKey=本表 Id）
    */
   flowInstanceId?: string;
 

@@ -20,7 +20,7 @@ using Takt.Shared.Models;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// 敏感词过滤实现（<see cref="ITaktVocabularyFilter"/>）。
+/// 敏感词过滤实现（ITaktVocabularyFilter）。
 /// 按租户缓存启用词条，优先匹配较长词；ReplaceText 为空时使用等长 *。
 /// </summary>
 public class TaktVocabularyFilter : ITaktVocabularyFilter
@@ -163,7 +163,7 @@ public class TaktVocabularyFilter : ITaktVocabularyFilter
     private async Task<IReadOnlyList<VocabularyEntry>> LoadActiveEntriesAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var list = await _vocabularyRepository.GetListAsync(x => x.Status == TaktCommonStatus.Enabled);
+        var list = await _vocabularyRepository.GetListAsync(x => x.Status == 1);
         return list
             .Where(x => !string.IsNullOrWhiteSpace(x.WordText))
             .Select(x => new VocabularyEntry(x.WordText, x.FilterLevel, x.ReplaceText))

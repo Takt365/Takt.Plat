@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Attendance;
 
@@ -39,7 +38,7 @@ public class TaktHoliday : TaktCompanyEntityBase
     /// 假日类型（字典 hr_holiday_type）
     /// </summary>
     [SugarColumn(ColumnName = "holiday_type", ColumnDescription = "假日类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktHolidayType HolidayType { get; set; } = TaktHolidayType.Statutory;
+    public int HolidayType { get; set; } = 0;
 
     /// <summary>
     /// 假日开始日期
@@ -57,7 +56,7 @@ public class TaktHoliday : TaktCompanyEntityBase
     /// 是否工作日（字典 hr_holiday_is_working_day）
     /// </summary>
     [SugarColumn(ColumnName = "is_working_day", ColumnDescription = "是否工作日", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktHolidayWorkingDay IsWorkingDay { get; set; } = TaktHolidayWorkingDay.NonWorkingDay;
+    public int IsWorkingDay { get; set; } = 0;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）

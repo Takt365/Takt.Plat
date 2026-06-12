@@ -16,7 +16,7 @@ using Takt.Shared.Helpers;
 namespace Takt.Application.Dtos.HumanResource.Organization;
 
 /// <summary>
-/// 员工-岗位关联列表 DTO（对应 <see cref="Takt.Domain.Entities.HumanResource.Organization.TaktEmployeePost"/>）
+/// 员工-岗位关联列表 DTO（对应 TaktEmployeePost）
 /// </summary>
 public class TaktEmployeePostDto : TaktCompanyDtoBase
 {

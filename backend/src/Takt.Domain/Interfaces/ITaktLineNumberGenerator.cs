@@ -13,7 +13,7 @@
 namespace Takt.Domain.Interfaces;
 
 /// <summary>
-/// 明细行号生成器（Infrastructure 由 <see cref="Takt.Infrastructure.Services.TaktLineNumberGenerator"/> 实现）
+/// 明细行号生成器（Infrastructure 由 TaktLineNumberGenerator 实现）
 /// </summary>
 public interface ITaktLineNumberGenerator
 {

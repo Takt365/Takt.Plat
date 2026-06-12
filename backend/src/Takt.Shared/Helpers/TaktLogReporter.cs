@@ -23,7 +23,7 @@ namespace Takt.Shared.Helpers;
 /// 统一日志远端上报器
 /// </summary>
 /// <remarks>
-/// 非纯工具网关：内存队列、定时器与 <see cref="HttpClient"/> 批量 HTTP 上报；由 <see cref="TaktLogger.Configure"/> 触发配置。
+/// 非纯工具网关：内存队列、定时器与 HttpClient 批量 HTTP 上报；由 TaktLogger.Configure 触发配置。
 /// </remarks>
 public static class TaktLogReporter
 {
@@ -144,6 +144,10 @@ public static class TaktLogReporter
         }
     }
 
+    /// <summary>
+    /// 上报失败时将批次重新入队（超队列上限时丢弃最旧条目）
+    /// </summary>
+    /// <param name="batch">待重入队的日志批次</param>
     private static void RequeueBatch(List<TaktLogEntry> batch)
     {
         foreach (var item in batch)
@@ -156,6 +160,9 @@ public static class TaktLogReporter
         }
     }
 
+    /// <summary>
+    /// 重启定时 flush 计时器（远端上报启用且 URL 有效时）
+    /// </summary>
     private static void RestartFlushTimer()
     {
         _flushTimer?.Dispose();

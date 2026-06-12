@@ -15,7 +15,7 @@ using Microsoft.Extensions.Configuration;
 namespace Takt.Shared.Options;
 
 /// <summary>
-/// 配置节绑定扩展（标准三层：Options 默认值 → appsettings 覆盖 → <see cref="Validate"/> 校验）
+/// 配置节绑定扩展（标准三层：Options 默认值 → appsettings 覆盖 → Validate 校验）
 /// </summary>
 public static class TaktConfigurationExtensions
 {
@@ -36,7 +36,7 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
-    /// 绑定配置节（同 <see cref="BindOptions{T}"/>，保留历史调用名）
+    /// 绑定配置节（同 BindOptions{T}，保留历史调用名）
     /// </summary>
     /// <typeparam name="T">须有无参构造函数的配置类型</typeparam>
     /// <param name="configuration">应用配置</param>
@@ -59,7 +59,7 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
-    /// 绑定 <c>Init</c> 节（建表/种子开关，与 <see cref="TaktDatabaseOptions"/> 数据范围分离）
+    /// 绑定 <c>Init</c> 节（建表/种子开关，与 TaktDatabaseOptions 数据范围分离）
     /// </summary>
     /// <param name="configuration">应用配置</param>
     /// <returns>初始化开关配置</returns>
@@ -112,7 +112,7 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
-    /// 租户编码与连接字符串（顺序与 <see cref="GetTenantCodes"/> 一致）
+    /// 租户编码与连接字符串（顺序与 GetTenantCodes 一致）
     /// </summary>
     /// <param name="configuration">应用配置</param>
     /// <returns>租户编码与连接字符串列表</returns>

@@ -133,14 +133,14 @@ public class TaktMenu : TaktTenantEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "menu_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus MenuStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int MenuStatus { get; set; } = 1;
 
     /// <summary>
     /// 是否内置（1=是，0=否）
     /// 种子菜单为内置，不允许删除
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 菜单描述

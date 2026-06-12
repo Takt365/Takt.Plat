@@ -84,7 +84,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         var leaveRepository = serviceProvider.GetRequiredService<ITaktApprovalSeedRepository<TaktLeave>>();
         var seedContext = serviceProvider.GetRequiredService<TaktSeedContext>();
         var companies = await companyRepository.GetListAsync(
-            c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+            c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         if (companies == null || companies.Count == 0)
         {
             TaktLogger.Warning("租户 {TenantCode} 未找到启用的公司，跳过请假工作流种子", tenantCode);
@@ -154,7 +154,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 new DateTime(2026, 6, 16),
                 "演示：请假草稿",
                 0,
-                TaktApprovalStatus.Pending,
+                0,
                 null);
             insertCount += dli;
             updateCount += dlu;
@@ -170,7 +170,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 new DateTime(2026, 6, 11),
                 "演示：年假审批中",
                 1,
-                TaktApprovalStatus.InProgress,
+                1,
                 null);
             insertCount += rli;
             updateCount += rlu;
@@ -186,7 +186,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 new DateTime(2026, 6, 9),
                 "演示：病假已通过",
                 2,
-                TaktApprovalStatus.Approved,
+                2,
                 null);
             insertCount += oli;
             updateCount += olu;
@@ -364,16 +364,28 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
     /// </summary>
     private static string BuildRelatedFormFieldJson()
     {
-        var fields = new object[]
+        var root = new
         {
-            new { dbColumnName = "employee_id", csharpColumnName = "employeeId", columnDescription = "员工ID", dataType = "bigint", displayType = "input" },
-            new { dbColumnName = "employee_name", csharpColumnName = "employeeName", columnDescription = "员工姓名", dataType = "nvarchar", displayType = "input" },
-            new { dbColumnName = "leave_type", csharpColumnName = "leaveType", columnDescription = "请假类型", dataType = "nvarchar", displayType = "select", dictTypeCode = "sys_leave_category" },
-            new { dbColumnName = "start_date", csharpColumnName = "startDate", columnDescription = "开始日期", dataType = "date", displayType = "date" },
-            new { dbColumnName = "end_date", csharpColumnName = "endDate", columnDescription = "结束日期", dataType = "date", displayType = "date" },
-            new { dbColumnName = "reason", csharpColumnName = "reason", columnDescription = "请假事由", dataType = "nvarchar", displayType = "textarea" }
+            fields = new object[]
+            {
+                new { dbColumnName = "employee_id", csharpColumnName = "employeeId", columnDescription = "员工ID", dataType = "bigint", displayType = "input" },
+                new { dbColumnName = "employee_name", csharpColumnName = "employeeName", columnDescription = "员工姓名", dataType = "nvarchar", displayType = "input" },
+                new { dbColumnName = "leave_type", csharpColumnName = "leaveType", columnDescription = "请假类型", dataType = "nvarchar", displayType = "select", dictTypeCode = "sys_leave_category" },
+                new { dbColumnName = "start_date", csharpColumnName = "startDate", columnDescription = "开始日期", dataType = "date", displayType = "date" },
+                new { dbColumnName = "end_date", csharpColumnName = "endDate", columnDescription = "结束日期", dataType = "date", displayType = "date" },
+                new { dbColumnName = "reason", csharpColumnName = "reason", columnDescription = "请假事由", dataType = "nvarchar", displayType = "textarea" }
+            },
+            business = new
+            {
+                businessStatusColumn = "leave_status",
+                statusInProgress = 1,
+                statusApproved = 2,
+                statusRejected = 3,
+                statusCancelled = 4,
+                submitAllowedBusinessStatuses = new[] { 0, 3 }
+            }
         };
-        return JsonConvert.SerializeObject(fields, JsonSettings);
+        return JsonConvert.SerializeObject(root, JsonSettings);
     }
 
     /// <summary>
@@ -453,8 +465,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 IsLatest = 1,
                 ProcessCategory = 1,
                 ProcessDescription = "员工请假：直属主管审批 → 人事确认",
-                ProcessStatus = TaktFlowSchemeStatus.Published,
-                SuspensionState = TaktFlowSuspensionState.Active,
+                ProcessStatus = 1,
+                SuspensionState = (int)TaktFlowSuspensionState.Active,
                 ProcessContent = processContent,
                 DeploymentId = "leave-v1-seed",
                 FormId = form.Id,
@@ -469,8 +481,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         scheme.IsLatest = 1;
         scheme.ProcessCategory = 1;
         scheme.ProcessDescription = "员工请假：直属主管审批 → 人事确认";
-        scheme.ProcessStatus = TaktFlowSchemeStatus.Published;
-        scheme.SuspensionState = TaktFlowSuspensionState.Active;
+        scheme.ProcessStatus = 1;
+        scheme.SuspensionState = (int)TaktFlowSuspensionState.Active;
         scheme.ProcessContent = processContent;
         scheme.DeploymentId = "leave-v1-seed";
         scheme.FormId = form.Id;
@@ -495,7 +507,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         DateTime endDate,
         string reason,
         int leaveStatus,
-        TaktApprovalStatus approvalStatus,
+        int approvalStatus,
         long? flowInstanceId)
     {
         var leave = await repository.FirstAsync(l =>
@@ -581,7 +593,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 CurrentActivityName = currentActivityName,
                 StartUserId = starter.Id,
                 StartUserName = starter.Nickname ?? starter.Username,
-                StartTime = startTime,
+                StartTime = startTime ?? DateTime.Now,
                 EndTime = endTime,
                 BusinessKey = businessKey,
                 BusinessType = BusinessType,
@@ -590,13 +602,9 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 FormCode = scheme.FormCode,
                 ProcessContentSnapshot = scheme.ProcessContent
             };
-            if (status == TaktFlowInstanceStatus.Running && !instance.StartTime.HasValue)
+            if (status == TaktFlowInstanceStatus.Completed && endTime.HasValue)
             {
-                instance.StartTime = DateTime.Now;
-            }
-            if (status == TaktFlowInstanceStatus.Completed && instance.StartTime.HasValue && endTime.HasValue)
-            {
-                instance.DurationMs = (long)(endTime.Value - instance.StartTime.Value).TotalMilliseconds;
+                instance.DurationMs = (long)(endTime.Value - (instance.StartTime ?? DateTime.Now)).TotalMilliseconds;
             }
             instance = await repository.CreateAsync(instance);
             return (instance, 1, 0);
@@ -611,7 +619,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         instance.CurrentActivityName = currentActivityName;
         instance.StartUserId = starter.Id;
         instance.StartUserName = starter.Nickname ?? starter.Username;
-        instance.StartTime = startTime;
+        instance.StartTime = startTime ?? instance.StartTime;
         instance.EndTime = endTime;
         instance.BusinessKey = businessKey;
         instance.BusinessType = BusinessType;
@@ -619,9 +627,9 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         instance.FormId = scheme.FormId;
         instance.FormCode = scheme.FormCode;
         instance.ProcessContentSnapshot = scheme.ProcessContent;
-        if (status == TaktFlowInstanceStatus.Completed && instance.StartTime.HasValue && endTime.HasValue)
+        if (status == TaktFlowInstanceStatus.Completed && endTime.HasValue)
         {
-            instance.DurationMs = (long)(endTime.Value - instance.StartTime.Value).TotalMilliseconds;
+            instance.DurationMs = (long)(endTime.Value - (instance.StartTime ?? DateTime.Now)).TotalMilliseconds;
         }
         else if (status != TaktFlowInstanceStatus.Completed)
         {
@@ -652,7 +660,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         TaktUser manager)
     {
         await ClearInstanceRuntimeAsync(seedContext, instance.Id);
-        var startTime = instance.StartTime ?? DateTime.Now.AddDays(-1);
+        var startTime = instance.StartTime ?? DateTime.Now;
         await transitionRepository.CreateAsync(new TaktFlowTransition
         {
             TenantCode = instance.TenantCode,

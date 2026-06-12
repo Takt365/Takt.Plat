@@ -151,6 +151,7 @@
       :checked-keys="masterVisibleColumnKeys"
       :id-column-key="masterIdColumnKey"
       :action-column-key="masterActionColumnKey"
+      :entity-scope="masterEntityScope"
       @update:checked-keys="handleMasterColumnKeysChange"
       @reset="handleMasterColumnSettingReset"
     />
@@ -162,6 +163,7 @@
       :checked-keys="detailVisibleColumnKeys"
       :id-column-key="detailIdColumnKey"
       :action-column-key="detailActionColumnKey"
+      :entity-scope="detailEntityScope"
       @update:checked-keys="handleDetailColumnKeysChange"
       @reset="handleDetailColumnSettingReset"
     />

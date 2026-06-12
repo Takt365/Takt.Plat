@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowAddSignI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowAddSign 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow;
 
 /// <summary>
-/// TaktFlowAddSign 实体国际化翻译种子（键前缀 entity.flowAddSign.*）
+/// TaktFlowAddSign 实体国际化翻译种子（键前缀 entity.flowaddsign.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktFlowAddSignI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktFlowAddSignI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 flowAddSign 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 flowaddsign 实体翻译...", tenantCode);
 
         foreach (var item in GetFlowAddSignTranslations())
         {
@@ -76,101 +75,101 @@ public class TaktFlowAddSignI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktFlowAddSign 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.flowAddSign._self / entity.flowAddSign.{{field}}；ResourceGroup=TaktModule.Workflow；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.flowaddsign._self / entity.flowaddsign.{{field}}；ResourceGroup=6；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetFlowAddSignTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.flowAddSign._self
-            new TranslationSeedItem("entity.flowAddSign._self", "en-US", "Flow Add Sign Information", "实体名称"),
-            // entity.flowAddSign._self
-            new TranslationSeedItem("entity.flowAddSign._self", "ja-JP", "流程加签记录信息", "实体名称"),
-            // entity.flowAddSign._self
-            new TranslationSeedItem("entity.flowAddSign._self", "zh-CN", "流程加签记录信息", "实体名称"),
-            // entity.flowAddSign._self
-            new TranslationSeedItem("entity.flowAddSign._self", "zh-HK", "流程加签记录信息", "实体名称"),
+            // entity.flowaddsign._self
+            new TranslationSeedItem("entity.flowaddsign._self", "en-US", "Flow Add Sign Information", "实体名称"),
+            // entity.flowaddsign._self
+            new TranslationSeedItem("entity.flowaddsign._self", "ja-JP", "流程加签记录信息", "实体名称"),
+            // entity.flowaddsign._self
+            new TranslationSeedItem("entity.flowaddsign._self", "zh-CN", "流程加签记录信息", "实体名称"),
+            // entity.flowaddsign._self
+            new TranslationSeedItem("entity.flowaddsign._self", "zh-HK", "流程加签记录信息", "实体名称"),
 
-            // entity.flowAddSign.instanceid
-            new TranslationSeedItem("entity.flowAddSign.instanceid", "en-US", "流程实例ID", "流程实例 ID"),
-            // entity.flowAddSign.instanceid
-            new TranslationSeedItem("entity.flowAddSign.instanceid", "ja-JP", "流程实例ID", "流程实例 ID"),
-            // entity.flowAddSign.instanceid
-            new TranslationSeedItem("entity.flowAddSign.instanceid", "zh-CN", "流程实例ID", "流程实例 ID"),
-            // entity.flowAddSign.instanceid
-            new TranslationSeedItem("entity.flowAddSign.instanceid", "zh-HK", "流程实例ID", "流程实例 ID"),
+            // entity.flowaddsign.instanceid
+            new TranslationSeedItem("entity.flowaddsign.instanceid", "en-US", "流程实例ID", "流程实例 ID"),
+            // entity.flowaddsign.instanceid
+            new TranslationSeedItem("entity.flowaddsign.instanceid", "ja-JP", "流程实例ID", "流程实例 ID"),
+            // entity.flowaddsign.instanceid
+            new TranslationSeedItem("entity.flowaddsign.instanceid", "zh-CN", "流程实例ID", "流程实例 ID"),
+            // entity.flowaddsign.instanceid
+            new TranslationSeedItem("entity.flowaddsign.instanceid", "zh-HK", "流程实例ID", "流程实例 ID"),
 
-            // entity.flowAddSign.nodeid
-            new TranslationSeedItem("entity.flowAddSign.nodeid", "en-US", "节点ID", "加签节点 ID"),
-            // entity.flowAddSign.nodeid
-            new TranslationSeedItem("entity.flowAddSign.nodeid", "ja-JP", "节点ID", "加签节点 ID"),
-            // entity.flowAddSign.nodeid
-            new TranslationSeedItem("entity.flowAddSign.nodeid", "zh-CN", "节点ID", "加签节点 ID"),
-            // entity.flowAddSign.nodeid
-            new TranslationSeedItem("entity.flowAddSign.nodeid", "zh-HK", "节点ID", "加签节点 ID"),
+            // entity.flowaddsign.nodeid
+            new TranslationSeedItem("entity.flowaddsign.nodeid", "en-US", "节点ID", "加签节点 ID"),
+            // entity.flowaddsign.nodeid
+            new TranslationSeedItem("entity.flowaddsign.nodeid", "ja-JP", "节点ID", "加签节点 ID"),
+            // entity.flowaddsign.nodeid
+            new TranslationSeedItem("entity.flowaddsign.nodeid", "zh-CN", "节点ID", "加签节点 ID"),
+            // entity.flowaddsign.nodeid
+            new TranslationSeedItem("entity.flowaddsign.nodeid", "zh-HK", "节点ID", "加签节点 ID"),
 
-            // entity.flowAddSign.signuserid
-            new TranslationSeedItem("entity.flowAddSign.signuserid", "en-US", "加签人ID", "加签人 ID"),
-            // entity.flowAddSign.signuserid
-            new TranslationSeedItem("entity.flowAddSign.signuserid", "ja-JP", "加签人ID", "加签人 ID"),
-            // entity.flowAddSign.signuserid
-            new TranslationSeedItem("entity.flowAddSign.signuserid", "zh-CN", "加签人ID", "加签人 ID"),
-            // entity.flowAddSign.signuserid
-            new TranslationSeedItem("entity.flowAddSign.signuserid", "zh-HK", "加签人ID", "加签人 ID"),
+            // entity.flowaddsign.signuserid
+            new TranslationSeedItem("entity.flowaddsign.signuserid", "en-US", "加签人ID", "加签人 ID"),
+            // entity.flowaddsign.signuserid
+            new TranslationSeedItem("entity.flowaddsign.signuserid", "ja-JP", "加签人ID", "加签人 ID"),
+            // entity.flowaddsign.signuserid
+            new TranslationSeedItem("entity.flowaddsign.signuserid", "zh-CN", "加签人ID", "加签人 ID"),
+            // entity.flowaddsign.signuserid
+            new TranslationSeedItem("entity.flowaddsign.signuserid", "zh-HK", "加签人ID", "加签人 ID"),
 
-            // entity.flowAddSign.signusername
-            new TranslationSeedItem("entity.flowAddSign.signusername", "en-US", "加签人姓名", "加签人姓名"),
-            // entity.flowAddSign.signusername
-            new TranslationSeedItem("entity.flowAddSign.signusername", "ja-JP", "加签人姓名", "加签人姓名"),
-            // entity.flowAddSign.signusername
-            new TranslationSeedItem("entity.flowAddSign.signusername", "zh-CN", "加签人姓名", "加签人姓名"),
-            // entity.flowAddSign.signusername
-            new TranslationSeedItem("entity.flowAddSign.signusername", "zh-HK", "加签人姓名", "加签人姓名"),
+            // entity.flowaddsign.signusername
+            new TranslationSeedItem("entity.flowaddsign.signusername", "en-US", "加签人姓名", "加签人姓名"),
+            // entity.flowaddsign.signusername
+            new TranslationSeedItem("entity.flowaddsign.signusername", "ja-JP", "加签人姓名", "加签人姓名"),
+            // entity.flowaddsign.signusername
+            new TranslationSeedItem("entity.flowaddsign.signusername", "zh-CN", "加签人姓名", "加签人姓名"),
+            // entity.flowaddsign.signusername
+            new TranslationSeedItem("entity.flowaddsign.signusername", "zh-HK", "加签人姓名", "加签人姓名"),
 
-            // entity.flowAddSign.signtype
-            new TranslationSeedItem("entity.flowAddSign.signtype", "en-US", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
-            // entity.flowAddSign.signtype
-            new TranslationSeedItem("entity.flowAddSign.signtype", "ja-JP", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
-            // entity.flowAddSign.signtype
-            new TranslationSeedItem("entity.flowAddSign.signtype", "zh-CN", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
-            // entity.flowAddSign.signtype
-            new TranslationSeedItem("entity.flowAddSign.signtype", "zh-HK", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
+            // entity.flowaddsign.signtype
+            new TranslationSeedItem("entity.flowaddsign.signtype", "en-US", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
+            // entity.flowaddsign.signtype
+            new TranslationSeedItem("entity.flowaddsign.signtype", "ja-JP", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
+            // entity.flowaddsign.signtype
+            new TranslationSeedItem("entity.flowaddsign.signtype", "zh-CN", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
+            // entity.flowaddsign.signtype
+            new TranslationSeedItem("entity.flowaddsign.signtype", "zh-HK", "加签方式", "加签方式（sequential / all / one，与前端 approveType 一致）"),
 
-            // entity.flowAddSign.returntosignnode
-            new TranslationSeedItem("entity.flowAddSign.returntosignnode", "en-US", "回到加签节点", "完成后是否回到加签节点"),
-            // entity.flowAddSign.returntosignnode
-            new TranslationSeedItem("entity.flowAddSign.returntosignnode", "ja-JP", "回到加签节点", "完成后是否回到加签节点"),
-            // entity.flowAddSign.returntosignnode
-            new TranslationSeedItem("entity.flowAddSign.returntosignnode", "zh-CN", "回到加签节点", "完成后是否回到加签节点"),
-            // entity.flowAddSign.returntosignnode
-            new TranslationSeedItem("entity.flowAddSign.returntosignnode", "zh-HK", "回到加签节点", "完成后是否回到加签节点"),
+            // entity.flowaddsign.returntosignnode
+            new TranslationSeedItem("entity.flowaddsign.returntosignnode", "en-US", "回到加签节点", "完成后是否回到加签节点"),
+            // entity.flowaddsign.returntosignnode
+            new TranslationSeedItem("entity.flowaddsign.returntosignnode", "ja-JP", "回到加签节点", "完成后是否回到加签节点"),
+            // entity.flowaddsign.returntosignnode
+            new TranslationSeedItem("entity.flowaddsign.returntosignnode", "zh-CN", "回到加签节点", "完成后是否回到加签节点"),
+            // entity.flowaddsign.returntosignnode
+            new TranslationSeedItem("entity.flowaddsign.returntosignnode", "zh-HK", "回到加签节点", "完成后是否回到加签节点"),
 
-            // entity.flowAddSign.reason
-            new TranslationSeedItem("entity.flowAddSign.reason", "en-US", "加签原因", "加签原因"),
-            // entity.flowAddSign.reason
-            new TranslationSeedItem("entity.flowAddSign.reason", "ja-JP", "加签原因", "加签原因"),
-            // entity.flowAddSign.reason
-            new TranslationSeedItem("entity.flowAddSign.reason", "zh-CN", "加签原因", "加签原因"),
-            // entity.flowAddSign.reason
-            new TranslationSeedItem("entity.flowAddSign.reason", "zh-HK", "加签原因", "加签原因"),
+            // entity.flowaddsign.reason
+            new TranslationSeedItem("entity.flowaddsign.reason", "en-US", "加签原因", "加签原因"),
+            // entity.flowaddsign.reason
+            new TranslationSeedItem("entity.flowaddsign.reason", "ja-JP", "加签原因", "加签原因"),
+            // entity.flowaddsign.reason
+            new TranslationSeedItem("entity.flowaddsign.reason", "zh-CN", "加签原因", "加签原因"),
+            // entity.flowaddsign.reason
+            new TranslationSeedItem("entity.flowaddsign.reason", "zh-HK", "加签原因", "加签原因"),
 
-            // entity.flowAddSign.ishandled
-            new TranslationSeedItem("entity.flowAddSign.ishandled", "en-US", "是否已处理", "是否已处理（含减签）"),
-            // entity.flowAddSign.ishandled
-            new TranslationSeedItem("entity.flowAddSign.ishandled", "ja-JP", "是否已处理", "是否已处理（含减签）"),
-            // entity.flowAddSign.ishandled
-            new TranslationSeedItem("entity.flowAddSign.ishandled", "zh-CN", "是否已处理", "是否已处理（含减签）"),
-            // entity.flowAddSign.ishandled
-            new TranslationSeedItem("entity.flowAddSign.ishandled", "zh-HK", "是否已处理", "是否已处理（含减签）"),
+            // entity.flowaddsign.ishandled
+            new TranslationSeedItem("entity.flowaddsign.ishandled", "en-US", "是否已处理", "是否已处理（含减签）"),
+            // entity.flowaddsign.ishandled
+            new TranslationSeedItem("entity.flowaddsign.ishandled", "ja-JP", "是否已处理", "是否已处理（含减签）"),
+            // entity.flowaddsign.ishandled
+            new TranslationSeedItem("entity.flowaddsign.ishandled", "zh-CN", "是否已处理", "是否已处理（含减签）"),
+            // entity.flowaddsign.ishandled
+            new TranslationSeedItem("entity.flowaddsign.ishandled", "zh-HK", "是否已处理", "是否已处理（含减签）"),
 
-            // entity.flowAddSign.instance
-            new TranslationSeedItem("entity.flowAddSign.instance", "en-US", "所属流程实例", "所属流程实例"),
-            // entity.flowAddSign.instance
-            new TranslationSeedItem("entity.flowAddSign.instance", "ja-JP", "所属流程实例", "所属流程实例"),
-            // entity.flowAddSign.instance
-            new TranslationSeedItem("entity.flowAddSign.instance", "zh-CN", "所属流程实例", "所属流程实例"),
-            // entity.flowAddSign.instance
-            new TranslationSeedItem("entity.flowAddSign.instance", "zh-HK", "所属流程实例", "所属流程实例"),
+            // entity.flowaddsign.instance
+            new TranslationSeedItem("entity.flowaddsign.instance", "en-US", "所属流程实例", "所属流程实例"),
+            // entity.flowaddsign.instance
+            new TranslationSeedItem("entity.flowaddsign.instance", "ja-JP", "所属流程实例", "所属流程实例"),
+            // entity.flowaddsign.instance
+            new TranslationSeedItem("entity.flowaddsign.instance", "zh-CN", "所属流程实例", "所属流程实例"),
+            // entity.flowaddsign.instance
+            new TranslationSeedItem("entity.flowaddsign.instance", "zh-HK", "所属流程实例", "所属流程实例"),
         };
     }
 
@@ -188,8 +187,8 @@ public class TaktFlowAddSignI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Workflow;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 6;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

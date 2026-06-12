@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.Announcement
 // 文件名称：TaktAnnouncementService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公告通知应用服务实现
 // 
@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Routine.Announcement;
+using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.Routine.Announcement;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -32,23 +33,27 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
 {
     private readonly ITaktApprovalRepository<TaktAnnouncement> _announcementRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly TaktApprovalFlowSubmitService _approvalFlowSubmitService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="announcementRepository">公告通知仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="approvalFlowSubmitService">通用提交审批服务</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAnnouncementService(
         ITaktApprovalRepository<TaktAnnouncement> announcementRepository,
         ITaktUniqueValidator uniqueValidator,
+        TaktApprovalFlowSubmitService approvalFlowSubmitService,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _announcementRepository = announcementRepository;
         _uniqueValidator = uniqueValidator;
+        _approvalFlowSubmitService = approvalFlowSubmitService;
     }
 
     /// <summary>
@@ -180,6 +185,17 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         entity.AnnouncementStatus = dto.AnnouncementStatus;
         await _announcementRepository.UpdateAsync(entity);
         return await GetAnnouncementByIdAsync(dto.AnnouncementId) ?? throw new TaktBusinessException("公告通知不存在");
+    }
+
+    /// <summary>
+    /// 提交公告审批（发起 Announcement 流程）
+    /// </summary>
+    /// <param name="id">公告 ID</param>
+    /// <returns>公告 DTO</returns>
+    public async Task<TaktAnnouncementDto> SubmitAnnouncementForApprovalAsync(long id)
+    {
+        await _approvalFlowSubmitService.SubmitForApprovalByTableAsync("takt_routine_announcement", id);
+        return await GetAnnouncementByIdAsync(id) ?? throw new TaktBusinessException("公告通知不存在");
     }
 
     /// <summary>

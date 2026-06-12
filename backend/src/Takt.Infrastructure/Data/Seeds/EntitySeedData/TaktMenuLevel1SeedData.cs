@@ -25,7 +25,7 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// Takt 一级菜单种子数据。
 /// <para>
 /// 定义系统侧边栏最顶层节点（如仪表盘、工作流、日常事务、后勤、人力资源等），
-/// 二级及以下菜单在 <see cref="TaktMenuLevel2SeedData"/> 及后续 Level 中展开。
+/// 二级及以下菜单在 TaktMenuLevel2SeedData 及后续 Level 中展开。
 /// 由 TaktMenuSeedData 统一协调调用，不直接注册为 ITaktSeedDataCoordinator。
 /// </para>
 /// </summary>
@@ -38,7 +38,7 @@ public class TaktMenuLevel1SeedData
     /// 由 TaktMenuSeedData 协调器调用。
     /// </para>
     /// </summary>
-    /// <param name="serviceProvider">服务提供者，用于解析 <see cref="ITaktRepository{TaktMenu}"/>。</param>
+    /// <param name="serviceProvider">服务提供者，用于解析 ITaktRepository{TaktMenu}。</param>
     /// <param name="tenantCode">租户编码（由协调器传入）。</param>
     /// <returns>元组：(InsertCount, UpdateCount)，分别为本次新增与更新的一级菜单条数。</returns>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? specifiedTenantCode = null)
@@ -94,9 +94,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/dashboard";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "dashboard";
                 menu.SortOrder = 2;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -114,9 +114,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/routine";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "routine";
                 menu.SortOrder = 3;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -134,9 +134,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/accounting";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "accounting";
                 menu.SortOrder = 4;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -154,9 +154,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "logistics";
                 menu.SortOrder = 5;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -174,9 +174,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/human-resource";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "human-resource";
                 menu.SortOrder = 6;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -194,9 +194,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/identity";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "identity";
                 menu.SortOrder = 7;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -214,9 +214,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/workflow";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "workflow";
                 menu.SortOrder = 8;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -234,9 +234,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/code";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "code";
                 menu.SortOrder = 9;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -254,9 +254,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/foundation";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "foundation";
                 menu.SortOrder = 10;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -274,9 +274,9 @@ public class TaktMenuLevel1SeedData
                 menu.ParentId = 0;
                 menu.MenuType = 0;
                 menu.RoutePath = "/statistics";
-                menu.ComponentPath = "";
+                menu.ComponentPath = "statistics";
                 menu.SortOrder = 11;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -297,7 +297,7 @@ public class TaktMenuLevel1SeedData
                 menu.RoutePath = "/about";
                 menu.ComponentPath = "about/index";
                 menu.SortOrder = 12;
-                menu.MenuStatus = TaktCommonStatus.Enabled;
+                menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
@@ -338,7 +338,7 @@ public class TaktMenuLevel1SeedData
             menu.TenantCode = tenantCode;
             
             configure(menu);
-            menu.IsBuiltIn = TaktYesNo.Yes;
+            menu.IsBuiltIn = 1;
             
             // 自动计算 Level(根节点为 1)
             menu.Level = menu.ParentId > 0 ? 0 : 1; // 稍后根据父级计算
@@ -397,7 +397,7 @@ public class TaktMenuLevel1SeedData
             
             // 应用配置
             configure(menu);
-            menu.IsBuiltIn = TaktYesNo.Yes;
+            menu.IsBuiltIn = 1;
             
             // 检查是否有变化
             bool needUpdate = oldMenuName != menu.MenuName ||

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentVersionI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocumentVersion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter;
 
 /// <summary>
-/// TaktDocumentVersion 实体国际化翻译种子（键前缀 entity.documentVersion.*）
+/// TaktDocumentVersion 实体国际化翻译种子（键前缀 entity.documentversion.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 documentVersion 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 documentversion 实体翻译...", tenantCode);
 
         foreach (var item in GetDocumentVersionTranslations())
         {
@@ -76,137 +75,137 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktDocumentVersion 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.documentVersion._self / entity.documentVersion.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.documentversion._self / entity.documentversion.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetDocumentVersionTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.documentVersion._self
-            new TranslationSeedItem("entity.documentVersion._self", "en-US", "Document Version Information", "实体名称"),
-            // entity.documentVersion._self
-            new TranslationSeedItem("entity.documentVersion._self", "ja-JP", "文管文档版本子信息", "实体名称"),
-            // entity.documentVersion._self
-            new TranslationSeedItem("entity.documentVersion._self", "zh-CN", "文管文档版本子信息", "实体名称"),
-            // entity.documentVersion._self
-            new TranslationSeedItem("entity.documentVersion._self", "zh-HK", "文管文档版本子信息", "实体名称"),
+            // entity.documentversion._self
+            new TranslationSeedItem("entity.documentversion._self", "en-US", "Document Version Information", "实体名称"),
+            // entity.documentversion._self
+            new TranslationSeedItem("entity.documentversion._self", "ja-JP", "文管文档版本子信息", "实体名称"),
+            // entity.documentversion._self
+            new TranslationSeedItem("entity.documentversion._self", "zh-CN", "文管文档版本子信息", "实体名称"),
+            // entity.documentversion._self
+            new TranslationSeedItem("entity.documentversion._self", "zh-HK", "文管文档版本子信息", "实体名称"),
 
-            // entity.documentVersion.documentid
-            new TranslationSeedItem("entity.documentVersion.documentid", "en-US", "文档ID", "文档 ID"),
-            // entity.documentVersion.documentid
-            new TranslationSeedItem("entity.documentVersion.documentid", "ja-JP", "文档ID", "文档 ID"),
-            // entity.documentVersion.documentid
-            new TranslationSeedItem("entity.documentVersion.documentid", "zh-CN", "文档ID", "文档 ID"),
-            // entity.documentVersion.documentid
-            new TranslationSeedItem("entity.documentVersion.documentid", "zh-HK", "文档ID", "文档 ID"),
+            // entity.documentversion.documentid
+            new TranslationSeedItem("entity.documentversion.documentid", "en-US", "文档ID", "文档 ID"),
+            // entity.documentversion.documentid
+            new TranslationSeedItem("entity.documentversion.documentid", "ja-JP", "文档ID", "文档 ID"),
+            // entity.documentversion.documentid
+            new TranslationSeedItem("entity.documentversion.documentid", "zh-CN", "文档ID", "文档 ID"),
+            // entity.documentversion.documentid
+            new TranslationSeedItem("entity.documentversion.documentid", "zh-HK", "文档ID", "文档 ID"),
 
-            // entity.documentVersion.versionno
-            new TranslationSeedItem("entity.documentVersion.versionno", "en-US", "版本号", "版本号"),
-            // entity.documentVersion.versionno
-            new TranslationSeedItem("entity.documentVersion.versionno", "ja-JP", "版本号", "版本号"),
-            // entity.documentVersion.versionno
-            new TranslationSeedItem("entity.documentVersion.versionno", "zh-CN", "版本号", "版本号"),
-            // entity.documentVersion.versionno
-            new TranslationSeedItem("entity.documentVersion.versionno", "zh-HK", "版本号", "版本号"),
+            // entity.documentversion.versionno
+            new TranslationSeedItem("entity.documentversion.versionno", "en-US", "版本号", "版本号"),
+            // entity.documentversion.versionno
+            new TranslationSeedItem("entity.documentversion.versionno", "ja-JP", "版本号", "版本号"),
+            // entity.documentversion.versionno
+            new TranslationSeedItem("entity.documentversion.versionno", "zh-CN", "版本号", "版本号"),
+            // entity.documentversion.versionno
+            new TranslationSeedItem("entity.documentversion.versionno", "zh-HK", "版本号", "版本号"),
 
-            // entity.documentVersion.versionnote
-            new TranslationSeedItem("entity.documentVersion.versionnote", "en-US", "版本说明", "版本说明"),
-            // entity.documentVersion.versionnote
-            new TranslationSeedItem("entity.documentVersion.versionnote", "ja-JP", "版本说明", "版本说明"),
-            // entity.documentVersion.versionnote
-            new TranslationSeedItem("entity.documentVersion.versionnote", "zh-CN", "版本说明", "版本说明"),
-            // entity.documentVersion.versionnote
-            new TranslationSeedItem("entity.documentVersion.versionnote", "zh-HK", "版本说明", "版本说明"),
+            // entity.documentversion.versionnote
+            new TranslationSeedItem("entity.documentversion.versionnote", "en-US", "版本说明", "版本说明"),
+            // entity.documentversion.versionnote
+            new TranslationSeedItem("entity.documentversion.versionnote", "ja-JP", "版本说明", "版本说明"),
+            // entity.documentversion.versionnote
+            new TranslationSeedItem("entity.documentversion.versionnote", "zh-CN", "版本说明", "版本说明"),
+            // entity.documentversion.versionnote
+            new TranslationSeedItem("entity.documentversion.versionnote", "zh-HK", "版本说明", "版本说明"),
 
-            // entity.documentVersion.fileid
-            new TranslationSeedItem("entity.documentVersion.fileid", "en-US", "文件ID", "文件 ID"),
-            // entity.documentVersion.fileid
-            new TranslationSeedItem("entity.documentVersion.fileid", "ja-JP", "文件ID", "文件 ID"),
-            // entity.documentVersion.fileid
-            new TranslationSeedItem("entity.documentVersion.fileid", "zh-CN", "文件ID", "文件 ID"),
-            // entity.documentVersion.fileid
-            new TranslationSeedItem("entity.documentVersion.fileid", "zh-HK", "文件ID", "文件 ID"),
+            // entity.documentversion.fileid
+            new TranslationSeedItem("entity.documentversion.fileid", "en-US", "文件ID", "文件 ID"),
+            // entity.documentversion.fileid
+            new TranslationSeedItem("entity.documentversion.fileid", "ja-JP", "文件ID", "文件 ID"),
+            // entity.documentversion.fileid
+            new TranslationSeedItem("entity.documentversion.fileid", "zh-CN", "文件ID", "文件 ID"),
+            // entity.documentversion.fileid
+            new TranslationSeedItem("entity.documentversion.fileid", "zh-HK", "文件ID", "文件 ID"),
 
-            // entity.documentVersion.filename
-            new TranslationSeedItem("entity.documentVersion.filename", "en-US", "文件名称", "文件名称"),
-            // entity.documentVersion.filename
-            new TranslationSeedItem("entity.documentVersion.filename", "ja-JP", "文件名称", "文件名称"),
-            // entity.documentVersion.filename
-            new TranslationSeedItem("entity.documentVersion.filename", "zh-CN", "文件名称", "文件名称"),
-            // entity.documentVersion.filename
-            new TranslationSeedItem("entity.documentVersion.filename", "zh-HK", "文件名称", "文件名称"),
+            // entity.documentversion.filename
+            new TranslationSeedItem("entity.documentversion.filename", "en-US", "文件名称", "文件名称"),
+            // entity.documentversion.filename
+            new TranslationSeedItem("entity.documentversion.filename", "ja-JP", "文件名称", "文件名称"),
+            // entity.documentversion.filename
+            new TranslationSeedItem("entity.documentversion.filename", "zh-CN", "文件名称", "文件名称"),
+            // entity.documentversion.filename
+            new TranslationSeedItem("entity.documentversion.filename", "zh-HK", "文件名称", "文件名称"),
 
-            // entity.documentVersion.filepath
-            new TranslationSeedItem("entity.documentVersion.filepath", "en-US", "文件路径", "文件路径"),
-            // entity.documentVersion.filepath
-            new TranslationSeedItem("entity.documentVersion.filepath", "ja-JP", "文件路径", "文件路径"),
-            // entity.documentVersion.filepath
-            new TranslationSeedItem("entity.documentVersion.filepath", "zh-CN", "文件路径", "文件路径"),
-            // entity.documentVersion.filepath
-            new TranslationSeedItem("entity.documentVersion.filepath", "zh-HK", "文件路径", "文件路径"),
+            // entity.documentversion.filepath
+            new TranslationSeedItem("entity.documentversion.filepath", "en-US", "文件路径", "文件路径"),
+            // entity.documentversion.filepath
+            new TranslationSeedItem("entity.documentversion.filepath", "ja-JP", "文件路径", "文件路径"),
+            // entity.documentversion.filepath
+            new TranslationSeedItem("entity.documentversion.filepath", "zh-CN", "文件路径", "文件路径"),
+            // entity.documentversion.filepath
+            new TranslationSeedItem("entity.documentversion.filepath", "zh-HK", "文件路径", "文件路径"),
 
-            // entity.documentVersion.filesize
-            new TranslationSeedItem("entity.documentVersion.filesize", "en-US", "文件大小", "文件大小（字节）"),
-            // entity.documentVersion.filesize
-            new TranslationSeedItem("entity.documentVersion.filesize", "ja-JP", "文件大小", "文件大小（字节）"),
-            // entity.documentVersion.filesize
-            new TranslationSeedItem("entity.documentVersion.filesize", "zh-CN", "文件大小", "文件大小（字节）"),
-            // entity.documentVersion.filesize
-            new TranslationSeedItem("entity.documentVersion.filesize", "zh-HK", "文件大小", "文件大小（字节）"),
+            // entity.documentversion.filesize
+            new TranslationSeedItem("entity.documentversion.filesize", "en-US", "文件大小", "文件大小（字节）"),
+            // entity.documentversion.filesize
+            new TranslationSeedItem("entity.documentversion.filesize", "ja-JP", "文件大小", "文件大小（字节）"),
+            // entity.documentversion.filesize
+            new TranslationSeedItem("entity.documentversion.filesize", "zh-CN", "文件大小", "文件大小（字节）"),
+            // entity.documentversion.filesize
+            new TranslationSeedItem("entity.documentversion.filesize", "zh-HK", "文件大小", "文件大小（字节）"),
 
-            // entity.documentVersion.filetype
-            new TranslationSeedItem("entity.documentVersion.filetype", "en-US", "文件类型", "文件类型（MIME）"),
-            // entity.documentVersion.filetype
-            new TranslationSeedItem("entity.documentVersion.filetype", "ja-JP", "文件类型", "文件类型（MIME）"),
-            // entity.documentVersion.filetype
-            new TranslationSeedItem("entity.documentVersion.filetype", "zh-CN", "文件类型", "文件类型（MIME）"),
-            // entity.documentVersion.filetype
-            new TranslationSeedItem("entity.documentVersion.filetype", "zh-HK", "文件类型", "文件类型（MIME）"),
+            // entity.documentversion.filetype
+            new TranslationSeedItem("entity.documentversion.filetype", "en-US", "文件类型", "文件类型（MIME）"),
+            // entity.documentversion.filetype
+            new TranslationSeedItem("entity.documentversion.filetype", "ja-JP", "文件类型", "文件类型（MIME）"),
+            // entity.documentversion.filetype
+            new TranslationSeedItem("entity.documentversion.filetype", "zh-CN", "文件类型", "文件类型（MIME）"),
+            // entity.documentversion.filetype
+            new TranslationSeedItem("entity.documentversion.filetype", "zh-HK", "文件类型", "文件类型（MIME）"),
 
-            // entity.documentVersion.fileextension
-            new TranslationSeedItem("entity.documentVersion.fileextension", "en-US", "文件扩展名", "文件扩展名"),
-            // entity.documentVersion.fileextension
-            new TranslationSeedItem("entity.documentVersion.fileextension", "ja-JP", "文件扩展名", "文件扩展名"),
-            // entity.documentVersion.fileextension
-            new TranslationSeedItem("entity.documentVersion.fileextension", "zh-CN", "文件扩展名", "文件扩展名"),
-            // entity.documentVersion.fileextension
-            new TranslationSeedItem("entity.documentVersion.fileextension", "zh-HK", "文件扩展名", "文件扩展名"),
+            // entity.documentversion.fileextension
+            new TranslationSeedItem("entity.documentversion.fileextension", "en-US", "文件扩展名", "文件扩展名"),
+            // entity.documentversion.fileextension
+            new TranslationSeedItem("entity.documentversion.fileextension", "ja-JP", "文件扩展名", "文件扩展名"),
+            // entity.documentversion.fileextension
+            new TranslationSeedItem("entity.documentversion.fileextension", "zh-CN", "文件扩展名", "文件扩展名"),
+            // entity.documentversion.fileextension
+            new TranslationSeedItem("entity.documentversion.fileextension", "zh-HK", "文件扩展名", "文件扩展名"),
 
-            // entity.documentVersion.revisedby
-            new TranslationSeedItem("entity.documentVersion.revisedby", "en-US", "修订人ID", "修订人 ID"),
-            // entity.documentVersion.revisedby
-            new TranslationSeedItem("entity.documentVersion.revisedby", "ja-JP", "修订人ID", "修订人 ID"),
-            // entity.documentVersion.revisedby
-            new TranslationSeedItem("entity.documentVersion.revisedby", "zh-CN", "修订人ID", "修订人 ID"),
-            // entity.documentVersion.revisedby
-            new TranslationSeedItem("entity.documentVersion.revisedby", "zh-HK", "修订人ID", "修订人 ID"),
+            // entity.documentversion.revisedby
+            new TranslationSeedItem("entity.documentversion.revisedby", "en-US", "修订人ID", "修订人 ID"),
+            // entity.documentversion.revisedby
+            new TranslationSeedItem("entity.documentversion.revisedby", "ja-JP", "修订人ID", "修订人 ID"),
+            // entity.documentversion.revisedby
+            new TranslationSeedItem("entity.documentversion.revisedby", "zh-CN", "修订人ID", "修订人 ID"),
+            // entity.documentversion.revisedby
+            new TranslationSeedItem("entity.documentversion.revisedby", "zh-HK", "修订人ID", "修订人 ID"),
 
-            // entity.documentVersion.revisedbyname
-            new TranslationSeedItem("entity.documentVersion.revisedbyname", "en-US", "修订人姓名", "修订人姓名"),
-            // entity.documentVersion.revisedbyname
-            new TranslationSeedItem("entity.documentVersion.revisedbyname", "ja-JP", "修订人姓名", "修订人姓名"),
-            // entity.documentVersion.revisedbyname
-            new TranslationSeedItem("entity.documentVersion.revisedbyname", "zh-CN", "修订人姓名", "修订人姓名"),
-            // entity.documentVersion.revisedbyname
-            new TranslationSeedItem("entity.documentVersion.revisedbyname", "zh-HK", "修订人姓名", "修订人姓名"),
+            // entity.documentversion.revisedbyname
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "en-US", "修订人姓名", "修订人姓名"),
+            // entity.documentversion.revisedbyname
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "ja-JP", "修订人姓名", "修订人姓名"),
+            // entity.documentversion.revisedbyname
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "zh-CN", "修订人姓名", "修订人姓名"),
+            // entity.documentversion.revisedbyname
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "zh-HK", "修订人姓名", "修订人姓名"),
 
-            // entity.documentVersion.revisedat
-            new TranslationSeedItem("entity.documentVersion.revisedat", "en-US", "修订时间", "修订时间"),
-            // entity.documentVersion.revisedat
-            new TranslationSeedItem("entity.documentVersion.revisedat", "ja-JP", "修订时间", "修订时间"),
-            // entity.documentVersion.revisedat
-            new TranslationSeedItem("entity.documentVersion.revisedat", "zh-CN", "修订时间", "修订时间"),
-            // entity.documentVersion.revisedat
-            new TranslationSeedItem("entity.documentVersion.revisedat", "zh-HK", "修订时间", "修订时间"),
+            // entity.documentversion.revisedat
+            new TranslationSeedItem("entity.documentversion.revisedat", "en-US", "修订时间", "修订时间"),
+            // entity.documentversion.revisedat
+            new TranslationSeedItem("entity.documentversion.revisedat", "ja-JP", "修订时间", "修订时间"),
+            // entity.documentversion.revisedat
+            new TranslationSeedItem("entity.documentversion.revisedat", "zh-CN", "修订时间", "修订时间"),
+            // entity.documentversion.revisedat
+            new TranslationSeedItem("entity.documentversion.revisedat", "zh-HK", "修订时间", "修订时间"),
 
-            // entity.documentVersion.document
-            new TranslationSeedItem("entity.documentVersion.document", "en-US", "文档", "文档（主表）"),
-            // entity.documentVersion.document
-            new TranslationSeedItem("entity.documentVersion.document", "ja-JP", "文档", "文档（主表）"),
-            // entity.documentVersion.document
-            new TranslationSeedItem("entity.documentVersion.document", "zh-CN", "文档", "文档（主表）"),
-            // entity.documentVersion.document
-            new TranslationSeedItem("entity.documentVersion.document", "zh-HK", "文档", "文档（主表）"),
+            // entity.documentversion.document
+            new TranslationSeedItem("entity.documentversion.document", "en-US", "文档", "文档（主表）"),
+            // entity.documentversion.document
+            new TranslationSeedItem("entity.documentversion.document", "ja-JP", "文档", "文档（主表）"),
+            // entity.documentversion.document
+            new TranslationSeedItem("entity.documentversion.document", "zh-CN", "文档", "文档（主表）"),
+            // entity.documentversion.document
+            new TranslationSeedItem("entity.documentversion.document", "zh-HK", "文档", "文档（主表）"),
         };
     }
 
@@ -224,8 +223,8 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

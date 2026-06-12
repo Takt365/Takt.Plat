@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Talent
 // 文件名称：TaktTalentInterviewValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentInterview 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTalentInterview 生成，请按需审阅）
 // 
@@ -31,20 +31,20 @@ public class TaktTalentInterviewCreateValidator : AbstractValidator<TaktTalentIn
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布ID不能为负数");
         RuleFor(x => x.InterviewNo)
             .NotEmpty().WithMessage("面试单号不能为空")
             .MaximumLength(20).WithMessage("面试单号长度不能超过20个字符");
         RuleFor(x => x.InterviewerName)
-            .MaximumLength(50).WithMessage("面试官姓名长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("面试官姓名长度不能超过40个字符");
         RuleFor(x => x.CandidateName)
             .NotEmpty().WithMessage("候选人姓名不能为空")
-            .MaximumLength(50).WithMessage("候选人姓名长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("候选人姓名长度不能超过40个字符");
         RuleFor(x => x.Mobile)
             .MaximumLength(11).WithMessage("候选人手机长度不能超过11个字符");
         RuleFor(x => x.Email)
@@ -95,19 +95,19 @@ public class TaktTalentInterviewImportValidator : AbstractValidator<TaktTalentIn
     public TaktTalentInterviewImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布ID不能为负数");
         RuleFor(x => x.InterviewNo)
             .NotEmpty().WithMessage("面试单号不能为空")
             .MaximumLength(20).WithMessage("面试单号长度不能超过20个字符");
         RuleFor(x => x.InterviewerName)
-            .MaximumLength(50).WithMessage("面试官姓名长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.InterviewerName));
+            .MaximumLength(40).WithMessage("面试官姓名长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.InterviewerName));
         RuleFor(x => x.CandidateName)
             .NotEmpty().WithMessage("候选人姓名不能为空")
-            .MaximumLength(50).WithMessage("候选人姓名长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("候选人姓名长度不能超过40个字符");
         RuleFor(x => x.Mobile)
             .MaximumLength(11).WithMessage("候选人手机长度不能超过11个字符").When(x => !string.IsNullOrWhiteSpace(x.Mobile));
         RuleFor(x => x.Email)

@@ -21,12 +21,12 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// <para>
 /// 统一协调处理所有层级的菜单初始化，按顺序调用：
 /// <list type="number">
-///   <item><description>一级菜单（顶级目录）：<see cref="TaktMenuLevel1SeedData"/></description></item>
-///   <item><description>二级菜单（模块分类）：<see cref="TaktMenuLevel2SeedData"/></description></item>
-///   <item><description>三级菜单（页面功能）：<see cref="TaktMenuLevel3SeedData"/></description></item>
-///   <item><description>四级菜单（功能细分）：<see cref="TaktMenuLevel4SeedData"/></description></item>
-///   <item><description>五级菜单（操作级）：<see cref="TaktMenuLevel5SeedData"/></description></item>
-///   <item><description>按钮权限（操作按钮）：<see cref="TaktMenuButtonSeedData"/></description></item>
+///   <item><description>一级菜单（顶级目录）：TaktMenuLevel1SeedData</description></item>
+///   <item><description>二级菜单（模块分类）：TaktMenuLevel2SeedData</description></item>
+///   <item><description>三级菜单（页面功能）：TaktMenuLevel3SeedData</description></item>
+///   <item><description>四级菜单（功能细分）：TaktMenuLevel4SeedData</description></item>
+///   <item><description>五级菜单（操作级）：TaktMenuLevel5SeedData</description></item>
+///   <item><description>按钮权限（操作按钮）：TaktMenuButtonSeedData</description></item>
 /// </list>
 /// </para>
 /// </summary>

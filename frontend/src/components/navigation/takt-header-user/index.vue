@@ -91,8 +91,8 @@ const { t } = useI18n()
 const handleLogout = () => {
   const logoutAction = t('common.page.button.logout')
   Modal.confirm({
-    title: t('common.tip.confirm.action.title', { action: logoutAction }),
-    content: t('common.tip.confirm.action.question', { action: logoutAction }),
+    title: t('common.tip.confirm.title', { action: logoutAction }),
+    content: t('common.tip.confirm.question', { action: logoutAction }),
     centered: true,
     okText: t('common.page.button.ok'),
     cancelText: t('common.page.button.cancel'),

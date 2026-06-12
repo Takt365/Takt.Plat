@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工调动控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.HumanResource.Personnel;
 /// 员工调动控制器
 /// 提供员工调动的 REST API
 /// </summary>
-[ApiModule(TaktModule.HumanResource, "人事管理")]
+[ApiModule(5, "人事管理")]
 [Route("api/[controller]", Name = "员工调动")]
 public class TaktEmployeeReassignmentsController : TaktControllerBase
 {

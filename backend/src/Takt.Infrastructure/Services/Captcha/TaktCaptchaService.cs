@@ -28,10 +28,10 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Services.Captcha;
 
 /// <summary>
-/// 验证码服务实现（<see cref="ITaktCaptchaService"/>）。
-/// 按 <c>Captcha:Type</c> 分支：<see cref="TaktCaptchaTypeNames.Slider"/> 合成拼图并校验像素偏差；
-/// <see cref="TaktCaptchaTypeNames.Behavior"/> 在内存保存目标百分比并对 <c>position/timeSpent/mouseTrajectory</c> 加权评分。
-/// 挑战数据存于进程内 <see cref="ConcurrentDictionary{TKey,TValue}"/>，一次性校验后移除（Behavior 仅成功时移除）。
+/// 验证码服务实现（ITaktCaptchaService）。
+/// 按 <c>Captcha:Type</c> 分支：TaktCaptchaTypeNames.Slider 合成拼图并校验像素偏差；
+/// TaktCaptchaTypeNames.Behavior 在内存保存目标百分比并对 <c>position/timeSpent/mouseTrajectory</c> 加权评分。
+/// 挑战数据存于进程内 ConcurrentDictionary{TKey,TValue}，一次性校验后移除（Behavior 仅成功时移除）。
 /// </summary>
 public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
 {
@@ -264,7 +264,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     }
 
     /// <summary>
-    /// 扫描 wwwroot 模板目录，填充 <see cref="_availableTemplateGroups"/>
+    /// 扫描 wwwroot 模板目录，填充 _availableTemplateGroups
     /// </summary>
     private void InitializeSliderTemplateGroups()
     {
@@ -322,7 +322,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     /// 从 wwwroot 背景目录随机选取一张图；数量不足时触发下载，仍无则生成随机色块图
     /// </summary>
     /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>背景 <see cref="Image{Rgba32}"/></returns>
+    /// <returns>背景 Image{Rgba32}</returns>
     private async Task<Image<Rgba32>> LoadBackgroundImageAsync(CancellationToken cancellationToken)
     {
         var wwwroot = TaktFileHelper.GetWwwRootPath(_environment.ContentRootPath);
@@ -349,7 +349,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     }
 
     /// <summary>
-    /// 按配置从 <see cref="TaktCaptchaBackgroundImagesOptions.DownloadUrl"/> 下载背景图至存储目录
+    /// 按配置从 TaktCaptchaBackgroundImagesOptions.DownloadUrl 下载背景图至存储目录
     /// </summary>
     /// <param name="cancellationToken">取消令牌</param>
     private async Task DownloadBackgroundImagesAsync(CancellationToken cancellationToken)
@@ -663,7 +663,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     }
 
     /// <summary>
-    /// 校验行为提交是否满足 <see cref="TaktCaptchaBehaviorOptions"/> 中的 RequireTimeSpent / RequireTrajectory
+    /// 校验行为提交是否满足 TaktCaptchaBehaviorOptions 中的 RequireTimeSpent / RequireTrajectory
     /// </summary>
     /// <param name="userInput">用户输入</param>
     /// <param name="validationKey">校验失败时的抽象 I18n 键</param>
@@ -915,7 +915,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
         relativePath.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
 
     /// <summary>
-    /// 将登录提交的 UserInput 转为 <see cref="JObject"/>（支持字符串 JSON、JObject、JsonElement）
+    /// 将登录提交的 UserInput 转为 JObject（支持字符串 JSON、JObject、JsonElement）
     /// </summary>
     /// <param name="userInput">控制器绑定的 CaptchaCode 或对象</param>
     /// <returns>解析后的 JObject；无法解析时返回 null</returns>

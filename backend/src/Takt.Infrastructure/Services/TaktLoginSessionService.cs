@@ -24,7 +24,7 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktLoginSessionService"/> 实现
+/// ITaktLoginSessionService 实现
 /// 登录页租户与用户校验均查询对应租户库实体表，不按配置白名单兜底
 /// </summary>
 public class TaktLoginSessionService : ITaktLoginSessionService
@@ -59,7 +59,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
             {
                 using var seedContext = CreateSeedContext(code);
                 var tenant = await seedContext.Query<TaktTenant>()
-                    .Where(t => t.TenantCode == code && t.TenantStatus == TaktCommonStatus.Enabled)
+                    .Where(t => t.TenantCode == code && t.TenantStatus == 1)
                     .FirstAsync(cancellationToken);
                 if (tenant == null)
                 {
@@ -129,7 +129,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
                     u =>
                         u.TenantCode == trimmedTenant
                         && u.Username == normalizedUsername
-                        && u.UserStatus == TaktCommonStatus.Enabled,
+                        && u.UserStatus == 1,
                     cancellationToken);
         }
         catch (Exception ex) when (TaktTenantDatabaseHelper.IsInfrastructureFailure(ex))
@@ -144,7 +144,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>存在且启用为 true；库/表缺失时抛出 <see cref="TaktBusinessException"/></returns>
+    /// <returns>存在且启用为 true；库/表缺失时抛出 TaktBusinessException</returns>
     public async Task<bool> ValidateLoginTenantCodeAsync(
         string tenantCode,
         CancellationToken cancellationToken = default)
@@ -161,7 +161,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
             using var seedContext = CreateSeedContext(trimmedTenant);
             return await seedContext.Query<TaktTenant>()
                 .AnyAsync(
-                    t => t.TenantCode == trimmedTenant && t.TenantStatus == TaktCommonStatus.Enabled,
+                    t => t.TenantCode == trimmedTenant && t.TenantStatus == 1,
                     cancellationToken);
         }
         catch (Exception ex) when (TaktTenantDatabaseHelper.IsInfrastructureFailure(ex))
@@ -211,7 +211,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
             var list = await seedContext.Query<TaktCulture>()
                 .Where(c =>
                     c.TenantCode == tenantCode
-                    && c.LanguageStatus == TaktCommonStatus.Enabled
+                    && c.LanguageStatus == 1
                     && c.IsDeleted == 0)
                 .OrderBy(c => c.SortOrder)
                 .ToListAsync(cancellationToken);

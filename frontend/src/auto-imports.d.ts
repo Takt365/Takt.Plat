@@ -8,8 +8,10 @@ export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
   const Modal: typeof import('ant-design-vue').Modal
+  const QUARTZ_TABLE_NAME: typeof import('./composables/use-quartz-signalr-refresh').QUARTZ_TABLE_NAME
   const TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT: typeof import('./composables/use-takt-captcha-behavior').TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT
   const TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT: typeof import('./composables/use-takt-captcha-slider').TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT
+  const WORKFLOW_TABLE_NAMES: typeof import('./composables/use-workflow-signalr-refresh').WORKFLOW_TABLE_NAMES
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
   const computed: typeof import('vue').computed
   const createApp: typeof import('vue').createApp
@@ -77,20 +79,26 @@ declare global {
   const triggerRef: typeof import('vue').triggerRef
   const unref: typeof import('vue').unref
   const useAttrs: typeof import('vue').useAttrs
+  const useBusinessScopeRouteKey: typeof import('./composables/use-business-scope-route-key').useBusinessScopeRouteKey
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
+  const useDatabaseInfoCatalog: typeof import('./composables/use-database-info-catalog').useDatabaseInfoCatalog
   const useId: typeof import('vue').useId
   const useLink: typeof import('vue-router').useLink
   const useLoginFieldSync: typeof import('./composables/use-login-field-sync').useLoginFieldSync
   const useModel: typeof import('vue').useModel
+  const useQuartzSignalRRefresh: typeof import('./composables/use-quartz-signalr-refresh').useQuartzSignalRRefresh
   const useRoute: typeof import('vue-router').useRoute
   const useRouter: typeof import('vue-router').useRouter
   const useSlots: typeof import('vue').useSlots
+  const useTableRefresh: typeof import('./composables/use-table-refresh').useTableRefresh
   const useTaktCaptchaBehavior: typeof import('./composables/use-takt-captcha-behavior').useTaktCaptchaBehavior
   const useTaktCaptchaSlider: typeof import('./composables/use-takt-captcha-slider').useTaktCaptchaSlider
   const useTaktComponentLocale: typeof import('./composables/use-takt-component-locale').useTaktComponentLocale
+  const useTaktFlowSubmit: typeof import('./composables/use-takt-flow-submit').useTaktFlowSubmit
   const useTaktLoginCaptcha: typeof import('./composables/use-takt-login-captcha').useTaktLoginCaptcha
   const useTemplateRef: typeof import('vue').useTemplateRef
+  const useWorkflowSignalRRefresh: typeof import('./composables/use-workflow-signalr-refresh').useWorkflowSignalRRefresh
   const watch: typeof import('vue').watch
   const watchEffect: typeof import('vue').watchEffect
   const watchPostEffect: typeof import('vue').watchPostEffect
@@ -116,8 +124,10 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly Modal: UnwrapRef<typeof import('ant-design-vue')['Modal']>
+    readonly QUARTZ_TABLE_NAME: UnwrapRef<typeof import('./composables/use-quartz-signalr-refresh')['QUARTZ_TABLE_NAME']>
     readonly TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT: UnwrapRef<typeof import('./composables/use-takt-captcha-behavior')['TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT']>
     readonly TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT: UnwrapRef<typeof import('./composables/use-takt-captcha-slider')['TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT']>
+    readonly WORKFLOW_TABLE_NAMES: UnwrapRef<typeof import('./composables/use-workflow-signalr-refresh')['WORKFLOW_TABLE_NAMES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
@@ -185,20 +195,26 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useBusinessScopeRouteKey: UnwrapRef<typeof import('./composables/use-business-scope-route-key')['useBusinessScopeRouteKey']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useDatabaseInfoCatalog: UnwrapRef<typeof import('./composables/use-database-info-catalog')['useDatabaseInfoCatalog']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLoginFieldSync: UnwrapRef<typeof import('./composables/use-login-field-sync')['useLoginFieldSync']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
+    readonly useQuartzSignalRRefresh: UnwrapRef<typeof import('./composables/use-quartz-signalr-refresh')['useQuartzSignalRRefresh']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useTableRefresh: UnwrapRef<typeof import('./composables/use-table-refresh')['useTableRefresh']>
     readonly useTaktCaptchaBehavior: UnwrapRef<typeof import('./composables/use-takt-captcha-behavior')['useTaktCaptchaBehavior']>
     readonly useTaktCaptchaSlider: UnwrapRef<typeof import('./composables/use-takt-captcha-slider')['useTaktCaptchaSlider']>
     readonly useTaktComponentLocale: UnwrapRef<typeof import('./composables/use-takt-component-locale')['useTaktComponentLocale']>
+    readonly useTaktFlowSubmit: UnwrapRef<typeof import('./composables/use-takt-flow-submit')['useTaktFlowSubmit']>
     readonly useTaktLoginCaptcha: UnwrapRef<typeof import('./composables/use-takt-login-captcha')['useTaktLoginCaptcha']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
+    readonly useWorkflowSignalRRefresh: UnwrapRef<typeof import('./composables/use-workflow-signalr-refresh')['useWorkflowSignalRRefresh']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

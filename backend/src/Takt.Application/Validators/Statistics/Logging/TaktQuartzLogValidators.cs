@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktQuartzLogValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQuartzLog 生成，请按需审阅）
 // 
@@ -42,8 +42,7 @@ public class TaktQuartzLogCreateValidator : AbstractValidator<TaktQuartzLogCreat
             .NotEmpty().WithMessage("任务名称不能为空")
             .MaximumLength(100).WithMessage("任务名称长度不能超过100个字符");
         RuleFor(x => x.JobGroup)
-            .NotEmpty().WithMessage("任务组名不能为空")
-            .MaximumLength(50).WithMessage("任务组名长度不能超过50个字符");
+            .IsInEnum().WithMessage("任务组名无效");
         RuleFor(x => x.TaskType)
             .IsInEnum().WithMessage("任务类型无效");
         RuleFor(x => x.ExecuteParams)

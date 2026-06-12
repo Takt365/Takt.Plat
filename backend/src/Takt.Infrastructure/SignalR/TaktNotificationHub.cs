@@ -21,7 +21,6 @@ using Takt.Application.Services.Identity;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Models.Foundation;
 using Takt.Infrastructure.Services;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.SignalR;
@@ -79,17 +78,7 @@ public class TaktNotificationHub : Hub
             await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
             await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.NotificationsGroup(companyCode));
 
-            await Clients.Caller.SendAsync("OnlineMessage", new
-            {
-                Message = $"通知服务连接成功，当前时间：{connectTime:yyyy-MM-dd HH:mm:ss}",
-                MessageType = TaktMessageType.Heartbeat,
-                UserName = userName,
-                UserId = userId.ToString(),
-                ConnectTime = connectTime,
-                ConnectIp = connectIp,
-                ConnectLocation = connectLocation,
-            });
-
+            // OnlineMessage 仅由 ConnectHub 推送一次；此处只同步消息统计
             await _signalRDispatchService.PushMessageStatisticsToUserAsync(companyCode, userName, userId);
 
             TaktSignalRLogging.LogHubConnected(
@@ -152,21 +141,19 @@ public class TaktNotificationHub : Hub
     /// <param name="messageTitle">消息标题</param>
     /// <param name="messageType">消息类型</param>
     /// <param name="messageGroup">消息分组</param>
-    /// <param name="messageExtData">扩展数据 JSON</param>
     /// <returns>任务</returns>
     public async Task SendMessage(
         string toUserName,
         string messageContent,
         string? messageTitle = null,
-        TaktMessageType messageType = TaktMessageType.UserMessage,
-        TaktMessageGroup? messageGroup = null,
-        string? messageExtData = null)
+        int messageType = 1,
+        int? messageGroup = null)
     {
         try
         {
             RequireResolvedLoginUser();
             var fromUserName = _userContext.UserName!.Trim();
-            var fromUserId = _userContext.UserId;
+            var fromUserId = _userContext.UserId!.Value;
 
             var created = await _messageService.CreateMessageAsync(new TaktMessageCreateDto
             {
@@ -176,13 +163,12 @@ public class TaktNotificationHub : Hub
                 MessageTitle = messageTitle,
                 MessageContent = messageContent,
                 MessageType = messageType,
-                MessageGroup = messageGroup ?? TaktMessageGroup.Chat,
-                ReadStatus = TaktMessageReadStatus.Unread,
+                MessageGroup = messageGroup ?? 1,
+                ReadStatus = 0,
                 SendTime = DateTime.Now,
-                MessageExtData = messageExtData,
             });
 
-            await _signalRDispatchService.PushPrivateMessageAsync(created.Adapt<TaktSignalRPrivateMessagePush>());
+            await _messageService.SendMessageByIdAsync(created.MessageId);
 
             await Clients.Caller.SendAsync("MessageSent", new
             {
@@ -214,8 +200,8 @@ public class TaktNotificationHub : Hub
     public async Task BroadcastMessage(
         string messageContent,
         string? messageTitle = null,
-        TaktMessageType messageType = TaktMessageType.SystemNotice,
-        TaktMessageGroup messageGroup = TaktMessageGroup.Notification)
+        int messageType = 4,
+        int messageGroup = 4)
     {
         try
         {
@@ -263,7 +249,11 @@ public class TaktNotificationHub : Hub
         try
         {
             RequireResolvedLoginUser();
-            var updated = await _messageService.UpdateMessageReadStatusAsync(messageId);
+            var updated = await _messageService.MarkMessageReadAsync(new TaktMessageReadDto
+            {
+                MessageId = messageId,
+                ReadStatus = 1,
+            });
 
             await Clients.Caller.SendAsync("MessageRead", new
             {

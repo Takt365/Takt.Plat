@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Attendance
 // 文件名称：TaktShiftScheduleValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ShiftSchedule 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktShiftSchedule 生成，请按需审阅）
 // 
@@ -31,10 +31,10 @@ public class TaktShiftScheduleCreateValidator : AbstractValidator<TaktShiftSched
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("部门 ID不能为负数");
         RuleFor(x => x.EmployeeId)
@@ -84,9 +84,9 @@ public class TaktShiftScheduleImportValidator : AbstractValidator<TaktShiftSched
     public TaktShiftScheduleImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("部门 ID不能为负数");
         RuleFor(x => x.EmployeeId)

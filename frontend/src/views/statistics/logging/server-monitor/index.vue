@@ -1,210 +1,413 @@
 <!-- ======================================== -->
-<!-- 项目名称：节节拍工厂·Takt Plat  -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/statistics/logging/server-monitor -->
 <!-- 文件名称：index.vue -->
-<!-- 创建时间：2026-05-06 -->
-<!-- 创建人：Takt365(Cursor AI) -->
-<!-- 功能描述：服务器监控页面，展示应用状态、硬件信息（CPU/内存/磁盘/网络）等 -->
-<!--  -->
+<!-- 功能描述：服务监控页面，展示应用状态与硬件信息；权限 statistics:logging:servermonitor:list -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="server-monitor-container">
-    <!-- 页面头部 -->
-    <a-card :bordered="false" class="header-card">
-      <div class="header-content">
-        <div class="header-left">
-          <h2>{{ t('statistics.logging.serverMonitor.page.title') }}</h2>
-          <p class="description">{{ t('statistics.logging.serverMonitor.page.description') }}</p>
-        </div>
-        <div class="header-right">
-          <a-button type="primary" :loading="refreshing" @click="handleRefresh">
-            <template #icon><ReloadOutlined /></template>
-            {{ t('statistics.logging.serverMonitor.page.refreshCache') }}
-          </a-button>
-        </div>
-      </div>
-    </a-card>
+  <div class="statistics-logging-server-monitor p-4 flex flex-col gap-4">
+    <!-- 页面标题 -->
+    <h2 class="text-xl font-semibold m-0">{{ t('statistics.logging.server-monitor.page.title') }}</h2>
 
-    <!-- 应用状态 -->
-    <a-card :title="t('servermonitor.object.appstatus')" :bordered="false" class="status-card">
-      <a-descriptions bordered :column="2" size="small">
-        <a-descriptions-item :label="t('servermonitor.appstatus.appname')">
-          {{ appStatus.applicationName }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.appversion')">
-          <a-tag color="blue">{{ appStatus.applicationVersion }}</a-tag>
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.environment')">
-          <a-tag :color="envColor">{{ appStatus.environment }}</a-tag>
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.machinename')">
-          {{ appStatus.machineName }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.dotnetversion')">
-          {{ appStatus.dotNetVersion }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.processorcount')">
-          {{ appStatus.processorCount }} 核
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.starttime')">
-          {{ formatDateTime(appStatus.startTime) }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.uptime')">
-          {{ formatUptime(appStatus.uptime) }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.appstatus.workingset')" :span="2">
-          {{ formatBytes(Number(appStatus.workingSet) || 0) }}
-        </a-descriptions-item>
-      </a-descriptions>
-    </a-card>
+    <!-- 工具栏 -->
+    <TaktToolsBar
+      :show-create="false"
+      :show-update="false"
+      :show-delete="false"
+      :show-import="false"
+      :show-export="false"
+      :show-advanced-query="false"
+      :show-column-setting="false"
+      :show-expand="false"
+      :show-fullscreen="true"
+      :show-refresh="true"
+      :refresh-loading="loading"
+      @refresh="loadData"
+    />
 
-    <!-- 操作系统信息 -->
-    <a-card :title="t('servermonitor.object.oslanguageinfo')" :bordered="false" class="info-card">
-      <a-descriptions bordered :column="2" size="small">
-        <a-descriptions-item :label="t('servermonitor.hardware.os')" :span="2">
-          {{ hardwareInfo.operatingSystem }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.os.osversion')">
-          {{ hardwareInfo.operatingSystemLanguage.oSVersion }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.os.currentculture')">
-          {{ hardwareInfo.operatingSystemLanguage.currentCultureDisplayName }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('servermonitor.os.currentculture')">
-          {{ hardwareInfo.operatingSystemLanguage.currentUICultureDisplayName }}
-        </a-descriptions-item>
-      </a-descriptions>
-    </a-card>
+    <a-spin :spinning="loading">
+      <a-tabs v-model:active-key="activeTab" type="card">
+        <!-- 应用状态 -->
+        <a-tab-pane
+          key="app"
+          :tab="t('statistics.logging.server-monitor.page.tabs.app')"
+        >
+          <a-descriptions bordered :column="2" size="small" class="pt-2">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.applicationName')">
+              {{ appStatus.applicationName }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.applicationVersion')">
+              <a-tag color="blue">{{ appStatus.applicationVersion }}</a-tag>
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.environment')">
+              <a-tag :color="envColor">{{ appStatus.environment }}</a-tag>
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.machineName')">
+              {{ appStatus.machineName }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.dotNetVersion')">
+              {{ appStatus.dotNetVersion }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.processArchitecture')">
+              {{ appStatus.processArchitecture || '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.processorCount')">
+              {{ appStatus.processorCount }} {{ t('statistics.logging.server-monitor.page.unit.core') }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.startTime')">
+              {{ formatDateTime(appStatus.startTime) }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.uptime')">
+              {{ formatUptime(appStatus.uptime) }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.workingSet')">
+              {{ formatBytes(Number(appStatus.workingSet) || 0) }}
+            </a-descriptions-item>
+          </a-descriptions>
+        </a-tab-pane>
 
-    <!-- CPU信息 -->
-    <a-card :title="t('servermonitor.object.cpuinfo')" :bordered="false" class="info-card">
-      <a-table
-        :columns="cpuColumns"
-        :data-source="hardwareInfo.cpuList"
-        :pagination="false"
-        size="small"
-        row-key="processorId"
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'numberOfCores'">
-            {{ record.numberOfCores }} 核
-          </template>
-          <template v-if="column.key === 'numberOfLogicalProcessors'">
-            {{ record.numberOfLogicalProcessors }} 线程
-          </template>
-        </template>
-      </a-table>
-    </a-card>
+        <!-- 操作系统与语言 -->
+        <a-tab-pane
+          key="system"
+          :tab="t('statistics.logging.server-monitor.page.tabs.system')"
+        >
+          <a-descriptions bordered :column="2" size="small" class="pt-2">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.operatingSystem')" :span="2">
+              {{ hardwareInfo.operatingSystem }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.osVersion')">
+              {{ hardwareInfo.operatingSystemLanguage.osVersion || '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.currentCulture')">
+              {{ hardwareInfo.operatingSystemLanguage.currentCultureDisplayName }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.currentUiCulture')">
+              {{ hardwareInfo.operatingSystemLanguage.currentUICultureDisplayName }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.systemType')">
+              {{ hardwareInfo.osArchitecture || '-' }}
+            </a-descriptions-item>
+          </a-descriptions>
+          <a-divider class="my-3" />
+          <a-descriptions bordered :column="2" size="small" :title="t('statistics.logging.server-monitor.page.section.motherboard')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardManufacturer')">
+              {{ hardwareInfo.motherboard.manufacturer || '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardProduct')">
+              {{ hardwareInfo.motherboard.product || '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardSerialNumber')">
+              {{ hardwareInfo.motherboard.serialNumber || '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardVersion')">
+              {{ hardwareInfo.motherboard.version || '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardUuid')" :span="2">
+              {{ hardwareInfo.motherboard.uuid || '-' }}
+            </a-descriptions-item>
+          </a-descriptions>
+        </a-tab-pane>
 
-    <!-- 内存信息 -->
-    <a-card :title="t('servermonitor.object.memoryinfo')" :bordered="false" class="info-card">
-      <a-row :gutter="[16, 16]">
-        <a-col :span="8">
-          <a-statistic
-            :title="t('servermonitor.memory.totalphysical')"
-            :value="formatBytes(hardwareInfo.memory.totalPhysicalMemory)"
-          />
-        </a-col>
-        <a-col :span="8">
-          <a-statistic
-            :title="t('servermonitor.memory.usedphysical')"
-            :value="formatBytes(hardwareInfo.memory.usedPhysicalMemory)"
-          />
-        </a-col>
-        <a-col :span="8">
-          <a-statistic
-            :title="t('servermonitor.memory.usagepercent')"
-            :value="memoryUsagePercent"
-            suffix="%"
-            :value-style="{ color: getMemoryUsageColor(memoryUsagePercent) }"
-          />
-        </a-col>
-      </a-row>
-      <a-divider />
-      <a-row :gutter="[16, 16]">
-        <a-col :span="12">
-          <a-progress
-            :percent="memoryUsagePercent"
-            :stroke-color="getMemoryUsageColor(memoryUsagePercent)"
-          />
-        </a-col>
-      </a-row>
-    </a-card>
-
-    <!-- 磁盘信息 -->
-    <a-card :title="t('servermonitor.object.driveinfo')" :bordered="false" class="info-card">
-      <a-table
-        :columns="driveColumns"
-        :data-source="hardwareInfo.driveList"
-        :pagination="false"
-        size="small"
-        row-key="name"
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'totalSize'">
-            {{ formatBytes(record.totalSize) }}
-          </template>
-          <template v-if="column.key === 'freeSpace'">
-            {{ formatBytes(record.freeSpace) }}
-          </template>
-          <template v-if="column.key === 'usedSpace'">
-            {{ formatBytes(record.usedSpace) }}
-          </template>
-          <template v-if="column.key === 'usagePercent'">
-            <a-progress
-              :percent="calcUsagePercent(record.usedSpace, record.totalSize)"
+        <!-- CPU -->
+        <a-tab-pane
+          key="cpu"
+          :tab="t('statistics.logging.server-monitor.page.tabs.cpu')"
+        >
+          <div class="pt-2">
+            <div class="flex flex-col items-center gap-2 pb-2 max-w-[280px] mx-auto">
+              <span class="text-sm text-text-secondary">
+                {{ t('statistics.logging.server-monitor.page.field.cpuUsagePercent') }}
+              </span>
+              <div ref="cpuUsageGaugeRef" class="h-[260px] w-full max-w-[320px]" />
+            </div>
+            <a-divider />
+            <a-table
+              v-model:expanded-row-keys="expandedCpuRowKeys"
+              :columns="cpuColumns"
+              :data-source="hardwareInfo.cpuList"
+              :pagination="false"
+              :row-key="getCpuRowKey"
               size="small"
-              :stroke-color="getDriveUsageColor(calcUsagePercent(record.usedSpace, record.totalSize))"
-            />
-          </template>
-        </template>
-      </a-table>
-    </a-card>
+            >
+              <template #bodyCell="{ column, record }">
+                <template v-if="column.key === 'numberOfCores'">
+                  {{ record.numberOfCores }} {{ t('statistics.logging.server-monitor.page.unit.core') }}
+                </template>
+                <template v-if="column.key === 'numberOfLogicalProcessors'">
+                  {{ record.numberOfLogicalProcessors }} {{ t('statistics.logging.server-monitor.page.unit.thread') }}
+                </template>
+                <template v-if="column.key === 'socketDesignation'">
+                  {{ record.socketDesignation || '-' }}
+                </template>
+                <template v-if="column.key === 'usagePercent'">
+                  <a-progress
+                    :percent="clampUsagePercent(Number(record.usagePercent) || 0)"
+                    size="small"
+                    :stroke-color="getCpuUsageColor(Number(record.usagePercent) || 0)"
+                  />
+                </template>
+              </template>
+              <template #expandedRowRender="{ record }">
+                <a-table
+                  :columns="cpuCoreColumns"
+                  :data-source="record.coreList ?? []"
+                  :pagination="false"
+                  :row-key="getCpuCoreRowKey"
+                  size="small"
+                >
+                  <template #bodyCell="{ column, record: coreRecord }">
+                    <template v-if="column.key === 'usagePercent'">
+                      <a-progress
+                        :percent="clampUsagePercent(Number(coreRecord.usagePercent) || 0)"
+                        size="small"
+                        :stroke-color="getCpuUsageColor(Number(coreRecord.usagePercent) || 0)"
+                      />
+                    </template>
+                  </template>
+                </a-table>
+              </template>
+            </a-table>
+          </div>
+        </a-tab-pane>
 
-    <!-- 网络适配器信息 -->
-    <a-card :title="t('servermonitor.object.networkadapterinfo')" :bordered="false" class="info-card">
-      <a-table
-        :columns="networkColumns"
-        :data-source="hardwareInfo.networkAdapterList"
-        :pagination="false"
-        size="small"
-        row-key="mACAddress"
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'speed'">
-            {{ formatSpeed(record.speed) }}
-          </template>
-          <template v-if="column.key === 'status'">
-            <a-tag :color="record.status === 'Up' ? 'green' : 'red'">
-              {{ record.status }}
-            </a-tag>
-          </template>
-        </template>
-      </a-table>
-    </a-card>
+        <!-- 内存 -->
+        <a-tab-pane
+          key="memory"
+          :tab="t('statistics.logging.server-monitor.page.tabs.memory')"
+        >
+          <div class="pt-2">
+            <div class="flex flex-col items-center gap-2 pb-2 max-w-[280px] mx-auto">
+              <span class="text-sm text-text-secondary">
+                {{ t('statistics.logging.server-monitor.page.field.memoryUsagePercent') }}
+              </span>
+              <div ref="memoryUsageGaugeRef" class="h-[260px] w-full max-w-[320px]" />
+            </div>
+            <a-divider />
+            <a-table
+              v-model:expanded-row-keys="expandedMemoryRowKeys"
+              :columns="memoryColumns"
+              :data-source="memorySummaryList"
+              :expandable="memoryTableExpandable"
+              :pagination="false"
+              row-key="key"
+              size="small"
+            >
+              <template #bodyCell="{ column, record }">
+                <template v-if="column.key === 'totalSize'">
+                  {{ formatBytes(toByteNumber(record.totalSize)) }}
+                </template>
+                <template v-if="column.key === 'usedSpace'">
+                  {{ formatBytes(toByteNumber(record.usedSpace)) }}
+                </template>
+                <template v-if="column.key === 'freeSpace'">
+                  {{ formatBytes(toByteNumber(record.freeSpace)) }}
+                </template>
+                <template v-if="column.key === 'usagePercent'">
+                  <a-progress
+                    :percent="clampUsagePercent(Number(record.usagePercent) || 0)"
+                    size="small"
+                    :stroke-color="getMemoryUsageColor(Number(record.usagePercent) || 0)"
+                  />
+                </template>
+              </template>
+              <template #expandedRowRender>
+                <a-table
+                  :columns="memoryModuleColumns"
+                  :data-source="hardwareInfo.memoryModuleList"
+                  :pagination="false"
+                  :row-key="getMemoryModuleRowKey"
+                  size="small"
+                >
+                  <template #bodyCell="{ column, record }">
+                    <template v-if="column.key === 'capacity'">
+                      {{ formatBytes(toByteNumber(record.capacity)) }}
+                    </template>
+                    <template v-if="column.key === 'speed'">
+                      {{ formatMemoryModuleSpeed(record.speed) }}
+                    </template>
+                    <template v-if="column.key === 'manufacturer'">
+                      {{ record.manufacturer || '-' }}
+                    </template>
+                    <template v-if="column.key === 'partNumber'">
+                      {{ record.partNumber || '-' }}
+                    </template>
+                    <template v-if="column.key === 'serialNumber'">
+                      {{ record.serialNumber || '-' }}
+                    </template>
+                  </template>
+                </a-table>
+              </template>
+            </a-table>
+          </div>
+        </a-tab-pane>
+
+        <!-- 显卡 -->
+        <a-tab-pane
+          key="gpu"
+          :tab="t('statistics.logging.server-monitor.page.tabs.gpu')"
+        >
+          <a-table
+            class="pt-2"
+            :columns="gpuColumns"
+            :data-source="hardwareInfo.gpuList"
+            :pagination="false"
+            size="small"
+            :row-key="getGpuRowKey"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'adapterRam'">
+                {{ formatGpuAdapterRam(record.adapterRam) }}
+              </template>
+              <template v-if="column.key === 'driverVersion'">
+                {{ record.driverVersion?.trim() || '-' }}
+              </template>
+              <template v-if="column.key === 'manufacturer'">
+                {{ record.manufacturer?.trim() || '-' }}
+              </template>
+            </template>
+          </a-table>
+        </a-tab-pane>
+
+        <!-- 磁盘 -->
+        <a-tab-pane
+          key="drive"
+          :tab="t('statistics.logging.server-monitor.page.tabs.drive')"
+        >
+          <a-table
+            class="pt-2"
+            :columns="driveColumns"
+            :data-source="hardwareInfo.driveList"
+            :pagination="false"
+            size="small"
+            row-key="name"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'totalSize'">
+                {{ formatBytes(toByteNumber(record.totalSize)) }}
+              </template>
+              <template v-if="column.key === 'freeSpace'">
+                {{ formatBytes(toByteNumber(record.freeSpace)) }}
+              </template>
+              <template v-if="column.key === 'usedSpace'">
+                {{ formatBytes(toByteNumber(record.usedSpace)) }}
+              </template>
+              <template v-if="column.key === 'usagePercent'">
+                <a-progress
+                  :percent="calcUsagePercent(toByteNumber(record.usedSpace), toByteNumber(record.totalSize))"
+                  size="small"
+                  :stroke-color="getDriveUsageColor(calcUsagePercent(toByteNumber(record.usedSpace), toByteNumber(record.totalSize)))"
+                />
+              </template>
+            </template>
+          </a-table>
+        </a-tab-pane>
+
+        <!-- 网络 -->
+        <a-tab-pane
+          key="network"
+          :tab="t('statistics.logging.server-monitor.page.tabs.network')"
+        >
+          <a-table
+            class="pt-2"
+            :columns="networkColumns"
+            :data-source="hardwareInfo.networkAdapterList"
+            :pagination="false"
+            size="small"
+            row-key="name"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'name'">
+                <div class="flex flex-col gap-0.5">
+                  <span>{{ formatNetworkAdapterPrimary(record.name, record.description) }}</span>
+                  <span
+                    v-if="shouldShowNetworkDescription(record.name, record.description)"
+                    class="text-xs text-text-secondary"
+                  >
+                    {{ record.description?.trim() }}
+                  </span>
+                </div>
+              </template>
+              <template v-if="column.key === 'macAddress'">
+                {{ record.macAddress || '-' }}
+              </template>
+              <template v-if="column.key === 'ipAddress'">
+                {{ record.ipAddress || '-' }}
+              </template>
+              <template v-if="column.key === 'speed'">
+                {{ formatNetworkSpeed(record.speed) }}
+              </template>
+              <template v-if="column.key === 'status'">
+                <a-tag :color="getNetworkStatusColor(record.status)">
+                  {{ formatNetworkStatus(record.status) }}
+                </a-tag>
+              </template>
+            </template>
+          </a-table>
+        </a-tab-pane>
+      </a-tabs>
+    </a-spin>
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * 服务器监控页面
- * 展示应用运行状态和服务器硬件信息
+ * 服务监控页面
+ * 展示应用运行状态与服务器硬件信息
  */
-import { ref, onMounted, computed } from 'vue'
-import { ReloadOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { getServerHardware, getAppStatus, refreshHardwareCache } from '@/api/statistics/logging/server-monitor'
-import type { AppStatus, ServerHardware } from '@/types/statistics/logging/server-monitor'
+import * as echarts from 'echarts/core'
+import { GaugeChart } from 'echarts/charts'
+import { TooltipComponent } from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
+import type { ECharts } from 'echarts/core'
+import { useTaktComponentLocale } from '@/composables/use-takt-component-locale'
+import { usePermissionStore } from '@/stores/identity/permission'
+import {
+  getAppStatus,
+  getServerHardware,
+} from '@/api/statistics/logging/server-monitor'
+import type { AppStatus, CpuCoreInfo, CpuInfo, GpuInfo, MemoryModule, ServerHardware } from '@/types/statistics/logging/server-monitor'
 
 dayjs.extend(duration)
 
-const { t } = useI18n()
+echarts.use([GaugeChart, TooltipComponent, CanvasRenderer])
+
+const { t, locale } = useI18n()
+/** ECharts 语言键（随 vue-i18n 同步） */
+const { echartsLocale } = useTaktComponentLocale()
+/** 权限 Store */
+const permissionStore = usePermissionStore()
+
+/** 列表/query 权限（GET hardware、GET app-status） */
+const PERMISSION_LIST = 'statistics:logging:servermonitor:list'
+
+/** CPU 汇总使用率仪表盘容器 */
+const cpuUsageGaugeRef = ref<HTMLDivElement | null>(null)
+/** CPU 仪表盘容器 ResizeObserver */
+let cpuUsageGaugeResizeObserver: ResizeObserver | null = null
+/** 内存汇总使用率仪表盘容器 */
+const memoryUsageGaugeRef = ref<HTMLDivElement | null>(null)
+/** 内存仪表盘容器 ResizeObserver */
+let memoryUsageGaugeResizeObserver: ResizeObserver | null = null
+/** CPU 仪表盘实例 */
+const cpuUsageGaugeChartRef = { chart: null as ECharts | null }
+/** 内存仪表盘实例 */
+const memoryUsageGaugeChartRef = { chart: null as ECharts | null }
+
+/** 数据加载状态 */
+const loading = ref(false)
+/** 当前 Tab（app / system / cpu / memory / drive / network） */
+const activeTab = ref('app')
+/** 已展开的物理 CPU 行（展示逻辑核心子表） */
+const expandedCpuRowKeys = ref<string[]>([])
+/** 已展开的物理内存行（展示内存条子表） */
+const expandedMemoryRowKeys = ref<string[]>([])
 
 /** 服务器硬件信息 */
 const hardwareInfo = ref<ServerHardware>({
@@ -212,6 +415,8 @@ const hardwareInfo = ref<ServerHardware>({
   driveSerialNumber: '',
   macAddress: '',
   cpuModel: '',
+  cpuUsagePercent: 0,
+  osArchitecture: '',
   operatingSystem: '',
   operatingSystemLanguage: {
     currentCulture: '',
@@ -221,20 +426,21 @@ const hardwareInfo = ref<ServerHardware>({
     currentUICultureDisplayName: '',
     currentUICultureNativeName: '',
     systemDefaultLanguage: '',
-    oSVersion: '',
-    installedLanguages: []
+    osVersion: '',
+    installedLanguages: [],
   },
   motherboard: {
     manufacturer: '',
     product: '',
     serialNumber: '',
-    version: ''
+    version: '',
+    uuid: '',
   },
   bios: {
     manufacturer: '',
     version: '',
     releaseDate: '',
-    serialNumber: ''
+    serialNumber: '',
   },
   cpuList: [],
   gpuList: [],
@@ -244,11 +450,12 @@ const hardwareInfo = ref<ServerHardware>({
     usedPhysicalMemory: 0,
     totalVirtualMemory: 0,
     availableVirtualMemory: 0,
-    usedVirtualMemory: 0
+    usedVirtualMemory: 0,
   },
+  memoryModuleList: [],
   driveList: [],
   networkAdapterList: [],
-  computerSystemList: []
+  computerSystemList: [],
 })
 
 /** 应用运行状态 */
@@ -261,55 +468,261 @@ const appStatus = ref<AppStatus>({
   uptime: '',
   dotNetVersion: '',
   workingSet: '',
-  processorCount: 0
+  processorCount: 0,
+  processArchitecture: '',
 })
 
-/** 刷新加载状态 */
-const refreshing = ref(false)
-
-/** 物理内存使用率（%） */
+/** 物理内存使用率（%）；饼图与汇总列表共用 */
 const memoryUsagePercent = computed(() =>
   calcUsagePercent(hardwareInfo.value.memory.usedPhysicalMemory, hardwareInfo.value.memory.totalPhysicalMemory),
 )
 
+/** 内存汇总列表（物理 / 虚拟） */
+const memorySummaryList = computed(() => {
+  const memory = hardwareInfo.value.memory
+  return [
+    {
+      key: 'physical',
+      memoryType: t('statistics.logging.server-monitor.page.field.memoryTypePhysical'),
+      totalSize: memory.totalPhysicalMemory,
+      usedSpace: memory.usedPhysicalMemory,
+      freeSpace: memory.availablePhysicalMemory,
+      usagePercent: calcUsagePercent(memory.usedPhysicalMemory, memory.totalPhysicalMemory),
+    },
+    {
+      key: 'virtual',
+      memoryType: t('statistics.logging.server-monitor.page.field.memoryTypeVirtual'),
+      totalSize: memory.totalVirtualMemory,
+      usedSpace: memory.usedVirtualMemory,
+      freeSpace: memory.availableVirtualMemory,
+      usagePercent: calcUsagePercent(memory.usedVirtualMemory, memory.totalVirtualMemory),
+    },
+  ]
+})
+
+/** 内存汇总表：仅物理内存行可展开内存条子表 */
+const memoryTableExpandable = computed(() => ({
+  rowExpandable: (record: { key: string }) =>
+    record.key === 'physical' && (hardwareInfo.value.memoryModuleList?.length ?? 0) > 0,
+}))
+
+/** CPU 平均使用率（%） */
+const cpuUsagePercent = computed(() => Number(hardwareInfo.value.cpuUsagePercent) || 0)
+
 /** 环境标签颜色 */
 const envColor = computed(() => {
   switch (appStatus.value.environment) {
-    case 'Development': return 'green'
-    case 'Staging': return 'orange'
-    case 'Production': return 'red'
-    default: return 'default'
+    case 'Development':
+      return 'green'
+    case 'Staging':
+      return 'orange'
+    case 'Production':
+      return 'red'
+    default:
+      return 'default'
   }
 })
 
-/** CPU 表格列定义 */
-const cpuColumns = [
-  { title: t('servermonitor.cpu.name'), dataIndex: 'name', key: 'name' },
-  { title: t('servermonitor.cpu.manufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
-  { title: t('servermonitor.cpu.cores'), dataIndex: 'numberOfCores', key: 'numberOfCores' },
-  { title: t('servermonitor.cpu.logicalprocessors'), dataIndex: 'numberOfLogicalProcessors', key: 'numberOfLogicalProcessors' },
-  { title: t('servermonitor.cpu.processorid'), dataIndex: 'processorId', key: 'processorId' }
-]
+/** CPU 表格列（每行 = 一个物理 CPU / Socket） */
+const cpuColumns = computed(() => [
+  { title: t('statistics.logging.server-monitor.page.field.cpuName'), dataIndex: 'name', key: 'name' },
+  { title: t('statistics.logging.server-monitor.page.field.cpuManufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
+  { title: t('statistics.logging.server-monitor.page.field.cpuCores'), dataIndex: 'numberOfCores', key: 'numberOfCores' },
+  { title: t('statistics.logging.server-monitor.page.field.cpuLogicalProcessors'), dataIndex: 'numberOfLogicalProcessors', key: 'numberOfLogicalProcessors' },
+  { title: t('statistics.logging.server-monitor.page.field.cpuSocket'), dataIndex: 'socketDesignation', key: 'socketDesignation' },
+  { title: t('statistics.logging.server-monitor.page.field.cpuUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
+  { title: t('statistics.logging.server-monitor.page.field.cpuProcessorId'), dataIndex: 'processorId', key: 'processorId' },
+])
 
-/** 磁盘表格列定义 */
-const driveColumns = [
-  { title: t('servermonitor.drive.name'), dataIndex: 'name', key: 'name' },
-  { title: t('servermonitor.drive.type'), dataIndex: 'driveType', key: 'driveType' },
-  { title: t('servermonitor.drive.filesystem'), dataIndex: 'fileSystem', key: 'fileSystem' },
-  { title: t('servermonitor.drive.totalsize'), dataIndex: 'totalSize', key: 'totalSize' },
-  { title: t('servermonitor.drive.freespace'), dataIndex: 'freeSpace', key: 'freeSpace' },
-  { title: t('servermonitor.drive.usedspace'), dataIndex: 'usedSpace', key: 'usedSpace' },
-  { title: t('servermonitor.drive.usagepercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 200 }
-]
+/** 逻辑核心子表列（CpuCoreList） */
+const cpuCoreColumns = computed(() => [
+  { title: t('statistics.logging.server-monitor.page.field.cpuLogicalCoreName'), dataIndex: 'name', key: 'name', width: 120 },
+  { title: t('statistics.logging.server-monitor.page.field.cpuUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
+])
 
-/** 网络适配器表格列定义 */
-const networkColumns = [
-  { title: t('servermonitor.network.name'), dataIndex: 'name', key: 'name' },
-  { title: t('servermonitor.network.description'), dataIndex: 'description', key: 'description' },
-  { title: t('servermonitor.network.macaddress'), dataIndex: 'mACAddress', key: 'mACAddress' },
-  { title: t('servermonitor.network.speed'), dataIndex: 'speed', key: 'speed' },
-  { title: t('servermonitor.network.status'), dataIndex: 'status', key: 'status' }
-]
+/** 内存汇总表格列 */
+const memoryColumns = computed(() => [
+  { title: t('statistics.logging.server-monitor.page.field.memoryType'), dataIndex: 'memoryType', key: 'memoryType' },
+  { title: t('statistics.logging.server-monitor.page.field.memoryTotalPhysical'), dataIndex: 'totalSize', key: 'totalSize' },
+  { title: t('statistics.logging.server-monitor.page.field.memoryUsedPhysical'), dataIndex: 'usedSpace', key: 'usedSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.memoryAvailable'), dataIndex: 'freeSpace', key: 'freeSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.memoryUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
+])
+
+/** 物理内存条子表列 */
+const memoryModuleColumns = computed(() => [
+  { title: t('statistics.logging.server-monitor.page.field.memoryBankLabel'), dataIndex: 'bankLabel', key: 'bankLabel' },
+  { title: t('statistics.logging.server-monitor.page.field.memoryManufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
+  { title: t('statistics.logging.server-monitor.page.field.memoryCapacity'), dataIndex: 'capacity', key: 'capacity' },
+  { title: t('statistics.logging.server-monitor.page.field.memorySpeed'), dataIndex: 'speed', key: 'speed' },
+  { title: t('statistics.logging.server-monitor.page.field.memoryPartNumber'), dataIndex: 'partNumber', key: 'partNumber' },
+  { title: t('statistics.logging.server-monitor.page.field.memorySerialNumber'), dataIndex: 'serialNumber', key: 'serialNumber' },
+])
+
+/**
+ * 物理 CPU 表格 row-key（仅依据 record 字段，不使用 index）
+ * @param record CPU 行
+ * @returns 唯一键
+ */
+function getCpuRowKey(record: CpuInfo): string {
+  const processorId = String(record.processorId ?? '').trim()
+  if (processorId) {
+    return processorId
+  }
+  const composite = [
+    String(record.socketDesignation ?? '').trim(),
+    String(record.name ?? '').trim(),
+    String(record.manufacturer ?? '').trim(),
+  ].filter(Boolean).join('|')
+  return composite || 'cpu-unknown'
+}
+
+/**
+ * 逻辑核心子表 row-key
+ * @param core 逻辑核心行
+ * @returns 唯一键
+ */
+function getCpuCoreRowKey(core: CpuCoreInfo): string {
+  return String(core.name ?? '').trim() || 'core-unknown'
+}
+
+/**
+ * 内存条子表 row-key（仅依据 record 字段，不使用 index）
+ * @param module 内存条行
+ * @returns 唯一键
+ */
+function getMemoryModuleRowKey(module: MemoryModule): string {
+  const bankLabel = String(module.bankLabel ?? '').trim()
+  if (bankLabel) {
+    return bankLabel
+  }
+  const serialNumber = String(module.serialNumber ?? '').trim()
+  if (serialNumber) {
+    return serialNumber
+  }
+  const composite = [
+    String(module.manufacturer ?? '').trim(),
+    String(module.partNumber ?? '').trim(),
+    String(module.capacity ?? ''),
+    String(module.speed ?? ''),
+  ].filter(Boolean).join('|')
+  return composite || 'memory-module-unknown'
+}
+
+/**
+ * 显卡表格 row-key（仅依据 record 字段，不使用 index）
+ * @param record 显卡行
+ * @returns 唯一键
+ */
+function getGpuRowKey(record: GpuInfo): string {
+  const composite = [
+    String(record.name ?? '').trim(),
+    String(record.manufacturer ?? '').trim(),
+    String(record.driverVersion ?? '').trim(),
+    String(record.adapterRam ?? ''),
+  ].filter(Boolean).join('|')
+  return composite || 'gpu-unknown'
+}
+
+/**
+ * 格式化显存容量；WMI 无效值（如 0 或 4GB 上限）时显示「-」
+ * @param adapterRam 显存字节数
+ * @returns 展示文案
+ */
+function formatGpuAdapterRam(adapterRam: unknown): string {
+  const bytes = toByteNumber(adapterRam)
+  if (bytes <= 0) {
+    return '-'
+  }
+  return formatBytes(bytes)
+}
+
+/**
+ * 格式化内存条频率（MHz）
+ * @param speedMHz 频率
+ * @returns 展示文案
+ */
+function formatMemoryModuleSpeed(speedMHz: unknown): string {
+  const speed = Number(speedMHz) || 0
+  if (speed <= 0) {
+    return '-'
+  }
+  return `${speed} MHz`
+}
+
+/** 磁盘表格列 */
+const driveColumns = computed(() => [
+  { title: t('statistics.logging.server-monitor.page.field.driveName'), dataIndex: 'name', key: 'name' },
+  { title: t('statistics.logging.server-monitor.page.field.driveType'), dataIndex: 'driveType', key: 'driveType' },
+  { title: t('statistics.logging.server-monitor.page.field.driveFileSystem'), dataIndex: 'fileSystem', key: 'fileSystem' },
+  { title: t('statistics.logging.server-monitor.page.field.driveTotalSize'), dataIndex: 'totalSize', key: 'totalSize' },
+  { title: t('statistics.logging.server-monitor.page.field.driveFreeSpace'), dataIndex: 'freeSpace', key: 'freeSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.driveUsedSpace'), dataIndex: 'usedSpace', key: 'usedSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.driveUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 200 },
+])
+
+/** 显卡表格列 */
+const gpuColumns = computed(() => [
+  { title: t('statistics.logging.server-monitor.page.field.gpuName'), dataIndex: 'name', key: 'name', ellipsis: true },
+  { title: t('statistics.logging.server-monitor.page.field.gpuManufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
+  { title: t('statistics.logging.server-monitor.page.field.gpuAdapterRam'), dataIndex: 'adapterRam', key: 'adapterRam' },
+  { title: t('statistics.logging.server-monitor.page.field.gpuDriverVersion'), dataIndex: 'driverVersion', key: 'driverVersion' },
+])
+
+/** 网络表格列 */
+const networkColumns = computed(() => [
+  { title: t('statistics.logging.server-monitor.page.field.networkName'), dataIndex: 'name', key: 'name', ellipsis: true },
+  { title: t('statistics.logging.server-monitor.page.field.networkMacAddress'), dataIndex: 'macAddress', key: 'macAddress' },
+  { title: t('statistics.logging.server-monitor.page.field.networkIpAddress'), dataIndex: 'ipAddress', key: 'ipAddress' },
+  { title: t('statistics.logging.server-monitor.page.field.networkSpeed'), dataIndex: 'speed', key: 'speed' },
+  { title: t('statistics.logging.server-monitor.page.field.networkStatus'), dataIndex: 'status', key: 'status' },
+])
+
+/**
+ * 判断网卡描述是否与名称重复
+ * @param name 适配器名称
+ * @param description 适配器描述
+ * @returns 描述与名称不同且非空时返回 true
+ */
+function shouldShowNetworkDescription(name?: string, description?: string): boolean {
+  const normalizedName = (name ?? '').trim()
+  const normalizedDescription = (description ?? '').trim()
+  if (!normalizedName || !normalizedDescription) {
+    return false
+  }
+  return normalizedDescription.localeCompare(normalizedName, undefined, { sensitivity: 'accent' }) !== 0
+}
+
+/**
+ * 网卡名称主文案（名称与描述相同时只取一处）
+ * @param name 适配器名称
+ * @param description 适配器描述
+ * @returns 展示用主标题
+ */
+function formatNetworkAdapterPrimary(name?: string, description?: string): string {
+  const normalizedName = (name ?? '').trim()
+  const normalizedDescription = (description ?? '').trim()
+  if (normalizedName) {
+    return normalizedName
+  }
+  if (normalizedDescription) {
+    return normalizedDescription
+  }
+  return '-'
+}
+
+/**
+ * 将 API 数值转为字节数
+ * @param value 字节数（number 或 string）
+ * @returns 字节数
+ */
+function toByteNumber(value: unknown): number {
+  if (value == null || value === '') {
+    return 0
+  }
+  const num = Number(value)
+  return Number.isFinite(num) ? num : 0
+}
 
 /**
  * 计算使用率（%）
@@ -318,8 +731,8 @@ const networkColumns = [
  * @returns 使用率百分比
  */
 function calcUsagePercent(used: unknown, total: unknown): number {
-  const totalNum = Number(total)
-  const usedNum = Number(used)
+  const totalNum = toByteNumber(total)
+  const usedNum = toByteNumber(used)
   if (!totalNum) {
     return 0
   }
@@ -329,58 +742,364 @@ function calcUsagePercent(used: unknown, total: unknown): number {
 /**
  * 格式化字节数
  * @param bytes 字节数
- * @returns 格式化后的字符串
+ * @returns 格式化字符串
  */
 function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B'
+  if (!bytes) {
+    return '0 B'
+  }
   const k = 1024
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
 }
 
 /**
- * 格式化网速
- * @param bytesPerSecond 字节/秒
- * @returns 格式化后的字符串
+ * 格式化网卡链路速度（比特/秒）
+ * @param bitsPerSecond 比特/秒
+ * @returns 格式化字符串
  */
-function formatSpeed(bytesPerSecond: number): string {
-  return formatBytes(bytesPerSecond) + '/s'
+function formatNetworkSpeed(bitsPerSecond: unknown): string {
+  const bps = toByteNumber(bitsPerSecond)
+  if (!bps) {
+    return '-'
+  }
+  if (bps >= 1_000_000_000) {
+    return `${(bps / 1_000_000_000).toFixed(2)} Gbps`
+  }
+  if (bps >= 1_000_000) {
+    return `${(bps / 1_000_000).toFixed(2)} Mbps`
+  }
+  if (bps >= 1_000) {
+    return `${(bps / 1_000).toFixed(2)} Kbps`
+  }
+  return `${bps} bps`
+}
+
+/**
+ * 网卡状态 Tag 颜色
+ * @param status 后端联网状态
+ * @returns Ant Design Tag color
+ */
+function getNetworkStatusColor(status: string | undefined): string {
+  const normalized = (status ?? '').trim().toLowerCase()
+  switch (normalized) {
+    case 'online':
+    case 'up':
+    case 'enabled':
+      return 'green'
+    case 'nointernet':
+    case 'dnsfault':
+      return 'orange'
+    case 'down':
+    case 'disabled':
+      return 'red'
+    default:
+      return 'default'
+  }
+}
+
+/**
+ * 格式化网卡状态文案
+ * @param status 后端联网状态
+ * @returns 本地化状态
+ */
+function formatNetworkStatus(status: string | undefined): string {
+  const normalized = (status ?? '').trim().toLowerCase()
+  switch (normalized) {
+    case 'online':
+      return t('statistics.logging.server-monitor.page.field.networkStatusOnline')
+    case 'nointernet':
+      return t('statistics.logging.server-monitor.page.field.networkStatusNoInternet')
+    case 'dnsfault':
+      return t('statistics.logging.server-monitor.page.field.networkStatusDnsFault')
+    case 'up':
+      return t('statistics.logging.server-monitor.page.field.networkStatusUp')
+    case 'down':
+      return t('statistics.logging.server-monitor.page.field.networkStatusDown')
+    case 'enabled':
+      return t('statistics.logging.server-monitor.page.field.networkStatusEnabled')
+    case 'disabled':
+      return t('statistics.logging.server-monitor.page.field.networkStatusDisabled')
+    default:
+      return status?.trim() || t('statistics.logging.server-monitor.page.field.networkStatusUnknown')
+  }
 }
 
 /**
  * 格式化日期时间
  * @param dateTime 日期时间字符串
- * @returns 格式化后的字符串
+ * @returns 格式化字符串
  */
 function formatDateTime(dateTime: string): string {
+  if (!dateTime) {
+    return '-'
+  }
   return dayjs(dateTime).format('YYYY-MM-DD HH:mm:ss')
 }
 
 /**
  * 格式化运行时长
- * @param uptime TimeSpan 字符串（格式：d.hh:mm:ss.fffffff）
- * @returns 格式化后的字符串
+ * @param uptime TimeSpan 字符串
+ * @returns 本地化时长文案
  */
 function formatUptime(uptime: string): string {
-  // TimeSpan 格式：d.hh:mm:ss.fffffff
-  if (!uptime) return uptime
-  
+  if (!uptime) {
+    return '-'
+  }
   const parts = uptime.split('.')
   if (parts.length >= 2) {
-    const days = parseInt(parts[0] || '0')
+    const days = parseInt(parts[0] || '0', 10)
     const time = parts[1]?.split(':')
-    if (!time || time.length < 2) return uptime
-    
-    const hours = parseInt(time[0] || '0')
-    const minutes = parseInt(time[1] || '0')
-    
-    if (days > 0) {
-      return `${days} 天 ${hours} 小时 ${minutes} 分钟`
+    if (!time || time.length < 2) {
+      return uptime
     }
-    return `${hours} 小时 ${minutes} 分钟`
+    const hours = parseInt(time[0] || '0', 10)
+    const minutes = parseInt(time[1] || '0', 10)
+    const dayUnit = t('statistics.logging.server-monitor.page.unit.day')
+    const hourUnit = t('statistics.logging.server-monitor.page.unit.hour')
+    const minuteUnit = t('statistics.logging.server-monitor.page.unit.minute')
+    if (days > 0) {
+      return `${days} ${dayUnit} ${hours} ${hourUnit} ${minutes} ${minuteUnit}`
+    }
+    return `${hours} ${hourUnit} ${minutes} ${minuteUnit}`
   }
   return uptime
+}
+
+/**
+ * 限制使用率百分比在 0~100
+ * @param usage 使用率
+ * @returns 0~100
+ */
+function clampUsagePercent(usage: number): number {
+  const value = Number(usage) || 0
+  return Math.min(Math.max(value, 0), 100)
+}
+
+/** 仪表盘刻度段颜色：0~30 青 / 30~70 蓝 / 70~100 红 */
+const GAUGE_AXIS_COLORS: ReadonlyArray<[number, string]> = [
+  [0.3, '#67e0e3'],
+  [0.7, '#37a2da'],
+  [1, '#fd666d'],
+]
+
+/**
+ * 按使用率返回仪表盘刻度/数值强调色
+ * @param usage 使用率 0~100
+ * @returns 与刻度段一致的颜色
+ */
+function getGaugeAccentColor(usage: number): string {
+  const value = clampUsagePercent(usage)
+  if (value >= 70) {
+    return '#fd666d'
+  }
+  if (value >= 30) {
+    return '#37a2da'
+  }
+  return '#67e0e3'
+}
+
+/**
+ * 渲染使用率仪表盘（半圆速度表风格，0~100%）
+ * @param chartRef 图表实例引用
+ * @param containerRef 容器 DOM
+ * @param usedPercent 已用百分比
+ */
+function renderUsageGaugeChart(
+  chartRef: { chart: ECharts | null },
+  containerRef: HTMLDivElement | null,
+  usedPercent: number,
+): void {
+  if (!containerRef) {
+    return
+  }
+  if (!chartRef.chart) {
+    chartRef.chart = echarts.init(containerRef, undefined, { locale: echartsLocale.value })
+  }
+  const used = clampUsagePercent(usedPercent)
+  const accentColor = getGaugeAccentColor(used)
+  const usedLabel = t('statistics.logging.server-monitor.page.field.usageUsed')
+  chartRef.chart.setOption(
+    {
+      tooltip: {
+        formatter: `${usedLabel}: ${used.toFixed(2)}%`,
+      },
+      series: [
+        {
+          type: 'gauge',
+          min: 0,
+          max: 100,
+          splitNumber: 10,
+          startAngle: 225,
+          endAngle: -45,
+          radius: '92%',
+          center: ['50%', '58%'],
+          axisLine: {
+            lineStyle: {
+              width: 18,
+              color: [...GAUGE_AXIS_COLORS],
+            },
+          },
+          pointer: {
+            length: '62%',
+            width: 5,
+            itemStyle: {
+              color: accentColor,
+            },
+          },
+          axisTick: {
+            distance: -18,
+            length: 6,
+            lineStyle: {
+              color: '#fff',
+              width: 1,
+            },
+          },
+          splitLine: {
+            distance: -20,
+            length: 16,
+            lineStyle: {
+              color: '#fff',
+              width: 2,
+            },
+          },
+          axisLabel: {
+            distance: 22,
+            fontSize: 11,
+            color: (value: number) => getGaugeAccentColor(value),
+          },
+          detail: {
+            valueAnimation: true,
+            offsetCenter: [0, '72%'],
+            fontSize: 24,
+            fontWeight: 700,
+            color: accentColor,
+            formatter: (value: number) => `${(Number(value) || 0).toFixed(2)}%`,
+          },
+          data: [{ value: used, name: usedLabel }],
+        },
+      ],
+    },
+    { notMerge: true },
+  )
+}
+
+/**
+ * 渲染 CPU 汇总使用率仪表盘
+ */
+function renderCpuUsageGaugeChart(): void {
+  renderUsageGaugeChart(
+    cpuUsageGaugeChartRef,
+    cpuUsageGaugeRef.value,
+    cpuUsagePercent.value,
+  )
+}
+
+/**
+ * 渲染内存汇总使用率仪表盘
+ */
+function renderMemoryUsageGaugeChart(): void {
+  renderUsageGaugeChart(
+    memoryUsageGaugeChartRef,
+    memoryUsageGaugeRef.value,
+    memoryUsagePercent.value,
+  )
+}
+
+/**
+ * 初始化使用率仪表盘与尺寸监听
+ * @param containerRef 容器 DOM
+ * @param renderChart 渲染回调
+ * @param resizeObserverRef 当前 ResizeObserver
+ * @param chartRef 图表实例引用
+ * @returns 新的 ResizeObserver
+ */
+function initUsageGaugeChart(
+  containerRef: HTMLDivElement | null,
+  renderChart: () => void,
+  resizeObserverRef: ResizeObserver | null,
+  chartRef: { chart: ECharts | null },
+): ResizeObserver | null {
+  if (!containerRef) {
+    return resizeObserverRef
+  }
+  renderChart()
+  resizeObserverRef?.disconnect()
+  const observer = new ResizeObserver(() => {
+    chartRef.chart?.resize()
+  })
+  observer.observe(containerRef)
+  return observer
+}
+
+/**
+ * 初始化 CPU 汇总仪表盘与尺寸监听
+ */
+function initCpuUsageGaugeChart(): void {
+  cpuUsageGaugeResizeObserver = initUsageGaugeChart(
+    cpuUsageGaugeRef.value,
+    renderCpuUsageGaugeChart,
+    cpuUsageGaugeResizeObserver,
+    cpuUsageGaugeChartRef,
+  )
+}
+
+/**
+ * 初始化内存汇总仪表盘与尺寸监听
+ */
+function initMemoryUsageGaugeChart(): void {
+  memoryUsageGaugeResizeObserver = initUsageGaugeChart(
+    memoryUsageGaugeRef.value,
+    renderMemoryUsageGaugeChart,
+    memoryUsageGaugeResizeObserver,
+    memoryUsageGaugeChartRef,
+  )
+}
+
+/**
+ * 销毁 CPU 汇总仪表盘实例
+ */
+function disposeCpuUsageGaugeChart(): void {
+  cpuUsageGaugeResizeObserver?.disconnect()
+  cpuUsageGaugeResizeObserver = null
+  cpuUsageGaugeChartRef.chart?.dispose()
+  cpuUsageGaugeChartRef.chart = null
+}
+
+/**
+ * 销毁内存汇总仪表盘实例
+ */
+function disposeMemoryUsageGaugeChart(): void {
+  memoryUsageGaugeResizeObserver?.disconnect()
+  memoryUsageGaugeResizeObserver = null
+  memoryUsageGaugeChartRef.chart?.dispose()
+  memoryUsageGaugeChartRef.chart = null
+}
+
+/**
+ * 语言切换时重建仪表盘（ECharts locale 在 init 时注入）
+ */
+function reinitUsageGaugeChartsOnLocaleChange(): void {
+  disposeCpuUsageGaugeChart()
+  disposeMemoryUsageGaugeChart()
+  nextTick(() => {
+    if (activeTab.value === 'cpu') {
+      initCpuUsageGaugeChart()
+    }
+    if (activeTab.value === 'memory') {
+      initMemoryUsageGaugeChart()
+    }
+  })
+}
+
+/**
+ * 获取 CPU 使用率颜色
+ * @param usage 使用率百分比
+ * @returns 颜色值
+ */
+function getCpuUsageColor(usage: number): string {
+  return getMemoryUsageColor(usage)
 }
 
 /**
@@ -389,8 +1108,12 @@ function formatUptime(uptime: string): string {
  * @returns 颜色值
  */
 function getMemoryUsageColor(usage: number): string {
-  if (usage >= 90) return '#ff4d4f'
-  if (usage >= 70) return '#faad14'
+  if (usage >= 90) {
+    return '#ff4d4f'
+  }
+  if (usage >= 70) {
+    return '#faad14'
+  }
   return '#52c41a'
 }
 
@@ -400,80 +1123,82 @@ function getMemoryUsageColor(usage: number): string {
  * @returns 颜色值
  */
 function getDriveUsageColor(usage: number): string {
-  if (usage >= 90) return '#ff4d4f'
-  if (usage >= 70) return '#faad14'
+  if (usage >= 90) {
+    return '#ff4d4f'
+  }
+  if (usage >= 70) {
+    return '#faad14'
+  }
   return '#1677ff'
 }
 
-/** 加载数据 */
+/**
+ * 加载监控数据（需 statistics:logging:servermonitor:list）
+ */
 async function loadData() {
+  if (!permissionStore.hasPermission(PERMISSION_LIST)) {
+    return
+  }
+  loading.value = true
   try {
-    const [hardware, status] = await Promise.all([
-      getServerHardware(),
-      getAppStatus()
-    ])
+    const [hardware, status] = await Promise.all([getServerHardware(), getAppStatus()])
     hardwareInfo.value = hardware
     appStatus.value = status
-  } catch (error: any) {
-    message.error(error?.message || t('common.page.api.requestfail'))
-  }
-}
-
-/** 刷新缓存 */
-async function handleRefresh() {
-  refreshing.value = true
-  try {
-    await refreshHardwareCache()
-    message.success(t('statistics.logging.serverMonitor.page.refreshSuccess'))
-    await loadData()
-  } catch (error: any) {
-    message.error(error?.message || t('common.page.api.requestfail'))
+    nextTick(() => {
+      if (activeTab.value === 'cpu') {
+        initCpuUsageGaugeChart()
+      }
+      if (activeTab.value === 'memory') {
+        initMemoryUsageGaugeChart()
+      }
+    })
+  } catch {
+    message.error(t('statistics.logging.server-monitor.page.message.loadFail'))
   } finally {
-    refreshing.value = false
+    loading.value = false
   }
 }
 
-/** 初始化加载 */
+/** 租户/公司切换时刷新 */
+useTableRefresh(loadData)
+
 onMounted(() => {
-  loadData()
+  void loadData()
+  nextTick(() => {
+    initCpuUsageGaugeChart()
+    initMemoryUsageGaugeChart()
+  })
+})
+
+watch(cpuUsagePercent, () => {
+  renderCpuUsageGaugeChart()
+})
+
+watch(memoryUsagePercent, () => {
+  renderMemoryUsageGaugeChart()
+})
+
+watch([locale, echartsLocale], () => {
+  reinitUsageGaugeChartsOnLocaleChange()
+})
+
+watch(activeTab, (key) => {
+  if (key === 'cpu') {
+    nextTick(() => {
+      initCpuUsageGaugeChart()
+      cpuUsageGaugeChartRef.chart?.resize()
+    })
+  }
+  if (key === 'memory') {
+    nextTick(() => {
+      initMemoryUsageGaugeChart()
+      memoryUsageGaugeChartRef.chart?.resize()
+    })
+  }
+})
+
+onUnmounted(() => {
+  disposeCpuUsageGaugeChart()
+  disposeMemoryUsageGaugeChart()
 })
 </script>
-
-<style scoped lang="css">
-.server-monitor-container {
-  padding: 16px;
-  
-  .header-card {
-    margin-bottom: 16px;
-    
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      
-      .header-left {
-        h2 {
-          margin: 0 0 8px 0;
-          font-size: 20px;
-          font-weight: 600;
-        }
-        
-        .description {
-          margin: 0;
-          color: #666;
-          font-size: 14px;
-        }
-      }
-      
-      .header-right {
-        flex-shrink: 0;
-      }
-    }
-  }
-  
-  .status-card,
-  .info-card {
-    margin-bottom: 16px;
-  }
-}
-</style>

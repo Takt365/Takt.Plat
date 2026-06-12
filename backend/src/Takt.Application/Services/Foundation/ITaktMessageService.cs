@@ -29,6 +29,20 @@ public interface ITaktMessageService
     Task<TaktPagedResult<TaktMessageDto>> GetMessageListAsync(TaktMessageQueryDto queryDto);
 
     /// <summary>
+    /// 获取当前登录用户已读消息列表（分页）
+    /// </summary>
+    /// <param name="queryDto">已读列表查询 DTO</param>
+    /// <returns>分页结果</returns>
+    Task<TaktPagedResult<TaktMessageDto>> GetMessageReadListAsync(TaktMessageInboxListQueryDto queryDto);
+
+    /// <summary>
+    /// 获取当前登录用户未读消息列表（分页）
+    /// </summary>
+    /// <param name="queryDto">未读列表查询 DTO</param>
+    /// <returns>分页结果</returns>
+    Task<TaktPagedResult<TaktMessageDto>> GetMessageUnreadListAsync(TaktMessageInboxListQueryDto queryDto);
+
+    /// <summary>
     /// 根据ID获取在线消息
     /// </summary>
     /// <param name="id">在线消息ID</param>
@@ -49,12 +63,18 @@ public interface ITaktMessageService
     Task<TaktMessageDto> CreateMessageAsync(TaktMessageCreateDto dto);
 
     /// <summary>
-    /// 更新在线消息
+    /// 批量创建在线消息并 SignalR 推送给各接收者（全员或指定用户列表）
     /// </summary>
-    /// <param name="id">在线消息ID</param>
-    /// <param name="dto">更新DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktMessageDto> UpdateMessageAsync(long id, TaktMessageUpdateDto dto);
+    /// <param name="dto">批量创建 DTO</param>
+    /// <returns>已落库消息列表</returns>
+    Task<List<TaktMessageDto>> CreateAndSendMessagesAsync(TaktMessageBatchCreateDto dto);
+
+    /// <summary>
+    /// 按消息 ID 经 SignalR 推送给接收者（须已落库）
+    /// </summary>
+    /// <param name="id">在线消息 ID</param>
+    /// <returns>任务</returns>
+    Task SendMessageByIdAsync(long id);
 
     /// <summary>
     /// 删除在线消息
@@ -71,18 +91,18 @@ public interface ITaktMessageService
     Task DeleteMessageBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新在线消息状态
+    /// 标记在线消息为已读
     /// </summary>
-    /// <param name="dto">状态DTO</param>
+    /// <param name="dto">已读 DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktMessageDto> UpdateMessageStatusAsync(TaktMessageStatusDto dto);
+    Task<TaktMessageDto> MarkMessageReadAsync(TaktMessageReadDto dto);
 
     /// <summary>
-    /// 标记在线消息为已读（SignalR Hub 调用）
+    /// 标记在线消息为未读
     /// </summary>
-    /// <param name="messageId">消息 ID</param>
+    /// <param name="dto">未读 DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktMessageDto> UpdateMessageReadStatusAsync(long messageId);
+    Task<TaktMessageDto> MarkMessageUnreadAsync(TaktMessageUnreadDto dto);
 
     /// <summary>
     /// 获取指定用户未读消息数量（SignalR Hub 调用）

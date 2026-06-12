@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktQuartzLogDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQuartzLog 生成，请按需审阅）
 // 
@@ -15,7 +15,6 @@ using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Enums;
-using Takt.Application.Dtos.Foundation;
 
 namespace Takt.Application.Dtos.Statistics.Logging;
 
@@ -56,7 +55,7 @@ public class TaktQuartzLogDto : TaktCompanyDtoBase
     /// <summary>
     /// 任务组名（执行时快照）
     /// </summary>
-    public string JobGroup { get; set; } = string.Empty;
+    public TaktQuartzLogJobGroup JobGroup { get; set; }
 
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
@@ -146,7 +145,7 @@ public class TaktQuartzLogQueryDto : TaktPagedQuery
     /// <summary>
     /// 任务组名（执行时快照）
     /// </summary>
-    public string? JobGroup { get; set; } = string.Empty;
+    public TaktQuartzLogJobGroup? JobGroup { get; set; }
 
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
@@ -259,8 +258,7 @@ public class TaktQuartzLogCreateDto
     /// <summary>
     /// 任务组名（执行时快照）
     /// </summary>
-    [Required(ErrorMessage = "任务组名（执行时快照）不能为空")]
-    public string JobGroup { get; set; } = string.Empty;
+    public TaktQuartzLogJobGroup JobGroup { get; set; }
 
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）
@@ -399,7 +397,7 @@ public class TaktQuartzLogExportDto
     /// <summary>
     /// 任务组名（执行时快照）
     /// </summary>
-    public string JobGroup { get; set; } = string.Empty;
+    public TaktQuartzLogJobGroup JobGroup { get; set; }
 
     /// <summary>
     /// 任务类型（1=程序集 2=网络请求 3=SQL语句）

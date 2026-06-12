@@ -48,7 +48,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var configuredCompanyCodes = configuration.RequireDatabase().CompanyCodes;
         var companies = await companyRepository.GetListAsync(
-            c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+            c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         var orderedCompanies = TaktDatabaseOptions.OrderByConfiguredCodes(
             configuredCompanyCodes,
             companies,
@@ -86,7 +86,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
     private static IEnumerable<(string EmployeeNo, string PostCode)> GetEmployeePostTemplates(TaktCompany company)
     {
         if (string.Equals(company.DefaultCulture, "zh-CN", StringComparison.OrdinalIgnoreCase)
-            && company.CompanyType == TaktCompanyType.Manufacturing)
+            && company.CompanyType == 1)
         {
             yield return ("900001", "POST01");
             yield return ("900002", "POST02");

@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// <see cref="Dictionary{TKey,TValue}"/> 形式 SQL 结果行读取器（无状态纯函数）。
+/// Dictionary{TKey,TValue} 形式 SQL 结果行读取器（无状态纯函数）。
 /// </summary>
 public static class TaktSqlRowReader
 {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Workflow
 // 文件名称：TaktFlowTasksController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程用户任务控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Workflow;
 /// 流程用户任务控制器
 /// 提供流程用户任务的 REST API
 /// </summary>
-[ApiModule(TaktModule.Workflow, "工作流")]
+[ApiModule(6, "工作流")]
 [Route("api/[controller]", Name = "流程用户任务")]
 public class TaktFlowTasksController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("workflow:flowtask:list", "流程用户任务列表")]
+    [TaktPermission("workflow:todo:list", "流程用户任务列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetFlowTaskListAsync([FromQuery] TaktFlowTaskQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程用户任务ID</param>
     /// <returns>流程用户任务DTO</returns>
-    [TaktPermission("workflow:flowtask:query", "流程用户任务详情")]
+    [TaktPermission("workflow:todo:query", "流程用户任务详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFlowTaskByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// 获取流程用户任务选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("workflow:flowtask:query", "流程用户任务选项")]
+    [TaktPermission("workflow:todo:query", "流程用户任务选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetFlowTaskOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>流程用户任务DTO</returns>
-    [TaktPermission("workflow:flowtask:create", "创建流程用户任务")]
+    [TaktPermission("workflow:todo:create", "创建流程用户任务")]
     [HttpPost]
     public async Task<IActionResult> CreateFlowTaskAsync([FromBody] TaktFlowTaskCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// <param name="id">流程用户任务ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>流程用户任务DTO</returns>
-    [TaktPermission("workflow:flowtask:update", "更新流程用户任务")]
+    [TaktPermission("workflow:todo:update", "更新流程用户任务")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFlowTaskAsync(long id, [FromBody] TaktFlowTaskUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程用户任务ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowtask:delete", "删除流程用户任务")]
+    [TaktPermission("workflow:todo:delete", "删除流程用户任务")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFlowTaskByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowtask:delete", "批量删除流程用户任务")]
+    [TaktPermission("workflow:todo:delete", "批量删除流程用户任务")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteFlowTaskBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO（TaktFlowTaskStatus 枚举）</param>
     /// <returns>流程用户任务DTO</returns>
-    [TaktPermission("workflow:flowtask:update", "更新流程用户任务状态")]
+    [TaktPermission("workflow:todo:approve", "更新流程用户任务状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateFlowTaskStatusAsync([FromBody] TaktFlowTaskStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>流程用户任务DTO</returns>
-    [TaktPermission("workflow:flowtask:update", "更新流程用户任务排序")]
+    [TaktPermission("workflow:todo:update", "更新流程用户任务排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateFlowTaskSortAsync([FromBody] TaktFlowTaskSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowtask:import", "获取流程用户任务导入模板")]
+    [TaktPermission("workflow:todo:import", "获取流程用户任务导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetFlowTaskTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("workflow:flowtask:import", "导入流程用户任务")]
+    [TaktPermission("workflow:todo:import", "导入流程用户任务")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportFlowTaskAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktFlowTasksController : TaktControllerBase
     /// 导出流程用户任务
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowtask:export", "导出流程用户任务")]
+    [TaktPermission("workflow:todo:export", "导出流程用户任务")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportFlowTaskAsync([FromQuery] TaktFlowTaskQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

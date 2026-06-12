@@ -42,26 +42,11 @@ public interface ITaktOnlineService
     Task<List<TaktSelectOption>> GetOnlineOptionsAsync();
 
     /// <summary>
-    /// 创建在线用户
-    /// </summary>
-    /// <param name="dto">创建DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktOnlineDto> CreateOnlineAsync(TaktOnlineCreateDto dto);
-
-    /// <summary>
     /// 注册 SignalR 在线会话（同租户+公司+用户复用主记录；其它仍 Online 的会话标为离线）
     /// </summary>
     /// <param name="dto">连接信息</param>
     /// <returns>在线用户 DTO</returns>
     Task<TaktOnlineDto> RegisterOnlineSessionAsync(TaktOnlineCreateDto dto);
-
-    /// <summary>
-    /// 更新在线用户
-    /// </summary>
-    /// <param name="id">在线用户ID</param>
-    /// <param name="dto">更新DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktOnlineDto> UpdateOnlineAsync(long id, TaktOnlineUpdateDto dto);
 
     /// <summary>
     /// 删除在线用户

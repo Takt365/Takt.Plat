@@ -59,7 +59,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        var companies = await companyRepository.GetListAsync(c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+        var companies = await companyRepository.GetListAsync(c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
 
         if (companies == null || companies.Count == 0)
         {
@@ -169,7 +169,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                 Gender = 0,
                 EmployeeStatus = 2, // 2=正式
                 JoinedDate = DateTime.Now,
-                IsBuiltIn = TaktYesNo.Yes
+                IsBuiltIn = 1
             };
             employee = await repository.CreateAsync(employee);
             return (employee, 1, 0);
@@ -179,7 +179,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
             // 存在：更新记录（排除唯一索引字段）
             employee.Name = name;
             employee.EmployeeStatus = 2; // 2=正式
-            employee.IsBuiltIn = TaktYesNo.Yes;
+            employee.IsBuiltIn = 1;
 
             // 使用 IgnoreColumns 排除唯一索引字段（EmployeeNo），避免更新时触发唯一约束冲突
             // 唯一索引: ix_employee_no (TenantCode + CompanyCode + EmployeeNo)

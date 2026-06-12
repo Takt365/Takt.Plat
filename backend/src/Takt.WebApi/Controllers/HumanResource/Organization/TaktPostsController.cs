@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.HumanResource.Organization
 // 文件名称：TaktPostsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：岗位控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.HumanResource.Organization;
 /// 岗位控制器
 /// 提供岗位的 REST API
 /// </summary>
-[ApiModule(TaktModule.HumanResource, "组织管理")]
+[ApiModule(5, "组织管理")]
 [Route("api/[controller]", Name = "岗位")]
 public class TaktPostsController : TaktControllerBase
 {

@@ -71,37 +71,39 @@ export enum TaktOperatingSystem {
 }
 
 /**
- * 在线消息读取状态（与后端 TaktMessageReadStatus 一致）
- */
-export enum TaktMessageReadStatus {
-  /** 未读 */
-  Unread = 0,
-  /** 已读 */
-  Read = 1,
-}
-
-/**
- * 在线消息类型（与后端 TaktMessageType 一致）
+ * 在线消息内容类型（与后端 TaktMessageType、字典 sys_message_type 一致）
  */
 export enum TaktMessageType {
-  /** 系统通知（广播） */
-  SystemNotice = 1,
-  /** 用户私信 */
-  UserMessage = 2,
-  /** 流程审批通知 */
-  ApprovalNotify = 4,
-  /** 强制下线 */
-  ForceLogout = 5,
-  /** 心跳 / 在线状态 */
-  Heartbeat = 6,
+  /** 文本 */
+  Text = 1,
+  /** 图片 */
+  Image = 2,
+  /** 文件 */
+  File = 3,
+  /** 系统消息 */
+  System = 4,
+  /** 视频 */
+  Video = 5,
+  /** 语音 */
+  Voice = 6,
 }
 
 /**
- * 在线消息分组（与后端 TaktMessageGroup 一致）
+ * 在线消息分组（与后端 TaktMessageGroup、字典 sys_message_group 一致）
  */
 export enum TaktMessageGroup {
-  /** 聊天 */
-  Chat = 1,
-  /** 通知 */
-  Notification = 2,
+  /** 协同 */
+  Collaboration = 1,
+  /** 公文 */
+  OfficialDocument = 2,
+  /** 文档 */
+  Document = 3,
+  /** 公告 */
+  Announcement = 4,
+  /** 其他 */
+  Other = 5,
+  /** 消息 */
+  Message = 6,
+  /** 提醒 */
+  Reminder = 7,
 }

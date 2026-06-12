@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：file.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -445,189 +445,6 @@ export interface FileStatus {
 
 
 /**
- * File 导入模板行 DTO
- * 对应前端 FileTemplate
- * @description 对应后端 TaktFileTemplateDto
- */
-export interface FileTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）
-   */
-  fileCode?: string;
-
-  /**
-   * 文件名称（存储文件名）
-   */
-  fileName?: string;
-
-  /**
-   * 文件原始名称（上传时的原始文件名）
-   */
-  fileOriginalName?: string;
-
-  /**
-   * 文件路径（相对路径或完整路径）
-   */
-  filePath?: string;
-
-  /**
-   * 文件大小（字节）
-   */
-  fileSize?: string;
-
-  /**
-   * 文件 MIME 类型
-   */
-  fileType?: string;
-
-  /**
-   * 文件扩展名
-   */
-  fileExtension?: string;
-
-  /**
-   * 文件哈希值（MD5 或 SHA256，用于去重与校验）
-   */
-  fileHash?: string;
-
-  /**
-   * 文件分类（字典 sys_file_category）
-   */
-  fileCategory?: number;
-
-  /**
-   * 存储方式（字典 sys_storage_type）
-   */
-  storageType?: number;
-
-  /**
-   * 存储配置（JSON，OSS/FTP 等扩展配置）
-   */
-  storageConfig?: string;
-
-  /**
-   * 访问地址（文件 URL）
-   */
-  accessUrl?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extFieldJson?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * File 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 FileImport
- * @description 对应后端 TaktFileImportDto
- */
-export interface FileImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）
-   */
-  fileCode?: string;
-
-  /**
-   * 文件名称（存储文件名）
-   */
-  fileName?: string;
-
-  /**
-   * 文件原始名称（上传时的原始文件名）
-   */
-  fileOriginalName?: string;
-
-  /**
-   * 文件路径（相对路径或完整路径）
-   */
-  filePath?: string;
-
-  /**
-   * 文件大小（字节）
-   */
-  fileSize?: string;
-
-  /**
-   * 文件 MIME 类型
-   */
-  fileType?: string;
-
-  /**
-   * 文件扩展名
-   */
-  fileExtension?: string;
-
-  /**
-   * 文件哈希值（MD5 或 SHA256，用于去重与校验）
-   */
-  fileHash?: string;
-
-  /**
-   * 文件分类（字典 sys_file_category）
-   */
-  fileCategory?: number;
-
-  /**
-   * 存储方式（字典 sys_storage_type）
-   */
-  storageType?: number;
-
-  /**
-   * 存储配置（JSON，OSS/FTP 等扩展配置）
-   */
-  storageConfig?: string;
-
-  /**
-   * 访问地址（文件 URL）
-   */
-  accessUrl?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extFieldJson?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
  * File 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 FileExport
  * @description 对应后端 TaktFileExportDto
@@ -758,5 +575,130 @@ export interface FileExport {
    */
   createdAt: string;
 
+}
+
+// ========================================
+// 上传 / 下载
+// ========================================
+
+/**
+ * 文件上传结果 DTO
+ * @description 对应后端 TaktFileUploadResultDto
+ */
+export interface FileUploadResult {
+  fileId: string;
+  fileCode: string;
+  fileName: string;
+  fileOriginalName: string;
+  filePath: string;
+  fileSize: string;
+  fileType?: string;
+  fileExtension?: string;
+  fileHash?: string;
+  fileCategory: number;
+  /** 访问地址 */
+  accessUrl?: string;
+}
+
+/**
+ * 分片存在性检查请求
+ * @description 对应后端 TaktFileChunkCheckDto
+ */
+export interface FileChunkCheck {
+  identifier: string;
+  chunkNumber: number;
+  chunkSize: string;
+  totalSize: string;
+  fileName?: string;
+}
+
+/**
+ * 分片存在性检查结果
+ * @description 对应后端 TaktFileChunkCheckResultDto
+ */
+export interface FileChunkCheckResult {
+  exists: boolean;
+}
+
+/**
+ * 已上传分片列表查询
+ * @description 对应后端 TaktFileChunkListDto
+ */
+export interface FileChunkList {
+  identifier: string;
+  totalChunks?: number;
+}
+
+/**
+ * 已上传分片列表结果
+ * @description 对应后端 TaktFileChunkListResultDto
+ */
+export interface FileChunkListResult {
+  uploadedChunkNumbers: number[];
+}
+
+/**
+ * 取消分片上传
+ * @description 对应后端 TaktFileChunkCancelDto
+ */
+export interface FileChunkCancel {
+  identifier: string;
+}
+
+/**
+ * 分片上传元数据
+ * @description 对应后端 TaktFileChunkUploadDto
+ */
+export interface FileChunkUpload {
+  identifier: string;
+  chunkNumber: number;
+  totalChunks: number;
+  chunkSize: string;
+  totalSize: string;
+  fileName: string;
+}
+
+/**
+ * 分片合并请求
+ * @description 对应后端 TaktFileChunkMergeDto
+ */
+export interface FileChunkMerge {
+  identifier: string;
+  fileName: string;
+  totalChunks: number;
+  totalSize: string;
+  fileDescription?: string;
+  fileTags?: string;
+  isPublic?: number;
+  ipAddress?: string;
+  location?: string;
+  /** 上传类型：0=Avatar，1=Image，2=File */
+  fileUploadType?: number;
+  /** 目标文件名（可选） */
+  targetFileName?: string;
+}
+
+/**
+ * 整文件上传附加元数据
+ * @description 对应后端 TaktFileUploadMetaDto
+ */
+export interface FileUploadMeta {
+  fileDescription?: string;
+  fileTags?: string;
+  isPublic?: number;
+  ipAddress?: string;
+  location?: string;
+  /** 上传类型：0=Avatar，1=Image，2=File */
+  fileUploadType?: number;
+  /** 目标文件名（可选） */
+  targetFileName?: string;
+}
+
+/**
+ * 文件公开范围更新 DTO
+ * @description 对应后端 TaktFilePublicAccessDto
+ */
+export interface FilePublicAccess {
+  isPublic: number;
 }
 

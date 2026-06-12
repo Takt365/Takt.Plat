@@ -147,6 +147,36 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
     }
 
     /// <summary>
+    /// 批量获取用户角色名称（导出用；UserId → 逗号分隔角色名）
+    /// </summary>
+    /// <param name="userIds">用户 ID 集合</param>
+    /// <returns>用户 ID 到角色名称的映射</returns>
+    public async Task<IReadOnlyDictionary<long, string>> GetUserRoleNamesMapAsync(IEnumerable<long> userIds)
+    {
+        var idList = userIds?.Where(id => id > 0).Distinct().ToList() ?? [];
+        if (idList.Count == 0)
+        {
+            return new Dictionary<long, string>();
+        }
+        var userRoles = await _userRoleRepository.GetListAsync(x => idList.Contains(x.UserId));
+        if (userRoles.Count == 0)
+        {
+            return new Dictionary<long, string>();
+        }
+        var roleIds = userRoles.Select(ur => ur.RoleId).Distinct().ToList();
+        var roles = await _roleRepository.GetListAsync(r => roleIds.Contains(r.Id));
+        var roleNameMap = roles.ToDictionary(r => r.Id, r => r.RoleName ?? string.Empty);
+        return userRoles
+            .GroupBy(ur => ur.UserId)
+            .ToDictionary(
+                g => g.Key,
+                g => string.Join(
+                    ", ",
+                    g.Select(ur => roleNameMap.TryGetValue(ur.RoleId, out var name) ? name : string.Empty)
+                        .Where(name => !string.IsNullOrWhiteSpace(name))));
+    }
+
+    /// <summary>
     /// 【分配】用户角色全量覆盖（【查询】旧关联 → 【删除】软删除 → 【新增】批量插入）
     /// </summary>
     /// <param name="userId">用户ID</param>
@@ -267,8 +297,8 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
             UserId = userId,
             TenantCode = code,
             IsDefault = string.Equals(code, defaultTenantCode, StringComparison.OrdinalIgnoreCase)
-                ? TaktYesNo.Yes
-                : TaktYesNo.No,
+                ? 1
+                : 0,
         }).ToList();
 
         // 【分配】查询 → 删除 → 新增
@@ -331,7 +361,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         {
             UserId = userId,
             TenantCode = code,
-            IsDefault = TaktYesNo.No,
+            IsDefault = 0,
         }).ToList();
         await ReplaceTenantAssociationsAsync(
             _userTenantRepository,
@@ -373,8 +403,8 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
                 TenantCode = CurrentTenantCode,
                 CompanyCode = company.CompanyCode,
                 IsDefault = string.Equals(code, defaultCompanyCode, StringComparison.OrdinalIgnoreCase)
-                    ? TaktYesNo.Yes
-                    : TaktYesNo.No,
+                    ? 1
+                    : 0,
             };
         }).ToList();
 
@@ -1223,7 +1253,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
 
         // 【查询】当前租户下已启用的公司主数据
         var enabledCompanies = await _companyCatalogRepository.GetListAsync(
-            c => c.CompanyStatus == TaktCommonStatus.Enabled);
+            c => c.CompanyStatus == 1);
         var companyMap = enabledCompanies.ToDictionary(
             c => c.CompanyCode,
             c => c,

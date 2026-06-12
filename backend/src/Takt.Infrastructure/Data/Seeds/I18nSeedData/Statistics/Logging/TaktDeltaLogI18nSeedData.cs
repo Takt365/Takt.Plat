@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktDeltaLogI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDeltaLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging;
 
 /// <summary>
-/// TaktDeltaLog 实体国际化翻译种子（键前缀 entity.deltaLog.*）
+/// TaktDeltaLog 实体国际化翻译种子（键前缀 entity.deltalog.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktDeltaLogI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktDeltaLogI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 deltaLog 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 deltalog 实体翻译...", tenantCode);
 
         foreach (var item in GetDeltaLogTranslations())
         {
@@ -76,128 +75,128 @@ public class TaktDeltaLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktDeltaLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.deltaLog._self / entity.deltaLog.{{field}}；ResourceGroup=TaktModule.Statistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.deltalog._self / entity.deltalog.{{field}}；ResourceGroup=9；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetDeltaLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.deltaLog._self
-            new TranslationSeedItem("entity.deltaLog._self", "en-US", "Delta Log Information", "实体名称"),
-            // entity.deltaLog._self
-            new TranslationSeedItem("entity.deltaLog._self", "ja-JP", "差异日志信息", "实体名称"),
-            // entity.deltaLog._self
-            new TranslationSeedItem("entity.deltaLog._self", "zh-CN", "差异日志信息", "实体名称"),
-            // entity.deltaLog._self
-            new TranslationSeedItem("entity.deltaLog._self", "zh-HK", "差异日志信息", "实体名称"),
+            // entity.deltalog._self
+            new TranslationSeedItem("entity.deltalog._self", "en-US", "Delta Log Information", "实体名称"),
+            // entity.deltalog._self
+            new TranslationSeedItem("entity.deltalog._self", "ja-JP", "差异日志信息", "实体名称"),
+            // entity.deltalog._self
+            new TranslationSeedItem("entity.deltalog._self", "zh-CN", "差异日志信息", "实体名称"),
+            // entity.deltalog._self
+            new TranslationSeedItem("entity.deltalog._self", "zh-HK", "差异日志信息", "实体名称"),
 
-            // entity.deltaLog.username
-            new TranslationSeedItem("entity.deltaLog.username", "en-US", "用户名", "用户名（登录账号）"),
-            // entity.deltaLog.username
-            new TranslationSeedItem("entity.deltaLog.username", "ja-JP", "用户名", "用户名（登录账号）"),
-            // entity.deltaLog.username
-            new TranslationSeedItem("entity.deltaLog.username", "zh-CN", "用户名", "用户名（登录账号）"),
-            // entity.deltaLog.username
-            new TranslationSeedItem("entity.deltaLog.username", "zh-HK", "用户名", "用户名（登录账号）"),
+            // entity.deltalog.username
+            new TranslationSeedItem("entity.deltalog.username", "en-US", "用户名", "用户名（登录账号）"),
+            // entity.deltalog.username
+            new TranslationSeedItem("entity.deltalog.username", "ja-JP", "用户名", "用户名（登录账号）"),
+            // entity.deltalog.username
+            new TranslationSeedItem("entity.deltalog.username", "zh-CN", "用户名", "用户名（登录账号）"),
+            // entity.deltalog.username
+            new TranslationSeedItem("entity.deltalog.username", "zh-HK", "用户名", "用户名（登录账号）"),
 
-            // entity.deltaLog.opertype
-            new TranslationSeedItem("entity.deltaLog.opertype", "en-US", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
-            // entity.deltaLog.opertype
-            new TranslationSeedItem("entity.deltaLog.opertype", "ja-JP", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
-            // entity.deltaLog.opertype
-            new TranslationSeedItem("entity.deltaLog.opertype", "zh-CN", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
-            // entity.deltaLog.opertype
-            new TranslationSeedItem("entity.deltaLog.opertype", "zh-HK", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
+            // entity.deltalog.opertype
+            new TranslationSeedItem("entity.deltalog.opertype", "en-US", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
+            // entity.deltalog.opertype
+            new TranslationSeedItem("entity.deltalog.opertype", "ja-JP", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
+            // entity.deltalog.opertype
+            new TranslationSeedItem("entity.deltalog.opertype", "zh-CN", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
+            // entity.deltalog.opertype
+            new TranslationSeedItem("entity.deltalog.opertype", "zh-HK", "操作类型", "操作类型（INSERT、UPDATE、DELETE）"),
 
-            // entity.deltaLog.tablename
-            new TranslationSeedItem("entity.deltaLog.tablename", "en-US", "表名", "数据库表名（SugarTable 物理表名）"),
-            // entity.deltaLog.tablename
-            new TranslationSeedItem("entity.deltaLog.tablename", "ja-JP", "表名", "数据库表名（SugarTable 物理表名）"),
-            // entity.deltaLog.tablename
-            new TranslationSeedItem("entity.deltaLog.tablename", "zh-CN", "表名", "数据库表名（SugarTable 物理表名）"),
-            // entity.deltaLog.tablename
-            new TranslationSeedItem("entity.deltaLog.tablename", "zh-HK", "表名", "数据库表名（SugarTable 物理表名）"),
+            // entity.deltalog.tablename
+            new TranslationSeedItem("entity.deltalog.tablename", "en-US", "表名", "数据库表名（SugarTable 物理表名）"),
+            // entity.deltalog.tablename
+            new TranslationSeedItem("entity.deltalog.tablename", "ja-JP", "表名", "数据库表名（SugarTable 物理表名）"),
+            // entity.deltalog.tablename
+            new TranslationSeedItem("entity.deltalog.tablename", "zh-CN", "表名", "数据库表名（SugarTable 物理表名）"),
+            // entity.deltalog.tablename
+            new TranslationSeedItem("entity.deltalog.tablename", "zh-HK", "表名", "数据库表名（SugarTable 物理表名）"),
 
-            // entity.deltaLog.primarykeyid
-            new TranslationSeedItem("entity.deltaLog.primarykeyid", "en-US", "主键ID", "业务主键 ID"),
-            // entity.deltaLog.primarykeyid
-            new TranslationSeedItem("entity.deltaLog.primarykeyid", "ja-JP", "主键ID", "业务主键 ID"),
-            // entity.deltaLog.primarykeyid
-            new TranslationSeedItem("entity.deltaLog.primarykeyid", "zh-CN", "主键ID", "业务主键 ID"),
-            // entity.deltaLog.primarykeyid
-            new TranslationSeedItem("entity.deltaLog.primarykeyid", "zh-HK", "主键ID", "业务主键 ID"),
+            // entity.deltalog.primarykeyid
+            new TranslationSeedItem("entity.deltalog.primarykeyid", "en-US", "主键ID", "业务主键 ID"),
+            // entity.deltalog.primarykeyid
+            new TranslationSeedItem("entity.deltalog.primarykeyid", "ja-JP", "主键ID", "业务主键 ID"),
+            // entity.deltalog.primarykeyid
+            new TranslationSeedItem("entity.deltalog.primarykeyid", "zh-CN", "主键ID", "业务主键 ID"),
+            // entity.deltalog.primarykeyid
+            new TranslationSeedItem("entity.deltalog.primarykeyid", "zh-HK", "主键ID", "业务主键 ID"),
 
-            // entity.deltaLog.beforedata
-            new TranslationSeedItem("entity.deltaLog.beforedata", "en-US", "修改前数据", "修改前数据 JSON（旧值快照）"),
-            // entity.deltaLog.beforedata
-            new TranslationSeedItem("entity.deltaLog.beforedata", "ja-JP", "修改前数据", "修改前数据 JSON（旧值快照）"),
-            // entity.deltaLog.beforedata
-            new TranslationSeedItem("entity.deltaLog.beforedata", "zh-CN", "修改前数据", "修改前数据 JSON（旧值快照）"),
-            // entity.deltaLog.beforedata
-            new TranslationSeedItem("entity.deltaLog.beforedata", "zh-HK", "修改前数据", "修改前数据 JSON（旧值快照）"),
+            // entity.deltalog.beforedata
+            new TranslationSeedItem("entity.deltalog.beforedata", "en-US", "修改前数据", "修改前数据 JSON（旧值快照）"),
+            // entity.deltalog.beforedata
+            new TranslationSeedItem("entity.deltalog.beforedata", "ja-JP", "修改前数据", "修改前数据 JSON（旧值快照）"),
+            // entity.deltalog.beforedata
+            new TranslationSeedItem("entity.deltalog.beforedata", "zh-CN", "修改前数据", "修改前数据 JSON（旧值快照）"),
+            // entity.deltalog.beforedata
+            new TranslationSeedItem("entity.deltalog.beforedata", "zh-HK", "修改前数据", "修改前数据 JSON（旧值快照）"),
 
-            // entity.deltaLog.afterdata
-            new TranslationSeedItem("entity.deltaLog.afterdata", "en-US", "修改后数据", "修改后数据 JSON（新值快照）"),
-            // entity.deltaLog.afterdata
-            new TranslationSeedItem("entity.deltaLog.afterdata", "ja-JP", "修改后数据", "修改后数据 JSON（新值快照）"),
-            // entity.deltaLog.afterdata
-            new TranslationSeedItem("entity.deltaLog.afterdata", "zh-CN", "修改后数据", "修改后数据 JSON（新值快照）"),
-            // entity.deltaLog.afterdata
-            new TranslationSeedItem("entity.deltaLog.afterdata", "zh-HK", "修改后数据", "修改后数据 JSON（新值快照）"),
+            // entity.deltalog.afterdata
+            new TranslationSeedItem("entity.deltalog.afterdata", "en-US", "修改后数据", "修改后数据 JSON（新值快照）"),
+            // entity.deltalog.afterdata
+            new TranslationSeedItem("entity.deltalog.afterdata", "ja-JP", "修改后数据", "修改后数据 JSON（新值快照）"),
+            // entity.deltalog.afterdata
+            new TranslationSeedItem("entity.deltalog.afterdata", "zh-CN", "修改后数据", "修改后数据 JSON（新值快照）"),
+            // entity.deltalog.afterdata
+            new TranslationSeedItem("entity.deltalog.afterdata", "zh-HK", "修改后数据", "修改后数据 JSON（新值快照）"),
 
-            // entity.deltaLog.diffdata
-            new TranslationSeedItem("entity.deltaLog.diffdata", "en-US", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
-            // entity.deltaLog.diffdata
-            new TranslationSeedItem("entity.deltaLog.diffdata", "ja-JP", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
-            // entity.deltaLog.diffdata
-            new TranslationSeedItem("entity.deltaLog.diffdata", "zh-CN", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
-            // entity.deltaLog.diffdata
-            new TranslationSeedItem("entity.deltaLog.diffdata", "zh-HK", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
+            // entity.deltalog.diffdata
+            new TranslationSeedItem("entity.deltalog.diffdata", "en-US", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
+            // entity.deltalog.diffdata
+            new TranslationSeedItem("entity.deltalog.diffdata", "ja-JP", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
+            // entity.deltalog.diffdata
+            new TranslationSeedItem("entity.deltalog.diffdata", "zh-CN", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
+            // entity.deltalog.diffdata
+            new TranslationSeedItem("entity.deltalog.diffdata", "zh-HK", "差异内容", "差异内容 JSON（变更字段及旧/新值明细）"),
 
-            // entity.deltaLog.sqlstatement
-            new TranslationSeedItem("entity.deltaLog.sqlstatement", "en-US", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
-            // entity.deltaLog.sqlstatement
-            new TranslationSeedItem("entity.deltaLog.sqlstatement", "ja-JP", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
-            // entity.deltaLog.sqlstatement
-            new TranslationSeedItem("entity.deltaLog.sqlstatement", "zh-CN", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
-            // entity.deltaLog.sqlstatement
-            new TranslationSeedItem("entity.deltaLog.sqlstatement", "zh-HK", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
+            // entity.deltalog.sqlstatement
+            new TranslationSeedItem("entity.deltalog.sqlstatement", "en-US", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
+            // entity.deltalog.sqlstatement
+            new TranslationSeedItem("entity.deltalog.sqlstatement", "ja-JP", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
+            // entity.deltalog.sqlstatement
+            new TranslationSeedItem("entity.deltalog.sqlstatement", "zh-CN", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
+            // entity.deltalog.sqlstatement
+            new TranslationSeedItem("entity.deltalog.sqlstatement", "zh-HK", "SQL语句", "执行的 SQL 语句（AOP 捕获，可选）"),
 
-            // entity.deltaLog.operip
-            new TranslationSeedItem("entity.deltaLog.operip", "en-US", "操作IP", "操作 IP"),
-            // entity.deltaLog.operip
-            new TranslationSeedItem("entity.deltaLog.operip", "ja-JP", "操作IP", "操作 IP"),
-            // entity.deltaLog.operip
-            new TranslationSeedItem("entity.deltaLog.operip", "zh-CN", "操作IP", "操作 IP"),
-            // entity.deltaLog.operip
-            new TranslationSeedItem("entity.deltaLog.operip", "zh-HK", "操作IP", "操作 IP"),
+            // entity.deltalog.operip
+            new TranslationSeedItem("entity.deltalog.operip", "en-US", "操作IP", "操作 IP"),
+            // entity.deltalog.operip
+            new TranslationSeedItem("entity.deltalog.operip", "ja-JP", "操作IP", "操作 IP"),
+            // entity.deltalog.operip
+            new TranslationSeedItem("entity.deltalog.operip", "zh-CN", "操作IP", "操作 IP"),
+            // entity.deltalog.operip
+            new TranslationSeedItem("entity.deltalog.operip", "zh-HK", "操作IP", "操作 IP"),
 
-            // entity.deltaLog.operlocation
-            new TranslationSeedItem("entity.deltaLog.operlocation", "en-US", "操作地点", "操作地点（由 <see cref=\"OperIp\"/> 解析，如：中国-广东省-深圳市）"),
-            // entity.deltaLog.operlocation
-            new TranslationSeedItem("entity.deltaLog.operlocation", "ja-JP", "操作地点", "操作地点（由 <see cref=\"OperIp\"/> 解析，如：中国-广东省-深圳市）"),
-            // entity.deltaLog.operlocation
-            new TranslationSeedItem("entity.deltaLog.operlocation", "zh-CN", "操作地点", "操作地点（由 <see cref=\"OperIp\"/> 解析，如：中国-广东省-深圳市）"),
-            // entity.deltaLog.operlocation
-            new TranslationSeedItem("entity.deltaLog.operlocation", "zh-HK", "操作地点", "操作地点（由 <see cref=\"OperIp\"/> 解析，如：中国-广东省-深圳市）"),
+            // entity.deltalog.operlocation
+            new TranslationSeedItem("entity.deltalog.operlocation", "en-US", "操作地点", "操作地点（由 OperIp 解析，如：中国-广东省-深圳市）"),
+            // entity.deltalog.operlocation
+            new TranslationSeedItem("entity.deltalog.operlocation", "ja-JP", "操作地点", "操作地点（由 OperIp 解析，如：中国-广东省-深圳市）"),
+            // entity.deltalog.operlocation
+            new TranslationSeedItem("entity.deltalog.operlocation", "zh-CN", "操作地点", "操作地点（由 OperIp 解析，如：中国-广东省-深圳市）"),
+            // entity.deltalog.operlocation
+            new TranslationSeedItem("entity.deltalog.operlocation", "zh-HK", "操作地点", "操作地点（由 OperIp 解析，如：中国-广东省-深圳市）"),
 
-            // entity.deltaLog.opertime
-            new TranslationSeedItem("entity.deltaLog.opertime", "en-US", "操作时间", "操作时间（数据变更发生时刻）"),
-            // entity.deltaLog.opertime
-            new TranslationSeedItem("entity.deltaLog.opertime", "ja-JP", "操作时间", "操作时间（数据变更发生时刻）"),
-            // entity.deltaLog.opertime
-            new TranslationSeedItem("entity.deltaLog.opertime", "zh-CN", "操作时间", "操作时间（数据变更发生时刻）"),
-            // entity.deltaLog.opertime
-            new TranslationSeedItem("entity.deltaLog.opertime", "zh-HK", "操作时间", "操作时间（数据变更发生时刻）"),
+            // entity.deltalog.opertime
+            new TranslationSeedItem("entity.deltalog.opertime", "en-US", "操作时间", "操作时间（数据变更发生时刻）"),
+            // entity.deltalog.opertime
+            new TranslationSeedItem("entity.deltalog.opertime", "ja-JP", "操作时间", "操作时间（数据变更发生时刻）"),
+            // entity.deltalog.opertime
+            new TranslationSeedItem("entity.deltalog.opertime", "zh-CN", "操作时间", "操作时间（数据变更发生时刻）"),
+            // entity.deltalog.opertime
+            new TranslationSeedItem("entity.deltalog.opertime", "zh-HK", "操作时间", "操作时间（数据变更发生时刻）"),
 
-            // entity.deltaLog.elapsedtime
-            new TranslationSeedItem("entity.deltaLog.elapsedtime", "en-US", "执行耗时毫秒", "执行耗时（毫秒）"),
-            // entity.deltaLog.elapsedtime
-            new TranslationSeedItem("entity.deltaLog.elapsedtime", "ja-JP", "执行耗时毫秒", "执行耗时（毫秒）"),
-            // entity.deltaLog.elapsedtime
-            new TranslationSeedItem("entity.deltaLog.elapsedtime", "zh-CN", "执行耗时毫秒", "执行耗时（毫秒）"),
-            // entity.deltaLog.elapsedtime
-            new TranslationSeedItem("entity.deltaLog.elapsedtime", "zh-HK", "执行耗时毫秒", "执行耗时（毫秒）"),
+            // entity.deltalog.elapsedtime
+            new TranslationSeedItem("entity.deltalog.elapsedtime", "en-US", "执行耗时毫秒", "执行耗时（毫秒）"),
+            // entity.deltalog.elapsedtime
+            new TranslationSeedItem("entity.deltalog.elapsedtime", "ja-JP", "执行耗时毫秒", "执行耗时（毫秒）"),
+            // entity.deltalog.elapsedtime
+            new TranslationSeedItem("entity.deltalog.elapsedtime", "zh-CN", "执行耗时毫秒", "执行耗时（毫秒）"),
+            // entity.deltalog.elapsedtime
+            new TranslationSeedItem("entity.deltalog.elapsedtime", "zh-HK", "执行耗时毫秒", "执行耗时（毫秒）"),
         };
     }
 
@@ -215,8 +214,8 @@ public class TaktDeltaLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Statistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 9;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

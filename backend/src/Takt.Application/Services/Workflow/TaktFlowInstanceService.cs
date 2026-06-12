@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Workflow
 // 文件名称：TaktFlowInstanceService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程实例应用服务实现
 // 
@@ -596,7 +596,7 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
 
         if (!string.IsNullOrEmpty(queryDto?.FormCode))
         {
-            exp = exp.And(x => x.FormCode != null && x.FormCode.Contains(queryDto.FormCode));
+            exp = exp.And(x => x.FormCode.Contains(queryDto.FormCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ProcessContentSnapshot))

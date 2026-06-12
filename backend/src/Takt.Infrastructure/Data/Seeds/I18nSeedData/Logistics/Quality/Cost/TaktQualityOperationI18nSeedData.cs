@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityOperationI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityOperation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost;
 
 /// <summary>
-/// TaktQualityOperation 实体国际化翻译种子（键前缀 entity.qualityOperation.*）
+/// TaktQualityOperation 实体国际化翻译种子（键前缀 entity.qualityoperation.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktQualityOperationI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktQualityOperationI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityOperation 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityoperation 实体翻译...", tenantCode);
 
         foreach (var item in GetQualityOperationTranslations())
         {
@@ -76,155 +75,155 @@ public class TaktQualityOperationI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktQualityOperation 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.qualityOperation._self / entity.qualityOperation.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.qualityoperation._self / entity.qualityoperation.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetQualityOperationTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.qualityOperation._self
-            new TranslationSeedItem("entity.qualityOperation._self", "en-US", "Quality Operation Information", "实体名称"),
-            // entity.qualityOperation._self
-            new TranslationSeedItem("entity.qualityOperation._self", "ja-JP", "品质业务主表信息", "实体名称"),
-            // entity.qualityOperation._self
-            new TranslationSeedItem("entity.qualityOperation._self", "zh-CN", "品质业务主表信息", "实体名称"),
-            // entity.qualityOperation._self
-            new TranslationSeedItem("entity.qualityOperation._self", "zh-HK", "品质业务主表信息", "实体名称"),
+            // entity.qualityoperation._self
+            new TranslationSeedItem("entity.qualityoperation._self", "en-US", "Quality Operation Information", "实体名称"),
+            // entity.qualityoperation._self
+            new TranslationSeedItem("entity.qualityoperation._self", "ja-JP", "品质业务主表信息", "实体名称"),
+            // entity.qualityoperation._self
+            new TranslationSeedItem("entity.qualityoperation._self", "zh-CN", "品质业务主表信息", "实体名称"),
+            // entity.qualityoperation._self
+            new TranslationSeedItem("entity.qualityoperation._self", "zh-HK", "品质业务主表信息", "实体名称"),
 
-            // entity.qualityOperation.plantcode
-            new TranslationSeedItem("entity.qualityOperation.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.qualityOperation.plantcode
-            new TranslationSeedItem("entity.qualityOperation.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.qualityOperation.plantcode
-            new TranslationSeedItem("entity.qualityOperation.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.qualityOperation.plantcode
-            new TranslationSeedItem("entity.qualityOperation.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.qualityoperation.plantcode
+            new TranslationSeedItem("entity.qualityoperation.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.qualityoperation.plantcode
+            new TranslationSeedItem("entity.qualityoperation.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.qualityoperation.plantcode
+            new TranslationSeedItem("entity.qualityoperation.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.qualityoperation.plantcode
+            new TranslationSeedItem("entity.qualityoperation.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.qualityOperation.code
-            new TranslationSeedItem("entity.qualityOperation.code", "en-US", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
-            // entity.qualityOperation.code
-            new TranslationSeedItem("entity.qualityOperation.code", "ja-JP", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
-            // entity.qualityOperation.code
-            new TranslationSeedItem("entity.qualityOperation.code", "zh-CN", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
-            // entity.qualityOperation.code
-            new TranslationSeedItem("entity.qualityOperation.code", "zh-HK", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
+            // entity.qualityoperation.code
+            new TranslationSeedItem("entity.qualityoperation.code", "en-US", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
+            // entity.qualityoperation.code
+            new TranslationSeedItem("entity.qualityoperation.code", "ja-JP", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
+            // entity.qualityoperation.code
+            new TranslationSeedItem("entity.qualityoperation.code", "zh-CN", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
+            // entity.qualityoperation.code
+            new TranslationSeedItem("entity.qualityoperation.code", "zh-HK", "品质业务编码", "品质业务编码(唯一,如:QO-2026-0001)"),
 
-            // entity.qualityOperation.operationmonth
-            new TranslationSeedItem("entity.qualityOperation.operationmonth", "en-US", "业务年月", "业务年月(格式:2026-05)"),
-            // entity.qualityOperation.operationmonth
-            new TranslationSeedItem("entity.qualityOperation.operationmonth", "ja-JP", "业务年月", "业务年月(格式:2026-05)"),
-            // entity.qualityOperation.operationmonth
-            new TranslationSeedItem("entity.qualityOperation.operationmonth", "zh-CN", "业务年月", "业务年月(格式:2026-05)"),
-            // entity.qualityOperation.operationmonth
-            new TranslationSeedItem("entity.qualityOperation.operationmonth", "zh-HK", "业务年月", "业务年月(格式:2026-05)"),
+            // entity.qualityoperation.operationmonth
+            new TranslationSeedItem("entity.qualityoperation.operationmonth", "en-US", "业务年月", "业务年月(格式:2026-05)"),
+            // entity.qualityoperation.operationmonth
+            new TranslationSeedItem("entity.qualityoperation.operationmonth", "ja-JP", "业务年月", "业务年月(格式:2026-05)"),
+            // entity.qualityoperation.operationmonth
+            new TranslationSeedItem("entity.qualityoperation.operationmonth", "zh-CN", "业务年月", "业务年月(格式:2026-05)"),
+            // entity.qualityoperation.operationmonth
+            new TranslationSeedItem("entity.qualityoperation.operationmonth", "zh-HK", "业务年月", "业务年月(格式:2026-05)"),
 
-            // entity.qualityOperation.customername
-            new TranslationSeedItem("entity.qualityOperation.customername", "en-US", "顾客名", "顾客名"),
-            // entity.qualityOperation.customername
-            new TranslationSeedItem("entity.qualityOperation.customername", "ja-JP", "顾客名", "顾客名"),
-            // entity.qualityOperation.customername
-            new TranslationSeedItem("entity.qualityOperation.customername", "zh-CN", "顾客名", "顾客名"),
-            // entity.qualityOperation.customername
-            new TranslationSeedItem("entity.qualityOperation.customername", "zh-HK", "顾客名", "顾客名"),
+            // entity.qualityoperation.customername
+            new TranslationSeedItem("entity.qualityoperation.customername", "en-US", "顾客名", "顾客名"),
+            // entity.qualityoperation.customername
+            new TranslationSeedItem("entity.qualityoperation.customername", "ja-JP", "顾客名", "顾客名"),
+            // entity.qualityoperation.customername
+            new TranslationSeedItem("entity.qualityoperation.customername", "zh-CN", "顾客名", "顾客名"),
+            // entity.qualityoperation.customername
+            new TranslationSeedItem("entity.qualityoperation.customername", "zh-HK", "顾客名", "顾客名"),
 
-            // entity.qualityOperation.debitnoteno
-            new TranslationSeedItem("entity.qualityOperation.debitnoteno", "en-US", "Debit Note No", "Debit Note No"),
-            // entity.qualityOperation.debitnoteno
-            new TranslationSeedItem("entity.qualityOperation.debitnoteno", "ja-JP", "Debit Note No", "Debit Note No"),
-            // entity.qualityOperation.debitnoteno
-            new TranslationSeedItem("entity.qualityOperation.debitnoteno", "zh-CN", "Debit Note No", "Debit Note No"),
-            // entity.qualityOperation.debitnoteno
-            new TranslationSeedItem("entity.qualityOperation.debitnoteno", "zh-HK", "Debit Note No", "Debit Note No"),
+            // entity.qualityoperation.debitnoteno
+            new TranslationSeedItem("entity.qualityoperation.debitnoteno", "en-US", "Debit Note No", "Debit Note No"),
+            // entity.qualityoperation.debitnoteno
+            new TranslationSeedItem("entity.qualityoperation.debitnoteno", "ja-JP", "Debit Note No", "Debit Note No"),
+            // entity.qualityoperation.debitnoteno
+            new TranslationSeedItem("entity.qualityoperation.debitnoteno", "zh-CN", "Debit Note No", "Debit Note No"),
+            // entity.qualityoperation.debitnoteno
+            new TranslationSeedItem("entity.qualityoperation.debitnoteno", "zh-HK", "Debit Note No", "Debit Note No"),
 
-            // entity.qualityOperation.recorder
-            new TranslationSeedItem("entity.qualityOperation.recorder", "en-US", "记录者", "记录者"),
-            // entity.qualityOperation.recorder
-            new TranslationSeedItem("entity.qualityOperation.recorder", "ja-JP", "记录者", "记录者"),
-            // entity.qualityOperation.recorder
-            new TranslationSeedItem("entity.qualityOperation.recorder", "zh-CN", "记录者", "记录者"),
-            // entity.qualityOperation.recorder
-            new TranslationSeedItem("entity.qualityOperation.recorder", "zh-HK", "记录者", "记录者"),
+            // entity.qualityoperation.recorder
+            new TranslationSeedItem("entity.qualityoperation.recorder", "en-US", "记录者", "记录者"),
+            // entity.qualityoperation.recorder
+            new TranslationSeedItem("entity.qualityoperation.recorder", "ja-JP", "记录者", "记录者"),
+            // entity.qualityoperation.recorder
+            new TranslationSeedItem("entity.qualityoperation.recorder", "zh-CN", "记录者", "记录者"),
+            // entity.qualityoperation.recorder
+            new TranslationSeedItem("entity.qualityoperation.recorder", "zh-HK", "记录者", "记录者"),
 
-            // entity.qualityOperation.totalqualitycost
-            new TranslationSeedItem("entity.qualityOperation.totalqualitycost", "en-US", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
-            // entity.qualityOperation.totalqualitycost
-            new TranslationSeedItem("entity.qualityOperation.totalqualitycost", "ja-JP", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
-            // entity.qualityOperation.totalqualitycost
-            new TranslationSeedItem("entity.qualityOperation.totalqualitycost", "zh-CN", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
-            // entity.qualityOperation.totalqualitycost
-            new TranslationSeedItem("entity.qualityOperation.totalqualitycost", "zh-HK", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityoperation.totalqualitycost
+            new TranslationSeedItem("entity.qualityoperation.totalqualitycost", "en-US", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityoperation.totalqualitycost
+            new TranslationSeedItem("entity.qualityoperation.totalqualitycost", "ja-JP", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityoperation.totalqualitycost
+            new TranslationSeedItem("entity.qualityoperation.totalqualitycost", "zh-CN", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityoperation.totalqualitycost
+            new TranslationSeedItem("entity.qualityoperation.totalqualitycost", "zh-HK", "质量总成本", "质量总成本(元,自动计算 = 各子表费用合计)"),
 
-            // entity.qualityOperation.costcurrency
-            new TranslationSeedItem("entity.qualityOperation.costcurrency", "en-US", "成本币种", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityOperation.costcurrency
-            new TranslationSeedItem("entity.qualityOperation.costcurrency", "ja-JP", "成本币种", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityOperation.costcurrency
-            new TranslationSeedItem("entity.qualityOperation.costcurrency", "zh-CN", "成本币种", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityOperation.costcurrency
-            new TranslationSeedItem("entity.qualityOperation.costcurrency", "zh-HK", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityoperation.costcurrency
+            new TranslationSeedItem("entity.qualityoperation.costcurrency", "en-US", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityoperation.costcurrency
+            new TranslationSeedItem("entity.qualityoperation.costcurrency", "ja-JP", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityoperation.costcurrency
+            new TranslationSeedItem("entity.qualityoperation.costcurrency", "zh-CN", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityoperation.costcurrency
+            new TranslationSeedItem("entity.qualityoperation.costcurrency", "zh-HK", "成本币种", "成本币种(CNY/USD/JPY等)"),
 
-            // entity.qualityOperation.incomingitems
-            new TranslationSeedItem("entity.qualityOperation.incomingitems", "en-US", "来料检验费用明细列表", "来料检验费用明细列表"),
-            // entity.qualityOperation.incomingitems
-            new TranslationSeedItem("entity.qualityOperation.incomingitems", "ja-JP", "来料检验费用明细列表", "来料检验费用明细列表"),
-            // entity.qualityOperation.incomingitems
-            new TranslationSeedItem("entity.qualityOperation.incomingitems", "zh-CN", "来料检验费用明细列表", "来料检验费用明细列表"),
-            // entity.qualityOperation.incomingitems
-            new TranslationSeedItem("entity.qualityOperation.incomingitems", "zh-HK", "来料检验费用明细列表", "来料检验费用明细列表"),
+            // entity.qualityoperation.incomingitems
+            new TranslationSeedItem("entity.qualityoperation.incomingitems", "en-US", "来料检验费用明细列表", "来料检验费用明细列表"),
+            // entity.qualityoperation.incomingitems
+            new TranslationSeedItem("entity.qualityoperation.incomingitems", "ja-JP", "来料检验费用明细列表", "来料检验费用明细列表"),
+            // entity.qualityoperation.incomingitems
+            new TranslationSeedItem("entity.qualityoperation.incomingitems", "zh-CN", "来料检验费用明细列表", "来料检验费用明细列表"),
+            // entity.qualityoperation.incomingitems
+            new TranslationSeedItem("entity.qualityoperation.incomingitems", "zh-HK", "来料检验费用明细列表", "来料检验费用明细列表"),
 
-            // entity.qualityOperation.firstarticleitems
-            new TranslationSeedItem("entity.qualityOperation.firstarticleitems", "en-US", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
-            // entity.qualityOperation.firstarticleitems
-            new TranslationSeedItem("entity.qualityOperation.firstarticleitems", "ja-JP", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
-            // entity.qualityOperation.firstarticleitems
-            new TranslationSeedItem("entity.qualityOperation.firstarticleitems", "zh-CN", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
-            // entity.qualityOperation.firstarticleitems
-            new TranslationSeedItem("entity.qualityOperation.firstarticleitems", "zh-HK", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
+            // entity.qualityoperation.firstarticleitems
+            new TranslationSeedItem("entity.qualityoperation.firstarticleitems", "en-US", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
+            // entity.qualityoperation.firstarticleitems
+            new TranslationSeedItem("entity.qualityoperation.firstarticleitems", "ja-JP", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
+            // entity.qualityoperation.firstarticleitems
+            new TranslationSeedItem("entity.qualityoperation.firstarticleitems", "zh-CN", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
+            // entity.qualityoperation.firstarticleitems
+            new TranslationSeedItem("entity.qualityoperation.firstarticleitems", "zh-HK", "初期/定期检定费用明细列表", "初期/定期检定费用明细列表"),
 
-            // entity.qualityOperation.calibrationitems
-            new TranslationSeedItem("entity.qualityOperation.calibrationitems", "en-US", "设备校正费用明细列表", "设备校正费用明细列表"),
-            // entity.qualityOperation.calibrationitems
-            new TranslationSeedItem("entity.qualityOperation.calibrationitems", "ja-JP", "设备校正费用明细列表", "设备校正费用明细列表"),
-            // entity.qualityOperation.calibrationitems
-            new TranslationSeedItem("entity.qualityOperation.calibrationitems", "zh-CN", "设备校正费用明细列表", "设备校正费用明细列表"),
-            // entity.qualityOperation.calibrationitems
-            new TranslationSeedItem("entity.qualityOperation.calibrationitems", "zh-HK", "设备校正费用明细列表", "设备校正费用明细列表"),
+            // entity.qualityoperation.calibrationitems
+            new TranslationSeedItem("entity.qualityoperation.calibrationitems", "en-US", "设备校正费用明细列表", "设备校正费用明细列表"),
+            // entity.qualityoperation.calibrationitems
+            new TranslationSeedItem("entity.qualityoperation.calibrationitems", "ja-JP", "设备校正费用明细列表", "设备校正费用明细列表"),
+            // entity.qualityoperation.calibrationitems
+            new TranslationSeedItem("entity.qualityoperation.calibrationitems", "zh-CN", "设备校正费用明细列表", "设备校正费用明细列表"),
+            // entity.qualityoperation.calibrationitems
+            new TranslationSeedItem("entity.qualityoperation.calibrationitems", "zh-HK", "设备校正费用明细列表", "设备校正费用明细列表"),
 
-            // entity.qualityOperation.otheritems
-            new TranslationSeedItem("entity.qualityOperation.otheritems", "en-US", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
-            // entity.qualityOperation.otheritems
-            new TranslationSeedItem("entity.qualityOperation.otheritems", "ja-JP", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
-            // entity.qualityOperation.otheritems
-            new TranslationSeedItem("entity.qualityOperation.otheritems", "zh-CN", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
-            // entity.qualityOperation.otheritems
-            new TranslationSeedItem("entity.qualityOperation.otheritems", "zh-HK", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
+            // entity.qualityoperation.otheritems
+            new TranslationSeedItem("entity.qualityoperation.otheritems", "en-US", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
+            // entity.qualityoperation.otheritems
+            new TranslationSeedItem("entity.qualityoperation.otheritems", "ja-JP", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
+            // entity.qualityoperation.otheritems
+            new TranslationSeedItem("entity.qualityoperation.otheritems", "zh-CN", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
+            // entity.qualityoperation.otheritems
+            new TranslationSeedItem("entity.qualityoperation.otheritems", "zh-HK", "其他通常业务费用明细列表", "其他通常业务费用明细列表"),
 
-            // entity.qualityOperation.outgoingitems
-            new TranslationSeedItem("entity.qualityOperation.outgoingitems", "en-US", "出货检验费用明细列表", "出货检验费用明细列表"),
-            // entity.qualityOperation.outgoingitems
-            new TranslationSeedItem("entity.qualityOperation.outgoingitems", "ja-JP", "出货检验费用明细列表", "出货检验费用明细列表"),
-            // entity.qualityOperation.outgoingitems
-            new TranslationSeedItem("entity.qualityOperation.outgoingitems", "zh-CN", "出货检验费用明细列表", "出货检验费用明细列表"),
-            // entity.qualityOperation.outgoingitems
-            new TranslationSeedItem("entity.qualityOperation.outgoingitems", "zh-HK", "出货检验费用明细列表", "出货检验费用明细列表"),
+            // entity.qualityoperation.outgoingitems
+            new TranslationSeedItem("entity.qualityoperation.outgoingitems", "en-US", "出货检验费用明细列表", "出货检验费用明细列表"),
+            // entity.qualityoperation.outgoingitems
+            new TranslationSeedItem("entity.qualityoperation.outgoingitems", "ja-JP", "出货检验费用明细列表", "出货检验费用明细列表"),
+            // entity.qualityoperation.outgoingitems
+            new TranslationSeedItem("entity.qualityoperation.outgoingitems", "zh-CN", "出货检验费用明细列表", "出货检验费用明细列表"),
+            // entity.qualityoperation.outgoingitems
+            new TranslationSeedItem("entity.qualityoperation.outgoingitems", "zh-HK", "出货检验费用明细列表", "出货检验费用明细列表"),
 
-            // entity.qualityOperation.reliabilityitems
-            new TranslationSeedItem("entity.qualityOperation.reliabilityitems", "en-US", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
-            // entity.qualityOperation.reliabilityitems
-            new TranslationSeedItem("entity.qualityOperation.reliabilityitems", "ja-JP", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
-            // entity.qualityOperation.reliabilityitems
-            new TranslationSeedItem("entity.qualityOperation.reliabilityitems", "zh-CN", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
-            // entity.qualityOperation.reliabilityitems
-            new TranslationSeedItem("entity.qualityOperation.reliabilityitems", "zh-HK", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
+            // entity.qualityoperation.reliabilityitems
+            new TranslationSeedItem("entity.qualityoperation.reliabilityitems", "en-US", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
+            // entity.qualityoperation.reliabilityitems
+            new TranslationSeedItem("entity.qualityoperation.reliabilityitems", "ja-JP", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
+            // entity.qualityoperation.reliabilityitems
+            new TranslationSeedItem("entity.qualityoperation.reliabilityitems", "zh-CN", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
+            // entity.qualityoperation.reliabilityitems
+            new TranslationSeedItem("entity.qualityoperation.reliabilityitems", "zh-HK", "信赖性评价/ORT费用明细列表", "信赖性评价/ORT费用明细列表"),
 
-            // entity.qualityOperation.customerresponseitems
-            new TranslationSeedItem("entity.qualityOperation.customerresponseitems", "en-US", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
-            // entity.qualityOperation.customerresponseitems
-            new TranslationSeedItem("entity.qualityOperation.customerresponseitems", "ja-JP", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
-            // entity.qualityOperation.customerresponseitems
-            new TranslationSeedItem("entity.qualityOperation.customerresponseitems", "zh-CN", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
-            // entity.qualityOperation.customerresponseitems
-            new TranslationSeedItem("entity.qualityOperation.customerresponseitems", "zh-HK", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
+            // entity.qualityoperation.customerresponseitems
+            new TranslationSeedItem("entity.qualityoperation.customerresponseitems", "en-US", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
+            // entity.qualityoperation.customerresponseitems
+            new TranslationSeedItem("entity.qualityoperation.customerresponseitems", "ja-JP", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
+            // entity.qualityoperation.customerresponseitems
+            new TranslationSeedItem("entity.qualityoperation.customerresponseitems", "zh-CN", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
+            // entity.qualityoperation.customerresponseitems
+            new TranslationSeedItem("entity.qualityoperation.customerresponseitems", "zh-HK", "顾客品质要求对应费用明细列表", "顾客品质要求对应费用明细列表"),
         };
     }
 
@@ -242,8 +241,8 @@ public class TaktQualityOperationI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

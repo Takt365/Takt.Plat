@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionTeamDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeam 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionTeam 生成，请按需审阅）
 // 
@@ -85,7 +85,7 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus Status { get; set; }
+    public int Status { get; set; }
 
 }
 
@@ -158,7 +158,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? Status { get; set; }
+    public int? Status { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -257,7 +257,7 @@ public class TaktProductionTeamCreateDto
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus Status { get; set; }
+    public int Status { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -312,7 +312,7 @@ public class TaktProductionTeamStatusDto
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "启用状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus Status { get; set; }
+    public int Status { get; set; }
 }
 
 // ========================================
@@ -383,7 +383,7 @@ public class TaktProductionTeamTemplateDto
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? Status { get; set; }
+    public int? Status { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -466,7 +466,7 @@ public class TaktProductionTeamImportDto
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? Status { get; set; }
+    public int? Status { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -550,7 +550,7 @@ public class TaktProductionTeamExportDto
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus Status { get; set; }
+    public int Status { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

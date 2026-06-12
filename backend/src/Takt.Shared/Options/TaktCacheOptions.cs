@@ -133,12 +133,12 @@ public class TaktCacheMemoryOptions
     public int SizeLimit { get; set; } = 4096;
 
     /// <summary>
-    /// 压缩百分比（0.0-1.0），映射到 <see cref="Microsoft.Extensions.Caching.Memory.MemoryCacheOptions.CompactionPercentage"/>
+    /// 压缩百分比（0.0-1.0），映射到 MemoryCacheOptions.CompactionPercentage
     /// </summary>
     public double CompactionPercentage { get; set; } = 0.25;
 
     /// <summary>
-    /// 过期扫描频率（秒），映射到 <see cref="Microsoft.Extensions.Caching.Memory.MemoryCacheOptions.ExpirationScanFrequency"/>
+    /// 过期扫描频率（秒），映射到 MemoryCacheOptions.ExpirationScanFrequency
     /// </summary>
     public int ExpirationScanFrequency { get; set; } = 60;
 

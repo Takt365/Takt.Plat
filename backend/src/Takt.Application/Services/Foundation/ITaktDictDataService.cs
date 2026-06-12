@@ -12,6 +12,7 @@
 
 using Takt.Application.Dtos.Foundation;
 using Takt.Shared.Models;
+using Takt.Shared.Models.Foundation;
 using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Foundation;
@@ -101,5 +102,18 @@ public interface ITaktDictDataService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportDictDataAsync(TaktDictDataQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 获取当前租户下全部字典数据（扁平列表，含 DictTypeCode）
+    /// </summary>
+    /// <returns>全部字典数据 DTO</returns>
+    Task<TaktDataDictAllDto> GetDataDictAllAsync();
+
+    /// <summary>
+    /// 按字典类型编码批量构建双向快照（导入 GetCode / 导出 GetName）
+    /// </summary>
+    /// <param name="dictTypeCodes">字典类型编码（与种子 dict_type_code 一致）</param>
+    /// <returns>租户级预加载快照</returns>
+    Task<TaktDictSnapshot> CreateDictSnapshotAsync(params string[] dictTypeCodes);
 
 }

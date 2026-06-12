@@ -21,7 +21,7 @@ namespace Takt.Infrastructure.Extensions;
 public static class TaktIpLocationCollectionExtensions
 {
     /// <summary>
-    /// 初始化 <see cref="TaktLocationHelper"/>（读取 wwwroot/Region 下 ip2region xdb）
+    /// 初始化 TaktLocationHelper（读取 wwwroot/Region 下 ip2region xdb）
     /// IPv4 库缺失时记录警告并跳过；IPv6 库可选
     /// </summary>
     /// <param name="app">Web 应用（WebRootPath 下须有 Region/ip2region_v4.xdb）</param>

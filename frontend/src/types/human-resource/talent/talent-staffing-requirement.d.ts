@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/talent
 // 文件名称：talent-staffing-requirement.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/talent 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -26,7 +26,7 @@ import type {
 } from '@/types/human-resource/personnel/employee';
 
 /**
- * 用人需求（审批单；状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
+ * 用人需求（审批单；状态见 TaktApprovalEntityBase.ApprovalStatus）
  * 对应前端 TaktTalentStaffingRequirementDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 TalentStaffingRequirement

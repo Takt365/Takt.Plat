@@ -60,7 +60,7 @@ public class TaktCostElement : TaktCompanyEntityBase
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "cost_element_status", ColumnDescription = "成本要素状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus CostElementStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int CostElementStatus { get; set; } = 1;
     /// <summary>
     /// 生效日期
     /// </summary>

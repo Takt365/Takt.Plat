@@ -4,7 +4,7 @@
 // 文件名称：{{ table.entity_class_name }}Validators.cs
 // 创建时间：2025-02-02
 // 创建人：{{ table.gen_author }}
-// 功能描述：{{ table.comment }} DTO 验证器（Create/Update）。UpdateDto 须继承 CreateDto（与 TaktUserUpdateDto 及 Dto.cs.sbn 生成一致），以便 UpdateValidator 使用 Include(CreateValidator)；其余与 Identity 模块相同：WebApi 注册 + TaktFluentValidationActionFilter。
+// 功能描述：{{ table.comment }} DTO 验证器（Create/Update）。UpdateDto 须继承 CreateDto（与 TaktUserUpdateDto 及 Dto.cs.sbn 生成一致），以便 UpdateValidator 使用 Include(CreateValidator)；其余与 Identity 模块相同：WebApi 注册 + TaktValidationFilter。
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

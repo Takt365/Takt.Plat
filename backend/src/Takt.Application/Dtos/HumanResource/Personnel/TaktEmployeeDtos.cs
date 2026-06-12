@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Employee 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployee 生成，请按需审阅）
 // 
@@ -171,7 +171,7 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否内置（种子员工不可删）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 紧急联系人姓名
@@ -382,7 +382,7 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否内置（种子员工不可删）
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 紧急联系人姓名
@@ -576,7 +576,7 @@ public class TaktEmployeeCreateDto
     /// <summary>
     /// 是否内置（种子员工不可删）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 紧急联系人姓名
@@ -993,7 +993,7 @@ public class TaktEmployeeExportDto
     /// <summary>
     /// 是否内置（种子员工不可删）
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 紧急联系人姓名

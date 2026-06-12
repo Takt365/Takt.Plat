@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktSelfServiceI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSelfService 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk;
 
 /// <summary>
-/// TaktSelfService 实体国际化翻译种子（键前缀 entity.selfService.*）
+/// TaktSelfService 实体国际化翻译种子（键前缀 entity.selfservice.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 selfService 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 selfservice 实体翻译...", tenantCode);
 
         foreach (var item in GetSelfServiceTranslations())
         {
@@ -76,83 +75,83 @@ public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktSelfService 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.selfService._self / entity.selfService.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.selfservice._self / entity.selfservice.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetSelfServiceTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.selfService._self
-            new TranslationSeedItem("entity.selfService._self", "en-US", "Self Service Information", "实体名称"),
-            // entity.selfService._self
-            new TranslationSeedItem("entity.selfService._self", "ja-JP", "服务台自助服务项信息", "实体名称"),
-            // entity.selfService._self
-            new TranslationSeedItem("entity.selfService._self", "zh-CN", "服务台自助服务项信息", "实体名称"),
-            // entity.selfService._self
-            new TranslationSeedItem("entity.selfService._self", "zh-HK", "服务台自助服务项信息", "实体名称"),
+            // entity.selfservice._self
+            new TranslationSeedItem("entity.selfservice._self", "en-US", "Self Service Information", "实体名称"),
+            // entity.selfservice._self
+            new TranslationSeedItem("entity.selfservice._self", "ja-JP", "服务台自助服务项信息", "实体名称"),
+            // entity.selfservice._self
+            new TranslationSeedItem("entity.selfservice._self", "zh-CN", "服务台自助服务项信息", "实体名称"),
+            // entity.selfservice._self
+            new TranslationSeedItem("entity.selfservice._self", "zh-HK", "服务台自助服务项信息", "实体名称"),
 
-            // entity.selfService.servicename
-            new TranslationSeedItem("entity.selfService.servicename", "en-US", "服务名称", "自助服务名称"),
-            // entity.selfService.servicename
-            new TranslationSeedItem("entity.selfService.servicename", "ja-JP", "服务名称", "自助服务名称"),
-            // entity.selfService.servicename
-            new TranslationSeedItem("entity.selfService.servicename", "zh-CN", "服务名称", "自助服务名称"),
-            // entity.selfService.servicename
-            new TranslationSeedItem("entity.selfService.servicename", "zh-HK", "服务名称", "自助服务名称"),
+            // entity.selfservice.servicename
+            new TranslationSeedItem("entity.selfservice.servicename", "en-US", "服务名称", "自助服务名称"),
+            // entity.selfservice.servicename
+            new TranslationSeedItem("entity.selfservice.servicename", "ja-JP", "服务名称", "自助服务名称"),
+            // entity.selfservice.servicename
+            new TranslationSeedItem("entity.selfservice.servicename", "zh-CN", "服务名称", "自助服务名称"),
+            // entity.selfservice.servicename
+            new TranslationSeedItem("entity.selfservice.servicename", "zh-HK", "服务名称", "自助服务名称"),
 
-            // entity.selfService.servicetype
-            new TranslationSeedItem("entity.selfService.servicetype", "en-US", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
-            // entity.selfService.servicetype
-            new TranslationSeedItem("entity.selfService.servicetype", "ja-JP", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
-            // entity.selfService.servicetype
-            new TranslationSeedItem("entity.selfService.servicetype", "zh-CN", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
-            // entity.selfService.servicetype
-            new TranslationSeedItem("entity.selfService.servicetype", "zh-HK", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
+            // entity.selfservice.servicetype
+            new TranslationSeedItem("entity.selfservice.servicetype", "en-US", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
+            // entity.selfservice.servicetype
+            new TranslationSeedItem("entity.selfservice.servicetype", "ja-JP", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
+            // entity.selfservice.servicetype
+            new TranslationSeedItem("entity.selfservice.servicetype", "zh-CN", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
+            // entity.selfservice.servicetype
+            new TranslationSeedItem("entity.selfservice.servicetype", "zh-HK", "服务类型", "服务类型（0=链接，1=表单，2=知识引导）"),
 
-            // entity.selfService.description
-            new TranslationSeedItem("entity.selfService.description", "en-US", "描述", "描述"),
-            // entity.selfService.description
-            new TranslationSeedItem("entity.selfService.description", "ja-JP", "描述", "描述"),
-            // entity.selfService.description
-            new TranslationSeedItem("entity.selfService.description", "zh-CN", "描述", "描述"),
-            // entity.selfService.description
-            new TranslationSeedItem("entity.selfService.description", "zh-HK", "描述", "描述"),
+            // entity.selfservice.description
+            new TranslationSeedItem("entity.selfservice.description", "en-US", "描述", "描述"),
+            // entity.selfservice.description
+            new TranslationSeedItem("entity.selfservice.description", "ja-JP", "描述", "描述"),
+            // entity.selfservice.description
+            new TranslationSeedItem("entity.selfservice.description", "zh-CN", "描述", "描述"),
+            // entity.selfservice.description
+            new TranslationSeedItem("entity.selfservice.description", "zh-HK", "描述", "描述"),
 
-            // entity.selfService.linkorcode
-            new TranslationSeedItem("entity.selfService.linkorcode", "en-US", "链接或表单编码", "链接地址或表单编码"),
-            // entity.selfService.linkorcode
-            new TranslationSeedItem("entity.selfService.linkorcode", "ja-JP", "链接或表单编码", "链接地址或表单编码"),
-            // entity.selfService.linkorcode
-            new TranslationSeedItem("entity.selfService.linkorcode", "zh-CN", "链接或表单编码", "链接地址或表单编码"),
-            // entity.selfService.linkorcode
-            new TranslationSeedItem("entity.selfService.linkorcode", "zh-HK", "链接或表单编码", "链接地址或表单编码"),
+            // entity.selfservice.linkorcode
+            new TranslationSeedItem("entity.selfservice.linkorcode", "en-US", "链接或表单编码", "链接地址或表单编码"),
+            // entity.selfservice.linkorcode
+            new TranslationSeedItem("entity.selfservice.linkorcode", "ja-JP", "链接或表单编码", "链接地址或表单编码"),
+            // entity.selfservice.linkorcode
+            new TranslationSeedItem("entity.selfservice.linkorcode", "zh-CN", "链接或表单编码", "链接地址或表单编码"),
+            // entity.selfservice.linkorcode
+            new TranslationSeedItem("entity.selfservice.linkorcode", "zh-HK", "链接或表单编码", "链接地址或表单编码"),
 
-            // entity.selfService.iconurl
-            new TranslationSeedItem("entity.selfService.iconurl", "en-US", "图标URL", "图标或图片 URL"),
-            // entity.selfService.iconurl
-            new TranslationSeedItem("entity.selfService.iconurl", "ja-JP", "图标URL", "图标或图片 URL"),
-            // entity.selfService.iconurl
-            new TranslationSeedItem("entity.selfService.iconurl", "zh-CN", "图标URL", "图标或图片 URL"),
-            // entity.selfService.iconurl
-            new TranslationSeedItem("entity.selfService.iconurl", "zh-HK", "图标URL", "图标或图片 URL"),
+            // entity.selfservice.iconurl
+            new TranslationSeedItem("entity.selfservice.iconurl", "en-US", "图标URL", "图标或图片 URL"),
+            // entity.selfservice.iconurl
+            new TranslationSeedItem("entity.selfservice.iconurl", "ja-JP", "图标URL", "图标或图片 URL"),
+            // entity.selfservice.iconurl
+            new TranslationSeedItem("entity.selfservice.iconurl", "zh-CN", "图标URL", "图标或图片 URL"),
+            // entity.selfservice.iconurl
+            new TranslationSeedItem("entity.selfservice.iconurl", "zh-HK", "图标URL", "图标或图片 URL"),
 
-            // entity.selfService.status
-            new TranslationSeedItem("entity.selfService.status", "en-US", "状态", "自助服务状态（1=启用，0=禁用）"),
-            // entity.selfService.status
-            new TranslationSeedItem("entity.selfService.status", "ja-JP", "状态", "自助服务状态（1=启用，0=禁用）"),
-            // entity.selfService.status
-            new TranslationSeedItem("entity.selfService.status", "zh-CN", "状态", "自助服务状态（1=启用，0=禁用）"),
-            // entity.selfService.status
-            new TranslationSeedItem("entity.selfService.status", "zh-HK", "状态", "自助服务状态（1=启用，0=禁用）"),
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "en-US", "状态", "自助服务状态（1=启用，0=禁用）"),
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "ja-JP", "状态", "自助服务状态（1=启用，0=禁用）"),
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "zh-CN", "状态", "自助服务状态（1=启用，0=禁用）"),
+            // entity.selfservice.status
+            new TranslationSeedItem("entity.selfservice.status", "zh-HK", "状态", "自助服务状态（1=启用，0=禁用）"),
 
-            // entity.selfService.sortorder
-            new TranslationSeedItem("entity.selfService.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
-            // entity.selfService.sortorder
-            new TranslationSeedItem("entity.selfService.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
-            // entity.selfService.sortorder
-            new TranslationSeedItem("entity.selfService.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
-            // entity.selfService.sortorder
-            new TranslationSeedItem("entity.selfService.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+            // entity.selfservice.sortorder
+            new TranslationSeedItem("entity.selfservice.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
+            // entity.selfservice.sortorder
+            new TranslationSeedItem("entity.selfservice.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
+            // entity.selfservice.sortorder
+            new TranslationSeedItem("entity.selfservice.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            // entity.selfservice.sortorder
+            new TranslationSeedItem("entity.selfservice.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
         };
     }
 
@@ -170,8 +169,8 @@ public class TaktSelfServiceI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

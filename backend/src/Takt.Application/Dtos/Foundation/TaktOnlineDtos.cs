@@ -4,7 +4,7 @@
 // 文件名称：TaktOnlineDtos.cs
 // 创建时间：2026-05-25
 // 创建人：Takt365(Auto Generated)
-// 功能描述：Online 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOnline 生成，请按需审阅）
+// 功能描述：Online 模块 DTO（含 SignalR 强退/统计推送入参）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -60,7 +60,7 @@ public class TaktOnlineDto : TaktCompanyDtoBase
     /// <summary>
     /// 在线状态（0=在线，1=离线，2=离开）
     /// </summary>
-    public TaktOnlineStatus OnlineStatus { get; set; } = TaktOnlineStatus.Online;
+    public int OnlineStatus { get; set; } = 0;
 
     /// <summary>
     /// 连接 IP 地址
@@ -80,17 +80,17 @@ public class TaktOnlineDto : TaktCompanyDtoBase
     /// <summary>
     /// 设备类型
     /// </summary>
-    public TaktDeviceType? DeviceType { get; set; }
+    public int? DeviceType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public TaktBrowserType? BrowserType { get; set; }
+    public int? BrowserType { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public TaktOperatingSystem? OperatingSystem { get; set; }
+    public int? OperatingSystem { get; set; }
 
     /// <summary>
     /// 连接时间
@@ -153,7 +153,7 @@ public class TaktOnlineQueryDto : TaktPagedQuery
     /// <summary>
     /// 在线状态（0=在线，1=离线，2=离开）
     /// </summary>
-    public TaktOnlineStatus? OnlineStatus { get; set; }
+    public int? OnlineStatus { get; set; }
 
     /// <summary>
     /// 连接 IP 地址
@@ -173,17 +173,17 @@ public class TaktOnlineQueryDto : TaktPagedQuery
     /// <summary>
     /// 设备类型
     /// </summary>
-    public TaktDeviceType? DeviceType { get; set; }
+    public int? DeviceType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public TaktBrowserType? BrowserType { get; set; }
+    public int? BrowserType { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public TaktOperatingSystem? OperatingSystem { get; set; }
+    public int? OperatingSystem { get; set; }
 
     /// <summary>
     /// 连接时间（范围查询-开始）
@@ -242,12 +242,9 @@ public class TaktOnlineQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建Online DTO
+// 创建 DTO
 // ========================================
 
-/// <summary>
-/// 创建Online DTO
-/// </summary>
 public class TaktOnlineCreateDto
 {
     /// <summary>
@@ -271,7 +268,7 @@ public class TaktOnlineCreateDto
     /// <summary>
     /// 在线状态（0=在线，1=离线，2=离开）
     /// </summary>
-    public TaktOnlineStatus OnlineStatus { get; set; } = TaktOnlineStatus.Online;
+    public int OnlineStatus { get; set; } = 0;
 
     /// <summary>
     /// 连接 IP 地址
@@ -291,17 +288,17 @@ public class TaktOnlineCreateDto
     /// <summary>
     /// 设备类型
     /// </summary>
-    public TaktDeviceType? DeviceType { get; set; }
+    public int? DeviceType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public TaktBrowserType? BrowserType { get; set; }
+    public int? BrowserType { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public TaktOperatingSystem? OperatingSystem { get; set; }
+    public int? OperatingSystem { get; set; }
 
     /// <summary>
     /// 连接时间
@@ -336,26 +333,6 @@ public class TaktOnlineCreateDto
 }
 
 // ========================================
-// 更新Online DTO
-// ========================================
-
-/// <summary>
-/// 更新Online DTO
-/// 继承 TaktOnlineCreateDto，添加 OnlineId 字段
-/// </summary>
-public class TaktOnlineUpdateDto : TaktOnlineCreateDto
-{
-    /// <summary>
-    /// OnlineID（标识要更新的实体）
-    /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long OnlineId { get; set; }
-
-}
-
-// ========================================
 // Online 状态 DTO
 // ========================================
 
@@ -376,7 +353,7 @@ public class TaktOnlineStatusDto
     /// 在线状态（0=在线，1=离线，2=离开）
     /// </summary>
     [Required(ErrorMessage = "在线状态（0=在线，1=离线，2=离开）不能为空")]
-    public TaktOnlineStatus OnlineStatus { get; set; } = TaktOnlineStatus.Online;
+    public int OnlineStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -419,7 +396,7 @@ public class TaktOnlineExportDto
     /// <summary>
     /// 在线状态（0=在线，1=离线，2=离开）
     /// </summary>
-    public TaktOnlineStatus OnlineStatus { get; set; } = TaktOnlineStatus.Online;
+    public int OnlineStatus { get; set; } = 0;
 
     /// <summary>
     /// 连接 IP 地址
@@ -439,17 +416,17 @@ public class TaktOnlineExportDto
     /// <summary>
     /// 设备类型
     /// </summary>
-    public TaktDeviceType? DeviceType { get; set; }
+    public int? DeviceType { get; set; }
 
     /// <summary>
     /// 浏览器类型
     /// </summary>
-    public TaktBrowserType? BrowserType { get; set; }
+    public int? BrowserType { get; set; }
 
     /// <summary>
     /// 操作系统
     /// </summary>
-    public TaktOperatingSystem? OperatingSystem { get; set; }
+    public int? OperatingSystem { get; set; }
 
     /// <summary>
     /// 连接时间
@@ -485,6 +462,60 @@ public class TaktOnlineExportDto
     /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
+}
+
+// ========================================
+// 强退 DTO
+// ========================================
+
+/// <summary>
+/// 在线用户强退 DTO
+/// </summary>
+public class TaktOnlineForceKickDto
+{
+    /// <summary>
+    /// SignalR 连接 ID（可选；主键查无记录时按连接 ID 回退定位）
+    /// </summary>
+    public string? ConnectionId { get; set; }
+
+    /// <summary>
+    /// 强退原因（可选）
+    /// </summary>
+    public string? Reason { get; set; }
+}
+
+/// <summary>
+/// 批量强退在线用户 DTO
+/// </summary>
+public class TaktOnlineForceKickBatchDto
+{
+    /// <summary>
+    /// 在线用户记录 ID 列表
+    /// </summary>
+    [Required(ErrorMessage = "在线用户 ID 列表不能为空")]
+    public IEnumerable<long> OnlineIds { get; set; } = Array.Empty<long>();
+
+    /// <summary>
+    /// 强退原因（可选）
+    /// </summary>
+    public string? Reason { get; set; }
+}
+
+/// <summary>
+/// SignalR 统计推送目标用户 DTO
+/// </summary>
+public class TaktSignalRPushStatisticsRequestDto
+{
+    /// <summary>
+    /// 目标用户名
+    /// </summary>
+    [Required(ErrorMessage = "用户名不能为空")]
+    public string UserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目标用户 ID（可选，API 传 string 与前端对齐）
+    /// </summary>
+    public string? UserId { get; set; }
 }
 
 // ========================================

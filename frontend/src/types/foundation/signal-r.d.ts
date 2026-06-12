@@ -110,6 +110,11 @@ export interface SignalRMessage {
   messageContent: string;
 
   /**
+   * 附件列表 JSON
+   */
+  attachments?: string;
+
+  /**
    * 消息类型
    */
   messageType: number;
@@ -120,9 +125,9 @@ export interface SignalRMessage {
   messageGroup?: number;
 
   /**
-   * 读取状态（0=未读，1=已读）
+   * 发送时间
    */
-  readStatus: number;
+  sendTime: string;
 
   /**
    * 读取时间
@@ -130,14 +135,9 @@ export interface SignalRMessage {
   readTime?: string;
 
   /**
-   * 发送时间
+   * 读取状态（0=未读，1=已读）
    */
-  sendTime: string;
-
-  /**
-   * 扩展数据 JSON
-   */
-  messageExtData?: string;
+  readStatus: number;
 }
 
 /**
@@ -245,9 +245,9 @@ export interface OnlineMessageEvent {
   message: string;
 
   /**
-   * 消息类型
+   * 消息内容类型（可选，上线欢迎消息不含此字段）
    */
-  messageType: number;
+  messageType?: number;
 }
 
 /**

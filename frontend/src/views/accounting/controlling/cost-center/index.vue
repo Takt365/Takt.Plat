@@ -164,6 +164,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('shortName')">
+      <a-form-item :label="t('entity.costCenter.shortname')">
+        <a-input
+          v-model:value="advancedQueryForm.shortName"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costCenter.shortname') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costCenterDesc')">
+      <a-form-item :label="t('entity.costCenter.costcenterdesc')">
+        <a-input
+          v-model:value="advancedQueryForm.costCenterDesc"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costCenter.costcenterdesc') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('parentId')">
       <a-form-item :label="t('entity.costCenter.parentid')">
         <a-input
@@ -453,6 +471,8 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   costCenterCode: '',
   costCenterName: '',
+  shortName: '',
+  costCenterDesc: '',
   parentId: '',
   costCenterType: undefined as number | undefined,
   managerId: '',
@@ -476,6 +496,8 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'costCenterCode', label: t('entity.costCenter.code') },
   { key: 'costCenterName', label: t('entity.costCenter.name') },
+  { key: 'shortName', label: t('entity.costCenter.shortname') },
+  { key: 'costCenterDesc', label: t('entity.costCenter.costcenterdesc') },
   { key: 'parentId', label: t('entity.costCenter.parentid') },
   { key: 'costCenterType', label: t('entity.costCenter.type') },
   { key: 'managerId', label: t('entity.costCenter.managerid') },
@@ -667,6 +689,8 @@ function matchesCostCenterRightQuery(record: Record<string, unknown>): boolean {
   }
   if (advancedQueryForm.value.costCenterCode && !String(record.costCenterCode ?? '').includes(String(advancedQueryForm.value.costCenterCode))) return false
   if (advancedQueryForm.value.costCenterName && !String(record.costCenterName ?? '').includes(String(advancedQueryForm.value.costCenterName))) return false
+  if (advancedQueryForm.value.shortName && !String(record.shortName ?? '').includes(String(advancedQueryForm.value.shortName))) return false
+  if (advancedQueryForm.value.costCenterDesc && !String(record.costCenterDesc ?? '').includes(String(advancedQueryForm.value.costCenterDesc))) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
   if (advancedQueryForm.value.costCenterType !== undefined && record.costCenterType !== advancedQueryForm.value.costCenterType) return false
   if (advancedQueryForm.value.managerId && !String(record.managerId ?? '').includes(String(advancedQueryForm.value.managerId))) return false
@@ -728,6 +752,8 @@ function buildCostCenterUpdateDto(
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     costCenterCode: costCenter.costCenterCode,
     costCenterName: costCenter.costCenterName,
+    shortName: costCenter.shortName,
+    costCenterDesc: costCenter.costCenterDesc,
     parentId: overrides.parentId,
     costCenterType: costCenter.costCenterType,
     managerId: costCenter.managerId,
@@ -883,6 +909,24 @@ watchEffect(() => {
     width: 160,
     resizable: true,
     ellipsis: true,
+  },
+  {
+    title: t('entity.costCenter.shortname'),
+    dataIndex: 'shortName',
+    key: 'shortName',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getCostCenterField(record, 'shortName') ?? ''
+  },
+  {
+    title: t('entity.costCenter.costcenterdesc'),
+    dataIndex: 'costCenterDesc',
+    key: 'costCenterDesc',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getCostCenterField(record, 'costCenterDesc') ?? ''
   },
   {
     title: t('entity.costCenter.parentid'),
@@ -1050,7 +1094,8 @@ async function loadData() {
   }
 }
 
-/** 右侧查询（客户端过滤，不请求接口） */
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 const handleSearch = () => {
   tableCurrentPage.value = 1
 }
@@ -1061,6 +1106,8 @@ const handleReset = () => {
   advancedQueryForm.value = {
   costCenterCode: '',
   costCenterName: '',
+  shortName: '',
+  costCenterDesc: '',
   parentId: '',
   costCenterType: undefined as number | undefined,
   managerId: '',
@@ -1251,6 +1298,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   costCenterCode: '',
   costCenterName: '',
+  shortName: '',
+  costCenterDesc: '',
   parentId: '',
   costCenterType: undefined as number | undefined,
   managerId: '',

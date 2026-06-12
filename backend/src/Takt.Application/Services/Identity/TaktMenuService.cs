@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktMenuService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单应用服务实现
 // 
@@ -103,7 +103,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
     /// <returns>树形选项</returns>
     public async Task<List<TaktTreeSelectOption>> GetMenuTreeOptionsAsync()
     {
-        var list = await _menuRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.MenuStatus == TaktCommonStatus.Enabled);
+        var list = await _menuRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.MenuStatus == 1);
         return BuildMenuTreeOptions(list, 0);
     }
 
@@ -142,7 +142,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
         var list = await _menuRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode);
         var filtered = includeDisabled
             ? list
-            : list.Where(x => x.MenuStatus == TaktCommonStatus.Enabled).ToList();
+            : list.Where(x => x.MenuStatus == 1).ToList();
         return BuildMenuTree(filtered, parentId);
     }
 
@@ -177,7 +177,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
     public async Task<TaktMenuDto> CreateMenuAsync(TaktMenuCreateDto dto)
     {
         var entity = dto.Adapt<TaktMenu>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         var isUnique_ix_menu_code_unique = await _uniqueValidator.IsUniqueAsync(
             _menuRepository,
             x => x.MenuCode == entity.MenuCode);
@@ -262,7 +262,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
         {
             throw new TaktBusinessException("菜单不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置菜单不允许删除");
         }
@@ -285,7 +285,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
         {
             return;
         }
-        if (await _menuRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _menuRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置菜单不允许删除");
         }
@@ -307,7 +307,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
         {
             throw new TaktBusinessException("菜单不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.MenuStatus != TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == 1 && dto.MenuStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置菜单");
         }
@@ -369,7 +369,7 @@ public class TaktMenuService : TaktServiceBase, ITaktMenuService
             try
             {
                 var entity = rows[i].Adapt<TaktMenu>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.MenuCode}";
                 if (!importSeenKeys.Add(importKey))
                 {

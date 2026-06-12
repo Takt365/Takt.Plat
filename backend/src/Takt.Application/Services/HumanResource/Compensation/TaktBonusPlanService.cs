@@ -1,0 +1,394 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Services.HumanResource.Compensation
+// 文件名称：TaktBonusPlanService.cs
+// 创建时间：2026-06-12
+// 创建人：Takt365(Cursor AI)
+// 功能描述：奖金方案应用服务实现
+// 
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.Linq.Expressions;
+using Mapster;
+using SqlSugar;
+using Takt.Application.Dtos.HumanResource.Compensation;
+using Takt.Domain.Entities.HumanResource.Compensation;
+using Takt.Domain.Interfaces;
+using Takt.Domain.Repositories;
+using Takt.Shared.Exceptions;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models;
+using Takt.Shared.Options;
+
+namespace Takt.Application.Services.HumanResource.Compensation;
+
+/// <summary>
+/// 奖金方案应用服务
+/// </summary>
+public class TaktBonusPlanService : TaktServiceBase, ITaktBonusPlanService
+{
+    private readonly ITaktCompanyRepository<TaktBonusPlan> _bonusPlanRepository;
+    private readonly ITaktUniqueValidator _uniqueValidator;
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="bonusPlanRepository">奖金方案仓储</param>
+    /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="userContext">用户上下文</param>
+    /// <param name="localizationService">本地化服务</param>
+    public TaktBonusPlanService(
+        ITaktCompanyRepository<TaktBonusPlan> bonusPlanRepository,
+        ITaktUniqueValidator uniqueValidator,
+        ITaktUserContext? userContext = null,
+        ITaktLocalizationService? localizationService = null)
+        : base(userContext, localizationService)
+    {
+        _bonusPlanRepository = bonusPlanRepository;
+        _uniqueValidator = uniqueValidator;
+    }
+
+    /// <summary>
+    /// 获取奖金方案列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    public async Task<TaktPagedResult<TaktBonusPlanDto>> GetBonusPlanListAsync(TaktBonusPlanQueryDto queryDto)
+    {
+        var predicate = QueryExpression(queryDto);
+        var (data, total) = await _bonusPlanRepository.GetPagedAsync(
+            queryDto.PageIndex,
+            queryDto.PageSize,
+            predicate);
+        return TaktPagedResult<TaktBonusPlanDto>.Create(
+            data.Adapt<List<TaktBonusPlanDto>>(),
+            total,
+            queryDto.PageIndex,
+            queryDto.PageSize);
+    }
+
+    /// <summary>
+    /// 根据ID获取奖金方案
+    /// </summary>
+    /// <param name="id">奖金方案ID</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktBonusPlanDto?> GetBonusPlanByIdAsync(long id)
+    {
+        var entity = await _bonusPlanRepository.GetByIdAsync(id);
+        if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            return null;
+        }
+        return entity.Adapt<TaktBonusPlanDto>();
+    }
+
+    /// <summary>
+    /// 获取奖金方案选项列表
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    public async Task<List<TaktSelectOption>> GetBonusPlanOptionsAsync()
+    {
+        EnsureThreeLayerContext();
+        var list = await _bonusPlanRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PlanStatus == 1,
+            x => x.PlanName,
+            false);
+        return list.Select(e => new TaktSelectOption
+        {
+            DictValue = e.Id,
+            DictLabel = e.PlanName ?? e.Id.ToString(),
+        }).ToList();
+    }
+
+    /// <summary>
+    /// 创建奖金方案
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktBonusPlanDto> CreateBonusPlanAsync(TaktBonusPlanCreateDto dto)
+    {
+        var entity = dto.Adapt<TaktBonusPlan>();
+        var isUnique_ix_bonus_plan_code_unique = await _uniqueValidator.IsUniqueAsync(
+            _bonusPlanRepository,
+            x => x.PlanCode == entity.PlanCode);
+        if (!isUnique_ix_bonus_plan_code_unique)
+        {
+            throw new TaktBusinessException("奖金方案的PlanCode已存在");
+        }
+        entity = await _bonusPlanRepository.CreateAsync(entity);
+        return await GetBonusPlanByIdAsync(entity.Id) ?? entity.Adapt<TaktBonusPlanDto>();
+    }
+
+    /// <summary>
+    /// 更新奖金方案
+    /// </summary>
+    /// <param name="id">奖金方案ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktBonusPlanDto> UpdateBonusPlanAsync(long id, TaktBonusPlanUpdateDto dto)
+    {
+        var entity = await _bonusPlanRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("奖金方案不存在");
+        }
+        dto.Adapt(entity);
+        var isUnique_ix_bonus_plan_code_unique = await _uniqueValidator.IsUniqueAsync(
+            _bonusPlanRepository,
+            x => x.PlanCode == entity.PlanCode,
+            id);
+        if (!isUnique_ix_bonus_plan_code_unique)
+        {
+            throw new TaktBusinessException("奖金方案的PlanCode已存在");
+        }
+        await _bonusPlanRepository.UpdateAsync(entity);
+        return await GetBonusPlanByIdAsync(id) ?? throw new TaktBusinessException("奖金方案不存在");
+    }
+
+    /// <summary>
+    /// 删除奖金方案
+    /// </summary>
+    /// <param name="id">奖金方案ID</param>
+    /// <returns>任务</returns>
+    public async Task DeleteBonusPlanByIdAsync(long id)
+    {
+        var deleted = await _bonusPlanRepository.DeleteAsync(id);
+        if (!deleted)
+        {
+            throw new TaktBusinessException("奖金方案不存在或已删除");
+        }
+    }
+
+    /// <summary>
+    /// 批量删除奖金方案
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>任务</returns>
+    public async Task DeleteBonusPlanBatchAsync(IEnumerable<long> ids)
+    {
+        var idList = ids?.Distinct().ToList() ?? new List<long>();
+        if (idList.Count == 0)
+        {
+            return;
+        }
+        foreach (var id in idList)
+        {
+            await DeleteBonusPlanByIdAsync(id);
+        }
+    }
+
+    /// <summary>
+    /// 更新奖金方案状态
+    /// </summary>
+    /// <param name="dto">状态DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktBonusPlanDto> UpdateBonusPlanStatusAsync(TaktBonusPlanStatusDto dto)
+    {
+        var entity = await _bonusPlanRepository.GetByIdAsync(dto.BonusPlanId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("奖金方案不存在");
+        }
+        entity.PlanStatus = dto.PlanStatus;
+        await _bonusPlanRepository.UpdateAsync(entity);
+        return await GetBonusPlanByIdAsync(dto.BonusPlanId) ?? throw new TaktBusinessException("奖金方案不存在");
+    }
+
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
+    public async Task<(string fileName, byte[] content)> GetBonusPlanTemplateAsync(string? sheetName = null, string? fileName = null)
+    {
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktBonusPlanTemplateDto>(
+            sheetName ?? "奖金方案导入模板",
+            fileName ?? "奖金方案导入模板.xlsx");
+    }
+
+    /// <summary>
+    /// 导入奖金方案
+    /// </summary>
+    /// <param name="fileStream">Excel 文件流</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <returns>导入结果</returns>
+    public async Task<(int success, int fail, List<string> errors)> ImportBonusPlanAsync(Stream fileStream, string? sheetName = null)
+    {
+        var errors = new List<string>();
+        var success = 0;
+        var fail = 0;
+        var rows = await TaktExcelHelper.ImportAsync<TaktBonusPlanImportDto>(fileStream, sheetName ?? "奖金方案导入模板");
+        if (rows == null || rows.Count == 0)
+        {
+            errors.Add("Excel文件中没有数据");
+            return (0, 0, errors);
+        }
+        var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
+        for (var i = 0; i < rows.Count; i++)
+        {
+            try
+            {
+                var entity = rows[i].Adapt<TaktBonusPlan>();
+                var importKey = $"{entity.PlanCode}";
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（PlanCode）");
+                }
+                var isUnique_ix_bonus_plan_code_unique = await _uniqueValidator.IsUniqueAsync(
+                    _bonusPlanRepository,
+                    x => x.PlanCode == entity.PlanCode);
+                if (!isUnique_ix_bonus_plan_code_unique)
+                {
+                    throw new TaktBusinessException("奖金方案的PlanCode已存在");
+                }
+                await _bonusPlanRepository.CreateAsync(entity);
+                success += 1;
+            }
+            catch (Exception ex)
+            {
+                fail += 1;
+                errors.Add($"第{i + 2}行: {ex.Message}");
+            }
+        }
+        return (success, fail, errors);
+    }
+
+    /// <summary>
+    /// 导出奖金方案
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
+    public async Task<(string fileName, byte[] fileContent)> ExportBonusPlanAsync(TaktBonusPlanQueryDto? query = null, string? sheetName = null, string? fileName = null)
+    {
+        var predicate = QueryExpression(query ?? new TaktBonusPlanQueryDto());
+        var list = await _bonusPlanRepository.GetListAsync(predicate);
+        if (list == null || list.Count == 0)
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktBonusPlanExportDto>(),
+                sheetName ?? "奖金方案数据",
+                fileName ?? "奖金方案导出.xlsx");
+        }
+        var exportData = list.Adapt<List<TaktBonusPlanExportDto>>();
+        return await TaktExcelHelper.ExportAsync(
+            exportData,
+            sheetName ?? "奖金方案数据",
+            fileName ?? "奖金方案导出.xlsx");
+    }
+
+    // ========================================
+    // 查询表达式
+    // ========================================
+
+    /// <summary>
+    /// 构建奖金方案查询表达式
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>查询表达式</returns>
+    private static Expression<Func<TaktBonusPlan, bool>> QueryExpression(TaktBonusPlanQueryDto? queryDto)
+    {
+        var exp = Expressionable.Create<TaktBonusPlan>();
+
+        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        {
+            var keywords = queryDto.KeyWords;
+            exp = exp.And(x =>
+                (x.PlanCode != null && x.PlanCode.Contains(keywords))
+                || (x.PlanName != null && x.PlanName.Contains(keywords))
+                || SqlFunc.ToString(x.BonusType).Contains(keywords)
+                || SqlFunc.ToString(x.CalcMethod).Contains(keywords)
+                || SqlFunc.ToString(x.SalaryFormulaId).Contains(keywords)
+                || SqlFunc.ToString(x.DefaultAmount).Contains(keywords)
+                || SqlFunc.ToString(x.PlanStatus).Contains(keywords)
+                || (x.Description != null && x.Description.Contains(keywords))
+                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
+                || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
+                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
+            );
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlanCode))
+        {
+            exp = exp.And(x => x.PlanCode != null && x.PlanCode.Contains(queryDto.PlanCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlanName))
+        {
+            exp = exp.And(x => x.PlanName != null && x.PlanName.Contains(queryDto.PlanName));
+        }
+
+        if (queryDto?.BonusType.HasValue == true)
+        {
+            exp = exp.And(x => x.BonusType == queryDto.BonusType);
+        }
+
+        if (queryDto?.CalcMethod.HasValue == true)
+        {
+            exp = exp.And(x => x.CalcMethod == queryDto.CalcMethod);
+        }
+
+        if (queryDto?.SalaryFormulaId.HasValue == true)
+        {
+            exp = exp.And(x => x.SalaryFormulaId == queryDto.SalaryFormulaId);
+        }
+
+        if (queryDto?.DefaultAmount.HasValue == true)
+        {
+            exp = exp.And(x => x.DefaultAmount == queryDto.DefaultAmount);
+        }
+
+        if (queryDto?.PlanStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.PlanStatus == queryDto.PlanStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Description))
+        {
+            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        {
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        {
+            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        {
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+        }
+
+        if (queryDto?.EffectiveDateStart.HasValue == true)
+        {
+            exp = exp.And(x => x.EffectiveDate >= queryDto.EffectiveDateStart);
+        }
+
+        if (queryDto?.EffectiveDateEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.EffectiveDate <= queryDto.EffectiveDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+        }
+
+        return exp.ToExpression();
+    }
+}

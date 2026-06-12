@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktDeltaLogService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：差异日志应用服务实现
 // 
@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Statistics.Logging;
 
@@ -207,7 +208,7 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.UserName != null && x.UserName.Contains(keywords))
-                || (x.OperType != null && x.OperType.Contains(keywords))
+                || SqlFunc.ToString(x.OperType).Contains(keywords)
                 || (x.TableName != null && x.TableName.Contains(keywords))
                 || SqlFunc.ToString(x.PrimaryKeyId).Contains(keywords)
                 || (x.BeforeData != null && x.BeforeData.Contains(keywords))
@@ -229,9 +230,9 @@ public class TaktDeltaLogService : TaktServiceBase, ITaktDeltaLogService
             exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OperType))
+        if (queryDto?.OperType.HasValue == true)
         {
-            exp = exp.And(x => x.OperType != null && x.OperType.Contains(queryDto.OperType));
+            exp = exp.And(x => x.OperType == queryDto.OperType);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.TableName))

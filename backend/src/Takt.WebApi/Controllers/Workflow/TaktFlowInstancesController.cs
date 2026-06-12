@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Workflow
 // 文件名称：TaktFlowInstancesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程实例控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Workflow;
 /// 流程实例控制器
 /// 提供流程实例的 REST API
 /// </summary>
-[ApiModule(TaktModule.Workflow, "工作流")]
+[ApiModule(6, "工作流")]
 [Route("api/[controller]", Name = "流程实例")]
 public class TaktFlowInstancesController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("workflow:flowinstance:list", "流程实例列表")]
+    [TaktPermission("workflow:instance:list", "流程实例列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetFlowInstanceListAsync([FromQuery] TaktFlowInstanceQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程实例ID</param>
     /// <returns>流程实例DTO</returns>
-    [TaktPermission("workflow:flowinstance:query", "流程实例详情")]
+    [TaktPermission("workflow:instance:query", "流程实例详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFlowInstanceByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// 获取流程实例选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("workflow:flowinstance:query", "流程实例选项")]
+    [TaktPermission("workflow:instance:query", "流程实例选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetFlowInstanceOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>流程实例DTO</returns>
-    [TaktPermission("workflow:flowinstance:create", "创建流程实例")]
+    [TaktPermission("workflow:instance:create", "创建流程实例")]
     [HttpPost]
     public async Task<IActionResult> CreateFlowInstanceAsync([FromBody] TaktFlowInstanceCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// <param name="id">流程实例ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>流程实例DTO</returns>
-    [TaktPermission("workflow:flowinstance:update", "更新流程实例")]
+    [TaktPermission("workflow:instance:update", "更新流程实例")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFlowInstanceAsync(long id, [FromBody] TaktFlowInstanceUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程实例ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowinstance:delete", "删除流程实例")]
+    [TaktPermission("workflow:instance:delete", "删除流程实例")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFlowInstanceByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowinstance:delete", "批量删除流程实例")]
+    [TaktPermission("workflow:instance:delete", "批量删除流程实例")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteFlowInstanceBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO（TaktFlowInstanceStatus 枚举）</param>
     /// <returns>流程实例DTO</returns>
-    [TaktPermission("workflow:flowinstance:update", "更新流程实例状态")]
+    [TaktPermission("workflow:instance:update", "更新流程实例状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateFlowInstanceStatusAsync([FromBody] TaktFlowInstanceStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowinstance:import", "获取流程实例导入模板")]
+    [TaktPermission("workflow:instance:import", "获取流程实例导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetFlowInstanceTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("workflow:flowinstance:import", "导入流程实例")]
+    [TaktPermission("workflow:instance:import", "导入流程实例")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportFlowInstanceAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktFlowInstancesController : TaktControllerBase
     /// 导出流程实例
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowinstance:export", "导出流程实例")]
+    [TaktPermission("workflow:instance:export", "导出流程实例")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportFlowInstanceAsync([FromQuery] TaktFlowInstanceQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

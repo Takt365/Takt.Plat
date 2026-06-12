@@ -794,6 +794,9 @@ const loadData = async () => {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 // 翻译 tab：加载列表（主视图默认）
 const loadTranslationList = async () => {
   try {

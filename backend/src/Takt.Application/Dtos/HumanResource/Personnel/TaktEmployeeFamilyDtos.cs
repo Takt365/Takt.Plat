@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeFamily 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeFamily 生成，请按需审阅）
 // 
@@ -80,7 +80,7 @@ public class TaktEmployeeFamilyDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsEmergencyContact { get; set; }
+    public int IsEmergencyContact { get; set; }
 
 }
 
@@ -148,7 +148,7 @@ public class TaktEmployeeFamilyQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsEmergencyContact { get; set; }
+    public int? IsEmergencyContact { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -235,7 +235,7 @@ public class TaktEmployeeFamilyCreateDto
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsEmergencyContact { get; set; }
+    public int IsEmergencyContact { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -322,7 +322,7 @@ public class TaktEmployeeFamilyTemplateDto
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsEmergencyContact { get; set; }
+    public int? IsEmergencyContact { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -390,7 +390,7 @@ public class TaktEmployeeFamilyImportDto
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public TaktYesNo? IsEmergencyContact { get; set; }
+    public int? IsEmergencyContact { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -464,7 +464,7 @@ public class TaktEmployeeFamilyExportDto
     /// <summary>
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
-    public TaktYesNo IsEmergencyContact { get; set; }
+    public int IsEmergencyContact { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

@@ -27,6 +27,7 @@ export default {
     signalr: {
       connectFail: 'リアルタイム接続に失敗しました',
       onlineNotify: 'リアルタイム接続が復旧しました',
+      newMessage: '新着メッセージ',
     },
     theme: {
       switch: 'テーマを切り替え',

@@ -26,7 +26,7 @@ description: >-
 **前置（强制）**：先完成 [12-crud](../12-crud/SKILL.md) 基线清单（11 项能力、路由、权限）。
 
 ```
-- [ ] 1. Domain：实体继承 Tenant/Company/Approval 基类；表名 takt_{模块}_{实体}
+- [ ] 1. Domain：实体继承 Tenant/Company/Approval 基类；表名 takt_{模块}_{实体}；**属性一律 int/int?，禁止 enum**（00-project §1.8.1）
 - [ ] 2. DTO：TaktXxxDto / QueryDto(继承 TaktPagedQuery) / Create / Update / Import / Export
 - [ ] 3. 服务：ITaktXxxService + TaktXxxService（单数），继承 TaktServiceBase
 - [ ] 4. 控制器：TaktXxxsController（复数），只注入 ITaktXxxService；❌ 控制器内 SqlSugar
@@ -49,6 +49,16 @@ Domain → Shared
 ❌ 控制器内 SqlSugar 查询  
 ❌ 控制器注入仓储  
 ✅ 异常 try/catch + HandleException；业务错误 ThrowBusinessExceptionLocalized
+
+## 实体禁枚举（§1.8.1）
+
+```
+- [ ] Takt.Domain/Entities/** 无 public enum 属性
+- [ ] 状态/是否/类型字段为 int 或 int?
+- [ ] XML 注释含字典码或数值语义
+- [ ] DefaultValue 与 C# 初值一致；long 外键无 = 0
+- [ ] 无 using Takt.Shared.Enums（除非仅导航实体，通常也不需要）
+```
 
 ## 实体基类选型
 

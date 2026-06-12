@@ -17,12 +17,16 @@ import type {
 } from '@/types/common';
 import type {
   Message,
+  MessageBatchCreate,
   MessageCreate,
   MessageQuery,
+  MessageRead,
+  MessageReadListQuery,
   MessageStatistics,
-  MessageStatus,
-  MessageUpdate,
+  MessageUnread,
+  MessageUnreadListQuery,
 } from '@/types/foundation/message';
+import { TaktReadStatus } from '@/utils/common-enums';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -42,6 +46,32 @@ const MESSAGE_API_BASE = 'TaktMessages';
 export function getMessageList(queryDto: MessageQuery): Promise<TaktPagedResult<Message>> {
   return request<TaktPagedResult<Message>>({
     url: `${MESSAGE_API_BASE}/list`,
+    method: 'get',
+    params: queryDto,
+  });
+}
+
+/**
+ * 获取当前用户已读消息列表（分页）
+ * @param {MessageReadListQuery} queryDto 查询参数
+ * @returns {Promise<TaktPagedResult<Message>>} 分页结果
+ */
+export function getMessageReadList(queryDto: MessageReadListQuery): Promise<TaktPagedResult<Message>> {
+  return request<TaktPagedResult<Message>>({
+    url: `${MESSAGE_API_BASE}/read-list`,
+    method: 'get',
+    params: queryDto,
+  });
+}
+
+/**
+ * 获取当前用户未读消息列表（分页）
+ * @param {MessageUnreadListQuery} queryDto 查询参数
+ * @returns {Promise<TaktPagedResult<Message>>} 分页结果
+ */
+export function getMessageUnreadList(queryDto: MessageUnreadListQuery): Promise<TaktPagedResult<Message>> {
+  return request<TaktPagedResult<Message>>({
+    url: `${MESSAGE_API_BASE}/unread-list`,
     method: 'get',
     params: queryDto,
   });
@@ -73,16 +103,27 @@ export function createMessage(dto: MessageCreate): Promise<Message> {
 }
 
 /**
- * 更新在线消息
- * @param {string} id 在线消息ID
- * @param {MessageUpdate} dto 更新参数
- * @returns {Promise<Message>} 在线消息
+ * 批量创建在线消息并 SignalR 推送给各接收者（全员或指定用户）
+ * @param {MessageBatchCreate} dto 批量创建参数
+ * @returns {Promise<Message[]>} 已落库消息列表
  */
-export function updateMessage(id: string, dto: MessageUpdate): Promise<Message> {
-  return request<Message>({
-    url: `${MESSAGE_API_BASE}/${id}`,
-    method: 'put',
+export function createAndSendMessages(dto: MessageBatchCreate): Promise<Message[]> {
+  return request<Message[]>({
+    url: `${MESSAGE_API_BASE}/batch-send`,
+    method: 'post',
     data: dto,
+  });
+}
+
+/**
+ * 按消息 ID 推送给接收者（SignalR；须已落库）
+ * @param {string} messageId 在线消息 ID（须为 string，避免雪花 ID 精度丢失）
+ * @returns {Promise<void>} 操作结果
+ */
+export function sendMessageById(messageId: string): Promise<void> {
+  return request({
+    url: `${MESSAGE_API_BASE}/${messageId}/send`,
+    method: 'post',
   });
 }
 
@@ -108,19 +149,6 @@ export function deleteMessageBatch(ids: string[]): Promise<void> {
     url: `${MESSAGE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新在线消息状态
- * @param {MessageStatus} dto 状态参数
- * @returns {Promise<Message>} 在线消息
- */
-export function updateMessageStatus(dto: MessageStatus): Promise<Message> {
-  return request<Message>({
-    url: `${MESSAGE_API_BASE}/status`,
-    method: 'put',
-    data: dto,
   });
 }
 
@@ -151,6 +179,41 @@ export function getMessageStatistics(): Promise<MessageStatistics> {
   return request<MessageStatistics>({
     url: `${MESSAGE_API_BASE}/statistics`,
     method: 'get',
+  });
+}
+
+/**
+ * 标记在线消息为已读
+ * @param {string} id 在线消息 ID
+ * @returns {Promise<Message>} 在线消息
+ */
+export function markMessageReadById(id: string): Promise<Message> {
+  const dto: MessageRead = {
+    messageId: id,
+    readStatus: TaktReadStatus.Read,
+  };
+  return request<Message>({
+    url: `${MESSAGE_API_BASE}/${id}/read`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 标记在线消息为未读
+ * @param {string} id 在线消息 ID
+ * @returns {Promise<Message>} 在线消息
+ */
+export function markMessageUnreadById(id: string): Promise<Message> {
+  const dto: MessageUnread = {
+    messageId: id,
+    readStatus: TaktReadStatus.Unread,
+    readTime: null,
+  };
+  return request<Message>({
+    url: `${MESSAGE_API_BASE}/${id}/unread`,
+    method: 'put',
+    data: dto,
   });
 }
 

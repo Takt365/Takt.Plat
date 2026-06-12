@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktWorkShiftI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWorkShift 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance;
 
 /// <summary>
-/// TaktWorkShift 实体国际化翻译种子（键前缀 entity.workShift.*）
+/// TaktWorkShift 实体国际化翻译种子（键前缀 entity.workshift.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 workShift 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 workshift 实体翻译...", tenantCode);
 
         foreach (var item in GetWorkShiftTranslations())
         {
@@ -76,83 +75,83 @@ public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktWorkShift 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.workShift._self / entity.workShift.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.workshift._self / entity.workshift.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetWorkShiftTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.workShift._self
-            new TranslationSeedItem("entity.workShift._self", "en-US", "Work Shift Information", "实体名称"),
-            // entity.workShift._self
-            new TranslationSeedItem("entity.workShift._self", "ja-JP", "班次定义信息", "实体名称"),
-            // entity.workShift._self
-            new TranslationSeedItem("entity.workShift._self", "zh-CN", "班次定义信息", "实体名称"),
-            // entity.workShift._self
-            new TranslationSeedItem("entity.workShift._self", "zh-HK", "班次定义信息", "实体名称"),
+            // entity.workshift._self
+            new TranslationSeedItem("entity.workshift._self", "en-US", "Work Shift Information", "实体名称"),
+            // entity.workshift._self
+            new TranslationSeedItem("entity.workshift._self", "ja-JP", "班次定义信息", "实体名称"),
+            // entity.workshift._self
+            new TranslationSeedItem("entity.workshift._self", "zh-CN", "班次定义信息", "实体名称"),
+            // entity.workshift._self
+            new TranslationSeedItem("entity.workshift._self", "zh-HK", "班次定义信息", "实体名称"),
 
-            // entity.workShift.shiftcode
-            new TranslationSeedItem("entity.workShift.shiftcode", "en-US", "班次编码", "班次编码（租户+公司内唯一）"),
-            // entity.workShift.shiftcode
-            new TranslationSeedItem("entity.workShift.shiftcode", "ja-JP", "班次编码", "班次编码（租户+公司内唯一）"),
-            // entity.workShift.shiftcode
-            new TranslationSeedItem("entity.workShift.shiftcode", "zh-CN", "班次编码", "班次编码（租户+公司内唯一）"),
-            // entity.workShift.shiftcode
-            new TranslationSeedItem("entity.workShift.shiftcode", "zh-HK", "班次编码", "班次编码（租户+公司内唯一）"),
+            // entity.workshift.shiftcode
+            new TranslationSeedItem("entity.workshift.shiftcode", "en-US", "班次编码", "班次编码（租户+公司内唯一）"),
+            // entity.workshift.shiftcode
+            new TranslationSeedItem("entity.workshift.shiftcode", "ja-JP", "班次编码", "班次编码（租户+公司内唯一）"),
+            // entity.workshift.shiftcode
+            new TranslationSeedItem("entity.workshift.shiftcode", "zh-CN", "班次编码", "班次编码（租户+公司内唯一）"),
+            // entity.workshift.shiftcode
+            new TranslationSeedItem("entity.workshift.shiftcode", "zh-HK", "班次编码", "班次编码（租户+公司内唯一）"),
 
-            // entity.workShift.shiftname
-            new TranslationSeedItem("entity.workShift.shiftname", "en-US", "班次名称", "班次名称"),
-            // entity.workShift.shiftname
-            new TranslationSeedItem("entity.workShift.shiftname", "ja-JP", "班次名称", "班次名称"),
-            // entity.workShift.shiftname
-            new TranslationSeedItem("entity.workShift.shiftname", "zh-CN", "班次名称", "班次名称"),
-            // entity.workShift.shiftname
-            new TranslationSeedItem("entity.workShift.shiftname", "zh-HK", "班次名称", "班次名称"),
+            // entity.workshift.shiftname
+            new TranslationSeedItem("entity.workshift.shiftname", "en-US", "班次名称", "班次名称"),
+            // entity.workshift.shiftname
+            new TranslationSeedItem("entity.workshift.shiftname", "ja-JP", "班次名称", "班次名称"),
+            // entity.workshift.shiftname
+            new TranslationSeedItem("entity.workshift.shiftname", "zh-CN", "班次名称", "班次名称"),
+            // entity.workshift.shiftname
+            new TranslationSeedItem("entity.workshift.shiftname", "zh-HK", "班次名称", "班次名称"),
 
-            // entity.workShift.starttime
-            new TranslationSeedItem("entity.workShift.starttime", "en-US", "开始时间", "当班开始时间（HH:mm）"),
-            // entity.workShift.starttime
-            new TranslationSeedItem("entity.workShift.starttime", "ja-JP", "开始时间", "当班开始时间（HH:mm）"),
-            // entity.workShift.starttime
-            new TranslationSeedItem("entity.workShift.starttime", "zh-CN", "开始时间", "当班开始时间（HH:mm）"),
-            // entity.workShift.starttime
-            new TranslationSeedItem("entity.workShift.starttime", "zh-HK", "开始时间", "当班开始时间（HH:mm）"),
+            // entity.workshift.starttime
+            new TranslationSeedItem("entity.workshift.starttime", "en-US", "开始时间", "当班开始时间（HH:mm）"),
+            // entity.workshift.starttime
+            new TranslationSeedItem("entity.workshift.starttime", "ja-JP", "开始时间", "当班开始时间（HH:mm）"),
+            // entity.workshift.starttime
+            new TranslationSeedItem("entity.workshift.starttime", "zh-CN", "开始时间", "当班开始时间（HH:mm）"),
+            // entity.workshift.starttime
+            new TranslationSeedItem("entity.workshift.starttime", "zh-HK", "开始时间", "当班开始时间（HH:mm）"),
 
-            // entity.workShift.endtime
-            new TranslationSeedItem("entity.workShift.endtime", "en-US", "结束时间", "当班结束时间（HH:mm）"),
-            // entity.workShift.endtime
-            new TranslationSeedItem("entity.workShift.endtime", "ja-JP", "结束时间", "当班结束时间（HH:mm）"),
-            // entity.workShift.endtime
-            new TranslationSeedItem("entity.workShift.endtime", "zh-CN", "结束时间", "当班结束时间（HH:mm）"),
-            // entity.workShift.endtime
-            new TranslationSeedItem("entity.workShift.endtime", "zh-HK", "结束时间", "当班结束时间（HH:mm）"),
+            // entity.workshift.endtime
+            new TranslationSeedItem("entity.workshift.endtime", "en-US", "结束时间", "当班结束时间（HH:mm）"),
+            // entity.workshift.endtime
+            new TranslationSeedItem("entity.workshift.endtime", "ja-JP", "结束时间", "当班结束时间（HH:mm）"),
+            // entity.workshift.endtime
+            new TranslationSeedItem("entity.workshift.endtime", "zh-CN", "结束时间", "当班结束时间（HH:mm）"),
+            // entity.workshift.endtime
+            new TranslationSeedItem("entity.workshift.endtime", "zh-HK", "结束时间", "当班结束时间（HH:mm）"),
 
-            // entity.workShift.crossmidnight
-            new TranslationSeedItem("entity.workShift.crossmidnight", "en-US", "是否跨日", "是否跨自然日（0=否 1=是）"),
-            // entity.workShift.crossmidnight
-            new TranslationSeedItem("entity.workShift.crossmidnight", "ja-JP", "是否跨日", "是否跨自然日（0=否 1=是）"),
-            // entity.workShift.crossmidnight
-            new TranslationSeedItem("entity.workShift.crossmidnight", "zh-CN", "是否跨日", "是否跨自然日（0=否 1=是）"),
-            // entity.workShift.crossmidnight
-            new TranslationSeedItem("entity.workShift.crossmidnight", "zh-HK", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            // entity.workshift.crossmidnight
+            new TranslationSeedItem("entity.workshift.crossmidnight", "en-US", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            // entity.workshift.crossmidnight
+            new TranslationSeedItem("entity.workshift.crossmidnight", "ja-JP", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            // entity.workshift.crossmidnight
+            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-CN", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            // entity.workshift.crossmidnight
+            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-HK", "是否跨日", "是否跨自然日（0=否 1=是）"),
 
-            // entity.workShift.sortorder
-            new TranslationSeedItem("entity.workShift.sortorder", "en-US", "排序号", "排序号"),
-            // entity.workShift.sortorder
-            new TranslationSeedItem("entity.workShift.sortorder", "ja-JP", "排序号", "排序号"),
-            // entity.workShift.sortorder
-            new TranslationSeedItem("entity.workShift.sortorder", "zh-CN", "排序号", "排序号"),
-            // entity.workShift.sortorder
-            new TranslationSeedItem("entity.workShift.sortorder", "zh-HK", "排序号", "排序号"),
+            // entity.workshift.sortorder
+            new TranslationSeedItem("entity.workshift.sortorder", "en-US", "排序号", "排序号"),
+            // entity.workshift.sortorder
+            new TranslationSeedItem("entity.workshift.sortorder", "ja-JP", "排序号", "排序号"),
+            // entity.workshift.sortorder
+            new TranslationSeedItem("entity.workshift.sortorder", "zh-CN", "排序号", "排序号"),
+            // entity.workshift.sortorder
+            new TranslationSeedItem("entity.workshift.sortorder", "zh-HK", "排序号", "排序号"),
 
-            // entity.workShift.relatedplant
-            new TranslationSeedItem("entity.workShift.relatedplant", "en-US", "关联工厂", "关联工厂"),
-            // entity.workShift.relatedplant
-            new TranslationSeedItem("entity.workShift.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
-            // entity.workShift.relatedplant
-            new TranslationSeedItem("entity.workShift.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.workShift.relatedplant
-            new TranslationSeedItem("entity.workShift.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
+            // entity.workshift.relatedplant
+            new TranslationSeedItem("entity.workshift.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
         };
     }
 
@@ -170,8 +169,8 @@ public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

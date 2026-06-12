@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeEducation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel;
 
 /// <summary>
-/// TaktEmployeeEducation 实体国际化翻译种子（键前缀 entity.employeeEducation.*）
+/// TaktEmployeeEducation 实体国际化翻译种子（键前缀 entity.employeeeducation.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeEducation 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeeducation 实体翻译...", tenantCode);
 
         foreach (var item in GetEmployeeEducationTranslations())
         {
@@ -76,101 +75,101 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeEducation 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeEducation._self / entity.employeeEducation.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.employeeeducation._self / entity.employeeeducation.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeEducationTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.employeeEducation._self
-            new TranslationSeedItem("entity.employeeEducation._self", "en-US", "Employee Education Information", "实体名称"),
-            // entity.employeeEducation._self
-            new TranslationSeedItem("entity.employeeEducation._self", "ja-JP", "员工教育经历信息", "实体名称"),
-            // entity.employeeEducation._self
-            new TranslationSeedItem("entity.employeeEducation._self", "zh-CN", "员工教育经历信息", "实体名称"),
-            // entity.employeeEducation._self
-            new TranslationSeedItem("entity.employeeEducation._self", "zh-HK", "员工教育经历信息", "实体名称"),
+            // entity.employeeeducation._self
+            new TranslationSeedItem("entity.employeeeducation._self", "en-US", "Employee Education Information", "实体名称"),
+            // entity.employeeeducation._self
+            new TranslationSeedItem("entity.employeeeducation._self", "ja-JP", "员工教育经历信息", "实体名称"),
+            // entity.employeeeducation._self
+            new TranslationSeedItem("entity.employeeeducation._self", "zh-CN", "员工教育经历信息", "实体名称"),
+            // entity.employeeeducation._self
+            new TranslationSeedItem("entity.employeeeducation._self", "zh-HK", "员工教育经历信息", "实体名称"),
 
-            // entity.employeeEducation.employeeid
-            new TranslationSeedItem("entity.employeeEducation.employeeid", "en-US", "员工ID", "员工ID"),
-            // entity.employeeEducation.employeeid
-            new TranslationSeedItem("entity.employeeEducation.employeeid", "ja-JP", "员工ID", "员工ID"),
-            // entity.employeeEducation.employeeid
-            new TranslationSeedItem("entity.employeeEducation.employeeid", "zh-CN", "员工ID", "员工ID"),
-            // entity.employeeEducation.employeeid
-            new TranslationSeedItem("entity.employeeEducation.employeeid", "zh-HK", "员工ID", "员工ID"),
+            // entity.employeeeducation.employeeid
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "en-US", "员工ID", "员工ID"),
+            // entity.employeeeducation.employeeid
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "ja-JP", "员工ID", "员工ID"),
+            // entity.employeeeducation.employeeid
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-CN", "员工ID", "员工ID"),
+            // entity.employeeeducation.employeeid
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-HK", "员工ID", "员工ID"),
 
-            // entity.employeeEducation.schoolname
-            new TranslationSeedItem("entity.employeeEducation.schoolname", "en-US", "学校名称", "学校名称"),
-            // entity.employeeEducation.schoolname
-            new TranslationSeedItem("entity.employeeEducation.schoolname", "ja-JP", "学校名称", "学校名称"),
-            // entity.employeeEducation.schoolname
-            new TranslationSeedItem("entity.employeeEducation.schoolname", "zh-CN", "学校名称", "学校名称"),
-            // entity.employeeEducation.schoolname
-            new TranslationSeedItem("entity.employeeEducation.schoolname", "zh-HK", "学校名称", "学校名称"),
+            // entity.employeeeducation.schoolname
+            new TranslationSeedItem("entity.employeeeducation.schoolname", "en-US", "学校名称", "学校名称"),
+            // entity.employeeeducation.schoolname
+            new TranslationSeedItem("entity.employeeeducation.schoolname", "ja-JP", "学校名称", "学校名称"),
+            // entity.employeeeducation.schoolname
+            new TranslationSeedItem("entity.employeeeducation.schoolname", "zh-CN", "学校名称", "学校名称"),
+            // entity.employeeeducation.schoolname
+            new TranslationSeedItem("entity.employeeeducation.schoolname", "zh-HK", "学校名称", "学校名称"),
 
-            // entity.employeeEducation.educationlevel
-            new TranslationSeedItem("entity.employeeEducation.educationlevel", "en-US", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
-            // entity.employeeEducation.educationlevel
-            new TranslationSeedItem("entity.employeeEducation.educationlevel", "ja-JP", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
-            // entity.employeeEducation.educationlevel
-            new TranslationSeedItem("entity.employeeEducation.educationlevel", "zh-CN", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
-            // entity.employeeEducation.educationlevel
-            new TranslationSeedItem("entity.employeeEducation.educationlevel", "zh-HK", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
+            // entity.employeeeducation.educationlevel
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "en-US", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
+            // entity.employeeeducation.educationlevel
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "ja-JP", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
+            // entity.employeeeducation.educationlevel
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "zh-CN", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
+            // entity.employeeeducation.educationlevel
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "zh-HK", "学历层次", "学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）"),
 
-            // entity.employeeEducation.degreelevel
-            new TranslationSeedItem("entity.employeeEducation.degreelevel", "en-US", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
-            // entity.employeeEducation.degreelevel
-            new TranslationSeedItem("entity.employeeEducation.degreelevel", "ja-JP", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
-            // entity.employeeEducation.degreelevel
-            new TranslationSeedItem("entity.employeeEducation.degreelevel", "zh-CN", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
-            // entity.employeeEducation.degreelevel
-            new TranslationSeedItem("entity.employeeEducation.degreelevel", "zh-HK", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
+            // entity.employeeeducation.degreelevel
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "en-US", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
+            // entity.employeeeducation.degreelevel
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "ja-JP", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
+            // entity.employeeeducation.degreelevel
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "zh-CN", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
+            // entity.employeeeducation.degreelevel
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "zh-HK", "学位层次", "学位层次（0=无，1=学士，2=硕士，3=博士）"),
 
-            // entity.employeeEducation.majorname
-            new TranslationSeedItem("entity.employeeEducation.majorname", "en-US", "专业名称", "专业名称"),
-            // entity.employeeEducation.majorname
-            new TranslationSeedItem("entity.employeeEducation.majorname", "ja-JP", "专业名称", "专业名称"),
-            // entity.employeeEducation.majorname
-            new TranslationSeedItem("entity.employeeEducation.majorname", "zh-CN", "专业名称", "专业名称"),
-            // entity.employeeEducation.majorname
-            new TranslationSeedItem("entity.employeeEducation.majorname", "zh-HK", "专业名称", "专业名称"),
+            // entity.employeeeducation.majorname
+            new TranslationSeedItem("entity.employeeeducation.majorname", "en-US", "专业名称", "专业名称"),
+            // entity.employeeeducation.majorname
+            new TranslationSeedItem("entity.employeeeducation.majorname", "ja-JP", "专业名称", "专业名称"),
+            // entity.employeeeducation.majorname
+            new TranslationSeedItem("entity.employeeeducation.majorname", "zh-CN", "专业名称", "专业名称"),
+            // entity.employeeeducation.majorname
+            new TranslationSeedItem("entity.employeeeducation.majorname", "zh-HK", "专业名称", "专业名称"),
 
-            // entity.employeeEducation.certificateno
-            new TranslationSeedItem("entity.employeeEducation.certificateno", "en-US", "证书编号", "证书编号"),
-            // entity.employeeEducation.certificateno
-            new TranslationSeedItem("entity.employeeEducation.certificateno", "ja-JP", "证书编号", "证书编号"),
-            // entity.employeeEducation.certificateno
-            new TranslationSeedItem("entity.employeeEducation.certificateno", "zh-CN", "证书编号", "证书编号"),
-            // entity.employeeEducation.certificateno
-            new TranslationSeedItem("entity.employeeEducation.certificateno", "zh-HK", "证书编号", "证书编号"),
+            // entity.employeeeducation.certificateno
+            new TranslationSeedItem("entity.employeeeducation.certificateno", "en-US", "证书编号", "证书编号"),
+            // entity.employeeeducation.certificateno
+            new TranslationSeedItem("entity.employeeeducation.certificateno", "ja-JP", "证书编号", "证书编号"),
+            // entity.employeeeducation.certificateno
+            new TranslationSeedItem("entity.employeeeducation.certificateno", "zh-CN", "证书编号", "证书编号"),
+            // entity.employeeeducation.certificateno
+            new TranslationSeedItem("entity.employeeeducation.certificateno", "zh-HK", "证书编号", "证书编号"),
 
-            // entity.employeeEducation.startdate
-            new TranslationSeedItem("entity.employeeEducation.startdate", "en-US", "开始日期", "开始日期"),
-            // entity.employeeEducation.startdate
-            new TranslationSeedItem("entity.employeeEducation.startdate", "ja-JP", "开始日期", "开始日期"),
-            // entity.employeeEducation.startdate
-            new TranslationSeedItem("entity.employeeEducation.startdate", "zh-CN", "开始日期", "开始日期"),
-            // entity.employeeEducation.startdate
-            new TranslationSeedItem("entity.employeeEducation.startdate", "zh-HK", "开始日期", "开始日期"),
+            // entity.employeeeducation.startdate
+            new TranslationSeedItem("entity.employeeeducation.startdate", "en-US", "开始日期", "开始日期"),
+            // entity.employeeeducation.startdate
+            new TranslationSeedItem("entity.employeeeducation.startdate", "ja-JP", "开始日期", "开始日期"),
+            // entity.employeeeducation.startdate
+            new TranslationSeedItem("entity.employeeeducation.startdate", "zh-CN", "开始日期", "开始日期"),
+            // entity.employeeeducation.startdate
+            new TranslationSeedItem("entity.employeeeducation.startdate", "zh-HK", "开始日期", "开始日期"),
 
-            // entity.employeeEducation.enddate
-            new TranslationSeedItem("entity.employeeEducation.enddate", "en-US", "结束日期", "结束日期"),
-            // entity.employeeEducation.enddate
-            new TranslationSeedItem("entity.employeeEducation.enddate", "ja-JP", "结束日期", "结束日期"),
-            // entity.employeeEducation.enddate
-            new TranslationSeedItem("entity.employeeEducation.enddate", "zh-CN", "结束日期", "结束日期"),
-            // entity.employeeEducation.enddate
-            new TranslationSeedItem("entity.employeeEducation.enddate", "zh-HK", "结束日期", "结束日期"),
+            // entity.employeeeducation.enddate
+            new TranslationSeedItem("entity.employeeeducation.enddate", "en-US", "结束日期", "结束日期"),
+            // entity.employeeeducation.enddate
+            new TranslationSeedItem("entity.employeeeducation.enddate", "ja-JP", "结束日期", "结束日期"),
+            // entity.employeeeducation.enddate
+            new TranslationSeedItem("entity.employeeeducation.enddate", "zh-CN", "结束日期", "结束日期"),
+            // entity.employeeeducation.enddate
+            new TranslationSeedItem("entity.employeeeducation.enddate", "zh-HK", "结束日期", "结束日期"),
 
-            // entity.employeeEducation.ishighest
-            new TranslationSeedItem("entity.employeeEducation.ishighest", "en-US", "是否最高学历", "是否最高学历（1=是，0=否）"),
-            // entity.employeeEducation.ishighest
-            new TranslationSeedItem("entity.employeeEducation.ishighest", "ja-JP", "是否最高学历", "是否最高学历（1=是，0=否）"),
-            // entity.employeeEducation.ishighest
-            new TranslationSeedItem("entity.employeeEducation.ishighest", "zh-CN", "是否最高学历", "是否最高学历（1=是，0=否）"),
-            // entity.employeeEducation.ishighest
-            new TranslationSeedItem("entity.employeeEducation.ishighest", "zh-HK", "是否最高学历", "是否最高学历（1=是，0=否）"),
+            // entity.employeeeducation.ishighest
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "en-US", "是否最高学历", "是否最高学历（1=是，0=否）"),
+            // entity.employeeeducation.ishighest
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "ja-JP", "是否最高学历", "是否最高学历（1=是，0=否）"),
+            // entity.employeeeducation.ishighest
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "zh-CN", "是否最高学历", "是否最高学历（1=是，0=否）"),
+            // entity.employeeeducation.ishighest
+            new TranslationSeedItem("entity.employeeeducation.ishighest", "zh-HK", "是否最高学历", "是否最高学历（1=是，0=否）"),
         };
     }
 
@@ -188,8 +187,8 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

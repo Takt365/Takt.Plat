@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktSettingsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：系统设置控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Foundation;
 /// 系统设置控制器
 /// 提供系统设置的 REST API
 /// </summary>
-[ApiModule(TaktModule.Foundation, "基础设置")]
+[ApiModule(8, "基础设置")]
 [Route("api/[controller]", Name = "系统设置")]
 public class TaktSettingsController : TaktControllerBase
 {

@@ -8,7 +8,7 @@ alwaysApply: false
 
 命名/CRUD 基线见 `00-project`、`12-crud`；后端分层见 `01-backend`；前端见 `02-frontend`；视图/表单见 `13-vue-view`、`14-vue-form`。
 
-**入口**：`node scripts/generate-all.cjs --all` 或 `--<实体短名>`（不带 `Takt` 前缀）。
+**入口**：`node scripts/generate-all.cjs --<实体短名>`（不带 `Takt` 前缀；**已禁用 `--all`**，每次仅允许单实体）。
 
 **写入策略**（各子脚本统一，见 `generate-script-common.cjs`）：目标文件**不存在则创建，已存在则整文件覆盖**；`--force` 仅对 `TaktAuth` / `TaktRbac` 等手工独立服务/控制器生效。
 
@@ -113,28 +113,23 @@ alwaysApply: false
 
 ---
 
-## 四、排除与跳过（`generate-entity-exclusions.cjs`）
+## 四、架构约束（`generate-entity-exclusions.cjs`）
+
+> 已禁用 `--all`；不再维护「防批量覆盖」的手工 CRUD / Vue 排除表。显式 `--Entity` 即表示允许生成/覆盖该实体（`TaktAuth`/`TaktRbac`/`TaktFlowEngine` 等独立服务仍须 `--force`）。
 
 ### 4.1 跳过后端 DTO/服务/控制器
 
-| 类别 | 实体短名 |
-|------|----------|
-| 手工 CRUD | `User`、`Online`、`Message`、`DictType`、`DictData` |
-| RBAC 关联表 | `UserRole`、`UserTenant`、`UserCompany`、`RoleMenu`、`RoleCompany`、`RoleDept`、`EmployeeDept`、`EmployeePost` |
-| 独立服务 | `TaktAuth`、`TaktRbac`、`TaktFlowEngine`、`TaktHolidayTheme`、`TaktTranslationMessage`、`TaktDataDictAll` |
+| 类别 | 说明 |
+|------|------|
+| RBAC 关联表 | `UserRole`、`UserTenant`、`UserCompany`、`RoleMenu`、`RoleCompany`、`RoleDept`、`EmployeeDept`、`EmployeePost` — 由 `ITaktRbacService` 统一维护 |
+| 独立服务 | `TaktAuth`、`TaktRbac`、`TaktFlowEngine`、`TaktFileUploadEngine` — 无标准实体 CRUD 流水线 |
 
-`--all` 时上述独立服务/控制器默认不覆盖（须 `--force`）。
+### 4.2 跳过 Vue 生成
 
-### 4.2 跳过前端 types/api
+- `*ChangeLog` 从属实体：无独立 `index.vue` / `*-form.vue`（由主实体页承载）
+- 主子表从实体：默认由主表展开区承载（`QuartzLog` 等见 `STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES` 例外）
 
-- 与 `EXCLUDED_DTO_FILE_NAMES` 一致（含 RBAC、User、Dict 等）
-
-### 4.3 跳过 Vue 生成
-
-实体短名：`User`、`Menu`、`Dept`、`DictType`、`DictData`、`GenTable`、`GenTableColumn`、`Culture`、`Translation`、`Numbering`、`Online`、`Message`  
-目录：`frontend/src/api/workflow/**` 全部
-
-**树表**（如 `Dept`）后端可生成，**视图/表单须手工**（`dept/index.vue`、`dept-form.vue`）。
+**树表**（如 `Dept`）可执行 `--Dept` 生成后端与基础 Vue；复杂左树右表 UI 仍须对照 `13-vue-view` / `14-vue-form` 手工增强。
 
 ---
 
@@ -156,7 +151,7 @@ alwaysApply: false
 
 ```bash
 node scripts/generate-all.cjs --Holiday
-node scripts/generate-all.cjs --all
+node scripts/generate-all.cjs --CostCenter
 node scripts/generate-all.cjs --Plant --dry-run
 node scripts/generate-vue-crud-from-api.cjs --Holiday --view-path human-resource/attendance-leave/holiday
 node scripts/generate-vue-all-from-api.cjs --CostCenter

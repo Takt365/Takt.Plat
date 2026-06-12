@@ -75,7 +75,7 @@ public class IpLocationResult
     /// <summary>
     /// 日志表用地点文案（国家-省份-城市，与实体字段说明一致）
     /// </summary>
-    /// <returns>地点字符串；无法拼出有效段时返回 <see cref="FormattedAddress"/></returns>
+    /// <returns>地点字符串；无法拼出有效段时返回 FormattedAddress</returns>
     public string ToLogLocationText()
     {
         var parts = new List<string>();
@@ -108,7 +108,7 @@ public class IpLocationResult
 /// Takt IP 定位帮助类（IP2Region 离线库）。
 /// </summary>
 /// <remarks>
-/// 非纯工具网关：启动时 <see cref="Initialize"/> 加载 xdb 并缓存 <see cref="ISearcher"/> 实例；查询方法为 I/O 只读，失败返回 null 而非抛业务异常。
+/// 非纯工具网关：启动时 Initialize 加载 xdb 并缓存 ISearcher 实例；查询方法为 I/O 只读，失败返回 null 而非抛业务异常。
 /// </remarks>
 public static class TaktLocationHelper
 {

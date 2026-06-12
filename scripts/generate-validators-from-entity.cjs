@@ -12,7 +12,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
+const {
+  writeGeneratedFile,
+  logGeneratedFileWritePolicy,
+  parseSingleEntityGenerateArgs,
+  sanitizeXmlDocPlainText,
+} = require('./generate-script-common.cjs');
 const { isRbacJunctionEntity } = require('./generate-entity-exclusions.cjs');
 
 // ========================================
@@ -35,13 +40,15 @@ const DEFAULT_PASSWORD_MIN = 8;
 // ========================================
 
 function normalizeDocText(text) {
-  return (text || '')
-    .replace(/\/\/\/?/g, '')
-    .split('\n')
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .join(' ')
-    .trim();
+  return sanitizeXmlDocPlainText(
+    (text || '')
+      .replace(/\/\/\/?/g, '')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .join(' ')
+      .trim(),
+  );
 }
 
 function entityToIdPropertyName(entityName) {
@@ -808,10 +815,12 @@ function printUsage() {
 用法: node scripts/generate-validators-from-entity.cjs [参数]
 
 参数:
-  --all              扫描全部 Domain 实体
   --<实体名>         如 --Dept、--User、--UserRole
   --force            保留兼容（已存在文件默认覆盖更新）
   --dry-run          仅打印路径
+
+说明:
+  - 已禁用 --all；每次必须指定一个实体
 
 输出: backend/src/Takt.Application/Validators/{与实体相同路径}/Takt{Entity}Validators.cs
   - 聚合实体：Takt{Entity}CreateValidator / UpdateValidator / ImportValidator（*Dtos.cs 中存在的类才生成）
@@ -828,50 +837,7 @@ function printUsage() {
 }
 
 function parseArgs() {
-  const args = process.argv.slice(2);
-  if (args.length === 0) {
-    console.error('❌ 错误: 缺少参数');
-    printUsage();
-    process.exit(1);
-  }
-
-  const options = { entityPrefix: null, all: false, force: false, dryRun: false };
-  args.forEach((arg) => {
-    if (arg === '--force') {
-      options.force = true;
-      return;
-    }
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-      return;
-    }
-    if (!arg.startsWith('--')) {
-      console.error(`❌ 未知参数: ${arg}`);
-      process.exit(1);
-    }
-    const value = arg.slice(2);
-    if (value.toLowerCase() === 'all') {
-      options.all = true;
-      return;
-    }
-    if (value.startsWith('Takt')) {
-      console.error('❌ 实体名不要带 Takt 前缀');
-      process.exit(1);
-    }
-    if (options.entityPrefix) {
-      console.error('❌ 只能指定一个实体名，或使用 --all');
-      process.exit(1);
-    }
-    options.entityPrefix = value;
-  });
-
-  if (!options.all && !options.entityPrefix) {
-    console.error('❌ 请指定 --all 或 --<实体名>');
-    printUsage();
-    process.exit(1);
-  }
-
-  return options;
+  return parseSingleEntityGenerateArgs(printUsage);
 }
 
 console.log('🚀 从实体生成 FluentValidation 验证器...\n');
@@ -879,7 +845,7 @@ logGeneratedFileWritePolicy();
 
 try {
   const options = parseArgs();
-  const entities = scanEntities(options.all ? null : options.entityPrefix);
+  const entities = scanEntities(options.entityPrefix);
 
   if (entities.length === 0) {
     console.error('❌ 未找到匹配的实体文件');

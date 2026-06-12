@@ -125,7 +125,7 @@ public sealed class TaktPermissionFilter : IAsyncAuthorizationFilter
     }
 
     /// <summary>
-    /// 当前终结点是否标记 <see cref="IAllowAnonymous"/>（跳过功能权限校验）
+    /// 当前终结点是否标记 IAllowAnonymous（跳过功能权限校验）
     /// </summary>
     /// <param name="context">授权过滤器上下文</param>
     /// <returns>允许匿名访问为 true</returns>

@@ -19,13 +19,13 @@
     :rules="formRules"
   >
     <a-form-item
-      :label="t('workflow.instance.transferToUser')"
+      :label="t('workflow.todo.page.transferToUser')"
       name="toUserId"
       required
     >
       <a-select
         v-model:value="form.toUserId"
-        :placeholder="t('workflow.instance.transferToUserPlaceholder')"
+        :placeholder="t('workflow.todo.page.transferToUserPlaceholder')"
         show-search
         :filter-option="filterUserOption"
         :options="userOptions"
@@ -36,7 +36,7 @@
       />
     </a-form-item>
     <a-form-item
-      :label="t('workflow.instance.transferComment')"
+      :label="t('entity.flowTask.comment')"
       name="comment"
     >
       <a-textarea
@@ -81,7 +81,7 @@ const commentModel = computed<string>({
 
 const formRules = computed(() => ({
   toUserId: [
-    { required: true, message: t('workflow.instance.transferToUserPlaceholder') }
+    { required: true, message: t('workflow.todo.page.transferToUserPlaceholder') }
   ],
   comment: []
 }))

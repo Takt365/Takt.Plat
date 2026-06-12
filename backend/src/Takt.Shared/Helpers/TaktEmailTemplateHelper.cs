@@ -41,7 +41,7 @@ public static class TaktEmailTemplateHelper
     /// <summary>
     /// 加载模板并替换占位符。仅从 <paramref name="templatesBasePath"/>（wwwroot/Email/Templates）读取 .txt。
     /// </summary>
-    /// <param name="templateName">模板名（不含扩展名），使用 <see cref="TaktEmailTemplateNames"/> 常量</param>
+    /// <param name="templateName">模板名（不含扩展名），使用 TaktEmailTemplateNames 常量</param>
     /// <param name="variables">变量字典，键为占位符名</param>
     /// <param name="templatesBasePath">模板目录绝对路径（必填，由 Program 设置 Email:TemplatesPath）</param>
     /// <returns>填充后的纯文本字符串，发送时请使用 isHtml: false</returns>

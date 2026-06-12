@@ -4,7 +4,7 @@
 // 文件名称：TaktSequenceDefaults.cs
 // 创建时间：2026-05-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：行号与排序号生成默认步长与起始值
+// 功能描述：行号/排序号生成默认步长与起始值（仅 int const，非枚举）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

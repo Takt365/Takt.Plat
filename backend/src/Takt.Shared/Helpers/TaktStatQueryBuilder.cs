@@ -12,7 +12,6 @@
 
 using System.Text;
 using System.Text.RegularExpressions;
-using Takt.Shared.Enums;
 using Takt.Shared.Models.Statistics;
 
 namespace Takt.Shared.Helpers;
@@ -44,7 +43,7 @@ public static class TaktStatQueryBuilder
         }
 
         var sources = request.Sources.OrderBy(x => x.SortOrder).ToList();
-        var primary = sources.FirstOrDefault(x => x.IsPrimary == TaktYesNo.Yes) ?? sources[0];
+        var primary = sources.FirstOrDefault(x => x.IsPrimary == 1) ?? sources[0];
         var aliasToTable = BuildAliasMap(sources);
         var parameters = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
         {
@@ -53,7 +52,7 @@ public static class TaktStatQueryBuilder
         };
 
         var visibleFields = (request.Fields ?? Array.Empty<TaktStatQueryFieldItem>())
-            .Where(x => x.IsVisible == TaktYesNo.Yes)
+            .Where(x => x.IsVisible == 1)
             .OrderBy(x => x.SortOrder)
             .ToList();
         if (visibleFields.Count == 0)
@@ -64,7 +63,7 @@ public static class TaktStatQueryBuilder
         var groupBys = (request.GroupBys ?? Array.Empty<TaktStatQueryGroupByItem>())
             .OrderBy(x => x.SortOrder)
             .ToList();
-        var hasAggregate = visibleFields.Any(x => x.AggregateFunc != TaktConfigurableAggregateFunc.None);
+        var hasAggregate = visibleFields.Any(x => x.AggregateFunc != 0);
         var useGroupBy = groupBys.Count > 0 || hasAggregate;
 
         var outputKeys = new List<string>();
@@ -77,11 +76,11 @@ public static class TaktStatQueryBuilder
             var colExpr = $"{Bracket(field.SourceAlias)}.{Bracket(field.ColumnName)}";
             var expr = field.AggregateFunc switch
             {
-                TaktConfigurableAggregateFunc.Count => $"COUNT({colExpr})",
-                TaktConfigurableAggregateFunc.Sum => $"SUM({colExpr})",
-                TaktConfigurableAggregateFunc.Avg => $"AVG({colExpr})",
-                TaktConfigurableAggregateFunc.Min => $"MIN({colExpr})",
-                TaktConfigurableAggregateFunc.Max => $"MAX({colExpr})",
+                1 => $"COUNT({colExpr})",
+                2 => $"SUM({colExpr})",
+                3 => $"AVG({colExpr})",
+                4 => $"MIN({colExpr})",
+                5 => $"MAX({colExpr})",
                 _ => colExpr,
             };
             var outputKey = ResolveOutputKey(field);
@@ -99,7 +98,7 @@ public static class TaktStatQueryBuilder
 
         var sql = new StringBuilder();
         sql.Append("SELECT ");
-        if (request.DistinctRows == TaktYesNo.Yes)
+        if (request.DistinctRows == 1)
         {
             sql.Append("DISTINCT ");
         }
@@ -119,7 +118,7 @@ public static class TaktStatQueryBuilder
                     return $"{Bracket(x.SourceAlias)}.{Bracket(x.ColumnName)}";
                 }).ToList()
                 : visibleFields
-                    .Where(x => x.AggregateFunc == TaktConfigurableAggregateFunc.None)
+                    .Where(x => x.AggregateFunc == 0)
                     .Select(x => $"{Bracket(x.SourceAlias)}.{Bracket(x.ColumnName)}")
                     .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToList();
@@ -140,7 +139,7 @@ public static class TaktStatQueryBuilder
             {
                 ValidateAlias(x.SourceAlias);
                 ValidateColumn(x.ColumnName);
-                var dir = x.SortDirection == TaktConfigurableSortDirection.Desc ? "DESC" : "ASC";
+                var dir = x.SortDirection == 2 ? "DESC" : "ASC";
                 return $"{Bracket(x.SourceAlias)}.{Bracket(x.ColumnName)} {dir}";
             });
             sql.Append(" ORDER BY ");
@@ -209,6 +208,12 @@ public static class TaktStatQueryBuilder
         throw new ArgumentException("仅支持 SELECT 语句", nameof(coreSql));
     }
 
+    /// <summary>
+    /// 构建数据源别名 → 表名映射（别名唯一）
+    /// </summary>
+    /// <param name="sources">数据源列表</param>
+    /// <returns>别名到表名的字典</returns>
+    /// <exception cref="ArgumentException">别名重复或非法</exception>
     private static Dictionary<string, string> BuildAliasMap(IReadOnlyList<TaktStatQuerySourceItem> sources)
     {
         var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -224,6 +229,15 @@ public static class TaktStatQueryBuilder
         return map;
     }
 
+    /// <summary>
+    /// 构建 FROM 与 JOIN 子句
+    /// </summary>
+    /// <param name="primary">主数据源</param>
+    /// <param name="sources">全部数据源</param>
+    /// <param name="joins">JOIN 定义</param>
+    /// <param name="aliasToTable">别名到表名映射</param>
+    /// <returns>FROM/JOIN SQL 片段</returns>
+    /// <exception cref="ArgumentException">JOIN 引用未声明别名或标识符非法</exception>
     private static string BuildFromClause(
         TaktStatQuerySourceItem primary,
         IReadOnlyList<TaktStatQuerySourceItem> sources,
@@ -248,9 +262,9 @@ public static class TaktStatQueryBuilder
             ValidateTable(rightTable);
             var joinKeyword = join.JoinType switch
             {
-                TaktConfigurableJoinType.Left => "LEFT JOIN",
-                TaktConfigurableJoinType.Right => "RIGHT JOIN",
-                TaktConfigurableJoinType.Full => "FULL JOIN",
+                2 => "LEFT JOIN",
+                3 => "RIGHT JOIN",
+                4 => "FULL JOIN",
                 _ => "INNER JOIN",
             };
             sb.Append(' ');
@@ -265,6 +279,15 @@ public static class TaktStatQueryBuilder
         return sb.ToString();
     }
 
+    /// <summary>
+    /// 构建 WHERE 子句（租户/公司/软删 + 运行时筛选）
+    /// </summary>
+    /// <param name="primaryAlias">主表别名</param>
+    /// <param name="selections">筛选字段定义</param>
+    /// <param name="runtimeValues">运行时筛选值（按 SortOrder 索引）</param>
+    /// <param name="parameters">输出 SQL 参数</param>
+    /// <returns>WHERE SQL 片段</returns>
+    /// <exception cref="ArgumentException">必填筛选缺失或运算符不支持</exception>
     private static string BuildWhereClause(
         string primaryAlias,
         IReadOnlyList<TaktStatQuerySelectionItem> selections,
@@ -286,8 +309,8 @@ public static class TaktStatQueryBuilder
             var valueTo = runtimeValue?.ValueTo;
             if (string.IsNullOrWhiteSpace(value))
             {
-                if (selection.IsRequired == TaktYesNo.Yes
-                    && selection.FilterOperator is not (TaktConfigurableFilterOperator.IsNull or TaktConfigurableFilterOperator.IsNotNull))
+                if (selection.IsRequired == 1
+                    && selection.FilterOperator is not (10 or 11))
                 {
                     throw new ArgumentException($"筛选条件必填: {selection.SourceAlias}.{selection.ColumnName}");
                 }
@@ -297,35 +320,35 @@ public static class TaktStatQueryBuilder
             var paramBase = $"p_sel_{selection.SortOrder}";
             switch (selection.FilterOperator)
             {
-                case TaktConfigurableFilterOperator.Equal:
+                case 1:
                     parameters[paramBase] = value;
                     clauses.Add($"{columnExpr} = @{paramBase}");
                     break;
-                case TaktConfigurableFilterOperator.NotEqual:
+                case 2:
                     parameters[paramBase] = value;
                     clauses.Add($"{columnExpr} <> @{paramBase}");
                     break;
-                case TaktConfigurableFilterOperator.GreaterThan:
+                case 3:
                     parameters[paramBase] = value;
                     clauses.Add($"{columnExpr} > @{paramBase}");
                     break;
-                case TaktConfigurableFilterOperator.GreaterThanOrEqual:
+                case 4:
                     parameters[paramBase] = value;
                     clauses.Add($"{columnExpr} >= @{paramBase}");
                     break;
-                case TaktConfigurableFilterOperator.LessThan:
+                case 5:
                     parameters[paramBase] = value;
                     clauses.Add($"{columnExpr} < @{paramBase}");
                     break;
-                case TaktConfigurableFilterOperator.LessThanOrEqual:
+                case 6:
                     parameters[paramBase] = value;
                     clauses.Add($"{columnExpr} <= @{paramBase}");
                     break;
-                case TaktConfigurableFilterOperator.Contains:
+                case 7:
                     parameters[paramBase] = $"%{value}%";
                     clauses.Add($"{columnExpr} LIKE @{paramBase}");
                     break;
-                case TaktConfigurableFilterOperator.Between:
+                case 8:
                     if (string.IsNullOrWhiteSpace(valueTo))
                     {
                         throw new ArgumentException($"区间筛选缺少结束值: {selection.SourceAlias}.{selection.ColumnName}");
@@ -334,7 +357,7 @@ public static class TaktStatQueryBuilder
                     parameters[$"{paramBase}_to"] = valueTo;
                     clauses.Add($"{columnExpr} BETWEEN @{paramBase}_from AND @{paramBase}_to");
                     break;
-                case TaktConfigurableFilterOperator.In:
+                case 9:
                     var inParts = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                     if (inParts.Length == 0)
                     {
@@ -349,10 +372,10 @@ public static class TaktStatQueryBuilder
                     }
                     clauses.Add($"{columnExpr} IN ({string.Join(", ", inParams)})");
                     break;
-                case TaktConfigurableFilterOperator.IsNull:
+                case 10:
                     clauses.Add($"{columnExpr} IS NULL");
                     break;
-                case TaktConfigurableFilterOperator.IsNotNull:
+                case 11:
                     clauses.Add($"{columnExpr} IS NOT NULL");
                     break;
                 default:
@@ -362,6 +385,12 @@ public static class TaktStatQueryBuilder
         return $"WHERE {string.Join(" AND ", clauses)}";
     }
 
+    /// <summary>
+    /// 解析输出列别名（显式 OutputAlias 或 源别名_列名）
+    /// </summary>
+    /// <param name="field">输出字段定义</param>
+    /// <returns>输出列键名</returns>
+    /// <exception cref="ArgumentException">输出别名非法</exception>
     private static string ResolveOutputKey(TaktStatQueryFieldItem field)
     {
         if (!string.IsNullOrWhiteSpace(field.OutputAlias))
@@ -374,12 +403,23 @@ public static class TaktStatQueryBuilder
         return key;
     }
 
+    /// <summary>
+    /// 将标识符包装为 SQL Server 方括号引用
+    /// </summary>
+    /// <param name="identifier">标识符</param>
+    /// <returns>[identifier] 形式</returns>
+    /// <exception cref="ArgumentException">标识符非法</exception>
     private static string Bracket(string identifier)
     {
         ValidateIdentifier(identifier);
         return $"[{identifier}]";
     }
 
+    /// <summary>
+    /// 校验物理表名（小写蛇形，takt_ 前缀）
+    /// </summary>
+    /// <param name="tableName">表名</param>
+    /// <exception cref="ArgumentException">表名非法</exception>
     private static void ValidateTable(string tableName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
@@ -389,6 +429,11 @@ public static class TaktStatQueryBuilder
         }
     }
 
+    /// <summary>
+    /// 校验列名（小写蛇形）
+    /// </summary>
+    /// <param name="columnName">列名</param>
+    /// <exception cref="ArgumentException">列名非法</exception>
     private static void ValidateColumn(string columnName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(columnName);
@@ -398,6 +443,11 @@ public static class TaktStatQueryBuilder
         }
     }
 
+    /// <summary>
+    /// 校验数据源别名
+    /// </summary>
+    /// <param name="alias">别名</param>
+    /// <exception cref="ArgumentException">别名非法</exception>
     private static void ValidateAlias(string alias)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(alias);
@@ -407,6 +457,11 @@ public static class TaktStatQueryBuilder
         }
     }
 
+    /// <summary>
+    /// 校验 SELECT 输出列别名
+    /// </summary>
+    /// <param name="alias">输出别名</param>
+    /// <exception cref="ArgumentException">输出别名非法</exception>
     private static void ValidateOutputAlias(string alias)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(alias);
@@ -416,6 +471,11 @@ public static class TaktStatQueryBuilder
         }
     }
 
+    /// <summary>
+    /// 校验 SQL 标识符（字母开头，仅字母数字下划线）
+    /// </summary>
+    /// <param name="identifier">标识符</param>
+    /// <exception cref="ArgumentException">标识符非法</exception>
     private static void ValidateIdentifier(string identifier)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(identifier);

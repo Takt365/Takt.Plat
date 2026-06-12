@@ -24,7 +24,7 @@ public static class TaktValidationI18nKeys
     public const string Invalid = "common.validation.invalid";
 
     /// <summary>格式不正确</summary>
-    public const string InvalidFormat = "common.validation.invalid.format";
+    public const string InvalidFormat = "common.validation.format.invalid";
 
     /// <summary>已存在</summary>
     public const string Duplicate = "common.validation.duplicate";
@@ -33,7 +33,7 @@ public static class TaktValidationI18nKeys
     public const string NotFound = "common.validation.not.found";
 
     /// <summary>不存在或已过期</summary>
-    public const string NotFoundOrExpired = "common.validation.not.found.or.expired";
+    public const string NotFoundOrExpired = "common.validation.missing.or.expired";
 
     /// <summary>已过期</summary>
     public const string Expired = "common.validation.expired";
@@ -69,7 +69,7 @@ public static class TaktValidationI18nKeys
     public const string FieldExcelHelper = "common.field.excel.helper";
 
     /// <summary>工作表</summary>
-    public const string FieldSheet = "common.field.sheet";
+    public const string FieldSheet = "common.field.sheet.label";
 
     /// <summary>工作表名称</summary>
     public const string FieldSheetName = "common.field.sheet.name";
@@ -144,7 +144,7 @@ public static class TaktValidationI18nKeys
     public const string FeedbackSuccess = "common.feedback.success";
 
     /// <summary>验证码</summary>
-    public const string FieldCaptcha = "common.field.captcha";
+    public const string FieldCaptcha = "common.field.captcha.label";
 
     /// <summary>验证码 ID</summary>
     public const string FieldCaptchaId = "common.field.captcha.id";
@@ -211,4 +211,16 @@ public static class TaktValidationI18nKeys
 
     /// <summary>文件</summary>
     public const string FieldFile = "common.field.file";
+
+    /// <summary>工单状态流转不合法</summary>
+    public const string TicketStatusTransitionInvalid = "validation.ticket.status.transition.invalid";
+
+    /// <summary>仅提交人可操作</summary>
+    public const string TicketSubmitterOnly = "validation.ticket.submitter.only";
+
+    /// <summary>仅处理人可操作</summary>
+    public const string TicketAssigneeOnly = "validation.ticket.assignee.only";
+
+    /// <summary>工单已关闭不可编辑</summary>
+    public const string TicketClosedReadonly = "validation.ticket.closed.readonly";
 }

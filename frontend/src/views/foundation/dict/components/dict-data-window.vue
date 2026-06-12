@@ -74,6 +74,7 @@
 
       <!-- 表格 -->
       <TaktSingleTable
+        entity-scope="tenant"
         :columns="displayColumns"
         :data-source="dataSource"
         :loading="loading"

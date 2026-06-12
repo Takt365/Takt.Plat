@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceContractDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceContract 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceContract 生成，请按需审阅）
 // 
@@ -132,13 +132,13 @@ public class TaktServiceContractDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 服务订单列表（外键在子表 <see cref="TaktServiceOrder.ServiceContractId"/>）
+    /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）
     /// （子表：TaktServiceOrder）
     /// </summary>
     public List<TaktServiceOrderDto>? ServiceOrders { get; set; }
 
     /// <summary>
-    /// 服务请求列表（外键在子表 <see cref="TaktServiceRequest.ServiceContractId"/>）
+    /// 服务请求列表（外键在子表 TaktServiceRequest.ServiceContractId）
     /// （子表：TaktServiceRequest）
     /// </summary>
     public List<TaktServiceRequestDto>? ServiceRequests { get; set; }
@@ -424,12 +424,12 @@ public class TaktServiceContractCreateDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 服务订单列表（外键在子表 <see cref="TaktServiceOrder.ServiceContractId"/>）（子表，级联保存）
+    /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）（子表，级联保存）
     /// </summary>
     public List<TaktServiceOrderCreateDto>? ServiceOrders { get; set; }
 
     /// <summary>
-    /// 服务请求列表（外键在子表 <see cref="TaktServiceRequest.ServiceContractId"/>）（子表，级联保存）
+    /// 服务请求列表（外键在子表 TaktServiceRequest.ServiceContractId）（子表，级联保存）
     /// </summary>
     public List<TaktServiceRequestCreateDto>? ServiceRequests { get; set; }
 

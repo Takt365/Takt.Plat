@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.NewsCenter
 // 文件名称：TaktNewsReadValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：NewsRead 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktNewsRead 生成，请按需审阅）
 // 
@@ -31,17 +31,17 @@ public class TaktNewsReadCreateValidator : AbstractValidator<TaktNewsReadCreateD
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.NewsId)
             .GreaterThanOrEqualTo(0).WithMessage("新闻 ID不能为负数");
         RuleFor(x => x.UserId)
             .GreaterThanOrEqualTo(0).WithMessage("用户 ID不能为负数");
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("用户姓名不能为空")
-            .MaximumLength(20).WithMessage("用户姓名长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("用户姓名长度不能超过40个字符");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -83,16 +83,16 @@ public class TaktNewsReadImportValidator : AbstractValidator<TaktNewsReadImportD
     public TaktNewsReadImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.NewsId)
             .GreaterThanOrEqualTo(0).WithMessage("新闻 ID不能为负数");
         RuleFor(x => x.UserId)
             .GreaterThanOrEqualTo(0).WithMessage("用户 ID不能为负数");
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("用户姓名不能为空")
-            .MaximumLength(20).WithMessage("用户姓名长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("用户姓名长度不能超过40个字符");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

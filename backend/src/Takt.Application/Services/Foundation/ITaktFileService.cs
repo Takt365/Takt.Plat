@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktFileService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文件应用服务接口
 // 
@@ -78,22 +78,6 @@ public interface ITaktFileService
     Task<TaktFileDto> UpdateFileStatusAsync(TaktFileStatusDto dto);
 
     /// <summary>
-    /// 获取导入模板
-    /// </summary>
-    /// <param name="sheetName">工作表名称</param>
-    /// <param name="fileName">文件名</param>
-    /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] content)> GetFileTemplateAsync(string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 导入文件
-    /// </summary>
-    /// <param name="fileStream">Excel 文件流</param>
-    /// <param name="sheetName">工作表名称</param>
-    /// <returns>导入结果</returns>
-    Task<(int success, int fail, List<string> errors)> ImportFileAsync(Stream fileStream, string? sheetName = null);
-
-    /// <summary>
     /// 导出文件
     /// </summary>
     /// <param name="query">查询条件</param>
@@ -102,4 +86,78 @@ public interface ITaktFileService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportFileAsync(TaktFileQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 整文件上传（引擎 I/O + 元数据落库）
+    /// </summary>
+    /// <param name="fileStream">文件流</param>
+    /// <param name="fileName">原始文件名</param>
+    /// <param name="contentType">MIME 类型</param>
+    /// <param name="meta">可选业务元数据</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>文件 DTO</returns>
+    Task<TaktFileUploadResultDto> UploadFileAsync(
+        Stream fileStream,
+        string fileName,
+        string? contentType,
+        TaktFileUploadMetaDto? meta = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 检查分片是否已上传
+    /// </summary>
+    /// <param name="dto">检查参数</param>
+    /// <returns>是否存在</returns>
+    Task<TaktFileChunkCheckResultDto> CheckFileChunkAsync(TaktFileChunkCheckDto dto);
+
+    /// <summary>
+    /// 列出已上传分片序号（断点续传）
+    /// </summary>
+    /// <param name="dto">查询参数</param>
+    /// <returns>已上传分片序号</returns>
+    Task<TaktFileChunkListResultDto> ListFileChunksAsync(TaktFileChunkListDto dto);
+
+    /// <summary>
+    /// 取消分片上传并清理临时文件
+    /// </summary>
+    /// <param name="dto">取消参数</param>
+    Task CancelFileChunksAsync(TaktFileChunkCancelDto dto);
+
+    /// <summary>
+    /// 上传单个分片
+    /// </summary>
+    /// <param name="chunkStream">分片流</param>
+    /// <param name="dto">分片元数据</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    Task UploadFileChunkAsync(
+        Stream chunkStream,
+        TaktFileChunkUploadDto dto,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 合并分片并写入文件元数据
+    /// </summary>
+    /// <param name="dto">合并参数</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>文件 DTO</returns>
+    Task<TaktFileUploadResultDto> MergeFileChunksAsync(
+        TaktFileChunkMergeDto dto,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 下载文件（更新下载次数）
+    /// </summary>
+    /// <param name="fileId">文件 ID</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>下载流与文件名</returns>
+    Task<TaktFileDownloadResultDto> DownloadFileAsync(
+        long fileId,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 更新文件公开范围
+    /// </summary>
+    /// <param name="fileId">文件 ID</param>
+    /// <param name="dto">公开范围</param>
+    /// <returns>文件 DTO</returns>
+    Task<TaktFileDto> ChangeFilePublicAccessAsync(long fileId, TaktFilePublicAccessDto dto);
 }

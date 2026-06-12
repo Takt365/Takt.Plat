@@ -68,12 +68,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.plantcode')"
+                :label="t('entity.assydefect.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.plantcode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.plantcode') })"
                   size="small"
                   allow-clear
                 />
@@ -81,12 +81,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.prodcategory')"
+                :label="t('entity.assydefect.prodcategory')"
                 name="prodCategory"
               >
                 <a-input
                   v-model:value="formState.prodCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodcategory') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodcategory') })"
                   size="small"
                   allow-clear
                 />
@@ -94,12 +94,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.proddate')"
+                :label="t('entity.assydefect.proddate')"
                 name="prodDate"
               >
                 <a-date-picker
                   v-model:value="formState.prodDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyDefect.proddate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefect.proddate') })"
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
@@ -108,12 +108,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.prodline')"
+                :label="t('entity.assydefect.prodline')"
                 name="prodLine"
               >
                 <a-input
                   v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodline') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodline') })"
                   size="small"
                   allow-clear
                 />
@@ -121,12 +121,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.shiftno')"
+                :label="t('entity.assydefect.shiftno')"
                 name="shiftNo"
               >
                 <a-input-number
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.shiftno') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.shiftno') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -134,12 +134,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.prodordercode')"
+                :label="t('entity.assydefect.prodordercode')"
                 name="prodOrderCode"
               >
                 <a-input
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodordercode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodordercode') })"
                   size="small"
                   allow-clear
                 />
@@ -147,12 +147,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.prodorderqty')"
+                :label="t('entity.assydefect.prodorderqty')"
                 name="prodOrderQty"
               >
                 <a-input-number
                   v-model:value="formState.prodOrderQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodorderqty') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodorderqty') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -170,12 +170,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.modelcode')"
+                :label="t('entity.assydefect.modelcode')"
                 name="modelCode"
               >
                 <a-input
                   v-model:value="formState.modelCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.modelcode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.modelcode') })"
                   size="small"
                   allow-clear
                 />
@@ -183,12 +183,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.batchno')"
+                :label="t('entity.assydefect.batchno')"
                 name="batchNo"
               >
                 <a-input
                   v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.batchno') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.batchno') })"
                   size="small"
                   allow-clear
                 />
@@ -196,12 +196,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.materialcode')"
+                :label="t('entity.assydefect.materialcode')"
                 name="materialCode"
               >
                 <a-input
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.materialcode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.materialcode') })"
                   size="small"
                   allow-clear
                 />
@@ -209,12 +209,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.prodactualqty')"
+                :label="t('entity.assydefect.prodactualqty')"
                 name="prodActualQty"
               >
                 <a-input-number
                   v-model:value="formState.prodActualQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodactualqty') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodactualqty') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -222,12 +222,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.goodquantity')"
+                :label="t('entity.assydefect.goodquantity')"
                 name="goodQuantity"
               >
                 <a-input-number
                   v-model:value="formState.goodQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.goodquantity') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.goodquantity') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -235,12 +235,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyDefect.status')"
+                :label="t('entity.assydefect.status')"
                 name="status"
               >
                 <a-input-number
                   v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefect.status') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefect.status') })"
                   size="small"
                   style="width: 100%"
                 />
@@ -278,12 +278,12 @@
       <!-- 子表：assyDefectDetail -->
       <a-tab-pane
         key="child-assyDefectDetails"
-        :tab="t('entity.assyDefectDetail._self')"
+        :tab="t('entity.assydefectdetail._self')"
         force-render
       >
         <div class="mb-2">
           <a-button type="primary" size="small" @click="handleAddAssyDefectDetailRow">
-            {{ t('common.page.button.create') }}{{ t('entity.assyDefectDetail._self') }}
+            {{ t('common.page.button.create') }}{{ t('entity.assydefectdetail._self') }}
           </a-button>
         </div>
         <a-table
@@ -322,7 +322,7 @@
             <template v-else-if="column.key === 'prodOrderCode'">
               <a-input
                 v-model:value="record.prodOrderCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.prodordercode') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.prodordercode') })"
                 size="small"
                 allow-clear
               />
@@ -330,7 +330,7 @@
             <template v-else-if="column.key === 'lineNumber'">
               <a-input-number
                 v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.linenumber') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.linenumber') })"
                 size="small"
                 style="width: 100%"
               />
@@ -338,7 +338,7 @@
             <template v-else-if="column.key === 'defectCategory'">
               <a-input
                 v-model:value="record.defectCategory"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.defectcategory') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.defectcategory') })"
                 size="small"
                 allow-clear
               />
@@ -346,7 +346,7 @@
             <template v-else-if="column.key === 'defectQty'">
               <a-input-number
                 v-model:value="record.defectQty"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.defectqty') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.defectqty') })"
                 size="small"
                 style="width: 100%"
               />
@@ -354,7 +354,7 @@
             <template v-else-if="column.key === 'cumulativeDefectQty'">
               <a-input-number
                 v-model:value="record.cumulativeDefectQty"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.cumulativedefectqty') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.cumulativedefectqty') })"
                 size="small"
                 style="width: 100%"
               />
@@ -362,7 +362,7 @@
             <template v-else-if="column.key === 'randomCardNo'">
               <a-input
                 v-model:value="record.randomCardNo"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.randomcardno') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.randomcardno') })"
                 size="small"
                 allow-clear
               />
@@ -370,7 +370,7 @@
             <template v-else-if="column.key === 'occurrenceEngineering'">
               <a-input
                 v-model:value="record.occurrenceEngineering"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.occurrenceengineering') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.occurrenceengineering') })"
                 size="small"
                 allow-clear
               />
@@ -378,7 +378,7 @@
             <template v-else-if="column.key === 'testStep'">
               <a-input
                 v-model:value="record.testStep"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyDefectDetail.teststep') })"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.teststep') })"
                 size="small"
                 allow-clear
               />
@@ -462,49 +462,49 @@ const assyDefectDetailFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.prodordercode'),
+    title: t('entity.assydefectdetail.prodordercode'),
     dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.linenumber'),
+    title: t('entity.assydefectdetail.linenumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.defectcategory'),
+    title: t('entity.assydefectdetail.defectcategory'),
     dataIndex: 'defectCategory',
     key: 'defectCategory',
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.defectqty'),
+    title: t('entity.assydefectdetail.defectqty'),
     dataIndex: 'defectQty',
     key: 'defectQty',
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.cumulativedefectqty'),
+    title: t('entity.assydefectdetail.cumulativedefectqty'),
     dataIndex: 'cumulativeDefectQty',
     key: 'cumulativeDefectQty',
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.randomcardno'),
+    title: t('entity.assydefectdetail.randomcardno'),
     dataIndex: 'randomCardNo',
     key: 'randomCardNo',
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.occurrenceengineering'),
+    title: t('entity.assydefectdetail.occurrenceengineering'),
     dataIndex: 'occurrenceEngineering',
     key: 'occurrenceEngineering',
     width: 140,
   },
   {
-    title: t('entity.assyDefectDetail.teststep'),
+    title: t('entity.assydefectdetail.teststep'),
     dataIndex: 'testStep',
     key: 'testStep',
     width: 140,
@@ -603,84 +603,84 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyDefect.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.plantcode') }),
       trigger: 'blur'
     }
   ],
   prodCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodcategory') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodcategory') }),
       trigger: 'blur'
     }
   ],
   prodDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyDefect.proddate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.assydefect.proddate') }),
       trigger: 'change'
     }
   ],
   prodLine: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodline') }),
       trigger: 'blur'
     }
   ],
   shiftNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyDefect.shiftno') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.assydefect.shiftno') }),
       trigger: 'change'
     }
   ],
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyDefect.prodordercode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.prodordercode') }),
       trigger: 'blur'
     }
   ],
   prodOrderQty: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyDefect.prodorderqty') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodorderqty') }),
       trigger: 'change'
     }
   ],
   modelCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyDefect.modelcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.modelcode') }),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyDefect.materialcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assydefect.materialcode') }),
       trigger: 'blur'
     }
   ],
   prodActualQty: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyDefect.prodactualqty') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.assydefect.prodactualqty') }),
       trigger: 'change'
     }
   ],
   goodQuantity: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyDefect.goodquantity') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.assydefect.goodquantity') }),
       trigger: 'change'
     }
   ],
   status: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyDefect.status') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.assydefect.status') }),
       trigger: 'change'
     }
   ],

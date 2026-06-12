@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation;
 
 /// <summary>
-/// TaktIqcOrder 实体国际化翻译种子（键前缀 entity.iqcOrder.*）
+/// TaktIqcOrder 实体国际化翻译种子（键前缀 entity.iqcorder.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 iqcOrder 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 iqcorder 实体翻译...", tenantCode);
 
         foreach (var item in GetIqcOrderTranslations())
         {
@@ -76,164 +75,164 @@ public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktIqcOrder 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.iqcOrder._self / entity.iqcOrder.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.iqcorder._self / entity.iqcorder.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetIqcOrderTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.iqcOrder._self
-            new TranslationSeedItem("entity.iqcOrder._self", "en-US", "Iqc Order Information", "实体名称"),
-            // entity.iqcOrder._self
-            new TranslationSeedItem("entity.iqcOrder._self", "ja-JP", "IQC进货检验单信息", "实体名称"),
-            // entity.iqcOrder._self
-            new TranslationSeedItem("entity.iqcOrder._self", "zh-CN", "IQC进货检验单信息", "实体名称"),
-            // entity.iqcOrder._self
-            new TranslationSeedItem("entity.iqcOrder._self", "zh-HK", "IQC进货检验单信息", "实体名称"),
+            // entity.iqcorder._self
+            new TranslationSeedItem("entity.iqcorder._self", "en-US", "Iqc Order Information", "实体名称"),
+            // entity.iqcorder._self
+            new TranslationSeedItem("entity.iqcorder._self", "ja-JP", "IQC进货检验单信息", "实体名称"),
+            // entity.iqcorder._self
+            new TranslationSeedItem("entity.iqcorder._self", "zh-CN", "IQC进货检验单信息", "实体名称"),
+            // entity.iqcorder._self
+            new TranslationSeedItem("entity.iqcorder._self", "zh-HK", "IQC进货检验单信息", "实体名称"),
 
-            // entity.iqcOrder.plantcode
-            new TranslationSeedItem("entity.iqcOrder.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.iqcOrder.plantcode
-            new TranslationSeedItem("entity.iqcOrder.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.iqcOrder.plantcode
-            new TranslationSeedItem("entity.iqcOrder.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.iqcOrder.plantcode
-            new TranslationSeedItem("entity.iqcOrder.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.iqcorder.plantcode
+            new TranslationSeedItem("entity.iqcorder.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.iqcorder.plantcode
+            new TranslationSeedItem("entity.iqcorder.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.iqcorder.plantcode
+            new TranslationSeedItem("entity.iqcorder.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.iqcorder.plantcode
+            new TranslationSeedItem("entity.iqcorder.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.iqcOrder.sourcecode
-            new TranslationSeedItem("entity.iqcOrder.sourcecode", "en-US", "来源单号", "来源单号（采购订单编码）"),
-            // entity.iqcOrder.sourcecode
-            new TranslationSeedItem("entity.iqcOrder.sourcecode", "ja-JP", "来源单号", "来源单号（采购订单编码）"),
-            // entity.iqcOrder.sourcecode
-            new TranslationSeedItem("entity.iqcOrder.sourcecode", "zh-CN", "来源单号", "来源单号（采购订单编码）"),
-            // entity.iqcOrder.sourcecode
-            new TranslationSeedItem("entity.iqcOrder.sourcecode", "zh-HK", "来源单号", "来源单号（采购订单编码）"),
+            // entity.iqcorder.sourcecode
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "en-US", "来源单号", "来源单号（采购订单编码）"),
+            // entity.iqcorder.sourcecode
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "ja-JP", "来源单号", "来源单号（采购订单编码）"),
+            // entity.iqcorder.sourcecode
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "zh-CN", "来源单号", "来源单号（采购订单编码）"),
+            // entity.iqcorder.sourcecode
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "zh-HK", "来源单号", "来源单号（采购订单编码）"),
 
-            // entity.iqcOrder.inspectiondate
-            new TranslationSeedItem("entity.iqcOrder.inspectiondate", "en-US", "检验日期", "检验日期"),
-            // entity.iqcOrder.inspectiondate
-            new TranslationSeedItem("entity.iqcOrder.inspectiondate", "ja-JP", "检验日期", "检验日期"),
-            // entity.iqcOrder.inspectiondate
-            new TranslationSeedItem("entity.iqcOrder.inspectiondate", "zh-CN", "检验日期", "检验日期"),
-            // entity.iqcOrder.inspectiondate
-            new TranslationSeedItem("entity.iqcOrder.inspectiondate", "zh-HK", "检验日期", "检验日期"),
+            // entity.iqcorder.inspectiondate
+            new TranslationSeedItem("entity.iqcorder.inspectiondate", "en-US", "检验日期", "检验日期"),
+            // entity.iqcorder.inspectiondate
+            new TranslationSeedItem("entity.iqcorder.inspectiondate", "ja-JP", "检验日期", "检验日期"),
+            // entity.iqcorder.inspectiondate
+            new TranslationSeedItem("entity.iqcorder.inspectiondate", "zh-CN", "检验日期", "检验日期"),
+            // entity.iqcorder.inspectiondate
+            new TranslationSeedItem("entity.iqcorder.inspectiondate", "zh-HK", "检验日期", "检验日期"),
 
-            // entity.iqcOrder.code
-            new TranslationSeedItem("entity.iqcOrder.code", "en-US", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
-            // entity.iqcOrder.code
-            new TranslationSeedItem("entity.iqcOrder.code", "ja-JP", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
-            // entity.iqcOrder.code
-            new TranslationSeedItem("entity.iqcOrder.code", "zh-CN", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
-            // entity.iqcOrder.code
-            new TranslationSeedItem("entity.iqcOrder.code", "zh-HK", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
+            // entity.iqcorder.code
+            new TranslationSeedItem("entity.iqcorder.code", "en-US", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
+            // entity.iqcorder.code
+            new TranslationSeedItem("entity.iqcorder.code", "ja-JP", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
+            // entity.iqcorder.code
+            new TranslationSeedItem("entity.iqcorder.code", "zh-CN", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
+            // entity.iqcorder.code
+            new TranslationSeedItem("entity.iqcorder.code", "zh-HK", "IQC检验单编码", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
 
-            // entity.iqcOrder.suppliercode
-            new TranslationSeedItem("entity.iqcOrder.suppliercode", "en-US", "供应商编码", "供应商编码"),
-            // entity.iqcOrder.suppliercode
-            new TranslationSeedItem("entity.iqcOrder.suppliercode", "ja-JP", "供应商编码", "供应商编码"),
-            // entity.iqcOrder.suppliercode
-            new TranslationSeedItem("entity.iqcOrder.suppliercode", "zh-CN", "供应商编码", "供应商编码"),
-            // entity.iqcOrder.suppliercode
-            new TranslationSeedItem("entity.iqcOrder.suppliercode", "zh-HK", "供应商编码", "供应商编码"),
+            // entity.iqcorder.suppliercode
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "en-US", "供应商编码", "供应商编码"),
+            // entity.iqcorder.suppliercode
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "ja-JP", "供应商编码", "供应商编码"),
+            // entity.iqcorder.suppliercode
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "zh-CN", "供应商编码", "供应商编码"),
+            // entity.iqcorder.suppliercode
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "zh-HK", "供应商编码", "供应商编码"),
 
-            // entity.iqcOrder.totalpurchasequantity
-            new TranslationSeedItem("entity.iqcOrder.totalpurchasequantity", "en-US", "进货总数", "进货总数"),
-            // entity.iqcOrder.totalpurchasequantity
-            new TranslationSeedItem("entity.iqcOrder.totalpurchasequantity", "ja-JP", "进货总数", "进货总数"),
-            // entity.iqcOrder.totalpurchasequantity
-            new TranslationSeedItem("entity.iqcOrder.totalpurchasequantity", "zh-CN", "进货总数", "进货总数"),
-            // entity.iqcOrder.totalpurchasequantity
-            new TranslationSeedItem("entity.iqcOrder.totalpurchasequantity", "zh-HK", "进货总数", "进货总数"),
+            // entity.iqcorder.totalpurchasequantity
+            new TranslationSeedItem("entity.iqcorder.totalpurchasequantity", "en-US", "进货总数", "进货总数"),
+            // entity.iqcorder.totalpurchasequantity
+            new TranslationSeedItem("entity.iqcorder.totalpurchasequantity", "ja-JP", "进货总数", "进货总数"),
+            // entity.iqcorder.totalpurchasequantity
+            new TranslationSeedItem("entity.iqcorder.totalpurchasequantity", "zh-CN", "进货总数", "进货总数"),
+            // entity.iqcorder.totalpurchasequantity
+            new TranslationSeedItem("entity.iqcorder.totalpurchasequantity", "zh-HK", "进货总数", "进货总数"),
 
-            // entity.iqcOrder.totalsamplequantity
-            new TranslationSeedItem("entity.iqcOrder.totalsamplequantity", "en-US", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
-            // entity.iqcOrder.totalsamplequantity
-            new TranslationSeedItem("entity.iqcOrder.totalsamplequantity", "ja-JP", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
-            // entity.iqcOrder.totalsamplequantity
-            new TranslationSeedItem("entity.iqcOrder.totalsamplequantity", "zh-CN", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
-            // entity.iqcOrder.totalsamplequantity
-            new TranslationSeedItem("entity.iqcOrder.totalsamplequantity", "zh-HK", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
+            // entity.iqcorder.totalsamplequantity
+            new TranslationSeedItem("entity.iqcorder.totalsamplequantity", "en-US", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
+            // entity.iqcorder.totalsamplequantity
+            new TranslationSeedItem("entity.iqcorder.totalsamplequantity", "ja-JP", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
+            // entity.iqcorder.totalsamplequantity
+            new TranslationSeedItem("entity.iqcorder.totalsamplequantity", "zh-CN", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
+            // entity.iqcorder.totalsamplequantity
+            new TranslationSeedItem("entity.iqcorder.totalsamplequantity", "zh-HK", "总抽样数量", "总抽样数量（自动计算 = 各明细抽样数量合计）"),
 
-            // entity.iqcOrder.totalqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalqualifiedquantity", "en-US", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
-            // entity.iqcOrder.totalqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalqualifiedquantity", "ja-JP", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
-            // entity.iqcOrder.totalqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalqualifiedquantity", "zh-CN", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
-            // entity.iqcOrder.totalqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalqualifiedquantity", "zh-HK", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
+            // entity.iqcorder.totalqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalqualifiedquantity", "en-US", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
+            // entity.iqcorder.totalqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalqualifiedquantity", "ja-JP", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
+            // entity.iqcorder.totalqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalqualifiedquantity", "zh-CN", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
+            // entity.iqcorder.totalqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalqualifiedquantity", "zh-HK", "总合格数量", "总合格数量（自动计算 = 各明细合格数量合计）"),
 
-            // entity.iqcOrder.totalunqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalunqualifiedquantity", "en-US", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
-            // entity.iqcOrder.totalunqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalunqualifiedquantity", "ja-JP", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
-            // entity.iqcOrder.totalunqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalunqualifiedquantity", "zh-CN", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
-            // entity.iqcOrder.totalunqualifiedquantity
-            new TranslationSeedItem("entity.iqcOrder.totalunqualifiedquantity", "zh-HK", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
+            // entity.iqcorder.totalunqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalunqualifiedquantity", "en-US", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
+            // entity.iqcorder.totalunqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalunqualifiedquantity", "ja-JP", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
+            // entity.iqcorder.totalunqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalunqualifiedquantity", "zh-CN", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
+            // entity.iqcorder.totalunqualifiedquantity
+            new TranslationSeedItem("entity.iqcorder.totalunqualifiedquantity", "zh-HK", "总不合格数量", "总不合格数量（自动计算 = 各明细不合格数量合计）"),
 
-            // entity.iqcOrder.totalinspectionreturnquantity
-            new TranslationSeedItem("entity.iqcOrder.totalinspectionreturnquantity", "en-US", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
-            // entity.iqcOrder.totalinspectionreturnquantity
-            new TranslationSeedItem("entity.iqcOrder.totalinspectionreturnquantity", "ja-JP", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
-            // entity.iqcOrder.totalinspectionreturnquantity
-            new TranslationSeedItem("entity.iqcOrder.totalinspectionreturnquantity", "zh-CN", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
-            // entity.iqcOrder.totalinspectionreturnquantity
-            new TranslationSeedItem("entity.iqcOrder.totalinspectionreturnquantity", "zh-HK", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
+            // entity.iqcorder.totalinspectionreturnquantity
+            new TranslationSeedItem("entity.iqcorder.totalinspectionreturnquantity", "en-US", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
+            // entity.iqcorder.totalinspectionreturnquantity
+            new TranslationSeedItem("entity.iqcorder.totalinspectionreturnquantity", "ja-JP", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
+            // entity.iqcorder.totalinspectionreturnquantity
+            new TranslationSeedItem("entity.iqcorder.totalinspectionreturnquantity", "zh-CN", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
+            // entity.iqcorder.totalinspectionreturnquantity
+            new TranslationSeedItem("entity.iqcorder.totalinspectionreturnquantity", "zh-HK", "总验退数量", "总验退数量（自动计算 = 各明细验退数量合计）"),
 
-            // entity.iqcOrder.judgestatus
-            new TranslationSeedItem("entity.iqcOrder.judgestatus", "en-US", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
-            // entity.iqcOrder.judgestatus
-            new TranslationSeedItem("entity.iqcOrder.judgestatus", "ja-JP", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
-            // entity.iqcOrder.judgestatus
-            new TranslationSeedItem("entity.iqcOrder.judgestatus", "zh-CN", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
-            // entity.iqcOrder.judgestatus
-            new TranslationSeedItem("entity.iqcOrder.judgestatus", "zh-HK", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
+            // entity.iqcorder.judgestatus
+            new TranslationSeedItem("entity.iqcorder.judgestatus", "en-US", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
+            // entity.iqcorder.judgestatus
+            new TranslationSeedItem("entity.iqcorder.judgestatus", "ja-JP", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
+            // entity.iqcorder.judgestatus
+            new TranslationSeedItem("entity.iqcorder.judgestatus", "zh-CN", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
+            // entity.iqcorder.judgestatus
+            new TranslationSeedItem("entity.iqcorder.judgestatus", "zh-HK", "判定状态", "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）"),
 
-            // entity.iqcOrder.judgeby
-            new TranslationSeedItem("entity.iqcOrder.judgeby", "en-US", "判定人", "判定人（人员代码）"),
-            // entity.iqcOrder.judgeby
-            new TranslationSeedItem("entity.iqcOrder.judgeby", "ja-JP", "判定人", "判定人（人员代码）"),
-            // entity.iqcOrder.judgeby
-            new TranslationSeedItem("entity.iqcOrder.judgeby", "zh-CN", "判定人", "判定人（人员代码）"),
-            // entity.iqcOrder.judgeby
-            new TranslationSeedItem("entity.iqcOrder.judgeby", "zh-HK", "判定人", "判定人（人员代码）"),
+            // entity.iqcorder.judgeby
+            new TranslationSeedItem("entity.iqcorder.judgeby", "en-US", "判定人", "判定人（人员代码）"),
+            // entity.iqcorder.judgeby
+            new TranslationSeedItem("entity.iqcorder.judgeby", "ja-JP", "判定人", "判定人（人员代码）"),
+            // entity.iqcorder.judgeby
+            new TranslationSeedItem("entity.iqcorder.judgeby", "zh-CN", "判定人", "判定人（人员代码）"),
+            // entity.iqcorder.judgeby
+            new TranslationSeedItem("entity.iqcorder.judgeby", "zh-HK", "判定人", "判定人（人员代码）"),
 
-            // entity.iqcOrder.judgedate
-            new TranslationSeedItem("entity.iqcOrder.judgedate", "en-US", "判定日期", "判定日期"),
-            // entity.iqcOrder.judgedate
-            new TranslationSeedItem("entity.iqcOrder.judgedate", "ja-JP", "判定日期", "判定日期"),
-            // entity.iqcOrder.judgedate
-            new TranslationSeedItem("entity.iqcOrder.judgedate", "zh-CN", "判定日期", "判定日期"),
-            // entity.iqcOrder.judgedate
-            new TranslationSeedItem("entity.iqcOrder.judgedate", "zh-HK", "判定日期", "判定日期"),
+            // entity.iqcorder.judgedate
+            new TranslationSeedItem("entity.iqcorder.judgedate", "en-US", "判定日期", "判定日期"),
+            // entity.iqcorder.judgedate
+            new TranslationSeedItem("entity.iqcorder.judgedate", "ja-JP", "判定日期", "判定日期"),
+            // entity.iqcorder.judgedate
+            new TranslationSeedItem("entity.iqcorder.judgedate", "zh-CN", "判定日期", "判定日期"),
+            // entity.iqcorder.judgedate
+            new TranslationSeedItem("entity.iqcorder.judgedate", "zh-HK", "判定日期", "判定日期"),
 
-            // entity.iqcOrder.judgedescription
-            new TranslationSeedItem("entity.iqcOrder.judgedescription", "en-US", "判定说明", "判定说明"),
-            // entity.iqcOrder.judgedescription
-            new TranslationSeedItem("entity.iqcOrder.judgedescription", "ja-JP", "判定说明", "判定说明"),
-            // entity.iqcOrder.judgedescription
-            new TranslationSeedItem("entity.iqcOrder.judgedescription", "zh-CN", "判定说明", "判定说明"),
-            // entity.iqcOrder.judgedescription
-            new TranslationSeedItem("entity.iqcOrder.judgedescription", "zh-HK", "判定说明", "判定说明"),
+            // entity.iqcorder.judgedescription
+            new TranslationSeedItem("entity.iqcorder.judgedescription", "en-US", "判定说明", "判定说明"),
+            // entity.iqcorder.judgedescription
+            new TranslationSeedItem("entity.iqcorder.judgedescription", "ja-JP", "判定说明", "判定说明"),
+            // entity.iqcorder.judgedescription
+            new TranslationSeedItem("entity.iqcorder.judgedescription", "zh-CN", "判定说明", "判定说明"),
+            // entity.iqcorder.judgedescription
+            new TranslationSeedItem("entity.iqcorder.judgedescription", "zh-HK", "判定说明", "判定说明"),
 
-            // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "en-US", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
-            // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "ja-JP", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
-            // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "zh-CN", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
-            // entity.iqcOrder.items
-            new TranslationSeedItem("entity.iqcOrder.items", "zh-HK", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
+            // entity.iqcorder.items
+            new TranslationSeedItem("entity.iqcorder.items", "en-US", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
+            // entity.iqcorder.items
+            new TranslationSeedItem("entity.iqcorder.items", "ja-JP", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
+            // entity.iqcorder.items
+            new TranslationSeedItem("entity.iqcorder.items", "zh-CN", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
+            // entity.iqcorder.items
+            new TranslationSeedItem("entity.iqcorder.items", "zh-HK", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
 
-            // entity.iqcOrder.changelogs
-            new TranslationSeedItem("entity.iqcOrder.changelogs", "en-US", "变更日志列表", "变更日志列表（主子表关系）"),
-            // entity.iqcOrder.changelogs
-            new TranslationSeedItem("entity.iqcOrder.changelogs", "ja-JP", "变更日志列表", "变更日志列表（主子表关系）"),
-            // entity.iqcOrder.changelogs
-            new TranslationSeedItem("entity.iqcOrder.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
-            // entity.iqcOrder.changelogs
-            new TranslationSeedItem("entity.iqcOrder.changelogs", "zh-HK", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.iqcorder.changelogs
+            new TranslationSeedItem("entity.iqcorder.changelogs", "en-US", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.iqcorder.changelogs
+            new TranslationSeedItem("entity.iqcorder.changelogs", "ja-JP", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.iqcorder.changelogs
+            new TranslationSeedItem("entity.iqcorder.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
+            // entity.iqcorder.changelogs
+            new TranslationSeedItem("entity.iqcorder.changelogs", "zh-HK", "变更日志列表", "变更日志列表（主子表关系）"),
         };
     }
 
@@ -251,8 +250,8 @@ public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

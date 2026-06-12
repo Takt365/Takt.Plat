@@ -45,7 +45,7 @@ public class TaktMessageDto : TaktCompanyDtoBase
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FromUserId { get; set; }
+    public long FromUserId { get; set; }
 
     /// <summary>
     /// 接收者用户名
@@ -56,12 +56,17 @@ public class TaktMessageDto : TaktCompanyDtoBase
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ToUserId { get; set; }
+    public long ToUserId { get; set; }
+
+    /// <summary>
+    /// 是否抄送发送者本人（自审计，默认是）
+    /// </summary>
+    public int IsCc { get; set; } = 1;
 
     /// <summary>
     /// 消息标题
     /// </summary>
-    public string? MessageTitle { get; set; } = string.Empty;
+    public string MessageTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息内容
@@ -69,24 +74,19 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
+    /// 附件列表 JSON
+    /// </summary>
+    public string? Attachments { get; set; }
+
+    /// <summary>
     /// 消息类型
     /// </summary>
-    public TaktMessageType MessageType { get; set; } = TaktMessageType.UserMessage;
+    public int MessageType { get; set; } = 1;
 
     /// <summary>
     /// 消息分组
     /// </summary>
-    public TaktMessageGroup? MessageGroup { get; set; }
-
-    /// <summary>
-    /// 读取状态（0=未读，1=已读）
-    /// </summary>
-    public TaktMessageReadStatus ReadStatus { get; set; } = TaktMessageReadStatus.Unread;
-
-    /// <summary>
-    /// 读取时间
-    /// </summary>
-    public DateTime? ReadTime { get; set; }
+    public int MessageGroup { get; set; } = 1;
 
     /// <summary>
     /// 发送时间
@@ -94,9 +94,14 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public DateTime SendTime { get; set; }
 
     /// <summary>
-    /// 消息扩展数据（JSON）
+    /// 读取时间
     /// </summary>
-    public string? MessageExtData { get; set; } = string.Empty;
+    public DateTime? ReadTime { get; set; }
+
+    /// <summary>
+    /// 读取状态（0=未读，1=已读）
+    /// </summary>
+    public int ReadStatus { get; set; } = 0;
 
 }
 
@@ -132,7 +137,7 @@ public class TaktMessageQueryDto : TaktPagedQuery
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 接收者用户名（模糊）
     /// </summary>
     public string? ToUserName { get; set; } = string.Empty;
 
@@ -141,6 +146,11 @@ public class TaktMessageQueryDto : TaktPagedQuery
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
+
+    /// <summary>
+    /// 是否抄送发送者本人（自审计）
+    /// </summary>
+    public int? IsCc { get; set; }
 
     /// <summary>
     /// 消息标题
@@ -153,29 +163,19 @@ public class TaktMessageQueryDto : TaktPagedQuery
     public string? MessageContent { get; set; } = string.Empty;
 
     /// <summary>
+    /// 附件（模糊）
+    /// </summary>
+    public string? Attachments { get; set; }
+
+    /// <summary>
     /// 消息类型
     /// </summary>
-    public TaktMessageType? MessageType { get; set; }
+    public int? MessageType { get; set; }
 
     /// <summary>
     /// 消息分组
     /// </summary>
-    public TaktMessageGroup? MessageGroup { get; set; }
-
-    /// <summary>
-    /// 读取状态（0=未读，1=已读）
-    /// </summary>
-    public TaktMessageReadStatus? ReadStatus { get; set; }
-
-    /// <summary>
-    /// 读取时间（范围查询-开始）
-    /// </summary>
-    public DateTime? ReadTimeStart { get; set; }
-
-    /// <summary>
-    /// 读取时间（范围查询-结束）
-    /// </summary>
-    public DateTime? ReadTimeEnd { get; set; }
+    public int? MessageGroup { get; set; }
 
     /// <summary>
     /// 发送时间（范围查询-开始）
@@ -188,9 +188,19 @@ public class TaktMessageQueryDto : TaktPagedQuery
     public DateTime? SendTimeEnd { get; set; }
 
     /// <summary>
-    /// 消息扩展数据（JSON）
+    /// 读取时间（范围查询-开始）
     /// </summary>
-    public string? MessageExtData { get; set; } = string.Empty;
+    public DateTime? ReadTimeStart { get; set; }
+
+    /// <summary>
+    /// 读取时间（范围查询-结束）
+    /// </summary>
+    public DateTime? ReadTimeEnd { get; set; }
+
+    /// <summary>
+    /// 读取状态（0=未读，1=已读）
+    /// </summary>
+    public int? ReadStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -214,6 +224,61 @@ public class TaktMessageQueryDto : TaktPagedQuery
 }
 
 // ========================================
+// 收件箱已读 / 未读列表查询 DTO
+// ========================================
+
+/// <summary>
+/// 当前登录用户收件箱消息分页查询 DTO（已读/未读列表共用；接收者与 ReadStatus 由服务端按路由固定）
+/// </summary>
+public class TaktMessageInboxListQueryDto : TaktPagedQuery
+{
+    /// <summary>
+    /// 发送者用户名（模糊）
+    /// </summary>
+    public string? FromUserName { get; set; }
+
+    /// <summary>
+    /// 消息标题（模糊）
+    /// </summary>
+    public string? MessageTitle { get; set; }
+
+    /// <summary>
+    /// 消息内容（模糊）
+    /// </summary>
+    public string? MessageContent { get; set; }
+
+    /// <summary>
+    /// 消息类型
+    /// </summary>
+    public int? MessageType { get; set; }
+
+    /// <summary>
+    /// 消息分组
+    /// </summary>
+    public int? MessageGroup { get; set; }
+
+    /// <summary>
+    /// 发送时间（范围查询-开始）
+    /// </summary>
+    public DateTime? SendTimeStart { get; set; }
+
+    /// <summary>
+    /// 发送时间（范围查询-结束）
+    /// </summary>
+    public DateTime? SendTimeEnd { get; set; }
+
+    /// <summary>
+    /// 读取时间（范围查询-开始，已读列表可用）
+    /// </summary>
+    public DateTime? ReadTimeStart { get; set; }
+
+    /// <summary>
+    /// 读取时间（范围查询-结束，已读列表可用）
+    /// </summary>
+    public DateTime? ReadTimeEnd { get; set; }
+}
+
+// ========================================
 // 创建Message DTO
 // ========================================
 
@@ -232,51 +297,49 @@ public class TaktMessageCreateDto
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FromUserId { get; set; }
+    public long FromUserId { get; set; }
 
     /// <summary>
     /// 接收者用户名
     /// </summary>
-    [Required(ErrorMessage = "接收者用户名不能为空")]
     public string ToUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ToUserId { get; set; }
+    public long ToUserId { get; set; }
+
+    /// <summary>
+    /// 是否抄送发送者本人（自审计，默认是）
+    /// </summary>
+    public int IsCc { get; set; } = 1;
 
     /// <summary>
     /// 消息标题
     /// </summary>
-    public string? MessageTitle { get; set; } = string.Empty;
+    public string MessageTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息内容
     /// </summary>
-    [Required(ErrorMessage = "消息内容不能为空")]
     public string MessageContent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件列表 JSON
+    /// </summary>
+    public string? Attachments { get; set; }
 
     /// <summary>
     /// 消息类型
     /// </summary>
     [Required(ErrorMessage = "消息类型不能为空")]
-    public TaktMessageType MessageType { get; set; } = TaktMessageType.UserMessage;
+    public int MessageType { get; set; } = 1;
 
     /// <summary>
     /// 消息分组
     /// </summary>
-    public TaktMessageGroup? MessageGroup { get; set; }
-
-    /// <summary>
-    /// 读取状态（0=未读，1=已读）
-    /// </summary>
-    public TaktMessageReadStatus ReadStatus { get; set; } = TaktMessageReadStatus.Unread;
-
-    /// <summary>
-    /// 读取时间
-    /// </summary>
-    public DateTime? ReadTime { get; set; }
+    public int MessageGroup { get; set; } = 1;
 
     /// <summary>
     /// 发送时间
@@ -284,9 +347,14 @@ public class TaktMessageCreateDto
     public DateTime SendTime { get; set; }
 
     /// <summary>
-    /// 消息扩展数据（JSON）
+    /// 读取时间
     /// </summary>
-    public string? MessageExtData { get; set; } = string.Empty;
+    public DateTime? ReadTime { get; set; }
+
+    /// <summary>
+    /// 读取状态（0=未读，1=已读）
+    /// </summary>
+    public int ReadStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -297,37 +365,89 @@ public class TaktMessageCreateDto
     /// 备注
     /// </summary>
     public string? Remark { get; set; }
-
 }
 
 // ========================================
-// 更新Message DTO
+// 批量创建并推送 DTO
 // ========================================
 
 /// <summary>
-/// 更新Message DTO
-/// 继承 TaktMessageCreateDto，添加 MessageId 字段
+/// 批量创建在线消息并 SignalR 推送 DTO（全员或指定用户列表）
 /// </summary>
-public class TaktMessageUpdateDto : TaktMessageCreateDto
+public class TaktMessageBatchCreateDto
 {
     /// <summary>
-    /// MessageID（标识要更新的实体）
+    /// 发送者用户名
     /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long MessageId { get; set; }
+    [Required(ErrorMessage = "发送者用户名不能为空")]
+    public string FromUserName { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 发送者用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long FromUserId { get; set; }
+
+    /// <summary>
+    /// 是否向当前公司全部可访问用户落库并推送
+    /// </summary>
+    public bool SendToAll { get; set; }
+
+    /// <summary>
+    /// 指定接收者用户 ID 列表（SendToAll=false 时使用；元素为 string 以兼容前端雪花 ID）
+    /// </summary>
+    public List<string> ToUserIds { get; set; } = new();
+
+    /// <summary>
+    /// 是否抄送发送者本人（自审计，默认是）
+    /// </summary>
+    public int IsCc { get; set; } = 1;
+
+    /// <summary>
+    /// 消息标题
+    /// </summary>
+    public string MessageTitle { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 消息内容
+    /// </summary>
+    public string MessageContent { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件列表 JSON
+    /// </summary>
+    public string? Attachments { get; set; }
+
+    /// <summary>
+    /// 消息类型
+    /// </summary>
+    [Required(ErrorMessage = "消息类型不能为空")]
+    public int MessageType { get; set; } = 1;
+
+    /// <summary>
+    /// 消息分组
+    /// </summary>
+    public int MessageGroup { get; set; } = 1;
+
+    /// <summary>
+    /// 发送时间
+    /// </summary>
+    public DateTime SendTime { get; set; }
+
+    /// <summary>
+    /// 读取状态（0=未读，1=已读）
+    /// </summary>
+    public int ReadStatus { get; set; } = 0;
 }
 
 // ========================================
-// Message 状态 DTO
+// 已读 / 未读 DTO
 // ========================================
 
 /// <summary>
-/// Message 状态更新 DTO
+/// 标记在线消息已读 DTO
 /// </summary>
-public class TaktMessageStatusDto
+public class TaktMessageReadDto
 {
     /// <summary>
     /// MessageID
@@ -338,10 +458,40 @@ public class TaktMessageStatusDto
     public long MessageId { get; set; }
 
     /// <summary>
-    /// 读取状态（0=未读，1=已读）
+    /// 读取状态（固定为已读）
     /// </summary>
-    [Required(ErrorMessage = "读取状态（0=未读，1=已读）不能为空")]
-    public TaktMessageReadStatus ReadStatus { get; set; } = TaktMessageReadStatus.Unread;
+    [Required(ErrorMessage = "读取状态不能为空")]
+    public int ReadStatus { get; set; } = 1;
+
+    /// <summary>
+    /// 读取时间（为空时服务端写入当前时间）
+    /// </summary>
+    public DateTime? ReadTime { get; set; }
+}
+
+/// <summary>
+/// 标记在线消息未读 DTO
+/// </summary>
+public class TaktMessageUnreadDto
+{
+    /// <summary>
+    /// MessageID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long MessageId { get; set; }
+
+    /// <summary>
+    /// 读取状态（固定为未读）
+    /// </summary>
+    [Required(ErrorMessage = "读取状态不能为空")]
+    public int ReadStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 读取时间（标记未读时须清空）
+    /// </summary>
+    public DateTime? ReadTime { get; set; }
 }
 
 // ========================================
@@ -376,12 +526,12 @@ public class TaktMessageBroadcastDto
     /// <summary>
     /// 消息类型
     /// </summary>
-    public TaktMessageType MessageType { get; set; } = TaktMessageType.SystemNotice;
+    public int MessageType { get; set; } = 4;
 
     /// <summary>
     /// 消息分组
     /// </summary>
-    public TaktMessageGroup MessageGroup { get; set; } = TaktMessageGroup.Notification;
+    public int MessageGroup { get; set; } = 4;
 
     /// <summary>
     /// 发送时间
@@ -419,7 +569,7 @@ public class TaktMessageExportDto
     /// 发送者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FromUserId { get; set; }
+    public long FromUserId { get; set; }
 
     /// <summary>
     /// 接收者用户名
@@ -430,12 +580,17 @@ public class TaktMessageExportDto
     /// 接收者用户 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ToUserId { get; set; }
+    public long ToUserId { get; set; }
+
+    /// <summary>
+    /// 是否抄送发送者本人（自审计，默认是）
+    /// </summary>
+    public int IsCc { get; set; } = 1;
 
     /// <summary>
     /// 消息标题
     /// </summary>
-    public string? MessageTitle { get; set; } = string.Empty;
+    public string MessageTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// 消息内容
@@ -443,24 +598,19 @@ public class TaktMessageExportDto
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
+    /// 附件列表 JSON
+    /// </summary>
+    public string? Attachments { get; set; }
+
+    /// <summary>
     /// 消息类型
     /// </summary>
-    public TaktMessageType MessageType { get; set; } = TaktMessageType.UserMessage;
+    public int MessageType { get; set; } = 1;
 
     /// <summary>
     /// 消息分组
     /// </summary>
-    public TaktMessageGroup? MessageGroup { get; set; }
-
-    /// <summary>
-    /// 读取状态（0=未读，1=已读）
-    /// </summary>
-    public TaktMessageReadStatus ReadStatus { get; set; } = TaktMessageReadStatus.Unread;
-
-    /// <summary>
-    /// 读取时间
-    /// </summary>
-    public DateTime? ReadTime { get; set; }
+    public int MessageGroup { get; set; } = 1;
 
     /// <summary>
     /// 发送时间
@@ -468,9 +618,14 @@ public class TaktMessageExportDto
     public DateTime SendTime { get; set; }
 
     /// <summary>
-    /// 消息扩展数据（JSON）
+    /// 读取时间
     /// </summary>
-    public string? MessageExtData { get; set; } = string.Empty;
+    public DateTime? ReadTime { get; set; }
+
+    /// <summary>
+    /// 读取状态（0=未读，1=已读）
+    /// </summary>
+    public int ReadStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

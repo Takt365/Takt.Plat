@@ -15,7 +15,7 @@ using Takt.Shared.Models;
 namespace Takt.Domain.Interfaces;
 
 /// <summary>
-/// 敏感词过滤服务。从当前租户 <see cref="Entities.Foundation.TaktVocabulary"/> 词库加载启用词条，
+/// 敏感词过滤服务。从当前租户 TaktVocabulary 词库加载启用词条，
 /// 供新闻评论、公告等 UGC 场景检测或替换敏感词。
 /// </summary>
 public interface ITaktVocabularyFilter

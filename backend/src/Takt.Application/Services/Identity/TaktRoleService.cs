@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Identity
 // 文件名称：TaktRoleService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：角色应用服务实现
 // 
@@ -125,7 +125,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
     public async Task<TaktRoleDto> CreateRoleAsync(TaktRoleCreateDto dto)
     {
         var entity = dto.Adapt<TaktRole>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         var isUnique_ix_role_code_unique = await _uniqueValidator.IsUniqueAsync(
             _roleRepository,
             x => x.RoleCode == entity.RoleCode);
@@ -208,7 +208,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
         {
             throw new TaktBusinessException("角色不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置角色不允许删除");
         }
@@ -234,7 +234,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
         {
             return;
         }
-        if (await _roleRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _roleRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置角色不允许删除");
         }
@@ -256,7 +256,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
         {
             throw new TaktBusinessException("角色不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.RoleStatus != TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == 1 && dto.RoleStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置角色");
         }
@@ -321,7 +321,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
             try
             {
                 var entity = rows[i].Adapt<TaktRole>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.RoleCode}";
                 if (!importSeenKeys.Add(importKey))
                 {

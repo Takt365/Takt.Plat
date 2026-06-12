@@ -10,7 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import type { TaktPagedQuery, TenantDtoBase } from '@/types/common';
+import type { TaktPagedQuery, TaktSelectOption, TenantDtoBase } from '@/types/common';
 
 /**
  * 字典数据实体 字典类型的具体数据项，如：订单状态下的“待支付”、“已完成”等 租户级实体：字典数据在租户内共享，不需要公司隔离
@@ -520,5 +520,16 @@ export interface DictDataExport {
    */
   createdAt: string;
 
+}
+
+/**
+ * 租户下全部字典数据响应
+ * @description 对应后端 TaktDataDictAllDto
+ */
+export interface DictDataAll {
+  /**
+   * 字典项列表（含 dictTypeCode 供前端分组）
+   */
+  items: TaktSelectOption[];
 }
 

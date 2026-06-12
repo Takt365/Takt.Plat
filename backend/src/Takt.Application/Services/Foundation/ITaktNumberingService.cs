@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktNumberingService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：编号规则应用服务接口
 // 
@@ -101,5 +101,19 @@ public interface ITaktNumberingService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportNumberingAsync(TaktNumberingQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 预览编号（不占用流水号、不写库）
+    /// </summary>
+    /// <param name="request">预览参数</param>
+    /// <returns>预览结果</returns>
+    Task<TaktNumberingPreviewResultDto> PreviewNumberingAsync(TaktNumberingPreviewRequestDto request);
+
+    /// <summary>
+    /// 生成下一个业务编号（递增 CurrentSequence 并写回规则）
+    /// </summary>
+    /// <param name="request">生成参数</param>
+    /// <returns>生成结果</returns>
+    Task<TaktNumberingGenerateResultDto> GenerateNumberingAsync(TaktNumberingGenerateRequestDto request);
 
 }

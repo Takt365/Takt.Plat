@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktShiftScheduleI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktShiftSchedule 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance;
 
 /// <summary>
-/// TaktShiftSchedule 实体国际化翻译种子（键前缀 entity.shiftSchedule.*）
+/// TaktShiftSchedule 实体国际化翻译种子（键前缀 entity.shiftschedule.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktShiftScheduleI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktShiftScheduleI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 shiftSchedule 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 shiftschedule 实体翻译...", tenantCode);
 
         foreach (var item in GetShiftScheduleTranslations())
         {
@@ -76,74 +75,74 @@ public class TaktShiftScheduleI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktShiftSchedule 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.shiftSchedule._self / entity.shiftSchedule.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.shiftschedule._self / entity.shiftschedule.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetShiftScheduleTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.shiftSchedule._self
-            new TranslationSeedItem("entity.shiftSchedule._self", "en-US", "Shift Schedule Information", "实体名称"),
-            // entity.shiftSchedule._self
-            new TranslationSeedItem("entity.shiftSchedule._self", "ja-JP", "排班计划信息", "实体名称"),
-            // entity.shiftSchedule._self
-            new TranslationSeedItem("entity.shiftSchedule._self", "zh-CN", "排班计划信息", "实体名称"),
-            // entity.shiftSchedule._self
-            new TranslationSeedItem("entity.shiftSchedule._self", "zh-HK", "排班计划信息", "实体名称"),
+            // entity.shiftschedule._self
+            new TranslationSeedItem("entity.shiftschedule._self", "en-US", "Shift Schedule Information", "实体名称"),
+            // entity.shiftschedule._self
+            new TranslationSeedItem("entity.shiftschedule._self", "ja-JP", "排班计划信息", "实体名称"),
+            // entity.shiftschedule._self
+            new TranslationSeedItem("entity.shiftschedule._self", "zh-CN", "排班计划信息", "实体名称"),
+            // entity.shiftschedule._self
+            new TranslationSeedItem("entity.shiftschedule._self", "zh-HK", "排班计划信息", "实体名称"),
 
-            // entity.shiftSchedule.scheduletype
-            new TranslationSeedItem("entity.shiftSchedule.scheduletype", "en-US", "排班类别", "排班类别（0=部门 1=人员）"),
-            // entity.shiftSchedule.scheduletype
-            new TranslationSeedItem("entity.shiftSchedule.scheduletype", "ja-JP", "排班类别", "排班类别（0=部门 1=人员）"),
-            // entity.shiftSchedule.scheduletype
-            new TranslationSeedItem("entity.shiftSchedule.scheduletype", "zh-CN", "排班类别", "排班类别（0=部门 1=人员）"),
-            // entity.shiftSchedule.scheduletype
-            new TranslationSeedItem("entity.shiftSchedule.scheduletype", "zh-HK", "排班类别", "排班类别（0=部门 1=人员）"),
+            // entity.shiftschedule.scheduletype
+            new TranslationSeedItem("entity.shiftschedule.scheduletype", "en-US", "排班类别", "排班类别（0=部门 1=人员）"),
+            // entity.shiftschedule.scheduletype
+            new TranslationSeedItem("entity.shiftschedule.scheduletype", "ja-JP", "排班类别", "排班类别（0=部门 1=人员）"),
+            // entity.shiftschedule.scheduletype
+            new TranslationSeedItem("entity.shiftschedule.scheduletype", "zh-CN", "排班类别", "排班类别（0=部门 1=人员）"),
+            // entity.shiftschedule.scheduletype
+            new TranslationSeedItem("entity.shiftschedule.scheduletype", "zh-HK", "排班类别", "排班类别（0=部门 1=人员）"),
 
-            // entity.shiftSchedule.deptid
-            new TranslationSeedItem("entity.shiftSchedule.deptid", "en-US", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
-            // entity.shiftSchedule.deptid
-            new TranslationSeedItem("entity.shiftSchedule.deptid", "ja-JP", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
-            // entity.shiftSchedule.deptid
-            new TranslationSeedItem("entity.shiftSchedule.deptid", "zh-CN", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
-            // entity.shiftSchedule.deptid
-            new TranslationSeedItem("entity.shiftSchedule.deptid", "zh-HK", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
+            // entity.shiftschedule.deptid
+            new TranslationSeedItem("entity.shiftschedule.deptid", "en-US", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
+            // entity.shiftschedule.deptid
+            new TranslationSeedItem("entity.shiftschedule.deptid", "ja-JP", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
+            // entity.shiftschedule.deptid
+            new TranslationSeedItem("entity.shiftschedule.deptid", "zh-CN", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
+            // entity.shiftschedule.deptid
+            new TranslationSeedItem("entity.shiftschedule.deptid", "zh-HK", "部门ID", "部门 ID（ScheduleType=0 时必填）"),
 
-            // entity.shiftSchedule.employeeid
-            new TranslationSeedItem("entity.shiftSchedule.employeeid", "en-US", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
-            // entity.shiftSchedule.employeeid
-            new TranslationSeedItem("entity.shiftSchedule.employeeid", "ja-JP", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
-            // entity.shiftSchedule.employeeid
-            new TranslationSeedItem("entity.shiftSchedule.employeeid", "zh-CN", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
-            // entity.shiftSchedule.employeeid
-            new TranslationSeedItem("entity.shiftSchedule.employeeid", "zh-HK", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
+            // entity.shiftschedule.employeeid
+            new TranslationSeedItem("entity.shiftschedule.employeeid", "en-US", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
+            // entity.shiftschedule.employeeid
+            new TranslationSeedItem("entity.shiftschedule.employeeid", "ja-JP", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
+            // entity.shiftschedule.employeeid
+            new TranslationSeedItem("entity.shiftschedule.employeeid", "zh-CN", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
+            // entity.shiftschedule.employeeid
+            new TranslationSeedItem("entity.shiftschedule.employeeid", "zh-HK", "员工ID", "员工 ID（ScheduleType=1 时必填）"),
 
-            // entity.shiftSchedule.scheduledate
-            new TranslationSeedItem("entity.shiftSchedule.scheduledate", "en-US", "排班日期", "排班日期"),
-            // entity.shiftSchedule.scheduledate
-            new TranslationSeedItem("entity.shiftSchedule.scheduledate", "ja-JP", "排班日期", "排班日期"),
-            // entity.shiftSchedule.scheduledate
-            new TranslationSeedItem("entity.shiftSchedule.scheduledate", "zh-CN", "排班日期", "排班日期"),
-            // entity.shiftSchedule.scheduledate
-            new TranslationSeedItem("entity.shiftSchedule.scheduledate", "zh-HK", "排班日期", "排班日期"),
+            // entity.shiftschedule.scheduledate
+            new TranslationSeedItem("entity.shiftschedule.scheduledate", "en-US", "排班日期", "排班日期"),
+            // entity.shiftschedule.scheduledate
+            new TranslationSeedItem("entity.shiftschedule.scheduledate", "ja-JP", "排班日期", "排班日期"),
+            // entity.shiftschedule.scheduledate
+            new TranslationSeedItem("entity.shiftschedule.scheduledate", "zh-CN", "排班日期", "排班日期"),
+            // entity.shiftschedule.scheduledate
+            new TranslationSeedItem("entity.shiftschedule.scheduledate", "zh-HK", "排班日期", "排班日期"),
 
-            // entity.shiftSchedule.shiftid
-            new TranslationSeedItem("entity.shiftSchedule.shiftid", "en-US", "班次ID", "班次 ID（<see cref=\"TaktWorkShift\"/>）"),
-            // entity.shiftSchedule.shiftid
-            new TranslationSeedItem("entity.shiftSchedule.shiftid", "ja-JP", "班次ID", "班次 ID（<see cref=\"TaktWorkShift\"/>）"),
-            // entity.shiftSchedule.shiftid
-            new TranslationSeedItem("entity.shiftSchedule.shiftid", "zh-CN", "班次ID", "班次 ID（<see cref=\"TaktWorkShift\"/>）"),
-            // entity.shiftSchedule.shiftid
-            new TranslationSeedItem("entity.shiftSchedule.shiftid", "zh-HK", "班次ID", "班次 ID（<see cref=\"TaktWorkShift\"/>）"),
+            // entity.shiftschedule.shiftid
+            new TranslationSeedItem("entity.shiftschedule.shiftid", "en-US", "班次ID", "班次 ID（TaktWorkShift）"),
+            // entity.shiftschedule.shiftid
+            new TranslationSeedItem("entity.shiftschedule.shiftid", "ja-JP", "班次ID", "班次 ID（TaktWorkShift）"),
+            // entity.shiftschedule.shiftid
+            new TranslationSeedItem("entity.shiftschedule.shiftid", "zh-CN", "班次ID", "班次 ID（TaktWorkShift）"),
+            // entity.shiftschedule.shiftid
+            new TranslationSeedItem("entity.shiftschedule.shiftid", "zh-HK", "班次ID", "班次 ID（TaktWorkShift）"),
 
-            // entity.shiftSchedule.relatedplant
-            new TranslationSeedItem("entity.shiftSchedule.relatedplant", "en-US", "关联工厂", "关联工厂"),
-            // entity.shiftSchedule.relatedplant
-            new TranslationSeedItem("entity.shiftSchedule.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
-            // entity.shiftSchedule.relatedplant
-            new TranslationSeedItem("entity.shiftSchedule.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
-            // entity.shiftSchedule.relatedplant
-            new TranslationSeedItem("entity.shiftSchedule.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            // entity.shiftschedule.relatedplant
+            new TranslationSeedItem("entity.shiftschedule.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            // entity.shiftschedule.relatedplant
+            new TranslationSeedItem("entity.shiftschedule.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            // entity.shiftschedule.relatedplant
+            new TranslationSeedItem("entity.shiftschedule.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
+            // entity.shiftschedule.relatedplant
+            new TranslationSeedItem("entity.shiftschedule.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
         };
     }
 
@@ -161,8 +160,8 @@ public class TaktShiftScheduleI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

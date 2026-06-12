@@ -13,19 +13,19 @@
 namespace Takt.Shared.Options;
 
 /// <summary>
-/// 启动初始化开关（<c>Init</c> 节，仅控制是否执行各步骤；租户/公司/种子源在 <see cref="TaktDatabaseOptions"/>）
+/// 启动初始化开关（<c>Init</c> 节，仅控制是否执行各步骤；租户/公司/种子源在 TaktDatabaseOptions）
 /// </summary>
 public class TaktInitOptions
 {
     public const string SectionName = "Init";
 
     /// <summary>
-    /// 是否按 <see cref="TaktDatabaseOptions.TenantCodes"/> 建库建表
+    /// 是否按 TaktDatabaseOptions.TenantCodes 建库建表
     /// </summary>
     public bool InitDb { get; set; }
 
     /// <summary>
-    /// 是否执行业务种子（范围由 <see cref="TaktDatabaseOptions.TenantCodes"/>、<see cref="TaktDatabaseOptions.CompanyCodes"/> 决定）
+    /// 是否执行业务种子（范围由 TaktDatabaseOptions.TenantCodes、TaktDatabaseOptions.CompanyCodes 决定）
     /// </summary>
     public bool SeedData { get; set; }
 }

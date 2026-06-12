@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleChangeLogI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsScheduleChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling;
 
 /// <summary>
-/// TaktApsScheduleChangeLog 实体国际化翻译种子（键前缀 entity.apsScheduleChangeLog.*）
+/// TaktApsScheduleChangeLog 实体国际化翻译种子（键前缀 entity.apsschedulechangelog.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktApsScheduleChangeLogI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktApsScheduleChangeLogI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 apsScheduleChangeLog 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 apsschedulechangelog 实体翻译...", tenantCode);
 
         foreach (var item in GetApsScheduleChangeLogTranslations())
         {
@@ -76,83 +75,83 @@ public class TaktApsScheduleChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktApsScheduleChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.apsScheduleChangeLog._self / entity.apsScheduleChangeLog.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.apsschedulechangelog._self / entity.apsschedulechangelog.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetApsScheduleChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.apsScheduleChangeLog._self
-            new TranslationSeedItem("entity.apsScheduleChangeLog._self", "en-US", "Aps Schedule Change Log Information", "实体名称"),
-            // entity.apsScheduleChangeLog._self
-            new TranslationSeedItem("entity.apsScheduleChangeLog._self", "ja-JP", "APS排程变更日志", "实体名称"),
-            // entity.apsScheduleChangeLog._self
-            new TranslationSeedItem("entity.apsScheduleChangeLog._self", "zh-CN", "APS排程变更日志", "实体名称"),
-            // entity.apsScheduleChangeLog._self
-            new TranslationSeedItem("entity.apsScheduleChangeLog._self", "zh-HK", "APS排程变更日志", "实体名称"),
+            // entity.apsschedulechangelog._self
+            new TranslationSeedItem("entity.apsschedulechangelog._self", "en-US", "Aps Schedule Change Log Information", "实体名称"),
+            // entity.apsschedulechangelog._self
+            new TranslationSeedItem("entity.apsschedulechangelog._self", "ja-JP", "APS排程变更日志", "实体名称"),
+            // entity.apsschedulechangelog._self
+            new TranslationSeedItem("entity.apsschedulechangelog._self", "zh-CN", "APS排程变更日志", "实体名称"),
+            // entity.apsschedulechangelog._self
+            new TranslationSeedItem("entity.apsschedulechangelog._self", "zh-HK", "APS排程变更日志", "实体名称"),
 
-            // entity.apsScheduleChangeLog.apsscheduleid
-            new TranslationSeedItem("entity.apsScheduleChangeLog.apsscheduleid", "en-US", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.apsScheduleChangeLog.apsscheduleid
-            new TranslationSeedItem("entity.apsScheduleChangeLog.apsscheduleid", "ja-JP", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.apsScheduleChangeLog.apsscheduleid
-            new TranslationSeedItem("entity.apsScheduleChangeLog.apsscheduleid", "zh-CN", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.apsScheduleChangeLog.apsscheduleid
-            new TranslationSeedItem("entity.apsScheduleChangeLog.apsscheduleid", "zh-HK", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.apsschedulechangelog.apsscheduleid
+            new TranslationSeedItem("entity.apsschedulechangelog.apsscheduleid", "en-US", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.apsschedulechangelog.apsscheduleid
+            new TranslationSeedItem("entity.apsschedulechangelog.apsscheduleid", "ja-JP", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.apsschedulechangelog.apsscheduleid
+            new TranslationSeedItem("entity.apsschedulechangelog.apsscheduleid", "zh-CN", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.apsschedulechangelog.apsscheduleid
+            new TranslationSeedItem("entity.apsschedulechangelog.apsscheduleid", "zh-HK", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
-            // entity.apsScheduleChangeLog.changefields
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.apsScheduleChangeLog.changefields
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.apsScheduleChangeLog.changefields
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.apsScheduleChangeLog.changefields
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.apsschedulechangelog.changefields
+            new TranslationSeedItem("entity.apsschedulechangelog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.apsschedulechangelog.changefields
+            new TranslationSeedItem("entity.apsschedulechangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.apsschedulechangelog.changefields
+            new TranslationSeedItem("entity.apsschedulechangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.apsschedulechangelog.changefields
+            new TranslationSeedItem("entity.apsschedulechangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
 
-            // entity.apsScheduleChangeLog.changetype
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetype", "en-US", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
-            // entity.apsScheduleChangeLog.changetype
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetype", "ja-JP", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
-            // entity.apsScheduleChangeLog.changetype
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetype", "zh-CN", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
-            // entity.apsScheduleChangeLog.changetype
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetype", "zh-HK", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
+            // entity.apsschedulechangelog.changetype
+            new TranslationSeedItem("entity.apsschedulechangelog.changetype", "en-US", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
+            // entity.apsschedulechangelog.changetype
+            new TranslationSeedItem("entity.apsschedulechangelog.changetype", "ja-JP", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
+            // entity.apsschedulechangelog.changetype
+            new TranslationSeedItem("entity.apsschedulechangelog.changetype", "zh-CN", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
+            // entity.apsschedulechangelog.changetype
+            new TranslationSeedItem("entity.apsschedulechangelog.changetype", "zh-HK", "变更类型", "变更类型（0=新增，1=修改，2=删除，3=状态变更，4=重新排程）"),
 
-            // entity.apsScheduleChangeLog.changereason
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changereason", "en-US", "变更原因", "变更原因"),
-            // entity.apsScheduleChangeLog.changereason
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changereason", "ja-JP", "变更原因", "变更原因"),
-            // entity.apsScheduleChangeLog.changereason
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changereason", "zh-CN", "变更原因", "变更原因"),
-            // entity.apsScheduleChangeLog.changereason
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changereason", "zh-HK", "变更原因", "变更原因"),
+            // entity.apsschedulechangelog.changereason
+            new TranslationSeedItem("entity.apsschedulechangelog.changereason", "en-US", "变更原因", "变更原因"),
+            // entity.apsschedulechangelog.changereason
+            new TranslationSeedItem("entity.apsschedulechangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            // entity.apsschedulechangelog.changereason
+            new TranslationSeedItem("entity.apsschedulechangelog.changereason", "zh-CN", "变更原因", "变更原因"),
+            // entity.apsschedulechangelog.changereason
+            new TranslationSeedItem("entity.apsschedulechangelog.changereason", "zh-HK", "变更原因", "变更原因"),
 
-            // entity.apsScheduleChangeLog.changeby
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changeby", "en-US", "变更人", "变更人（人员代码）"),
-            // entity.apsScheduleChangeLog.changeby
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changeby", "ja-JP", "变更人", "变更人（人员代码）"),
-            // entity.apsScheduleChangeLog.changeby
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
-            // entity.apsScheduleChangeLog.changeby
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changeby", "zh-HK", "变更人", "变更人（人员代码）"),
+            // entity.apsschedulechangelog.changeby
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "en-US", "变更人", "变更人（人员代码）"),
+            // entity.apsschedulechangelog.changeby
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "ja-JP", "变更人", "变更人（人员代码）"),
+            // entity.apsschedulechangelog.changeby
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
+            // entity.apsschedulechangelog.changeby
+            new TranslationSeedItem("entity.apsschedulechangelog.changeby", "zh-HK", "变更人", "变更人（人员代码）"),
 
-            // entity.apsScheduleChangeLog.changetime
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetime", "en-US", "变更时间", "变更时间"),
-            // entity.apsScheduleChangeLog.changetime
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetime", "ja-JP", "变更时间", "变更时间"),
-            // entity.apsScheduleChangeLog.changetime
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetime", "zh-CN", "变更时间", "变更时间"),
-            // entity.apsScheduleChangeLog.changetime
-            new TranslationSeedItem("entity.apsScheduleChangeLog.changetime", "zh-HK", "变更时间", "变更时间"),
+            // entity.apsschedulechangelog.changetime
+            new TranslationSeedItem("entity.apsschedulechangelog.changetime", "en-US", "变更时间", "变更时间"),
+            // entity.apsschedulechangelog.changetime
+            new TranslationSeedItem("entity.apsschedulechangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            // entity.apsschedulechangelog.changetime
+            new TranslationSeedItem("entity.apsschedulechangelog.changetime", "zh-CN", "变更时间", "变更时间"),
+            // entity.apsschedulechangelog.changetime
+            new TranslationSeedItem("entity.apsschedulechangelog.changetime", "zh-HK", "变更时间", "变更时间"),
 
-            // entity.apsScheduleChangeLog.schedule
-            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "en-US", "APS排程主表", "APS排程主表（主表）"),
-            // entity.apsScheduleChangeLog.schedule
-            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "ja-JP", "APS排程主表", "APS排程主表（主表）"),
-            // entity.apsScheduleChangeLog.schedule
-            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "zh-CN", "APS排程主表", "APS排程主表（主表）"),
-            // entity.apsScheduleChangeLog.schedule
-            new TranslationSeedItem("entity.apsScheduleChangeLog.schedule", "zh-HK", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsschedulechangelog.schedule
+            new TranslationSeedItem("entity.apsschedulechangelog.schedule", "en-US", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsschedulechangelog.schedule
+            new TranslationSeedItem("entity.apsschedulechangelog.schedule", "ja-JP", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsschedulechangelog.schedule
+            new TranslationSeedItem("entity.apsschedulechangelog.schedule", "zh-CN", "APS排程主表", "APS排程主表（主表）"),
+            // entity.apsschedulechangelog.schedule
+            new TranslationSeedItem("entity.apsschedulechangelog.schedule", "zh-HK", "APS排程主表", "APS排程主表（主表）"),
         };
     }
 
@@ -170,8 +169,8 @@ public class TaktApsScheduleChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

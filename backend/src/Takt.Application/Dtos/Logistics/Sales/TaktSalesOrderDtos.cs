@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesOrderDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesOrder 生成，请按需审阅）
 // 
@@ -119,7 +119,7 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus OrderStatus { get; set; }
+    public int OrderStatus { get; set; }
 
     /// <summary>
     /// 交货状态（0=未交货，1=部分交货，2=全部交货）
@@ -148,7 +148,7 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     public List<TaktSalesOrderItemDto>? Items { get; set; }
 
     /// <summary>
-    /// 销售订单变更记录列表（外键在子表 <see cref="TaktSalesOrderChangeLog.OrderId"/>）
+    /// 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.OrderId）
     /// （子表：TaktSalesOrderChangeLog）
     /// </summary>
     public List<TaktSalesOrderChangeLogDto>? ChangeLogs { get; set; }
@@ -273,7 +273,7 @@ public class TaktSalesOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? OrderStatus { get; set; }
+    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 交货状态（0=未交货，1=部分交货，2=全部交货）
@@ -426,7 +426,7 @@ public class TaktSalesOrderCreateDto
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus OrderStatus { get; set; }
+    public int OrderStatus { get; set; }
 
     /// <summary>
     /// 交货状态（0=未交货，1=部分交货，2=全部交货）
@@ -454,7 +454,7 @@ public class TaktSalesOrderCreateDto
     public List<TaktSalesOrderItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 销售订单变更记录列表（外键在子表 <see cref="TaktSalesOrderChangeLog.OrderId"/>）（子表，级联保存）
+    /// 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.OrderId）（子表，级联保存）
     /// </summary>
     public List<TaktSalesOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
@@ -511,7 +511,7 @@ public class TaktSalesOrderStatusDto
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "订单状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus OrderStatus { get; set; }
+    public int OrderStatus { get; set; }
 }
 
 // ========================================
@@ -561,7 +561,7 @@ public class TaktSalesOrderTemplateDto
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? OrderStatus { get; set; }
+    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 交货状态（0=未交货，1=部分交货，2=全部交货）
@@ -643,7 +643,7 @@ public class TaktSalesOrderImportDto
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? OrderStatus { get; set; }
+    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 交货状态（0=未交货，1=部分交货，2=全部交货）
@@ -781,7 +781,7 @@ public class TaktSalesOrderExportDto
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus OrderStatus { get; set; }
+    public int OrderStatus { get; set; }
 
     /// <summary>
     /// 交货状态（0=未交货，1=部分交货，2=全部交货）

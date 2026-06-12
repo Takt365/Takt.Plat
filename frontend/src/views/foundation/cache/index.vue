@@ -1,251 +1,299 @@
 <!-- ======================================== -->
-<!-- 项目名称：节节拍工厂·Takt Plat  -->
-<!-- 命名空间：@/views/routine/tasks/cache -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
+<!-- 命名空间：@/views/foundation/cache -->
 <!-- 文件名称：index.vue -->
-<!-- 创建时间：2026-01-28 -->
-<!-- 创建人：Takt365(Cursor AI) -->
-<!-- 功能描述：缓存管理页面，展示缓存配置、统计信息及键值操作 -->
-<!--  -->
+<!-- 功能描述：缓存管理页面，展示配置与统计，支持按键检查/移除（权限 foundation:cache:list） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-cache">
-    <a-card>
-      <template #title>
-        <a-space>
-          <CloudServerOutlined />
-          <span>{{ t('routine.tasks.cache.page.title') }}</span>
-        </a-space>
-      </template>
+  <div class="foundation-cache p-4 flex flex-col gap-4">
+    <!-- 页面标题 -->
+    <div>
+      <h2 class="text-xl font-semibold mb-1 m-0">{{ t('foundation.cache.page.title') }}</h2>
+      <p class="text-sm text-text-secondary m-0">{{ t('foundation.cache.page.description') }}</p>
+    </div>
 
-      <!-- 缓存配置信息 -->
-      <a-descriptions
-        :title="t('routine.tasks.cache.descriptions.configTitle')"
-        :column="1"
-        bordered
-        size="small"
-        style="margin-bottom: 24px"
-      >
-        <a-descriptions-item :label="t('routine.tasks.cache.labels.provider')">
-          {{ cacheInfo?.provider ?? '-' }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('routine.tasks.cache.labels.defaultExpirationMinutes')">
-          {{ cacheInfo?.defaultExpirationMinutes ?? '-' }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('routine.tasks.cache.labels.slidingExpiration')">
-          {{ cacheInfo?.enableSlidingExpiration ? t('common.page.button.yes') : t('common.page.button.no') }}
-        </a-descriptions-item>
-        <a-descriptions-item :label="t('routine.tasks.cache.labels.multiLevelCache')">
-          {{ cacheInfo?.enableMultiLevelCache ? t('common.page.button.yes') : t('common.page.button.no') }}
-        </a-descriptions-item>
-        <a-descriptions-item
-          v-if="cacheInfo?.provider === 'Redis'"
-          :label="t('routine.tasks.cache.labels.redisInstancePrefix')"
-        >
-          {{ cacheInfo?.redisInstanceName || '-' }}
-        </a-descriptions-item>
-      </a-descriptions>
+    <!-- 工具栏 -->
+    <TaktToolsBar
+      :show-create="false"
+      :show-update="false"
+      :show-delete="false"
+      :show-import="false"
+      :show-export="false"
+      :show-advanced-query="false"
+      :show-column-setting="false"
+      :show-expand="false"
+      :show-fullscreen="true"
+      :show-refresh="true"
+      :refresh-loading="loading"
+      @refresh="loadCacheInfo"
+    />
 
-      <!-- 缓存统计（仅 Memory 支持） -->
-      <a-descriptions
-        :title="t('routine.tasks.cache.descriptions.statsTitle')"
-        :column="1"
-        bordered
-        size="small"
-        style="margin-bottom: 24px"
-      >
-        <template v-if="!statistics?.supported || statistics?.message">
-          <a-descriptions-item :label="t('routine.tasks.cache.labels.note')">
-            {{ statistics?.message ?? t('routine.tasks.cache.labels.loadingHint') }}
+    <a-spin :spinning="loading">
+      <!-- 缓存配置 -->
+      <a-card :title="t('foundation.cache.page.section.config')" :bordered="false" class="bg-container">
+        <a-descriptions bordered :column="1" size="small">
+          <a-descriptions-item :label="t('foundation.cache.page.field.provider')">
+            {{ cacheInfo?.provider ?? '-' }}
           </a-descriptions-item>
-        </template>
-        <template v-else>
-          <a-descriptions-item :label="t('routine.tasks.cache.labels.currentEntryCount')">
-            {{ statistics?.currentEntryCount ?? '-' }}
+          <a-descriptions-item :label="t('foundation.cache.page.field.defaultExpirationMinutes')">
+            {{ cacheInfo?.defaultExpirationMinutes ?? '-' }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('routine.tasks.cache.labels.totalHits')">
-            {{ statistics?.totalHits ?? '-' }}
+          <a-descriptions-item :label="t('foundation.cache.page.field.enableSlidingExpiration')">
+            {{ formatYesNo(cacheInfo?.enableSlidingExpiration) }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('routine.tasks.cache.labels.totalMisses')">
-            {{ statistics?.totalMisses ?? '-' }}
+          <a-descriptions-item :label="t('foundation.cache.page.field.enableMultiLevelCache')">
+            {{ formatYesNo(cacheInfo?.enableMultiLevelCache) }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('routine.tasks.cache.labels.hitRate')">
-            {{ statistics?.hitRate != null ? (Math.round(statistics.hitRate * 10000) / 100 + '%') : '-' }}
+          <a-descriptions-item
+            v-if="cacheInfo?.provider === 'Redis'"
+            :label="t('foundation.cache.page.field.redisInstanceName')"
+          >
+            {{ cacheInfo?.redisInstanceName || '-' }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('routine.tasks.cache.labels.estimatedSizeBytes')">
-            {{ statistics?.currentEstimatedSizeBytes != null ? statistics.currentEstimatedSizeBytes : '-' }}
-          </a-descriptions-item>
-        </template>
-      </a-descriptions>
+        </a-descriptions>
+      </a-card>
 
-      <a-divider />
+      <!-- 缓存统计 -->
+      <a-card :title="t('foundation.cache.page.section.statistics')" :bordered="false" class="bg-container mt-4">
+        <a-descriptions bordered :column="1" size="small">
+          <template v-if="!statistics?.supported || statistics?.message">
+            <a-descriptions-item :label="t('foundation.cache.page.field.note')">
+              {{ statistics?.message ?? t('foundation.cache.page.message.loadingHint') }}
+            </a-descriptions-item>
+          </template>
+          <template v-else>
+            <a-descriptions-item :label="t('foundation.cache.page.field.currentEntryCount')">
+              {{ statistics?.currentEntryCount ?? '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('foundation.cache.page.field.totalHits')">
+              {{ statistics?.totalHits ?? '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('foundation.cache.page.field.totalMisses')">
+              {{ statistics?.totalMisses ?? '-' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('foundation.cache.page.field.hitRate')">
+              {{ formatHitRate(statistics?.hitRate) }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="t('foundation.cache.page.field.estimatedSizeBytes')">
+              {{ formatEstimatedBytes(statistics?.currentEstimatedSizeBytes) }}
+            </a-descriptions-item>
+          </template>
+        </a-descriptions>
+      </a-card>
 
       <!-- 按键操作 -->
-      <h4>{{ t('routine.tasks.cache.labels.keyOps') }}</h4>
-      <a-form
-        layout="inline"
-        :model="keyForm"
-        style="margin-bottom: 16px"
-        @finish="handleCheckExists"
-      >
-        <a-form-item
-          :label="t('routine.tasks.cache.labels.cacheKey')"
-          name="key"
-          :rules="keyFormRules"
-        >
-          <a-input
-            v-model:value="keyForm.key"
-            :placeholder="t('routine.tasks.cache.placeholders.cacheKey')"
-            style="width: 280px"
-            allow-clear
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-button
-            type="primary"
-            html-type="submit"
-            :loading="existsLoading"
+      <a-card :title="t('foundation.cache.page.section.keyOps')" :bordered="false" class="bg-container mt-4">
+        <a-form layout="inline" :model="keyForm" @finish="handleCheckExists">
+          <a-form-item
+            :label="t('foundation.cache.page.field.cacheKey')"
+            name="key"
+            :rules="keyFormRules"
           >
-            <template #icon>
-              <SearchOutlined />
-            </template>
-            {{ t('routine.tasks.cache.buttons.checkExists') }}
-          </a-button>
-          <a-button
-            danger
-            style="margin-left: 8px"
-            :loading="removeLoading"
-            :disabled="!keyForm.key?.trim()"
-            @click="handleRemove"
-          >
-            <template #icon>
-              <DeleteOutlined />
-            </template>
-            {{ t('routine.tasks.cache.buttons.remove') }}
-          </a-button>
-        </a-form-item>
-      </a-form>
-
-      <a-alert
-        v-if="existsResult !== null"
-        :type="existsResult ? 'success' : 'warning'"
-        :message="existsResult ? t('routine.tasks.cache.alerts.keyExists') : t('routine.tasks.cache.alerts.keyNotExists')"
-        show-icon
-        style="margin-top: 8px"
-      />
-    </a-card>
+            <a-input
+              v-model:value="keyForm.key"
+              class="w-72"
+              :placeholder="t('foundation.cache.page.placeholder.cacheKey')"
+              allow-clear
+            />
+          </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-button
+                v-permission="PERMISSION_LIST"
+                type="primary"
+                html-type="submit"
+                :loading="existsLoading"
+              >
+                {{ t('foundation.cache.page.button.checkExists') }}
+              </a-button>
+              <a-button
+                v-permission="PERMISSION_LIST"
+                danger
+                :loading="removeLoading"
+                :disabled="!keyForm.key?.trim()"
+                @click="handleRemove"
+              >
+                {{ t('foundation.cache.page.button.remove') }}
+              </a-button>
+            </a-space>
+          </a-form-item>
+        </a-form>
+        <a-alert
+          v-if="existsResult !== null"
+          class="mt-3"
+          :type="existsResult ? 'success' : 'warning'"
+          :message="existsResult ? t('foundation.cache.page.alert.keyExists') : t('foundation.cache.page.alert.keyNotExists')"
+          show-icon
+        />
+      </a-card>
+    </a-spin>
   </div>
 </template>
 
 <script setup lang="ts">
 /**
  * 缓存管理页面
- * 展示缓存配置、统计信息及键值操作
+ * 展示运行时缓存配置、统计与按键操作
  */
-import { ref, onMounted, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { message } from 'ant-design-vue'
-import { CloudServerOutlined, SearchOutlined, DeleteOutlined } from '@ant-design/icons-vue'
-import { getCacheInfo, getCacheStatistics, existsCacheKey, removeCacheKey, type TaktCacheInfoDto, type TaktCacheStatisticsDto } from '@/api/routine/tasks/cache/cache'
+import { message, Modal } from 'ant-design-vue'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useI18n } from 'vue-i18n'
+import {
+  existsCacheKey,
+  getCacheInfo,
+  getCacheStatistics,
+  removeCacheKey,
+} from '@/api/foundation/cache'
+import type { TaktCacheInfoDto, TaktCacheStatisticsDto } from '@/types/foundation/cache'
+import { usePermissionStore } from '@/stores/identity/permission'
 
 const { t } = useI18n()
+/** 权限 Store */
+const permissionStore = usePermissionStore()
 
-/** 缓存配置信息 */
+/** 列表/键操作权限（与 TaktCachesController、菜单 foundation:cache:list 一致） */
+const PERMISSION_LIST = 'foundation:cache:list'
+
+/** 页面加载状态 */
+const loading = ref(false)
+/** 缓存配置 */
 const cacheInfo = ref<TaktCacheInfoDto | null>(null)
-/** 缓存统计信息 */
+/** 缓存统计 */
 const statistics = ref<TaktCacheStatisticsDto | null>(null)
-/** 信息加载状态 */
-const infoLoading = ref(false)
-/** 键值表单 */
+/** 按键表单 */
 const keyForm = ref({ key: '' })
-/** 检查存在加载状态 */
+/** 检查存在 loading */
 const existsLoading = ref(false)
-/** 移除加载状态 */
+/** 移除键 loading */
 const removeLoading = ref(false)
-/** 存在检查结果 */
+/** 键存在检查结果 */
 const existsResult = ref<boolean | null>(null)
 
-/** 键值表单校验规则 */
+/** 缓存键表单校验 */
 const keyFormRules = computed<Rule[]>(() => [
-  { required: true, message: t('routine.tasks.cache.rules.cacheKeyRequired') }
+  { required: true, message: t('foundation.cache.page.rule.cacheKeyRequired') },
 ])
 
-/** 加载缓存信息 */
+/**
+ * 格式化是/否
+ * @param value 布尔值
+ * @returns 本地化文案
+ */
+function formatYesNo(value: boolean | undefined): string {
+  if (value === undefined) {
+    return '-'
+  }
+  return value ? t('common.status.yes') : t('common.status.no')
+}
+
+/**
+ * 格式化命中率
+ * @param hitRate 0~1
+ * @returns 百分比或占位
+ */
+function formatHitRate(hitRate: number | undefined): string {
+  if (hitRate == null) {
+    return '-'
+  }
+  return `${Math.round(hitRate * 10000) / 100}%`
+}
+
+/**
+ * 格式化估算字节数
+ * @param bytes 字节数
+ * @returns 数值或占位
+ */
+function formatEstimatedBytes(bytes: number | undefined): string {
+  if (bytes == null) {
+    return '-'
+  }
+  return String(bytes)
+}
+
+/**
+ * 加载缓存配置与统计（需 foundation:cache:list）
+ */
 async function loadCacheInfo() {
-  infoLoading.value = true
+  if (!permissionStore.hasPermission(PERMISSION_LIST)) {
+    return
+  }
+  loading.value = true
   existsResult.value = null
   try {
-    const [infoRes, statsRes] = await Promise.all([getCacheInfo(), getCacheStatistics()])
-    const infoData = (infoRes as { data?: { success?: boolean; data?: TaktCacheInfoDto } })?.data
-    if (infoData?.success !== false && infoData?.data) {
-      cacheInfo.value = infoData.data
-    } else {
-      cacheInfo.value = null
-    }
-    const statsData = (statsRes as { data?: { success?: boolean; data?: TaktCacheStatisticsDto } })?.data
-    if (statsData?.success !== false && statsData?.data) {
-      statistics.value = statsData.data
-    } else {
-      statistics.value = null
-    }
+    const [info, stats] = await Promise.all([getCacheInfo(), getCacheStatistics()])
+    cacheInfo.value = info
+    statistics.value = stats
   } catch {
     cacheInfo.value = null
     statistics.value = null
-    message.error(t('routine.tasks.cache.messages.loadInfoFail'))
+    message.error(t('foundation.cache.page.message.loadFail'))
   } finally {
-    infoLoading.value = false
+    loading.value = false
   }
 }
 
-/** 检查缓存键是否存在 */
+/** 租户/公司切换时刷新 */
+useTableRefresh(loadCacheInfo)
+
+/**
+ * 检查缓存键是否存在
+ */
 async function handleCheckExists() {
+  if (!permissionStore.hasPermission(PERMISSION_LIST)) {
+    return
+  }
   const key = keyForm.value.key?.trim()
-  if (!key) return
+  if (!key) {
+    return
+  }
   existsLoading.value = true
   existsResult.value = null
   try {
-    const res = await existsCacheKey(key)
-    const data = (res as { data?: { success?: boolean; data?: { exists: boolean }; message?: string } })?.data
-    if (data?.success !== false && data?.data) {
-      existsResult.value = data.data.exists
-    } else {
-      message.error(data?.message || t('routine.tasks.cache.messages.checkFail'))
-    }
+    const result = await existsCacheKey(key)
+    existsResult.value = result.exists
   } catch {
-    message.error(t('routine.tasks.cache.messages.checkFail'))
+    message.error(t('foundation.cache.page.message.checkFail'))
   } finally {
     existsLoading.value = false
   }
 }
 
-/** 移除缓存键 */
-async function handleRemove() {
-  const key = keyForm.value.key?.trim()
-  if (!key) return
-  removeLoading.value = true
-  existsResult.value = null
-  try {
-    await removeCacheKey(key)
-    message.success(t('routine.tasks.cache.messages.removeSuccess'))
-    existsResult.value = false
-  } catch {
-    message.error(t('routine.tasks.cache.messages.removeFail'))
-  } finally {
-    removeLoading.value = false
+/**
+ * 移除指定缓存键
+ */
+function handleRemove() {
+  if (!permissionStore.hasPermission(PERMISSION_LIST)) {
+    return
   }
+  const key = keyForm.value.key?.trim()
+  if (!key) {
+    return
+  }
+  Modal.confirm({
+    title: t('foundation.cache.page.button.remove'),
+    content: key,
+    okType: 'danger',
+    onOk: async () => {
+      removeLoading.value = true
+      existsResult.value = null
+      try {
+        await removeCacheKey(key)
+        message.success(t('foundation.cache.page.message.removeSuccess'))
+        existsResult.value = false
+        await loadCacheInfo()
+      } catch {
+        message.error(t('foundation.cache.page.message.removeFail'))
+      } finally {
+        removeLoading.value = false
+      }
+    },
+  })
 }
 
-/** 初始化加载 */
 onMounted(() => {
-  loadCacheInfo()
+  void loadCacheInfo()
 })
 </script>
-
-<style scoped lang="css">
-.routine-cache {
-  padding: 0;
-}
-</style>

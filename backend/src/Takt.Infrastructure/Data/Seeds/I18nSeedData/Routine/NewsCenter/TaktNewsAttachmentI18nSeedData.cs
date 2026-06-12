@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsAttachmentI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter;
 
 /// <summary>
-/// TaktNewsAttachment 实体国际化翻译种子（键前缀 entity.newsAttachment.*）
+/// TaktNewsAttachment 实体国际化翻译种子（键前缀 entity.newsattachment.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktNewsAttachmentI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktNewsAttachmentI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 newsAttachment 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 newsattachment 实体翻译...", tenantCode);
 
         foreach (var item in GetNewsAttachmentTranslations())
         {
@@ -76,101 +75,101 @@ public class TaktNewsAttachmentI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktNewsAttachment 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.newsAttachment._self / entity.newsAttachment.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.newsattachment._self / entity.newsattachment.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetNewsAttachmentTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.newsAttachment._self
-            new TranslationSeedItem("entity.newsAttachment._self", "en-US", "News Attachment Information", "实体名称"),
-            // entity.newsAttachment._self
-            new TranslationSeedItem("entity.newsAttachment._self", "ja-JP", "新闻中心附件信息", "实体名称"),
-            // entity.newsAttachment._self
-            new TranslationSeedItem("entity.newsAttachment._self", "zh-CN", "新闻中心附件信息", "实体名称"),
-            // entity.newsAttachment._self
-            new TranslationSeedItem("entity.newsAttachment._self", "zh-HK", "新闻中心附件信息", "实体名称"),
+            // entity.newsattachment._self
+            new TranslationSeedItem("entity.newsattachment._self", "en-US", "News Attachment Information", "实体名称"),
+            // entity.newsattachment._self
+            new TranslationSeedItem("entity.newsattachment._self", "ja-JP", "新闻中心附件信息", "实体名称"),
+            // entity.newsattachment._self
+            new TranslationSeedItem("entity.newsattachment._self", "zh-CN", "新闻中心附件信息", "实体名称"),
+            // entity.newsattachment._self
+            new TranslationSeedItem("entity.newsattachment._self", "zh-HK", "新闻中心附件信息", "实体名称"),
 
-            // entity.newsAttachment.newsid
-            new TranslationSeedItem("entity.newsAttachment.newsid", "en-US", "新闻ID", "新闻 ID"),
-            // entity.newsAttachment.newsid
-            new TranslationSeedItem("entity.newsAttachment.newsid", "ja-JP", "新闻ID", "新闻 ID"),
-            // entity.newsAttachment.newsid
-            new TranslationSeedItem("entity.newsAttachment.newsid", "zh-CN", "新闻ID", "新闻 ID"),
-            // entity.newsAttachment.newsid
-            new TranslationSeedItem("entity.newsAttachment.newsid", "zh-HK", "新闻ID", "新闻 ID"),
+            // entity.newsattachment.newsid
+            new TranslationSeedItem("entity.newsattachment.newsid", "en-US", "新闻ID", "新闻 ID"),
+            // entity.newsattachment.newsid
+            new TranslationSeedItem("entity.newsattachment.newsid", "ja-JP", "新闻ID", "新闻 ID"),
+            // entity.newsattachment.newsid
+            new TranslationSeedItem("entity.newsattachment.newsid", "zh-CN", "新闻ID", "新闻 ID"),
+            // entity.newsattachment.newsid
+            new TranslationSeedItem("entity.newsattachment.newsid", "zh-HK", "新闻ID", "新闻 ID"),
 
-            // entity.newsAttachment.fileid
-            new TranslationSeedItem("entity.newsAttachment.fileid", "en-US", "文件ID", "文件 ID"),
-            // entity.newsAttachment.fileid
-            new TranslationSeedItem("entity.newsAttachment.fileid", "ja-JP", "文件ID", "文件 ID"),
-            // entity.newsAttachment.fileid
-            new TranslationSeedItem("entity.newsAttachment.fileid", "zh-CN", "文件ID", "文件 ID"),
-            // entity.newsAttachment.fileid
-            new TranslationSeedItem("entity.newsAttachment.fileid", "zh-HK", "文件ID", "文件 ID"),
+            // entity.newsattachment.fileid
+            new TranslationSeedItem("entity.newsattachment.fileid", "en-US", "文件ID", "文件 ID"),
+            // entity.newsattachment.fileid
+            new TranslationSeedItem("entity.newsattachment.fileid", "ja-JP", "文件ID", "文件 ID"),
+            // entity.newsattachment.fileid
+            new TranslationSeedItem("entity.newsattachment.fileid", "zh-CN", "文件ID", "文件 ID"),
+            // entity.newsattachment.fileid
+            new TranslationSeedItem("entity.newsattachment.fileid", "zh-HK", "文件ID", "文件 ID"),
 
-            // entity.newsAttachment.filename
-            new TranslationSeedItem("entity.newsAttachment.filename", "en-US", "文件名称", "文件名称"),
-            // entity.newsAttachment.filename
-            new TranslationSeedItem("entity.newsAttachment.filename", "ja-JP", "文件名称", "文件名称"),
-            // entity.newsAttachment.filename
-            new TranslationSeedItem("entity.newsAttachment.filename", "zh-CN", "文件名称", "文件名称"),
-            // entity.newsAttachment.filename
-            new TranslationSeedItem("entity.newsAttachment.filename", "zh-HK", "文件名称", "文件名称"),
+            // entity.newsattachment.filename
+            new TranslationSeedItem("entity.newsattachment.filename", "en-US", "文件名称", "文件名称"),
+            // entity.newsattachment.filename
+            new TranslationSeedItem("entity.newsattachment.filename", "ja-JP", "文件名称", "文件名称"),
+            // entity.newsattachment.filename
+            new TranslationSeedItem("entity.newsattachment.filename", "zh-CN", "文件名称", "文件名称"),
+            // entity.newsattachment.filename
+            new TranslationSeedItem("entity.newsattachment.filename", "zh-HK", "文件名称", "文件名称"),
 
-            // entity.newsAttachment.filepath
-            new TranslationSeedItem("entity.newsAttachment.filepath", "en-US", "文件路径", "文件路径"),
-            // entity.newsAttachment.filepath
-            new TranslationSeedItem("entity.newsAttachment.filepath", "ja-JP", "文件路径", "文件路径"),
-            // entity.newsAttachment.filepath
-            new TranslationSeedItem("entity.newsAttachment.filepath", "zh-CN", "文件路径", "文件路径"),
-            // entity.newsAttachment.filepath
-            new TranslationSeedItem("entity.newsAttachment.filepath", "zh-HK", "文件路径", "文件路径"),
+            // entity.newsattachment.filepath
+            new TranslationSeedItem("entity.newsattachment.filepath", "en-US", "文件路径", "文件路径"),
+            // entity.newsattachment.filepath
+            new TranslationSeedItem("entity.newsattachment.filepath", "ja-JP", "文件路径", "文件路径"),
+            // entity.newsattachment.filepath
+            new TranslationSeedItem("entity.newsattachment.filepath", "zh-CN", "文件路径", "文件路径"),
+            // entity.newsattachment.filepath
+            new TranslationSeedItem("entity.newsattachment.filepath", "zh-HK", "文件路径", "文件路径"),
 
-            // entity.newsAttachment.filesize
-            new TranslationSeedItem("entity.newsAttachment.filesize", "en-US", "文件大小（字节）", "文件大小（字节）"),
-            // entity.newsAttachment.filesize
-            new TranslationSeedItem("entity.newsAttachment.filesize", "ja-JP", "文件大小（字节）", "文件大小（字节）"),
-            // entity.newsAttachment.filesize
-            new TranslationSeedItem("entity.newsAttachment.filesize", "zh-CN", "文件大小（字节）", "文件大小（字节）"),
-            // entity.newsAttachment.filesize
-            new TranslationSeedItem("entity.newsAttachment.filesize", "zh-HK", "文件大小（字节）", "文件大小（字节）"),
+            // entity.newsattachment.filesize
+            new TranslationSeedItem("entity.newsattachment.filesize", "en-US", "文件大小（字节）", "文件大小（字节）"),
+            // entity.newsattachment.filesize
+            new TranslationSeedItem("entity.newsattachment.filesize", "ja-JP", "文件大小（字节）", "文件大小（字节）"),
+            // entity.newsattachment.filesize
+            new TranslationSeedItem("entity.newsattachment.filesize", "zh-CN", "文件大小（字节）", "文件大小（字节）"),
+            // entity.newsattachment.filesize
+            new TranslationSeedItem("entity.newsattachment.filesize", "zh-HK", "文件大小（字节）", "文件大小（字节）"),
 
-            // entity.newsAttachment.filetype
-            new TranslationSeedItem("entity.newsAttachment.filetype", "en-US", "文件类型", "文件类型（MIME 类型）"),
-            // entity.newsAttachment.filetype
-            new TranslationSeedItem("entity.newsAttachment.filetype", "ja-JP", "文件类型", "文件类型（MIME 类型）"),
-            // entity.newsAttachment.filetype
-            new TranslationSeedItem("entity.newsAttachment.filetype", "zh-CN", "文件类型", "文件类型（MIME 类型）"),
-            // entity.newsAttachment.filetype
-            new TranslationSeedItem("entity.newsAttachment.filetype", "zh-HK", "文件类型", "文件类型（MIME 类型）"),
+            // entity.newsattachment.filetype
+            new TranslationSeedItem("entity.newsattachment.filetype", "en-US", "文件类型", "文件类型（MIME 类型）"),
+            // entity.newsattachment.filetype
+            new TranslationSeedItem("entity.newsattachment.filetype", "ja-JP", "文件类型", "文件类型（MIME 类型）"),
+            // entity.newsattachment.filetype
+            new TranslationSeedItem("entity.newsattachment.filetype", "zh-CN", "文件类型", "文件类型（MIME 类型）"),
+            // entity.newsattachment.filetype
+            new TranslationSeedItem("entity.newsattachment.filetype", "zh-HK", "文件类型", "文件类型（MIME 类型）"),
 
-            // entity.newsAttachment.fileextension
-            new TranslationSeedItem("entity.newsAttachment.fileextension", "en-US", "文件扩展名", "文件扩展名"),
-            // entity.newsAttachment.fileextension
-            new TranslationSeedItem("entity.newsAttachment.fileextension", "ja-JP", "文件扩展名", "文件扩展名"),
-            // entity.newsAttachment.fileextension
-            new TranslationSeedItem("entity.newsAttachment.fileextension", "zh-CN", "文件扩展名", "文件扩展名"),
-            // entity.newsAttachment.fileextension
-            new TranslationSeedItem("entity.newsAttachment.fileextension", "zh-HK", "文件扩展名", "文件扩展名"),
+            // entity.newsattachment.fileextension
+            new TranslationSeedItem("entity.newsattachment.fileextension", "en-US", "文件扩展名", "文件扩展名"),
+            // entity.newsattachment.fileextension
+            new TranslationSeedItem("entity.newsattachment.fileextension", "ja-JP", "文件扩展名", "文件扩展名"),
+            // entity.newsattachment.fileextension
+            new TranslationSeedItem("entity.newsattachment.fileextension", "zh-CN", "文件扩展名", "文件扩展名"),
+            // entity.newsattachment.fileextension
+            new TranslationSeedItem("entity.newsattachment.fileextension", "zh-HK", "文件扩展名", "文件扩展名"),
 
-            // entity.newsAttachment.sortorder
-            new TranslationSeedItem("entity.newsAttachment.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
-            // entity.newsAttachment.sortorder
-            new TranslationSeedItem("entity.newsAttachment.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
-            // entity.newsAttachment.sortorder
-            new TranslationSeedItem("entity.newsAttachment.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
-            // entity.newsAttachment.sortorder
-            new TranslationSeedItem("entity.newsAttachment.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+            // entity.newsattachment.sortorder
+            new TranslationSeedItem("entity.newsattachment.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
+            // entity.newsattachment.sortorder
+            new TranslationSeedItem("entity.newsattachment.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
+            // entity.newsattachment.sortorder
+            new TranslationSeedItem("entity.newsattachment.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
+            // entity.newsattachment.sortorder
+            new TranslationSeedItem("entity.newsattachment.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
 
-            // entity.newsAttachment.news
-            new TranslationSeedItem("entity.newsAttachment.news", "en-US", "新闻", "新闻（主表）"),
-            // entity.newsAttachment.news
-            new TranslationSeedItem("entity.newsAttachment.news", "ja-JP", "新闻", "新闻（主表）"),
-            // entity.newsAttachment.news
-            new TranslationSeedItem("entity.newsAttachment.news", "zh-CN", "新闻", "新闻（主表）"),
-            // entity.newsAttachment.news
-            new TranslationSeedItem("entity.newsAttachment.news", "zh-HK", "新闻", "新闻（主表）"),
+            // entity.newsattachment.news
+            new TranslationSeedItem("entity.newsattachment.news", "en-US", "新闻", "新闻（主表）"),
+            // entity.newsattachment.news
+            new TranslationSeedItem("entity.newsattachment.news", "ja-JP", "新闻", "新闻（主表）"),
+            // entity.newsattachment.news
+            new TranslationSeedItem("entity.newsattachment.news", "zh-CN", "新闻", "新闻（主表）"),
+            // entity.newsattachment.news
+            new TranslationSeedItem("entity.newsattachment.news", "zh-HK", "新闻", "新闻（主表）"),
         };
     }
 
@@ -188,8 +187,8 @@ public class TaktNewsAttachmentI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Http;
 using Takt.Application.Services.Identity;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
-using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models.Logging;
@@ -26,11 +25,11 @@ namespace Takt.WebApi.Logging;
 /// </summary>
 public sealed class TaktAuthLoginLogWriteRequest
 {
-    /// <summary>流程阶段（<see cref="TaktAuthLoginPhases"/>）</summary>
+    /// <summary>流程阶段（TaktAuthLoginPhases）</summary>
     public required string Phase { get; init; }
 
-    /// <summary>登录方式（<see cref="TaktLoginTypes"/>）</summary>
-    public required string LoginType { get; init; }
+    /// <summary>登录方式（TaktLoginType）</summary>
+    public required TaktLoginType LoginType { get; init; }
 
     /// <summary>登录结果</summary>
     public required TaktLoginResult LoginResult { get; init; }
@@ -65,7 +64,7 @@ public sealed class TaktAuthLoginLogWriteRequest
 /// </summary>
 public sealed class TaktAuthFlowStepRequest
 {
-    /// <summary>流程阶段（<see cref="TaktAuthLoginPhases"/>）</summary>
+    /// <summary>流程阶段（TaktAuthLoginPhases）</summary>
     public required string Phase { get; init; }
 
     /// <summary>说明</summary>
@@ -118,7 +117,7 @@ public interface ITaktAuthLoginLogHandler
 }
 
 /// <summary>
-/// <see cref="ITaktAuthLoginLogHandler"/> 实现
+/// ITaktAuthLoginLogHandler 实现
 /// </summary>
 public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
 {
@@ -318,18 +317,13 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     /// </summary>
     /// <param name="loginType">登录方式</param>
     /// <returns>需要更新为 true</returns>
-    private static bool ShouldRecordUserLastLogin(string loginType)
+    private static bool ShouldRecordUserLastLogin(TaktLoginType loginType)
     {
-        if (string.IsNullOrWhiteSpace(loginType))
-        {
-            return false;
-        }
-
         return loginType is not (
-            TaktLoginTypes.SignOut
-            or TaktLoginTypes.RefreshToken
-            or TaktLoginTypes.VerifyPassword
-            or TaktLoginTypes.ClientCredentials);
+            TaktLoginType.SignOut
+            or TaktLoginType.RefreshToken
+            or TaktLoginType.VerifyPassword
+            or TaktLoginType.ClientCredentials);
     }
 
     /// <summary>
@@ -454,52 +448,52 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     /// </summary>
     /// <param name="userAgent">请求头 User-Agent</param>
     /// <returns>浏览器与操作系统；无法识别时为 null</returns>
-    private static (string? Browser, string? Os) ParseUserAgent(string userAgent)
+    private static (TaktBrowserType? Browser, TaktOperatingSystem? Os) ParseUserAgent(string userAgent)
     {
         if (string.IsNullOrWhiteSpace(userAgent))
         {
             return (null, null);
         }
 
-        string? os = null;
+        TaktOperatingSystem? os = null;
         if (userAgent.Contains("Windows", StringComparison.OrdinalIgnoreCase))
         {
-            os = "Windows";
+            os = TaktOperatingSystem.Windows;
         }
         else if (userAgent.Contains("Mac OS", StringComparison.OrdinalIgnoreCase))
         {
-            os = "macOS";
+            os = TaktOperatingSystem.MacOS;
         }
         else if (userAgent.Contains("Android", StringComparison.OrdinalIgnoreCase))
         {
-            os = "Android";
+            os = TaktOperatingSystem.Android;
         }
         else if (userAgent.Contains("iPhone", StringComparison.OrdinalIgnoreCase)
             || userAgent.Contains("iPad", StringComparison.OrdinalIgnoreCase))
         {
-            os = "iOS";
+            os = TaktOperatingSystem.IOS;
         }
         else if (userAgent.Contains("Linux", StringComparison.OrdinalIgnoreCase))
         {
-            os = "Linux";
+            os = TaktOperatingSystem.Linux;
         }
 
-        string? browser = null;
+        TaktBrowserType? browser = null;
         if (userAgent.Contains("Edg/", StringComparison.OrdinalIgnoreCase))
         {
-            browser = "Edge";
+            browser = TaktBrowserType.Edge;
         }
         else if (userAgent.Contains("Chrome/", StringComparison.OrdinalIgnoreCase))
         {
-            browser = "Chrome";
+            browser = TaktBrowserType.Chrome;
         }
         else if (userAgent.Contains("Firefox/", StringComparison.OrdinalIgnoreCase))
         {
-            browser = "Firefox";
+            browser = TaktBrowserType.Firefox;
         }
         else if (userAgent.Contains("Safari/", StringComparison.OrdinalIgnoreCase))
         {
-            browser = "Safari";
+            browser = TaktBrowserType.Safari;
         }
 
         return (browser, os);

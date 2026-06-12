@@ -13,7 +13,7 @@
 namespace Takt.Domain.Interfaces;
 
 /// <summary>
-/// 排序号生成器（Infrastructure 由 <see cref="Takt.Infrastructure.Services.TaktSortOrderGenerator"/> 实现）
+/// 排序号生成器（Infrastructure 由 TaktSortOrderGenerator 实现）
 /// </summary>
 public interface ITaktSortOrderGenerator
 {

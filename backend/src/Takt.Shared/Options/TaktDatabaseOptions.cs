@@ -15,7 +15,7 @@ using SqlSugar;
 namespace Takt.Shared.Options;
 
 /// <summary>
-/// 数据库配置（<c>appsettings Database</c> 节；绑定入口 <see cref="TaktConfigurationExtensions.RequireDatabase"/>）
+/// 数据库配置（<c>appsettings Database</c> 节；绑定入口 TaktConfigurationExtensions.RequireDatabase）
 /// </summary>
 public class TaktDatabaseOptions
 {
@@ -47,7 +47,7 @@ public class TaktDatabaseOptions
     public string ConnectionStringTemplate { get; set; } = null!;
 
     /// <summary>
-    /// 规范化列表与种子编码后执行 <see cref="Validate"/>
+    /// 规范化列表与种子编码后执行 Validate
     /// </summary>
     public void NormalizeAndValidate()
     {
@@ -58,13 +58,13 @@ public class TaktDatabaseOptions
     }
 
     /// <summary>
-    /// 默认租户（<see cref="TenantCodes"/> 首项；启动 DI 引导、演示主公司等）
+    /// 默认租户（TenantCodes 首项；启动 DI 引导、演示主公司等）
     /// </summary>
     /// <returns>默认租户编码</returns>
     public string GetSeedTenantCode() => TenantCodes[0];
 
     /// <summary>
-    /// 默认公司（<see cref="CompanyCodes"/> 首项；演示账号主公司、请假工作流演示范围等）
+    /// 默认公司（CompanyCodes 首项；演示账号主公司、请假工作流演示范围等）
     /// </summary>
     /// <returns>默认公司编码</returns>
     public string GetSeedCompanyCode() => CompanyCodes[0];
@@ -121,7 +121,7 @@ public class TaktDatabaseOptions
     }
 
     /// <summary>
-    /// 验证配置（须先 <see cref="NormalizeAndValidate"/> 或保证列表已规范化）
+    /// 验证配置（须先 NormalizeAndValidate 或保证列表已规范化）
     /// </summary>
     public void Validate()
     {

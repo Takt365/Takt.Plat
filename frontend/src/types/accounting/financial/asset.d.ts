@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：asset.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,19 +39,24 @@ export interface Asset extends CompanyDtoBase {
   assetName: string;
 
   /**
-   * 资产分类ID
+   * 资产规格
    */
-  assetCategoryId: string;
+  assetSpec?: string;
 
   /**
-   * 资产分类名称
+   * 资产描述
    */
-  assetCategoryName?: string;
+  assetDesc?: string;
+
+  /**
+   * 资产大类
+   */
+  assetCategory: string;
 
   /**
    * 资产类型
    */
-  assetType: number;
+  assetType: string;
 
   /**
    * 资产原值
@@ -139,6 +144,16 @@ export interface Asset extends CompanyDtoBase {
   monthlyDepreciation: number;
 
   /**
+   * 关联供应商ID
+   */
+  relatedSupplierId?: string;
+
+  /**
+   * 关联供应商
+   */
+  relatedSupplierName?: string;
+
+  /**
    * 关联生产线
    */
   relatedPlant?: string;
@@ -179,19 +194,24 @@ export interface AssetQuery extends TaktPagedQuery {
   assetName?: string;
 
   /**
-   * 资产分类ID
+   * 资产规格
    */
-  assetCategoryId?: string;
+  assetSpec?: string;
 
   /**
-   * 资产分类名称
+   * 资产描述
    */
-  assetCategoryName?: string;
+  assetDesc?: string;
+
+  /**
+   * 资产大类
+   */
+  assetCategory?: string;
 
   /**
    * 资产类型
    */
-  assetType?: number;
+  assetType?: string;
 
   /**
    * 资产原值
@@ -299,6 +319,16 @@ export interface AssetQuery extends TaktPagedQuery {
   monthlyDepreciation?: number;
 
   /**
+   * 关联供应商ID
+   */
+  relatedSupplierId?: string;
+
+  /**
+   * 关联供应商
+   */
+  relatedSupplierName?: string;
+
+  /**
    * 关联生产线
    */
   relatedPlant?: string;
@@ -363,19 +393,24 @@ export interface AssetCreate {
   assetName: string;
 
   /**
-   * 资产分类ID
+   * 资产规格
    */
-  assetCategoryId: string;
+  assetSpec?: string;
 
   /**
-   * 资产分类名称
+   * 资产描述
    */
-  assetCategoryName?: string;
+  assetDesc?: string;
+
+  /**
+   * 资产大类
+   */
+  assetCategory: string;
 
   /**
    * 资产类型
    */
-  assetType: number;
+  assetType: string;
 
   /**
    * 资产原值
@@ -461,6 +496,16 @@ export interface AssetCreate {
    * 每月折旧金额
    */
   monthlyDepreciation: number;
+
+  /**
+   * 关联供应商ID
+   */
+  relatedSupplierId?: string;
+
+  /**
+   * 关联供应商
+   */
+  relatedSupplierName?: string;
 
   /**
    * 关联生产线
@@ -546,19 +591,24 @@ export interface AssetTemplate {
   assetName?: string;
 
   /**
-   * 资产分类ID
+   * 资产规格
    */
-  assetCategoryId?: string;
+  assetSpec?: string;
 
   /**
-   * 资产分类名称
+   * 资产描述
    */
-  assetCategoryName?: string;
+  assetDesc?: string;
+
+  /**
+   * 资产大类
+   */
+  assetCategory?: string;
 
   /**
    * 资产类型
    */
-  assetType?: number;
+  assetType?: string;
 
   /**
    * 成本中心ID
@@ -640,19 +690,24 @@ export interface AssetImport {
   assetName?: string;
 
   /**
-   * 资产分类ID
+   * 资产规格
    */
-  assetCategoryId?: string;
+  assetSpec?: string;
 
   /**
-   * 资产分类名称
+   * 资产描述
    */
-  assetCategoryName?: string;
+  assetDesc?: string;
+
+  /**
+   * 资产大类
+   */
+  assetCategory?: string;
 
   /**
    * 资产类型
    */
-  assetType?: number;
+  assetType?: string;
 
   /**
    * 成本中心ID
@@ -729,19 +784,24 @@ export interface AssetExport {
   assetName: string;
 
   /**
-   * 资产分类ID
+   * 资产规格
    */
-  assetCategoryId: string;
+  assetSpec?: string;
 
   /**
-   * 资产分类名称
+   * 资产描述
    */
-  assetCategoryName?: string;
+  assetDesc?: string;
+
+  /**
+   * 资产大类
+   */
+  assetCategory: string;
 
   /**
    * 资产类型
    */
-  assetType: number;
+  assetType: string;
 
   /**
    * 资产原值
@@ -827,6 +887,16 @@ export interface AssetExport {
    * 每月折旧金额
    */
   monthlyDepreciation: number;
+
+  /**
+   * 关联供应商ID
+   */
+  relatedSupplierId?: string;
+
+  /**
+   * 关联供应商
+   */
+  relatedSupplierName?: string;
 
   /**
    * 关联生产线

@@ -33,7 +33,7 @@ public static class TaktPagedClamp
     /// 规范化每页大小（限制在 1～<paramref name="maxPageSize"/>）
     /// </summary>
     /// <param name="pageSize">原始每页大小</param>
-    /// <param name="maxPageSize">上限，默认 <see cref="DefaultMaxPageSize"/></param>
+    /// <param name="maxPageSize">上限，默认 DefaultMaxPageSize</param>
     /// <returns>规范化后的每页大小</returns>
     public static int NormalizePageSize(int pageSize, int maxPageSize = DefaultMaxPageSize)
     {

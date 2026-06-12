@@ -11,7 +11,6 @@
 // ========================================
 
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 
@@ -47,12 +46,12 @@ public class TaktConferenceParticipant : TaktCompanyEntityBase
     /// 参与角色
     /// </summary>
     [SugarColumn(ColumnName = "participant_role", ColumnDescription = "参与角色", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktConferenceParticipantRole ParticipantRole { get; set; } = TaktConferenceParticipantRole.Participant;
+    public int ParticipantRole { get; set; } = 0;
     /// <summary>
     /// 出席状态
     /// </summary>
     [SugarColumn(ColumnName = "attendance_status", ColumnDescription = "出席状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktConferenceAttendanceStatus AttendanceStatus { get; set; } = TaktConferenceAttendanceStatus.Pending;
+    public int AttendanceStatus { get; set; } = 0;
     /// <summary>
     /// 签到时间
     /// </summary>
@@ -63,6 +62,11 @@ public class TaktConferenceParticipant : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "check_out_time", ColumnDescription = "签退时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? CheckOutTime { get; set; }
+    /// <summary>
+    /// 签到方式（0=手动，1=扫码，2=人脸等）
+    /// </summary>
+    [SugarColumn(ColumnName = "check_in_method", ColumnDescription = "签到方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int CheckInMethod { get; set; } = 0;
     /// <summary>
     /// 会议（主表）
     /// </summary>

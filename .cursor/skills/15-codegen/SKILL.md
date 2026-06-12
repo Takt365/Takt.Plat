@@ -10,7 +10,7 @@ description: >-
 
 完整规范：`.cursor/rules/15-codegen.mdc`
 
-**入口**：`node scripts/generate-all.cjs --<Entity>` 或 `--all`（实体名不带 `Takt` 前缀）
+**入口**：`node scripts/generate-all.cjs --<Entity>`（实体名不带 `Takt` 前缀；**已禁用 `--all`**）
 
 ## 新建实体工作流（推荐）
 

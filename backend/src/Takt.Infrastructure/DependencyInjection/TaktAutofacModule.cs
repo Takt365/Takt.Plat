@@ -121,10 +121,6 @@ public class TaktAutofacModule : Autofac.Module
             .As<ITaktSortOrderGenerator>()
             .SingleInstance();
 
-        builder.RegisterType<Takt.Application.Services.Foundation.TaktNumberingGenerator>()
-            .As<Takt.Application.Services.Foundation.ITaktNumberingGenerator>()
-            .InstancePerLifetimeScope();
-
         builder.RegisterType<Takt.Infrastructure.Services.TaktFileUploadEngine>()
             .As<Takt.Domain.Interfaces.ITaktFileUploadEngine>()
             .InstancePerLifetimeScope();
@@ -133,8 +129,41 @@ public class TaktAutofacModule : Autofac.Module
             .As<Takt.Domain.Interfaces.ITaktDatabaseSchemaProvider>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<Takt.Infrastructure.Data.Schema.TaktTableCloneProvider>()
+            .As<Takt.Domain.Interfaces.ITaktTableCloneProvider>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Infrastructure.Data.Schema.TaktDataCloneProvider>()
+            .As<Takt.Domain.Interfaces.ITaktDataCloneProvider>()
+            .InstancePerLifetimeScope();
+
         builder.RegisterType<Takt.Application.Services.Workflow.FlowEngine.TaktFlowApproverResolverService>()
             .AsSelf()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Infrastructure.Services.TaktApprovalFlowDataGateway>()
+            .As<Takt.Domain.Interfaces.ITaktApprovalFlowDataGateway>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Infrastructure.Quartz.TaktQuartzSchedulerManager>()
+            .As<ITaktQuartzSchedulerManager>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Infrastructure.Quartz.TaktQuartzJobSignalRPushService>()
+            .As<ITaktQuartzJobSignalRPushService>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Application.Services.Foundation.TaktQuartzSignalRNotifier>()
+            .As<Takt.Application.Services.Foundation.ITaktQuartzSignalRNotifier>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Application.Services.Workflow.TaktWorkflowSignalRNotifier>()
+            .As<Takt.Application.Services.Workflow.ITaktWorkflowSignalRNotifier>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterAssemblyTypes(assemblies)
+            .Where(t => t.IsClass && !t.IsAbstract && typeof(ITaktQuartzJobHandler).IsAssignableFrom(t))
+            .As<ITaktQuartzJobHandler>()
             .InstancePerLifetimeScope();
 
         // ========================================
@@ -280,7 +309,7 @@ public class TaktAutofacModule : Autofac.Module
         type.IsClass && !type.IsAbstract && type.Name.EndsWith("Repository");
 
     /// <summary>
-    /// 判断是否为应用服务类（排除已由 MS DI 以 Singleton 注册的 <see cref="TaktCacheService"/>，避免每请求独立内存缓存导致登录票据跨请求失效）
+    /// 判断是否为应用服务类（排除已由 MS DI 以 Singleton 注册的 TaktCacheService，避免每请求独立内存缓存导致登录票据跨请求失效）
     /// </summary>
     private static bool IsService(Type type) =>
         type.IsClass && !type.IsAbstract && type.Name.EndsWith("Service")
@@ -348,7 +377,7 @@ public class TaktAutofacModule : Autofac.Module
         type.IsClass && !type.IsAbstract && type.Name.EndsWith("Helper");
 
     /// <summary>
-    /// 从 HTTP 请求头或 JWT claim 解析租户编码（与 <see cref="TaktUserContext"/> 一致）
+    /// 从 HTTP 请求头或 JWT claim 解析租户编码（与 TaktUserContext 一致）
     /// </summary>
     /// <param name="httpContextAccessor">HTTP 上下文访问器</param>
     /// <param name="tenantOptions">租户上下文配置</param>

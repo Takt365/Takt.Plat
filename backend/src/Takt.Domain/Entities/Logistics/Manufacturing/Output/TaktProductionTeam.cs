@@ -13,7 +13,6 @@
 
 using Newtonsoft.Json;
 using SqlSugar;
-using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
@@ -86,7 +85,7 @@ public class TaktProductionTeam : TaktCompanyEntityBase
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "启用状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus Status { get; set; } = TaktCommonStatus.Enabled;
+    public int Status { get; set; } = 1;
 
 }
 

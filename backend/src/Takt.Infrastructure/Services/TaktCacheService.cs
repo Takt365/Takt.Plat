@@ -15,16 +15,17 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Takt.Domain.Interfaces;
+using Takt.Shared.Models.Foundation;
 using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktCacheService"/> 实现
-/// 读取 <see cref="TaktCacheOptions"/>，内存层始终启用；Provider 为 Redis 时同步读写分布式层
+/// ITaktCacheService 实现
+/// 读取 TaktCacheOptions，内存层始终启用；Provider 为 Redis 时同步读写分布式层
 /// </summary>
 /// <remarks>
-/// 进程内有界 <see cref="MemoryCache"/> 与 DI 注册的 <see cref="IMemoryCache"/>（OpenIddict 等）分离，
+/// 进程内有界 MemoryCache 与 DI 注册的 IMemoryCache（OpenIddict 等）分离，
 /// 避免对全局 IMemoryCache 设置 SizeLimit 导致框架缓存项未指定 Size 而启动失败。
 /// </remarks>
 public class TaktCacheService : ITaktCacheService, IDisposable
@@ -51,6 +52,16 @@ public class TaktCacheService : ITaktCacheService, IDisposable
     /// 缓存配置（提供者、默认过期、滑动过期等）
     /// </summary>
     private readonly TaktCacheOptions _options;
+
+    /// <summary>
+    /// 命中计数
+    /// </summary>
+    private long _totalHits;
+
+    /// <summary>
+    /// 未命中计数
+    /// </summary>
+    private long _totalMisses;
 
     /// <summary>
     /// 构造函数
@@ -92,24 +103,32 @@ public class TaktCacheService : ITaktCacheService, IDisposable
     {
         if (_memoryCache.TryGetValue(key, out T? memoryValue) && memoryValue != null)
         {
+            Interlocked.Increment(ref _totalHits);
             return memoryValue;
         }
 
         if (!ShouldUseDistributedCache() || _distributedCache == null)
         {
+            Interlocked.Increment(ref _totalMisses);
             return null;
         }
 
         var bytes = await _distributedCache.GetAsync(key, cancellationToken);
         if (bytes == null || bytes.Length == 0)
         {
+            Interlocked.Increment(ref _totalMisses);
             return null;
         }
 
         var distributedValue = JsonSerializer.Deserialize<T>(bytes, JsonOptions);
         if (distributedValue != null)
         {
+            Interlocked.Increment(ref _totalHits);
             _memoryCache.Set(key, distributedValue, CreateMemoryEntryOptions(null));
+        }
+        else
+        {
+            Interlocked.Increment(ref _totalMisses);
         }
 
         return distributedValue;
@@ -188,7 +207,49 @@ public class TaktCacheService : ITaktCacheService, IDisposable
     }
 
     /// <summary>
-    /// 是否使用分布式缓存层（Redis 提供者且已注入 <see cref="IDistributedCache"/>）
+    /// 检查缓存键是否存在于内存或分布式层
+    /// </summary>
+    /// <param name="key">缓存键</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>存在返回 true</returns>
+    public async Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        if (_memoryCache.TryGetValue(key, out _))
+        {
+            return true;
+        }
+        if (!ShouldUseDistributedCache() || _distributedCache == null)
+        {
+            return false;
+        }
+        var bytes = await _distributedCache.GetAsync(key, cancellationToken);
+        return bytes != null && bytes.Length > 0;
+    }
+
+    /// <summary>
+    /// 获取进程内业务 MemoryCache 运行时统计
+    /// </summary>
+    /// <returns>统计快照</returns>
+    public TaktCacheMemoryStatisticsSnapshot GetMemoryStatistics()
+    {
+        var hits = Interlocked.Read(ref _totalHits);
+        var misses = Interlocked.Read(ref _totalMisses);
+        var total = hits + misses;
+        var entryCount = _memoryCache.Count;
+        return new TaktCacheMemoryStatisticsSnapshot
+        {
+            Supported = true,
+            CurrentEntryCount = entryCount,
+            TotalHits = hits,
+            TotalMisses = misses,
+            HitRate = total > 0 ? (double)hits / total : 0d,
+            CurrentEstimatedSizeBytes = checked(entryCount * 512L),
+        };
+    }
+
+    /// <summary>
+    /// 是否使用分布式缓存层（Redis 提供者且已注入 IDistributedCache）
     /// </summary>
     /// <returns>为 true 时读写 Redis</returns>
     private bool ShouldUseDistributedCache()
@@ -199,7 +260,7 @@ public class TaktCacheService : ITaktCacheService, IDisposable
     /// <summary>
     /// 创建内存缓存项选项（绝对或滑动过期由配置决定）
     /// </summary>
-    /// <param name="absoluteExpiration">绝对过期时间；为空时使用 <see cref="TaktCacheOptions.DefaultExpirationMinutes"/></param>
+    /// <param name="absoluteExpiration">绝对过期时间；为空时使用 TaktCacheOptions.DefaultExpirationMinutes</param>
     /// <returns>内存缓存项选项</returns>
     private MemoryCacheEntryOptions CreateMemoryEntryOptions(TimeSpan? absoluteExpiration)
     {
@@ -224,7 +285,7 @@ public class TaktCacheService : ITaktCacheService, IDisposable
     /// <summary>
     /// 创建分布式缓存项选项（绝对或滑动过期由配置决定）
     /// </summary>
-    /// <param name="absoluteExpiration">绝对过期时间；为空时使用 <see cref="TaktCacheOptions.DefaultExpirationMinutes"/></param>
+    /// <param name="absoluteExpiration">绝对过期时间；为空时使用 TaktCacheOptions.DefaultExpirationMinutes</param>
     /// <returns>分布式缓存项选项</returns>
     private DistributedCacheEntryOptions CreateDistributedEntryOptions(TimeSpan? absoluteExpiration)
     {

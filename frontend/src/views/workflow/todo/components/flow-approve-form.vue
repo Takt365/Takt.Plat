@@ -19,36 +19,36 @@
     :rules="formRules"
   >
     <a-form-item
-      :label="t('workflow.instance.approveComment')"
+      :label="t('entity.flowTask.comment')"
       name="comment"
     >
       <a-textarea
         v-model:value="form.comment"
         :rows="3"
-        :placeholder="t('workflow.instance.frmDataPlaceholder')"
+        :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowTask.comment') })"
       />
     </a-form-item>
     <a-form-item
-      :label="t('workflow.instance.approveResult')"
+      :label="t('workflow.todo.page.approveResult')"
       name="approved"
     >
       <a-radio-group v-model:value="form.approved">
         <a-radio :value="true">
-          {{ t('workflow.instance.approvePass') }}
+          {{ t('common.page.button.pass') }}
         </a-radio>
         <a-radio :value="false">
-          {{ t('workflow.instance.approveReject') }}
+          {{ t('common.page.button.reject') }}
         </a-radio>
       </a-radio-group>
     </a-form-item>
     <a-form-item
       v-if="!form.approved"
-      :label="t('workflow.instance.nodeRejectStepLabel')"
+      :label="t('workflow.todo.page.nodeRejectStepLabel')"
       name="nodeRejectStep"
     >
       <a-input
         v-model:value="form.nodeRejectStep"
-        :placeholder="t('workflow.instance.nodeRejectStepPlaceholder')"
+        :placeholder="t('workflow.todo.page.nodeRejectStepPlaceholder')"
         allow-clear
       />
     </a-form-item>

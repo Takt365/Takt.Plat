@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIncident 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost;
 
 /// <summary>
-/// TaktQualityIncident 实体国际化翻译种子（键前缀 entity.qualityIncident.*）
+/// TaktQualityIncident 实体国际化翻译种子（键前缀 entity.qualityincident.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktQualityIncidentI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktQualityIncidentI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityIncident 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityincident 实体翻译...", tenantCode);
 
         foreach (var item in GetQualityIncidentTranslations())
         {
@@ -76,110 +75,110 @@ public class TaktQualityIncidentI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktQualityIncident 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.qualityIncident._self / entity.qualityIncident.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.qualityincident._self / entity.qualityincident.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetQualityIncidentTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.qualityIncident._self
-            new TranslationSeedItem("entity.qualityIncident._self", "en-US", "Quality Incident Information", "实体名称"),
-            // entity.qualityIncident._self
-            new TranslationSeedItem("entity.qualityIncident._self", "ja-JP", "品质事故主表信息", "实体名称"),
-            // entity.qualityIncident._self
-            new TranslationSeedItem("entity.qualityIncident._self", "zh-CN", "品质事故主表信息", "实体名称"),
-            // entity.qualityIncident._self
-            new TranslationSeedItem("entity.qualityIncident._self", "zh-HK", "品质事故主表信息", "实体名称"),
+            // entity.qualityincident._self
+            new TranslationSeedItem("entity.qualityincident._self", "en-US", "Quality Incident Information", "实体名称"),
+            // entity.qualityincident._self
+            new TranslationSeedItem("entity.qualityincident._self", "ja-JP", "品质事故主表信息", "实体名称"),
+            // entity.qualityincident._self
+            new TranslationSeedItem("entity.qualityincident._self", "zh-CN", "品质事故主表信息", "实体名称"),
+            // entity.qualityincident._self
+            new TranslationSeedItem("entity.qualityincident._self", "zh-HK", "品质事故主表信息", "实体名称"),
 
-            // entity.qualityIncident.plantcode
-            new TranslationSeedItem("entity.qualityIncident.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.qualityIncident.plantcode
-            new TranslationSeedItem("entity.qualityIncident.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.qualityIncident.plantcode
-            new TranslationSeedItem("entity.qualityIncident.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.qualityIncident.plantcode
-            new TranslationSeedItem("entity.qualityIncident.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.qualityincident.plantcode
+            new TranslationSeedItem("entity.qualityincident.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.qualityincident.plantcode
+            new TranslationSeedItem("entity.qualityincident.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.qualityincident.plantcode
+            new TranslationSeedItem("entity.qualityincident.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.qualityincident.plantcode
+            new TranslationSeedItem("entity.qualityincident.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.qualityIncident.code
-            new TranslationSeedItem("entity.qualityIncident.code", "en-US", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
-            // entity.qualityIncident.code
-            new TranslationSeedItem("entity.qualityIncident.code", "ja-JP", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
-            // entity.qualityIncident.code
-            new TranslationSeedItem("entity.qualityIncident.code", "zh-CN", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
-            // entity.qualityIncident.code
-            new TranslationSeedItem("entity.qualityIncident.code", "zh-HK", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
+            // entity.qualityincident.code
+            new TranslationSeedItem("entity.qualityincident.code", "en-US", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
+            // entity.qualityincident.code
+            new TranslationSeedItem("entity.qualityincident.code", "ja-JP", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
+            // entity.qualityincident.code
+            new TranslationSeedItem("entity.qualityincident.code", "zh-CN", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
+            // entity.qualityincident.code
+            new TranslationSeedItem("entity.qualityincident.code", "zh-HK", "品质事故编码", "品质事故编码(唯一,如:QI-2026-0001)"),
 
-            // entity.qualityIncident.incidentdate
-            new TranslationSeedItem("entity.qualityIncident.incidentdate", "en-US", "事故日期", "事故日期"),
-            // entity.qualityIncident.incidentdate
-            new TranslationSeedItem("entity.qualityIncident.incidentdate", "ja-JP", "事故日期", "事故日期"),
-            // entity.qualityIncident.incidentdate
-            new TranslationSeedItem("entity.qualityIncident.incidentdate", "zh-CN", "事故日期", "事故日期"),
-            // entity.qualityIncident.incidentdate
-            new TranslationSeedItem("entity.qualityIncident.incidentdate", "zh-HK", "事故日期", "事故日期"),
+            // entity.qualityincident.incidentdate
+            new TranslationSeedItem("entity.qualityincident.incidentdate", "en-US", "事故日期", "事故日期"),
+            // entity.qualityincident.incidentdate
+            new TranslationSeedItem("entity.qualityincident.incidentdate", "ja-JP", "事故日期", "事故日期"),
+            // entity.qualityincident.incidentdate
+            new TranslationSeedItem("entity.qualityincident.incidentdate", "zh-CN", "事故日期", "事故日期"),
+            // entity.qualityincident.incidentdate
+            new TranslationSeedItem("entity.qualityincident.incidentdate", "zh-HK", "事故日期", "事故日期"),
 
-            // entity.qualityIncident.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityIncident.indirectmanpowercostperminute", "en-US", "间接人员费率", "间接人员费率(元/分钟)"),
-            // entity.qualityIncident.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityIncident.indirectmanpowercostperminute", "ja-JP", "间接人员费率", "间接人员费率(元/分钟)"),
-            // entity.qualityIncident.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityIncident.indirectmanpowercostperminute", "zh-CN", "间接人员费率", "间接人员费率(元/分钟)"),
-            // entity.qualityIncident.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityIncident.indirectmanpowercostperminute", "zh-HK", "间接人员费率", "间接人员费率(元/分钟)"),
+            // entity.qualityincident.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityincident.indirectmanpowercostperminute", "en-US", "间接人员费率", "间接人员费率(元/分钟)"),
+            // entity.qualityincident.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityincident.indirectmanpowercostperminute", "ja-JP", "间接人员费率", "间接人员费率(元/分钟)"),
+            // entity.qualityincident.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityincident.indirectmanpowercostperminute", "zh-CN", "间接人员费率", "间接人员费率(元/分钟)"),
+            // entity.qualityincident.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityincident.indirectmanpowercostperminute", "zh-HK", "间接人员费率", "间接人员费率(元/分钟)"),
 
-            // entity.qualityIncident.model
-            new TranslationSeedItem("entity.qualityIncident.model", "en-US", "机种", "机种/产品型号"),
-            // entity.qualityIncident.model
-            new TranslationSeedItem("entity.qualityIncident.model", "ja-JP", "机种", "机种/产品型号"),
-            // entity.qualityIncident.model
-            new TranslationSeedItem("entity.qualityIncident.model", "zh-CN", "机种", "机种/产品型号"),
-            // entity.qualityIncident.model
-            new TranslationSeedItem("entity.qualityIncident.model", "zh-HK", "机种", "机种/产品型号"),
+            // entity.qualityincident.model
+            new TranslationSeedItem("entity.qualityincident.model", "en-US", "机种", "机种/产品型号"),
+            // entity.qualityincident.model
+            new TranslationSeedItem("entity.qualityincident.model", "ja-JP", "机种", "机种/产品型号"),
+            // entity.qualityincident.model
+            new TranslationSeedItem("entity.qualityincident.model", "zh-CN", "机种", "机种/产品型号"),
+            // entity.qualityincident.model
+            new TranslationSeedItem("entity.qualityincident.model", "zh-HK", "机种", "机种/产品型号"),
 
-            // entity.qualityIncident.incidentreason
-            new TranslationSeedItem("entity.qualityIncident.incidentreason", "en-US", "事故内容", "事故内容(废弃原因)"),
-            // entity.qualityIncident.incidentreason
-            new TranslationSeedItem("entity.qualityIncident.incidentreason", "ja-JP", "事故内容", "事故内容(废弃原因)"),
-            // entity.qualityIncident.incidentreason
-            new TranslationSeedItem("entity.qualityIncident.incidentreason", "zh-CN", "事故内容", "事故内容(废弃原因)"),
-            // entity.qualityIncident.incidentreason
-            new TranslationSeedItem("entity.qualityIncident.incidentreason", "zh-HK", "事故内容", "事故内容(废弃原因)"),
+            // entity.qualityincident.incidentreason
+            new TranslationSeedItem("entity.qualityincident.incidentreason", "en-US", "事故内容", "事故内容(废弃原因)"),
+            // entity.qualityincident.incidentreason
+            new TranslationSeedItem("entity.qualityincident.incidentreason", "ja-JP", "事故内容", "事故内容(废弃原因)"),
+            // entity.qualityincident.incidentreason
+            new TranslationSeedItem("entity.qualityincident.incidentreason", "zh-CN", "事故内容", "事故内容(废弃原因)"),
+            // entity.qualityincident.incidentreason
+            new TranslationSeedItem("entity.qualityincident.incidentreason", "zh-HK", "事故内容", "事故内容(废弃原因)"),
 
-            // entity.qualityIncident.totalscrapquantity
-            new TranslationSeedItem("entity.qualityIncident.totalscrapquantity", "en-US", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
-            // entity.qualityIncident.totalscrapquantity
-            new TranslationSeedItem("entity.qualityIncident.totalscrapquantity", "ja-JP", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
-            // entity.qualityIncident.totalscrapquantity
-            new TranslationSeedItem("entity.qualityIncident.totalscrapquantity", "zh-CN", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
-            // entity.qualityIncident.totalscrapquantity
-            new TranslationSeedItem("entity.qualityIncident.totalscrapquantity", "zh-HK", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
+            // entity.qualityincident.totalscrapquantity
+            new TranslationSeedItem("entity.qualityincident.totalscrapquantity", "en-US", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
+            // entity.qualityincident.totalscrapquantity
+            new TranslationSeedItem("entity.qualityincident.totalscrapquantity", "ja-JP", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
+            // entity.qualityincident.totalscrapquantity
+            new TranslationSeedItem("entity.qualityincident.totalscrapquantity", "zh-CN", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
+            // entity.qualityincident.totalscrapquantity
+            new TranslationSeedItem("entity.qualityincident.totalscrapquantity", "zh-HK", "废弃总数", "废弃总数(自动计算 = 各子表废弃数量合计)"),
 
-            // entity.qualityIncident.totalscrapcost
-            new TranslationSeedItem("entity.qualityIncident.totalscrapcost", "en-US", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
-            // entity.qualityIncident.totalscrapcost
-            new TranslationSeedItem("entity.qualityIncident.totalscrapcost", "ja-JP", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
-            // entity.qualityIncident.totalscrapcost
-            new TranslationSeedItem("entity.qualityIncident.totalscrapcost", "zh-CN", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
-            // entity.qualityIncident.totalscrapcost
-            new TranslationSeedItem("entity.qualityIncident.totalscrapcost", "zh-HK", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityincident.totalscrapcost
+            new TranslationSeedItem("entity.qualityincident.totalscrapcost", "en-US", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityincident.totalscrapcost
+            new TranslationSeedItem("entity.qualityincident.totalscrapcost", "ja-JP", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityincident.totalscrapcost
+            new TranslationSeedItem("entity.qualityincident.totalscrapcost", "zh-CN", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
+            // entity.qualityincident.totalscrapcost
+            new TranslationSeedItem("entity.qualityincident.totalscrapcost", "zh-HK", "总废弃费用", "总废弃费用(元,自动计算 = 各子表费用合计)"),
 
-            // entity.qualityIncident.costcurrency
-            new TranslationSeedItem("entity.qualityIncident.costcurrency", "en-US", "成本币种", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityIncident.costcurrency
-            new TranslationSeedItem("entity.qualityIncident.costcurrency", "ja-JP", "成本币种", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityIncident.costcurrency
-            new TranslationSeedItem("entity.qualityIncident.costcurrency", "zh-CN", "成本币种", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityIncident.costcurrency
-            new TranslationSeedItem("entity.qualityIncident.costcurrency", "zh-HK", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityincident.costcurrency
+            new TranslationSeedItem("entity.qualityincident.costcurrency", "en-US", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityincident.costcurrency
+            new TranslationSeedItem("entity.qualityincident.costcurrency", "ja-JP", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityincident.costcurrency
+            new TranslationSeedItem("entity.qualityincident.costcurrency", "zh-CN", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityincident.costcurrency
+            new TranslationSeedItem("entity.qualityincident.costcurrency", "zh-HK", "成本币种", "成本币种(CNY/USD/JPY等)"),
 
-            // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "en-US", "事故明细列表", "事故明细列表"),
-            // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "ja-JP", "事故明细列表", "事故明细列表"),
-            // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "zh-CN", "事故明细列表", "事故明细列表"),
-            // entity.qualityIncident.incidentitems
-            new TranslationSeedItem("entity.qualityIncident.incidentitems", "zh-HK", "事故明细列表", "事故明细列表"),
+            // entity.qualityincident.incidentitems
+            new TranslationSeedItem("entity.qualityincident.incidentitems", "en-US", "事故明细列表", "事故明细列表"),
+            // entity.qualityincident.incidentitems
+            new TranslationSeedItem("entity.qualityincident.incidentitems", "ja-JP", "事故明细列表", "事故明细列表"),
+            // entity.qualityincident.incidentitems
+            new TranslationSeedItem("entity.qualityincident.incidentitems", "zh-CN", "事故明细列表", "事故明细列表"),
+            // entity.qualityincident.incidentitems
+            new TranslationSeedItem("entity.qualityincident.incidentitems", "zh-HK", "事故明细列表", "事故明细列表"),
         };
     }
 
@@ -197,8 +196,8 @@ public class TaktQualityIncidentI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

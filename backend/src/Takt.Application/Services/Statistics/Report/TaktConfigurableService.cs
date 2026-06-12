@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Report
 // 文件名称：TaktConfigurableService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：自定义报表主应用服务实现
 // 
@@ -118,7 +118,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     public async Task<List<TaktSelectOption>> GetConfigurableOptionsAsync()
     {
         var list = await _configurableRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ReportStatus == TaktCommonStatus.Enabled,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ReportStatus == 1,
             x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption
@@ -136,7 +136,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     public async Task<TaktConfigurableDto> CreateConfigurableAsync(TaktConfigurableCreateDto dto)
     {
         var entity = dto.Adapt<TaktConfigurable>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         var isUnique_ix_configurable_code_unique = await _uniqueValidator.IsUniqueAsync(
             _configurableRepository,
             x => x.ReportCode == entity.ReportCode);
@@ -197,7 +197,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         {
             throw new TaktBusinessException("自定义报表主不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置自定义报表主不允许删除");
         }
@@ -226,7 +226,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         {
             return;
         }
-        if (await _configurableRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _configurableRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置自定义报表主不允许删除");
         }
@@ -248,7 +248,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         {
             throw new TaktBusinessException("自定义报表主不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.ReportStatus != TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == 1 && dto.ReportStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置自定义报表主");
         }
@@ -310,7 +310,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
             try
             {
                 var entity = rows[i].Adapt<TaktConfigurable>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.ReportCode}";
                 if (!importSeenKeys.Add(importKey))
                 {

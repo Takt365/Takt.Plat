@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktOnlineI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOnline 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation;
@@ -76,7 +75,7 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktOnline 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.online._self / entity.online.{{field}}；ResourceGroup=TaktModule.Foundation；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.online._self / entity.online.{{field}}；ResourceGroup=8；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetOnlineTranslations()
     {
@@ -119,13 +118,13 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online.userid", "zh-HK", "用户ID", "用户 ID"),
 
             // entity.online.status
-            new TranslationSeedItem("entity.online.status", "en-US", "在线状态", "在线状态"),
+            new TranslationSeedItem("entity.online.status", "en-US", "在线状态", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
             // entity.online.status
-            new TranslationSeedItem("entity.online.status", "ja-JP", "在线状态", "在线状态"),
+            new TranslationSeedItem("entity.online.status", "ja-JP", "在线状态", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
             // entity.online.status
-            new TranslationSeedItem("entity.online.status", "zh-CN", "在线状态", "在线状态"),
+            new TranslationSeedItem("entity.online.status", "zh-CN", "在线状态", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
             // entity.online.status
-            new TranslationSeedItem("entity.online.status", "zh-HK", "在线状态", "在线状态"),
+            new TranslationSeedItem("entity.online.status", "zh-HK", "在线状态", "在线状态（字典 sys_online_status；0=在线 1=离线 2=离开）"),
 
             // entity.online.connectip
             new TranslationSeedItem("entity.online.connectip", "en-US", "连接IP地址", "连接 IP 地址"),
@@ -164,22 +163,22 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.online.devicetype", "zh-HK", "设备类型", "设备类型"),
 
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "en-US", "浏览器类型", "浏览器类型"),
+            new TranslationSeedItem("entity.online.browsertype", "en-US", "浏览器类型", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "ja-JP", "浏览器类型", "浏览器类型"),
+            new TranslationSeedItem("entity.online.browsertype", "ja-JP", "浏览器类型", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "zh-CN", "浏览器类型", "浏览器类型"),
+            new TranslationSeedItem("entity.online.browsertype", "zh-CN", "浏览器类型", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
             // entity.online.browsertype
-            new TranslationSeedItem("entity.online.browsertype", "zh-HK", "浏览器类型", "浏览器类型"),
+            new TranslationSeedItem("entity.online.browsertype", "zh-HK", "浏览器类型", "浏览器类型（User-Agent 解析；0=未知 1=Chrome 2=Firefox 3=Safari 4=Edge）"),
 
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "en-US", "操作系统", "操作系统"),
+            new TranslationSeedItem("entity.online.operatingsystem", "en-US", "操作系统", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "ja-JP", "操作系统", "操作系统"),
+            new TranslationSeedItem("entity.online.operatingsystem", "ja-JP", "操作系统", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "zh-CN", "操作系统", "操作系统"),
+            new TranslationSeedItem("entity.online.operatingsystem", "zh-CN", "操作系统", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
             // entity.online.operatingsystem
-            new TranslationSeedItem("entity.online.operatingsystem", "zh-HK", "操作系统", "操作系统"),
+            new TranslationSeedItem("entity.online.operatingsystem", "zh-HK", "操作系统", "操作系统（User-Agent 解析；0=未知 1=Windows 2=macOS 3=Linux 4=Android 5=iOS）"),
 
             // entity.online.connecttime
             new TranslationSeedItem("entity.online.connecttime", "en-US", "连接时间", "连接时间"),
@@ -233,8 +232,8 @@ public class TaktOnlineI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Foundation;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 8;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

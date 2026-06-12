@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketCategoryAssignI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketCategoryAssign 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk;
 
 /// <summary>
-/// TaktTicketCategoryAssign 实体国际化翻译种子（键前缀 entity.ticketCategoryAssign.*）
+/// TaktTicketCategoryAssign 实体国际化翻译种子（键前缀 entity.ticketcategoryassign.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 ticketCategoryAssign 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 ticketcategoryassign 实体翻译...", tenantCode);
 
         foreach (var item in GetTicketCategoryAssignTranslations())
         {
@@ -76,56 +75,56 @@ public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTicketCategoryAssign 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ticketCategoryAssign._self / entity.ticketCategoryAssign.{{field}}；ResourceGroup=TaktModule.Routine；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.ticketcategoryassign._self / entity.ticketcategoryassign.{{field}}；ResourceGroup=2；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetTicketCategoryAssignTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.ticketCategoryAssign._self
-            new TranslationSeedItem("entity.ticketCategoryAssign._self", "en-US", "Ticket Category Assign Information", "实体名称"),
-            // entity.ticketCategoryAssign._self
-            new TranslationSeedItem("entity.ticketCategoryAssign._self", "ja-JP", "工单分类默认处理人信息", "实体名称"),
-            // entity.ticketCategoryAssign._self
-            new TranslationSeedItem("entity.ticketCategoryAssign._self", "zh-CN", "工单分类默认处理人信息", "实体名称"),
-            // entity.ticketCategoryAssign._self
-            new TranslationSeedItem("entity.ticketCategoryAssign._self", "zh-HK", "工单分类默认处理人信息", "实体名称"),
+            // entity.ticketcategoryassign._self
+            new TranslationSeedItem("entity.ticketcategoryassign._self", "en-US", "Ticket Category Assign Information", "实体名称"),
+            // entity.ticketcategoryassign._self
+            new TranslationSeedItem("entity.ticketcategoryassign._self", "ja-JP", "工单分类默认处理人信息", "实体名称"),
+            // entity.ticketcategoryassign._self
+            new TranslationSeedItem("entity.ticketcategoryassign._self", "zh-CN", "工单分类默认处理人信息", "实体名称"),
+            // entity.ticketcategoryassign._self
+            new TranslationSeedItem("entity.ticketcategoryassign._self", "zh-HK", "工单分类默认处理人信息", "实体名称"),
 
-            // entity.ticketCategoryAssign.categorycode
-            new TranslationSeedItem("entity.ticketCategoryAssign.categorycode", "en-US", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
-            // entity.ticketCategoryAssign.categorycode
-            new TranslationSeedItem("entity.ticketCategoryAssign.categorycode", "ja-JP", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
-            // entity.ticketCategoryAssign.categorycode
-            new TranslationSeedItem("entity.ticketCategoryAssign.categorycode", "zh-CN", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
-            // entity.ticketCategoryAssign.categorycode
-            new TranslationSeedItem("entity.ticketCategoryAssign.categorycode", "zh-HK", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            // entity.ticketcategoryassign.categorycode
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "en-US", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            // entity.ticketcategoryassign.categorycode
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "ja-JP", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            // entity.ticketcategoryassign.categorycode
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "zh-CN", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
+            // entity.ticketcategoryassign.categorycode
+            new TranslationSeedItem("entity.ticketcategoryassign.categorycode", "zh-HK", "分类编码", "分类编码（与 TaktTicket.CategoryCode 对应）"),
 
-            // entity.ticketCategoryAssign.assigneeid
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneeid", "en-US", "默认处理人ID", "默认处理人 ID"),
-            // entity.ticketCategoryAssign.assigneeid
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneeid", "ja-JP", "默认处理人ID", "默认处理人 ID"),
-            // entity.ticketCategoryAssign.assigneeid
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneeid", "zh-CN", "默认处理人ID", "默认处理人 ID"),
-            // entity.ticketCategoryAssign.assigneeid
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneeid", "zh-HK", "默认处理人ID", "默认处理人 ID"),
+            // entity.ticketcategoryassign.assigneeid
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneeid", "en-US", "默认处理人ID", "默认处理人 ID"),
+            // entity.ticketcategoryassign.assigneeid
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneeid", "ja-JP", "默认处理人ID", "默认处理人 ID"),
+            // entity.ticketcategoryassign.assigneeid
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneeid", "zh-CN", "默认处理人ID", "默认处理人 ID"),
+            // entity.ticketcategoryassign.assigneeid
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneeid", "zh-HK", "默认处理人ID", "默认处理人 ID"),
 
-            // entity.ticketCategoryAssign.assigneename
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneename", "en-US", "默认处理人姓名", "默认处理人姓名"),
-            // entity.ticketCategoryAssign.assigneename
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneename", "ja-JP", "默认处理人姓名", "默认处理人姓名"),
-            // entity.ticketCategoryAssign.assigneename
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneename", "zh-CN", "默认处理人姓名", "默认处理人姓名"),
-            // entity.ticketCategoryAssign.assigneename
-            new TranslationSeedItem("entity.ticketCategoryAssign.assigneename", "zh-HK", "默认处理人姓名", "默认处理人姓名"),
+            // entity.ticketcategoryassign.assigneename
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "en-US", "默认处理人姓名", "默认处理人姓名"),
+            // entity.ticketcategoryassign.assigneename
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "ja-JP", "默认处理人姓名", "默认处理人姓名"),
+            // entity.ticketcategoryassign.assigneename
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "zh-CN", "默认处理人姓名", "默认处理人姓名"),
+            // entity.ticketcategoryassign.assigneename
+            new TranslationSeedItem("entity.ticketcategoryassign.assigneename", "zh-HK", "默认处理人姓名", "默认处理人姓名"),
 
-            // entity.ticketCategoryAssign.sortorder
-            new TranslationSeedItem("entity.ticketCategoryAssign.sortorder", "en-US", "排序号", "排序号"),
-            // entity.ticketCategoryAssign.sortorder
-            new TranslationSeedItem("entity.ticketCategoryAssign.sortorder", "ja-JP", "排序号", "排序号"),
-            // entity.ticketCategoryAssign.sortorder
-            new TranslationSeedItem("entity.ticketCategoryAssign.sortorder", "zh-CN", "排序号", "排序号"),
-            // entity.ticketCategoryAssign.sortorder
-            new TranslationSeedItem("entity.ticketCategoryAssign.sortorder", "zh-HK", "排序号", "排序号"),
+            // entity.ticketcategoryassign.sortorder
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "en-US", "排序号", "排序号"),
+            // entity.ticketcategoryassign.sortorder
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "ja-JP", "排序号", "排序号"),
+            // entity.ticketcategoryassign.sortorder
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "zh-CN", "排序号", "排序号"),
+            // entity.ticketcategoryassign.sortorder
+            new TranslationSeedItem("entity.ticketcategoryassign.sortorder", "zh-HK", "排序号", "排序号"),
         };
     }
 
@@ -143,8 +142,8 @@ public class TaktTicketCategoryAssignI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Routine;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 2;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

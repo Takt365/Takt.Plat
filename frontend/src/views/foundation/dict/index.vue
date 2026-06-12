@@ -211,6 +211,8 @@ import type { DictType, DictTypeQuery, DictTypeCreate, DictTypeUpdate } from '@/
 import type { DictData } from '@/types/foundation/dict-data'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { useUserStore } from '@/stores/identity/user'
+import { isLogoutInProgress } from '@/bootstrap/takt-logout-flow'
 
 const { t } = useI18n()
 
@@ -461,6 +463,9 @@ const columns = computed<TableColumnsType<DictType>>(() => [
 
 // 加载数据
 const loadData = async () => {
+  if (!useUserStore().isLoggedIn || isLogoutInProgress()) {
+    return
+  }
   try {
     loading.value = true
     const query: DictTypeQuery = {
@@ -479,6 +484,9 @@ const loadData = async () => {
     
     // 字典数据按需加载（点击展开时加载），不再一次性加载所有数据
   } catch (error) {
+    if (isLogoutInProgress() || !useUserStore().isLoggedIn) {
+      return
+    }
     logger.error('[DictType] 加载数据失败', { action: 'loadData' }, error)
     message.error(t('common.page.msg.loadtargetfail', { target: t('entity.dictType._self') }))
   } finally {
@@ -486,8 +494,11 @@ const loadData = async () => {
   }
 }
 
-// 搜索
-const handleSearch = () => {
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
+/** 快捷查询 */
+function handleSearch() {
   currentPage.value = 1
   loadData()
 }

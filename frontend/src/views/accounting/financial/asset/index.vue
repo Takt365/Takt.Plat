@@ -69,7 +69,20 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'assetCategory'">
+          <TaktDictTag
+            :value="getAssetField(record, 'assetCategory')"
+            dict-type="accounting_asset_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'assetType'">
+          <TaktDictTag
+            :value="getAssetField(record, 'assetType')"
+            dict-type="accounting_asset_type"
+          />
+        </template>
+      </template>
     </TaktSingleTable>
 
     <!-- 分页组件 -->
@@ -126,30 +139,41 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('assetCategoryId')">
-      <a-form-item :label="t('entity.asset.categoryid')">
+      <div v-show="isFieldVisible('assetSpec')">
+      <a-form-item :label="t('entity.asset.spec')">
         <a-input
-          v-model:value="advancedQueryForm.assetCategoryId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.categoryid') })"
+          v-model:value="advancedQueryForm.assetSpec"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.spec') })"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('assetCategoryName')">
-      <a-form-item :label="t('entity.asset.categoryname')">
+      <div v-show="isFieldVisible('assetDesc')">
+      <a-form-item :label="t('entity.asset.desc')">
         <a-input
-          v-model:value="advancedQueryForm.assetCategoryName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.categoryname') })"
+          v-model:value="advancedQueryForm.assetDesc"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.desc') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('assetCategory')">
+      <a-form-item :label="t('entity.asset.category')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.assetCategory"
+          dict-type="accounting_asset_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.category') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assetType')">
       <a-form-item :label="t('entity.asset.type')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.assetType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.type') })"
-          style="width: 100%"
+          dict-type="accounting_asset_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -350,6 +374,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('relatedSupplierId')">
+      <a-form-item :label="t('entity.asset.relatedsupplierid')">
+        <a-input
+          v-model:value="advancedQueryForm.relatedSupplierId"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.relatedsupplierid') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('relatedSupplierName')">
+      <a-form-item :label="t('entity.asset.relatedsuppliername')">
+        <a-input
+          v-model:value="advancedQueryForm.relatedSupplierName"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.relatedsuppliername') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('relatedPlant')">
       <a-form-item :label="t('entity.asset.relatedplant')">
         <a-input
@@ -508,9 +550,10 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   assetCode: '',
   assetName: '',
-  assetCategoryId: '',
-  assetCategoryName: '',
-  assetType: undefined as number | undefined,
+  assetSpec: '',
+  assetDesc: '',
+  assetCategory: '',
+  assetType: '',
   assetOriginalValue: undefined as number | undefined,
   assetNetValue: undefined as number | undefined,
   accumulatedDepreciation: undefined as number | undefined,
@@ -532,6 +575,8 @@ const advancedQueryForm = ref({
   expectedLifeMonths: undefined as number | undefined,
   depreciationMethod: undefined as number | undefined,
   monthlyDepreciation: undefined as number | undefined,
+  relatedSupplierId: '',
+  relatedSupplierName: '',
   relatedPlant: '',
   assetStatus: undefined as number | undefined,
   createdAtStart: '',
@@ -543,8 +588,9 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'assetCode', label: t('entity.asset.code') },
   { key: 'assetName', label: t('entity.asset.name') },
-  { key: 'assetCategoryId', label: t('entity.asset.categoryid') },
-  { key: 'assetCategoryName', label: t('entity.asset.categoryname') },
+  { key: 'assetSpec', label: t('entity.asset.spec') },
+  { key: 'assetDesc', label: t('entity.asset.desc') },
+  { key: 'assetCategory', label: t('entity.asset.category') },
   { key: 'assetType', label: t('entity.asset.type') },
   { key: 'assetOriginalValue', label: t('entity.asset.originalvalue') },
   { key: 'assetNetValue', label: t('entity.asset.netvalue') },
@@ -567,6 +613,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'expectedLifeMonths', label: t('entity.asset.expectedlifemonths') },
   { key: 'depreciationMethod', label: t('entity.asset.depreciationmethod') },
   { key: 'monthlyDepreciation', label: t('entity.asset.monthlydepreciation') },
+  { key: 'relatedSupplierId', label: t('entity.asset.relatedsupplierid') },
+  { key: 'relatedSupplierName', label: t('entity.asset.relatedsuppliername') },
   { key: 'relatedPlant', label: t('entity.asset.relatedplant') },
   { key: 'assetStatus', label: t('entity.asset.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
@@ -631,22 +679,30 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssetField(record, 'assetName') ?? ''
   },
   {
-    title: t('entity.asset.categoryid'),
-    dataIndex: 'assetCategoryId',
-    key: 'assetCategoryId',
+    title: t('entity.asset.spec'),
+    dataIndex: 'assetSpec',
+    key: 'assetSpec',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssetField(record, 'assetCategoryId') ?? ''
+    customRender: ({ record }: { record: any }) => getAssetField(record, 'assetSpec') ?? ''
   },
   {
-    title: t('entity.asset.categoryname'),
-    dataIndex: 'assetCategoryName',
-    key: 'assetCategoryName',
+    title: t('entity.asset.desc'),
+    dataIndex: 'assetDesc',
+    key: 'assetDesc',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getAssetField(record, 'assetDesc') ?? ''
+  },
+  {
+    title: t('entity.asset.category'),
+    dataIndex: 'assetCategory',
+    key: 'assetCategory',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssetField(record, 'assetCategoryName') ?? ''
   },
   {
     title: t('entity.asset.type'),
@@ -655,7 +711,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssetField(record, 'assetType') ?? ''
   },
   {
     title: t('entity.asset.originalvalue'),
@@ -811,6 +866,24 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssetField(record, 'monthlyDepreciation') ?? ''
   },
   {
+    title: t('entity.asset.relatedsupplierid'),
+    dataIndex: 'relatedSupplierId',
+    key: 'relatedSupplierId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getAssetField(record, 'relatedSupplierId') ?? ''
+  },
+  {
+    title: t('entity.asset.relatedsuppliername'),
+    dataIndex: 'relatedSupplierName',
+    key: 'relatedSupplierName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getAssetField(record, 'relatedSupplierName') ?? ''
+  },
+  {
     title: t('entity.asset.relatedplant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
@@ -923,6 +996,9 @@ async function loadData() {
   }
 }
 
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -935,9 +1011,10 @@ function handleReset() {
   advancedQueryForm.value = {
   assetCode: '',
   assetName: '',
-  assetCategoryId: '',
-  assetCategoryName: '',
-  assetType: undefined as number | undefined,
+  assetSpec: '',
+  assetDesc: '',
+  assetCategory: '',
+  assetType: '',
   assetOriginalValue: undefined as number | undefined,
   assetNetValue: undefined as number | undefined,
   accumulatedDepreciation: undefined as number | undefined,
@@ -959,6 +1036,8 @@ function handleReset() {
   expectedLifeMonths: undefined as number | undefined,
   depreciationMethod: undefined as number | undefined,
   monthlyDepreciation: undefined as number | undefined,
+  relatedSupplierId: '',
+  relatedSupplierName: '',
   relatedPlant: '',
   assetStatus: undefined as number | undefined,
   createdAtStart: '',
@@ -1137,9 +1216,10 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   assetCode: '',
   assetName: '',
-  assetCategoryId: '',
-  assetCategoryName: '',
-  assetType: undefined as number | undefined,
+  assetSpec: '',
+  assetDesc: '',
+  assetCategory: '',
+  assetType: '',
   assetOriginalValue: undefined as number | undefined,
   assetNetValue: undefined as number | undefined,
   accumulatedDepreciation: undefined as number | undefined,
@@ -1161,6 +1241,8 @@ function handleAdvancedQueryReset() {
   expectedLifeMonths: undefined as number | undefined,
   depreciationMethod: undefined as number | undefined,
   monthlyDepreciation: undefined as number | undefined,
+  relatedSupplierId: '',
+  relatedSupplierName: '',
   relatedPlant: '',
   assetStatus: undefined as number | undefined,
   createdAtStart: '',

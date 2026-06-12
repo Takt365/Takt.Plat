@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktAccountTitleChangeLogI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAccountTitleChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial;
 
 /// <summary>
-/// TaktAccountTitleChangeLog 实体国际化翻译种子（键前缀 entity.accountTitleChangeLog.*）
+/// TaktAccountTitleChangeLog 实体国际化翻译种子（键前缀 entity.accounttitlechangelog.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktAccountTitleChangeLogI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktAccountTitleChangeLogI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 accountTitleChangeLog 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 accounttitlechangelog 实体翻译...", tenantCode);
 
         foreach (var item in GetAccountTitleChangeLogTranslations())
         {
@@ -76,74 +75,74 @@ public class TaktAccountTitleChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktAccountTitleChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.accountTitleChangeLog._self / entity.accountTitleChangeLog.{{field}}；ResourceGroup=TaktModule.Accounting；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.accounttitlechangelog._self / entity.accounttitlechangelog.{{field}}；ResourceGroup=3；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetAccountTitleChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.accountTitleChangeLog._self
-            new TranslationSeedItem("entity.accountTitleChangeLog._self", "en-US", "Account Title Change Log Information", "实体名称"),
-            // entity.accountTitleChangeLog._self
-            new TranslationSeedItem("entity.accountTitleChangeLog._self", "ja-JP", "会计科目变更记录信息", "实体名称"),
-            // entity.accountTitleChangeLog._self
-            new TranslationSeedItem("entity.accountTitleChangeLog._self", "zh-CN", "会计科目变更记录信息", "实体名称"),
-            // entity.accountTitleChangeLog._self
-            new TranslationSeedItem("entity.accountTitleChangeLog._self", "zh-HK", "会计科目变更记录信息", "实体名称"),
+            // entity.accounttitlechangelog._self
+            new TranslationSeedItem("entity.accounttitlechangelog._self", "en-US", "Account Title Change Log Information", "实体名称"),
+            // entity.accounttitlechangelog._self
+            new TranslationSeedItem("entity.accounttitlechangelog._self", "ja-JP", "会计科目变更记录信息", "实体名称"),
+            // entity.accounttitlechangelog._self
+            new TranslationSeedItem("entity.accounttitlechangelog._self", "zh-CN", "会计科目变更记录信息", "实体名称"),
+            // entity.accounttitlechangelog._self
+            new TranslationSeedItem("entity.accounttitlechangelog._self", "zh-HK", "会计科目变更记录信息", "实体名称"),
 
-            // entity.accountTitleChangeLog.accounttitleid
-            new TranslationSeedItem("entity.accountTitleChangeLog.accounttitleid", "en-US", "会计科目ID", "会计科目 ID"),
-            // entity.accountTitleChangeLog.accounttitleid
-            new TranslationSeedItem("entity.accountTitleChangeLog.accounttitleid", "ja-JP", "会计科目ID", "会计科目 ID"),
-            // entity.accountTitleChangeLog.accounttitleid
-            new TranslationSeedItem("entity.accountTitleChangeLog.accounttitleid", "zh-CN", "会计科目ID", "会计科目 ID"),
-            // entity.accountTitleChangeLog.accounttitleid
-            new TranslationSeedItem("entity.accountTitleChangeLog.accounttitleid", "zh-HK", "会计科目ID", "会计科目 ID"),
+            // entity.accounttitlechangelog.accounttitleid
+            new TranslationSeedItem("entity.accounttitlechangelog.accounttitleid", "en-US", "会计科目ID", "会计科目 ID"),
+            // entity.accounttitlechangelog.accounttitleid
+            new TranslationSeedItem("entity.accounttitlechangelog.accounttitleid", "ja-JP", "会计科目ID", "会计科目 ID"),
+            // entity.accounttitlechangelog.accounttitleid
+            new TranslationSeedItem("entity.accounttitlechangelog.accounttitleid", "zh-CN", "会计科目ID", "会计科目 ID"),
+            // entity.accounttitlechangelog.accounttitleid
+            new TranslationSeedItem("entity.accounttitlechangelog.accounttitleid", "zh-HK", "会计科目ID", "会计科目 ID"),
 
-            // entity.accountTitleChangeLog.titlecode
-            new TranslationSeedItem("entity.accountTitleChangeLog.titlecode", "en-US", "科目编码", "科目编码（冗余）"),
-            // entity.accountTitleChangeLog.titlecode
-            new TranslationSeedItem("entity.accountTitleChangeLog.titlecode", "ja-JP", "科目编码", "科目编码（冗余）"),
-            // entity.accountTitleChangeLog.titlecode
-            new TranslationSeedItem("entity.accountTitleChangeLog.titlecode", "zh-CN", "科目编码", "科目编码（冗余）"),
-            // entity.accountTitleChangeLog.titlecode
-            new TranslationSeedItem("entity.accountTitleChangeLog.titlecode", "zh-HK", "科目编码", "科目编码（冗余）"),
+            // entity.accounttitlechangelog.titlecode
+            new TranslationSeedItem("entity.accounttitlechangelog.titlecode", "en-US", "科目编码", "科目编码（冗余）"),
+            // entity.accounttitlechangelog.titlecode
+            new TranslationSeedItem("entity.accounttitlechangelog.titlecode", "ja-JP", "科目编码", "科目编码（冗余）"),
+            // entity.accounttitlechangelog.titlecode
+            new TranslationSeedItem("entity.accounttitlechangelog.titlecode", "zh-CN", "科目编码", "科目编码（冗余）"),
+            // entity.accounttitlechangelog.titlecode
+            new TranslationSeedItem("entity.accounttitlechangelog.titlecode", "zh-HK", "科目编码", "科目编码（冗余）"),
 
-            // entity.accountTitleChangeLog.changefields
-            new TranslationSeedItem("entity.accountTitleChangeLog.changefields", "en-US", "变更字段列表", "变更字段列表 JSON"),
-            // entity.accountTitleChangeLog.changefields
-            new TranslationSeedItem("entity.accountTitleChangeLog.changefields", "ja-JP", "变更字段列表", "变更字段列表 JSON"),
-            // entity.accountTitleChangeLog.changefields
-            new TranslationSeedItem("entity.accountTitleChangeLog.changefields", "zh-CN", "变更字段列表", "变更字段列表 JSON"),
-            // entity.accountTitleChangeLog.changefields
-            new TranslationSeedItem("entity.accountTitleChangeLog.changefields", "zh-HK", "变更字段列表", "变更字段列表 JSON"),
+            // entity.accounttitlechangelog.changefields
+            new TranslationSeedItem("entity.accounttitlechangelog.changefields", "en-US", "变更字段列表", "变更字段列表 JSON"),
+            // entity.accounttitlechangelog.changefields
+            new TranslationSeedItem("entity.accounttitlechangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表 JSON"),
+            // entity.accounttitlechangelog.changefields
+            new TranslationSeedItem("entity.accounttitlechangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表 JSON"),
+            // entity.accounttitlechangelog.changefields
+            new TranslationSeedItem("entity.accounttitlechangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表 JSON"),
 
-            // entity.accountTitleChangeLog.changetime
-            new TranslationSeedItem("entity.accountTitleChangeLog.changetime", "en-US", "变更时间", "变更时间"),
-            // entity.accountTitleChangeLog.changetime
-            new TranslationSeedItem("entity.accountTitleChangeLog.changetime", "ja-JP", "变更时间", "变更时间"),
-            // entity.accountTitleChangeLog.changetime
-            new TranslationSeedItem("entity.accountTitleChangeLog.changetime", "zh-CN", "变更时间", "变更时间"),
-            // entity.accountTitleChangeLog.changetime
-            new TranslationSeedItem("entity.accountTitleChangeLog.changetime", "zh-HK", "变更时间", "变更时间"),
+            // entity.accounttitlechangelog.changetime
+            new TranslationSeedItem("entity.accounttitlechangelog.changetime", "en-US", "变更时间", "变更时间"),
+            // entity.accounttitlechangelog.changetime
+            new TranslationSeedItem("entity.accounttitlechangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            // entity.accounttitlechangelog.changetime
+            new TranslationSeedItem("entity.accounttitlechangelog.changetime", "zh-CN", "变更时间", "变更时间"),
+            // entity.accounttitlechangelog.changetime
+            new TranslationSeedItem("entity.accounttitlechangelog.changetime", "zh-HK", "变更时间", "变更时间"),
 
-            // entity.accountTitleChangeLog.changeby
-            new TranslationSeedItem("entity.accountTitleChangeLog.changeby", "en-US", "变更人", "变更人"),
-            // entity.accountTitleChangeLog.changeby
-            new TranslationSeedItem("entity.accountTitleChangeLog.changeby", "ja-JP", "变更人", "变更人"),
-            // entity.accountTitleChangeLog.changeby
-            new TranslationSeedItem("entity.accountTitleChangeLog.changeby", "zh-CN", "变更人", "变更人"),
-            // entity.accountTitleChangeLog.changeby
-            new TranslationSeedItem("entity.accountTitleChangeLog.changeby", "zh-HK", "变更人", "变更人"),
+            // entity.accounttitlechangelog.changeby
+            new TranslationSeedItem("entity.accounttitlechangelog.changeby", "en-US", "变更人", "变更人"),
+            // entity.accounttitlechangelog.changeby
+            new TranslationSeedItem("entity.accounttitlechangelog.changeby", "ja-JP", "变更人", "变更人"),
+            // entity.accounttitlechangelog.changeby
+            new TranslationSeedItem("entity.accounttitlechangelog.changeby", "zh-CN", "变更人", "变更人"),
+            // entity.accounttitlechangelog.changeby
+            new TranslationSeedItem("entity.accounttitlechangelog.changeby", "zh-HK", "变更人", "变更人"),
 
-            // entity.accountTitleChangeLog.changereason
-            new TranslationSeedItem("entity.accountTitleChangeLog.changereason", "en-US", "变更原因", "变更原因"),
-            // entity.accountTitleChangeLog.changereason
-            new TranslationSeedItem("entity.accountTitleChangeLog.changereason", "ja-JP", "变更原因", "变更原因"),
-            // entity.accountTitleChangeLog.changereason
-            new TranslationSeedItem("entity.accountTitleChangeLog.changereason", "zh-CN", "变更原因", "变更原因"),
-            // entity.accountTitleChangeLog.changereason
-            new TranslationSeedItem("entity.accountTitleChangeLog.changereason", "zh-HK", "变更原因", "变更原因"),
+            // entity.accounttitlechangelog.changereason
+            new TranslationSeedItem("entity.accounttitlechangelog.changereason", "en-US", "变更原因", "变更原因"),
+            // entity.accounttitlechangelog.changereason
+            new TranslationSeedItem("entity.accounttitlechangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            // entity.accounttitlechangelog.changereason
+            new TranslationSeedItem("entity.accounttitlechangelog.changereason", "zh-CN", "变更原因", "变更原因"),
+            // entity.accounttitlechangelog.changereason
+            new TranslationSeedItem("entity.accounttitlechangelog.changereason", "zh-HK", "变更原因", "变更原因"),
         };
     }
 
@@ -161,8 +160,8 @@ public class TaktAccountTitleChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Accounting;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 3;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

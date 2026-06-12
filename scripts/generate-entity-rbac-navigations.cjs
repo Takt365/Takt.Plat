@@ -12,7 +12,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
+const { writeGeneratedFile, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgs } = require('./generate-script-common.cjs');
 const {
   NAVIGATION_REGION_MARKER,
   RBAC_PARENT_NAVIGATIONS,
@@ -203,11 +203,11 @@ function printUsage() {
 用法: node scripts/generate-entity-rbac-navigations.cjs [参数]
 
 参数:
-  --all              同步全部 RBAC 主实体（User/Tenant/Role/Menu/Company/Employee/Dept/Post）
   --<实体名>         仅同步指定实体，如 --Role
   --dry-run          仅打印，不写入
 
 说明:
+  - 已禁用 --all；每次必须指定一个实体
   - 配置源：scripts/rbac-parent-config.cjs → RBAC_PARENT_NAVIGATIONS
   - 写入「导航属性区域」内 SqlSugar [Navigate] OneToMany
   - 须先于 generate-dtos-from-entity.cjs（DTO 从实体导航生成 List<关联Dto> 与 Create *Ids）
@@ -215,32 +215,7 @@ function printUsage() {
 }
 
 function parseArgs() {
-  const args = process.argv.slice(2);
-  const options = { all: false, entityPrefix: null, dryRun: false };
-  args.forEach((arg) => {
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-      return;
-    }
-    if (arg.startsWith('--')) {
-      const value = arg.slice(2);
-      if (value.toLowerCase() === 'all') {
-        options.all = true;
-        return;
-      }
-      if (value.startsWith('Takt')) {
-        console.error('❌ 实体名不要带 Takt 前缀');
-        process.exit(1);
-      }
-      options.entityPrefix = value;
-    }
-  });
-  if (!options.all && !options.entityPrefix) {
-    console.error('❌ 请指定 --all 或 --<实体名>');
-    printUsage();
-    process.exit(1);
-  }
-  return options;
+  return parseSingleEntityGenerateArgs(printUsage);
 }
 
 if (require.main === module) {

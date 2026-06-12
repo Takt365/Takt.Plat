@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/workflow
 // 文件名称：flow-engine.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：workflow 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -19,6 +19,65 @@ import type {
  * 对应前端 FlowStart
  * @description 对应后端 TaktFlowStartDto
  */
+/**
+ * 按业务表提交审批
+ * 对应前端 FlowSubmitByTable
+ * @description 对应后端 TaktFlowSubmitByTableDto
+ */
+export interface FlowSubmitByTable {
+  /**
+   * 表单 RelatedTableName
+   */
+  relatedTableName: string;
+
+  /**
+   * 业务主键
+   */
+  entityId: string;
+
+  /**
+   * 可选流程键
+   */
+  processKey?: string;
+}
+
+/**
+ * 可发起流程方案摘要
+ * 对应前端 FlowStartableScheme
+ * @description 对应后端 TaktFlowStartableSchemeDto
+ */
+export interface FlowStartableScheme {
+  /**
+   * 流程键
+   */
+  processKey: string;
+
+  /**
+   * 流程名称
+   */
+  processName: string;
+
+  /**
+   * 关联表单 ID
+   */
+  formId: string;
+
+  /**
+   * 关联表单编码
+   */
+  formCode: string;
+
+  /**
+   * 是否绑定数据源
+   */
+  isDatasource: number;
+
+  /**
+   * 关联物理表名
+   */
+  relatedTableName?: string;
+}
+
 export interface FlowStart {
   /**
    * 流程键
@@ -223,7 +282,7 @@ export interface FlowInstanceOperate {
 
 
 /**
- * 待办/已办查询（分页与关键词见 <see cref="TaktPagedQuery"/>）
+ * 待办/已办查询（分页与关键词见 TaktPagedQuery）
  * 对应前端 FlowTodoQuery
  * @description 对应后端 TaktFlowTodoQueryDto
  */
@@ -277,13 +336,24 @@ export interface FlowTodoQuery extends TaktPagedQuery {
 
 
 /**
+ * 当前用户待办数量
+ * @description 对应后端 TaktFlowTodoCountDto
+ */
+export interface FlowTodoCount {
+  /**
+   * 待办数量
+   */
+  todoCount: number;
+}
+
+/**
  * 待办列表项
  * 对应前端 FlowTodoItem
  * @description 对应后端 TaktFlowTodoItemDto
  */
 export interface FlowTodoItem {
   /**
-   * 流程实例 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowInstance"/> Id）
+   * 流程实例 ID（对应 takt_workflow_instance 主键 Id）
    */
   flowInstanceId: string;
 
@@ -318,7 +388,7 @@ export interface FlowTodoItem {
   startTime?: string;
 
   /**
-   * 任务 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowTask"/> Id）
+   * 任务 ID（适配 TaktFlowTask Id）
    */
   flowTaskId: string;
 
@@ -366,7 +436,7 @@ export interface FlowHistoryItem {
  */
 export interface FlowPendingAddApprover {
   /**
-   * 加签记录 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowAddSign"/> Id）
+   * 加签记录 ID（适配 TaktFlowAddSign Id）
    */
   flowAddSignId: string;
 
@@ -385,7 +455,7 @@ export interface FlowPendingAddApprover {
  */
 export interface FlowInstanceDetail {
   /**
-   * 流程实例 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowInstance"/> Id）
+   * 流程实例 ID（对应 takt_workflow_instance 主键 Id）
    */
   flowInstanceId: string;
 
@@ -479,7 +549,7 @@ export interface FlowInstanceDetail {
  */
 export interface FlowInstanceListItem {
   /**
-   * 流程实例 ID（适配 <see cref="Takt.Domain.Entities.Workflow.TaktFlowInstance"/> Id）
+   * 流程实例 ID（对应 takt_workflow_instance 主键 Id）
    */
   flowInstanceId: string;
 

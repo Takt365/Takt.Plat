@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：translation.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   Translation,
   TranslationCreate,
+  TranslationMessages,
   TranslationTransposedResult,
   TranslationUpdate
 } from '@/types/foundation/translation';
@@ -222,5 +223,22 @@ export function exportTranslation(
       exportName
     },
     responseType: 'blob',
+  });
+}
+
+// ========================================
+// 动态翻译消息
+// ========================================
+
+/**
+ * 获取指定区域文化的前端扁平翻译消息（登录后供 vue-i18n 动态合并）
+ * @param {string} cultureCode 区域文化编码 BCP47（如 zh-CN）
+ * @returns {Promise<TranslationMessages>} 扁平 i18n 键值
+ */
+export function getTranslationMessages(cultureCode: string): Promise<TranslationMessages> {
+  return request<TranslationMessages>({
+    url: `${TRANSLATION_API_BASE}/messages`,
+    method: 'get',
+    params: { cultureCode },
   });
 }

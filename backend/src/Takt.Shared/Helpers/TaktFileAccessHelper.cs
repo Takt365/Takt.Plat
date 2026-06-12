@@ -10,12 +10,10 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Takt.Shared.Enums;
-
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 文件访问判定（<see cref="TaktFilePublicAccess"/> + 创建人；不含 RBAC，RBAC 由控制器层校验）
+/// 文件访问判定（IsPublic 字典 sys_is_public：0=公开，1=私有；不含 RBAC，RBAC 由控制器层校验）
 /// </summary>
 public static class TaktFileAccessHelper
 {
@@ -26,9 +24,9 @@ public static class TaktFileAccessHelper
     /// <param name="createdBy">文件创建人用户 ID</param>
     /// <param name="currentUserId">当前登录用户 ID</param>
     /// <returns>公开文件为 true；私有文件仅创建人为 true</returns>
-    public static bool CanAccess(TaktFilePublicAccess isPublic, long createdBy, long? currentUserId)
+    public static bool CanAccess(int isPublic, long createdBy, long? currentUserId)
     {
-        if (isPublic == TaktFilePublicAccess.Public)
+        if (isPublic == 0)
         {
             return true;
         }

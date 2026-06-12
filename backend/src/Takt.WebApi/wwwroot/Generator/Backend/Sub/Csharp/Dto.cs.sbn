@@ -126,7 +126,7 @@ public class {{ table.entity_class_name }}CreateDto
 {{~ end ~}}
 {{ if update_inherits_create }}
 /// <summary>
-/// {{ table.comment }}UpdateDto（继承 <see cref="{{ table.entity_class_name }}CreateDto"/> 并仅增加主键；与 <see cref="Takt.Application.Dtos.Identity.TaktUserUpdateDto"/> 一致，供 WebApi 中 <c>{{ table.entity_class_name }}UpdateDtoValidator</c> 使用 <c>Include(new {{ table.entity_class_name }}CreateDtoValidator)</c>）
+/// {{ table.comment }}UpdateDto（继承 {{ table.entity_class_name }}CreateDto 并仅增加主键；与 TaktUserUpdateDto 一致，供 WebApi 中 <c>{{ table.entity_class_name }}UpdateDtoValidator</c> 使用 <c>Include(new {{ table.entity_class_name }}CreateDtoValidator)</c>）
 /// </summary>
 public class {{ table.entity_class_name }}UpdateDto : {{ table.entity_class_name }}CreateDto
 {

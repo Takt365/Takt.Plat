@@ -90,14 +90,15 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
         return new List<(string, string, string, int)>
         {
             ("accounting_account_category","科目类别","会计科目分类。用于财务科目管理",1),
-            ("accounting_asset_category","资产类别","固定资产分类。用于资产管理",2),
-            ("accounting_cost_center_category","成本中心类别","成本中心分类。用于成本核算管理",3),
-            ("accounting_cost_element_category","成本要素类别","成本要素分类。用于成本要素管理",4),
-            ("accounting_currency","币种","货币类型。国际贸易和财务结算通用币种",5),
-            ("accounting_payment_terms","付款条件","付款条件。用于客户和供应商财务付款条款管理",6),
-            ("accounting_profit_center_category","利润中心类别","利润中心分类。用于利润核算管理",7),
-            ("accounting_tax_code","税码","税务编码。用于增值税等税务管理",8),
-            ("accounting_tax_rate","税率","税率。用于各类税务计算",9),
+            ("accounting_asset_category","资产大类","固定资产大类分类。用于资产管理",2),
+            ("accounting_asset_type","资产类型","资产类型与品种。用于资产管理",3),
+            ("accounting_cost_center_category","成本中心类别","成本中心分类。用于成本核算管理",4),
+            ("accounting_cost_element_category","成本要素类别","成本要素分类。用于成本要素管理",5),
+            ("accounting_currency","币种","货币类型。国际贸易和财务结算通用币种",6),
+            ("accounting_payment_terms","付款条件","付款条件。用于客户和供应商财务付款条款管理",7),
+            ("accounting_profit_center_category","利润中心类别","利润中心分类。用于利润核算管理",8),
+            ("accounting_tax_code","税码","税务编码。用于增值税等税务管理",9),
+            ("accounting_tax_rate","税率","税率。用于各类税务计算",10),
             ("gen_button_category","代码生成操作后缀","对应 TaktGenTable.MenuButtonGroup；DictValue 为完整权限码第四段英文 key（前缀为三段规范化的 PermsPrefixCanonical，见 TaktGenTable.PermsPrefix 注释）；多选逗号；TaktCodeGenWorkflowService.BuildSqlMenuButtonRowsAsync 生成 basePerm:sfx 与 MenuL10nKey=common.button.*；DictLabel 为中文名。已合并原 sys_button_category。曾用类型名「按钮权限后缀」片面。原编码 gen_menu_button。",10),
             ("gen_button_style","操作按钮样式","代码生成表 TaktGenTable.FrontBtnStyle（front_btn_style）。0=文本，1=标准。原编码 sys_button_style。",11),
             ("gen_csharp_data_type","C#数据类型","代码生成列 CsharpDataType。对应 string、int、long、DateTime、decimal、bool、Guid 等。C# 数据类型。原编码 sys_csharp_type。",12),
@@ -213,7 +214,7 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
             ("sys_mail_status","邮件状态","邮件状态。0=草稿，1=已发送，2=发送失败，3=已撤回，4=定时发送中",110),
             ("sys_mail_type","邮件类型","邮件类型。0=普通邮件，1=系统邮件，2=通知邮件，3=提醒邮件",111),
             ("sys_menu_type","菜单类型","菜单类型。0=目录，1=菜单，2=按钮",112),
-            ("sys_message_group","消息分组","消息分组。Chat=聊天，Notification=通知，Alert=提醒",113),
+            ("sys_message_group","消息分组","消息分组。Collaboration=协同，OfficialDocument=公文，Document=文档，Announcement=公告，Other=其他，Message=消息，Reminder=提醒",113),
             ("sys_message_type","消息类型","消息类型。Text=文本，Image=图片，File=文件，System=系统消息",114),
             ("sys_news_category","新闻分类","新闻分类。0=公司新闻，1=行业动态，2=技术分享，3=产品发布，4=活动资讯，5=其他",115),
             ("sys_news_status","新闻状态","新闻状态。0=草稿，1=已发布，2=已撤回，3=已过期",116),
@@ -242,6 +243,9 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
             ("sys_word_filter_level","敏感词过滤等级","敏感词过滤等级（与 Takt.Domain.Entities.Foundation.TaktVocabulary.FilterLevel 一致，字典 sys_word_filter_level）。1=低，2=中，3=高",139),
             ("sys_yes_no","是否","通用布尔标志。1=是/启用，0=否/禁用",140),
             ("sys_culture_code","区域类别","区域文化编码（BCP47，对齐 TaktCulture.CultureCode；用于用户/公司/工厂 default_culture 下拉）。如 zh-CN、en-US、ja-JP、zh-HK",141),
+            ("helpdesk_ticket_status","工单状态","服务台工单 ITSM 状态。0=新建，1=已指派，2=处理中，3=等待用户回复，4=已解决，5=已关闭，6=重新打开",142),
+            ("helpdesk_ticket_source","工单来源","服务台工单来源。0=门户，1=邮件，2=电话，3=API",143),
+            ("sys_warranty_type","保修类型","保修类型（与 TaktWarrantyType 一致）。0=原厂保修，1=延长保修，2=上门保修，3=寄修保修，4=维保合同，5=付费保养",144),
 
         };
     }
@@ -268,9 +272,9 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
                 DictTypeCode = dictTypeCode,
                 DictTypeName = dictTypeName,
                 Remark = remark,
-                IsBuiltIn = TaktYesNo.Yes,
-                DataSource = TaktDataSource.TableData,
-                DictStatus = TaktCommonStatus.Enabled,
+                IsBuiltIn = 1,
+                DataSource = 0,
+                DictStatus = 1,
                 SortOrder = sortOrder
             };
             dictType = await repository.CreateAsync(dictType);

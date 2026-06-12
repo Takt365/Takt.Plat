@@ -53,5 +53,5 @@ public interface ITaktPermissionService
     /// <param name="userId">用户ID</param>
     /// <param name="tenantCode">租户编码</param>
     /// <returns>数据权限范围</returns>
-    Task<TaktDataScope> GetDataScopeAsync(long userId, string tenantCode);
+    Task<int> GetDataScopeAsync(long userId, string tenantCode);
 }

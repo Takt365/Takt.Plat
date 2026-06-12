@@ -251,7 +251,7 @@ const usernameInputRef = ref<{ focus?: () => void } | null>(null);
 
 /** 登录表单模型 */
 const formData = reactive({
-  tenantCode: '',
+  tenantCode: '000',
   username: 'admin',
   password: 'Takt@123456',
   rememberMe: false,

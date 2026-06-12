@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Personnel;
 
@@ -75,5 +74,5 @@ public class TaktEmployeeEducation : TaktCompanyEntityBase
     /// 是否最高学历（1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_highest", ColumnDescription = "是否最高学历", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsHighest { get; set; } = TaktYesNo.No;
+    public int IsHighest { get; set; } = 0;
 }

@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Organization;
 
@@ -73,7 +72,7 @@ public class TaktDept : TaktCompanyEntityBase
     /// 费用类别（1=直接，2=间接）
     /// </summary>
     [SugarColumn(ColumnName = "cost_category", ColumnDescription = "费用类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
-    public TaktCostCategory CostCategory { get; set; } = TaktCostCategory.Indirect;
+    public int CostCategory { get; set; } = 2;
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -103,14 +102,14 @@ public class TaktDept : TaktCompanyEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "dept_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus DeptStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int DeptStatus { get; set; } = 1;
 
     /// <summary>
     /// 是否内置（1=是，0=否）
     /// 种子部门为内置，不允许删除
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
     /// 排序号（同级部门排序）

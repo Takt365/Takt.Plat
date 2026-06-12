@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesInvoicesController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Logistics.Sales;
 /// 销售发票控制器
 /// 提供销售发票的 REST API
 /// </summary>
-[ApiModule(TaktModule.Logistics, "后勤管理")]
+[ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "销售发票")]
 public class TaktSalesInvoicesController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:sales:salesinvoice:list", "销售发票列表")]
+    [TaktPermission("logistics:sales:invoice:list", "销售发票列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSalesInvoiceListAsync([FromQuery] TaktSalesInvoiceQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售发票ID</param>
     /// <returns>销售发票DTO</returns>
-    [TaktPermission("logistics:sales:salesinvoice:query", "销售发票详情")]
+    [TaktPermission("logistics:sales:invoice:query", "销售发票详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSalesInvoiceByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// 获取销售发票选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:sales:salesinvoice:query", "销售发票选项")]
+    [TaktPermission("logistics:sales:invoice:query", "销售发票选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSalesInvoiceOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>销售发票DTO</returns>
-    [TaktPermission("logistics:sales:salesinvoice:create", "创建销售发票")]
+    [TaktPermission("logistics:sales:invoice:create", "创建销售发票")]
     [HttpPost]
     public async Task<IActionResult> CreateSalesInvoiceAsync([FromBody] TaktSalesInvoiceCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// <param name="id">销售发票ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>销售发票DTO</returns>
-    [TaktPermission("logistics:sales:salesinvoice:update", "更新销售发票")]
+    [TaktPermission("logistics:sales:invoice:update", "更新销售发票")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSalesInvoiceAsync(long id, [FromBody] TaktSalesInvoiceUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售发票ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salesinvoice:delete", "删除销售发票")]
+    [TaktPermission("logistics:sales:invoice:delete", "删除销售发票")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSalesInvoiceByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salesinvoice:delete", "批量删除销售发票")]
+    [TaktPermission("logistics:sales:invoice:delete", "批量删除销售发票")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSalesInvoiceBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>销售发票DTO</returns>
-    [TaktPermission("logistics:sales:salesinvoice:update", "更新销售发票状态")]
+    [TaktPermission("logistics:sales:invoice:update", "更新销售发票状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSalesInvoiceStatusAsync([FromBody] TaktSalesInvoiceStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:sales:salesinvoice:import", "获取销售发票导入模板")]
+    [TaktPermission("logistics:sales:invoice:import", "获取销售发票导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSalesInvoiceTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:sales:salesinvoice:import", "导入销售发票")]
+    [TaktPermission("logistics:sales:invoice:import", "导入销售发票")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSalesInvoiceAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktSalesInvoicesController : TaktControllerBase
     /// 导出销售发票
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:sales:salesinvoice:export", "导出销售发票")]
+    [TaktPermission("logistics:sales:invoice:export", "导出销售发票")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSalesInvoiceAsync([FromQuery] TaktSalesInvoiceQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

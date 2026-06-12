@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
 // 文件名称：TaktQualityFailuresController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质问题应对主控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Logistics.Quality.Cost;
 /// 品质问题应对主控制器
 /// 提供品质问题应对主的 REST API
 /// </summary>
-[ApiModule(TaktModule.Logistics, "后勤管理")]
+[ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "品质问题应对主")]
 public class TaktQualityFailuresController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:list", "品质问题应对主列表")]
+    [TaktPermission("logistics:quality:cost:failure:list", "品质问题应对主列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetQualityFailureListAsync([FromQuery] TaktQualityFailureQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质问题应对主ID</param>
     /// <returns>品质问题应对主DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:query", "品质问题应对主详情")]
+    [TaktPermission("logistics:quality:cost:failure:query", "品质问题应对主详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQualityFailureByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// 获取品质问题应对主选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:query", "品质问题应对主选项")]
+    [TaktPermission("logistics:quality:cost:failure:query", "品质问题应对主选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetQualityFailureOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>品质问题应对主DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:create", "创建品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:failure:create", "创建品质问题应对主")]
     [HttpPost]
     public async Task<IActionResult> CreateQualityFailureAsync([FromBody] TaktQualityFailureCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// <param name="id">品质问题应对主ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>品质问题应对主DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:update", "更新品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:failure:update", "更新品质问题应对主")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateQualityFailureAsync(long id, [FromBody] TaktQualityFailureUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质问题应对主ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:delete", "删除品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:failure:delete", "删除品质问题应对主")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteQualityFailureByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:delete", "批量删除品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:failure:delete", "批量删除品质问题应对主")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteQualityFailureBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:import", "获取品质问题应对主导入模板")]
+    [TaktPermission("logistics:quality:cost:failure:import", "获取品质问题应对主导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetQualityFailureTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:import", "导入品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:failure:import", "导入品质问题应对主")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportQualityFailureAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// 导出品质问题应对主
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailure:export", "导出品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:failure:export", "导出品质问题应对主")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportQualityFailureAsync([FromQuery] TaktQualityFailureQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

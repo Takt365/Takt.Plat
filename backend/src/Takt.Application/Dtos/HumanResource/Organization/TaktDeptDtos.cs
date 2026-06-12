@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Organization
 // 文件名称：TaktDeptDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Dept 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDept 生成，请按需审阅）
 // 
@@ -75,7 +75,7 @@ public class TaktDeptDto : TaktCompanyDtoBase
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public TaktCostCategory CostCategory { get; set; }
+    public int CostCategory { get; set; }
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -106,12 +106,12 @@ public class TaktDeptDto : TaktCompanyDtoBase
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus DeptStatus { get; set; }
+    public int DeptStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -212,7 +212,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public TaktCostCategory? CostCategory { get; set; }
+    public int? CostCategory { get; set; }
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -238,12 +238,12 @@ public class TaktDeptQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? DeptStatus { get; set; }
+    public int? DeptStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -327,7 +327,7 @@ public class TaktDeptCreateDto
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public TaktCostCategory CostCategory { get; set; }
+    public int CostCategory { get; set; }
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -356,12 +356,12 @@ public class TaktDeptCreateDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus DeptStatus { get; set; }
+    public int DeptStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -437,7 +437,7 @@ public class TaktDeptStatusDto
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus DeptStatus { get; set; }
+    public int DeptStatus { get; set; }
 }
 
 // ========================================
@@ -507,7 +507,7 @@ public class TaktDeptTemplateDto
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public TaktCostCategory? CostCategory { get; set; }
+    public int? CostCategory { get; set; }
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -533,12 +533,12 @@ public class TaktDeptTemplateDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? DeptStatus { get; set; }
+    public int? DeptStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -601,7 +601,7 @@ public class TaktDeptImportDto
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public TaktCostCategory? CostCategory { get; set; }
+    public int? CostCategory { get; set; }
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -627,12 +627,12 @@ public class TaktDeptImportDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? DeptStatus { get; set; }
+    public int? DeptStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号（同级部门排序）
@@ -711,7 +711,7 @@ public class TaktDeptExportDto
     /// <summary>
     /// 费用类别（1=直接，2=间接）
     /// </summary>
-    public TaktCostCategory CostCategory { get; set; }
+    public int CostCategory { get; set; }
 
     /// <summary>
     /// 部门负责人ID（关联TaktUser.Id）
@@ -737,12 +737,12 @@ public class TaktDeptExportDto
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus DeptStatus { get; set; }
+    public int DeptStatus { get; set; }
 
     /// <summary>
     /// 是否内置（1=是，0=否） 种子部门为内置，不允许删除
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 排序号（同级部门排序）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// TaktAssyOutputDetail 实体国际化翻译种子（键前缀 entity.assyOutputDetail.*）
+/// TaktAssyOutputDetail 实体国际化翻译种子（键前缀 entity.assyoutputdetail.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 assyOutputDetail 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 assyoutputdetail 实体翻译...", tenantCode);
 
         foreach (var item in GetAssyOutputDetailTranslations())
         {
@@ -76,155 +75,155 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktAssyOutputDetail 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.assyOutputDetail._self / entity.assyOutputDetail.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.assyoutputdetail._self / entity.assyoutputdetail.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetAssyOutputDetailTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.assyOutputDetail._self
-            new TranslationSeedItem("entity.assyOutputDetail._self", "en-US", "Assy Output Detail Information", "实体名称"),
-            // entity.assyOutputDetail._self
-            new TranslationSeedItem("entity.assyOutputDetail._self", "ja-JP", "组立日报明细信息", "实体名称"),
-            // entity.assyOutputDetail._self
-            new TranslationSeedItem("entity.assyOutputDetail._self", "zh-CN", "组立日报明细信息", "实体名称"),
-            // entity.assyOutputDetail._self
-            new TranslationSeedItem("entity.assyOutputDetail._self", "zh-HK", "组立日报明细信息", "实体名称"),
+            // entity.assyoutputdetail._self
+            new TranslationSeedItem("entity.assyoutputdetail._self", "en-US", "Assy Output Detail Information", "实体名称"),
+            // entity.assyoutputdetail._self
+            new TranslationSeedItem("entity.assyoutputdetail._self", "ja-JP", "组立日报明细信息", "实体名称"),
+            // entity.assyoutputdetail._self
+            new TranslationSeedItem("entity.assyoutputdetail._self", "zh-CN", "组立日报明细信息", "实体名称"),
+            // entity.assyoutputdetail._self
+            new TranslationSeedItem("entity.assyoutputdetail._self", "zh-HK", "组立日报明细信息", "实体名称"),
 
-            // entity.assyOutputDetail.assyoutputid
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutputid", "en-US", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.assyOutputDetail.assyoutputid
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutputid", "ja-JP", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.assyOutputDetail.assyoutputid
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutputid", "zh-CN", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.assyOutputDetail.assyoutputid
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutputid", "zh-HK", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.assyoutputdetail.assyoutputid
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "en-US", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.assyoutputdetail.assyoutputid
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "ja-JP", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.assyoutputdetail.assyoutputid
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "zh-CN", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.assyoutputdetail.assyoutputid
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "zh-HK", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
 
-            // entity.assyOutputDetail.prodordercode
-            new TranslationSeedItem("entity.assyOutputDetail.prodordercode", "en-US", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.assyOutputDetail.prodordercode
-            new TranslationSeedItem("entity.assyOutputDetail.prodordercode", "ja-JP", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.assyOutputDetail.prodordercode
-            new TranslationSeedItem("entity.assyOutputDetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
-            // entity.assyOutputDetail.prodordercode
-            new TranslationSeedItem("entity.assyOutputDetail.prodordercode", "zh-HK", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.assyoutputdetail.prodordercode
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "en-US", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.assyoutputdetail.prodordercode
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "ja-JP", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.assyoutputdetail.prodordercode
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            // entity.assyoutputdetail.prodordercode
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "zh-HK", "生产工单号", "生产工单号（冗余字段,便于查询）"),
 
-            // entity.assyOutputDetail.linenumber
-            new TranslationSeedItem("entity.assyOutputDetail.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.assyOutputDetail.linenumber
-            new TranslationSeedItem("entity.assyOutputDetail.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.assyOutputDetail.linenumber
-            new TranslationSeedItem("entity.assyOutputDetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.assyOutputDetail.linenumber
-            new TranslationSeedItem("entity.assyOutputDetail.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.assyoutputdetail.linenumber
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.assyoutputdetail.linenumber
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.assyoutputdetail.linenumber
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.assyoutputdetail.linenumber
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
 
-            // entity.assyOutputDetail.timeperiod
-            new TranslationSeedItem("entity.assyOutputDetail.timeperiod", "en-US", "生产时段", "生产时段"),
-            // entity.assyOutputDetail.timeperiod
-            new TranslationSeedItem("entity.assyOutputDetail.timeperiod", "ja-JP", "生产时段", "生产时段"),
-            // entity.assyOutputDetail.timeperiod
-            new TranslationSeedItem("entity.assyOutputDetail.timeperiod", "zh-CN", "生产时段", "生产时段"),
-            // entity.assyOutputDetail.timeperiod
-            new TranslationSeedItem("entity.assyOutputDetail.timeperiod", "zh-HK", "生产时段", "生产时段"),
+            // entity.assyoutputdetail.timeperiod
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "en-US", "生产时段", "生产时段"),
+            // entity.assyoutputdetail.timeperiod
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "ja-JP", "生产时段", "生产时段"),
+            // entity.assyoutputdetail.timeperiod
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段"),
+            // entity.assyoutputdetail.timeperiod
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-HK", "生产时段", "生产时段"),
 
-            // entity.assyOutputDetail.prodactualqty
-            new TranslationSeedItem("entity.assyOutputDetail.prodactualqty", "en-US", "实际生产数量", "实际生产数量"),
-            // entity.assyOutputDetail.prodactualqty
-            new TranslationSeedItem("entity.assyOutputDetail.prodactualqty", "ja-JP", "实际生产数量", "实际生产数量"),
-            // entity.assyOutputDetail.prodactualqty
-            new TranslationSeedItem("entity.assyOutputDetail.prodactualqty", "zh-CN", "实际生产数量", "实际生产数量"),
-            // entity.assyOutputDetail.prodactualqty
-            new TranslationSeedItem("entity.assyOutputDetail.prodactualqty", "zh-HK", "实际生产数量", "实际生产数量"),
+            // entity.assyoutputdetail.prodactualqty
+            new TranslationSeedItem("entity.assyoutputdetail.prodactualqty", "en-US", "实际生产数量", "实际生产数量"),
+            // entity.assyoutputdetail.prodactualqty
+            new TranslationSeedItem("entity.assyoutputdetail.prodactualqty", "ja-JP", "实际生产数量", "实际生产数量"),
+            // entity.assyoutputdetail.prodactualqty
+            new TranslationSeedItem("entity.assyoutputdetail.prodactualqty", "zh-CN", "实际生产数量", "实际生产数量"),
+            // entity.assyoutputdetail.prodactualqty
+            new TranslationSeedItem("entity.assyoutputdetail.prodactualqty", "zh-HK", "实际生产数量", "实际生产数量"),
 
-            // entity.assyOutputDetail.downtimeminutes
-            new TranslationSeedItem("entity.assyOutputDetail.downtimeminutes", "en-US", "停线时间", "停线时间(分钟)"),
-            // entity.assyOutputDetail.downtimeminutes
-            new TranslationSeedItem("entity.assyOutputDetail.downtimeminutes", "ja-JP", "停线时间", "停线时间(分钟)"),
-            // entity.assyOutputDetail.downtimeminutes
-            new TranslationSeedItem("entity.assyOutputDetail.downtimeminutes", "zh-CN", "停线时间", "停线时间(分钟)"),
-            // entity.assyOutputDetail.downtimeminutes
-            new TranslationSeedItem("entity.assyOutputDetail.downtimeminutes", "zh-HK", "停线时间", "停线时间(分钟)"),
+            // entity.assyoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.assyoutputdetail.downtimeminutes", "en-US", "停线时间", "停线时间(分钟)"),
+            // entity.assyoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.assyoutputdetail.downtimeminutes", "ja-JP", "停线时间", "停线时间(分钟)"),
+            // entity.assyoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.assyoutputdetail.downtimeminutes", "zh-CN", "停线时间", "停线时间(分钟)"),
+            // entity.assyoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.assyoutputdetail.downtimeminutes", "zh-HK", "停线时间", "停线时间(分钟)"),
 
-            // entity.assyOutputDetail.downtimereason
-            new TranslationSeedItem("entity.assyOutputDetail.downtimereason", "en-US", "停线原因", "停线原因"),
-            // entity.assyOutputDetail.downtimereason
-            new TranslationSeedItem("entity.assyOutputDetail.downtimereason", "ja-JP", "停线原因", "停线原因"),
-            // entity.assyOutputDetail.downtimereason
-            new TranslationSeedItem("entity.assyOutputDetail.downtimereason", "zh-CN", "停线原因", "停线原因"),
-            // entity.assyOutputDetail.downtimereason
-            new TranslationSeedItem("entity.assyOutputDetail.downtimereason", "zh-HK", "停线原因", "停线原因"),
+            // entity.assyoutputdetail.downtimereason
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "en-US", "停线原因", "停线原因"),
+            // entity.assyoutputdetail.downtimereason
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "ja-JP", "停线原因", "停线原因"),
+            // entity.assyoutputdetail.downtimereason
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因"),
+            // entity.assyoutputdetail.downtimereason
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-HK", "停线原因", "停线原因"),
 
-            // entity.assyOutputDetail.downtimedescription
-            new TranslationSeedItem("entity.assyOutputDetail.downtimedescription", "en-US", "停线说明", "停线说明"),
-            // entity.assyOutputDetail.downtimedescription
-            new TranslationSeedItem("entity.assyOutputDetail.downtimedescription", "ja-JP", "停线说明", "停线说明"),
-            // entity.assyOutputDetail.downtimedescription
-            new TranslationSeedItem("entity.assyOutputDetail.downtimedescription", "zh-CN", "停线说明", "停线说明"),
-            // entity.assyOutputDetail.downtimedescription
-            new TranslationSeedItem("entity.assyOutputDetail.downtimedescription", "zh-HK", "停线说明", "停线说明"),
+            // entity.assyoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "en-US", "停线说明", "停线说明"),
+            // entity.assyoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "ja-JP", "停线说明", "停线说明"),
+            // entity.assyoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-CN", "停线说明", "停线说明"),
+            // entity.assyoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-HK", "停线说明", "停线说明"),
 
-            // entity.assyOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.assyOutputDetail.unachievedreason", "en-US", "未达成原因", "未达成原因"),
-            // entity.assyOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.assyOutputDetail.unachievedreason", "ja-JP", "未达成原因", "未达成原因"),
-            // entity.assyOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.assyOutputDetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因"),
-            // entity.assyOutputDetail.unachievedreason
-            new TranslationSeedItem("entity.assyOutputDetail.unachievedreason", "zh-HK", "未达成原因", "未达成原因"),
+            // entity.assyoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "en-US", "未达成原因", "未达成原因"),
+            // entity.assyoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "ja-JP", "未达成原因", "未达成原因"),
+            // entity.assyoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因"),
+            // entity.assyoutputdetail.unachievedreason
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-HK", "未达成原因", "未达成原因"),
 
-            // entity.assyOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.assyOutputDetail.unachieveddescription", "en-US", "未达成说明", "未达成说明"),
-            // entity.assyOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.assyOutputDetail.unachieveddescription", "ja-JP", "未达成说明", "未达成说明"),
-            // entity.assyOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.assyOutputDetail.unachieveddescription", "zh-CN", "未达成说明", "未达成说明"),
-            // entity.assyOutputDetail.unachieveddescription
-            new TranslationSeedItem("entity.assyOutputDetail.unachieveddescription", "zh-HK", "未达成说明", "未达成说明"),
+            // entity.assyoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "en-US", "未达成说明", "未达成说明"),
+            // entity.assyoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "ja-JP", "未达成说明", "未达成说明"),
+            // entity.assyoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "zh-CN", "未达成说明", "未达成说明"),
+            // entity.assyoutputdetail.unachieveddescription
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "zh-HK", "未达成说明", "未达成说明"),
 
-            // entity.assyOutputDetail.inputminutes
-            new TranslationSeedItem("entity.assyOutputDetail.inputminutes", "en-US", "投入工时", "投入工时(分钟)"),
-            // entity.assyOutputDetail.inputminutes
-            new TranslationSeedItem("entity.assyOutputDetail.inputminutes", "ja-JP", "投入工时", "投入工时(分钟)"),
-            // entity.assyOutputDetail.inputminutes
-            new TranslationSeedItem("entity.assyOutputDetail.inputminutes", "zh-CN", "投入工时", "投入工时(分钟)"),
-            // entity.assyOutputDetail.inputminutes
-            new TranslationSeedItem("entity.assyOutputDetail.inputminutes", "zh-HK", "投入工时", "投入工时(分钟)"),
+            // entity.assyoutputdetail.inputminutes
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "en-US", "投入工时", "投入工时(分钟)"),
+            // entity.assyoutputdetail.inputminutes
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "ja-JP", "投入工时", "投入工时(分钟)"),
+            // entity.assyoutputdetail.inputminutes
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "zh-CN", "投入工时", "投入工时(分钟)"),
+            // entity.assyoutputdetail.inputminutes
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "zh-HK", "投入工时", "投入工时(分钟)"),
 
-            // entity.assyOutputDetail.prodminutes
-            new TranslationSeedItem("entity.assyOutputDetail.prodminutes", "en-US", "生产工时", "生产工时(分钟)"),
-            // entity.assyOutputDetail.prodminutes
-            new TranslationSeedItem("entity.assyOutputDetail.prodminutes", "ja-JP", "生产工时", "生产工时(分钟)"),
-            // entity.assyOutputDetail.prodminutes
-            new TranslationSeedItem("entity.assyOutputDetail.prodminutes", "zh-CN", "生产工时", "生产工时(分钟)"),
-            // entity.assyOutputDetail.prodminutes
-            new TranslationSeedItem("entity.assyOutputDetail.prodminutes", "zh-HK", "生产工时", "生产工时(分钟)"),
+            // entity.assyoutputdetail.prodminutes
+            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "en-US", "生产工时", "生产工时(分钟)"),
+            // entity.assyoutputdetail.prodminutes
+            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "ja-JP", "生产工时", "生产工时(分钟)"),
+            // entity.assyoutputdetail.prodminutes
+            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "zh-CN", "生产工时", "生产工时(分钟)"),
+            // entity.assyoutputdetail.prodminutes
+            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "zh-HK", "生产工时", "生产工时(分钟)"),
 
-            // entity.assyOutputDetail.actualminutes
-            new TranslationSeedItem("entity.assyOutputDetail.actualminutes", "en-US", "实际工时", "实际工时(分钟)"),
-            // entity.assyOutputDetail.actualminutes
-            new TranslationSeedItem("entity.assyOutputDetail.actualminutes", "ja-JP", "实际工时", "实际工时(分钟)"),
-            // entity.assyOutputDetail.actualminutes
-            new TranslationSeedItem("entity.assyOutputDetail.actualminutes", "zh-CN", "实际工时", "实际工时(分钟)"),
-            // entity.assyOutputDetail.actualminutes
-            new TranslationSeedItem("entity.assyOutputDetail.actualminutes", "zh-HK", "实际工时", "实际工时(分钟)"),
+            // entity.assyoutputdetail.actualminutes
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "en-US", "实际工时", "实际工时(分钟)"),
+            // entity.assyoutputdetail.actualminutes
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "ja-JP", "实际工时", "实际工时(分钟)"),
+            // entity.assyoutputdetail.actualminutes
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "zh-CN", "实际工时", "实际工时(分钟)"),
+            // entity.assyoutputdetail.actualminutes
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "zh-HK", "实际工时", "实际工时(分钟)"),
 
-            // entity.assyOutputDetail.achievementrate
-            new TranslationSeedItem("entity.assyOutputDetail.achievementrate", "en-US", "达成率", "达成率(%)"),
-            // entity.assyOutputDetail.achievementrate
-            new TranslationSeedItem("entity.assyOutputDetail.achievementrate", "ja-JP", "达成率", "达成率(%)"),
-            // entity.assyOutputDetail.achievementrate
-            new TranslationSeedItem("entity.assyOutputDetail.achievementrate", "zh-CN", "达成率", "达成率(%)"),
-            // entity.assyOutputDetail.achievementrate
-            new TranslationSeedItem("entity.assyOutputDetail.achievementrate", "zh-HK", "达成率", "达成率(%)"),
+            // entity.assyoutputdetail.achievementrate
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "en-US", "达成率", "达成率(%)"),
+            // entity.assyoutputdetail.achievementrate
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "ja-JP", "达成率", "达成率(%)"),
+            // entity.assyoutputdetail.achievementrate
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "zh-CN", "达成率", "达成率(%)"),
+            // entity.assyoutputdetail.achievementrate
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "zh-HK", "达成率", "达成率(%)"),
 
-            // entity.assyOutputDetail.assyoutput
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "en-US", "组立日报", "组立日报（主表）"),
-            // entity.assyOutputDetail.assyoutput
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "ja-JP", "组立日报", "组立日报（主表）"),
-            // entity.assyOutputDetail.assyoutput
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "zh-CN", "组立日报", "组立日报（主表）"),
-            // entity.assyOutputDetail.assyoutput
-            new TranslationSeedItem("entity.assyOutputDetail.assyoutput", "zh-HK", "组立日报", "组立日报（主表）"),
+            // entity.assyoutputdetail.assyoutput
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutput", "en-US", "组立日报", "组立日报（主表）"),
+            // entity.assyoutputdetail.assyoutput
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutput", "ja-JP", "组立日报", "组立日报（主表）"),
+            // entity.assyoutputdetail.assyoutput
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutput", "zh-CN", "组立日报", "组立日报（主表）"),
+            // entity.assyoutputdetail.assyoutput
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutput", "zh-HK", "组立日报", "组立日报（主表）"),
         };
     }
 
@@ -242,8 +241,8 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

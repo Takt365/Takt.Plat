@@ -76,16 +76,41 @@ alwaysApply: true
 |------|------|
 | `api/` | 按后端模块划分；`routine/business/` 与 `routine/tasks/` 分开 |
 | `types/` | 与 `api/` 一一对应；ID 与后端 `long` 对齐用 **`string`** |
-| `views/` | 页面；子组件放 `components/` |
+| `views/` | 页面；子组件放 `components/`；页面私有 composable 放 `views/.../composables/` |
 | `components/common/` | 通用展示组件 |
 | `components/business/` | 业务通用组件（`takt-modal`、`takt-action-column` 等） |
 | `stores/` | Pinia，按模块拆分 |
 | `locales/` | 静态文案（`{目录}.page.*`，见 §6.2）；动态 `entity.*` 与后端种子对齐 |
-| `composables/` | `useXxx` |
+| `config/` | 环境变量与静态配置解析（`vite-env`、`oauth`、`auth-idle`）；无 Vue 生命周期副作用 |
+| `bootstrap/` | 应用启动编排（`main.ts` 调用）；全局 EventBus、空闲会话、登出防重入 |
+| `composables/` | 全局可复用 `useXxx`（响应式 + 生命周期）；供 views/components 按需挂载 |
+| `utils/` | 纯函数与运行时网关（`oauth.ts`、`event-bus.ts` 等）；禁止 `ref`/`onMounted` |
 | `router/` | 路由（懒加载） |
 | `styles/` | `global.css`（入口）、`color-base.css`、`button-base.css`、`action-column-base.css`、`dict-tag-base.css` |
 
 文件名 **kebab-case**（`user-form.vue`、`user.ts`），见 `00-project` §1.1。
+
+### 2.1 配置 / 启动 / 组合式分层（强制）
+
+三层职责不同，**禁止混目录或循环依赖**：
+
+| 层 | 目录 | 典型内容 | 调用方 |
+|----|------|----------|--------|
+| 配置 | `config/` | `readViteEnv`、`getOAuthConfig`、`getAuthIdleTimeoutMs` | `api/`、`utils/`、`bootstrap/` |
+| 启动 | `bootstrap/` | `registerTaktEventHandlers`、`initTaktIdleSession`、`isLogoutInProgress` | 仅 `main.ts` 初始化；少量横切守卫（登出中）可被 `api/`、views 引用 |
+| 组合式 | `composables/` | `useTableRefresh`、`useTaktLoginCaptcha` | views、components、layouts |
+
+依赖方向（单向）：
+
+```text
+main.ts → bootstrap → config / stores / utils / api
+views / components → composables → api / stores / utils
+api / utils → config
+```
+
+- `composables/` **不得** import `bootstrap/`（租户/公司切换通过 EventBus `table:refresh` 解耦，见 `use-table-refresh.ts`）
+- `config/` **不得** import `bootstrap/` 或 `composables/`
+- 构建期 Vite 插件（`config/vite-dev-plugin.ts`）仅由 `vite.config.ts` 引用，不属于 SPA 运行时
 
 ---
 

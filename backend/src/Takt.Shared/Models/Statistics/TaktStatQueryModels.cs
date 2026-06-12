@@ -10,8 +10,6 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Takt.Shared.Enums;
-
 namespace Takt.Shared.Models.Statistics;
 
 /// <summary>
@@ -30,9 +28,9 @@ public sealed class TaktStatQueryBuildRequest
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否 SELECT DISTINCT
+    /// 是否 SELECT DISTINCT（sys_yes_no，1=是）
     /// </summary>
-    public TaktYesNo DistinctRows { get; set; } = TaktYesNo.No;
+    public int DistinctRows { get; set; } = 0;
 
     /// <summary>
     /// 数据源表
@@ -87,9 +85,9 @@ public sealed class TaktStatQuerySourceItem
     public string TableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否主表
+    /// 是否主表（sys_yes_no，1=是）
     /// </summary>
-    public TaktYesNo IsPrimary { get; set; } = TaktYesNo.No;
+    public int IsPrimary { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -103,9 +101,9 @@ public sealed class TaktStatQuerySourceItem
 public sealed class TaktStatQueryJoinItem
 {
     /// <summary>
-    /// 关联类型
+    /// 关联类型（1=内连接，2=左，3=右，4=全）
     /// </summary>
-    public TaktConfigurableJoinType JoinType { get; set; } = TaktConfigurableJoinType.Inner;
+    public int JoinType { get; set; } = 1;
 
     /// <summary>
     /// 左表别名
@@ -159,14 +157,14 @@ public sealed class TaktStatQueryFieldItem
     public string? OutputAlias { get; set; }
 
     /// <summary>
-    /// 聚合函数
+    /// 聚合函数（0=无，1=COUNT，2=SUM，3=AVG，4=MIN，5=MAX）
     /// </summary>
-    public TaktConfigurableAggregateFunc AggregateFunc { get; set; } = TaktConfigurableAggregateFunc.None;
+    public int AggregateFunc { get; set; } = 0;
 
     /// <summary>
-    /// 是否可见
+    /// 是否可见（sys_yes_no，1=是）
     /// </summary>
-    public TaktYesNo IsVisible { get; set; } = TaktYesNo.Yes;
+    public int IsVisible { get; set; } = 1;
 
     /// <summary>
     /// 排序号
@@ -190,14 +188,14 @@ public sealed class TaktStatQuerySelectionItem
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 比较符
+    /// 比较符（1=等于…11=不为空）
     /// </summary>
-    public TaktConfigurableFilterOperator FilterOperator { get; set; } = TaktConfigurableFilterOperator.Equal;
+    public int FilterOperator { get; set; } = 1;
 
     /// <summary>
-    /// 是否必填
+    /// 是否必填（sys_yes_no，1=是）
     /// </summary>
-    public TaktYesNo IsRequired { get; set; } = TaktYesNo.No;
+    public int IsRequired { get; set; } = 0;
 
     /// <summary>
     /// 排序号（运行时取值键）
@@ -258,9 +256,9 @@ public sealed class TaktStatQueryOrderByItem
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序方向
+    /// 排序方向（1=升序，2=降序）
     /// </summary>
-    public TaktConfigurableSortDirection SortDirection { get; set; } = TaktConfigurableSortDirection.Asc;
+    public int SortDirection { get; set; } = 1;
 
     /// <summary>
     /// 排序号

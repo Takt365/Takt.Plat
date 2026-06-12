@@ -20,7 +20,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Logistics.Materials;
@@ -201,7 +200,7 @@ public class TaktVendor : TaktCompanyEntityBase
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "vendor_status", ColumnDescription = "经销商状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus VendorStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int VendorStatus { get; set; } = 1;
 
     /// <summary>
     /// 排序号（越小越靠前）

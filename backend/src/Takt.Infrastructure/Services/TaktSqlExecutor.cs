@@ -19,8 +19,8 @@ using Takt.Shared.Validation;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktSqlExecutor"/> 实现
-/// 只读 SQL 经 <see cref="TaktSqlExecutorValidator"/> 校验后，由 <see cref="TaktRepositoryReadOnlySql"/> 执行（与 <see cref="TaktTenantRepository{TEntity}.QueryReadOnlySqlAsync"/> 相同路径）
+/// ITaktSqlExecutor 实现
+/// 只读 SQL 经 TaktSqlExecutorValidator 校验后，由 TaktRepositoryReadOnlySql 执行（与 TaktTenantRepository{TEntity}.QueryReadOnlySqlAsync 相同路径）
 /// </summary>
 public sealed class TaktSqlExecutor : ITaktSqlExecutor
 {

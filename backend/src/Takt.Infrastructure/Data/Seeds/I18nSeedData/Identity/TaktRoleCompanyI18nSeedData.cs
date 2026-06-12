@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleCompanyI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoleCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity;
 
 /// <summary>
-/// TaktRoleCompany 实体国际化翻译种子（键前缀 entity.roleCompany.*）
+/// TaktRoleCompany 实体国际化翻译种子（键前缀 entity.rolecompany.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktRoleCompanyI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktRoleCompanyI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 roleCompany 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 rolecompany 实体翻译...", tenantCode);
 
         foreach (var item in GetRoleCompanyTranslations())
         {
@@ -76,47 +75,47 @@ public class TaktRoleCompanyI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktRoleCompany 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.roleCompany._self / entity.roleCompany.{{field}}；ResourceGroup=TaktModule.Identity；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.rolecompany._self / entity.rolecompany.{{field}}；ResourceGroup=1；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetRoleCompanyTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.roleCompany._self
-            new TranslationSeedItem("entity.roleCompany._self", "en-US", "Role Company Information", "实体名称"),
-            // entity.roleCompany._self
-            new TranslationSeedItem("entity.roleCompany._self", "ja-JP", "角色公司关联信息", "实体名称"),
-            // entity.roleCompany._self
-            new TranslationSeedItem("entity.roleCompany._self", "zh-CN", "角色公司关联信息", "实体名称"),
-            // entity.roleCompany._self
-            new TranslationSeedItem("entity.roleCompany._self", "zh-HK", "角色公司关联信息", "实体名称"),
+            // entity.rolecompany._self
+            new TranslationSeedItem("entity.rolecompany._self", "en-US", "Role Company Information", "实体名称"),
+            // entity.rolecompany._self
+            new TranslationSeedItem("entity.rolecompany._self", "ja-JP", "角色公司关联信息", "实体名称"),
+            // entity.rolecompany._self
+            new TranslationSeedItem("entity.rolecompany._self", "zh-CN", "角色公司关联信息", "实体名称"),
+            // entity.rolecompany._self
+            new TranslationSeedItem("entity.rolecompany._self", "zh-HK", "角色公司关联信息", "实体名称"),
 
-            // entity.roleCompany.roleid
-            new TranslationSeedItem("entity.roleCompany.roleid", "en-US", "角色ID", "角色ID"),
-            // entity.roleCompany.roleid
-            new TranslationSeedItem("entity.roleCompany.roleid", "ja-JP", "角色ID", "角色ID"),
-            // entity.roleCompany.roleid
-            new TranslationSeedItem("entity.roleCompany.roleid", "zh-CN", "角色ID", "角色ID"),
-            // entity.roleCompany.roleid
-            new TranslationSeedItem("entity.roleCompany.roleid", "zh-HK", "角色ID", "角色ID"),
+            // entity.rolecompany.roleid
+            new TranslationSeedItem("entity.rolecompany.roleid", "en-US", "角色ID", "角色ID"),
+            // entity.rolecompany.roleid
+            new TranslationSeedItem("entity.rolecompany.roleid", "ja-JP", "角色ID", "角色ID"),
+            // entity.rolecompany.roleid
+            new TranslationSeedItem("entity.rolecompany.roleid", "zh-CN", "角色ID", "角色ID"),
+            // entity.rolecompany.roleid
+            new TranslationSeedItem("entity.rolecompany.roleid", "zh-HK", "角色ID", "角色ID"),
 
-            // entity.roleCompany.role
-            new TranslationSeedItem("entity.roleCompany.role", "en-US", "角色", "角色（多对一）"),
-            // entity.roleCompany.role
-            new TranslationSeedItem("entity.roleCompany.role", "ja-JP", "角色", "角色（多对一）"),
-            // entity.roleCompany.role
-            new TranslationSeedItem("entity.roleCompany.role", "zh-CN", "角色", "角色（多对一）"),
-            // entity.roleCompany.role
-            new TranslationSeedItem("entity.roleCompany.role", "zh-HK", "角色", "角色（多对一）"),
+            // entity.rolecompany.role
+            new TranslationSeedItem("entity.rolecompany.role", "en-US", "角色", "角色（多对一）"),
+            // entity.rolecompany.role
+            new TranslationSeedItem("entity.rolecompany.role", "ja-JP", "角色", "角色（多对一）"),
+            // entity.rolecompany.role
+            new TranslationSeedItem("entity.rolecompany.role", "zh-CN", "角色", "角色（多对一）"),
+            // entity.rolecompany.role
+            new TranslationSeedItem("entity.rolecompany.role", "zh-HK", "角色", "角色（多对一）"),
 
-            // entity.roleCompany.company
-            new TranslationSeedItem("entity.roleCompany.company", "en-US", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
-            // entity.roleCompany.company
-            new TranslationSeedItem("entity.roleCompany.company", "ja-JP", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
-            // entity.roleCompany.company
-            new TranslationSeedItem("entity.roleCompany.company", "zh-CN", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
-            // entity.roleCompany.company
-            new TranslationSeedItem("entity.roleCompany.company", "zh-HK", "可访问公司", "可访问公司（多对一，按 <see cref=\"CompanyCode\"/> 关联）"),
+            // entity.rolecompany.company
+            new TranslationSeedItem("entity.rolecompany.company", "en-US", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
+            // entity.rolecompany.company
+            new TranslationSeedItem("entity.rolecompany.company", "ja-JP", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
+            // entity.rolecompany.company
+            new TranslationSeedItem("entity.rolecompany.company", "zh-CN", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
+            // entity.rolecompany.company
+            new TranslationSeedItem("entity.rolecompany.company", "zh-HK", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
         };
     }
 
@@ -134,8 +133,8 @@ public class TaktRoleCompanyI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Identity;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 1;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

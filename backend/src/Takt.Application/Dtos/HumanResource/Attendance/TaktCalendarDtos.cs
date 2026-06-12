@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktCalendarDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Calendar 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCalendar 生成，请按需审阅）
 // 
@@ -46,7 +46,7 @@ public class TaktCalendarDto : TaktCompanyDtoBase
     public int IsWorkingDay { get; set; } = 0;
 
     /// <summary>
-    /// 关联假日 ID（<see cref="TaktHoliday"/>）
+    /// 关联假日 ID（TaktHoliday）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
@@ -57,7 +57,7 @@ public class TaktCalendarDto : TaktCompanyDtoBase
     public string? HolidayName { get; set; }
 
     /// <summary>
-    /// 关联班次 ID（<see cref="TaktWorkShift"/>）
+    /// 关联班次 ID（TaktWorkShift）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
@@ -110,13 +110,13 @@ public class TaktCalendarQueryDto : TaktPagedQuery
     public int? IsWorkingDay { get; set; }
 
     /// <summary>
-    /// 关联假日 ID（<see cref="TaktHoliday"/>）
+    /// 关联假日 ID（TaktHoliday）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
 
     /// <summary>
-    /// 关联班次 ID（<see cref="TaktWorkShift"/>）
+    /// 关联班次 ID（TaktWorkShift）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
@@ -182,13 +182,13 @@ public class TaktCalendarCreateDto
     public int IsWorkingDay { get; set; } = 0;
 
     /// <summary>
-    /// 关联假日 ID（<see cref="TaktHoliday"/>）
+    /// 关联假日 ID（TaktHoliday）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
 
     /// <summary>
-    /// 关联班次 ID（<see cref="TaktWorkShift"/>）
+    /// 关联班次 ID（TaktWorkShift）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
@@ -255,13 +255,13 @@ public class TaktCalendarTemplateDto
     public int? IsWorkingDay { get; set; }
 
     /// <summary>
-    /// 关联假日 ID（<see cref="TaktHoliday"/>）
+    /// 关联假日 ID（TaktHoliday）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
 
     /// <summary>
-    /// 关联班次 ID（<see cref="TaktWorkShift"/>）
+    /// 关联班次 ID（TaktWorkShift）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
@@ -309,13 +309,13 @@ public class TaktCalendarImportDto
     public int? IsWorkingDay { get; set; }
 
     /// <summary>
-    /// 关联假日 ID（<see cref="TaktHoliday"/>）
+    /// 关联假日 ID（TaktHoliday）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
 
     /// <summary>
-    /// 关联班次 ID（<see cref="TaktWorkShift"/>）
+    /// 关联班次 ID（TaktWorkShift）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
@@ -369,13 +369,13 @@ public class TaktCalendarExportDto
     public int IsWorkingDay { get; set; } = 0;
 
     /// <summary>
-    /// 关联假日 ID（<see cref="TaktHoliday"/>）
+    /// 关联假日 ID（TaktHoliday）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
 
     /// <summary>
-    /// 关联班次 ID（<see cref="TaktWorkShift"/>）
+    /// 关联班次 ID（TaktWorkShift）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }

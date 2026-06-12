@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：calendar.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface Calendar extends CompanyDtoBase {
   isWorkingDay: number;
 
   /**
-   * 关联假日 ID（<see cref="TaktHoliday"/>）
+   * 关联假日 ID（TaktHoliday）
    */
   holidayId?: string;
 
@@ -49,7 +49,7 @@ export interface Calendar extends CompanyDtoBase {
   holidayName?: string;
 
   /**
-   * 关联班次 ID（<see cref="TaktWorkShift"/>）
+   * 关联班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -99,12 +99,12 @@ export interface CalendarQuery extends TaktPagedQuery {
   isWorkingDay?: number;
 
   /**
-   * 关联假日 ID（<see cref="TaktHoliday"/>）
+   * 关联假日 ID（TaktHoliday）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（<see cref="TaktWorkShift"/>）
+   * 关联班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -168,12 +168,12 @@ export interface CalendarCreate {
   isWorkingDay: number;
 
   /**
-   * 关联假日 ID（<see cref="TaktHoliday"/>）
+   * 关联假日 ID（TaktHoliday）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（<see cref="TaktWorkShift"/>）
+   * 关联班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -232,12 +232,12 @@ export interface CalendarTemplate {
   isWorkingDay?: number;
 
   /**
-   * 关联假日 ID（<see cref="TaktHoliday"/>）
+   * 关联假日 ID（TaktHoliday）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（<see cref="TaktWorkShift"/>）
+   * 关联班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -286,12 +286,12 @@ export interface CalendarImport {
   isWorkingDay?: number;
 
   /**
-   * 关联假日 ID（<see cref="TaktHoliday"/>）
+   * 关联假日 ID（TaktHoliday）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（<see cref="TaktWorkShift"/>）
+   * 关联班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 
@@ -340,12 +340,12 @@ export interface CalendarExport {
   isWorkingDay: number;
 
   /**
-   * 关联假日 ID（<see cref="TaktHoliday"/>）
+   * 关联假日 ID（TaktHoliday）
    */
   holidayId?: string;
 
   /**
-   * 关联班次 ID（<see cref="TaktWorkShift"/>）
+   * 关联班次 ID（TaktWorkShift）
    */
   shiftId?: string;
 

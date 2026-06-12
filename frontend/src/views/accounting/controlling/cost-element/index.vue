@@ -164,6 +164,24 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('shortName')">
+      <a-form-item :label="t('entity.costElement.shortname')">
+        <a-input
+          v-model:value="advancedQueryForm.shortName"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costElement.shortname') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costElementDesc')">
+      <a-form-item :label="t('entity.costElement.costelementdesc')">
+        <a-input
+          v-model:value="advancedQueryForm.costElementDesc"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costElement.costelementdesc') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('costElementType')">
       <a-form-item :label="t('entity.costElement.type')">
         <a-input-number
@@ -417,6 +435,8 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   costElementCode: '',
   costElementName: '',
+  shortName: '',
+  costElementDesc: '',
   costElementType: undefined as number | undefined,
   costElementCategory: undefined as number | undefined,
   parentId: '',
@@ -436,6 +456,8 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'costElementCode', label: t('entity.costElement.code') },
   { key: 'costElementName', label: t('entity.costElement.name') },
+  { key: 'shortName', label: t('entity.costElement.shortname') },
+  { key: 'costElementDesc', label: t('entity.costElement.costelementdesc') },
   { key: 'costElementType', label: t('entity.costElement.type') },
   { key: 'costElementCategory', label: t('entity.costElement.category') },
   { key: 'parentId', label: t('entity.costElement.parentid') },
@@ -623,6 +645,8 @@ function matchesCostElementRightQuery(record: Record<string, unknown>): boolean 
   }
   if (advancedQueryForm.value.costElementCode && !String(record.costElementCode ?? '').includes(String(advancedQueryForm.value.costElementCode))) return false
   if (advancedQueryForm.value.costElementName && !String(record.costElementName ?? '').includes(String(advancedQueryForm.value.costElementName))) return false
+  if (advancedQueryForm.value.shortName && !String(record.shortName ?? '').includes(String(advancedQueryForm.value.shortName))) return false
+  if (advancedQueryForm.value.costElementDesc && !String(record.costElementDesc ?? '').includes(String(advancedQueryForm.value.costElementDesc))) return false
   if (advancedQueryForm.value.costElementType !== undefined && record.costElementType !== advancedQueryForm.value.costElementType) return false
   if (advancedQueryForm.value.costElementCategory !== undefined && record.costElementCategory !== advancedQueryForm.value.costElementCategory) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
@@ -680,6 +704,8 @@ function buildCostElementUpdateDto(
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     costElementCode: costElement.costElementCode,
     costElementName: costElement.costElementName,
+    shortName: costElement.shortName,
+    costElementDesc: costElement.costElementDesc,
     costElementType: costElement.costElementType,
     costElementCategory: costElement.costElementCategory,
     parentId: overrides.parentId,
@@ -833,6 +859,24 @@ watchEffect(() => {
     ellipsis: true,
   },
   {
+    title: t('entity.costElement.shortname'),
+    dataIndex: 'shortName',
+    key: 'shortName',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'shortName') ?? ''
+  },
+  {
+    title: t('entity.costElement.costelementdesc'),
+    dataIndex: 'costElementDesc',
+    key: 'costElementDesc',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementDesc') ?? ''
+  },
+  {
     title: t('entity.costElement.type'),
     dataIndex: 'costElementType',
     key: 'costElementType',
@@ -962,7 +1006,8 @@ async function loadData() {
   }
 }
 
-/** 右侧查询（客户端过滤，不请求接口） */
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 const handleSearch = () => {
   tableCurrentPage.value = 1
 }
@@ -973,6 +1018,8 @@ const handleReset = () => {
   advancedQueryForm.value = {
   costElementCode: '',
   costElementName: '',
+  shortName: '',
+  costElementDesc: '',
   costElementType: undefined as number | undefined,
   costElementCategory: undefined as number | undefined,
   parentId: '',
@@ -1159,6 +1206,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   costElementCode: '',
   costElementName: '',
+  shortName: '',
+  costElementDesc: '',
   costElementType: undefined as number | undefined,
   costElementCategory: undefined as number | undefined,
   parentId: '',

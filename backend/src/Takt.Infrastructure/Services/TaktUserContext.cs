@@ -19,7 +19,7 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// <see cref="ITaktUserContext"/> 实现
+/// ITaktUserContext 实现
 /// 从 HTTP Context 或 SignalR Hub 调用链中解析当前登录用户、租户与公司
 /// </summary>
 public class TaktUserContext : ITaktUserContext
@@ -40,8 +40,8 @@ public class TaktUserContext : ITaktUserContext
     private readonly TaktTenantContextOptions _tenantOptions;
 
     /// <summary>
-    /// SignalR Hub 生命周期或客户端调用时写入的 <see cref="ClaimsPrincipal"/>，
-    /// 供 <see cref="UserId"/>、<see cref="UserName"/> 在 WebSocket 场景下解析用户
+    /// SignalR Hub 生命周期或客户端调用时写入的 ClaimsPrincipal，
+    /// 供 UserId、UserName 在 WebSocket 场景下解析用户
     /// </summary>
     public static ClaimsPrincipal? HubInvocationPrincipal
     {
@@ -148,7 +148,7 @@ public class TaktUserContext : ITaktUserContext
     /// <summary>
     /// 解析当前请求或 Hub 调用的用户主体（优先 Hub AsyncLocal，其次 HTTP User）
     /// </summary>
-    /// <returns>已认证的 <see cref="ClaimsPrincipal"/>；无上下文时返回 null</returns>
+    /// <returns>已认证的 ClaimsPrincipal；无上下文时返回 null</returns>
     private ClaimsPrincipal? ResolvePrincipal()
     {
         var hubPrincipal = HubInvocationPrincipal;

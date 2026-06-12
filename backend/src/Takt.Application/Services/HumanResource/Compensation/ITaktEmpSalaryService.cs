@@ -1,0 +1,105 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Services.HumanResource.Compensation
+// 文件名称：ITaktEmpSalaryService.cs
+// 创建时间：2026-06-12
+// 创建人：Takt365(Cursor AI)
+// 功能描述：员工薪酬应用服务接口
+// 
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Takt.Application.Dtos.HumanResource.Compensation;
+using Takt.Shared.Models;
+using Takt.Shared.Options;
+
+namespace Takt.Application.Services.HumanResource.Compensation;
+
+/// <summary>
+/// 员工薪酬应用服务接口
+/// </summary>
+public interface ITaktEmpSalaryService
+{
+    /// <summary>
+    /// 获取员工薪酬列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    Task<TaktPagedResult<TaktEmpSalaryDto>> GetEmpSalaryListAsync(TaktEmpSalaryQueryDto queryDto);
+
+    /// <summary>
+    /// 根据ID获取员工薪酬
+    /// </summary>
+    /// <param name="id">员工薪酬ID</param>
+    /// <returns>DTO</returns>
+    Task<TaktEmpSalaryDto?> GetEmpSalaryByIdAsync(long id);
+
+    /// <summary>
+    /// 获取员工薪酬选项列表
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetEmpSalaryOptionsAsync();
+
+    /// <summary>
+    /// 创建员工薪酬
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktEmpSalaryDto> CreateEmpSalaryAsync(TaktEmpSalaryCreateDto dto);
+
+    /// <summary>
+    /// 更新员工薪酬
+    /// </summary>
+    /// <param name="id">员工薪酬ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktEmpSalaryDto> UpdateEmpSalaryAsync(long id, TaktEmpSalaryUpdateDto dto);
+
+    /// <summary>
+    /// 删除员工薪酬
+    /// </summary>
+    /// <param name="id">员工薪酬ID</param>
+    /// <returns>任务</returns>
+    Task DeleteEmpSalaryByIdAsync(long id);
+
+    /// <summary>
+    /// 批量删除员工薪酬
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>任务</returns>
+    Task DeleteEmpSalaryBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新员工薪酬状态
+    /// </summary>
+    /// <param name="dto">状态DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktEmpSalaryDto> UpdateEmpSalaryStatusAsync(TaktEmpSalaryStatusDto dto);
+
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
+    Task<(string fileName, byte[] content)> GetEmpSalaryTemplateAsync(string? sheetName = null, string? fileName = null);
+
+    /// <summary>
+    /// 导入员工薪酬
+    /// </summary>
+    /// <param name="fileStream">Excel 文件流</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <returns>导入结果</returns>
+    Task<(int success, int fail, List<string> errors)> ImportEmpSalaryAsync(Stream fileStream, string? sheetName = null);
+
+    /// <summary>
+    /// 导出员工薪酬
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
+    Task<(string fileName, byte[] fileContent)> ExportEmpSalaryAsync(TaktEmpSalaryQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+}

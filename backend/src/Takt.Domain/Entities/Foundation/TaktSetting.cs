@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -54,31 +53,31 @@ public class TaktSetting : TaktCompanyEntityBase
     /// 设置类别（0=前端，1=后端）
     /// </summary>
     [SugarColumn(ColumnName = "setting_group", ColumnDescription = "设置类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktAppSide SettingGroup { get; set; } = TaktAppSide.Frontend;
+    public int SettingGroup { get; set; } = 0;
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
     [SugarColumn(ColumnName = "value_type", ColumnDescription = "值类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktSettingValueType ValueType { get; set; } = TaktSettingValueType.String;
+    public int ValueType { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（0=否，1=是，系统内置的不可删除）
+    /// 是否内置（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否只读（0=否，1=是，只读设置不可修改）
+    /// 是否只读（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_readonly", ColumnDescription = "是否只读", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsReadonly { get; set; } = TaktYesNo.No;
+    public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+    /// 是否加密存储（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_encrypted", ColumnDescription = "是否加密存储", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsEncrypted { get; set; } = TaktYesNo.No;
+    public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
     /// 排序号

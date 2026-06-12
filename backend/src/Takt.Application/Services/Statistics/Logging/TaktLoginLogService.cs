@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktLoginLogService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：登录日志应用服务实现
 // 
@@ -208,9 +208,9 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.Username != null && x.Username.Contains(keywords))
-                || (x.LoginType != null && x.LoginType.Contains(keywords))
-                || (x.Browser != null && x.Browser.Contains(keywords))
-                || (x.Os != null && x.Os.Contains(keywords))
+                || SqlFunc.ToString(x.LoginType).Contains(keywords)
+                || SqlFunc.ToString(x.Browser).Contains(keywords)
+                || SqlFunc.ToString(x.Os).Contains(keywords)
                 || (x.UserAgent != null && x.UserAgent.Contains(keywords))
                 || SqlFunc.ToString(x.LoginResult).Contains(keywords)
                 || (x.LoginMessage != null && x.LoginMessage.Contains(keywords))
@@ -229,19 +229,19 @@ public class TaktLoginLogService : TaktServiceBase, ITaktLoginLogService
             exp = exp.And(x => x.Username != null && x.Username.Contains(queryDto.Username));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LoginType))
+        if (queryDto?.LoginType.HasValue == true)
         {
-            exp = exp.And(x => x.LoginType != null && x.LoginType.Contains(queryDto.LoginType));
+            exp = exp.And(x => x.LoginType == queryDto.LoginType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Browser))
+        if (queryDto?.Browser.HasValue == true)
         {
-            exp = exp.And(x => x.Browser != null && x.Browser.Contains(queryDto.Browser));
+            exp = exp.And(x => x.Browser == queryDto.Browser);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Os))
+        if (queryDto?.Os.HasValue == true)
         {
-            exp = exp.And(x => x.Os != null && x.Os.Contains(queryDto.Os));
+            exp = exp.And(x => x.Os == queryDto.Os);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.UserAgent))

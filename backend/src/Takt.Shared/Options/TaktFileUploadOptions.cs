@@ -46,4 +46,9 @@ public class TaktFileUploadOptions
     /// 允许上传的扩展名（小写、不含点；空数组表示不限制）
     /// </summary>
     public string[] AllowedExtensions { get; set; } = [];
+
+    /// <summary>
+    /// 禁止上传的扩展名（小写、不含点；在 AllowedExtensions 校验之前执行）
+    /// </summary>
+    public string[] DeniedExtensions { get; set; } = ["doc", "xls", "ppt"];
 }

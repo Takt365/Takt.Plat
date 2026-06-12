@@ -61,13 +61,13 @@ public class TaktCulture : TaktTenantEntityBase
     /// 是否默认语言（1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_default", ColumnDescription = "是否默认语言", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsDefault { get; set; } = TaktYesNo.No;
+    public int IsDefault { get; set; } = 0;
 
-     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "language_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus LanguageStatus { get; set; } = TaktCommonStatus.Enabled;   
+    public int LanguageStatus { get; set; } = 1;
 
     // ========================================
     // 导航属性区域

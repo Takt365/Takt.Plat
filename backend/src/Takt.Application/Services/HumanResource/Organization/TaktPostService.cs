@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：TaktPostService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：岗位应用服务实现
 // 
@@ -124,7 +124,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
     public async Task<TaktPostDto> CreatePostAsync(TaktPostCreateDto dto)
     {
         var entity = dto.Adapt<TaktPost>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         var isUnique_ix_post_code_unique = await _uniqueValidator.IsUniqueAsync(
             _postRepository,
             x => x.PostCode == entity.PostCode);
@@ -209,7 +209,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
         {
             throw new TaktBusinessException("岗位不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置岗位不允许删除");
         }
@@ -232,7 +232,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
         {
             return;
         }
-        if (await _postRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _postRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置岗位不允许删除");
         }
@@ -254,7 +254,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
         {
             throw new TaktBusinessException("岗位不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.PostStatus != TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == 1 && dto.PostStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置岗位");
         }
@@ -316,7 +316,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
             try
             {
                 var entity = rows[i].Adapt<TaktPost>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.PostCode}";
                 if (!importSeenKeys.Add(importKey))
                 {

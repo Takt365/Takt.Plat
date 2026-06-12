@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/identity
 // 文件名称：role.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：identity 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface Role extends TenantDtoBase {
   roleName: string;
 
   /**
-   * 数据权限范围（见 <see cref="TaktDataScope"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
    */
   dataScope: number;
 
@@ -109,7 +109,7 @@ export interface RoleQuery extends TaktPagedQuery {
   roleName?: string;
 
   /**
-   * 数据权限范围（见 <see cref="TaktDataScope"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
    */
   dataScope?: number;
 
@@ -178,7 +178,7 @@ export interface RoleCreate {
   roleName: string;
 
   /**
-   * 数据权限范围（见 <see cref="TaktDataScope"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
    */
   dataScope: number;
 
@@ -305,7 +305,7 @@ export interface RoleTemplate {
   roleName?: string;
 
   /**
-   * 数据权限范围（见 <see cref="TaktDataScope"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
    */
   dataScope?: number;
 
@@ -364,7 +364,7 @@ export interface RoleImport {
   roleName?: string;
 
   /**
-   * 数据权限范围（见 <see cref="TaktDataScope"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
    */
   dataScope?: number;
 
@@ -423,7 +423,7 @@ export interface RoleExport {
   roleName: string;
 
   /**
-   * 数据权限范围（见 <see cref="TaktDataScope"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+   * 数据权限范围（1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
    */
   dataScope: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAssetService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：资产应用服务实现
 // 
@@ -300,7 +300,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             exp = exp.And(x =>
                 (x.AssetCode != null && x.AssetCode.Contains(keywords))
                 || (x.AssetName != null && x.AssetName.Contains(keywords))
-                || SqlFunc.ToString(x.AssetCategoryId).Contains(keywords)
+                || (x.Remark != null && x.Remark.Contains(keywords))
                 || (x.AssetCategoryName != null && x.AssetCategoryName.Contains(keywords))
                 || SqlFunc.ToString(x.AssetType).Contains(keywords)
                 || SqlFunc.ToString(x.AssetOriginalValue).Contains(keywords)
@@ -319,7 +319,6 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.AssetStatus).Contains(keywords)
                 || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
-                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
                 || SqlFunc.ToString(x.ScrapDate).Contains(keywords)
@@ -338,19 +337,24 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             exp = exp.And(x => x.AssetName != null && x.AssetName.Contains(queryDto.AssetName));
         }
 
-        if (queryDto?.AssetCategoryId.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.AssetSpec))
         {
-            exp = exp.And(x => x.AssetCategoryId == queryDto.AssetCategoryId);
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.AssetSpec));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssetCategoryName))
+        if (!string.IsNullOrEmpty(queryDto?.AssetDesc))
         {
-            exp = exp.And(x => x.AssetCategoryName != null && x.AssetCategoryName.Contains(queryDto.AssetCategoryName));
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.AssetDesc));
         }
 
-        if (queryDto?.AssetType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.AssetCategory))
         {
-            exp = exp.And(x => x.AssetType == queryDto.AssetType);
+            exp = exp.And(x => x.AssetCategoryName != null && x.AssetCategoryName.Contains(queryDto.AssetCategory));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.AssetType) && int.TryParse(queryDto.AssetType, out var assetType))
+        {
+            exp = exp.And(x => x.AssetType == assetType);
         }
 
         if (queryDto?.AssetOriginalValue.HasValue == true)

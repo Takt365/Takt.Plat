@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
 namespace Takt.Domain.Entities.Logistics.Materials;
@@ -273,7 +272,7 @@ public class TaktMaterial : TaktCompanyEntityBase
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "material_status", ColumnDescription = "物料状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus MaterialStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int MaterialStatus { get; set; } = 1;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）

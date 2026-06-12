@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktHolidayService.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：假日信息应用服务实现
 // 
@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Attendance;
+using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.HumanResource.Attendance;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -31,23 +32,27 @@ namespace Takt.Application.Services.HumanResource.Attendance;
 public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
 {
     private readonly ITaktCompanyRepository<TaktHoliday> _holidayRepository;
+    private readonly ITaktTenantRepository<TaktCompany> _companyRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="holidayRepository">假日信息仓储</param>
+    /// <param name="companyRepository">公司仓储（校验租户下公司存在且启用）</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktHolidayService(
         ITaktCompanyRepository<TaktHoliday> holidayRepository,
+        ITaktTenantRepository<TaktCompany> companyRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _holidayRepository = holidayRepository;
+        _companyRepository = companyRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -269,6 +274,51 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
             exportData,
             sheetName ?? "假日信息数据",
             fileName ?? "假日信息导出.xlsx");
+    }
+
+    /// <summary>
+    /// 获取服务器当日、指定租户与公司下的假日主题色与问候信息
+    /// </summary>
+    /// <param name="tenantCode">租户编码（登录页显式传入；禁止依赖配置默认租户）</param>
+    /// <param name="companyCode">公司编码（由登录预览语言接口解析后传入）</param>
+    /// <returns>假日主题 DTO</returns>
+    public async Task<TaktHolidayThemeDto> GetHolidayThemeAsync(string tenantCode, string companyCode)
+    {
+        if (string.IsNullOrWhiteSpace(tenantCode))
+        {
+            ThrowBusinessException("租户编码不能为空");
+        }
+        if (string.IsNullOrWhiteSpace(companyCode))
+        {
+            ThrowBusinessException("公司编码不能为空");
+        }
+        var effectiveTenant = tenantCode.Trim();
+        var effectiveCompany = companyCode.Trim();
+        var empty = new TaktHolidayThemeDto();
+        var company = await _companyRepository.FirstAsync(c =>
+            c.TenantCode == effectiveTenant
+            && c.CompanyCode == effectiveCompany
+            && c.CompanyStatus == 1);
+        if (company == null)
+        {
+            return empty;
+        }
+        var today = DateTime.Now.Date;
+        var holidays = await _holidayRepository.GetListAsync(
+            h => h.TenantCode == effectiveTenant
+                && h.CompanyCode == effectiveCompany
+                && h.StartDate.Date <= today
+                && h.EndDate.Date >= today,
+            h => h.StartDate,
+            true);
+        var holiday = holidays.FirstOrDefault();
+        if (holiday == null)
+        {
+            return empty;
+        }
+        var dto = holiday.Adapt<TaktHolidayThemeDto>();
+        dto.IsHolidayToday = holiday.IsWorkingDay == 0;
+        return dto;
     }
 
     // ========================================

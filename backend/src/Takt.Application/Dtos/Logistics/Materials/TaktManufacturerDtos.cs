@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktManufacturerDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Manufacturer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktManufacturer 生成，请按需审阅）
 // 
@@ -144,7 +144,7 @@ public class TaktManufacturerDto : TaktCompanyDtoBase
     /// <summary>
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus ManufacturerStatus { get; set; }
+    public int ManufacturerStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -287,7 +287,7 @@ public class TaktManufacturerQueryDto : TaktPagedQuery
     /// <summary>
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? ManufacturerStatus { get; set; }
+    public int? ManufacturerStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -449,7 +449,7 @@ public class TaktManufacturerCreateDto
     /// <summary>
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus ManufacturerStatus { get; set; }
+    public int ManufacturerStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -514,7 +514,7 @@ public class TaktManufacturerStatusDto
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "制造商状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus ManufacturerStatus { get; set; }
+    public int ManufacturerStatus { get; set; }
 }
 
 // ========================================
@@ -853,7 +853,7 @@ public class TaktManufacturerExportDto
     /// <summary>
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus ManufacturerStatus { get; set; }
+    public int ManufacturerStatus { get; set; }
 
     /// <summary>
     /// 排序号（越小越靠前）

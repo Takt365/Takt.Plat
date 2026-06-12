@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Foundation;
 /// 字典类型控制器
 /// 提供字典类型的 REST API
 /// </summary>
-[ApiModule(TaktModule.Foundation, "基础设置")]
+[ApiModule(8, "基础设置")]
 [Route("api/[controller]", Name = "字典类型")]
 public class TaktDictTypesController : TaktControllerBase
 {

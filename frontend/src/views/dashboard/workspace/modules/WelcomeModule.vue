@@ -65,7 +65,7 @@ import { getCurrentUser } from '@/api/identity/auths'
 import { useUserStore } from '@/stores/identity/user'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useLocaleStore } from '@/stores/foundation/locale'
-import type { HolidayTheme } from '@/types/human-resource/attendance/holiday-theme'
+import type { HolidayTheme } from '@/types/human-resource/attendance/holiday'
 import { normalizeUserInfoProfile } from '@/utils/takt-user-profile-normalize'
 
 dayjs.extend(localizedFormat)

@@ -143,7 +143,7 @@ public class TaktSeedContext : IDisposable
     }
 
     /// <summary>
-    /// 获取所有实体类型（与 <see cref="TaktSqlSugarContext"/> 扫描规则一致）
+    /// 获取所有实体类型（与 TaktSqlSugarContext 扫描规则一致）
     /// </summary>
     public static IReadOnlyList<Type> EntityTypes => _entityTypes;
 

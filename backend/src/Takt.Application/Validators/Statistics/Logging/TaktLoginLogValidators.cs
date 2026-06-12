@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktLoginLogValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：LoginLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktLoginLog 生成，请按需审阅）
 // 
@@ -40,11 +40,11 @@ public class TaktLoginLogCreateValidator : AbstractValidator<TaktLoginLogCreateD
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
         RuleFor(x => x.LoginType)
-            .MaximumLength(50).WithMessage("登录方式长度不能超过50个字符");
+            .IsInEnum().WithMessage("登录方式无效");
         RuleFor(x => x.Browser)
-            .MaximumLength(50).WithMessage("浏览器类型长度不能超过50个字符");
+            .IsInEnum().WithMessage("浏览器类型无效");
         RuleFor(x => x.Os)
-            .MaximumLength(50).WithMessage("操作系统长度不能超过50个字符");
+            .IsInEnum().WithMessage("操作系统无效");
         RuleFor(x => x.UserAgent)
             .MaximumLength(500).WithMessage("用户代理字符串长度不能超过500个字符");
         RuleFor(x => x.LoginResult)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDetailValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaInspectionDetail 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPcbaInspectionDetail 生成，请按需审阅）
 // 
@@ -31,15 +31,15 @@ public class TaktPcbaInspectionDetailCreateValidator : AbstractValidator<TaktPcb
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.PcbaInspectionId)
             .GreaterThanOrEqualTo(0).WithMessage("PCBA检查日报ID不能为负数");
         RuleFor(x => x.ProdOrderCode)
             .NotEmpty().WithMessage("生产工单号不能为空")
-            .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("生产工单号长度不能超过40个字符");
         RuleFor(x => x.PcbaBoardType)
             .MaximumLength(50).WithMessage("PCBA板别长度不能超过50个字符");
         RuleFor(x => x.VisualInspectionLine)
@@ -47,7 +47,7 @@ public class TaktPcbaInspectionDetailCreateValidator : AbstractValidator<TaktPcb
         RuleFor(x => x.AoiLine)
             .MaximumLength(50).WithMessage("AOI线别长度不能超过50个字符");
         RuleFor(x => x.InspectorName)
-            .MaximumLength(50).WithMessage("检查员长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("检查员长度不能超过40个字符");
         RuleFor(x => x.ProdLine)
             .MaximumLength(50).WithMessage("生产线长度不能超过50个字符");
         RuleFor(x => x.HandPlacement)
@@ -99,14 +99,14 @@ public class TaktPcbaInspectionDetailImportValidator : AbstractValidator<TaktPcb
     public TaktPcbaInspectionDetailImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PcbaInspectionId)
             .GreaterThanOrEqualTo(0).WithMessage("PCBA检查日报ID不能为负数");
         RuleFor(x => x.ProdOrderCode)
             .NotEmpty().WithMessage("生产工单号不能为空")
-            .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("生产工单号长度不能超过40个字符");
         RuleFor(x => x.PcbaBoardType)
             .MaximumLength(50).WithMessage("PCBA板别长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.PcbaBoardType));
         RuleFor(x => x.VisualInspectionLine)
@@ -114,7 +114,7 @@ public class TaktPcbaInspectionDetailImportValidator : AbstractValidator<TaktPcb
         RuleFor(x => x.AoiLine)
             .MaximumLength(50).WithMessage("AOI线别长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.AoiLine));
         RuleFor(x => x.InspectorName)
-            .MaximumLength(50).WithMessage("检查员长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.InspectorName));
+            .MaximumLength(40).WithMessage("检查员长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.InspectorName));
         RuleFor(x => x.ProdLine)
             .MaximumLength(50).WithMessage("生产线长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ProdLine));
         RuleFor(x => x.HandPlacement)

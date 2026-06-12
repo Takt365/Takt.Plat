@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Identity;
 
@@ -39,10 +38,10 @@ public class TaktUser : TaktTenantEntityBase
     public string? Nickname { get; set; }
 
     /// <summary>
-    /// 用户类型
+    /// 用户类型（字典 sys_user_type）
     /// </summary>
     [SugarColumn(ColumnName = "user_type", ColumnDescription = "用户类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktUserType UserType { get; set; } = TaktUserType.Normal;
+    public int UserType { get; set; } = 0;
 
     /// <summary>
     /// 密码哈希值（bcrypt加密）
@@ -63,17 +62,16 @@ public class TaktUser : TaktTenantEntityBase
     public string DefaultCulture { get; set; } = "en-US";
     
     /// <summary>
-    /// 是否内置（1=是，0=否）
-    /// 种子用户（admin/guest/demo）为内置，不允许删除
+    /// 是否内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "user_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus UserStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int UserStatus { get; set; } = 1;
 
     /// <summary>
     /// 最后登录时间

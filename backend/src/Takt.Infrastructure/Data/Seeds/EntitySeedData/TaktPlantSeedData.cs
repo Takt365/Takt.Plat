@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
@@ -87,11 +86,11 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "TKC",
                 "TKC",
                 "zh-CN",
-                TaktCompanyType.Research,
+                3,
                 "0001",
-                TaktEnterpriseNature.DomesticLimitedLiability,
-                TaktIndustryAttribute.L,
-                TaktEnterpriseScale.Large,
+                150,
+                12,
+                1,
                 "软件开发与信息技术服务",
                 "中国",
                 "北京市",
@@ -106,11 +105,11 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "TCJ",
                 "TCJ",
                 "ja-JP",
-                TaktCompanyType.Manufacturing,
+                1,
                 "1000",
-                TaktEnterpriseNature.ForeignWhollyOwned,
-                TaktIndustryAttribute.C,
-                TaktEnterpriseScale.Large,
+                330,
+                3,
+                1,
                 "音響機器（ハイエンドオーディオ機器、プレミアムオーディオ機器、音楽制作?業務用オーディオ機器 TASCAM ブランド）の開発?製造?販売並びに情報機器（計測機器、医用画像記録再生機器、機内エンターテインメント機器、産業用光ドライブ、データレコーダー等）の開発?製造?販売及びこれらに関するアフターサービス、ソリューションビジネス",
                 "日本",
                 "东京都",
@@ -125,11 +124,11 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "DTA",
                 "DTA",
                 "zh-CN",
-                TaktCompanyType.Manufacturing,
+                1,
                 "2300",
-                TaktEnterpriseNature.DomesticLimitedLiability,
-                TaktIndustryAttribute.C,
-                TaktEnterpriseScale.Large,
+                150,
+                3,
+                1,
                 "电子元器件制造；电子元器件批发；电子元器件零售；音响设备制造；音响设备销售；影视录放设备制造；家用视听设备销售；电气信号设备装置制造；电气信号设备装置销售；日用电器修理。",
                 "中国",
                 "广东省",
@@ -144,11 +143,11 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "TAC",
                 "TAC",
                 "zh-HK",
-                TaktCompanyType.Sales,
+                2,
                 "2400",
-                TaktEnterpriseNature.HmtWhollyOwned,
-                TaktIndustryAttribute.F,
-                TaktEnterpriseScale.Medium,
+                230,
+                6,
+                2,
                 "Import/Export of Audio Equipment, Hi-Fi Equipment, Cassette Recorders, TV & Video Equipment and Electronic Components",
                 "中国",
                 "香港特别行政区",
@@ -163,11 +162,11 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "TSZ",
                 "TSZ",
                 "zh-CN",
-                TaktCompanyType.Sales,
+                2,
                 "2700",
-                TaktEnterpriseNature.DomesticLimitedLiability,
-                TaktIndustryAttribute.F,
-                TaktEnterpriseScale.Medium,
+                150,
+                6,
+                2,
                 "音响设备及其零配件、电子产品及其零配件、电子元器件的研发、批发、佣金代理（拍卖除外）、进出口及相关配套服务。",
                 "中国",
                 "广东省",
@@ -182,11 +181,11 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "TCA",
                 "TCA",
                 "en-US",
-                TaktCompanyType.Headquarters,
+                4,
                 "3000",
-                TaktEnterpriseNature.ForeignWhollyOwned,
-                TaktIndustryAttribute.L,
-                TaktEnterpriseScale.Large,
+                330,
+                12,
+                1,
                 "Engaged in the import, distribution, marketing and sales of high-fidelity audio/video electronics, consumer electronics, professional audio recording equipment (TASCAM brand), high-end audiophile components (Esoteric brand), computer data storage devices, disc publishing products, and instrumentation/data recorders. Also acts as the North American sales and service headquarters for TEAC Group products.",
                 "美国",
                 "California",
@@ -258,8 +257,8 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
         plant.RegisteredCapital = seed.RegisteredCapital;
         plant.EstablishmentDate = seed.EstablishmentDate;
         plant.ClosingDate = null;
-        plant.PlantExistence = TaktCompanyExistenceStatus.Subsisting;
-        plant.PlantStatus = TaktCommonStatus.Enabled;
+        plant.PlantExistence = 1;
+        plant.PlantStatus = 1;
         plant.SortOrder = seed.SortOrder;
     }
 
@@ -272,11 +271,11 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
         string PlantShortName,
         string CodeAlias,
         string DefaultCulture,
-        TaktCompanyType PlantType,
+        int PlantType,
         string RelatedCompany,
-        TaktEnterpriseNature EnterpriseNature,
-        TaktIndustryAttribute IndustryAttribute,
-        TaktEnterpriseScale EnterpriseScale,
+        int EnterpriseNature,
+        int IndustryAttribute,
+        int EnterpriseScale,
         string BusinessScope,
         string RegistrationRegion,
         string RegistrationProvince,

@@ -4,26 +4,13 @@
 // 文件名称：TaktFlowEnums.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
-// 功能描述：工作流相关枚举
+// 功能描述：工作流引擎固定枚举（运行时态）；字典字段实体存 int
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 namespace Takt.Shared.Enums;
-
-/// <summary>
-/// 流程定义发布状态
-/// </summary>
-public enum TaktFlowSchemeStatus
-{
-    /// <summary>草稿</summary>
-    Draft = 0,
-    /// <summary>已发布</summary>
-    Published = 1,
-    /// <summary>已停用</summary>
-    Disabled = 2
-}
 
 /// <summary>
 /// 流程定义挂起状态（1 激活，2 挂起）

@@ -109,13 +109,13 @@
   <data name="common.validation.not.found" xml:space="preserve">
     <value>{field} not found</value>
   </data>
-  <data name="common.validation.not.found.or.expired" xml:space="preserve">
+  <data name="common.validation.missing.or.expired" xml:space="preserve">
     <value>{field} not found or expired</value>
   </data>
   <data name="common.validation.expired" xml:space="preserve">
     <value>{field} has expired</value>
   </data>
-  <data name="common.validation.invalid.format" xml:space="preserve">
+  <data name="common.validation.format.invalid" xml:space="preserve">
     <value>Invalid {field} format</value>
   </data>
   <data name="common.validation.too.fast.retry" xml:space="preserve">
@@ -124,7 +124,7 @@
   <data name="common.validation.verify.failed" xml:space="preserve">
     <value>Verification failed</value>
   </data>
-  <data name="common.field.captcha" xml:space="preserve">
+  <data name="common.field.captcha.label" xml:space="preserve">
     <value>Captcha</value>
   </data>
   <data name="common.field.tenant.code" xml:space="preserve">

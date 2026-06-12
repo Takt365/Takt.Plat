@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableSelectionDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableSelection 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableSelection 生成，请按需审阅）
 // 
@@ -65,7 +65,7 @@ public class TaktConfigurableSelectionDto : TaktCompanyDtoBase
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public TaktConfigurableFilterOperator FilterOperator { get; set; }
+    public int FilterOperator { get; set; }
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -80,7 +80,7 @@ public class TaktConfigurableSelectionDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public TaktYesNo IsRequired { get; set; }
+    public int IsRequired { get; set; }
 
     /// <summary>
     /// 排序号（Selection Screen 展示顺序）
@@ -139,7 +139,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public TaktConfigurableFilterOperator? FilterOperator { get; set; }
+    public int? FilterOperator { get; set; }
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -154,7 +154,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public TaktYesNo? IsRequired { get; set; }
+    public int? IsRequired { get; set; }
 
     /// <summary>
     /// 排序号（Selection Screen 展示顺序）
@@ -233,7 +233,7 @@ public class TaktConfigurableSelectionCreateDto
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public TaktConfigurableFilterOperator FilterOperator { get; set; }
+    public int FilterOperator { get; set; }
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -248,7 +248,7 @@ public class TaktConfigurableSelectionCreateDto
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public TaktYesNo IsRequired { get; set; }
+    public int IsRequired { get; set; }
 
     /// <summary>
     /// 排序号（Selection Screen 展示顺序）
@@ -354,7 +354,7 @@ public class TaktConfigurableSelectionTemplateDto
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public TaktConfigurableFilterOperator? FilterOperator { get; set; }
+    public int? FilterOperator { get; set; }
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -369,7 +369,7 @@ public class TaktConfigurableSelectionTemplateDto
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public TaktYesNo? IsRequired { get; set; }
+    public int? IsRequired { get; set; }
 
     /// <summary>
     /// 排序号（Selection Screen 展示顺序）
@@ -432,7 +432,7 @@ public class TaktConfigurableSelectionImportDto
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public TaktConfigurableFilterOperator? FilterOperator { get; set; }
+    public int? FilterOperator { get; set; }
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -447,7 +447,7 @@ public class TaktConfigurableSelectionImportDto
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public TaktYesNo? IsRequired { get; set; }
+    public int? IsRequired { get; set; }
 
     /// <summary>
     /// 排序号（Selection Screen 展示顺序）
@@ -511,7 +511,7 @@ public class TaktConfigurableSelectionExportDto
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public TaktConfigurableFilterOperator FilterOperator { get; set; }
+    public int FilterOperator { get; set; }
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -526,7 +526,7 @@ public class TaktConfigurableSelectionExportDto
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public TaktYesNo IsRequired { get; set; }
+    public int IsRequired { get; set; }
 
     /// <summary>
     /// 排序号（Selection Screen 展示顺序）

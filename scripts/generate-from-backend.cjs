@@ -19,6 +19,8 @@ const {
   matchControllerForEntityPrefix,
   pluralizeEntityShort,
   logGeneratedFileWritePolicy,
+  parseSingleEntityGenerateArgs,
+  sanitizeXmlDocPlainText,
 } = require('./generate-script-common.cjs');
 const {
   shouldExcludeDtoSourceBase,
@@ -274,7 +276,7 @@ function cleanSummaryLines(text) {
  */
 function normalizeDocText(text) {
   const lines = cleanSummaryLines(text);
-  return lines.join(' ').trim();
+  return sanitizeXmlDocPlainText(lines.join(' ').trim());
 }
 
 /**
@@ -1670,75 +1672,45 @@ function printUsage() {
 用法: node scripts/generate-from-backend.cjs [参数]
 
 参数:
-  --all              生成所有 *Dtos.cs 与 *Controller.cs（每个 Dtos 文件对应一个 .d.ts）
-  --<实体名前缀>     生成指定实体（如: --User, --Holiday）
+  --<实体名前缀>     生成指定实体（如: --User, --Holiday, --CostCenter）
                      匹配: Takt{实体}Dtos.cs、Takt{实体复数}Controller.cs（如 TaktHolidaysController）
+
+说明:
+  - 已禁用 --all；每次必须指定一个实体
 
 输出策略:
   - 目标 .d.ts / .ts 不存在则创建，已存在则覆盖更新（与 generate-script-common.cjs 一致）
 
 示例:
-  node scripts/generate-from-backend.cjs --all              # 生成全部
-  node scripts/generate-from-backend.cjs --Menu             # 生成菜单相关
-  node scripts/generate-from-backend.cjs --User             # 生成用户相关
+  node scripts/generate-from-backend.cjs --CostCenter
+  node scripts/generate-from-backend.cjs --Menu
+  node scripts/generate-from-backend.cjs --User
+  node scripts/generate-from-backend.cjs --Dept
+  node scripts/generate-from-backend.cjs --Employee
 
 生成范围:
   - 类型：*Dtos.cs 全部类（含主子表导航、转置 DTO）；前端类型名去 Takt 与末尾 Dto（TaktCompanyDto → Company）
   - 跳过前端：Online、Message（SignalR 手工维护）
-  - 跳过独立模块 DTO 文件：TaktDataDictAllDtos、TaktTranslationMessagesDtos（手工 types + api）
+  - 跳过独立模块 DTO：已合并至对应 Takt*Dtos.cs 的附属 DTO
   - API：控制器全部 Action；标准 list 用 XxxQueryDto，转置用 XxxTransposedQueryDto
   - 主子表字段：List<Takt子Dto> → 子Dto[]（跨模块自动 import）
-  node scripts/generate-from-backend.cjs --Dept             # 生成部门相关
-  node scripts/generate-from-backend.cjs --Employee         # 生成员工相关
 
   `
   );
 }
 
 /**
- * 解析命令行参数
+ * 解析命令行参数（单实体，禁止 --all）
  */
 function parseArgs() {
-  const args = process.argv.slice(2);
-  
-  if (args.length === 0) {
-    console.error('❌ 错误: 缺少必要参数');
-    printUsage();
-    process.exit(1);
-  }
-  
-  const arg = args[0];
-  
-  // 检查参数格式
-  if (!arg.startsWith('--')) {
-    console.error('❌ 错误: 参数必须以 -- 开头');
-    printUsage();
-    process.exit(1);
-  }
-  
-  const value = arg.substring(2); // 去掉 --
-  
-  if (value.toLowerCase() === 'all') {
-    return {
-      command: 'all',
-      generateTypes: true,
-      generateApi: true,
-      entityPrefix: null,
-    };
-  }
-  
-  // 验证实体名前缀格式（不能以Takt开头，会自动添加）
-  if (value.startsWith('Takt')) {
-    console.error(`❌ 错误: 实体名前缀不应包含Takt，例如: --User 而不是 --TaktUser`);
-    printUsage();
-    process.exit(1);
-  }
-  
+  const options = parseSingleEntityGenerateArgs(printUsage);
   return {
-    command: value,
+    command: options.entityPrefix,
     generateTypes: true,
     generateApi: true,
-    entityPrefix: value,
+    entityPrefix: options.entityPrefix,
+    force: options.force,
+    dryRun: options.dryRun,
   };
 }
 
@@ -1748,14 +1720,10 @@ logGeneratedFileWritePolicy();
 try {
   const options = parseArgs();
   
-  if (options.entityPrefix) {
-    console.log(`📦 实体前缀: ${options.entityPrefix}`);
-    console.log(
-      `   将匹配: Takt${options.entityPrefix}Dtos、Takt${pluralizeEntityShort(options.entityPrefix)}Controller\n`,
-    );
-  } else {
-    console.log(`📦 生成模式: 全部\n`);
-  }
+  console.log(`📦 实体前缀: ${options.entityPrefix}`);
+  console.log(
+    `   将匹配: Takt${options.entityPrefix}Dtos、Takt${pluralizeEntityShort(options.entityPrefix)}Controller\n`,
+  );
 
   let typesCreated = 0;
   let typesUpdated = 0;

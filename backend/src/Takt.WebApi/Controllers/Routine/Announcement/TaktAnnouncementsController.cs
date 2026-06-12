@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.Announcement
 // 文件名称：TaktAnnouncementsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公告通知控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Routine.Announcement;
 /// 公告通知控制器
 /// 提供公告通知的 REST API
 /// </summary>
-[ApiModule(TaktModule.Routine, "日常事务")]
+[ApiModule(2, "日常事务")]
 [Route("api/[controller]", Name = "公告通知")]
 public class TaktAnnouncementsController : TaktControllerBase
 {
@@ -193,6 +193,26 @@ public class TaktAnnouncementsController : TaktControllerBase
         {
             var result = await _announcementService.UpdateAnnouncementStatusAsync(dto);
             return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 提交公告审批（发起工作流）
+    /// </summary>
+    /// <param name="id">公告 ID</param>
+    /// <returns>公告 DTO</returns>
+    [TaktPermission("routine:announcement:announcement:update", "提交公告审批")]
+    [HttpPost("{id}/submit-approval")]
+    public async Task<IActionResult> SubmitAnnouncementForApprovalAsync(long id)
+    {
+        try
+        {
+            var result = await _announcementService.SubmitAnnouncementForApprovalAsync(id);
+            return Success(result, "提交审批成功");
         }
         catch (Exception ex)
         {

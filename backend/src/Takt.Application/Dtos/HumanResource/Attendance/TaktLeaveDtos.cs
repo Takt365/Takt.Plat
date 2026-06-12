@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktLeaveDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Leave 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktLeave 生成，请按需审阅）
 // 
@@ -86,12 +86,6 @@ public class TaktLeaveDto : TaktApprovalDtoBase
     /// 证明附件 JSON（与 TaktFile 字段对齐的数组）
     /// </summary>
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 流程实例 名称（填充字段）
@@ -204,7 +198,7 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -238,7 +232,7 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
+    public int? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -373,7 +367,7 @@ public class TaktLeaveCreateDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -517,7 +511,7 @@ public class TaktLeaveTemplateDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -613,7 +607,7 @@ public class TaktLeaveImportDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
@@ -715,7 +709,7 @@ public class TaktLeaveExportDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
+    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }

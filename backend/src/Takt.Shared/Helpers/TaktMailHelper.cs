@@ -24,7 +24,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt邮件帮助类
 /// </summary>
-/// <remarks>网络 I/O 网关；所有发送方法须显式传入 <see cref="IConfiguration"/> 与收件人参数。</remarks>
+/// <remarks>网络 I/O 网关；所有发送方法须显式传入 IConfiguration 与收件人参数。</remarks>
 public static class TaktMailHelper
 {
     /// <summary>

@@ -116,7 +116,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
     public async Task<TaktDictTypeDto> CreateDictTypeAsync(TaktDictTypeCreateDto dto)
     {
         var entity = dto.Adapt<TaktDictType>();
-        entity.IsBuiltIn = TaktYesNo.No;
+        entity.IsBuiltIn = 0;
         var isUnique_ix_dict_type_code_unique = await _uniqueValidator.IsUniqueAsync(
             _dictTypeRepository,
             x => x.DictTypeCode == entity.DictTypeCode);
@@ -170,7 +170,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
         {
             throw new TaktBusinessException("字典类型不存在或已删除");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes)
+        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置字典类型不允许删除");
         }
@@ -194,7 +194,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
         {
             return;
         }
-        if (await _dictTypeRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+        if (await _dictTypeRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置字典类型不允许删除");
         }
@@ -216,7 +216,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
         {
             throw new TaktBusinessException("字典类型不存在");
         }
-        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.DictStatus != TaktCommonStatus.Enabled)
+        if (entity.IsBuiltIn == 1 && dto.DictStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置字典类型");
         }
@@ -278,7 +278,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
             try
             {
                 var entity = rows[i].Adapt<TaktDictType>();
-                entity.IsBuiltIn = TaktYesNo.No;
+                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.DictTypeCode}";
                 if (!importSeenKeys.Add(importKey))
                 {

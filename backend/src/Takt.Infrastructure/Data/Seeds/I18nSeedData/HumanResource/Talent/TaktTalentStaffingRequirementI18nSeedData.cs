@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentStaffingRequirement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent;
 
 /// <summary>
-/// TaktTalentStaffingRequirement 实体国际化翻译种子（键前缀 entity.talentStaffingRequirement.*）
+/// TaktTalentStaffingRequirement 实体国际化翻译种子（键前缀 entity.talentstaffingrequirement.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 talentStaffingRequirement 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 talentstaffingrequirement 实体翻译...", tenantCode);
 
         foreach (var item in GetTalentStaffingRequirementTranslations())
         {
@@ -76,182 +75,182 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
 
     /// <summary>
     /// TaktTalentStaffingRequirement 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.talentStaffingRequirement._self / entity.talentStaffingRequirement.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.talentstaffingrequirement._self / entity.talentstaffingrequirement.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetTalentStaffingRequirementTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.talentStaffingRequirement._self
-            new TranslationSeedItem("entity.talentStaffingRequirement._self", "en-US", "Talent Staffing Requirement Information", "实体名称"),
-            // entity.talentStaffingRequirement._self
-            new TranslationSeedItem("entity.talentStaffingRequirement._self", "ja-JP", "用人需求信息", "实体名称"),
-            // entity.talentStaffingRequirement._self
-            new TranslationSeedItem("entity.talentStaffingRequirement._self", "zh-CN", "用人需求信息", "实体名称"),
-            // entity.talentStaffingRequirement._self
-            new TranslationSeedItem("entity.talentStaffingRequirement._self", "zh-HK", "用人需求信息", "实体名称"),
+            // entity.talentstaffingrequirement._self
+            new TranslationSeedItem("entity.talentstaffingrequirement._self", "en-US", "Talent Staffing Requirement Information", "实体名称"),
+            // entity.talentstaffingrequirement._self
+            new TranslationSeedItem("entity.talentstaffingrequirement._self", "ja-JP", "用人需求信息", "实体名称"),
+            // entity.talentstaffingrequirement._self
+            new TranslationSeedItem("entity.talentstaffingrequirement._self", "zh-CN", "用人需求信息", "实体名称"),
+            // entity.talentstaffingrequirement._self
+            new TranslationSeedItem("entity.talentstaffingrequirement._self", "zh-HK", "用人需求信息", "实体名称"),
 
-            // entity.talentStaffingRequirement.reqno
-            new TranslationSeedItem("entity.talentStaffingRequirement.reqno", "en-US", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
-            // entity.talentStaffingRequirement.reqno
-            new TranslationSeedItem("entity.talentStaffingRequirement.reqno", "ja-JP", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
-            // entity.talentStaffingRequirement.reqno
-            new TranslationSeedItem("entity.talentStaffingRequirement.reqno", "zh-CN", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
-            // entity.talentStaffingRequirement.reqno
-            new TranslationSeedItem("entity.talentStaffingRequirement.reqno", "zh-HK", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
+            // entity.talentstaffingrequirement.reqno
+            new TranslationSeedItem("entity.talentstaffingrequirement.reqno", "en-US", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
+            // entity.talentstaffingrequirement.reqno
+            new TranslationSeedItem("entity.talentstaffingrequirement.reqno", "ja-JP", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
+            // entity.talentstaffingrequirement.reqno
+            new TranslationSeedItem("entity.talentstaffingrequirement.reqno", "zh-CN", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
+            // entity.talentstaffingrequirement.reqno
+            new TranslationSeedItem("entity.talentstaffingrequirement.reqno", "zh-HK", "需求单号", "需求单号（ReqNo，租户+公司内唯一；自动生成，如 PR-2026-00123）"),
 
-            // entity.talentStaffingRequirement.deptid
-            new TranslationSeedItem("entity.talentStaffingRequirement.deptid", "en-US", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
-            // entity.talentStaffingRequirement.deptid
-            new TranslationSeedItem("entity.talentStaffingRequirement.deptid", "ja-JP", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
-            // entity.talentStaffingRequirement.deptid
-            new TranslationSeedItem("entity.talentStaffingRequirement.deptid", "zh-CN", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
-            // entity.talentStaffingRequirement.deptid
-            new TranslationSeedItem("entity.talentStaffingRequirement.deptid", "zh-HK", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
+            // entity.talentstaffingrequirement.deptid
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "en-US", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
+            // entity.talentstaffingrequirement.deptid
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "ja-JP", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
+            // entity.talentstaffingrequirement.deptid
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-CN", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
+            // entity.talentstaffingrequirement.deptid
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-HK", "申请部门ID", "申请部门ID（DeptID，FK→TaktDept）"),
 
-            // entity.talentStaffingRequirement.postid
-            new TranslationSeedItem("entity.talentStaffingRequirement.postid", "en-US", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
-            // entity.talentStaffingRequirement.postid
-            new TranslationSeedItem("entity.talentStaffingRequirement.postid", "ja-JP", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
-            // entity.talentStaffingRequirement.postid
-            new TranslationSeedItem("entity.talentStaffingRequirement.postid", "zh-CN", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
-            // entity.talentStaffingRequirement.postid
-            new TranslationSeedItem("entity.talentStaffingRequirement.postid", "zh-HK", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
+            // entity.talentstaffingrequirement.postid
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "en-US", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
+            // entity.talentstaffingrequirement.postid
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "ja-JP", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
+            // entity.talentstaffingrequirement.postid
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-CN", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
+            // entity.talentstaffingrequirement.postid
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-HK", "申请岗位ID", "申请岗位ID（PositionID，FK→TaktPost）"),
 
-            // entity.talentStaffingRequirement.jobgrade
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobgrade", "en-US", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
-            // entity.talentStaffingRequirement.jobgrade
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobgrade", "ja-JP", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
-            // entity.talentStaffingRequirement.jobgrade
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobgrade", "zh-CN", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
-            // entity.talentStaffingRequirement.jobgrade
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobgrade", "zh-HK", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
+            // entity.talentstaffingrequirement.jobgrade
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobgrade", "en-US", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
+            // entity.talentstaffingrequirement.jobgrade
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobgrade", "ja-JP", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
+            // entity.talentstaffingrequirement.jobgrade
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobgrade", "zh-CN", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
+            // entity.talentstaffingrequirement.jobgrade
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobgrade", "zh-HK", "职级", "职级（JobGrade/Rank，如专员/主任/工程师）"),
 
-            // entity.talentStaffingRequirement.requestqty
-            new TranslationSeedItem("entity.talentStaffingRequirement.requestqty", "en-US", "需求人数", "需求人数（RequestQty，默认 1）"),
-            // entity.talentStaffingRequirement.requestqty
-            new TranslationSeedItem("entity.talentStaffingRequirement.requestqty", "ja-JP", "需求人数", "需求人数（RequestQty，默认 1）"),
-            // entity.talentStaffingRequirement.requestqty
-            new TranslationSeedItem("entity.talentStaffingRequirement.requestqty", "zh-CN", "需求人数", "需求人数（RequestQty，默认 1）"),
-            // entity.talentStaffingRequirement.requestqty
-            new TranslationSeedItem("entity.talentStaffingRequirement.requestqty", "zh-HK", "需求人数", "需求人数（RequestQty，默认 1）"),
+            // entity.talentstaffingrequirement.requestqty
+            new TranslationSeedItem("entity.talentstaffingrequirement.requestqty", "en-US", "需求人数", "需求人数（RequestQty，默认 1）"),
+            // entity.talentstaffingrequirement.requestqty
+            new TranslationSeedItem("entity.talentstaffingrequirement.requestqty", "ja-JP", "需求人数", "需求人数（RequestQty，默认 1）"),
+            // entity.talentstaffingrequirement.requestqty
+            new TranslationSeedItem("entity.talentstaffingrequirement.requestqty", "zh-CN", "需求人数", "需求人数（RequestQty，默认 1）"),
+            // entity.talentstaffingrequirement.requestqty
+            new TranslationSeedItem("entity.talentstaffingrequirement.requestqty", "zh-HK", "需求人数", "需求人数（RequestQty，默认 1）"),
 
-            // entity.talentStaffingRequirement.headcounttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.headcounttype", "en-US", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
-            // entity.talentStaffingRequirement.headcounttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.headcounttype", "ja-JP", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
-            // entity.talentStaffingRequirement.headcounttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.headcounttype", "zh-CN", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
-            // entity.talentStaffingRequirement.headcounttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.headcounttype", "zh-HK", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
+            // entity.talentstaffingrequirement.headcounttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "en-US", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
+            // entity.talentstaffingrequirement.headcounttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "ja-JP", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
+            // entity.talentstaffingrequirement.headcounttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "zh-CN", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
+            // entity.talentstaffingrequirement.headcounttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "zh-HK", "编制类型", "编制类型（HeadcountType：正式/派遣/实习生/临时）"),
 
-            // entity.talentStaffingRequirement.reasoncode
-            new TranslationSeedItem("entity.talentStaffingRequirement.reasoncode", "en-US", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
-            // entity.talentStaffingRequirement.reasoncode
-            new TranslationSeedItem("entity.talentStaffingRequirement.reasoncode", "ja-JP", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
-            // entity.talentStaffingRequirement.reasoncode
-            new TranslationSeedItem("entity.talentStaffingRequirement.reasoncode", "zh-CN", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
-            // entity.talentStaffingRequirement.reasoncode
-            new TranslationSeedItem("entity.talentStaffingRequirement.reasoncode", "zh-HK", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
+            // entity.talentstaffingrequirement.reasoncode
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "en-US", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
+            // entity.talentstaffingrequirement.reasoncode
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "ja-JP", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
+            // entity.talentstaffingrequirement.reasoncode
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "zh-CN", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
+            // entity.talentstaffingrequirement.reasoncode
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "zh-HK", "需求原因", "需求原因（ReasonCode：新增编制/离职补充/业务扩大/替岗）"),
 
-            // entity.talentStaffingRequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployeeid", "en-US", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
-            // entity.talentStaffingRequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployeeid", "ja-JP", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
-            // entity.talentStaffingRequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployeeid", "zh-CN", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
-            // entity.talentStaffingRequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployeeid", "zh-HK", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
+            // entity.talentstaffingrequirement.replaceemployeeid
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "en-US", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
+            // entity.talentstaffingrequirement.replaceemployeeid
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "ja-JP", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
+            // entity.talentstaffingrequirement.replaceemployeeid
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-CN", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
+            // entity.talentstaffingrequirement.replaceemployeeid
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-HK", "替补员工ID", "替补员工ID（ReplaceEmpID，离职补充时填原员工，FK→TaktEmployee，可空）"),
 
-            // entity.talentStaffingRequirement.expectedonboarddate
-            new TranslationSeedItem("entity.talentStaffingRequirement.expectedonboarddate", "en-US", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
-            // entity.talentStaffingRequirement.expectedonboarddate
-            new TranslationSeedItem("entity.talentStaffingRequirement.expectedonboarddate", "ja-JP", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
-            // entity.talentStaffingRequirement.expectedonboarddate
-            new TranslationSeedItem("entity.talentStaffingRequirement.expectedonboarddate", "zh-CN", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
-            // entity.talentStaffingRequirement.expectedonboarddate
-            new TranslationSeedItem("entity.talentStaffingRequirement.expectedonboarddate", "zh-HK", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
+            // entity.talentstaffingrequirement.expectedonboarddate
+            new TranslationSeedItem("entity.talentstaffingrequirement.expectedonboarddate", "en-US", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
+            // entity.talentstaffingrequirement.expectedonboarddate
+            new TranslationSeedItem("entity.talentstaffingrequirement.expectedonboarddate", "ja-JP", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
+            // entity.talentstaffingrequirement.expectedonboarddate
+            new TranslationSeedItem("entity.talentstaffingrequirement.expectedonboarddate", "zh-CN", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
+            // entity.talentstaffingrequirement.expectedonboarddate
+            new TranslationSeedItem("entity.talentstaffingrequirement.expectedonboarddate", "zh-HK", "期望入职日", "期望入职日（ExpectedOnboardDate）"),
 
-            // entity.talentStaffingRequirement.contracttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.contracttype", "en-US", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
-            // entity.talentStaffingRequirement.contracttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.contracttype", "ja-JP", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
-            // entity.talentStaffingRequirement.contracttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.contracttype", "zh-CN", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
-            // entity.talentStaffingRequirement.contracttype
-            new TranslationSeedItem("entity.talentStaffingRequirement.contracttype", "zh-HK", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
+            // entity.talentstaffingrequirement.contracttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "en-US", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
+            // entity.talentstaffingrequirement.contracttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "ja-JP", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
+            // entity.talentstaffingrequirement.contracttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "zh-CN", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
+            // entity.talentstaffingrequirement.contracttype
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "zh-HK", "合同类型", "合同类型（ContractType：固定期/无固定/实习协议）"),
 
-            // entity.talentStaffingRequirement.worklocation
-            new TranslationSeedItem("entity.talentStaffingRequirement.worklocation", "en-US", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
-            // entity.talentStaffingRequirement.worklocation
-            new TranslationSeedItem("entity.talentStaffingRequirement.worklocation", "ja-JP", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
-            // entity.talentStaffingRequirement.worklocation
-            new TranslationSeedItem("entity.talentStaffingRequirement.worklocation", "zh-CN", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
-            // entity.talentStaffingRequirement.worklocation
-            new TranslationSeedItem("entity.talentStaffingRequirement.worklocation", "zh-HK", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
+            // entity.talentstaffingrequirement.worklocation
+            new TranslationSeedItem("entity.talentstaffingrequirement.worklocation", "en-US", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
+            // entity.talentstaffingrequirement.worklocation
+            new TranslationSeedItem("entity.talentstaffingrequirement.worklocation", "ja-JP", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
+            // entity.talentstaffingrequirement.worklocation
+            new TranslationSeedItem("entity.talentstaffingrequirement.worklocation", "zh-CN", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
+            // entity.talentstaffingrequirement.worklocation
+            new TranslationSeedItem("entity.talentstaffingrequirement.worklocation", "zh-HK", "工作地点", "工作地点（WorkLocation，如工厂/分公司）"),
 
-            // entity.talentStaffingRequirement.jobdesc
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobdesc", "en-US", "岗位职责", "岗位职责（JobDesc）"),
-            // entity.talentStaffingRequirement.jobdesc
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobdesc", "ja-JP", "岗位职责", "岗位职责（JobDesc）"),
-            // entity.talentStaffingRequirement.jobdesc
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobdesc", "zh-CN", "岗位职责", "岗位职责（JobDesc）"),
-            // entity.talentStaffingRequirement.jobdesc
-            new TranslationSeedItem("entity.talentStaffingRequirement.jobdesc", "zh-HK", "岗位职责", "岗位职责（JobDesc）"),
+            // entity.talentstaffingrequirement.jobdesc
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobdesc", "en-US", "岗位职责", "岗位职责（JobDesc）"),
+            // entity.talentstaffingrequirement.jobdesc
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobdesc", "ja-JP", "岗位职责", "岗位职责（JobDesc）"),
+            // entity.talentstaffingrequirement.jobdesc
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobdesc", "zh-CN", "岗位职责", "岗位职责（JobDesc）"),
+            // entity.talentstaffingrequirement.jobdesc
+            new TranslationSeedItem("entity.talentstaffingrequirement.jobdesc", "zh-HK", "岗位职责", "岗位职责（JobDesc）"),
 
-            // entity.talentStaffingRequirement.qualification
-            new TranslationSeedItem("entity.talentStaffingRequirement.qualification", "en-US", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
-            // entity.talentStaffingRequirement.qualification
-            new TranslationSeedItem("entity.talentStaffingRequirement.qualification", "ja-JP", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
-            // entity.talentStaffingRequirement.qualification
-            new TranslationSeedItem("entity.talentStaffingRequirement.qualification", "zh-CN", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
-            // entity.talentStaffingRequirement.qualification
-            new TranslationSeedItem("entity.talentStaffingRequirement.qualification", "zh-HK", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
+            // entity.talentstaffingrequirement.qualification
+            new TranslationSeedItem("entity.talentstaffingrequirement.qualification", "en-US", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
+            // entity.talentstaffingrequirement.qualification
+            new TranslationSeedItem("entity.talentstaffingrequirement.qualification", "ja-JP", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
+            // entity.talentstaffingrequirement.qualification
+            new TranslationSeedItem("entity.talentstaffingrequirement.qualification", "zh-CN", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
+            // entity.talentstaffingrequirement.qualification
+            new TranslationSeedItem("entity.talentstaffingrequirement.qualification", "zh-HK", "任职要求", "任职要求（Qualification，学历/经验/技能）"),
 
-            // entity.talentStaffingRequirement.budgetyear
-            new TranslationSeedItem("entity.talentStaffingRequirement.budgetyear", "en-US", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
-            // entity.talentStaffingRequirement.budgetyear
-            new TranslationSeedItem("entity.talentStaffingRequirement.budgetyear", "ja-JP", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
-            // entity.talentStaffingRequirement.budgetyear
-            new TranslationSeedItem("entity.talentStaffingRequirement.budgetyear", "zh-CN", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
-            // entity.talentStaffingRequirement.budgetyear
-            new TranslationSeedItem("entity.talentStaffingRequirement.budgetyear", "zh-HK", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
+            // entity.talentstaffingrequirement.budgetyear
+            new TranslationSeedItem("entity.talentstaffingrequirement.budgetyear", "en-US", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
+            // entity.talentstaffingrequirement.budgetyear
+            new TranslationSeedItem("entity.talentstaffingrequirement.budgetyear", "ja-JP", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
+            // entity.talentstaffingrequirement.budgetyear
+            new TranslationSeedItem("entity.talentstaffingrequirement.budgetyear", "zh-CN", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
+            // entity.talentstaffingrequirement.budgetyear
+            new TranslationSeedItem("entity.talentstaffingrequirement.budgetyear", "zh-HK", "预算年度", "预算年度（BudgetYear，用于 headcount 控制）"),
 
-            // entity.talentStaffingRequirement.dept
-            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "en-US", "申请部门", "申请部门"),
-            // entity.talentStaffingRequirement.dept
-            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "ja-JP", "申请部门", "申请部门"),
-            // entity.talentStaffingRequirement.dept
-            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "zh-CN", "申请部门", "申请部门"),
-            // entity.talentStaffingRequirement.dept
-            new TranslationSeedItem("entity.talentStaffingRequirement.dept", "zh-HK", "申请部门", "申请部门"),
+            // entity.talentstaffingrequirement.dept
+            new TranslationSeedItem("entity.talentstaffingrequirement.dept", "en-US", "申请部门", "申请部门"),
+            // entity.talentstaffingrequirement.dept
+            new TranslationSeedItem("entity.talentstaffingrequirement.dept", "ja-JP", "申请部门", "申请部门"),
+            // entity.talentstaffingrequirement.dept
+            new TranslationSeedItem("entity.talentstaffingrequirement.dept", "zh-CN", "申请部门", "申请部门"),
+            // entity.talentstaffingrequirement.dept
+            new TranslationSeedItem("entity.talentstaffingrequirement.dept", "zh-HK", "申请部门", "申请部门"),
 
-            // entity.talentStaffingRequirement.post
-            new TranslationSeedItem("entity.talentStaffingRequirement.post", "en-US", "申请岗位", "申请岗位"),
-            // entity.talentStaffingRequirement.post
-            new TranslationSeedItem("entity.talentStaffingRequirement.post", "ja-JP", "申请岗位", "申请岗位"),
-            // entity.talentStaffingRequirement.post
-            new TranslationSeedItem("entity.talentStaffingRequirement.post", "zh-CN", "申请岗位", "申请岗位"),
-            // entity.talentStaffingRequirement.post
-            new TranslationSeedItem("entity.talentStaffingRequirement.post", "zh-HK", "申请岗位", "申请岗位"),
+            // entity.talentstaffingrequirement.post
+            new TranslationSeedItem("entity.talentstaffingrequirement.post", "en-US", "申请岗位", "申请岗位"),
+            // entity.talentstaffingrequirement.post
+            new TranslationSeedItem("entity.talentstaffingrequirement.post", "ja-JP", "申请岗位", "申请岗位"),
+            // entity.talentstaffingrequirement.post
+            new TranslationSeedItem("entity.talentstaffingrequirement.post", "zh-CN", "申请岗位", "申请岗位"),
+            // entity.talentstaffingrequirement.post
+            new TranslationSeedItem("entity.talentstaffingrequirement.post", "zh-HK", "申请岗位", "申请岗位"),
 
-            // entity.talentStaffingRequirement.replaceemployee
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "en-US", "替补员工", "替补员工"),
-            // entity.talentStaffingRequirement.replaceemployee
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "ja-JP", "替补员工", "替补员工"),
-            // entity.talentStaffingRequirement.replaceemployee
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "zh-CN", "替补员工", "替补员工"),
-            // entity.talentStaffingRequirement.replaceemployee
-            new TranslationSeedItem("entity.talentStaffingRequirement.replaceemployee", "zh-HK", "替补员工", "替补员工"),
+            // entity.talentstaffingrequirement.replaceemployee
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployee", "en-US", "替补员工", "替补员工"),
+            // entity.talentstaffingrequirement.replaceemployee
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployee", "ja-JP", "替补员工", "替补员工"),
+            // entity.talentstaffingrequirement.replaceemployee
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployee", "zh-CN", "替补员工", "替补员工"),
+            // entity.talentstaffingrequirement.replaceemployee
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployee", "zh-HK", "替补员工", "替补员工"),
 
-            // entity.talentStaffingRequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "en-US", "招聘计划", "招聘计划"),
-            // entity.talentStaffingRequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "ja-JP", "招聘计划", "招聘计划"),
-            // entity.talentStaffingRequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "zh-CN", "招聘计划", "招聘计划"),
-            // entity.talentStaffingRequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentStaffingRequirement.talentrecruitmentplans", "zh-HK", "招聘计划", "招聘计划"),
+            // entity.talentstaffingrequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "en-US", "招聘计划", "招聘计划"),
+            // entity.talentstaffingrequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "ja-JP", "招聘计划", "招聘计划"),
+            // entity.talentstaffingrequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "zh-CN", "招聘计划", "招聘计划"),
+            // entity.talentstaffingrequirement.talentrecruitmentplans
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "zh-HK", "招聘计划", "招聘计划"),
         };
     }
 
@@ -269,8 +268,8 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

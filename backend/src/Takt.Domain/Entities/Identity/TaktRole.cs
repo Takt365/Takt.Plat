@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities.HumanResource.Organization;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Identity;
 
@@ -40,10 +39,10 @@ public class TaktRole : TaktTenantEntityBase
     public string RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（见 <see cref="TaktDataScope"/>：1=全部，2=本公司，3=本部门，4=仅本人，5=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     [SugarColumn(ColumnName = "data_scope", ColumnDescription = "数据权限范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
-    public int DataScope { get; set; } = (int)TaktDataScope.Self;
+    public int DataScope { get; set; } = 4;
 
     /// <summary>
     /// 排序号
@@ -52,17 +51,16 @@ public class TaktRole : TaktTenantEntityBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（1=是，0=否）
-    /// 种子角色为内置，不允许删除
+    /// 是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "role_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus RoleStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int RoleStatus { get; set; } = 1;
 
     /// <summary>
     /// 角色描述

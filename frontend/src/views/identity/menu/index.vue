@@ -602,7 +602,6 @@ const loadMenuTree = async (): Promise<MenuTree[]> => {
   return trees
 }
 
-/** 右侧查询/重置：仅客户端过滤，不覆盖 fullTableTree（与左侧点选共用 getMenuTree 结构） */
 const applyRightTableQuery = () => {
   tableCurrentPage.value = 1
 }
@@ -797,6 +796,9 @@ const loadData = async () => {
     loading.value = false
   }
 }
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 
 /** 右侧查询（不影响左侧树与 fullTableTree） */
 const handleSearch = () => {

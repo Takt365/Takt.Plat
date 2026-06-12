@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：cost-element.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -37,6 +37,16 @@ export interface CostElement extends CompanyDtoBase {
    * 成本要素名称
    */
   costElementName: string;
+
+  /**
+   * 成本要素简称
+   */
+  shortName?: string;
+
+  /**
+   * 成本要素描述
+   */
+  costElementDesc?: string;
 
   /**
    * 成本要素类型（0=初级，1=次级）
@@ -122,6 +132,16 @@ export interface CostElementQuery extends TaktPagedQuery {
    * 成本要素名称
    */
   costElementName?: string;
+
+  /**
+   * 成本要素简称
+   */
+  shortName?: string;
+
+  /**
+   * 成本要素描述
+   */
+  costElementDesc?: string;
 
   /**
    * 成本要素类型（0=初级，1=次级）
@@ -226,6 +246,16 @@ export interface CostElementCreate {
    * 成本要素名称
    */
   costElementName: string;
+
+  /**
+   * 成本要素简称
+   */
+  shortName?: string;
+
+  /**
+   * 成本要素描述
+   */
+  costElementDesc?: string;
 
   /**
    * 成本要素类型（0=初级，1=次级）
@@ -360,6 +390,16 @@ export interface CostElementTemplate {
   costElementName?: string;
 
   /**
+   * 成本要素简称
+   */
+  shortName?: string;
+
+  /**
+   * 成本要素描述
+   */
+  costElementDesc?: string;
+
+  /**
    * 成本要素类型（0=初级，1=次级）
    */
   costElementType?: number;
@@ -434,6 +474,16 @@ export interface CostElementImport {
   costElementName?: string;
 
   /**
+   * 成本要素简称
+   */
+  shortName?: string;
+
+  /**
+   * 成本要素描述
+   */
+  costElementDesc?: string;
+
+  /**
    * 成本要素类型（0=初级，1=次级）
    */
   costElementType?: number;
@@ -501,6 +551,16 @@ export interface CostElementExport {
    * 成本要素名称
    */
   costElementName: string;
+
+  /**
+   * 成本要素简称
+   */
+  shortName?: string;
+
+  /**
+   * 成本要素描述
+   */
+  costElementDesc?: string;
 
   /**
    * 成本要素类型（0=初级，1=次级）

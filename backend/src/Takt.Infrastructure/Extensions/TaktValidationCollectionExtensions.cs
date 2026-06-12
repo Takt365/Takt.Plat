@@ -4,7 +4,7 @@
 // 文件名称：TaktValidationCollectionExtensions.cs
 // 创建时间：2026-05-28
 // 创建人：Takt365(Cursor AI)
-// 功能描述：FluentValidation 验证器注册（扫描 Takt.Application 程序集）
+// 功能描述：FluentValidation 验证器 DI 注册（扫描 Takt.Application；入参校验由 WebApi TaktValidationFilter 执行）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

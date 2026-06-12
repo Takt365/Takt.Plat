@@ -28,13 +28,13 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// </summary>
 public class TaktHolidaySeedData : ITaktSeedDataCoordinator
 {
-    private static readonly TaktHolidayType Statutory = TaktHolidayType.Statutory;
+    private static readonly int Statutory = 0;
 
-    private static readonly TaktHolidayType Compensatory = TaktHolidayType.Compensatory;
+    private static readonly int Compensatory = 1;
 
-    private static readonly TaktHolidayWorkingDay Off = TaktHolidayWorkingDay.NonWorkingDay;
+    private static readonly int Off = 0;
 
-    private static readonly TaktHolidayWorkingDay Work = TaktHolidayWorkingDay.WorkingDay;
+    private static readonly int Work = 1;
 
     /// <summary>
     /// 执行顺序（在公司、区域文化、字典数据之后）
@@ -68,7 +68,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
         int updateCount = 0;
 
         var companies = await companyRepository.GetListAsync(
-            c => c.TenantCode == tenantCode && c.CompanyStatus == TaktCommonStatus.Enabled);
+            c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
 
         if (companies == null || companies.Count == 0)
         {
@@ -351,10 +351,10 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
 
     private static TaktHolidaySeedItem Item(
         string holidayName,
-        TaktHolidayType holidayType,
+        int holidayType,
         DateTime startDate,
         DateTime endDate,
-        TaktHolidayWorkingDay isWorkingDay,
+        int isWorkingDay,
         string greeting,
         string quote,
         string theme) =>
@@ -373,10 +373,10 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
     /// <param name="HolidayTheme">主题色 key</param>
     private sealed record TaktHolidaySeedItem(
         string HolidayName,
-        TaktHolidayType HolidayType,
+        int HolidayType,
         DateTime StartDate,
         DateTime EndDate,
-        TaktHolidayWorkingDay IsWorkingDay,
+        int IsWorkingDay,
         string HolidayGreeting,
         string HolidayQuote,
         string HolidayTheme);

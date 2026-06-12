@@ -37,7 +37,7 @@
     :placeholder="placeholder ?? t('common.page.form.placeholder.selectonly')"
     :allow-clear="allowClear"
     :disabled="disabled"
-    :multiple="multiple"
+    :mode="multiple ? 'multiple' : undefined"
     :size="size"
     :show-search="showSearch"
     :filter-option="filterOption"

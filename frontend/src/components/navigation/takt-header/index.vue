@@ -62,17 +62,11 @@
 <script setup lang="ts">
 import { RiMenuUnfoldLine, RiMenuFoldLine } from '@remixicon/vue'
 import { defaultSetting, useSettingStore } from '@/stores/common/setting'
+import { useHeaderNotificationStore } from '@/stores/navigation/header-notification'
 import { createLogger } from '@/utils/logger'
 
 const headerLogger = createLogger('takt-header')
-
-interface Notification {
-  id: string
-  title: string
-  content: string
-  time: string
-  read: boolean
-}
+const headerNotificationStore = useHeaderNotificationStore()
 
 type HeaderHeight = 32 | 40 | 48
 
@@ -81,7 +75,6 @@ interface Props {
   fixed?: boolean
   leftOffset?: string
   height?: HeaderHeight
-  notifications?: Notification[]
   notificationDot?: boolean
   notificationOverflowCount?: number
 }
@@ -91,10 +84,20 @@ const props = withDefaults(defineProps<Props>(), {
   fixed: true,
   leftOffset: '0px',
   height: 40,
-  notifications: () => [],
   notificationDot: false,
   notificationOverflowCount: 99
 })
+
+/** 顶栏通知列表（来自 header-notification Store） */
+const notifications = computed(() =>
+  headerNotificationStore.items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    content: item.content,
+    time: item.time,
+    read: item.read,
+  })),
+)
 
 const emit = defineEmits<{
   'update:collapsed': [value: boolean]
@@ -181,14 +184,17 @@ const handleNotificationClick = () => {
 }
 
 const handleNotificationRead = (id: string) => {
+  void headerNotificationStore.markNotificationReadAsync(id).catch(() => undefined)
   emit('notification-read', id)
 }
 
 const handleNotificationDelete = (id: string) => {
+  headerNotificationStore.removeNotification(id)
   emit('notification-delete', id)
 }
 
 const handleNotificationClearAll = () => {
+  headerNotificationStore.clearAllNotifications()
   emit('notification-clear-all')
 }
 </script>

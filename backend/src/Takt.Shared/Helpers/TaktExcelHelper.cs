@@ -27,8 +27,8 @@ namespace Takt.Shared.Helpers;
 /// Excel 导入导出帮助类（基于 EPPlus）。
 /// </summary>
 /// <remarks>
-/// 非纯工具网关：工作簿元数据依赖启动时 <see cref="Configure"/> 注入的 <see cref="TaktExcelOptions"/>，
-/// 或通过各公开方法的 <c>excelOptions</c> 显式传入；导出文件名时间戳方法依赖当前时间（见 <see cref="GetTimestampString"/>）。
+/// 非纯工具网关：工作簿元数据依赖启动时 Configure 注入的 TaktExcelOptions，
+/// 或通过各公开方法的 <c>excelOptions</c> 显式传入；导出文件名时间戳方法依赖当前时间（见 GetTimestampString）。
 /// </remarks>
 public static class TaktExcelHelper
 {
@@ -134,7 +134,7 @@ public static class TaktExcelHelper
     }
 
     /// <summary>
-    /// 解析工作簿元数据配置（显式参数优先，否则使用 <see cref="Configure"/> 结果）。
+    /// 解析工作簿元数据配置（显式参数优先，否则使用 Configure 结果）。
     /// </summary>
     /// <param name="excelOptions">可选显式配置</param>
     /// <returns>非 null 的 Excel 配置</returns>
@@ -201,7 +201,7 @@ public static class TaktExcelHelper
         ResolveExcelOptions(excelOptions).Export.MaxSheetsPerFile;
 
     /// <summary>
-    /// 设置工作簿属性（确保所有导出的 Excel 文件都包含完整的 <see cref="TaktExcelOptions"/> 信息）。
+    /// 设置工作簿属性（确保所有导出的 Excel 文件都包含完整的 TaktExcelOptions 信息）。
     /// </summary>
     /// <param name="workbook">目标工作簿</param>
     /// <param name="options">工作簿元数据配置</param>
@@ -235,7 +235,7 @@ public static class TaktExcelHelper
     /// <param name="data">数据集合</param>
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名（仅名称，不含 .xlsx；为空时用 sheetName；后端自动拼接 名称_yyyyMMddHHmmss.xlsx）</param>
-    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 <see cref="Configure"/> 注入的配置</param>
+    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 Configure 注入的配置</param>
     /// <returns>最终文件名与内容（fileName 已含时间戳与 .xlsx）</returns>
     public static async Task<(string fileName, byte[] content)> ExportAsync<T>(
         IEnumerable<T> data,
@@ -426,7 +426,7 @@ public static class TaktExcelHelper
     /// 导出Excel(多个Sheet)
     /// </summary>
     /// <param name="sheets">Sheet数据字典，key为sheet名称，value为数据集合</param>
-    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 <see cref="Configure"/> 注入的配置</param>
+    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 Configure 注入的配置</param>
     /// <returns>包含文件名和内容的元组</returns>
     public static async Task<(string fileName, byte[] content)> ExportMultiSheetAsync<T>(
         Dictionary<string, IEnumerable<T>> sheets,
@@ -610,7 +610,7 @@ public static class TaktExcelHelper
     /// <typeparam name="T">模板类型</typeparam>
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名（仅名称，不含 .xlsx；为空时用 <paramref name="sheetName"/> + <c>Template</c> 作基础设施兜底，不含业务文案；业务下载应由应用层传入已本地化基名；后端自动拼接 名称_yyyyMMddHHmmss.xlsx）</param>
-    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 <see cref="Configure"/> 注入的配置</param>
+    /// <param name="excelOptions">可选显式工作簿元数据；为空时使用 Configure 注入的配置</param>
     /// <returns>最终文件名与内容（fileName 已含时间戳与 .xlsx）</returns>
     public static async Task<(string fileName, byte[] content)> GenerateTemplateAsync<T>(
         string sheetName = "Data",

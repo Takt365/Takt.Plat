@@ -147,6 +147,19 @@ public class TaktTicket : TaktCompanyEntityBase
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
+    /// 关联 IT 设备保修扩展 ID
+    /// </summary>
+    [SugarColumn(ColumnName = "it_asset_id", ColumnDescription = "IT设备ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ItAssetId { get; set; }
+
+    /// <summary>
+    /// 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+    /// </summary>
+    [SugarColumn(ColumnName = "asset_code", ColumnDescription = "资产号码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    public string? AssetCode { get; set; }
+
+    /// <summary>
     /// 流程实例ID（关联工作流；流程侧 BusinessType=Ticket、BusinessKey=本表 Id）
     /// </summary>
     [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]

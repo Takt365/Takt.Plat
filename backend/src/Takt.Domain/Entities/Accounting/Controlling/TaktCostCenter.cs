@@ -80,7 +80,7 @@ public class TaktCostCenter : TaktCompanyEntityBase
     /// 成本中心状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "cost_center_status", ColumnDescription = "成本中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus CostCenterStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int CostCenterStatus { get; set; } = 1;
     /// <summary>
     /// 生效日期
     /// </summary>

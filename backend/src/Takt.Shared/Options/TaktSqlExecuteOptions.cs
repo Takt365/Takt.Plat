@@ -15,7 +15,7 @@ using Takt.Shared.Enums;
 namespace Takt.Shared.Options;
 
 /// <summary>
-/// 只读 SQL 脚本执行选项（配合 <see cref="Takt.Domain.Interfaces.ITaktSqlExecutor"/> 与仓储 <c>QueryReadOnlySqlAsync</c>）
+/// 只读 SQL 脚本执行选项（配合 ITaktSqlExecutor 与仓储 <c>QueryReadOnlySqlAsync</c>）
 /// </summary>
 public sealed class TaktSqlExecuteOptions
 {

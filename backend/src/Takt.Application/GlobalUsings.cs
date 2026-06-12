@@ -28,3 +28,4 @@ global using Takt.Domain.Entities.Identity;
 global using Takt.Domain.Entities.HumanResource.Organization;
 global using Takt.Application.Dtos.HumanResource.Organization;
 global using Takt.Application.Dtos.Identity;
+global using Takt.Application.Dtos.Foundation;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Talent
 // 文件名称：TaktTalentJobPostingValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentJobPosting 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTalentJobPosting 生成，请按需审阅）
 // 
@@ -31,15 +31,15 @@ public class TaktTalentJobPostingCreateValidator : AbstractValidator<TaktTalentJ
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.RecruitmentPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("招聘计划ID不能为负数");
         RuleFor(x => x.PostingCode)
             .NotEmpty().WithMessage("发布编号不能为空")
-            .MaximumLength(20).WithMessage("发布编号长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("发布编号长度不能超过40个字符");
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("职位标题不能为空")
             .MaximumLength(100).WithMessage("职位标题长度不能超过100个字符");
@@ -86,14 +86,14 @@ public class TaktTalentJobPostingImportValidator : AbstractValidator<TaktTalentJ
     public TaktTalentJobPostingImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.RecruitmentPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("招聘计划ID不能为负数");
         RuleFor(x => x.PostingCode)
             .NotEmpty().WithMessage("发布编号不能为空")
-            .MaximumLength(20).WithMessage("发布编号长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("发布编号长度不能超过40个字符");
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("职位标题不能为空")
             .MaximumLength(100).WithMessage("职位标题长度不能超过100个字符");

@@ -38,6 +38,16 @@ public class TaktServerHardwareDto
     public string CpuModel { get; set; } = string.Empty;
 
     /// <summary>
+    /// CPU 平均使用率（%）
+    /// </summary>
+    public double CpuUsagePercent { get; set; }
+
+    /// <summary>
+    /// 操作系统架构（RuntimeInformation.OSArchitecture，如 X64、Arm64）
+    /// </summary>
+    public string OsArchitecture { get; set; } = string.Empty;
+
+    /// <summary>
     /// 操作系统信息
     /// </summary>
     public string OperatingSystem { get; set; } = string.Empty;
@@ -69,6 +79,11 @@ public class TaktServerHardwareDto
 
     /// <summary>
     /// 内存信息
+    /// </summary>
+    public List<TaktMemoryModuleDto> MemoryModuleList { get; set; } = new();
+
+    /// <summary>
+    /// 内存汇总
     /// </summary>
     public TaktMemoryInfoDto Memory { get; set; } = new();
 
@@ -129,9 +144,9 @@ public class TaktOperatingSystemLanguageDto
     public string SystemDefaultLanguage { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统版本
+    /// 操作系统版本（GetOsVersion：平台分发 + OSDescription 兜底）
     /// </summary>
-    public string OSVersion { get; set; } = string.Empty;
+    public string OsVersion { get; set; } = string.Empty;
 
     /// <summary>
     /// 已安装的语言列表
@@ -204,6 +219,37 @@ public class TaktCpuInfoDto
     /// 处理器 ID
     /// </summary>
     public string ProcessorId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 插槽标识（SocketDesignation）
+    /// </summary>
+    public string SocketDesignation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物理 CPU 总使用率（%），PercentProcessorTime
+    /// </summary>
+    public double UsagePercent { get; set; }
+
+    /// <summary>
+    /// 各逻辑核心使用率（CpuCoreList；逻辑处理器，非物理核心）
+    /// </summary>
+    public List<TaktCpuCoreInfoDto> CoreList { get; set; } = new();
+}
+
+/// <summary>
+/// CPU 核心使用率 DTO
+/// </summary>
+public class TaktCpuCoreInfoDto
+{
+    /// <summary>
+    /// 逻辑核心名称
+    /// </summary>
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 逻辑核心使用率（%）
+    /// </summary>
+    public double UsagePercent { get; set; }
 }
 
 /// <summary>
@@ -273,6 +319,42 @@ public class TaktMemoryInfoDto
     public double MemoryUsagePercent => TotalPhysicalMemory > 0
         ? Math.Round((double)UsedPhysicalMemory / TotalPhysicalMemory * 100, 2)
         : 0;
+}
+
+/// <summary>
+/// 物理内存条（DIMM）信息 DTO
+/// </summary>
+public class TaktMemoryModuleDto
+{
+    /// <summary>
+    /// 插槽 / Bank 标识
+    /// </summary>
+    public string BankLabel { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 容量（字节）
+    /// </summary>
+    public ulong Capacity { get; set; }
+
+    /// <summary>
+    /// 频率（MHz）
+    /// </summary>
+    public uint Speed { get; set; }
+
+    /// <summary>
+    /// 制造商
+    /// </summary>
+    public string Manufacturer { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部件号
+    /// </summary>
+    public string PartNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 序列号
+    /// </summary>
+    public string SerialNumber { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -354,12 +436,17 @@ public class TaktNetworkAdapterDto
     public string MACAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// 速度（字节/秒）
+    /// IPv4 地址（多个以逗号分隔）
+    /// </summary>
+    public string IpAddress { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 速度（比特/秒，WMI Speed）
     /// </summary>
     public ulong Speed { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 联网状态：Down / NoInternet / DnsFault / Online
     /// </summary>
     public string Status { get; set; } = string.Empty;
 }
@@ -375,7 +462,7 @@ public class TaktMotherboardInfoDto
     public string Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 型号
+    /// 型号（Product，主板型号/ID）
     /// </summary>
     public string Product { get; set; } = string.Empty;
 
@@ -388,6 +475,11 @@ public class TaktMotherboardInfoDto
     /// 版本
     /// </summary>
     public string Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机器 UUID（SMBIOS）
+    /// </summary>
+    public string Uuid { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -445,6 +537,11 @@ public class TaktComputerSystemInfoDto
     /// 系统类型
     /// </summary>
     public string SystemType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机器 UUID
+    /// </summary>
+    public string Uuid { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -496,4 +593,9 @@ public class TaktAppStatusDto
     /// 处理器数量
     /// </summary>
     public int ProcessorCount { get; set; }
+
+    /// <summary>
+    /// 进程架构（RuntimeInformation.ProcessArchitecture，如 X64、Arm64）
+    /// </summary>
+    public string ProcessArchitecture { get; set; } = string.Empty;
 }

@@ -31,7 +31,7 @@ public class TaktDictData : TaktTenantEntityBase
     /// 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique）
     /// </summary>
     [SugarColumn(ColumnName = "dict_type_id", ColumnDescription = "字典类型ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
-    public long DictTypeId { get; set; } = 0;
+    public long DictTypeId { get; set; }
 
     /// <summary>
     /// 字典类型编码（关联 TaktDictType.DictTypeCode）
@@ -87,7 +87,7 @@ public class TaktDictData : TaktTenantEntityBase
     /// 是否默认项（1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_default", ColumnDescription = "是否默认项", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsDefault { get; set; } = TaktYesNo.No;
+    public int IsDefault { get; set; } = 0;
 
     /// <summary>
     /// 排序号

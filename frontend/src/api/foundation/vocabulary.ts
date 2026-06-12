@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：vocabulary.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,9 @@ import type {
 import type {
   Vocabulary,
   VocabularyCreate,
+  VocabularyDetectResult,
+  VocabularyFilterRequest,
+  VocabularyFilterResult,
   VocabularyStatus,
   VocabularyUpdate
 } from '@/types/foundation/vocabulary';
@@ -205,5 +208,35 @@ export function exportVocabulary(
       exportName
     },
     responseType: 'blob',
+  });
+}
+
+// ========================================
+// 敏感词检测/过滤
+// ========================================
+
+/**
+ * 检测文本是否包含敏感词
+ * @param {VocabularyFilterRequest} dto 检测请求
+ * @returns {Promise<VocabularyDetectResult>} 检测结果
+ */
+export function detectVocabularyText(dto: VocabularyFilterRequest): Promise<VocabularyDetectResult> {
+  return request<VocabularyDetectResult>({
+    url: `${VOCABULARY_API_BASE}/detect`,
+    method: 'post',
+    data: dto,
+  });
+}
+
+/**
+ * 过滤文本中的敏感词
+ * @param {VocabularyFilterRequest} dto 过滤请求
+ * @returns {Promise<VocabularyFilterResult>} 过滤结果
+ */
+export function filterVocabularyText(dto: VocabularyFilterRequest): Promise<VocabularyFilterResult> {
+  return request<VocabularyFilterResult>({
+    url: `${VOCABULARY_API_BASE}/filter`,
+    method: 'post',
+    data: dto,
   });
 }

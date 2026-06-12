@@ -85,7 +85,14 @@ export default {
         fileuploadsuccess: '{name} 上传成功',
         fileuploadfail: '{name} 上传失败',
         partialuploadfail: '部分文件上传失败',
-        preview: '预览'
+        preview: '预览',
+        chunkpause: '暂停',
+        chunkresume: '继续上传',
+        chunkhashing: '正在计算文件指纹…',
+        chunkuploading: '分片上传中 ({uploaded}/{total})',
+        chunkmerging: '正在合并文件…',
+        chunkpaused: '已暂停，点击继续上传',
+        chunkmodaltitle: '文件上传'
       },
       download: {
         downloadfile: '下载文件',

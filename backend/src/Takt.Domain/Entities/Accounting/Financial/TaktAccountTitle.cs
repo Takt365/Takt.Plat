@@ -100,7 +100,7 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "title_status", ColumnDescription = "科目状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus TitleStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int TitleStatus { get; set; } = 1;
     /// <summary>
     /// 生效日期
     /// </summary>

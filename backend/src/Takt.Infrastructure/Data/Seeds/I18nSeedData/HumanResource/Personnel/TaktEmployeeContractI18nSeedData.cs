@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel;
 
 /// <summary>
-/// TaktEmployeeContract 实体国际化翻译种子（键前缀 entity.employeeContract.*）
+/// TaktEmployeeContract 实体国际化翻译种子（键前缀 entity.employeecontract.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeContract 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeecontract 实体翻译...", tenantCode);
 
         foreach (var item in GetEmployeeContractTranslations())
         {
@@ -76,101 +75,101 @@ public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeContract 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeContract._self / entity.employeeContract.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.employeecontract._self / entity.employeecontract.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeContractTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.employeeContract._self
-            new TranslationSeedItem("entity.employeeContract._self", "en-US", "Employee Contract Information", "实体名称"),
-            // entity.employeeContract._self
-            new TranslationSeedItem("entity.employeeContract._self", "ja-JP", "员工劳动合同信息", "实体名称"),
-            // entity.employeeContract._self
-            new TranslationSeedItem("entity.employeeContract._self", "zh-CN", "员工劳动合同信息", "实体名称"),
-            // entity.employeeContract._self
-            new TranslationSeedItem("entity.employeeContract._self", "zh-HK", "员工劳动合同信息", "实体名称"),
+            // entity.employeecontract._self
+            new TranslationSeedItem("entity.employeecontract._self", "en-US", "Employee Contract Information", "实体名称"),
+            // entity.employeecontract._self
+            new TranslationSeedItem("entity.employeecontract._self", "ja-JP", "员工劳动合同信息", "实体名称"),
+            // entity.employeecontract._self
+            new TranslationSeedItem("entity.employeecontract._self", "zh-CN", "员工劳动合同信息", "实体名称"),
+            // entity.employeecontract._self
+            new TranslationSeedItem("entity.employeecontract._self", "zh-HK", "员工劳动合同信息", "实体名称"),
 
-            // entity.employeeContract.employeeid
-            new TranslationSeedItem("entity.employeeContract.employeeid", "en-US", "员工ID", "员工ID"),
-            // entity.employeeContract.employeeid
-            new TranslationSeedItem("entity.employeeContract.employeeid", "ja-JP", "员工ID", "员工ID"),
-            // entity.employeeContract.employeeid
-            new TranslationSeedItem("entity.employeeContract.employeeid", "zh-CN", "员工ID", "员工ID"),
-            // entity.employeeContract.employeeid
-            new TranslationSeedItem("entity.employeeContract.employeeid", "zh-HK", "员工ID", "员工ID"),
+            // entity.employeecontract.employeeid
+            new TranslationSeedItem("entity.employeecontract.employeeid", "en-US", "员工ID", "员工ID"),
+            // entity.employeecontract.employeeid
+            new TranslationSeedItem("entity.employeecontract.employeeid", "ja-JP", "员工ID", "员工ID"),
+            // entity.employeecontract.employeeid
+            new TranslationSeedItem("entity.employeecontract.employeeid", "zh-CN", "员工ID", "员工ID"),
+            // entity.employeecontract.employeeid
+            new TranslationSeedItem("entity.employeecontract.employeeid", "zh-HK", "员工ID", "员工ID"),
 
-            // entity.employeeContract.contractno
-            new TranslationSeedItem("entity.employeeContract.contractno", "en-US", "合同编号", "合同编号"),
-            // entity.employeeContract.contractno
-            new TranslationSeedItem("entity.employeeContract.contractno", "ja-JP", "合同编号", "合同编号"),
-            // entity.employeeContract.contractno
-            new TranslationSeedItem("entity.employeeContract.contractno", "zh-CN", "合同编号", "合同编号"),
-            // entity.employeeContract.contractno
-            new TranslationSeedItem("entity.employeeContract.contractno", "zh-HK", "合同编号", "合同编号"),
+            // entity.employeecontract.contractno
+            new TranslationSeedItem("entity.employeecontract.contractno", "en-US", "合同编号", "合同编号"),
+            // entity.employeecontract.contractno
+            new TranslationSeedItem("entity.employeecontract.contractno", "ja-JP", "合同编号", "合同编号"),
+            // entity.employeecontract.contractno
+            new TranslationSeedItem("entity.employeecontract.contractno", "zh-CN", "合同编号", "合同编号"),
+            // entity.employeecontract.contractno
+            new TranslationSeedItem("entity.employeecontract.contractno", "zh-HK", "合同编号", "合同编号"),
 
-            // entity.employeeContract.contracttype
-            new TranslationSeedItem("entity.employeeContract.contracttype", "en-US", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
-            // entity.employeeContract.contracttype
-            new TranslationSeedItem("entity.employeeContract.contracttype", "ja-JP", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
-            // entity.employeeContract.contracttype
-            new TranslationSeedItem("entity.employeeContract.contracttype", "zh-CN", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
-            // entity.employeeContract.contracttype
-            new TranslationSeedItem("entity.employeeContract.contracttype", "zh-HK", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
+            // entity.employeecontract.contracttype
+            new TranslationSeedItem("entity.employeecontract.contracttype", "en-US", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
+            // entity.employeecontract.contracttype
+            new TranslationSeedItem("entity.employeecontract.contracttype", "ja-JP", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
+            // entity.employeecontract.contracttype
+            new TranslationSeedItem("entity.employeecontract.contracttype", "zh-CN", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
+            // entity.employeecontract.contracttype
+            new TranslationSeedItem("entity.employeecontract.contracttype", "zh-HK", "合同类型", "合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）"),
 
-            // entity.employeeContract.contractstatus
-            new TranslationSeedItem("entity.employeeContract.contractstatus", "en-US", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
-            // entity.employeeContract.contractstatus
-            new TranslationSeedItem("entity.employeeContract.contractstatus", "ja-JP", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
-            // entity.employeeContract.contractstatus
-            new TranslationSeedItem("entity.employeeContract.contractstatus", "zh-CN", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
-            // entity.employeeContract.contractstatus
-            new TranslationSeedItem("entity.employeeContract.contractstatus", "zh-HK", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
+            // entity.employeecontract.contractstatus
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "en-US", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
+            // entity.employeecontract.contractstatus
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "ja-JP", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
+            // entity.employeecontract.contractstatus
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-CN", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
+            // entity.employeecontract.contractstatus
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-HK", "合同状态", "合同状态（0=草稿，1=生效，2=到期，3=终止）"),
 
-            // entity.employeeContract.startdate
-            new TranslationSeedItem("entity.employeeContract.startdate", "en-US", "合同开始日期", "合同开始日期"),
-            // entity.employeeContract.startdate
-            new TranslationSeedItem("entity.employeeContract.startdate", "ja-JP", "合同开始日期", "合同开始日期"),
-            // entity.employeeContract.startdate
-            new TranslationSeedItem("entity.employeeContract.startdate", "zh-CN", "合同开始日期", "合同开始日期"),
-            // entity.employeeContract.startdate
-            new TranslationSeedItem("entity.employeeContract.startdate", "zh-HK", "合同开始日期", "合同开始日期"),
+            // entity.employeecontract.startdate
+            new TranslationSeedItem("entity.employeecontract.startdate", "en-US", "合同开始日期", "合同开始日期"),
+            // entity.employeecontract.startdate
+            new TranslationSeedItem("entity.employeecontract.startdate", "ja-JP", "合同开始日期", "合同开始日期"),
+            // entity.employeecontract.startdate
+            new TranslationSeedItem("entity.employeecontract.startdate", "zh-CN", "合同开始日期", "合同开始日期"),
+            // entity.employeecontract.startdate
+            new TranslationSeedItem("entity.employeecontract.startdate", "zh-HK", "合同开始日期", "合同开始日期"),
 
-            // entity.employeeContract.enddate
-            new TranslationSeedItem("entity.employeeContract.enddate", "en-US", "合同结束日期", "合同结束日期"),
-            // entity.employeeContract.enddate
-            new TranslationSeedItem("entity.employeeContract.enddate", "ja-JP", "合同结束日期", "合同结束日期"),
-            // entity.employeeContract.enddate
-            new TranslationSeedItem("entity.employeeContract.enddate", "zh-CN", "合同结束日期", "合同结束日期"),
-            // entity.employeeContract.enddate
-            new TranslationSeedItem("entity.employeeContract.enddate", "zh-HK", "合同结束日期", "合同结束日期"),
+            // entity.employeecontract.enddate
+            new TranslationSeedItem("entity.employeecontract.enddate", "en-US", "合同结束日期", "合同结束日期"),
+            // entity.employeecontract.enddate
+            new TranslationSeedItem("entity.employeecontract.enddate", "ja-JP", "合同结束日期", "合同结束日期"),
+            // entity.employeecontract.enddate
+            new TranslationSeedItem("entity.employeecontract.enddate", "zh-CN", "合同结束日期", "合同结束日期"),
+            // entity.employeecontract.enddate
+            new TranslationSeedItem("entity.employeecontract.enddate", "zh-HK", "合同结束日期", "合同结束日期"),
 
-            // entity.employeeContract.probationenddate
-            new TranslationSeedItem("entity.employeeContract.probationenddate", "en-US", "试用期结束日期", "试用期结束日期"),
-            // entity.employeeContract.probationenddate
-            new TranslationSeedItem("entity.employeeContract.probationenddate", "ja-JP", "试用期结束日期", "试用期结束日期"),
-            // entity.employeeContract.probationenddate
-            new TranslationSeedItem("entity.employeeContract.probationenddate", "zh-CN", "试用期结束日期", "试用期结束日期"),
-            // entity.employeeContract.probationenddate
-            new TranslationSeedItem("entity.employeeContract.probationenddate", "zh-HK", "试用期结束日期", "试用期结束日期"),
+            // entity.employeecontract.probationenddate
+            new TranslationSeedItem("entity.employeecontract.probationenddate", "en-US", "试用期结束日期", "试用期结束日期"),
+            // entity.employeecontract.probationenddate
+            new TranslationSeedItem("entity.employeecontract.probationenddate", "ja-JP", "试用期结束日期", "试用期结束日期"),
+            // entity.employeecontract.probationenddate
+            new TranslationSeedItem("entity.employeecontract.probationenddate", "zh-CN", "试用期结束日期", "试用期结束日期"),
+            // entity.employeecontract.probationenddate
+            new TranslationSeedItem("entity.employeecontract.probationenddate", "zh-HK", "试用期结束日期", "试用期结束日期"),
 
-            // entity.employeeContract.signdate
-            new TranslationSeedItem("entity.employeeContract.signdate", "en-US", "签订日期", "签订日期"),
-            // entity.employeeContract.signdate
-            new TranslationSeedItem("entity.employeeContract.signdate", "ja-JP", "签订日期", "签订日期"),
-            // entity.employeeContract.signdate
-            new TranslationSeedItem("entity.employeeContract.signdate", "zh-CN", "签订日期", "签订日期"),
-            // entity.employeeContract.signdate
-            new TranslationSeedItem("entity.employeeContract.signdate", "zh-HK", "签订日期", "签订日期"),
+            // entity.employeecontract.signdate
+            new TranslationSeedItem("entity.employeecontract.signdate", "en-US", "签订日期", "签订日期"),
+            // entity.employeecontract.signdate
+            new TranslationSeedItem("entity.employeecontract.signdate", "ja-JP", "签订日期", "签订日期"),
+            // entity.employeecontract.signdate
+            new TranslationSeedItem("entity.employeecontract.signdate", "zh-CN", "签订日期", "签订日期"),
+            // entity.employeecontract.signdate
+            new TranslationSeedItem("entity.employeecontract.signdate", "zh-HK", "签订日期", "签订日期"),
 
-            // entity.employeeContract.signcompany
-            new TranslationSeedItem("entity.employeeContract.signcompany", "en-US", "签约单位", "签约单位"),
-            // entity.employeeContract.signcompany
-            new TranslationSeedItem("entity.employeeContract.signcompany", "ja-JP", "签约单位", "签约单位"),
-            // entity.employeeContract.signcompany
-            new TranslationSeedItem("entity.employeeContract.signcompany", "zh-CN", "签约单位", "签约单位"),
-            // entity.employeeContract.signcompany
-            new TranslationSeedItem("entity.employeeContract.signcompany", "zh-HK", "签约单位", "签约单位"),
+            // entity.employeecontract.signcompany
+            new TranslationSeedItem("entity.employeecontract.signcompany", "en-US", "签约单位", "签约单位"),
+            // entity.employeecontract.signcompany
+            new TranslationSeedItem("entity.employeecontract.signcompany", "ja-JP", "签约单位", "签约单位"),
+            // entity.employeecontract.signcompany
+            new TranslationSeedItem("entity.employeecontract.signcompany", "zh-CN", "签约单位", "签约单位"),
+            // entity.employeecontract.signcompany
+            new TranslationSeedItem("entity.employeecontract.signcompany", "zh-HK", "签约单位", "签约单位"),
         };
     }
 
@@ -188,8 +187,8 @@ public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

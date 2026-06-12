@@ -15,7 +15,7 @@ namespace Takt.Shared.Helpers;
 /// <summary>
 /// Takt加密帮助类
 /// </summary>
-/// <remarks>无状态；<see cref="HashPassword"/> 使用随机盐，输出随调用变化；<see cref="VerifyPassword"/> 为 Try 语义，无效输入返回 false。</remarks>
+/// <remarks>无状态；HashPassword 使用随机盐，输出随调用变化；VerifyPassword 为 Try 语义，无效输入返回 false。</remarks>
 public static class TaktEncryptHelper
 {
     private const int SaltSize = 32; // 盐值长度（字节），增加到32字节以增强防彩虹表攻击

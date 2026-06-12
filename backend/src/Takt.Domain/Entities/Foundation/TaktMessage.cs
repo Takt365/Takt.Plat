@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -69,22 +68,22 @@ public class TaktMessage : TaktCompanyEntityBase
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型
+    /// 消息类型（1=系统消息 2=用户消息 3=通知消息）
     /// </summary>
     [SugarColumn(ColumnName = "message_type", ColumnDescription = "消息类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
-    public TaktMessageType MessageType { get; set; } = TaktMessageType.UserMessage;
+    public int MessageType { get; set; } = 2;
 
     /// <summary>
-    /// 消息分组
+    /// 消息分组（可选）
     /// </summary>
     [SugarColumn(ColumnName = "message_group", ColumnDescription = "消息分组", ColumnDataType = "int", IsNullable = true)]
-    public TaktMessageGroup? MessageGroup { get; set; }
+    public int? MessageGroup { get; set; }
 
     /// <summary>
-    /// 读取状态
+    /// 读取状态（0=未读 1=已读）
     /// </summary>
     [SugarColumn(ColumnName = "read_status", ColumnDescription = "读取状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktMessageReadStatus ReadStatus { get; set; } = TaktMessageReadStatus.Unread;
+    public int ReadStatus { get; set; } = 0;
 
     /// <summary>
     /// 读取时间
@@ -97,6 +96,18 @@ public class TaktMessage : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "send_time", ColumnDescription = "发送时间", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime SendTime { get; set; } = DateTime.Now;
+
+    /// <summary>
+    /// 是否抄送自审计（0=否，1=是）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_cc", ColumnDescription = "是否抄送自审计", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsCc { get; set; } = 0;
+
+    /// <summary>
+    /// 附件路径（JSON 或逗号分隔）
+    /// </summary>
+    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
+    public string? Attachments { get; set; }
 
     /// <summary>
     /// 消息扩展数据（JSON）

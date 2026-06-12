@@ -35,6 +35,7 @@ description: >-
 - [ ] TaktToolsBar *-permission 与菜单一致
 - [ ] TaktSingleTable :pagination="false" + 外置 TaktPagination
 - [ ] row-key string；loadData/handleSearch/CRUD/import/export 对齐 12-crud §六
+- [ ] `useTableRefresh(loadData)`（`loadData` 定义之后；订阅租户/公司切换）
 - [ ] TaktModal + <xxx-form ref="formRef" />（勿双层 a-modal）
 - [ ] 列标题 entity.*；loading 态；07/08 分页
 - [ ] 03-format-blank-lines

@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.HumanResource.Personnel;
 
@@ -69,5 +68,5 @@ public class TaktEmployeeFamily : TaktCompanyEntityBase
     /// 是否紧急联系人（1=是，0=否）
     /// </summary>
     [SugarColumn(ColumnName = "is_emergency_contact", ColumnDescription = "是否紧急联系人", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsEmergencyContact { get; set; } = TaktYesNo.No;
+    public int IsEmergencyContact { get; set; } = 0;
 }

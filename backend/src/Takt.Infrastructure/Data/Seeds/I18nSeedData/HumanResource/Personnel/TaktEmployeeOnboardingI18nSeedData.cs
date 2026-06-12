@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeOnboarding 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel;
 
 /// <summary>
-/// TaktEmployeeOnboarding 实体国际化翻译种子（键前缀 entity.employeeOnboarding.*）
+/// TaktEmployeeOnboarding 实体国际化翻译种子（键前缀 entity.employeeonboarding.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeOnboarding 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 employeeonboarding 实体翻译...", tenantCode);
 
         foreach (var item in GetEmployeeOnboardingTranslations())
         {
@@ -76,119 +75,119 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeOnboarding 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeOnboarding._self / entity.employeeOnboarding.{{field}}；ResourceGroup=TaktModule.HumanResource；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.employeeonboarding._self / entity.employeeonboarding.{{field}}；ResourceGroup=5；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeOnboardingTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.employeeOnboarding._self
-            new TranslationSeedItem("entity.employeeOnboarding._self", "en-US", "Employee Onboarding Information", "实体名称"),
-            // entity.employeeOnboarding._self
-            new TranslationSeedItem("entity.employeeOnboarding._self", "ja-JP", "入职待办信息", "实体名称"),
-            // entity.employeeOnboarding._self
-            new TranslationSeedItem("entity.employeeOnboarding._self", "zh-CN", "入职待办信息", "实体名称"),
-            // entity.employeeOnboarding._self
-            new TranslationSeedItem("entity.employeeOnboarding._self", "zh-HK", "入职待办信息", "实体名称"),
+            // entity.employeeonboarding._self
+            new TranslationSeedItem("entity.employeeonboarding._self", "en-US", "Employee Onboarding Information", "实体名称"),
+            // entity.employeeonboarding._self
+            new TranslationSeedItem("entity.employeeonboarding._self", "ja-JP", "入职待办信息", "实体名称"),
+            // entity.employeeonboarding._self
+            new TranslationSeedItem("entity.employeeonboarding._self", "zh-CN", "入职待办信息", "实体名称"),
+            // entity.employeeonboarding._self
+            new TranslationSeedItem("entity.employeeonboarding._self", "zh-HK", "入职待办信息", "实体名称"),
 
-            // entity.employeeOnboarding.offerid
-            new TranslationSeedItem("entity.employeeOnboarding.offerid", "en-US", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
-            // entity.employeeOnboarding.offerid
-            new TranslationSeedItem("entity.employeeOnboarding.offerid", "ja-JP", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
-            // entity.employeeOnboarding.offerid
-            new TranslationSeedItem("entity.employeeOnboarding.offerid", "zh-CN", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
-            // entity.employeeOnboarding.offerid
-            new TranslationSeedItem("entity.employeeOnboarding.offerid", "zh-HK", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
+            // entity.employeeonboarding.offerid
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "en-US", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
+            // entity.employeeonboarding.offerid
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "ja-JP", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
+            // entity.employeeonboarding.offerid
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "zh-CN", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
+            // entity.employeeonboarding.offerid
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "zh-HK", "录用信息ID", "录用信息ID（人才管理 TaktTalentOffer）"),
 
-            // entity.employeeOnboarding.todono
-            new TranslationSeedItem("entity.employeeOnboarding.todono", "en-US", "待办单号", "待办单号（租户+公司内业务编号）"),
-            // entity.employeeOnboarding.todono
-            new TranslationSeedItem("entity.employeeOnboarding.todono", "ja-JP", "待办单号", "待办单号（租户+公司内业务编号）"),
-            // entity.employeeOnboarding.todono
-            new TranslationSeedItem("entity.employeeOnboarding.todono", "zh-CN", "待办单号", "待办单号（租户+公司内业务编号）"),
-            // entity.employeeOnboarding.todono
-            new TranslationSeedItem("entity.employeeOnboarding.todono", "zh-HK", "待办单号", "待办单号（租户+公司内业务编号）"),
+            // entity.employeeonboarding.todono
+            new TranslationSeedItem("entity.employeeonboarding.todono", "en-US", "待办单号", "待办单号（租户+公司内业务编号）"),
+            // entity.employeeonboarding.todono
+            new TranslationSeedItem("entity.employeeonboarding.todono", "ja-JP", "待办单号", "待办单号（租户+公司内业务编号）"),
+            // entity.employeeonboarding.todono
+            new TranslationSeedItem("entity.employeeonboarding.todono", "zh-CN", "待办单号", "待办单号（租户+公司内业务编号）"),
+            // entity.employeeonboarding.todono
+            new TranslationSeedItem("entity.employeeonboarding.todono", "zh-HK", "待办单号", "待办单号（租户+公司内业务编号）"),
 
-            // entity.employeeOnboarding.todostatus
-            new TranslationSeedItem("entity.employeeOnboarding.todostatus", "en-US", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
-            // entity.employeeOnboarding.todostatus
-            new TranslationSeedItem("entity.employeeOnboarding.todostatus", "ja-JP", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
-            // entity.employeeOnboarding.todostatus
-            new TranslationSeedItem("entity.employeeOnboarding.todostatus", "zh-CN", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
-            // entity.employeeOnboarding.todostatus
-            new TranslationSeedItem("entity.employeeOnboarding.todostatus", "zh-HK", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
+            // entity.employeeonboarding.todostatus
+            new TranslationSeedItem("entity.employeeonboarding.todostatus", "en-US", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
+            // entity.employeeonboarding.todostatus
+            new TranslationSeedItem("entity.employeeonboarding.todostatus", "ja-JP", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
+            // entity.employeeonboarding.todostatus
+            new TranslationSeedItem("entity.employeeonboarding.todostatus", "zh-CN", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
+            // entity.employeeonboarding.todostatus
+            new TranslationSeedItem("entity.employeeonboarding.todostatus", "zh-HK", "待办状态", "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）"),
 
-            // entity.employeeOnboarding.plannedjoineddate
-            new TranslationSeedItem("entity.employeeOnboarding.plannedjoineddate", "en-US", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
-            // entity.employeeOnboarding.plannedjoineddate
-            new TranslationSeedItem("entity.employeeOnboarding.plannedjoineddate", "ja-JP", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
-            // entity.employeeOnboarding.plannedjoineddate
-            new TranslationSeedItem("entity.employeeOnboarding.plannedjoineddate", "zh-CN", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
-            // entity.employeeOnboarding.plannedjoineddate
-            new TranslationSeedItem("entity.employeeOnboarding.plannedjoineddate", "zh-HK", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
+            // entity.employeeonboarding.plannedjoineddate
+            new TranslationSeedItem("entity.employeeonboarding.plannedjoineddate", "en-US", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
+            // entity.employeeonboarding.plannedjoineddate
+            new TranslationSeedItem("entity.employeeonboarding.plannedjoineddate", "ja-JP", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
+            // entity.employeeonboarding.plannedjoineddate
+            new TranslationSeedItem("entity.employeeonboarding.plannedjoineddate", "zh-CN", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
+            // entity.employeeonboarding.plannedjoineddate
+            new TranslationSeedItem("entity.employeeonboarding.plannedjoineddate", "zh-HK", "计划上岗日期", "计划上岗日期（JoinedDate 计划值）"),
 
-            // entity.employeeOnboarding.candidatename
-            new TranslationSeedItem("entity.employeeOnboarding.candidatename", "en-US", "候选人姓名", "候选人姓名（快照）"),
-            // entity.employeeOnboarding.candidatename
-            new TranslationSeedItem("entity.employeeOnboarding.candidatename", "ja-JP", "候选人姓名", "候选人姓名（快照）"),
-            // entity.employeeOnboarding.candidatename
-            new TranslationSeedItem("entity.employeeOnboarding.candidatename", "zh-CN", "候选人姓名", "候选人姓名（快照）"),
-            // entity.employeeOnboarding.candidatename
-            new TranslationSeedItem("entity.employeeOnboarding.candidatename", "zh-HK", "候选人姓名", "候选人姓名（快照）"),
+            // entity.employeeonboarding.candidatename
+            new TranslationSeedItem("entity.employeeonboarding.candidatename", "en-US", "候选人姓名", "候选人姓名（快照）"),
+            // entity.employeeonboarding.candidatename
+            new TranslationSeedItem("entity.employeeonboarding.candidatename", "ja-JP", "候选人姓名", "候选人姓名（快照）"),
+            // entity.employeeonboarding.candidatename
+            new TranslationSeedItem("entity.employeeonboarding.candidatename", "zh-CN", "候选人姓名", "候选人姓名（快照）"),
+            // entity.employeeonboarding.candidatename
+            new TranslationSeedItem("entity.employeeonboarding.candidatename", "zh-HK", "候选人姓名", "候选人姓名（快照）"),
 
-            // entity.employeeOnboarding.mobile
-            new TranslationSeedItem("entity.employeeOnboarding.mobile", "en-US", "候选人手机", "候选人手机（快照）"),
-            // entity.employeeOnboarding.mobile
-            new TranslationSeedItem("entity.employeeOnboarding.mobile", "ja-JP", "候选人手机", "候选人手机（快照）"),
-            // entity.employeeOnboarding.mobile
-            new TranslationSeedItem("entity.employeeOnboarding.mobile", "zh-CN", "候选人手机", "候选人手机（快照）"),
-            // entity.employeeOnboarding.mobile
-            new TranslationSeedItem("entity.employeeOnboarding.mobile", "zh-HK", "候选人手机", "候选人手机（快照）"),
+            // entity.employeeonboarding.mobile
+            new TranslationSeedItem("entity.employeeonboarding.mobile", "en-US", "候选人手机", "候选人手机（快照）"),
+            // entity.employeeonboarding.mobile
+            new TranslationSeedItem("entity.employeeonboarding.mobile", "ja-JP", "候选人手机", "候选人手机（快照）"),
+            // entity.employeeonboarding.mobile
+            new TranslationSeedItem("entity.employeeonboarding.mobile", "zh-CN", "候选人手机", "候选人手机（快照）"),
+            // entity.employeeonboarding.mobile
+            new TranslationSeedItem("entity.employeeonboarding.mobile", "zh-HK", "候选人手机", "候选人手机（快照）"),
 
-            // entity.employeeOnboarding.employeeid
-            new TranslationSeedItem("entity.employeeOnboarding.employeeid", "en-US", "关联员工ID", "关联员工ID（建档后回填，可空）"),
-            // entity.employeeOnboarding.employeeid
-            new TranslationSeedItem("entity.employeeOnboarding.employeeid", "ja-JP", "关联员工ID", "关联员工ID（建档后回填，可空）"),
-            // entity.employeeOnboarding.employeeid
-            new TranslationSeedItem("entity.employeeOnboarding.employeeid", "zh-CN", "关联员工ID", "关联员工ID（建档后回填，可空）"),
-            // entity.employeeOnboarding.employeeid
-            new TranslationSeedItem("entity.employeeOnboarding.employeeid", "zh-HK", "关联员工ID", "关联员工ID（建档后回填，可空）"),
+            // entity.employeeonboarding.employeeid
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "en-US", "关联员工ID", "关联员工ID（建档后回填，可空）"),
+            // entity.employeeonboarding.employeeid
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "ja-JP", "关联员工ID", "关联员工ID（建档后回填，可空）"),
+            // entity.employeeonboarding.employeeid
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "zh-CN", "关联员工ID", "关联员工ID（建档后回填，可空）"),
+            // entity.employeeonboarding.employeeid
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "zh-HK", "关联员工ID", "关联员工ID（建档后回填，可空）"),
 
-            // entity.employeeOnboarding.employeejoinedid
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoinedid", "en-US", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
-            // entity.employeeOnboarding.employeejoinedid
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoinedid", "ja-JP", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
-            // entity.employeeOnboarding.employeejoinedid
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoinedid", "zh-CN", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
-            // entity.employeeOnboarding.employeejoinedid
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoinedid", "zh-HK", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
+            // entity.employeeonboarding.employeejoinedid
+            new TranslationSeedItem("entity.employeeonboarding.employeejoinedid", "en-US", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
+            // entity.employeeonboarding.employeejoinedid
+            new TranslationSeedItem("entity.employeeonboarding.employeejoinedid", "ja-JP", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
+            // entity.employeeonboarding.employeejoinedid
+            new TranslationSeedItem("entity.employeeonboarding.employeejoinedid", "zh-CN", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
+            // entity.employeeonboarding.employeejoinedid
+            new TranslationSeedItem("entity.employeeonboarding.employeejoinedid", "zh-HK", "入职上岗单ID", "入职上岗单ID（待办完成后回填，可空）"),
 
-            // entity.employeeOnboarding.reason
-            new TranslationSeedItem("entity.employeeOnboarding.reason", "en-US", "待办说明", "待办说明"),
-            // entity.employeeOnboarding.reason
-            new TranslationSeedItem("entity.employeeOnboarding.reason", "ja-JP", "待办说明", "待办说明"),
-            // entity.employeeOnboarding.reason
-            new TranslationSeedItem("entity.employeeOnboarding.reason", "zh-CN", "待办说明", "待办说明"),
-            // entity.employeeOnboarding.reason
-            new TranslationSeedItem("entity.employeeOnboarding.reason", "zh-HK", "待办说明", "待办说明"),
+            // entity.employeeonboarding.reason
+            new TranslationSeedItem("entity.employeeonboarding.reason", "en-US", "待办说明", "待办说明"),
+            // entity.employeeonboarding.reason
+            new TranslationSeedItem("entity.employeeonboarding.reason", "ja-JP", "待办说明", "待办说明"),
+            // entity.employeeonboarding.reason
+            new TranslationSeedItem("entity.employeeonboarding.reason", "zh-CN", "待办说明", "待办说明"),
+            // entity.employeeonboarding.reason
+            new TranslationSeedItem("entity.employeeonboarding.reason", "zh-HK", "待办说明", "待办说明"),
 
-            // entity.employeeOnboarding.offer
-            new TranslationSeedItem("entity.employeeOnboarding.offer", "en-US", "录用信息", "录用信息"),
-            // entity.employeeOnboarding.offer
-            new TranslationSeedItem("entity.employeeOnboarding.offer", "ja-JP", "录用信息", "录用信息"),
-            // entity.employeeOnboarding.offer
-            new TranslationSeedItem("entity.employeeOnboarding.offer", "zh-CN", "录用信息", "录用信息"),
-            // entity.employeeOnboarding.offer
-            new TranslationSeedItem("entity.employeeOnboarding.offer", "zh-HK", "录用信息", "录用信息"),
+            // entity.employeeonboarding.offer
+            new TranslationSeedItem("entity.employeeonboarding.offer", "en-US", "录用信息", "录用信息"),
+            // entity.employeeonboarding.offer
+            new TranslationSeedItem("entity.employeeonboarding.offer", "ja-JP", "录用信息", "录用信息"),
+            // entity.employeeonboarding.offer
+            new TranslationSeedItem("entity.employeeonboarding.offer", "zh-CN", "录用信息", "录用信息"),
+            // entity.employeeonboarding.offer
+            new TranslationSeedItem("entity.employeeonboarding.offer", "zh-HK", "录用信息", "录用信息"),
 
-            // entity.employeeOnboarding.employeejoined
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "en-US", "入职上岗单", "入职上岗单"),
-            // entity.employeeOnboarding.employeejoined
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "ja-JP", "入职上岗单", "入职上岗单"),
-            // entity.employeeOnboarding.employeejoined
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "zh-CN", "入职上岗单", "入职上岗单"),
-            // entity.employeeOnboarding.employeejoined
-            new TranslationSeedItem("entity.employeeOnboarding.employeejoined", "zh-HK", "入职上岗单", "入职上岗单"),
+            // entity.employeeonboarding.employeejoined
+            new TranslationSeedItem("entity.employeeonboarding.employeejoined", "en-US", "入职上岗单", "入职上岗单"),
+            // entity.employeeonboarding.employeejoined
+            new TranslationSeedItem("entity.employeeonboarding.employeejoined", "ja-JP", "入职上岗单", "入职上岗单"),
+            // entity.employeeonboarding.employeejoined
+            new TranslationSeedItem("entity.employeeonboarding.employeejoined", "zh-CN", "入职上岗单", "入职上岗单"),
+            // entity.employeeonboarding.employeejoined
+            new TranslationSeedItem("entity.employeeonboarding.employeejoined", "zh-HK", "入职上岗单", "入职上岗单"),
         };
     }
 
@@ -206,8 +205,8 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.HumanResource;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 5;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

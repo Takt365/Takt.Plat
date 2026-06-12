@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-notice.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -94,7 +94,7 @@ export interface EcNotice extends ApprovalDtoBase {
   ecNoticeStatus: number;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
    */
   flowInstanceId?: string;
 
@@ -194,7 +194,7 @@ export interface EcNoticeQuery extends TaktPagedQuery {
   ecNoticeStatus?: number;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
    */
   flowInstanceId?: string;
 
@@ -338,7 +338,7 @@ export interface EcNoticeCreate {
   ecNoticeStatus: number;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
    */
   flowInstanceId?: string;
 
@@ -461,7 +461,7 @@ export interface EcNoticeTemplate {
   ecNoticeStatus?: number;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
    */
   flowInstanceId?: string;
 
@@ -555,7 +555,7 @@ export interface EcNoticeImport {
   ecNoticeStatus?: number;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
    */
   flowInstanceId?: string;
 
@@ -644,7 +644,7 @@ export interface EcNoticeExport {
   ecNoticeStatus: number;
 
   /**
-   * 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>；发起审批后由业务写入）
+   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；发起审批后由业务写入）
    */
   flowInstanceId?: string;
 

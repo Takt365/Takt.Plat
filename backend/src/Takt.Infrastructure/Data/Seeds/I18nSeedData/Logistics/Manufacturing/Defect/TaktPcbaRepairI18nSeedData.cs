@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepair 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect;
 
 /// <summary>
-/// TaktPcbaRepair 实体国际化翻译种子（键前缀 entity.pcbaRepair.*）
+/// TaktPcbaRepair 实体国际化翻译种子（键前缀 entity.pcbarepair.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 pcbaRepair 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 pcbarepair 实体翻译...", tenantCode);
 
         foreach (var item in GetPcbaRepairTranslations())
         {
@@ -76,128 +75,128 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPcbaRepair 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.pcbaRepair._self / entity.pcbaRepair.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.pcbarepair._self / entity.pcbarepair.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetPcbaRepairTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.pcbaRepair._self
-            new TranslationSeedItem("entity.pcbaRepair._self", "en-US", "Pcba Repair Information", "实体名称"),
-            // entity.pcbaRepair._self
-            new TranslationSeedItem("entity.pcbaRepair._self", "ja-JP", "PCBA改修日报信息", "实体名称"),
-            // entity.pcbaRepair._self
-            new TranslationSeedItem("entity.pcbaRepair._self", "zh-CN", "PCBA改修日报信息", "实体名称"),
-            // entity.pcbaRepair._self
-            new TranslationSeedItem("entity.pcbaRepair._self", "zh-HK", "PCBA改修日报信息", "实体名称"),
+            // entity.pcbarepair._self
+            new TranslationSeedItem("entity.pcbarepair._self", "en-US", "Pcba Repair Information", "实体名称"),
+            // entity.pcbarepair._self
+            new TranslationSeedItem("entity.pcbarepair._self", "ja-JP", "PCBA改修日报信息", "实体名称"),
+            // entity.pcbarepair._self
+            new TranslationSeedItem("entity.pcbarepair._self", "zh-CN", "PCBA改修日报信息", "实体名称"),
+            // entity.pcbarepair._self
+            new TranslationSeedItem("entity.pcbarepair._self", "zh-HK", "PCBA改修日报信息", "实体名称"),
 
-            // entity.pcbaRepair.plantcode
-            new TranslationSeedItem("entity.pcbaRepair.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.pcbaRepair.plantcode
-            new TranslationSeedItem("entity.pcbaRepair.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.pcbaRepair.plantcode
-            new TranslationSeedItem("entity.pcbaRepair.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.pcbaRepair.plantcode
-            new TranslationSeedItem("entity.pcbaRepair.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.pcbarepair.plantcode
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.pcbarepair.plantcode
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.pcbarepair.plantcode
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.pcbarepair.plantcode
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.pcbaRepair.prodcategory
-            new TranslationSeedItem("entity.pcbaRepair.prodcategory", "en-US", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
-            // entity.pcbaRepair.prodcategory
-            new TranslationSeedItem("entity.pcbaRepair.prodcategory", "ja-JP", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
-            // entity.pcbaRepair.prodcategory
-            new TranslationSeedItem("entity.pcbaRepair.prodcategory", "zh-CN", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
-            // entity.pcbaRepair.prodcategory
-            new TranslationSeedItem("entity.pcbaRepair.prodcategory", "zh-HK", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.pcbarepair.prodcategory
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "en-US", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.pcbarepair.prodcategory
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "ja-JP", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.pcbarepair.prodcategory
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-CN", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.pcbarepair.prodcategory
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-HK", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
 
-            // entity.pcbaRepair.proddate
-            new TranslationSeedItem("entity.pcbaRepair.proddate", "en-US", "生产日期", "生产日期"),
-            // entity.pcbaRepair.proddate
-            new TranslationSeedItem("entity.pcbaRepair.proddate", "ja-JP", "生产日期", "生产日期"),
-            // entity.pcbaRepair.proddate
-            new TranslationSeedItem("entity.pcbaRepair.proddate", "zh-CN", "生产日期", "生产日期"),
-            // entity.pcbaRepair.proddate
-            new TranslationSeedItem("entity.pcbaRepair.proddate", "zh-HK", "生产日期", "生产日期"),
+            // entity.pcbarepair.proddate
+            new TranslationSeedItem("entity.pcbarepair.proddate", "en-US", "生产日期", "生产日期"),
+            // entity.pcbarepair.proddate
+            new TranslationSeedItem("entity.pcbarepair.proddate", "ja-JP", "生产日期", "生产日期"),
+            // entity.pcbarepair.proddate
+            new TranslationSeedItem("entity.pcbarepair.proddate", "zh-CN", "生产日期", "生产日期"),
+            // entity.pcbarepair.proddate
+            new TranslationSeedItem("entity.pcbarepair.proddate", "zh-HK", "生产日期", "生产日期"),
 
-            // entity.pcbaRepair.prodline
-            new TranslationSeedItem("entity.pcbaRepair.prodline", "en-US", "生产线", "生产线"),
-            // entity.pcbaRepair.prodline
-            new TranslationSeedItem("entity.pcbaRepair.prodline", "ja-JP", "生产线", "生产线"),
-            // entity.pcbaRepair.prodline
-            new TranslationSeedItem("entity.pcbaRepair.prodline", "zh-CN", "生产线", "生产线"),
-            // entity.pcbaRepair.prodline
-            new TranslationSeedItem("entity.pcbaRepair.prodline", "zh-HK", "生产线", "生产线"),
+            // entity.pcbarepair.prodline
+            new TranslationSeedItem("entity.pcbarepair.prodline", "en-US", "生产线", "生产线"),
+            // entity.pcbarepair.prodline
+            new TranslationSeedItem("entity.pcbarepair.prodline", "ja-JP", "生产线", "生产线"),
+            // entity.pcbarepair.prodline
+            new TranslationSeedItem("entity.pcbarepair.prodline", "zh-CN", "生产线", "生产线"),
+            // entity.pcbarepair.prodline
+            new TranslationSeedItem("entity.pcbarepair.prodline", "zh-HK", "生产线", "生产线"),
 
-            // entity.pcbaRepair.shiftno
-            new TranslationSeedItem("entity.pcbaRepair.shiftno", "en-US", "班次", "班次(1=早班 2=中班 3=晚班)"),
-            // entity.pcbaRepair.shiftno
-            new TranslationSeedItem("entity.pcbaRepair.shiftno", "ja-JP", "班次", "班次(1=早班 2=中班 3=晚班)"),
-            // entity.pcbaRepair.shiftno
-            new TranslationSeedItem("entity.pcbaRepair.shiftno", "zh-CN", "班次", "班次(1=早班 2=中班 3=晚班)"),
-            // entity.pcbaRepair.shiftno
-            new TranslationSeedItem("entity.pcbaRepair.shiftno", "zh-HK", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.pcbarepair.shiftno
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "en-US", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.pcbarepair.shiftno
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "ja-JP", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.pcbarepair.shiftno
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "zh-CN", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.pcbarepair.shiftno
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "zh-HK", "班次", "班次(1=早班 2=中班 3=晚班)"),
 
-            // entity.pcbaRepair.prodordercode
-            new TranslationSeedItem("entity.pcbaRepair.prodordercode", "en-US", "生产工单号", "生产工单号"),
-            // entity.pcbaRepair.prodordercode
-            new TranslationSeedItem("entity.pcbaRepair.prodordercode", "ja-JP", "生产工单号", "生产工单号"),
-            // entity.pcbaRepair.prodordercode
-            new TranslationSeedItem("entity.pcbaRepair.prodordercode", "zh-CN", "生产工单号", "生产工单号"),
-            // entity.pcbaRepair.prodordercode
-            new TranslationSeedItem("entity.pcbaRepair.prodordercode", "zh-HK", "生产工单号", "生产工单号"),
+            // entity.pcbarepair.prodordercode
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "en-US", "生产工单号", "生产工单号"),
+            // entity.pcbarepair.prodordercode
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "ja-JP", "生产工单号", "生产工单号"),
+            // entity.pcbarepair.prodordercode
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "zh-CN", "生产工单号", "生产工单号"),
+            // entity.pcbarepair.prodordercode
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "zh-HK", "生产工单号", "生产工单号"),
 
-            // entity.pcbaRepair.prodorderqty
-            new TranslationSeedItem("entity.pcbaRepair.prodorderqty", "en-US", "订单数量", "订单数量"),
-            // entity.pcbaRepair.prodorderqty
-            new TranslationSeedItem("entity.pcbaRepair.prodorderqty", "ja-JP", "订单数量", "订单数量"),
-            // entity.pcbaRepair.prodorderqty
-            new TranslationSeedItem("entity.pcbaRepair.prodorderqty", "zh-CN", "订单数量", "订单数量"),
-            // entity.pcbaRepair.prodorderqty
-            new TranslationSeedItem("entity.pcbaRepair.prodorderqty", "zh-HK", "订单数量", "订单数量"),
+            // entity.pcbarepair.prodorderqty
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "en-US", "订单数量", "订单数量"),
+            // entity.pcbarepair.prodorderqty
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "ja-JP", "订单数量", "订单数量"),
+            // entity.pcbarepair.prodorderqty
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "zh-CN", "订单数量", "订单数量"),
+            // entity.pcbarepair.prodorderqty
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "zh-HK", "订单数量", "订单数量"),
 
-            // entity.pcbaRepair.modelcode
-            new TranslationSeedItem("entity.pcbaRepair.modelcode", "en-US", "机种", "机种"),
-            // entity.pcbaRepair.modelcode
-            new TranslationSeedItem("entity.pcbaRepair.modelcode", "ja-JP", "机种", "机种"),
-            // entity.pcbaRepair.modelcode
-            new TranslationSeedItem("entity.pcbaRepair.modelcode", "zh-CN", "机种", "机种"),
-            // entity.pcbaRepair.modelcode
-            new TranslationSeedItem("entity.pcbaRepair.modelcode", "zh-HK", "机种", "机种"),
+            // entity.pcbarepair.modelcode
+            new TranslationSeedItem("entity.pcbarepair.modelcode", "en-US", "机种", "机种"),
+            // entity.pcbarepair.modelcode
+            new TranslationSeedItem("entity.pcbarepair.modelcode", "ja-JP", "机种", "机种"),
+            // entity.pcbarepair.modelcode
+            new TranslationSeedItem("entity.pcbarepair.modelcode", "zh-CN", "机种", "机种"),
+            // entity.pcbarepair.modelcode
+            new TranslationSeedItem("entity.pcbarepair.modelcode", "zh-HK", "机种", "机种"),
 
-            // entity.pcbaRepair.batchno
-            new TranslationSeedItem("entity.pcbaRepair.batchno", "en-US", "批次", "批次"),
-            // entity.pcbaRepair.batchno
-            new TranslationSeedItem("entity.pcbaRepair.batchno", "ja-JP", "批次", "批次"),
-            // entity.pcbaRepair.batchno
-            new TranslationSeedItem("entity.pcbaRepair.batchno", "zh-CN", "批次", "批次"),
-            // entity.pcbaRepair.batchno
-            new TranslationSeedItem("entity.pcbaRepair.batchno", "zh-HK", "批次", "批次"),
+            // entity.pcbarepair.batchno
+            new TranslationSeedItem("entity.pcbarepair.batchno", "en-US", "批次", "批次"),
+            // entity.pcbarepair.batchno
+            new TranslationSeedItem("entity.pcbarepair.batchno", "ja-JP", "批次", "批次"),
+            // entity.pcbarepair.batchno
+            new TranslationSeedItem("entity.pcbarepair.batchno", "zh-CN", "批次", "批次"),
+            // entity.pcbarepair.batchno
+            new TranslationSeedItem("entity.pcbarepair.batchno", "zh-HK", "批次", "批次"),
 
-            // entity.pcbaRepair.materialcode
-            new TranslationSeedItem("entity.pcbaRepair.materialcode", "en-US", "物料编码", "物料编码"),
-            // entity.pcbaRepair.materialcode
-            new TranslationSeedItem("entity.pcbaRepair.materialcode", "ja-JP", "物料编码", "物料编码"),
-            // entity.pcbaRepair.materialcode
-            new TranslationSeedItem("entity.pcbaRepair.materialcode", "zh-CN", "物料编码", "物料编码"),
-            // entity.pcbaRepair.materialcode
-            new TranslationSeedItem("entity.pcbaRepair.materialcode", "zh-HK", "物料编码", "物料编码"),
+            // entity.pcbarepair.materialcode
+            new TranslationSeedItem("entity.pcbarepair.materialcode", "en-US", "物料编码", "物料编码"),
+            // entity.pcbarepair.materialcode
+            new TranslationSeedItem("entity.pcbarepair.materialcode", "ja-JP", "物料编码", "物料编码"),
+            // entity.pcbarepair.materialcode
+            new TranslationSeedItem("entity.pcbarepair.materialcode", "zh-CN", "物料编码", "物料编码"),
+            // entity.pcbarepair.materialcode
+            new TranslationSeedItem("entity.pcbarepair.materialcode", "zh-HK", "物料编码", "物料编码"),
 
-            // entity.pcbaRepair.status
-            new TranslationSeedItem("entity.pcbaRepair.status", "en-US", "状态", "状态(0=正常 1=停用)"),
-            // entity.pcbaRepair.status
-            new TranslationSeedItem("entity.pcbaRepair.status", "ja-JP", "状态", "状态(0=正常 1=停用)"),
-            // entity.pcbaRepair.status
-            new TranslationSeedItem("entity.pcbaRepair.status", "zh-CN", "状态", "状态(0=正常 1=停用)"),
-            // entity.pcbaRepair.status
-            new TranslationSeedItem("entity.pcbaRepair.status", "zh-HK", "状态", "状态(0=正常 1=停用)"),
+            // entity.pcbarepair.status
+            new TranslationSeedItem("entity.pcbarepair.status", "en-US", "状态", "状态(0=正常 1=停用)"),
+            // entity.pcbarepair.status
+            new TranslationSeedItem("entity.pcbarepair.status", "ja-JP", "状态", "状态(0=正常 1=停用)"),
+            // entity.pcbarepair.status
+            new TranslationSeedItem("entity.pcbarepair.status", "zh-CN", "状态", "状态(0=正常 1=停用)"),
+            // entity.pcbarepair.status
+            new TranslationSeedItem("entity.pcbarepair.status", "zh-HK", "状态", "状态(0=正常 1=停用)"),
 
-            // entity.pcbaRepair.details
-            new TranslationSeedItem("entity.pcbaRepair.details", "en-US", "PCBA改修明细列表", "PCBA改修明细列表"),
-            // entity.pcbaRepair.details
-            new TranslationSeedItem("entity.pcbaRepair.details", "ja-JP", "PCBA改修明细列表", "PCBA改修明细列表"),
-            // entity.pcbaRepair.details
-            new TranslationSeedItem("entity.pcbaRepair.details", "zh-CN", "PCBA改修明细列表", "PCBA改修明细列表"),
-            // entity.pcbaRepair.details
-            new TranslationSeedItem("entity.pcbaRepair.details", "zh-HK", "PCBA改修明细列表", "PCBA改修明细列表"),
+            // entity.pcbarepair.details
+            new TranslationSeedItem("entity.pcbarepair.details", "en-US", "PCBA改修明细列表", "PCBA改修明细列表"),
+            // entity.pcbarepair.details
+            new TranslationSeedItem("entity.pcbarepair.details", "ja-JP", "PCBA改修明细列表", "PCBA改修明细列表"),
+            // entity.pcbarepair.details
+            new TranslationSeedItem("entity.pcbarepair.details", "zh-CN", "PCBA改修明细列表", "PCBA改修明细列表"),
+            // entity.pcbarepair.details
+            new TranslationSeedItem("entity.pcbarepair.details", "zh-HK", "PCBA改修明细列表", "PCBA改修明细列表"),
         };
     }
 
@@ -215,8 +214,8 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

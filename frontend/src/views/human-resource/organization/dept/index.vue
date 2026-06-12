@@ -721,9 +721,7 @@ const loadFullDeptTree = async () => {
   if (treeExpanded.value) {
     treeExpandedKeys.value = collectTreeExpandableKeys(filteredDeptTreeData.value)
   }
-}
 
-/** 右侧查询/重置：仅客户端过滤 tableFlatRows，不请求接口、不替换 fullTableTree */
 const applyRightTableQuery = () => {
   tableCurrentPage.value = 1
 }
@@ -744,6 +742,9 @@ const loadData = async () => {
     loading.value = false
   }
 }
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 
 /** 右侧查询（不影响左侧树与 fullTableTree） */
 const handleSearch = () => {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Workflow
 // 文件名称：TaktFlowTaskDtos.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowTask 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFlowTask 生成，请按需审阅）
 // 
@@ -115,7 +115,7 @@ public class TaktFlowTaskDto : TaktCompanyDtoBase
     public int IsAddSign { get; set; } = 0;
 
     /// <summary>
-    /// 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+    /// 加签记录 ID（TaktFlowAddSign）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -247,7 +247,7 @@ public class TaktFlowTaskQueryDto : TaktPagedQuery
     public int? IsAddSign { get; set; }
 
     /// <summary>
-    /// 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+    /// 加签记录 ID（TaktFlowAddSign）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -377,7 +377,7 @@ public class TaktFlowTaskCreateDto
     public int IsAddSign { get; set; } = 0;
 
     /// <summary>
-    /// 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+    /// 加签记录 ID（TaktFlowAddSign）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -545,7 +545,7 @@ public class TaktFlowTaskTemplateDto
     public int? IsAddSign { get; set; }
 
     /// <summary>
-    /// 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+    /// 加签记录 ID（TaktFlowAddSign）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -641,7 +641,7 @@ public class TaktFlowTaskImportDto
     public int? IsAddSign { get; set; }
 
     /// <summary>
-    /// 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+    /// 加签记录 ID（TaktFlowAddSign）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -753,7 +753,7 @@ public class TaktFlowTaskExportDto
     public int IsAddSign { get; set; } = 0;
 
     /// <summary>
-    /// 加签记录 ID（<see cref="TaktFlowAddSign"/>）
+    /// 加签记录 ID（TaktFlowAddSign）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }

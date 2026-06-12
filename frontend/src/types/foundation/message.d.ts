@@ -13,6 +13,28 @@
 import type { TaktPagedQuery } from '@/types/common';
 
 /**
+ * 消息附件项（Attachments JSON 数组元素）
+ */
+export interface MessageAttachmentItem {
+  /** 文件 ID */
+  fileId: string;
+  /** 存储文件名 */
+  fileName: string;
+  /** 原始文件名 */
+  fileOriginalName?: string;
+  /** 访问地址 */
+  accessUrl: string;
+  /** 文件大小（字节） */
+  fileSize?: string;
+  /** MIME 类型 */
+  fileType?: string;
+  /** 扩展名 */
+  fileExtension?: string;
+  /** 排序 */
+  sortOrder?: number;
+}
+
+/**
  * 在线消息实体 公司级实体：消息按租户+公司双重隔离
  * 对应前端 Message
  * 继承 CompanyDtoBase
@@ -45,6 +67,11 @@ export interface Message extends CompanyDtoBase {
   toUserId?: string;
 
   /**
+   * 是否抄送发送者本人（自审计，TaktYesNo：0=否，1=是，默认 1）
+   */
+  isCc?: number;
+
+  /**
    * 消息标题
    */
   messageTitle?: string;
@@ -53,6 +80,11 @@ export interface Message extends CompanyDtoBase {
    * 消息内容
    */
   messageContent: string;
+
+  /**
+   * 附件列表 JSON
+   */
+  attachments?: string;
 
   /**
    * 消息类型
@@ -65,9 +97,9 @@ export interface Message extends CompanyDtoBase {
   messageGroup?: number;
 
   /**
-   * 读取状态（0=未读，1=已读）
+   * 发送时间
    */
-  readStatus: number;
+  sendTime: string;
 
   /**
    * 读取时间
@@ -75,14 +107,9 @@ export interface Message extends CompanyDtoBase {
   readTime?: string;
 
   /**
-   * 发送时间
+   * 读取状态（0=未读，1=已读）
    */
-  sendTime: string;
-
-  /**
-   * 消息扩展数据（JSON）
-   */
-  messageExtData?: string;
+  readStatus: number;
 
 }
 
@@ -114,7 +141,7 @@ export interface MessageQuery extends TaktPagedQuery {
   fromUserId?: string;
 
   /**
-   * 接收者用户名
+   * 接收者用户名（模糊）
    */
   toUserName?: string;
 
@@ -122,6 +149,11 @@ export interface MessageQuery extends TaktPagedQuery {
    * 接收者用户 ID
    */
   toUserId?: string;
+
+  /**
+   * 是否抄送发送者本人（TaktYesNo：0=否，1=是）
+   */
+  isCc?: number;
 
   /**
    * 消息标题
@@ -134,6 +166,11 @@ export interface MessageQuery extends TaktPagedQuery {
   messageContent?: string;
 
   /**
+   * 附件（模糊）
+   */
+  attachments?: string;
+
+  /**
    * 消息类型
    */
   messageType?: string;
@@ -142,21 +179,6 @@ export interface MessageQuery extends TaktPagedQuery {
    * 消息分组
    */
   messageGroup?: number;
-
-  /**
-   * 读取状态（0=未读，1=已读）
-   */
-  readStatus?: number;
-
-  /**
-   * 读取时间（范围查询-开始）
-   */
-  readTimeStart?: string;
-
-  /**
-   * 读取时间（范围查询-结束）
-   */
-  readTimeEnd?: string;
 
   /**
    * 发送时间（范围查询-开始）
@@ -169,9 +191,19 @@ export interface MessageQuery extends TaktPagedQuery {
   sendTimeEnd?: string;
 
   /**
-   * 消息扩展数据（JSON）
+   * 读取时间（范围查询-开始）
    */
-  messageExtData?: string;
+  readTimeStart?: string;
+
+  /**
+   * 读取时间（范围查询-结束）
+   */
+  readTimeEnd?: string;
+
+  /**
+   * 读取状态（0=未读，1=已读）
+   */
+  readStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -195,6 +227,62 @@ export interface MessageQuery extends TaktPagedQuery {
 
 }
 
+/**
+ * 当前用户收件箱消息分页查询 DTO（已读/未读列表共用）
+ * @description 对应后端 TaktMessageInboxListQueryDto；接收者与 ReadStatus 由服务端按路由固定
+ */
+export interface MessageInboxListQuery extends TaktPagedQuery {
+  /**
+   * 发送者用户名
+   */
+  fromUserName?: string;
+
+  /**
+   * 消息标题
+   */
+  messageTitle?: string;
+
+  /**
+   * 消息内容
+   */
+  messageContent?: string;
+
+  /**
+   * 消息类型
+   */
+  messageType?: string;
+
+  /**
+   * 消息分组
+   */
+  messageGroup?: number;
+
+  /**
+   * 发送时间（范围查询-开始）
+   */
+  sendTimeStart?: string;
+
+  /**
+   * 发送时间（范围查询-结束）
+   */
+  sendTimeEnd?: string;
+
+  /**
+   * 读取时间（范围查询-开始，已读列表可用）
+   */
+  readTimeStart?: string;
+
+  /**
+   * 读取时间（范围查询-结束，已读列表可用）
+   */
+  readTimeEnd?: string;
+}
+
+/** 已读列表查询（同 MessageInboxListQuery） */
+export type MessageReadListQuery = MessageInboxListQuery;
+
+/** 未读列表查询（同 MessageInboxListQuery） */
+export type MessageUnreadListQuery = MessageInboxListQuery;
 
 /**
  * 创建Message DTO
@@ -222,6 +310,11 @@ export interface MessageCreate {
   toUserId?: string;
 
   /**
+   * 是否抄送发送者本人（自审计，TaktYesNo：0=否，1=是，默认 1）
+   */
+  isCc?: number;
+
+  /**
    * 消息标题
    */
   messageTitle?: string;
@@ -230,6 +323,11 @@ export interface MessageCreate {
    * 消息内容
    */
   messageContent: string;
+
+  /**
+   * 附件列表 JSON
+   */
+  attachments?: string;
 
   /**
    * 消息类型
@@ -242,9 +340,9 @@ export interface MessageCreate {
   messageGroup?: number;
 
   /**
-   * 读取状态（0=未读，1=已读）
+   * 发送时间
    */
-  readStatus: number;
+  sendTime: string;
 
   /**
    * 读取时间
@@ -252,14 +350,9 @@ export interface MessageCreate {
   readTime?: string;
 
   /**
-   * 发送时间
+   * 读取状态（0=未读，1=已读）
    */
-  sendTime: string;
-
-  /**
-   * 消息扩展数据（JSON）
-   */
-  messageExtData?: string;
+  readStatus: number;
 
   /**
    * 扩展字段JSON
@@ -273,26 +366,41 @@ export interface MessageCreate {
 
 }
 
-
 /**
- * 更新Message DTO
- * 继承 MessageCreate，添加 MessageId 字段
- * @description 对应后端 TaktMessageUpdateDto
+ * 批量创建并推送 Message DTO
+ * @description 对应后端 TaktMessageBatchCreateDto
  */
-export interface MessageUpdate extends MessageCreate {
-  /**
-   * MessageID（标识要更新的实体）
-   */
-  messageId: string;
-
+export interface MessageBatchCreate {
+  /** 发送者用户名 */
+  fromUserName: string;
+  /** 发送者用户 ID */
+  fromUserId?: string;
+  /** 是否向租户全部用户落库并推送 */
+  sendToAll: boolean;
+  /** 指定接收者用户 ID 列表 */
+  toUserIds?: string[];
+  /** 消息标题 */
+  messageTitle?: string;
+  /** 消息内容 */
+  messageContent: string;
+  /** 附件列表 JSON */
+  attachments?: string;
+  /** 消息类型 */
+  messageType: number;
+  /** 消息分组 */
+  messageGroup?: number;
+  /** 读取状态（0=未读，1=已读） */
+  readStatus?: number;
+  /** 是否抄送发送者本人（TaktYesNo，默认 1=是） */
+  isCc?: number;
 }
 
 
 /**
- * Message 状态更新 DTO
- * @description 对应后端 TaktMessageStatusDto
+ * 标记在线消息已读 DTO
+ * @description 对应后端 TaktMessageReadDto
  */
-export interface MessageStatus {
+export interface MessageRead {
   /**
    * MessageID
    */
@@ -303,8 +411,32 @@ export interface MessageStatus {
    */
   readStatus: number;
 
+  /**
+   * 读取时间（可选，为空时服务端写入当前时间）
+   */
+  readTime?: string;
 }
 
+/**
+ * 标记在线消息未读 DTO
+ * @description 对应后端 TaktMessageUnreadDto
+ */
+export interface MessageUnread {
+  /**
+   * MessageID
+   */
+  messageId: string;
+
+  /**
+   * 读取状态（0=未读，1=已读）
+   */
+  readStatus: number;
+
+  /**
+   * 读取时间（标记未读时须为 null）
+   */
+  readTime?: string | null;
+}
 
 /**
  * Message 导出 DTO（独立实现，不继承响应 Dto）
@@ -342,6 +474,11 @@ export interface MessageExport {
   toUserId?: string;
 
   /**
+   * 是否抄送发送者本人（自审计，TaktYesNo：0=否，1=是，默认 1）
+   */
+  isCc?: number;
+
+  /**
    * 消息标题
    */
   messageTitle?: string;
@@ -350,6 +487,11 @@ export interface MessageExport {
    * 消息内容
    */
   messageContent: string;
+
+  /**
+   * 附件列表 JSON
+   */
+  attachments?: string;
 
   /**
    * 消息类型
@@ -362,9 +504,9 @@ export interface MessageExport {
   messageGroup?: number;
 
   /**
-   * 读取状态（0=未读，1=已读）
+   * 发送时间
    */
-  readStatus: number;
+  sendTime: string;
 
   /**
    * 读取时间
@@ -372,14 +514,9 @@ export interface MessageExport {
   readTime?: string;
 
   /**
-   * 发送时间
+   * 读取状态（0=未读，1=已读）
    */
-  sendTime: string;
-
-  /**
-   * 消息扩展数据（JSON）
-   */
-  messageExtData?: string;
+  readStatus: number;
 
   /**
    * 扩展字段JSON

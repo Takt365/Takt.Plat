@@ -12,12 +12,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
-const { isRbacJunctionEntity } = require('./generate-entity-exclusions.cjs');
 const {
-  EXCLUDED_ENTITY_SHORT_NAMES,
-  isExcludedEntity,
-} = require('./generate-entity-exclusions.cjs');
+  writeGeneratedFile,
+  logGeneratedFileWritePolicy,
+  parseSingleEntityGenerateArgs,
+  sanitizeXmlDocPlainText,
+} = require('./generate-script-common.cjs');
+const { isRbacJunctionEntity, assertNotRbacJunctionEntityCli } = require('./generate-entity-exclusions.cjs');
 const { isTransposableEntity, appendTransposedDtoBlock } = require('./generate-transposed-support.cjs');
 const {
   resolveRbacCreateFieldFromNav,
@@ -60,6 +61,7 @@ const ENTITY_BASE_FIELDS = new Set([
   'ApprovalOpinion',
   'ApprovedBy',
   'ApprovedAt',
+  'FlowInstanceId',
 ]);
 
 /** CreateDto 排除的只读/统计类字段 */
@@ -102,29 +104,6 @@ function buildAggregateDtoClassNames(entityShort) {
   };
 }
 
-/**
- * 手工维护的特殊实体（禁止脚本生成 DTO）
- * --all 时自动跳过；--User / --Online / --Message 将直接报错退出
- */
-function isSpecialEntity(entityShort) {
-  return isExcludedEntity(entityShort);
-}
-
-/**
- * CLI 指定单实体时，禁止对特殊实体生成
- * @param {string} entityShort
- */
-function assertNotSpecialEntityCli(entityShort) {
-  if (!isSpecialEntity(entityShort)) {
-    return;
-  }
-  console.error(
-    `❌ 实体 ${entityShort} 为手工维护的特殊 DTO（如 TaktUserDtos.cs、TaktUserRoleDtos.cs），禁止本脚本生成。`,
-  );
-  console.error(`   已排除（全字匹配）: ${[...EXCLUDED_ENTITY_SHORT_NAMES].join('、')}`);
-  process.exit(1);
-}
-
 // ========================================
 // 工具
 // ========================================
@@ -164,13 +143,15 @@ function extractSummary(xmlComment) {
  * @param {string} text
  */
 function normalizeDocText(text) {
-  return (text || '')
-    .replace(/\/\/\/?/g, '')
-    .split('\n')
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .join(' ')
-    .trim();
+  return sanitizeXmlDocPlainText(
+    (text || '')
+      .replace(/\/\/\/?/g, '')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .join(' ')
+      .trim(),
+  );
 }
 
 /**
@@ -184,7 +165,7 @@ function entityToIdPropertyName(entityName) {
 
 /**
  * 是否仅生成极简关联 DTO（relationOnly）
- * RBAC 八表已在 isExcludedEntity 中跳过；业务主子表子实体一律走完整聚合 DTO（含 CRUD/Query/Import/Export）
+ * RBAC 八表走 relationOnly 极简 DTO；业务主子表子实体一律走完整聚合 DTO（含 CRUD/Query/Import/Export）
  * @param {object} entity
  */
 function isRelationEntity(entity) {
@@ -471,6 +452,7 @@ function appendApprovalQueryProperties(lines, entityBase) {
   appendDateRangeQueryProperties(lines, { name: 'InitiatedAt', summary: '发起时间' });
   appendQueryLongProperty(lines, 'ApprovedBy', '最终审批人ID');
   appendDateRangeQueryProperties(lines, { name: 'ApprovedAt', summary: '最终审批时间' });
+  appendQueryLongProperty(lines, 'FlowInstanceId', '流程实例 ID');
 }
 
 // ========================================
@@ -1319,7 +1301,7 @@ function scanEntities(entityPrefix = null) {
 
       const entityShort = entry.name.replace(/^Takt/, '').replace(/\.cs$/, '');
 
-      if (isSpecialEntity(entityShort)) {
+      if (isRbacJunctionEntity(entityShort)) {
         if (!entityPrefix) {
           console.log(`⏭️  跳过特殊实体（手工维护 DTO）: Takt${entityShort}`);
         }
@@ -1352,14 +1334,14 @@ function printUsage() {
 用法: node scripts/generate-dtos-from-entity.cjs [参数]
 
 参数:
-  --all              扫描 Takt.Domain/Entities 下全部实体并生成 *Dtos.cs
   --<实体名>         仅生成指定实体，如 --Company、--Dept（不可用 --User、--Online、--UserRole）
   --force            已废弃（与默认行为相同，仅为兼容 generate-all.cjs 传参保留）
   --dry-run          仅打印将生成的文件，不写入磁盘
 
 说明:
+  - 已禁用 --all；每次必须指定一个实体
   - 输出策略：目标 *Dtos.cs 不存在则创建，已存在则整文件覆盖更新（writeGeneratedFile，无需 --force）
-  - 排除（--all 跳过）：User（密码等）、Online、Message；RBAC 八表（UserRole…EmployeePost）
+  - 排除：User（密码等）、Online、Message；RBAC 八表（UserRole…EmployeePost）
   - 对应 TaktUserDtos.cs、TaktOnlineDtos.cs、TaktMessageDtos.cs 及八张关联 *Dtos.cs
   - 主子表：响应 TaktXxxDto 含 List<子Dto>；Create/Update 含 List<子CreateDto>
   - 转置（仅 Translation）：TaktTranslationTransposedDto/Query/Result/Batch
@@ -1394,7 +1376,7 @@ function printUsage() {
 
 示例:
   node scripts/generate-dtos-from-entity.cjs --Company
-  node scripts/generate-dtos-from-entity.cjs --all
+  node scripts/generate-dtos-from-entity.cjs --CostCenter
   node scripts/generate-dtos-from-entity.cjs --Company --force
 `);
 }
@@ -1403,59 +1385,8 @@ function printUsage() {
  * 解析命令行
  */
 function parseArgs() {
-  const args = process.argv.slice(2);
-  if (args.length === 0) {
-    console.error('❌ 错误: 缺少参数');
-    printUsage();
-    process.exit(1);
-  }
-
-  const options = {
-    entityPrefix: null,
-    all: false,
-    force: false,
-    dryRun: false,
-  };
-
-  args.forEach((arg) => {
-    if (arg === '--force') {
-      options.force = true;
-      return;
-    }
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-      return;
-    }
-    if (!arg.startsWith('--')) {
-      console.error(`❌ 未知参数: ${arg}`);
-      process.exit(1);
-    }
-    const value = arg.slice(2);
-    if (value.toLowerCase() === 'all') {
-      options.all = true;
-      return;
-    }
-    if (value.startsWith('Takt')) {
-      console.error('❌ 实体名不要带 Takt 前缀，例如 --Company');
-      process.exit(1);
-    }
-    if (options.entityPrefix) {
-      console.error('❌ 只能指定一个实体名，或使用 --all');
-      process.exit(1);
-    }
-    options.entityPrefix = value;
-  });
-
-  if (!options.all && !options.entityPrefix) {
-    console.error('❌ 请指定 --all 或 --<实体名>');
-    printUsage();
-    process.exit(1);
-  }
-
-  if (options.entityPrefix) {
-    assertNotSpecialEntityCli(options.entityPrefix);
-  }
-
+  const options = parseSingleEntityGenerateArgs(printUsage);
+  assertNotRbacJunctionEntityCli(options.entityPrefix);
   return options;
 }
 
@@ -1482,11 +1413,11 @@ try {
     });
     console.log('');
   }
-  const entities = scanEntities(options.all ? null : options.entityPrefix);
+  const entities = scanEntities(options.entityPrefix);
 
   if (entities.length === 0) {
-    if (options.entityPrefix && isSpecialEntity(options.entityPrefix)) {
-      assertNotSpecialEntityCli(options.entityPrefix);
+    if (options.entityPrefix && isRbacJunctionEntity(options.entityPrefix)) {
+      assertNotRbacJunctionEntityCli(options.entityPrefix);
     }
     console.error('❌ 未找到匹配的实体文件');
     process.exit(1);

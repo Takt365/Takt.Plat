@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Identity;
 
@@ -62,17 +61,16 @@ public class TaktTenant : TaktTenantEntityBase
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内置（1=是，0=否）
-    /// 种子租户（000/500/100）为内置，不允许删除
+    /// 是否内置（字典 sys_yes_no；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktYesNo IsBuiltIn { get; set; } = TaktYesNo.No;
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable）
     /// </summary>
     [SugarColumn(ColumnName = "tenant_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus TenantStatus { get; set; } = TaktCommonStatus.Enabled;
+    public int TenantStatus { get; set; } = 1;
 
     // ========================================
     // 导航属性区域

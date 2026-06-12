@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktQuartzTasksController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：定时任务控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Foundation;
 /// 定时任务控制器
 /// 提供定时任务的 REST API
 /// </summary>
-[ApiModule(TaktModule.Foundation, "基础设置")]
+[ApiModule(8, "基础设置")]
 [Route("api/[controller]", Name = "定时任务")]
 public class TaktQuartzTasksController : TaktControllerBase
 {
@@ -183,7 +183,7 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// <summary>
     /// 更新定时任务状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktQuartzTaskStatus 枚举）</param>
+    /// <param name="dto">状态 DTO（0=正常，1=暂停）</param>
     /// <returns>定时任务DTO</returns>
     [TaktPermission("foundation:quartztask:update", "更新定时任务状态")]
     [HttpPut("status")]
@@ -193,6 +193,26 @@ public class TaktQuartzTasksController : TaktControllerBase
         {
             var result = await _quartzTaskService.UpdateQuartzTaskStatusAsync(dto);
             return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 立即执行定时任务一次
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("foundation:quartztask:update", "立即执行定时任务")]
+    [HttpPost("{id}/run")]
+    public async Task<IActionResult> RunQuartzTaskNowAsync(long id)
+    {
+        try
+        {
+            await _quartzTaskService.RunQuartzTaskNowAsync(id);
+            return Success("已触发执行");
         }
         catch (Exception ex)
         {

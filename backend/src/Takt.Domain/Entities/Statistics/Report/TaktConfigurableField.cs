@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Report;
 
@@ -59,13 +58,13 @@ public class TaktConfigurableField : TaktCompanyEntityBase
     /// 聚合函数（无分组时为 None）
     /// </summary>
     [SugarColumn(ColumnName = "aggregate_func", ColumnDescription = "聚合函数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public TaktConfigurableAggregateFunc AggregateFunc { get; set; } = TaktConfigurableAggregateFunc.None;
+    public int AggregateFunc { get; set; } = 0;
 
     /// <summary>
     /// 是否输出（0=隐藏 1=显示）
     /// </summary>
     [SugarColumn(ColumnName = "is_visible", ColumnDescription = "是否输出", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktYesNo IsVisible { get; set; } = TaktYesNo.Yes;
+    public int IsVisible { get; set; } = 1;
 
     /// <summary>
     /// 排序号（SELECT 列顺序）

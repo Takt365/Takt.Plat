@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPurchaseOrderChangeLogI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrderChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials;
 
 /// <summary>
-/// TaktPurchaseOrderChangeLog 实体国际化翻译种子（键前缀 entity.purchaseOrderChangeLog.*）
+/// TaktPurchaseOrderChangeLog 实体国际化翻译种子（键前缀 entity.purchaseorderchangelog.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktPurchaseOrderChangeLogI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktPurchaseOrderChangeLogI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 purchaseOrderChangeLog 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 purchaseorderchangelog 实体翻译...", tenantCode);
 
         foreach (var item in GetPurchaseOrderChangeLogTranslations())
         {
@@ -76,74 +75,74 @@ public class TaktPurchaseOrderChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPurchaseOrderChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.purchaseOrderChangeLog._self / entity.purchaseOrderChangeLog.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.purchaseorderchangelog._self / entity.purchaseorderchangelog.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetPurchaseOrderChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.purchaseOrderChangeLog._self
-            new TranslationSeedItem("entity.purchaseOrderChangeLog._self", "en-US", "Purchase Order Change Log Information", "实体名称"),
-            // entity.purchaseOrderChangeLog._self
-            new TranslationSeedItem("entity.purchaseOrderChangeLog._self", "ja-JP", "采购订单变更记录信息", "实体名称"),
-            // entity.purchaseOrderChangeLog._self
-            new TranslationSeedItem("entity.purchaseOrderChangeLog._self", "zh-CN", "采购订单变更记录信息", "实体名称"),
-            // entity.purchaseOrderChangeLog._self
-            new TranslationSeedItem("entity.purchaseOrderChangeLog._self", "zh-HK", "采购订单变更记录信息", "实体名称"),
+            // entity.purchaseorderchangelog._self
+            new TranslationSeedItem("entity.purchaseorderchangelog._self", "en-US", "Purchase Order Change Log Information", "实体名称"),
+            // entity.purchaseorderchangelog._self
+            new TranslationSeedItem("entity.purchaseorderchangelog._self", "ja-JP", "采购订单变更记录信息", "实体名称"),
+            // entity.purchaseorderchangelog._self
+            new TranslationSeedItem("entity.purchaseorderchangelog._self", "zh-CN", "采购订单变更记录信息", "实体名称"),
+            // entity.purchaseorderchangelog._self
+            new TranslationSeedItem("entity.purchaseorderchangelog._self", "zh-HK", "采购订单变更记录信息", "实体名称"),
 
-            // entity.purchaseOrderChangeLog.purchaseorderid
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.purchaseorderid", "en-US", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.purchaseOrderChangeLog.purchaseorderid
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.purchaseorderid", "ja-JP", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.purchaseOrderChangeLog.purchaseorderid
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.purchaseorderid", "zh-CN", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
-            // entity.purchaseOrderChangeLog.purchaseorderid
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.purchaseorderid", "zh-HK", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.purchaseorderchangelog.purchaseorderid
+            new TranslationSeedItem("entity.purchaseorderchangelog.purchaseorderid", "en-US", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.purchaseorderchangelog.purchaseorderid
+            new TranslationSeedItem("entity.purchaseorderchangelog.purchaseorderid", "ja-JP", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.purchaseorderchangelog.purchaseorderid
+            new TranslationSeedItem("entity.purchaseorderchangelog.purchaseorderid", "zh-CN", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            // entity.purchaseorderchangelog.purchaseorderid
+            new TranslationSeedItem("entity.purchaseorderchangelog.purchaseorderid", "zh-HK", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
-            // entity.purchaseOrderChangeLog.ordercode
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.ordercode", "en-US", "订单编码", "订单编码"),
-            // entity.purchaseOrderChangeLog.ordercode
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.ordercode", "ja-JP", "订单编码", "订单编码"),
-            // entity.purchaseOrderChangeLog.ordercode
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.ordercode", "zh-CN", "订单编码", "订单编码"),
-            // entity.purchaseOrderChangeLog.ordercode
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.ordercode", "zh-HK", "订单编码", "订单编码"),
+            // entity.purchaseorderchangelog.ordercode
+            new TranslationSeedItem("entity.purchaseorderchangelog.ordercode", "en-US", "订单编码", "订单编码"),
+            // entity.purchaseorderchangelog.ordercode
+            new TranslationSeedItem("entity.purchaseorderchangelog.ordercode", "ja-JP", "订单编码", "订单编码"),
+            // entity.purchaseorderchangelog.ordercode
+            new TranslationSeedItem("entity.purchaseorderchangelog.ordercode", "zh-CN", "订单编码", "订单编码"),
+            // entity.purchaseorderchangelog.ordercode
+            new TranslationSeedItem("entity.purchaseorderchangelog.ordercode", "zh-HK", "订单编码", "订单编码"),
 
-            // entity.purchaseOrderChangeLog.changefields
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.purchaseOrderChangeLog.changefields
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.purchaseOrderChangeLog.changefields
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
-            // entity.purchaseOrderChangeLog.changefields
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.purchaseorderchangelog.changefields
+            new TranslationSeedItem("entity.purchaseorderchangelog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.purchaseorderchangelog.changefields
+            new TranslationSeedItem("entity.purchaseorderchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.purchaseorderchangelog.changefields
+            new TranslationSeedItem("entity.purchaseorderchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            // entity.purchaseorderchangelog.changefields
+            new TranslationSeedItem("entity.purchaseorderchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
 
-            // entity.purchaseOrderChangeLog.changetime
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changetime", "en-US", "变更时间", "变更时间"),
-            // entity.purchaseOrderChangeLog.changetime
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changetime", "ja-JP", "变更时间", "变更时间"),
-            // entity.purchaseOrderChangeLog.changetime
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changetime", "zh-CN", "变更时间", "变更时间"),
-            // entity.purchaseOrderChangeLog.changetime
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changetime", "zh-HK", "变更时间", "变更时间"),
+            // entity.purchaseorderchangelog.changetime
+            new TranslationSeedItem("entity.purchaseorderchangelog.changetime", "en-US", "变更时间", "变更时间"),
+            // entity.purchaseorderchangelog.changetime
+            new TranslationSeedItem("entity.purchaseorderchangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            // entity.purchaseorderchangelog.changetime
+            new TranslationSeedItem("entity.purchaseorderchangelog.changetime", "zh-CN", "变更时间", "变更时间"),
+            // entity.purchaseorderchangelog.changetime
+            new TranslationSeedItem("entity.purchaseorderchangelog.changetime", "zh-HK", "变更时间", "变更时间"),
 
-            // entity.purchaseOrderChangeLog.changeby
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changeby", "en-US", "变更人", "变更人（人员代码）"),
-            // entity.purchaseOrderChangeLog.changeby
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changeby", "ja-JP", "变更人", "变更人（人员代码）"),
-            // entity.purchaseOrderChangeLog.changeby
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
-            // entity.purchaseOrderChangeLog.changeby
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changeby", "zh-HK", "变更人", "变更人（人员代码）"),
+            // entity.purchaseorderchangelog.changeby
+            new TranslationSeedItem("entity.purchaseorderchangelog.changeby", "en-US", "变更人", "变更人（人员代码）"),
+            // entity.purchaseorderchangelog.changeby
+            new TranslationSeedItem("entity.purchaseorderchangelog.changeby", "ja-JP", "变更人", "变更人（人员代码）"),
+            // entity.purchaseorderchangelog.changeby
+            new TranslationSeedItem("entity.purchaseorderchangelog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
+            // entity.purchaseorderchangelog.changeby
+            new TranslationSeedItem("entity.purchaseorderchangelog.changeby", "zh-HK", "变更人", "变更人（人员代码）"),
 
-            // entity.purchaseOrderChangeLog.changereason
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changereason", "en-US", "变更原因", "变更原因"),
-            // entity.purchaseOrderChangeLog.changereason
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changereason", "ja-JP", "变更原因", "变更原因"),
-            // entity.purchaseOrderChangeLog.changereason
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changereason", "zh-CN", "变更原因", "变更原因"),
-            // entity.purchaseOrderChangeLog.changereason
-            new TranslationSeedItem("entity.purchaseOrderChangeLog.changereason", "zh-HK", "变更原因", "变更原因"),
+            // entity.purchaseorderchangelog.changereason
+            new TranslationSeedItem("entity.purchaseorderchangelog.changereason", "en-US", "变更原因", "变更原因"),
+            // entity.purchaseorderchangelog.changereason
+            new TranslationSeedItem("entity.purchaseorderchangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            // entity.purchaseorderchangelog.changereason
+            new TranslationSeedItem("entity.purchaseorderchangelog.changereason", "zh-CN", "变更原因", "变更原因"),
+            // entity.purchaseorderchangelog.changereason
+            new TranslationSeedItem("entity.purchaseorderchangelog.changereason", "zh-HK", "变更原因", "变更原因"),
         };
     }
 
@@ -161,8 +160,8 @@ public class TaktPurchaseOrderChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

@@ -87,6 +87,36 @@ export interface Events {
   };
 
   /**
+   * 在线消息 SignalR 实时送达（接收方客户端）
+   */
+  'foundation:message:received': import('@/types/foundation/signal-r').SignalRMessage;
+
+  /**
+   * 流程定义变更（SignalR）
+   */
+  'workflow:scheme:changed': import('@/types/workflow/signal-r').FlowSchemeChangedEvent;
+
+  /**
+   * 流程实例推进（SignalR）
+   */
+  'workflow:instance:progressed': import('@/types/workflow/signal-r').FlowInstanceProgressedEvent;
+
+  /**
+   * 待办数量更新（SignalR）
+   */
+  'workflow:todo:count-updated': import('@/types/workflow/signal-r').FlowTodoCountUpdatedEvent;
+
+  /**
+   * 定时任务定义变更（SignalR）
+   */
+  'foundation:quartz-task:changed': import('@/types/foundation/quartz-signal-r').QuartzTaskChangedEvent;
+
+  /**
+   * 定时任务执行完成（SignalR）
+   */
+  'foundation:quartz-task:executed': import('@/types/foundation/quartz-signal-r').QuartzTaskExecutedEvent;
+
+  /**
    * 刷新菜单
    */
   'menu:refresh': undefined;

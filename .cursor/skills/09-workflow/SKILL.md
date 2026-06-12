@@ -79,7 +79,7 @@ description: >-
 |------|-----|------|
 | 通过 | `complete` approved=true | `workflow:todo:approve` |
 | 驳回 | `complete` approved=false + 可选 nodeRejectStep | `workflow:todo:approve` |
-| 撤回 | `revoke` | `workflow:instance:revoke` |
+| 撤回 | `withdraw` | `workflow:instance:withdraw` |
 | 转办 | `transfer` | `workflow:todo:transfer` |
 | 加签/减签 | `add-sign` / `reduce-sign` | `workflow:todo:addsign` / `reducesign` |
 

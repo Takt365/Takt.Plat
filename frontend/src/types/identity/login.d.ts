@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/identity
 // 文件名称：login.d.ts
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：identity 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -261,6 +261,11 @@ export interface UserInfoResponse {
    * 用户类型名称
    */
   switch: any;
+
+  /**
+   * 关联的员工 ID（序列化为 string 以避免 Javascript 精度问题）
+   */
+  employeeId: string;
 
   /**
    * 员工姓名（从员工表 name 关联）

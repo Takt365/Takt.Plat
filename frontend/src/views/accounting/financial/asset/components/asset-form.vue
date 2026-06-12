@@ -93,27 +93,40 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.categoryid')"
-                name="assetCategoryId"
+                :label="t('entity.asset.spec')"
+                name="assetSpec"
               >
                 <a-input
-                  v-model:value="formState.assetCategoryId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.categoryid') })"
+                  v-model:value="formState.assetSpec"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.spec') })"
                   size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.asset.desc')"
+                name="assetDesc"
+              >
+                <a-textarea
+                  v-model:value="formState.assetDesc"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.desc') })"
+                  :rows="3"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.categoryname')"
-                name="assetCategoryName"
+                :label="t('entity.asset.category')"
+                name="assetCategory"
               >
-                <a-input
-                  v-model:value="formState.assetCategoryName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.categoryname') })"
+                <TaktSelect
+                  v-model:value="formState.assetCategory"
+                  dict-type="accounting_asset_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.category') })"
                   size="small"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -122,11 +135,11 @@
                 :label="t('entity.asset.type')"
                 name="assetType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.assetType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.type') })"
+                  dict-type="accounting_asset_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.type') })"
                   size="small"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -377,6 +390,32 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.asset.relatedsupplierid')"
+                name="relatedSupplierId"
+              >
+                <a-input
+                  v-model:value="formState.relatedSupplierId"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.relatedsupplierid') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.relatedsuppliername')"
+                name="relatedSupplierName"
+              >
+                <a-input
+                  v-model:value="formState.relatedSupplierName"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.relatedsuppliername') })"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.asset.relatedplant')"
                 name="relatedPlant"
               >
@@ -476,7 +515,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","assetName","assetCategoryId","assetCategoryName","assetType","assetOriginalValue","assetNetValue","accumulatedDepreciation","costCenterId","costCenterName","deptId","deptName","userId","userName","assetLocation","purchaseDate","startDate","scrapDate","disposalDate","expectedLifeMonths","depreciationMethod","monthlyDepreciation","relatedPlant","assetStatus","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","assetName","assetSpec","assetDesc","assetCategory","assetType","assetOriginalValue","assetNetValue","accumulatedDepreciation","costCenterId","costCenterName","deptId","deptName","userId","userName","assetLocation","purchaseDate","startDate","scrapDate","disposalDate","expectedLifeMonths","depreciationMethod","monthlyDepreciation","relatedSupplierId","relatedSupplierName","relatedPlant","assetStatus","extFieldJson","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -536,11 +575,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  assetCategoryId: [
+  assetCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.asset.categoryid') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.asset.category') }),
+      trigger: 'change'
     }
   ],
   assetType: [

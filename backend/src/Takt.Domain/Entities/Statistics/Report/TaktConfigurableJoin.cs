@@ -11,7 +11,6 @@
 // ========================================
 
 using SqlSugar;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Statistics.Report;
 
@@ -35,7 +34,7 @@ public class TaktConfigurableJoin : TaktCompanyEntityBase
     /// 关联类型（内/左/右/全连接）
     /// </summary>
     [SugarColumn(ColumnName = "join_type", ColumnDescription = "关联类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktConfigurableJoinType JoinType { get; set; } = TaktConfigurableJoinType.Inner;
+    public int JoinType { get; set; } = 1;
 
     /// <summary>
     /// 左表数据源别名

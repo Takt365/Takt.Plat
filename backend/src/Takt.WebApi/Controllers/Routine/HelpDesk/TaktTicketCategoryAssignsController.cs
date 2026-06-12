@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.HelpDesk
 // 文件名称：TaktTicketCategoryAssignsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工单分类默认处理人控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Routine.HelpDesk;
 /// 工单分类默认处理人控制器
 /// 提供工单分类默认处理人的 REST API
 /// </summary>
-[ApiModule(TaktModule.Routine, "日常事务")]
+[ApiModule(2, "日常事务")]
 [Route("api/[controller]", Name = "工单分类默认处理人")]
 public class TaktTicketCategoryAssignsController : TaktControllerBase
 {

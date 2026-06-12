@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktAssyDefect 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktAssyDefect 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/defect/assy-defect）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect;
 
 /// <summary>
-/// TaktAssyDefect 实体国际化翻译种子（键前缀 entity.assyDefect.*）
+/// TaktAssyDefect 实体国际化翻译种子（键前缀 entity.assydefect.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 assyDefect 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 assydefect 实体翻译...", tenantCode);
 
         foreach (var item in GetAssyDefectTranslations())
         {
@@ -76,146 +75,146 @@ public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktAssyDefect 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.assyDefect._self / entity.assyDefect.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.assydefect._self / entity.assydefect.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetAssyDefectTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.assyDefect._self
-            new TranslationSeedItem("entity.assyDefect._self", "en-US", "Assy Defect Information", "实体名称"),
-            // entity.assyDefect._self
-            new TranslationSeedItem("entity.assyDefect._self", "ja-JP", "组立不良日报信息", "实体名称"),
-            // entity.assyDefect._self
-            new TranslationSeedItem("entity.assyDefect._self", "zh-CN", "组立不良日报信息", "实体名称"),
-            // entity.assyDefect._self
-            new TranslationSeedItem("entity.assyDefect._self", "zh-HK", "组立不良日报信息", "实体名称"),
+            // entity.assydefect._self
+            new TranslationSeedItem("entity.assydefect._self", "en-US", "Assy Defect Information", "实体名称"),
+            // entity.assydefect._self
+            new TranslationSeedItem("entity.assydefect._self", "ja-JP", "组立不良日报信息", "实体名称"),
+            // entity.assydefect._self
+            new TranslationSeedItem("entity.assydefect._self", "zh-CN", "组立不良日报信息", "实体名称"),
+            // entity.assydefect._self
+            new TranslationSeedItem("entity.assydefect._self", "zh-HK", "组立不良日报信息", "实体名称"),
 
-            // entity.assyDefect.plantcode
-            new TranslationSeedItem("entity.assyDefect.plantcode", "en-US", "工厂代码", "工厂代码"),
-            // entity.assyDefect.plantcode
-            new TranslationSeedItem("entity.assyDefect.plantcode", "ja-JP", "工厂代码", "工厂代码"),
-            // entity.assyDefect.plantcode
-            new TranslationSeedItem("entity.assyDefect.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.assyDefect.plantcode
-            new TranslationSeedItem("entity.assyDefect.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            // entity.assydefect.plantcode
+            new TranslationSeedItem("entity.assydefect.plantcode", "en-US", "工厂代码", "工厂代码"),
+            // entity.assydefect.plantcode
+            new TranslationSeedItem("entity.assydefect.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            // entity.assydefect.plantcode
+            new TranslationSeedItem("entity.assydefect.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            // entity.assydefect.plantcode
+            new TranslationSeedItem("entity.assydefect.plantcode", "zh-HK", "工厂代码", "工厂代码"),
 
-            // entity.assyDefect.prodcategory
-            new TranslationSeedItem("entity.assyDefect.prodcategory", "en-US", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
-            // entity.assyDefect.prodcategory
-            new TranslationSeedItem("entity.assyDefect.prodcategory", "ja-JP", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
-            // entity.assyDefect.prodcategory
-            new TranslationSeedItem("entity.assyDefect.prodcategory", "zh-CN", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
-            // entity.assyDefect.prodcategory
-            new TranslationSeedItem("entity.assyDefect.prodcategory", "zh-HK", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.assydefect.prodcategory
+            new TranslationSeedItem("entity.assydefect.prodcategory", "en-US", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.assydefect.prodcategory
+            new TranslationSeedItem("entity.assydefect.prodcategory", "ja-JP", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.assydefect.prodcategory
+            new TranslationSeedItem("entity.assydefect.prodcategory", "zh-CN", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
+            // entity.assydefect.prodcategory
+            new TranslationSeedItem("entity.assydefect.prodcategory", "zh-HK", "生产类别", "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产"),
 
-            // entity.assyDefect.proddate
-            new TranslationSeedItem("entity.assyDefect.proddate", "en-US", "生产日期", "生产日期"),
-            // entity.assyDefect.proddate
-            new TranslationSeedItem("entity.assyDefect.proddate", "ja-JP", "生产日期", "生产日期"),
-            // entity.assyDefect.proddate
-            new TranslationSeedItem("entity.assyDefect.proddate", "zh-CN", "生产日期", "生产日期"),
-            // entity.assyDefect.proddate
-            new TranslationSeedItem("entity.assyDefect.proddate", "zh-HK", "生产日期", "生产日期"),
+            // entity.assydefect.proddate
+            new TranslationSeedItem("entity.assydefect.proddate", "en-US", "生产日期", "生产日期"),
+            // entity.assydefect.proddate
+            new TranslationSeedItem("entity.assydefect.proddate", "ja-JP", "生产日期", "生产日期"),
+            // entity.assydefect.proddate
+            new TranslationSeedItem("entity.assydefect.proddate", "zh-CN", "生产日期", "生产日期"),
+            // entity.assydefect.proddate
+            new TranslationSeedItem("entity.assydefect.proddate", "zh-HK", "生产日期", "生产日期"),
 
-            // entity.assyDefect.prodline
-            new TranslationSeedItem("entity.assyDefect.prodline", "en-US", "生产线", "生产线"),
-            // entity.assyDefect.prodline
-            new TranslationSeedItem("entity.assyDefect.prodline", "ja-JP", "生产线", "生产线"),
-            // entity.assyDefect.prodline
-            new TranslationSeedItem("entity.assyDefect.prodline", "zh-CN", "生产线", "生产线"),
-            // entity.assyDefect.prodline
-            new TranslationSeedItem("entity.assyDefect.prodline", "zh-HK", "生产线", "生产线"),
+            // entity.assydefect.prodline
+            new TranslationSeedItem("entity.assydefect.prodline", "en-US", "生产线", "生产线"),
+            // entity.assydefect.prodline
+            new TranslationSeedItem("entity.assydefect.prodline", "ja-JP", "生产线", "生产线"),
+            // entity.assydefect.prodline
+            new TranslationSeedItem("entity.assydefect.prodline", "zh-CN", "生产线", "生产线"),
+            // entity.assydefect.prodline
+            new TranslationSeedItem("entity.assydefect.prodline", "zh-HK", "生产线", "生产线"),
 
-            // entity.assyDefect.shiftno
-            new TranslationSeedItem("entity.assyDefect.shiftno", "en-US", "班次", "班次(1=早班 2=中班 3=晚班)"),
-            // entity.assyDefect.shiftno
-            new TranslationSeedItem("entity.assyDefect.shiftno", "ja-JP", "班次", "班次(1=早班 2=中班 3=晚班)"),
-            // entity.assyDefect.shiftno
-            new TranslationSeedItem("entity.assyDefect.shiftno", "zh-CN", "班次", "班次(1=早班 2=中班 3=晚班)"),
-            // entity.assyDefect.shiftno
-            new TranslationSeedItem("entity.assyDefect.shiftno", "zh-HK", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.assydefect.shiftno
+            new TranslationSeedItem("entity.assydefect.shiftno", "en-US", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.assydefect.shiftno
+            new TranslationSeedItem("entity.assydefect.shiftno", "ja-JP", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.assydefect.shiftno
+            new TranslationSeedItem("entity.assydefect.shiftno", "zh-CN", "班次", "班次(1=早班 2=中班 3=晚班)"),
+            // entity.assydefect.shiftno
+            new TranslationSeedItem("entity.assydefect.shiftno", "zh-HK", "班次", "班次(1=早班 2=中班 3=晚班)"),
 
-            // entity.assyDefect.prodordercode
-            new TranslationSeedItem("entity.assyDefect.prodordercode", "en-US", "生产订单号", "生产订单号"),
-            // entity.assyDefect.prodordercode
-            new TranslationSeedItem("entity.assyDefect.prodordercode", "ja-JP", "生产订单号", "生产订单号"),
-            // entity.assyDefect.prodordercode
-            new TranslationSeedItem("entity.assyDefect.prodordercode", "zh-CN", "生产订单号", "生产订单号"),
-            // entity.assyDefect.prodordercode
-            new TranslationSeedItem("entity.assyDefect.prodordercode", "zh-HK", "生产订单号", "生产订单号"),
+            // entity.assydefect.prodordercode
+            new TranslationSeedItem("entity.assydefect.prodordercode", "en-US", "生产订单号", "生产订单号"),
+            // entity.assydefect.prodordercode
+            new TranslationSeedItem("entity.assydefect.prodordercode", "ja-JP", "生产订单号", "生产订单号"),
+            // entity.assydefect.prodordercode
+            new TranslationSeedItem("entity.assydefect.prodordercode", "zh-CN", "生产订单号", "生产订单号"),
+            // entity.assydefect.prodordercode
+            new TranslationSeedItem("entity.assydefect.prodordercode", "zh-HK", "生产订单号", "生产订单号"),
 
-            // entity.assyDefect.prodorderqty
-            new TranslationSeedItem("entity.assyDefect.prodorderqty", "en-US", "生产订单数量", "生产订单数量"),
-            // entity.assyDefect.prodorderqty
-            new TranslationSeedItem("entity.assyDefect.prodorderqty", "ja-JP", "生产订单数量", "生产订单数量"),
-            // entity.assyDefect.prodorderqty
-            new TranslationSeedItem("entity.assyDefect.prodorderqty", "zh-CN", "生产订单数量", "生产订单数量"),
-            // entity.assyDefect.prodorderqty
-            new TranslationSeedItem("entity.assyDefect.prodorderqty", "zh-HK", "生产订单数量", "生产订单数量"),
+            // entity.assydefect.prodorderqty
+            new TranslationSeedItem("entity.assydefect.prodorderqty", "en-US", "生产订单数量", "生产订单数量"),
+            // entity.assydefect.prodorderqty
+            new TranslationSeedItem("entity.assydefect.prodorderqty", "ja-JP", "生产订单数量", "生产订单数量"),
+            // entity.assydefect.prodorderqty
+            new TranslationSeedItem("entity.assydefect.prodorderqty", "zh-CN", "生产订单数量", "生产订单数量"),
+            // entity.assydefect.prodorderqty
+            new TranslationSeedItem("entity.assydefect.prodorderqty", "zh-HK", "生产订单数量", "生产订单数量"),
 
-            // entity.assyDefect.modelcode
-            new TranslationSeedItem("entity.assyDefect.modelcode", "en-US", "机种", "机种"),
-            // entity.assyDefect.modelcode
-            new TranslationSeedItem("entity.assyDefect.modelcode", "ja-JP", "机种", "机种"),
-            // entity.assyDefect.modelcode
-            new TranslationSeedItem("entity.assyDefect.modelcode", "zh-CN", "机种", "机种"),
-            // entity.assyDefect.modelcode
-            new TranslationSeedItem("entity.assyDefect.modelcode", "zh-HK", "机种", "机种"),
+            // entity.assydefect.modelcode
+            new TranslationSeedItem("entity.assydefect.modelcode", "en-US", "机种", "机种"),
+            // entity.assydefect.modelcode
+            new TranslationSeedItem("entity.assydefect.modelcode", "ja-JP", "机种", "机种"),
+            // entity.assydefect.modelcode
+            new TranslationSeedItem("entity.assydefect.modelcode", "zh-CN", "机种", "机种"),
+            // entity.assydefect.modelcode
+            new TranslationSeedItem("entity.assydefect.modelcode", "zh-HK", "机种", "机种"),
 
-            // entity.assyDefect.batchno
-            new TranslationSeedItem("entity.assyDefect.batchno", "en-US", "批次", "批次"),
-            // entity.assyDefect.batchno
-            new TranslationSeedItem("entity.assyDefect.batchno", "ja-JP", "批次", "批次"),
-            // entity.assyDefect.batchno
-            new TranslationSeedItem("entity.assyDefect.batchno", "zh-CN", "批次", "批次"),
-            // entity.assyDefect.batchno
-            new TranslationSeedItem("entity.assyDefect.batchno", "zh-HK", "批次", "批次"),
+            // entity.assydefect.batchno
+            new TranslationSeedItem("entity.assydefect.batchno", "en-US", "批次", "批次"),
+            // entity.assydefect.batchno
+            new TranslationSeedItem("entity.assydefect.batchno", "ja-JP", "批次", "批次"),
+            // entity.assydefect.batchno
+            new TranslationSeedItem("entity.assydefect.batchno", "zh-CN", "批次", "批次"),
+            // entity.assydefect.batchno
+            new TranslationSeedItem("entity.assydefect.batchno", "zh-HK", "批次", "批次"),
 
-            // entity.assyDefect.materialcode
-            new TranslationSeedItem("entity.assyDefect.materialcode", "en-US", "物料编码", "物料编码"),
-            // entity.assyDefect.materialcode
-            new TranslationSeedItem("entity.assyDefect.materialcode", "ja-JP", "物料编码", "物料编码"),
-            // entity.assyDefect.materialcode
-            new TranslationSeedItem("entity.assyDefect.materialcode", "zh-CN", "物料编码", "物料编码"),
-            // entity.assyDefect.materialcode
-            new TranslationSeedItem("entity.assyDefect.materialcode", "zh-HK", "物料编码", "物料编码"),
+            // entity.assydefect.materialcode
+            new TranslationSeedItem("entity.assydefect.materialcode", "en-US", "物料编码", "物料编码"),
+            // entity.assydefect.materialcode
+            new TranslationSeedItem("entity.assydefect.materialcode", "ja-JP", "物料编码", "物料编码"),
+            // entity.assydefect.materialcode
+            new TranslationSeedItem("entity.assydefect.materialcode", "zh-CN", "物料编码", "物料编码"),
+            // entity.assydefect.materialcode
+            new TranslationSeedItem("entity.assydefect.materialcode", "zh-HK", "物料编码", "物料编码"),
 
-            // entity.assyDefect.prodactualqty
-            new TranslationSeedItem("entity.assyDefect.prodactualqty", "en-US", "生实实绩", "生实实绩"),
-            // entity.assyDefect.prodactualqty
-            new TranslationSeedItem("entity.assyDefect.prodactualqty", "ja-JP", "生实实绩", "生实实绩"),
-            // entity.assyDefect.prodactualqty
-            new TranslationSeedItem("entity.assyDefect.prodactualqty", "zh-CN", "生实实绩", "生实实绩"),
-            // entity.assyDefect.prodactualqty
-            new TranslationSeedItem("entity.assyDefect.prodactualqty", "zh-HK", "生实实绩", "生实实绩"),
+            // entity.assydefect.prodactualqty
+            new TranslationSeedItem("entity.assydefect.prodactualqty", "en-US", "生实实绩", "生实实绩"),
+            // entity.assydefect.prodactualqty
+            new TranslationSeedItem("entity.assydefect.prodactualqty", "ja-JP", "生实实绩", "生实实绩"),
+            // entity.assydefect.prodactualqty
+            new TranslationSeedItem("entity.assydefect.prodactualqty", "zh-CN", "生实实绩", "生实实绩"),
+            // entity.assydefect.prodactualqty
+            new TranslationSeedItem("entity.assydefect.prodactualqty", "zh-HK", "生实实绩", "生实实绩"),
 
-            // entity.assyDefect.goodquantity
-            new TranslationSeedItem("entity.assyDefect.goodquantity", "en-US", "无不良数量", "无不良数量"),
-            // entity.assyDefect.goodquantity
-            new TranslationSeedItem("entity.assyDefect.goodquantity", "ja-JP", "无不良数量", "无不良数量"),
-            // entity.assyDefect.goodquantity
-            new TranslationSeedItem("entity.assyDefect.goodquantity", "zh-CN", "无不良数量", "无不良数量"),
-            // entity.assyDefect.goodquantity
-            new TranslationSeedItem("entity.assyDefect.goodquantity", "zh-HK", "无不良数量", "无不良数量"),
+            // entity.assydefect.goodquantity
+            new TranslationSeedItem("entity.assydefect.goodquantity", "en-US", "无不良数量", "无不良数量"),
+            // entity.assydefect.goodquantity
+            new TranslationSeedItem("entity.assydefect.goodquantity", "ja-JP", "无不良数量", "无不良数量"),
+            // entity.assydefect.goodquantity
+            new TranslationSeedItem("entity.assydefect.goodquantity", "zh-CN", "无不良数量", "无不良数量"),
+            // entity.assydefect.goodquantity
+            new TranslationSeedItem("entity.assydefect.goodquantity", "zh-HK", "无不良数量", "无不良数量"),
 
-            // entity.assyDefect.status
-            new TranslationSeedItem("entity.assyDefect.status", "en-US", "状态", "状态(0=正常 1=停用)"),
-            // entity.assyDefect.status
-            new TranslationSeedItem("entity.assyDefect.status", "ja-JP", "状态", "状态(0=正常 1=停用)"),
-            // entity.assyDefect.status
-            new TranslationSeedItem("entity.assyDefect.status", "zh-CN", "状态", "状态(0=正常 1=停用)"),
-            // entity.assyDefect.status
-            new TranslationSeedItem("entity.assyDefect.status", "zh-HK", "状态", "状态(0=正常 1=停用)"),
+            // entity.assydefect.status
+            new TranslationSeedItem("entity.assydefect.status", "en-US", "状态", "状态(0=正常 1=停用)"),
+            // entity.assydefect.status
+            new TranslationSeedItem("entity.assydefect.status", "ja-JP", "状态", "状态(0=正常 1=停用)"),
+            // entity.assydefect.status
+            new TranslationSeedItem("entity.assydefect.status", "zh-CN", "状态", "状态(0=正常 1=停用)"),
+            // entity.assydefect.status
+            new TranslationSeedItem("entity.assydefect.status", "zh-HK", "状态", "状态(0=正常 1=停用)"),
 
-            // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "en-US", "组立不良明细列表", "组立不良明细列表"),
-            // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "ja-JP", "组立不良明细列表", "组立不良明细列表"),
-            // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "zh-CN", "组立不良明细列表", "组立不良明细列表"),
-            // entity.assyDefect.details
-            new TranslationSeedItem("entity.assyDefect.details", "zh-HK", "组立不良明细列表", "组立不良明细列表"),
+            // entity.assydefect.details
+            new TranslationSeedItem("entity.assydefect.details", "en-US", "组立不良明细列表", "组立不良明细列表"),
+            // entity.assydefect.details
+            new TranslationSeedItem("entity.assydefect.details", "ja-JP", "组立不良明细列表", "组立不良明细列表"),
+            // entity.assydefect.details
+            new TranslationSeedItem("entity.assydefect.details", "zh-CN", "组立不良明细列表", "组立不良明细列表"),
+            // entity.assydefect.details
+            new TranslationSeedItem("entity.assydefect.details", "zh-HK", "组立不良明细列表", "组立不良明细列表"),
         };
     }
 
@@ -233,8 +232,8 @@ public class TaktAssyDefectI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

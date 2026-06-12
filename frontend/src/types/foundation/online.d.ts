@@ -227,108 +227,6 @@ export interface OnlineQuery extends TaktPagedQuery {
 
 
 /**
- * 创建Online DTO
- * @description 对应后端 TaktOnlineCreateDto
- */
-export interface OnlineCreate {
-  /**
-   * SignalR 连接 ID（租户+公司内唯一）
-   */
-  connectionId: string;
-
-  /**
-   * 用户名
-   */
-  userName: string;
-
-  /**
-   * 用户 ID
-   */
-  userId?: string;
-
-  /**
-   * 在线状态（0=在线，1=离线，2=离开）
-   */
-  onlineStatus: number;
-
-  /**
-   * 连接 IP 地址
-   */
-  connectIp?: string;
-
-  /**
-   * 连接地点
-   */
-  connectLocation?: string;
-
-  /**
-   * User-Agent
-   */
-  userAgent?: string;
-
-  /**
-   * 设备类型
-   */
-  deviceType?: number;
-
-  /**
-   * 浏览器类型
-   */
-  browserType?: number;
-
-  /**
-   * 操作系统
-   */
-  operatingSystem?: number;
-
-  /**
-   * 连接时间
-   */
-  connectTime: string;
-
-  /**
-   * 最后活动时间
-   */
-  lastActiveTime?: string;
-
-  /**
-   * 断开时间
-   */
-  disconnectTime?: string;
-
-  /**
-   * 连接时长（秒）
-   */
-  connectionDuration?: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extFieldJson?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新Online DTO
- * 继承 OnlineCreate，添加 OnlineId 字段
- * @description 对应后端 TaktOnlineUpdateDto
- */
-export interface OnlineUpdate extends OnlineCreate {
-  /**
-   * OnlineID（标识要更新的实体）
-   */
-  onlineId: string;
-
-}
-
-
-/**
  * Online 状态更新 DTO
  * @description 对应后端 TaktOnlineStatusDto
  */
@@ -483,5 +381,59 @@ export interface OnlineStatistics {
    * 当月累计在线时长（秒）：当前用户当月各会话有效时长之和
    */
   monthDurationSeconds: number;
+}
+
+/**
+ * 在线用户强退参数
+ * @description 对应后端 TaktOnlineForceKickDto
+ */
+export interface OnlineForceKick {
+  /** SignalR 连接 ID（主键查无记录时回退定位） */
+  connectionId?: string;
+  /** 强退原因（可选） */
+  reason?: string;
+}
+
+/**
+ * 批量强退在线用户参数
+ * @description 对应后端 TaktOnlineForceKickBatchDto
+ */
+export interface OnlineForceKickBatch {
+  /** 在线用户 ID 列表 */
+  onlineIds: string[];
+  /** 强退原因（可选） */
+  reason?: string;
+}
+
+/**
+ * SignalR 统计推送目标用户
+ * @description 对应后端 TaktSignalRPushStatisticsRequestDto
+ */
+export interface OnlinePushStatisticsRequest {
+  /** 目标用户名 */
+  userName: string;
+  /** 目标用户 ID（可选） */
+  userId?: string;
+}
+
+/**
+ * 在线消息广播推送参数
+ * @description 对应后端 TaktMessageBroadcastDto（TaktOnlinesController 广播端点）
+ */
+export interface OnlineBroadcastPush {
+  /** 公司代码 */
+  companyCode?: string;
+  /** 发送者用户名 */
+  fromUserName?: string;
+  /** 消息标题 */
+  messageTitle?: string;
+  /** 消息内容 */
+  messageContent: string;
+  /** 消息类型 */
+  messageType?: number;
+  /** 消息分组 */
+  messageGroup?: number;
+  /** 发送时间 */
+  sendTime?: string;
 }
 

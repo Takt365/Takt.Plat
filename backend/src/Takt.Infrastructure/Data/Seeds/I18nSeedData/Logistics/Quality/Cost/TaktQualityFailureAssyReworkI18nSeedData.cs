@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityFailureAssyReworkI18nSeedData.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityFailureAssyRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -15,13 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost;
 
 /// <summary>
-/// TaktQualityFailureAssyRework 实体国际化翻译种子（键前缀 entity.qualityFailureAssyRework.*）
+/// TaktQualityFailureAssyRework 实体国际化翻译种子（键前缀 entity.qualityfailureassyrework.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
 public class TaktQualityFailureAssyReworkI18nSeedData : ITaktSeedDataCoordinator
@@ -51,7 +50,7 @@ public class TaktQualityFailureAssyReworkI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityFailureAssyRework 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityfailureassyrework 实体翻译...", tenantCode);
 
         foreach (var item in GetQualityFailureAssyReworkTranslations())
         {
@@ -76,182 +75,182 @@ public class TaktQualityFailureAssyReworkI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktQualityFailureAssyRework 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.qualityFailureAssyRework._self / entity.qualityFailureAssyRework.{{field}}；ResourceGroup=TaktModule.Logistics；ResourceType=TaktAppSide.Frontend
+    /// I18nKey：entity.qualityfailureassyrework._self / entity.qualityfailureassyrework.{{field}}；ResourceGroup=4；ResourceType=0
     /// </summary>
     private static List<TranslationSeedItem> GetQualityFailureAssyReworkTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.qualityFailureAssyRework._self
-            new TranslationSeedItem("entity.qualityFailureAssyRework._self", "en-US", "Quality Failure Assy Rework Information", "实体名称"),
-            // entity.qualityFailureAssyRework._self
-            new TranslationSeedItem("entity.qualityFailureAssyRework._self", "ja-JP", "品质问题应对明细 - 组装不良改修应对信息", "实体名称"),
-            // entity.qualityFailureAssyRework._self
-            new TranslationSeedItem("entity.qualityFailureAssyRework._self", "zh-CN", "品质问题应对明细 - 组装不良改修应对信息", "实体名称"),
-            // entity.qualityFailureAssyRework._self
-            new TranslationSeedItem("entity.qualityFailureAssyRework._self", "zh-HK", "品质问题应对明细 - 组装不良改修应对信息", "实体名称"),
+            // entity.qualityfailureassyrework._self
+            new TranslationSeedItem("entity.qualityfailureassyrework._self", "en-US", "Quality Failure Assy Rework Information", "实体名称"),
+            // entity.qualityfailureassyrework._self
+            new TranslationSeedItem("entity.qualityfailureassyrework._self", "ja-JP", "品质问题应对明细 - 组装不良改修应对信息", "实体名称"),
+            // entity.qualityfailureassyrework._self
+            new TranslationSeedItem("entity.qualityfailureassyrework._self", "zh-CN", "品质问题应对明细 - 组装不良改修应对信息", "实体名称"),
+            // entity.qualityfailureassyrework._self
+            new TranslationSeedItem("entity.qualityfailureassyrework._self", "zh-HK", "品质问题应对明细 - 组装不良改修应对信息", "实体名称"),
 
-            // entity.qualityFailureAssyRework.qualityfailureid
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailureid", "en-US", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityFailureAssyRework.qualityfailureid
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailureid", "ja-JP", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityFailureAssyRework.qualityfailureid
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailureid", "zh-CN", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityFailureAssyRework.qualityfailureid
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailureid", "zh-HK", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityfailureassyrework.qualityfailureid
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailureid", "en-US", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityfailureassyrework.qualityfailureid
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailureid", "ja-JP", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityfailureassyrework.qualityfailureid
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailureid", "zh-CN", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityfailureassyrework.qualityfailureid
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailureid", "zh-HK", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
 
-            // entity.qualityFailureAssyRework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailurecode", "en-US", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityFailureAssyRework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailurecode", "ja-JP", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityFailureAssyRework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailurecode", "zh-CN", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityFailureAssyRework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityFailureAssyRework.qualityfailurecode", "zh-HK", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityfailureassyrework.qualityfailurecode
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailurecode", "en-US", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityfailureassyrework.qualityfailurecode
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailurecode", "ja-JP", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityfailureassyrework.qualityfailurecode
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailurecode", "zh-CN", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityfailureassyrework.qualityfailurecode
+            new TranslationSeedItem("entity.qualityfailureassyrework.qualityfailurecode", "zh-HK", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
 
-            // entity.qualityFailureAssyRework.linenumber
-            new TranslationSeedItem("entity.qualityFailureAssyRework.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityFailureAssyRework.linenumber
-            new TranslationSeedItem("entity.qualityFailureAssyRework.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityFailureAssyRework.linenumber
-            new TranslationSeedItem("entity.qualityFailureAssyRework.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityFailureAssyRework.linenumber
-            new TranslationSeedItem("entity.qualityFailureAssyRework.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityfailureassyrework.linenumber
+            new TranslationSeedItem("entity.qualityfailureassyrework.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityfailureassyrework.linenumber
+            new TranslationSeedItem("entity.qualityfailureassyrework.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityfailureassyrework.linenumber
+            new TranslationSeedItem("entity.qualityfailureassyrework.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityfailureassyrework.linenumber
+            new TranslationSeedItem("entity.qualityfailureassyrework.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
 
-            // entity.qualityFailureAssyRework.assydefectparts
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydefectparts", "en-US", "组装不良内容", "组装不良内容(Parts/Components)"),
-            // entity.qualityFailureAssyRework.assydefectparts
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydefectparts", "ja-JP", "组装不良内容", "组装不良内容(Parts/Components)"),
-            // entity.qualityFailureAssyRework.assydefectparts
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydefectparts", "zh-CN", "组装不良内容", "组装不良内容(Parts/Components)"),
-            // entity.qualityFailureAssyRework.assydefectparts
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydefectparts", "zh-HK", "组装不良内容", "组装不良内容(Parts/Components)"),
+            // entity.qualityfailureassyrework.assydefectparts
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydefectparts", "en-US", "组装不良内容", "组装不良内容(Parts/Components)"),
+            // entity.qualityfailureassyrework.assydefectparts
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydefectparts", "ja-JP", "组装不良内容", "组装不良内容(Parts/Components)"),
+            // entity.qualityfailureassyrework.assydefectparts
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydefectparts", "zh-CN", "组装不良内容", "组装不良内容(Parts/Components)"),
+            // entity.qualityfailureassyrework.assydefectparts
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydefectparts", "zh-HK", "组装不良内容", "组装不良内容(Parts/Components)"),
 
-            // entity.qualityFailureAssyRework.assyreworkcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworkcost", "en-US", "组装选别改修费用", "组装选别・改修费用(元)"),
-            // entity.qualityFailureAssyRework.assyreworkcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworkcost", "ja-JP", "组装选别改修费用", "组装选别・改修费用(元)"),
-            // entity.qualityFailureAssyRework.assyreworkcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworkcost", "zh-CN", "组装选别改修费用", "组装选别・改修费用(元)"),
-            // entity.qualityFailureAssyRework.assyreworkcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworkcost", "zh-HK", "组装选别改修费用", "组装选别・改修费用(元)"),
+            // entity.qualityfailureassyrework.assyreworkcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworkcost", "en-US", "组装选别改修费用", "组装选别・改修费用(元)"),
+            // entity.qualityfailureassyrework.assyreworkcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworkcost", "ja-JP", "组装选别改修费用", "组装选别・改修费用(元)"),
+            // entity.qualityfailureassyrework.assyreworkcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworkcost", "zh-CN", "组装选别改修费用", "组装选别・改修费用(元)"),
+            // entity.qualityfailureassyrework.assyreworkcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworkcost", "zh-HK", "组装选别改修费用", "组装选别・改修费用(元)"),
 
-            // entity.qualityFailureAssyRework.assyreworktimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworktimeminutes", "en-US", "组装选别改修时间", "组装选别・改修时间(分钟)"),
-            // entity.qualityFailureAssyRework.assyreworktimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworktimeminutes", "ja-JP", "组装选别改修时间", "组装选别・改修时间(分钟)"),
-            // entity.qualityFailureAssyRework.assyreworktimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworktimeminutes", "zh-CN", "组装选别改修时间", "组装选别・改修时间(分钟)"),
-            // entity.qualityFailureAssyRework.assyreworktimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworktimeminutes", "zh-HK", "组装选别改修时间", "组装选别・改修时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreworktimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworktimeminutes", "en-US", "组装选别改修时间", "组装选别・改修时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreworktimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworktimeminutes", "ja-JP", "组装选别改修时间", "组装选别・改修时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreworktimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworktimeminutes", "zh-CN", "组装选别改修时间", "组装选别・改修时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreworktimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworktimeminutes", "zh-HK", "组装选别改修时间", "组装选别・改修时间(分钟)"),
 
-            // entity.qualityFailureAssyRework.assyreinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreinspectiontimeminutes", "en-US", "组装再检查时间", "组装再检查时间(分钟)"),
-            // entity.qualityFailureAssyRework.assyreinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreinspectiontimeminutes", "ja-JP", "组装再检查时间", "组装再检查时间(分钟)"),
-            // entity.qualityFailureAssyRework.assyreinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreinspectiontimeminutes", "zh-CN", "组装再检查时间", "组装再检查时间(分钟)"),
-            // entity.qualityFailureAssyRework.assyreinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreinspectiontimeminutes", "zh-HK", "组装再检查时间", "组装再检查时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreinspectiontimeminutes", "en-US", "组装再检查时间", "组装再检查时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreinspectiontimeminutes", "ja-JP", "组装再检查时间", "组装再检查时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreinspectiontimeminutes", "zh-CN", "组装再检查时间", "组装再检查时间(分钟)"),
+            // entity.qualityfailureassyrework.assyreinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreinspectiontimeminutes", "zh-HK", "组装再检查时间", "组装再检查时间(分钟)"),
 
-            // entity.qualityFailureAssyRework.assytravelcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assytravelcost", "en-US", "组装交通费旅费", "组装交通费、旅费(元)"),
-            // entity.qualityFailureAssyRework.assytravelcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assytravelcost", "ja-JP", "组装交通费旅费", "组装交通费、旅费(元)"),
-            // entity.qualityFailureAssyRework.assytravelcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assytravelcost", "zh-CN", "组装交通费旅费", "组装交通费、旅费(元)"),
-            // entity.qualityFailureAssyRework.assytravelcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assytravelcost", "zh-HK", "组装交通费旅费", "组装交通费、旅费(元)"),
+            // entity.qualityfailureassyrework.assytravelcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assytravelcost", "en-US", "组装交通费旅费", "组装交通费、旅费(元)"),
+            // entity.qualityfailureassyrework.assytravelcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assytravelcost", "ja-JP", "组装交通费旅费", "组装交通费、旅费(元)"),
+            // entity.qualityfailureassyrework.assytravelcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assytravelcost", "zh-CN", "组装交通费旅费", "组装交通费、旅费(元)"),
+            // entity.qualityfailureassyrework.assytravelcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assytravelcost", "zh-HK", "组装交通费旅费", "组装交通费、旅费(元)"),
 
-            // entity.qualityFailureAssyRework.assywarehousecost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assywarehousecost", "en-US", "组装仓库管理费", "组装仓库管理费(元)"),
-            // entity.qualityFailureAssyRework.assywarehousecost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assywarehousecost", "ja-JP", "组装仓库管理费", "组装仓库管理费(元)"),
-            // entity.qualityFailureAssyRework.assywarehousecost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assywarehousecost", "zh-CN", "组装仓库管理费", "组装仓库管理费(元)"),
-            // entity.qualityFailureAssyRework.assywarehousecost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assywarehousecost", "zh-HK", "组装仓库管理费", "组装仓库管理费(元)"),
+            // entity.qualityfailureassyrework.assywarehousecost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assywarehousecost", "en-US", "组装仓库管理费", "组装仓库管理费(元)"),
+            // entity.qualityfailureassyrework.assywarehousecost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assywarehousecost", "ja-JP", "组装仓库管理费", "组装仓库管理费(元)"),
+            // entity.qualityfailureassyrework.assywarehousecost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assywarehousecost", "zh-CN", "组装仓库管理费", "组装仓库管理费(元)"),
+            // entity.qualityfailureassyrework.assywarehousecost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assywarehousecost", "zh-HK", "组装仓库管理费", "组装仓库管理费(元)"),
 
-            // entity.qualityFailureAssyRework.assyotherexpenses
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses", "en-US", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
-            // entity.qualityFailureAssyRework.assyotherexpenses
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses", "ja-JP", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
-            // entity.qualityFailureAssyRework.assyotherexpenses
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses", "zh-CN", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
-            // entity.qualityFailureAssyRework.assyotherexpenses
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses", "zh-HK", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses", "en-US", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses", "ja-JP", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses", "zh-CN", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses", "zh-HK", "组装选别改修其他费用", "组装选别・改修其他费用(元)"),
 
-            // entity.qualityFailureAssyRework.assyreworknote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworknote", "en-US", "组装选别改修备注", "组装选别・改修备注"),
-            // entity.qualityFailureAssyRework.assyreworknote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworknote", "ja-JP", "组装选别改修备注", "组装选别・改修备注"),
-            // entity.qualityFailureAssyRework.assyreworknote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworknote", "zh-CN", "组装选别改修备注", "组装选别・改修备注"),
-            // entity.qualityFailureAssyRework.assyreworknote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyreworknote", "zh-HK", "组装选别改修备注", "组装选别・改修备注"),
+            // entity.qualityfailureassyrework.assyreworknote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworknote", "en-US", "组装选别改修备注", "组装选别・改修备注"),
+            // entity.qualityfailureassyrework.assyreworknote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworknote", "ja-JP", "组装选别改修备注", "组装选别・改修备注"),
+            // entity.qualityfailureassyrework.assyreworknote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworknote", "zh-CN", "组装选别改修备注", "组装选别・改修备注"),
+            // entity.qualityfailureassyrework.assyreworknote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyreworknote", "zh-HK", "组装选别改修备注", "组装选别・改修备注"),
 
-            // entity.qualityFailureAssyRework.assyscrapcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyscrapcost", "en-US", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
-            // entity.qualityFailureAssyRework.assyscrapcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyscrapcost", "ja-JP", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
-            // entity.qualityFailureAssyRework.assyscrapcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyscrapcost", "zh-CN", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
-            // entity.qualityFailureAssyRework.assyscrapcost
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyscrapcost", "zh-HK", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
+            // entity.qualityfailureassyrework.assyscrapcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyscrapcost", "en-US", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
+            // entity.qualityfailureassyrework.assyscrapcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyscrapcost", "ja-JP", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
+            // entity.qualityfailureassyrework.assyscrapcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyscrapcost", "zh-CN", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
+            // entity.qualityfailureassyrework.assyscrapcost
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyscrapcost", "zh-HK", "组装向顾客费用请求", "组装向顾客的费用请求(元)"),
 
-            // entity.qualityFailureAssyRework.assycustomername
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assycustomername", "en-US", "组装顾客名", "组装顾客名"),
-            // entity.qualityFailureAssyRework.assycustomername
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assycustomername", "ja-JP", "组装顾客名", "组装顾客名"),
-            // entity.qualityFailureAssyRework.assycustomername
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assycustomername", "zh-CN", "组装顾客名", "组装顾客名"),
-            // entity.qualityFailureAssyRework.assycustomername
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assycustomername", "zh-HK", "组装顾客名", "组装顾客名"),
+            // entity.qualityfailureassyrework.assycustomername
+            new TranslationSeedItem("entity.qualityfailureassyrework.assycustomername", "en-US", "组装顾客名", "组装顾客名"),
+            // entity.qualityfailureassyrework.assycustomername
+            new TranslationSeedItem("entity.qualityfailureassyrework.assycustomername", "ja-JP", "组装顾客名", "组装顾客名"),
+            // entity.qualityfailureassyrework.assycustomername
+            new TranslationSeedItem("entity.qualityfailureassyrework.assycustomername", "zh-CN", "组装顾客名", "组装顾客名"),
+            // entity.qualityfailureassyrework.assycustomername
+            new TranslationSeedItem("entity.qualityfailureassyrework.assycustomername", "zh-HK", "组装顾客名", "组装顾客名"),
 
-            // entity.qualityFailureAssyRework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydebitnoteno", "en-US", "组装 Debit Note No", "组装 Debit Note No"),
-            // entity.qualityFailureAssyRework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydebitnoteno", "ja-JP", "组装 Debit Note No", "组装 Debit Note No"),
-            // entity.qualityFailureAssyRework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydebitnoteno", "zh-CN", "组装 Debit Note No", "组装 Debit Note No"),
-            // entity.qualityFailureAssyRework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assydebitnoteno", "zh-HK", "组装 Debit Note No", "组装 Debit Note No"),
+            // entity.qualityfailureassyrework.assydebitnoteno
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydebitnoteno", "en-US", "组装 Debit Note No", "组装 Debit Note No"),
+            // entity.qualityfailureassyrework.assydebitnoteno
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydebitnoteno", "ja-JP", "组装 Debit Note No", "组装 Debit Note No"),
+            // entity.qualityfailureassyrework.assydebitnoteno
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydebitnoteno", "zh-CN", "组装 Debit Note No", "组装 Debit Note No"),
+            // entity.qualityfailureassyrework.assydebitnoteno
+            new TranslationSeedItem("entity.qualityfailureassyrework.assydebitnoteno", "zh-HK", "组装 Debit Note No", "组装 Debit Note No"),
 
-            // entity.qualityFailureAssyRework.assyotherexpenses2
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses2", "en-US", "组装其他费用", "组装其他费用(元)"),
-            // entity.qualityFailureAssyRework.assyotherexpenses2
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses2", "ja-JP", "组装其他费用", "组装其他费用(元)"),
-            // entity.qualityFailureAssyRework.assyotherexpenses2
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses2", "zh-CN", "组装其他费用", "组装其他费用(元)"),
-            // entity.qualityFailureAssyRework.assyotherexpenses2
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyotherexpenses2", "zh-HK", "组装其他费用", "组装其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses2
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses2", "en-US", "组装其他费用", "组装其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses2
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses2", "ja-JP", "组装其他费用", "组装其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses2
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses2", "zh-CN", "组装其他费用", "组装其他费用(元)"),
+            // entity.qualityfailureassyrework.assyotherexpenses2
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyotherexpenses2", "zh-HK", "组装其他费用", "组装其他费用(元)"),
 
-            // entity.qualityFailureAssyRework.assynote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assynote", "en-US", "组装备注", "组装备注"),
-            // entity.qualityFailureAssyRework.assynote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assynote", "ja-JP", "组装备注", "组装备注"),
-            // entity.qualityFailureAssyRework.assynote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assynote", "zh-CN", "组装备注", "组装备注"),
-            // entity.qualityFailureAssyRework.assynote
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assynote", "zh-HK", "组装备注", "组装备注"),
+            // entity.qualityfailureassyrework.assynote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assynote", "en-US", "组装备注", "组装备注"),
+            // entity.qualityfailureassyrework.assynote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assynote", "ja-JP", "组装备注", "组装备注"),
+            // entity.qualityfailureassyrework.assynote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assynote", "zh-CN", "组装备注", "组装备注"),
+            // entity.qualityfailureassyrework.assynote
+            new TranslationSeedItem("entity.qualityfailureassyrework.assynote", "zh-HK", "组装备注", "组装备注"),
 
-            // entity.qualityFailureAssyRework.assyrecorder
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyrecorder", "en-US", "组装不良改修对应记录者", "组装不良改修应对记录者"),
-            // entity.qualityFailureAssyRework.assyrecorder
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyrecorder", "ja-JP", "组装不良改修对应记录者", "组装不良改修应对记录者"),
-            // entity.qualityFailureAssyRework.assyrecorder
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyrecorder", "zh-CN", "组装不良改修对应记录者", "组装不良改修应对记录者"),
-            // entity.qualityFailureAssyRework.assyrecorder
-            new TranslationSeedItem("entity.qualityFailureAssyRework.assyrecorder", "zh-HK", "组装不良改修对应记录者", "组装不良改修应对记录者"),
+            // entity.qualityfailureassyrework.assyrecorder
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyrecorder", "en-US", "组装不良改修对应记录者", "组装不良改修应对记录者"),
+            // entity.qualityfailureassyrework.assyrecorder
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyrecorder", "ja-JP", "组装不良改修对应记录者", "组装不良改修应对记录者"),
+            // entity.qualityfailureassyrework.assyrecorder
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyrecorder", "zh-CN", "组装不良改修对应记录者", "组装不良改修应对记录者"),
+            // entity.qualityfailureassyrework.assyrecorder
+            new TranslationSeedItem("entity.qualityfailureassyrework.assyrecorder", "zh-HK", "组装不良改修对应记录者", "组装不良改修应对记录者"),
 
-            // entity.qualityFailureAssyRework.issue
-            new TranslationSeedItem("entity.qualityFailureAssyRework.issue", "en-US", "品质问题主表", "品质问题主表(导航属性)"),
-            // entity.qualityFailureAssyRework.issue
-            new TranslationSeedItem("entity.qualityFailureAssyRework.issue", "ja-JP", "品质问题主表", "品质问题主表(导航属性)"),
-            // entity.qualityFailureAssyRework.issue
-            new TranslationSeedItem("entity.qualityFailureAssyRework.issue", "zh-CN", "品质问题主表", "品质问题主表(导航属性)"),
-            // entity.qualityFailureAssyRework.issue
-            new TranslationSeedItem("entity.qualityFailureAssyRework.issue", "zh-HK", "品质问题主表", "品质问题主表(导航属性)"),
+            // entity.qualityfailureassyrework.issue
+            new TranslationSeedItem("entity.qualityfailureassyrework.issue", "en-US", "品质问题主表", "品质问题主表(导航属性)"),
+            // entity.qualityfailureassyrework.issue
+            new TranslationSeedItem("entity.qualityfailureassyrework.issue", "ja-JP", "品质问题主表", "品质问题主表(导航属性)"),
+            // entity.qualityfailureassyrework.issue
+            new TranslationSeedItem("entity.qualityfailureassyrework.issue", "zh-CN", "品质问题主表", "品质问题主表(导航属性)"),
+            // entity.qualityfailureassyrework.issue
+            new TranslationSeedItem("entity.qualityfailureassyrework.issue", "zh-HK", "品质问题主表", "品质问题主表(导航属性)"),
         };
     }
 
@@ -269,8 +268,8 @@ public class TaktQualityFailureAssyReworkI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = TaktModule.Logistics;
-        translation.ResourceType = TaktAppSide.Frontend;
+        translation.ResourceGroup = 4;
+        translation.ResourceType = 0;
         translation.ContextNote = item.ContextNote;
         translation.ExtFieldJson = null;
         translation.Remark = null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.ConferenceCenter
 // 文件名称：TaktConferenceValidators.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Conference 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktConference 生成，请按需审阅）
 // 
@@ -32,13 +32,13 @@ public class TaktConferenceCreateValidator : AbstractValidator<TaktConferenceCre
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
         RuleFor(x => x.ConferenceCode)
             .NotEmpty().WithMessage("会议编码不能为空")
-            .MaximumLength(50).WithMessage("会议编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("会议编码长度不能超过40个字符");
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("会议标题不能为空")
             .MaximumLength(200).WithMessage("会议标题长度不能超过200个字符");
@@ -46,23 +46,25 @@ public class TaktConferenceCreateValidator : AbstractValidator<TaktConferenceCre
             .IsInEnum().WithMessage("会议类型无效");
         RuleFor(x => x.ConferenceStatus)
             .IsInEnum().WithMessage("会议状态无效");
+        RuleFor(x => x.ConferenceRoomId)
+            .GreaterThanOrEqualTo(0).WithMessage("会议室 ID不能为负数");
+        RuleFor(x => x.ConferenceRoomName)
+            .MaximumLength(40).WithMessage("会议室名称长度不能超过40个字符");
         RuleFor(x => x.Location)
             .MaximumLength(200).WithMessage("会议地点长度不能超过200个字符");
         RuleFor(x => x.MeetingLink)
             .MaximumLength(500).WithMessage("会议链接长度不能超过500个字符");
-        RuleFor(x => x.Summary)
-            .MaximumLength(2000).WithMessage("会议纪要摘要长度不能超过2000个字符");
         RuleFor(x => x.Tags)
             .MaximumLength(500).WithMessage("标签长度不能超过500个字符");
         RuleFor(x => x.OrganizerId)
             .GreaterThanOrEqualTo(0).WithMessage("组织人 ID不能为负数");
         RuleFor(x => x.OrganizerName)
             .NotEmpty().WithMessage("组织人姓名不能为空")
-            .MaximumLength(20).WithMessage("组织人姓名长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("组织人姓名长度不能超过40个字符");
         RuleFor(x => x.DeptId)
             .GreaterThanOrEqualTo(0).WithMessage("主办部门 ID不能为负数");
         RuleFor(x => x.DeptName)
-            .MaximumLength(100).WithMessage("主办部门名称长度不能超过100个字符");
+            .MaximumLength(40).WithMessage("主办部门名称长度不能超过40个字符");
         RuleFor(x => x.FlowInstanceId)
             .GreaterThanOrEqualTo(0).WithMessage("流程实例 ID不能为负数");
         RuleFor(x => x.ExtFieldJson)
@@ -106,12 +108,12 @@ public class TaktConferenceImportValidator : AbstractValidator<TaktConferenceImp
     public TaktConferenceImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.ConferenceCode)
             .NotEmpty().WithMessage("会议编码不能为空")
-            .MaximumLength(50).WithMessage("会议编码长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("会议编码长度不能超过40个字符");
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("会议标题不能为空")
             .MaximumLength(200).WithMessage("会议标题长度不能超过200个字符");
@@ -119,19 +121,23 @@ public class TaktConferenceImportValidator : AbstractValidator<TaktConferenceImp
             .IsInEnum().WithMessage("会议类型无效");
         RuleFor(x => x.ConferenceStatus)
             .IsInEnum().WithMessage("会议状态无效");
+        RuleFor(x => x.ConferenceRoomId)
+            .GreaterThanOrEqualTo(0).WithMessage("会议室 ID不能为负数");
+        RuleFor(x => x.ConferenceRoomName)
+            .MaximumLength(40).WithMessage("会议室名称长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ConferenceRoomName));
         RuleFor(x => x.Location)
             .MaximumLength(200).WithMessage("会议地点长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.Location));
         RuleFor(x => x.MeetingLink)
             .MaximumLength(500).WithMessage("会议链接长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.MeetingLink));
-        RuleFor(x => x.Summary)
-            .MaximumLength(2000).WithMessage("会议纪要摘要长度不能超过2000个字符").When(x => !string.IsNullOrWhiteSpace(x.Summary));
         RuleFor(x => x.Tags)
             .MaximumLength(500).WithMessage("标签长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Tags));
         RuleFor(x => x.OrganizerId)
             .GreaterThanOrEqualTo(0).WithMessage("组织人 ID不能为负数");
         RuleFor(x => x.OrganizerName)
             .NotEmpty().WithMessage("组织人姓名不能为空")
-            .MaximumLength(20).WithMessage("组织人姓名长度不能超过20个字符");
+            .MaximumLength(40).WithMessage("组织人姓名长度不能超过40个字符");
+        RuleFor(x => x.DeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("主办部门 ID不能为负数");
         RuleFor(x => x.ExtFieldJson)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
         RuleFor(x => x.Remark)

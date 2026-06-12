@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Workflow
 // 文件名称：TaktFlowAddSignsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：流程加签记录控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Workflow;
 /// 流程加签记录控制器
 /// 提供流程加签记录的 REST API
 /// </summary>
-[ApiModule(TaktModule.Workflow, "工作流")]
+[ApiModule(6, "工作流")]
 [Route("api/[controller]", Name = "流程加签记录")]
 public class TaktFlowAddSignsController : TaktControllerBase
 {
@@ -41,7 +41,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("workflow:flowaddsign:list", "流程加签记录列表")]
+    [TaktPermission("workflow:todo:list", "流程加签记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetFlowAddSignListAsync([FromQuery] TaktFlowAddSignQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程加签记录ID</param>
     /// <returns>流程加签记录DTO</returns>
-    [TaktPermission("workflow:flowaddsign:query", "流程加签记录详情")]
+    [TaktPermission("workflow:todo:query", "流程加签记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFlowAddSignByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// 获取流程加签记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("workflow:flowaddsign:query", "流程加签记录选项")]
+    [TaktPermission("workflow:todo:query", "流程加签记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetFlowAddSignOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>流程加签记录DTO</returns>
-    [TaktPermission("workflow:flowaddsign:create", "创建流程加签记录")]
+    [TaktPermission("workflow:todo:addsign", "创建流程加签记录")]
     [HttpPost]
     public async Task<IActionResult> CreateFlowAddSignAsync([FromBody] TaktFlowAddSignCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// <param name="id">流程加签记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>流程加签记录DTO</returns>
-    [TaktPermission("workflow:flowaddsign:update", "更新流程加签记录")]
+    [TaktPermission("workflow:todo:addsign", "更新流程加签记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFlowAddSignAsync(long id, [FromBody] TaktFlowAddSignUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// </summary>
     /// <param name="id">流程加签记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowaddsign:delete", "删除流程加签记录")]
+    [TaktPermission("workflow:todo:reducesign", "删除流程加签记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFlowAddSignByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("workflow:flowaddsign:delete", "批量删除流程加签记录")]
+    [TaktPermission("workflow:todo:reducesign", "批量删除流程加签记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteFlowAddSignBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowaddsign:import", "获取流程加签记录导入模板")]
+    [TaktPermission("workflow:todo:import", "获取流程加签记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetFlowAddSignTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("workflow:flowaddsign:import", "导入流程加签记录")]
+    [TaktPermission("workflow:todo:import", "导入流程加签记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportFlowAddSignAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// 导出流程加签记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("workflow:flowaddsign:export", "导出流程加签记录")]
+    [TaktPermission("workflow:todo:export", "导出流程加签记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportFlowAddSignAsync([FromQuery] TaktFlowAddSignQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

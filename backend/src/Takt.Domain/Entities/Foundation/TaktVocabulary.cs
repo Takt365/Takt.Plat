@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Shared.Enums;
 
 namespace Takt.Domain.Entities.Foundation;
 
@@ -54,5 +53,5 @@ public class TaktVocabulary : TaktTenantEntityBase
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public TaktCommonStatus Status { get; set; } = TaktCommonStatus.Enabled;
+    public int Status { get; set; } = 1;
 }

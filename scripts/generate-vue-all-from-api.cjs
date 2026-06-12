@@ -12,7 +12,7 @@
 
 const path = require('path');
 const { spawnSync } = require('child_process');
-const { logGeneratedFileWritePolicy } = require('./generate-script-common.cjs');
+const { logGeneratedFileWritePolicy, buildSingleEntityChildArgs } = require('./generate-script-common.cjs');
 const { parseVueCliArgs } = require('./generate-vue-common.cjs');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
@@ -42,25 +42,6 @@ function runChildScript(scriptName, args) {
   return result.status ?? 1;
 }
 
-/**
- * @param {{ all: boolean, entityPrefix: string|null, force: boolean, dryRun: boolean, viewPath: string|null }} options
- * @returns {string[]}
- */
-function buildChildArgs(options) {
-  const args = [];
-  if (options.all) {
-    args.push('--all');
-  } else if (options.entityPrefix) {
-    args.push(`--${options.entityPrefix}`);
-  }
-  if (options.dryRun) {
-    args.push('--dry-run');
-  }
-  if (options.viewPath) {
-    args.push('--view-path', options.viewPath);
-  }
-  return args;
-}
 
 function printAllUsage() {
   console.log(`
@@ -72,14 +53,15 @@ function printAllUsage() {
   3. generate-vue-master-detail-from-api.cjs  主子表 Master-Detail
 
 参数:
-  --all                 扫描全部 API
   --<实体名>            如 --Plant、--CostCenter、--DictType
   --view-path <路径>    覆盖 views 输出目录
   --dry-run             仅预览
 
+说明:
+  - 已禁用 --all；每次必须指定一个实体
+
 示例:
   node scripts/generate-vue-all-from-api.cjs --CostCenter
-  node scripts/generate-vue-all-from-api.cjs --all
 `);
 }
 
@@ -87,7 +69,7 @@ if (require.main === module) {
   console.log('🚀 开始一键生成 Vue 视图（CRUD + TREE + Master-Detail）...\n');
   logGeneratedFileWritePolicy();
   const options = parseVueCliArgs(printAllUsage);
-  const childArgs = buildChildArgs(options);
+  const childArgs = buildSingleEntityChildArgs(options);
   let exitCode = 0;
   VUE_PIPELINE.forEach((step, index) => {
     console.log(`\n── 步骤 ${index + 1}/${VUE_PIPELINE.length}: ${step.label} (${step.script}) ──\n`);
@@ -105,5 +87,5 @@ if (require.main === module) {
 module.exports = {
   VUE_PIPELINE,
   runChildScript,
-  buildChildArgs,
+  buildSingleEntityChildArgs,
 };

@@ -49,7 +49,7 @@ public class TaktDictTypeDto : TaktTenantDtoBase
     /// <summary>
     /// 数据源（0=表数据，1=SQL脚本）
     /// </summary>
-    public TaktDataSource DataSource { get; set; }
+    public int DataSource { get; set; }
 
     /// <summary>
     /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
@@ -64,12 +64,12 @@ public class TaktDictTypeDto : TaktTenantDtoBase
     /// <summary>
     /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus DictStatus { get; set; }
+    public int DictStatus { get; set; }
 
     /// <summary>
     /// 字典数据列表（一对多关联）
@@ -107,7 +107,7 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     /// <summary>
     /// 数据源（0=表数据，1=SQL脚本）
     /// </summary>
-    public TaktDataSource? DataSource { get; set; }
+    public int? DataSource { get; set; }
 
     /// <summary>
     /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
@@ -122,12 +122,12 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     /// <summary>
     /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? DictStatus { get; set; }
+    public int? DictStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -174,7 +174,7 @@ public class TaktDictTypeCreateDto
     /// <summary>
     /// 数据源（0=表数据，1=SQL脚本）
     /// </summary>
-    public TaktDataSource DataSource { get; set; }
+    public int DataSource { get; set; }
 
     /// <summary>
     /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
@@ -189,12 +189,12 @@ public class TaktDictTypeCreateDto
     /// <summary>
     /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus DictStatus { get; set; }
+    public int DictStatus { get; set; }
 
     /// <summary>
     /// 字典数据列表（一对多关联）（子表，级联保存）
@@ -254,7 +254,7 @@ public class TaktDictTypeStatusDto
     /// 状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public TaktCommonStatus DictStatus { get; set; }
+    public int DictStatus { get; set; }
 }
 
 // ========================================
@@ -303,7 +303,7 @@ public class TaktDictTypeTemplateDto
     /// <summary>
     /// 数据源（0=表数据，1=SQL脚本）
     /// </summary>
-    public TaktDataSource? DataSource { get; set; }
+    public int? DataSource { get; set; }
 
     /// <summary>
     /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
@@ -318,12 +318,12 @@ public class TaktDictTypeTemplateDto
     /// <summary>
     /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? DictStatus { get; set; }
+    public int? DictStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -355,7 +355,7 @@ public class TaktDictTypeImportDto
     /// <summary>
     /// 数据源（0=表数据，1=SQL脚本）
     /// </summary>
-    public TaktDataSource? DataSource { get; set; }
+    public int? DataSource { get; set; }
 
     /// <summary>
     /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
@@ -370,12 +370,12 @@ public class TaktDictTypeImportDto
     /// <summary>
     /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
     /// </summary>
-    public TaktYesNo? IsBuiltIn { get; set; }
+    public int? IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus? DictStatus { get; set; }
+    public int? DictStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -418,7 +418,7 @@ public class TaktDictTypeExportDto
     /// <summary>
     /// 数据源（0=表数据，1=SQL脚本）
     /// </summary>
-    public TaktDataSource DataSource { get; set; }
+    public int DataSource { get; set; }
 
     /// <summary>
     /// 动态字典SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder
@@ -433,12 +433,12 @@ public class TaktDictTypeExportDto
     /// <summary>
     /// 是否内置（1=是，0=否） 内置字典不允许删除和修改核心字段
     /// </summary>
-    public TaktYesNo IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; }
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
     /// </summary>
-    public TaktCommonStatus DictStatus { get; set; }
+    public int DictStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

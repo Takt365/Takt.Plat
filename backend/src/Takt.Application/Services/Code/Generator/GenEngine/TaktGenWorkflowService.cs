@@ -398,7 +398,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     }
 
     /// <summary>
-    /// 按 menu_and_translation.sql 模板顺序构建翻译行（每行 Id 用 SnowFlakeSingle.Instance.NextId() 生成）。翻译键与种子一致：菜单标题用 menu.xxx（同 menu_l10n_key），字段用 xxx.entities.fieldname（全小写）；文化代码仅 <see cref="GenTranslationCultureCodes"/> 四种。
+    /// 按 menu_and_translation.sql 模板顺序构建翻译行（每行 Id 用 SnowFlakeSingle.Instance.NextId() 生成）。翻译键与种子一致：菜单标题用 menu.xxx（同 menu_l10n_key），字段用 xxx.entities.fieldname（全小写）；文化代码仅 GenTranslationCultureCodes 四种。
     /// </summary>
     private static List<TaktSqlTranslationRowItem> BuildSqlTranslationRows(TaktGenTemplateContext context)
     {

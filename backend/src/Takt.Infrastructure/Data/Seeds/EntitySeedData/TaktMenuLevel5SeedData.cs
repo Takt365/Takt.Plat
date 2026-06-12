@@ -17,7 +17,7 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
 /// Takt 五级菜单种子数据。
-/// <para>由 <see cref="TaktMenuSeedData"/> 统一协调调用；当前无五级菜单种子项。</para>
+/// <para>由 TaktMenuSeedData 统一协调调用；当前无五级菜单种子项。</para>
 /// </summary>
 public class TaktMenuLevel5SeedData
 {

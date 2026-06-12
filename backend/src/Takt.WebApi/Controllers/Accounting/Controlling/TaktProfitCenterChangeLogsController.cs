@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktProfitCenterChangeLogsController.cs
-// 创建时间：2026-06-08
+// 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：利润中心变更记录控制器
 // 
@@ -21,7 +21,7 @@ namespace Takt.WebApi.Controllers.Accounting.Controlling;
 /// 利润中心变更记录控制器
 /// 提供利润中心变更记录的 REST API
 /// </summary>
-[ApiModule(TaktModule.Accounting, "管控会计")]
+[ApiModule(3, "管控会计")]
 [Route("api/[controller]", Name = "利润中心变更记录")]
 public class TaktProfitCenterChangeLogsController : TaktControllerBase
 {
