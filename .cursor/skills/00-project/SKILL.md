@@ -97,6 +97,8 @@ description: >-
 - [ ] XML：无 <see cref>（00-project §二 §3）
 - [ ] i18n/权限：键格式符合上表
 - [ ] 实体/DTO：Domain 实体禁 enum（00-project §1.8.1）
+- [ ] scripts/：仅 .cjs；禁止 PowerShell（00-project §6.1）
+- [ ] Agent 查找/替换：Grep + StrReplace 或 node scripts/*.cjs；禁止 Shell/PowerShell（00-project §6.2）
 ```
 
 ## 规则与 Skill 索引（00~16）
@@ -132,6 +134,8 @@ description: >-
 | 主子表 | `12-crud` → `15-codegen` → `10-master-detail` → `13-vue-view` + `14-vue-form` |
 | 树表 | `12-crud` → `15-codegen`（后端）→ `11-tree-table` → `13-vue-view` + `14-vue-form`（Vue 手工） |
 | 新建实体全栈 | **`15-codegen`** + `12-crud` |
+| 删/清理 `scripts/` | **`15-codegen`** §4.2 + **`00-project`** §6.1～§6.2（仅 `.cjs`；禁止 PowerShell 查找/替换） |
+| 批量查找替换 | **Grep → StrReplace** 或 **`node scripts/*.cjs`**；禁止 PowerShell（`00-project` §6.2） |
 | 新建后端 | `01-backend` + `12-crud` |
 | 新建前端页 | `02-frontend` + `12-crud` + `13-vue-view` + `14-vue-form` |
 | 文件空行/行数翻倍 | `03-format-blank-lines` |

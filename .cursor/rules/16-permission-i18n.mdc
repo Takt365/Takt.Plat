@@ -61,7 +61,7 @@ menu.Permission = "identity:user:list";   // 权限码（冒号）
 menu.RoutePath = "/identity/user";
 ```
 
-**按钮菜单**由 `TaktMenuButtonSeedData` 按页面 `Permission` 推导：`{模块}:{菜单段}:{操作}`；按钮文案键为 `common.button.{操作}`（翻译键，非权限码）。
+**按钮菜单**由 `TaktMenuButtonSeedData` 按页面 `Permission` 推导：`{模块}:{菜单段}:{操作}`；按钮文案键为 `common.page.button.{操作}`（翻译键，非权限码；与工具栏 `t()` 共用）。
 
 ### 1.3 标准 CRUD 权限末段
 
@@ -141,7 +141,7 @@ menu.RoutePath = "/identity/user";
 ```text
 菜单标题  I18nKey:  menu.identity.user          Permission: identity:user:list
 实体字段  I18nKey:  entity.user.username         （无 Permission）
-按钮文案  I18nKey:  common.button.create        Permission: identity:user:create
+按钮文案  I18nKey:  common.page.button.create        Permission: identity:user:create
 ```
 
 ### 2.2 动态翻译（后端种子 → 前端 `t()`）
@@ -152,7 +152,7 @@ menu.RoutePath = "/identity/user";
 | 实体字段 | `entity.{slug}.*` | `TaktXxxI18nSeedData`（`generate-entity-i18n-seed.cjs`） |
 | 实体自称 | `entity.{slug}._self` | 同上 |
 | 部门名 | `org.dept.{编码小写}` | `TaktDeptI18nSeedData` |
-| 通用按钮/反馈 | `common.page.*` / `common.button.*` | `TaktCommonI18nSeedData` |
+| 通用按钮/反馈 | `common.page.*`（按钮为 `common.page.button.*`） | `TaktCommonI18nSeedData` |
 | 校验/权限错误 | `validation.*` | 后端 `TaktValidationI18nKeys` |
 
 登录后由 `mergeDynamicLocaleMessages` 合并进 `vue-i18n`（`frontend/src/locales/index.ts`）。
@@ -188,7 +188,7 @@ menu.RoutePath = "/identity/user";
 |----|------------|---------|
 | 分隔符 | `:` | `.` |
 | 用户管理列表页 | `identity:user:list` | 菜单 `menu.identity.user` |
-| 新增按钮 | `identity:user:create` | `common.button.create` |
+| 新增按钮 | `identity:user:create` | `common.page.button.create` |
 | 用户名字段 | — | `entity.user.username` |
 | 后端校验 | `[TaktPermission]` + Filter | — |
 | 前端显隐 | `v-permission` | — |

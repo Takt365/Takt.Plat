@@ -116,7 +116,7 @@ alwaysApply: true
 ❌ dept.technology_dept                      （应 org.dept.d0700 且菜单 I18nKey 一并改）
 ```
 
-- 新增/修改 i18n 种子前：先查前端 `t('…')`、菜单种子 `I18nKey` 是否已有约定，**禁止**在 `TaktMenuI18nSeedData` 重复 `TaktCommonI18nSeedData` 已有键（如 `common.button.*`）。
+- 新增/修改 i18n 种子前：先查前端 `t('…')`、菜单种子 `I18nKey` 是否已有约定，**禁止**在 `TaktMenuI18nSeedData` 重复 `TaktCommonI18nSeedData` 已有键（如 `common.page.button.*`）。
 
 **前端静态翻译文件（`frontend/src/locales/**/*.ts`，强制）**：
 
@@ -365,6 +365,43 @@ fix(dept): 修复部门唯一索引冲突
 
 §1.4/§1.5 与 `12-crud` §三能力表**同源**：命名以本章为准；CRUD 联调与页面壳以 `12-crud` 为准。`01`/`02` 内 CRUD 细节**引用** `12-crud`，不重复展开。权限验证与翻译键全栈细则见 `16-permission-i18n`。
 
+### 6.1 `scripts/` 脚本语言（强制）
+
+| 规则 | 说明 |
+|------|------|
+| ✅ 唯一可执行脚本 | `scripts/**/*.cjs`（CommonJS Node） |
+| 执行方式 | `node scripts/<name>.cjs [args]`（入口见 `15-codegen`） |
+| ❌ 禁止 | `.ps1`、`.psm1`、`.bat`、`.cmd` 及 **PowerShell 脚本/内联命令** 作为仓库自动化 |
+| ❌ 禁止 | 在 `scripts/` 新增 `.mjs`/`.ts` 作流水线或可执行入口（无用户明确例外） |
+| 允许非入口 | `scripts/jsconfig.json`、`scripts/api-fragments/**/*.cjs`（被 `require` 的片段） |
+
+批量改写、代码生成、校验：**写 `.cjs` 或 Cursor 编辑工具（StrReplace/Write）**，不得新建 PowerShell 脚本替代。
+
+### 6.2 Agent 工具：禁止 Shell/PowerShell 查找与替换（强制）
+
+| 场景 | 必须用 | ❌ 禁止 Shell/PowerShell |
+|------|--------|-------------------------|
+| 读文件 | **Read** | `Get-Content`、`type`、`cat` |
+| 查找/搜引用 | **Grep** | `rg`、`grep`、`git grep`、`Select-String`、`findstr` |
+| 列文件 | **Glob** | `dir`、`Get-ChildItem`、`find` |
+| **单文件/少量替换** | **StrReplace**（编辑工具） | `(Get-Content …) -replace`、`sed`、`awk` |
+| **多文件批量替换** | **Grep 定位 → 逐文件 StrReplace**；或 **`node scripts/*.cjs`**（一次性迁移） | PowerShell 循环替换、here-string 批量改写、`-replace` 管道 |
+| 看 diff/状态（非 commit 任务） | **Grep + Read** | 为探索而跑 `git diff`/`git status` |
+
+**批量替换硬约束**：
+
+- ❌ 禁止用 PowerShell（含内联 `pwsh -Command`）做全库查找、替换、重命名
+- ❌ 禁止 `(Get-ChildItem -Recurse \| … -replace)`、`Set-Content` 批量写回
+- ✅ 须先用 **Grep** 列出命中文件，再用 **StrReplace** 按文件精确修改（遵守 `03-format-blank-lines`）
+- ✅ 一次性大批量且可复现：写 **`scripts/<task>.cjs`**，用 `node` 执行；任务完成后按 `15-codegen` §4.2 删除
+
+Shell **仅**在以下情况使用，且 **scripts 入口只能是 `node scripts/*.cjs`**：
+
+- 用户明确要求执行：`node scripts/generate-all.cjs --Xxx`、`dotnet build`、`npm run …`
+- 用户明确要求 Git 操作（commit/PR 流程按 User Rule 执行）
+
+❌ 禁止为读代码、查引用、**查找替换**、删前核对而启动 PowerShell；❌ 禁止编写/执行 `.ps1` 完成上述任务。
+
 - 生成或修改代码时遵守本节及上文命名、注释、提交规范
 - **空行**：强制执行 `03-format-blank-lines.mdc`，参照 `TaktUser.cs`、`TaktCultureSeedData.cs` 等正常密度
 - **翻译键**：遵守 §1.6（动态键：小写点号、中间目录可多级；**静态 `locales/**`：`export default` 根键必须为 `page`**）；种子与前端 `t()` / 菜单 `I18nKey` 对齐
@@ -375,7 +412,7 @@ fix(dept): 修复部门唯一索引冲突
 - **规则 Skill 索引**：`.cursor/skills/00-project/SKILL.md`（00~16 与规则同名）
 - **标准 CRUD 全栈基线**：见 `@.cursor/rules/12-crud.mdc`（**单表/主子表/树表均须遵守**）；清单 `12-crud`
 - **Vue 视图/表单**：`13-vue-view`（index.vue）、`14-vue-form`（*-form.vue）
-- **全栈代码生成**：`15-codegen`（`generate-all.cjs`）；清单 `15-codegen`
+- **全栈代码生成**：`15-codegen`（`generate-all.cjs`）；清单 `15-codegen`；**`scripts/` 仅 `.cjs`；禁止 PowerShell 查找/替换（§6.1～§6.2）**
 - **权限与翻译键**：`16-permission-i18n`（Permission / I18nKey 四处一致）
 - **主子表 / 树表**：在 12-crud 之上叠加 `@.cursor/rules/10-master-detail.mdc`、`11-tree-table.mdc`
 - 新增后端接口/服务：对照 `@.cursor/rules/01-backend.mdc` 中的参照文件

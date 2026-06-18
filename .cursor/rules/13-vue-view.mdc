@@ -167,7 +167,7 @@ TaktQueryDrawer / TaktColumnDrawer / TaktImportFile（同单表）
 
 ## 六、代码生成（generate-vue-*-from-api.cjs）
 
-详见 `15-codegen` §3.6。流水线第 8 步，在 `types` + `api` 就绪后执行。
+详见 `15-codegen` §3.6。流水线**末步**（步 9 `vue`），在 `types` + `api` 就绪后执行。
 
 | 形态 | 脚本产出 | 生成后须人工 |
 |------|----------|--------------|

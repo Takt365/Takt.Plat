@@ -16,18 +16,26 @@ alwaysApply: false
 
 ## 一、流水线（按依赖顺序）
 
-| 步 | 脚本 | 输出 |
-|----|------|------|
-| 0 | `generate-entity-rbac-navigations.cjs` | 主实体 `Takt.Domain/Entities` RBAC `[Navigate]` 导航区（`rbac-parent-config`） |
-| 1 | `generate-dtos-from-entity.cjs` | `Takt.Application/Dtos/**/TaktXxxDtos.cs` |
-| 2 | `generate-validators-from-entity.cjs` | `Takt.Application/Validators/**/TaktXxx*Validator.cs` |
-| 3 | `generate-services-from-dtos.cjs` | `ITaktXxxService` + `TaktXxxService` |
-| 4 | `generate-controllers-from-services.cjs` | `TaktXxxsController`（复数路由） |
-| 5 | `generate-from-backend.cjs` | `frontend/src/types/**`、`frontend/src/api/**` |
-| 6 | `generate-entity-i18n-seed.cjs` | `Takt.Infrastructure/.../I18nSeedData/TaktXxxI18nSeedData.cs` |
-| 7 | `generate-vue-all-from-api.cjs` | `views/**/index.vue` + `components/*-form.vue`（串联 CRUD / TREE / Master-Detail） |
+**权威源（强制）**：`scripts/generate-all.cjs` → 常量 `PIPELINE`（`key` / `script` / `alwaysAll`）。本文与 Skill 须与其一致；**不一致时以代码为准并同步文档**。
 
-任一步非零退出码则中止。完成后须 **编译 backend** 并人工审阅（见 §五）。
+| 步 | `PIPELINE.key` | 脚本 | `alwaysAll` | 输出 |
+|----|----------------|------|-------------|------|
+| 0 | `entity-rbac-nav` | `generate-entity-rbac-navigations.cjs` | — | 主实体 RBAC `[Navigate]` 导航区 |
+| 1 | `dtos` | `generate-dtos-from-entity.cjs` | — | `Takt.Application/Dtos/**/TaktXxxDtos.cs` |
+| 2 | `validators` | `generate-validators-from-entity.cjs` | ✅ | `Takt.Application/Validators/**/TaktXxx*Validator.cs` |
+| 3 | `services` | `generate-services-from-dtos.cjs` | — | `ITaktXxxService` + `TaktXxxService` |
+| 4 | `controllers` | `generate-controllers-from-services.cjs` | — | `TaktXxxsController`（复数路由） |
+| 5 | `frontend` | `generate-from-backend.cjs` | — | `frontend/src/types/**`、`frontend/src/api/**` |
+| 6 | `i18n` | `generate-entity-i18n-seed.cjs` | ✅ | `TaktXxxI18nSeedData.cs`（`entity.*`） |
+| 7 | `dict-i18n` | `generate-dict-i18n-seed.cjs` | ✅ | `TaktDictI18nSeedData.cs`（`dict.*`） |
+| 8 | `menu-i18n` | `generate-menu-i18n-seed.cjs` | ✅ | 菜单 `menu.*` 种子 |
+| 9 | `vue` | `generate-vue-all-from-api.cjs` | — | `views/**/index.vue` + `components/*-form.vue` |
+
+`alwaysAll: true` → 子进程固定传 `--all`（全量重生成该步产物，与单实体 `--Holiday` 无关）。
+
+任一步非零退出码则中止。完成后须 **编译 backend** 并人工审阅（见 §六）。
+
+**extField 表单 i18n**：权威译文在 `generate-script-common.cjs`（`buildCommonExtField*I18nTuples`），须与 `TaktCommonI18nSeedData.cs` 手工对齐；**无**独立流水线校验脚本（`validate-*` 类一次性校验已废弃删除）。
 
 ---
 
@@ -84,10 +92,15 @@ alwaysApply: false
 - 导出函数：`getXxxList`、`createXxx`…（与 `12-crud` §三 对齐）
 - 转置：`getXxxTransposedList`、`saveXxxTransposedBatch`
 
-### 3.5 i18n 种子（`generate-entity-i18n-seed.cjs`）
+### 3.5 i18n 种子
 
-- 输出：`TaktXxxI18nSeedData.cs`；键 `entity.{slug}.*`（与 `00-project` §1.6 对齐）
-- 语言：`en-US`、`ja-JP`、`zh-CN`、`zh-HK`
+| 脚本 | 键前缀 | 产出 |
+|------|--------|------|
+| `generate-entity-i18n-seed.cjs` | `entity.{slug}.*` | 各实体 `TaktXxxI18nSeedData.cs` |
+| `generate-dict-i18n-seed.cjs` | `dict.*` | `TaktDictI18nSeedData.cs`（全量） |
+| `generate-menu-i18n-seed.cjs` | `menu.*` | 菜单导航种子（全量） |
+
+语言：`en-US`、`ja-JP`、`zh-CN`、`zh-HK`（与 `00-project` §1.6 对齐）。
 
 ### 3.6 Vue（`generate-vue-*-from-api.cjs`）
 
@@ -106,6 +119,8 @@ alwaysApply: false
 | 单表壳 | `TaktQueryBar` → `TaktToolsBar` → `TaktSingleTable` → `TaktPagination` → `TaktModal` |
 | 主子表 | CreateDto 含 `List<ChildCreate>` → 展开行懒加载 `getById` + 表单子表 Tab 行编辑 |
 | 表单 Tabs | 每 Tab 最多 10 字段；`tenantCode`/`companyCode` 隔离字段只读（Tenant/Company 实体除外） |
+| 表单控件尺寸 | **禁止** `size="small"`（`renderFormControl` / 主子表 Tab 内嵌表均须默认 `middle`）；写入前 `assertGeneratedFormNoSmallSize` 校验 |
+| 只读/隔离字段 | **禁止** HTML `readonly`；须 `disabled`（`renderReadOnlyControlAttrs`，参照 `user-form.vue`） |
 | 权限前缀 | 优先菜单 `ComponentPath`/`Permission`，其次控制器 `TaktPermission` |
 | `--view-path` | 覆盖 views 输出目录（相对 `src/views`） |
 
@@ -113,18 +128,46 @@ alwaysApply: false
 
 ---
 
-## 四、架构约束（`generate-entity-exclusions.cjs`）
+## 四、`scripts/` 目录治理（删改前强制）
+
+### 4.1 脚本语言与批量改写（强制）
+
+- **`scripts/` 可执行脚本仅 `.cjs`**；入口统一 `node scripts/<name>.cjs`
+- ❌ **禁止 PowerShell**（`.ps1`/`.psm1`/内联 `pwsh`）及 `.bat`/`.cmd` 作为仓库自动化
+- ❌ **禁止 PowerShell 查找/替换**（`Select-String`、`(Get-Content) -replace`、递归 `Set-Content` 等）
+- 批量任务：新增 **`.cjs`**（`node` 执行）或 **Grep + StrReplace** 逐文件改；不得用 PowerShell 脚本替代
+
+### 4.2 分类与删改
+
+| 类别 | 命名/位置 | 能否删除 | Agent 动作 |
+|------|-----------|----------|------------|
+| **流水线脚本** | 出现在 `generate-all.cjs` → `PIPELINE[].script` | ❌ 禁止 | 删/改名前须改 `PIPELINE` + 同步本章 + `node scripts/generate-all.cjs --Xxx --dry-run` |
+| **生成子脚本** | `generate-*.cjs`（被 PIPELINE 或子脚本 `require`） | ❌ 禁止 | 全库 **Grep 工具**查引用链 |
+| **共享模块** | `generate-script-common.cjs`、`generate-entity-exclusions.cjs` 等 | ❌ 禁止 | 改 public 导出须同步所有调用方 |
+| **一次性迁移/校验** | `rename-*` / `fix-*` / `consolidate-*` / `audit-*` / `validate-*` / `_*.cjs` | ⚠️ 任务完成后可删 | 确认**不在** `PIPELINE`、无 `require`、用户明确清单 |
+| **下划线临时** | `_encoding-test*`、`_patch-*`、`_fix-*` | ✅ 通常可删 | 仍须 **Grep 工具**，不得假设 |
+
+**删除 `scripts/` 下任意 `.cjs` 的强制流程**（**禁止**用 PowerShell/`git grep` 替代）：
+
+1. **Read** `scripts/generate-all.cjs` 的 `PIPELINE` 全文
+2. **Grep 工具**搜文件名于 `scripts/`、`package.json`、`.cursor/`
+3. 清单含 `PIPELINE` 内脚本 → **停止删除**，向用户说明并请求单独确认
+4. 用户说「临时」**不能**替代上述核对（迁移脚本与流水线脚本须分类）
+
+---
+
+## 五、架构约束（`generate-entity-exclusions.cjs`）
 
 > 已禁用 `--all`；不再维护「防批量覆盖」的手工 CRUD / Vue 排除表。显式 `--Entity` 即表示允许生成/覆盖该实体（`TaktAuth`/`TaktRbac`/`TaktFlowEngine` 等独立服务仍须 `--force`）。
 
-### 4.1 跳过后端 DTO/服务/控制器
+### 5.1 跳过后端 DTO/服务/控制器
 
 | 类别 | 说明 |
 |------|------|
 | RBAC 关联表 | `UserRole`、`UserTenant`、`UserCompany`、`RoleMenu`、`RoleCompany`、`RoleDept`、`EmployeeDept`、`EmployeePost` — 由 `ITaktRbacService` 统一维护 |
 | 独立服务 | `TaktAuth`、`TaktRbac`、`TaktFlowEngine`、`TaktFileUploadEngine` — 无标准实体 CRUD 流水线 |
 
-### 4.2 跳过 Vue 生成
+### 5.2 跳过 Vue 生成
 
 - `*ChangeLog` 从属实体：无独立 `index.vue` / `*-form.vue`（由主实体页承载）
 - 主子表从实体：默认由主表展开区承载（`QuartzLog` 等见 `STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES` 例外）
@@ -133,7 +176,7 @@ alwaysApply: false
 
 ---
 
-## 五、生成后人工必做
+## 六、生成后人工必做
 
 ```
 - [ ] dotnet build 通过
@@ -147,7 +190,7 @@ alwaysApply: false
 
 ---
 
-## 六、命令示例
+## 七、命令示例
 
 ```bash
 node scripts/generate-all.cjs --Holiday
@@ -159,11 +202,15 @@ node scripts/generate-vue-all-from-api.cjs --CostCenter
 
 ---
 
-## 七、Agent 约束
+## 八、Agent 约束
 
+- **动 `scripts/` 或用户要求删脚本**：必须先读本规则 §四 + **Read** `generate-all.cjs` → `PIPELINE`；核对用 **Grep 工具**，**禁止 PowerShell 查找/替换**
+- **`scripts/` 仅 `.cjs`**：禁止新增/执行 `.ps1` 等（见 `00-project` §6.1）
 - 新增实体模块：优先 `generate-all --<Entity>`，再对照 `12-crud` + 形态规则（`10`/`11`）+ `13`/`14` 补全/修正
 - **禁止**假设脚本已生成树表 Vue 或 User/Dept/Dict 等排除模块前端
+- **禁止**把 `PIPELINE` 内 `generate-*` 脚本与 `rename-*` / `fix-*` / `validate-*` 一次性脚本混为一谈；后者任务完成后应删除并同步文档
 - 生成覆盖后：**必须**检查权限码与 QueryExpression，不可直接交付
+- 改 `PIPELINE` 或流水线脚本后：**必须**同步本章 §一 与 `.cursor/skills/15-codegen/SKILL.md`
 - 命名：服务单数、控制器复数、API 路由复数（`generate-script-common.cjs`）
 - 权限与翻译键：`16-permission-i18n`
 - 实现清单：`.cursor/skills/15-codegen/SKILL.md`

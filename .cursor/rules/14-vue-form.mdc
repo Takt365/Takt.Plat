@@ -59,7 +59,7 @@ loading?: boolean
 - 字典：`TaktSelect` + `api-url` 或 `dict-type`（与后端 `DictTypeCode` 一致）
 - 长表单：`a-tabs` 分 Tab；Tab 文案用 `{路径}.page.tabs.*` 静态 locales
 
-❌ 在 form 内再包 `TaktModal`；❌ 硬编码中文；❌ 大块 scoped 布局 CSS（Tailwind / 极简 `:deep` 例外见 `02-frontend` §1.2）
+❌ 在 form 内再包 `TaktModal`；❌ 硬编码中文；❌ 表单控件 `size="small"`（须 Ant Design 默认 `middle`）；❌ 隔离/只读字段用 HTML `readonly`（须 `disabled`，参照 `user-form.vue`）；❌ 大块 scoped 布局 CSS（Tailwind / 极简 `:deep` 例外见 `02-frontend` §1.2）
 
 ---
 

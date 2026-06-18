@@ -136,7 +136,7 @@ loading    列表/提交 async + loading 态
 
 | 脚本 | 产出 |
 |------|------|
-| `generate-all.cjs` | 全栈 8 步流水线 |
+| `generate-all.cjs` | 全栈流水线（以 `PIPELINE` 为准，10 步，见 `15-codegen` §一） |
 | `generate-from-backend.cjs` | 前端 `api/`、`types/` |
 | `generate-vue-all-from-api.cjs` | `index.vue` + `*-form.vue`（串联 CRUD / TREE / Master-Detail） |
 | `generate-services-from-dtos.cjs` | 服务 |

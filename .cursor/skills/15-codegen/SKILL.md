@@ -22,18 +22,22 @@ description: >-
 5. 对照 12-crud + 10/11（形态）+ 13/14（Vue）+ 16-permission-i18n
 ```
 
-## 流水线（8 步，不可跳序）
+## 流水线（10 步，不可跳序；权威源 `generate-all.cjs` → `PIPELINE`）
 
-| 步 | 脚本 | 产出 |
-|----|------|------|
-| 0 | `generate-entity-rbac-navigations.cjs` | 实体 RBAC `[Navigate]` 区 |
-| 1 | `generate-dtos-from-entity.cjs` | `TaktXxxDtos.cs` |
-| 2 | `generate-validators-from-entity.cjs` | `TaktXxx*Validator.cs` |
-| 3 | `generate-services-from-dtos.cjs` | `ITaktXxxService` / `TaktXxxService` |
-| 4 | `generate-controllers-from-services.cjs` | `TaktXxxsController` |
-| 5 | `generate-from-backend.cjs` | `types/` + `api/` |
-| 6 | `generate-entity-i18n-seed.cjs` | `TaktXxxI18nSeedData.cs` |
-| 7 | `generate-vue-all-from-api.cjs` | `index.vue` + `*-form.vue`（CRUD / TREE / Master-Detail） |
+| 步 | `key` | 脚本 | `alwaysAll` | 产出 |
+|----|-------|------|-------------|------|
+| 0 | `entity-rbac-nav` | `generate-entity-rbac-navigations.cjs` | — | RBAC `[Navigate]` |
+| 1 | `dtos` | `generate-dtos-from-entity.cjs` | — | `TaktXxxDtos.cs` |
+| 2 | `validators` | `generate-validators-from-entity.cjs` | ✅ | `TaktXxx*Validator.cs` |
+| 3 | `services` | `generate-services-from-dtos.cjs` | — | Service |
+| 4 | `controllers` | `generate-controllers-from-services.cjs` | — | Controller |
+| 5 | `frontend` | `generate-from-backend.cjs` | — | `types/` + `api/` |
+| 6 | `i18n` | `generate-entity-i18n-seed.cjs` | ✅ | `TaktXxxI18nSeedData.cs` |
+| 7 | `dict-i18n` | `generate-dict-i18n-seed.cjs` | ✅ | `TaktDictI18nSeedData.cs` |
+| 8 | `menu-i18n` | `generate-menu-i18n-seed.cjs` | ✅ | 菜单 `menu.*` |
+| 9 | `vue` | `generate-vue-all-from-api.cjs` | — | `index.vue` + `*-form.vue` |
+
+**文档与代码不一致时以 `PIPELINE` 为准并回写本文。** `validate-*` 一次性校验脚本**不属于**流水线，完成后删除。详见规则 §四。
 
 **写入策略**：不存在则创建，已存在则覆盖；`TaktAuth`/`TaktRbac`/`TaktFlowEngine` 等须 `--force` 才覆盖。
 
@@ -92,6 +96,14 @@ node scripts/generate-all.cjs --Holiday --dry-run
 | 前端 types | 同模块 `{entity}.d.ts` |
 
 复数特例：`generate-script-common.cjs` → `CONTROLLER_PLURAL_OVERRIDES`（User→Users 等）。
+
+## 删改 `scripts/` 与批量改写（强制）
+
+- **`scripts/` 仅 `.cjs`**；❌ 禁止 PowerShell 查找/替换/批量写回
+- 批量替换：**Grep 定位 → StrReplace 逐文件**；或写一次性 **`scripts/<task>.cjs`** 用 `node` 跑
+- 删脚本前：**Read** `PIPELINE` + **Grep 工具**（禁止 Shell/`Select-String`/`git grep`）
+
+完整分类见 `15-codegen.mdc` §4.2；工具约束见 `00-project.mdc` §6.2。
 
 ## 交叉规则
 

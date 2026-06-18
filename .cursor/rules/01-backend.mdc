@@ -142,6 +142,16 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - 表名：`takt_{模块}_{实体}` 小写下划线（如 `takt_identity_user`）
 - 属性：PascalCase；列映射小写下划线
 - 多租户字段：`TenantCode`（3 位）、`CompanyCode`（4 位）
+- **字符串列黄金长度（`varchar`/`nvarchar`，强制）**：无专项约定时 **`Length = 40`**（业务编码、字典键值对齐字段、短标识/分组等）；❌ 禁止随手写 50/100。专项长度见下表，更长须 XML 注释说明理由
+
+| 场景 | 长度 | 示例 |
+|------|------|------|
+| 租户/公司码 | 3 / 4 | `TenantCode`、`CompanyCode` |
+| 区域文化 | 5 | `CultureCode` |
+| **默认短字符串** | **40** | `ResourceGroup`、`ResourceType`、方案/计划编码 |
+| 名称类 | 100～200 | `DictLabel`、`I18nKey` |
+| 长文本 | 500+ / `ntext` | `Remark`、`TranslationText` |
+
 - 索引：`[SugarIndex("ix_...", ...)]` 声明在实体属性上
 - 导航属性：放在实体文件**末尾**「导航属性区域」；仅必要时 `[Navigate]`
 
@@ -177,7 +187,7 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - **菜单标题**：`menu.{领域}.{目录…}.{项}`，与 `TaktMenu*SeedData` 的 `I18nKey`、路由层级一致；子菜单加深则键加长
 - **实体字段标签**：`entity.{段}._self`、`entity.{段}.{字段名}`（如 `entity.dept.deptName`）
 - **部门显示名**：`org.dept.{部门编码小写}`（如 `org.dept.d1000`），与 `TaktDeptSeedData.DeptCode` 对齐
-- ❌ 勿在 `TaktMenuI18nSeedData` 重复 `TaktCommonI18nSeedData` 的 `common.button.*`
+- ❌ 勿在 `TaktMenuI18nSeedData` 重复 `TaktCommonI18nSeedData` 的 `common.page.button.*`
 - 一实体字段翻译一种子类（`HumanResource/Organization/TaktDeptI18nSeedData.cs`）；业务数据翻译（部门名等）用根目录 `TaktDeptI18nSeedData.cs`，禁止混文件
 
 ---
@@ -194,9 +204,13 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 
 **完整流水线**见 `@.cursor/rules/15-codegen.mdc`；入口 `node scripts/generate-all.cjs --<Entity>`。
 
+**脚本语言（强制）**：`scripts/` 可执行脚本**仅 `.cjs`**；❌ 禁止 PowerShell 查找/替换/批量改写。执行：`node scripts/<name>.cjs`。Agent 须 **Read/Grep/Glob/StrReplace**，见 `00-project` §6.2。
+
 | 脚本 | 输出 |
 |------|------|
-| `generate-all.cjs` | 串联 §15-codegen 全部 8 步 |
+| `generate-all.cjs` | 串联 §15-codegen 全部步骤（以 `PIPELINE` 为准，共 10 步，见 `15-codegen` §一） |
+| `generate-dict-i18n-seed.cjs` | `TaktDictI18nSeedData.cs`（流水线步 7，全量） |
+| `generate-menu-i18n-seed.cjs` | 菜单 `menu.*` 种子（流水线步 8，全量） |
 | `generate-dtos-from-entity.cjs` | `TaktXxxDtos.cs` |
 | `generate-validators-from-entity.cjs` | `TaktXxx*Validator.cs` |
 | `generate-services-from-dtos.cjs` | `ITakt{单数}Service` / `Takt{单数}Service` |
@@ -223,5 +237,5 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - 树表 ParentId 扩展：见 `@.cursor/rules/11-tree-table.mdc`（**叠加**在 12-crud 之上）
 - 前端 `utils/` 对齐：见 `@.cursor/rules/05-utils-vue.mdc` §十
 - 工作流运行时/引擎/实体：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`
-- 全栈代码生成：见 `@.cursor/rules/15-codegen.mdc`；清单 `15-codegen`
-- 新建/审查实体：**禁止**实体属性使用 enum；一律 `int`/`int?`（`00-project` §1.8.1）
+- 全栈代码生成：见 `@.cursor/rules/15-codegen.mdc`；删改 `scripts/` 须先读 `PIPELINE`（§四）
+- 新建/审查实体：**禁止**实体属性使用 enum；一律 `int`/`int?`（`00-project` §1.8.1）；**短字符串列默认 `Length = 40`**（§六），禁止无说明使用 50/100

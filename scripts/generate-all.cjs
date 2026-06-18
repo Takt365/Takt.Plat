@@ -2,7 +2,7 @@
 
 // 项目名称：节拍工厂·Takt Plat
 
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 
 // 文件名称：generate-all.cjs
 
@@ -90,6 +90,8 @@ const PIPELINE = [
 
     script: 'generate-validators-from-entity.cjs',
 
+    alwaysAll: true,
+
   },
 
   {
@@ -129,6 +131,30 @@ const PIPELINE = [
     label: 'i18n 翻译种子（实体 → Infrastructure/Seeds）',
 
     script: 'generate-entity-i18n-seed.cjs',
+
+    alwaysAll: true,
+
+  },
+
+  {
+
+    key: 'dict-i18n',
+
+    label: 'i18n 翻译种子（字典项 dict.* → Infrastructure/Seeds）',
+
+    script: 'generate-dict-i18n-seed.cjs',
+
+    alwaysAll: true,
+
+  },
+
+  {
+
+    key: 'menu-i18n',
+
+    label: 'i18n 翻译种子（菜单导航 menu.* → Infrastructure/Seeds）',
+
+    script: 'generate-menu-i18n-seed.cjs',
 
     alwaysAll: true,
 
@@ -216,7 +242,7 @@ function printUsage() {
 
   1. generate-dtos-from-entity.cjs（含上一步；单跑 DTO 脚本时也会先同步导航）
 
-  3. generate-validators-from-entity.cjs
+  3. generate-validators-from-entity.cjs（全量）
 
   4. generate-services-from-dtos.cjs
 
@@ -224,9 +250,13 @@ function printUsage() {
 
   6. generate-from-backend.cjs
 
-  7. generate-entity-i18n-seed.cjs
+  7. generate-entity-i18n-seed.cjs（全量）
 
-  8. generate-vue-all-from-api.cjs（串联 CRUD / TREE / Master-Detail；*ChangeLog 无独立 Vue，见 generate-entity-exclusions.cjs）
+  8. generate-dict-i18n-seed.cjs（全量）
+
+  9. generate-menu-i18n-seed.cjs（全量）
+
+  10. generate-vue-all-from-api.cjs（串联 CRUD / TREE / Master-Detail；*ChangeLog 无独立 Vue，见 generate-entity-exclusions.cjs）
 
 
 
@@ -255,11 +285,7 @@ function printUsage() {
 function runPipelineStep(step, options) {
 
   const childArgs = step.alwaysAll
-    ? [
-        '--all',
-        ...(options.force ? ['--force'] : []),
-        ...(options.dryRun ? ['--dry-run'] : []),
-      ]
+    ? ['--all']
     : buildSingleEntityChildArgs(options);
 
   console.log(`\n${'═'.repeat(60)}`);

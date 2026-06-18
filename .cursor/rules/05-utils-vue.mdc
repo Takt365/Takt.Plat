@@ -193,7 +193,7 @@ export function sampleForLog<T>(items: readonly T[], maxSample = 40): { sample: 
 | `naming.ts` | `TaktNamingHelper` | Excel sheet/file 默认命名 |
 | `regex.ts` | `TaktRegexHelper` | 模式名与校验语义一致 |
 | `mask.ts` | `TaktMaskHelper` | 脱敏规则一致 |
-| `takt-validation-i18n.ts` | `TaktValidationI18nKeys` | 校验 i18n 键 |
+| 表单/校验 `t('common.validation.*')` | `TaktValidationI18nKeys` | 直接写完整键 + `{ field }` 插值，禁止再包 utils |
 | `log-formatter.ts` | `TaktLogFormatter` | 日志条目、`sampleForLog` |
 
 修改任一侧时须**同步检查对侧**；禁止前端自创与种子/后端不一致的校验键或正则语义。
