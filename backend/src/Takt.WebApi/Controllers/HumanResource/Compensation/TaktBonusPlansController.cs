@@ -41,7 +41,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:list", "奖金方案列表")]
+    [TaktPermission("human:resource:compensation:bonus:plan:list", "奖金方案列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetBonusPlanListAsync([FromQuery] TaktBonusPlanQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// </summary>
     /// <param name="id">奖金方案ID</param>
     /// <returns>奖金方案DTO</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:query", "奖金方案详情")]
+    [TaktPermission("human:resource:compensation:bonus:plan:query", "奖金方案详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBonusPlanByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// 获取奖金方案选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:query", "奖金方案选项")]
+    [TaktPermission("human:resource:compensation:bonus:plan:query", "奖金方案选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetBonusPlanOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>奖金方案DTO</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:create", "创建奖金方案")]
+    [TaktPermission("human:resource:compensation:bonus:plan:create", "创建奖金方案")]
     [HttpPost]
     public async Task<IActionResult> CreateBonusPlanAsync([FromBody] TaktBonusPlanCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// <param name="id">奖金方案ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>奖金方案DTO</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:update", "更新奖金方案")]
+    [TaktPermission("human:resource:compensation:bonus:plan:update", "更新奖金方案")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBonusPlanAsync(long id, [FromBody] TaktBonusPlanUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// </summary>
     /// <param name="id">奖金方案ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:delete", "删除奖金方案")]
+    [TaktPermission("human:resource:compensation:bonus:plan:delete", "删除奖金方案")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBonusPlanByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:delete", "批量删除奖金方案")]
+    [TaktPermission("human:resource:compensation:bonus:plan:delete", "批量删除奖金方案")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteBonusPlanBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>奖金方案DTO</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:update", "更新奖金方案状态")]
+    [TaktPermission("human:resource:compensation:bonus:plan:update", "更新奖金方案状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateBonusPlanStatusAsync([FromBody] TaktBonusPlanStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:import", "获取奖金方案导入模板")]
+    [TaktPermission("human:resource:compensation:bonus:plan:import", "获取奖金方案导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetBonusPlanTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:import", "导入奖金方案")]
+    [TaktPermission("human:resource:compensation:bonus:plan:import", "导入奖金方案")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportBonusPlanAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktBonusPlansController : TaktControllerBase
     /// 导出奖金方案
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:bonusplan:export", "导出奖金方案")]
+    [TaktPermission("human:resource:compensation:bonus:plan:export", "导出奖金方案")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportBonusPlanAsync([FromQuery] TaktBonusPlanQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -41,7 +41,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:organization:post:list", "岗位列表")]
+    [TaktPermission("human:resource:organization:post:list", "岗位列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPostListAsync([FromQuery] TaktPostQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="id">岗位ID</param>
     /// <returns>岗位DTO</returns>
-    [TaktPermission("humanresource:organization:post:query", "岗位详情")]
+    [TaktPermission("human:resource:organization:post:query", "岗位详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPostByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPostsController : TaktControllerBase
     /// 获取岗位选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:organization:post:query", "岗位选项")]
+    [TaktPermission("human:resource:organization:post:query", "岗位选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPostOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>岗位DTO</returns>
-    [TaktPermission("humanresource:organization:post:create", "创建岗位")]
+    [TaktPermission("human:resource:organization:post:create", "创建岗位")]
     [HttpPost]
     public async Task<IActionResult> CreatePostAsync([FromBody] TaktPostCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPostsController : TaktControllerBase
     /// <param name="id">岗位ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>岗位DTO</returns>
-    [TaktPermission("humanresource:organization:post:update", "更新岗位")]
+    [TaktPermission("human:resource:organization:post:update", "更新岗位")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePostAsync(long id, [FromBody] TaktPostUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="id">岗位ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:organization:post:delete", "删除岗位")]
+    [TaktPermission("human:resource:organization:post:delete", "删除岗位")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePostByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:organization:post:delete", "批量删除岗位")]
+    [TaktPermission("human:resource:organization:post:delete", "批量删除岗位")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePostBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>岗位DTO</returns>
-    [TaktPermission("humanresource:organization:post:update", "更新岗位状态")]
+    [TaktPermission("human:resource:organization:post:update", "更新岗位状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePostStatusAsync([FromBody] TaktPostStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">是否内置 DTO</param>
     /// <returns>岗位DTO</returns>
-    [TaktPermission("humanresource:organization:post:update", "更新岗位是否内置")]
+    [TaktPermission("human:resource:organization:post:update", "更新岗位是否内置")]
     [HttpPut("built-in")]
     public async Task<IActionResult> UpdatePostBuiltInAsync([FromBody] TaktPostBuiltInDto dto)
     {
@@ -225,7 +225,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>岗位DTO</returns>
-    [TaktPermission("humanresource:organization:post:update", "更新岗位排序")]
+    [TaktPermission("human:resource:organization:post:update", "更新岗位排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdatePostSortAsync([FromBody] TaktPostSortDto dto)
     {
@@ -244,7 +244,7 @@ public class TaktPostsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:organization:post:import", "获取岗位导入模板")]
+    [TaktPermission("human:resource:organization:post:import", "获取岗位导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPostTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -264,7 +264,7 @@ public class TaktPostsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:organization:post:import", "导入岗位")]
+    [TaktPermission("human:resource:organization:post:import", "导入岗位")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPostAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -294,7 +294,7 @@ public class TaktPostsController : TaktControllerBase
     /// 导出岗位
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:organization:post:export", "导出岗位")]
+    [TaktPermission("human:resource:organization:post:export", "导出岗位")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPostAsync([FromQuery] TaktPostQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

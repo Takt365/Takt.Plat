@@ -41,7 +41,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:list", "职位发布列表")]
+    [TaktPermission("human:resource:talent:talentjobposting:list", "职位发布列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTalentJobPostingListAsync([FromQuery] TaktTalentJobPostingQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">职位发布ID</param>
     /// <returns>职位发布DTO</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:query", "职位发布详情")]
+    [TaktPermission("human:resource:talent:talentjobposting:query", "职位发布详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTalentJobPostingByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// 获取职位发布选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:query", "职位发布选项")]
+    [TaktPermission("human:resource:talent:talentjobposting:query", "职位发布选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTalentJobPostingOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>职位发布DTO</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:create", "创建职位发布")]
+    [TaktPermission("human:resource:talent:talentjobposting:create", "创建职位发布")]
     [HttpPost]
     public async Task<IActionResult> CreateTalentJobPostingAsync([FromBody] TaktTalentJobPostingCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// <param name="id">职位发布ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>职位发布DTO</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:update", "更新职位发布")]
+    [TaktPermission("human:resource:talent:talentjobposting:update", "更新职位发布")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTalentJobPostingAsync(long id, [FromBody] TaktTalentJobPostingUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">职位发布ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:delete", "删除职位发布")]
+    [TaktPermission("human:resource:talent:talentjobposting:delete", "删除职位发布")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTalentJobPostingByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:delete", "批量删除职位发布")]
+    [TaktPermission("human:resource:talent:talentjobposting:delete", "批量删除职位发布")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTalentJobPostingBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>职位发布DTO</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:update", "更新职位发布状态")]
+    [TaktPermission("human:resource:talent:talentjobposting:update", "更新职位发布状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateTalentJobPostingStatusAsync([FromBody] TaktTalentJobPostingStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:import", "获取职位发布导入模板")]
+    [TaktPermission("human:resource:talent:talentjobposting:import", "获取职位发布导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetTalentJobPostingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:import", "导入职位发布")]
+    [TaktPermission("human:resource:talent:talentjobposting:import", "导入职位发布")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportTalentJobPostingAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktTalentJobPostingsController : TaktControllerBase
     /// 导出职位发布
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:talent:talentjobposting:export", "导出职位发布")]
+    [TaktPermission("human:resource:talent:talentjobposting:export", "导出职位发布")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTalentJobPostingAsync([FromQuery] TaktTalentJobPostingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

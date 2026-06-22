@@ -27,12 +27,27 @@ function pascalToKebab(value) {
 }
 
 /**
- * 服务目录段 → 权限段（小写连写，如 NewsCenter→newscenter）
+ * 服务目录段 → 权限词数组（PascalCase 按词拆段，如 HumanResource→['human','resource']）
+ * @param {string} part
+ * @returns {string[]}
+ */
+function pathPartToPermissionWords(part) {
+  if (!part) {
+    return [];
+  }
+  if (PERMISSION_PATH_PART_ALIASES[part]) {
+    return [PERMISSION_PATH_PART_ALIASES[part]];
+  }
+  return pascalToKebab(part).split('-').filter(Boolean);
+}
+
+/**
+ * @deprecated 使用 pathPartToPermissionWords；保留兼容单段拼接场景
  * @param {string} part
  * @returns {string}
  */
 function pathPartToPermissionSegment(part) {
-  return String(part || '').replace(/([a-z0-9])([A-Z])/g, '$1$2').toLowerCase();
+  return pathPartToPermissionWords(part).join('');
 }
 
 /**
@@ -53,14 +68,12 @@ function buildPathPermissionSegments(pathParts) {
   if (!pathParts || !pathParts.length) {
     return [];
   }
-  const domain = pathPartToPermissionSegment(pathParts[0]);
-  const dirs = pathParts.slice(1).map((part) => {
-    if (PERMISSION_PATH_PART_ALIASES[part]) {
-      return PERMISSION_PATH_PART_ALIASES[part];
-    }
-    return pathPartToPermissionSegment(part);
-  });
-  return [domain, ...dirs];
+  /** @type {string[]} */
+  const segments = [];
+  for (const part of pathParts) {
+    segments.push(...pathPartToPermissionWords(part));
+  }
+  return segments;
 }
 
 /**

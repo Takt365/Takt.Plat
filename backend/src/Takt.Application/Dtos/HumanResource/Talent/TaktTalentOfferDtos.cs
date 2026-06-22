@@ -40,12 +40,12 @@ public class TaktTalentOfferDto : TaktApprovalDtoBase
     /// 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long InterviewId { get; set; }
+    public long JobPostingId { get; set; }
 
     /// <summary>
     /// 面试安排名称（填充字段）
     /// </summary>
-    public string? InterviewName { get; set; }
+    public string? JobPostingName { get; set; }
 
     /// <summary>
     /// 录用编号（租户+公司内业务编号）
@@ -96,12 +96,6 @@ public class TaktTalentOfferDto : TaktApprovalDtoBase
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面试安排
-    /// （主表：TaktTalentInterview）
-    /// </summary>
-    public TaktTalentInterviewDto? Interview { get; set; }
-
-    /// <summary>
     /// 入职待办
     /// （子表：TaktEmployeeOnboarding）
     /// </summary>
@@ -133,7 +127,7 @@ public class TaktTalentOfferQueryDto : TaktPagedQuery
     /// 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? InterviewId { get; set; }
+    public long? JobPostingId { get; set; }
 
     /// <summary>
     /// 录用编号（租户+公司内业务编号）
@@ -269,7 +263,7 @@ public class TaktTalentOfferCreateDto
     /// 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long InterviewId { get; set; }
+    public long JobPostingId { get; set; }
 
     /// <summary>
     /// 录用编号（租户+公司内业务编号）
@@ -376,7 +370,7 @@ public class TaktTalentOfferTemplateDto
     /// 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? InterviewId { get; set; }
+    public long? JobPostingId { get; set; }
 
     /// <summary>
     /// 录用编号（租户+公司内业务编号）
@@ -452,7 +446,7 @@ public class TaktTalentOfferImportDto
     /// 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? InterviewId { get; set; }
+    public long? JobPostingId { get; set; }
 
     /// <summary>
     /// 录用编号（租户+公司内业务编号）
@@ -524,7 +518,7 @@ public class TaktTalentOfferExportDto
     /// 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long InterviewId { get; set; }
+    public long JobPostingId { get; set; }
 
     /// <summary>
     /// 录用编号（租户+公司内业务编号）

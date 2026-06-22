@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:personnel:employeeeducation:create"
-      update-permission="humanresource:personnel:employeeeducation:update"
-      delete-permission="humanresource:personnel:employeeeducation:delete"
-      import-permission="humanresource:personnel:employeeeducation:import"
-      export-permission="humanresource:personnel:employeeeducation:export"
+      create-permission="human:resource:personnel:employeeeducation:create"
+      update-permission="human:resource:personnel:employeeeducation:update"
+      delete-permission="human:resource:personnel:employeeeducation:delete"
+      import-permission="human:resource:personnel:employeeeducation:import"
+      export-permission="human:resource:personnel:employeeeducation:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -519,7 +519,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:personnel:employeeeducation:update',
+        permission: 'human:resource:personnel:employeeeducation:update',
         onClick: (record: EmployeeEducation) => handleEdit(record)
       },
       {
@@ -527,7 +527,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:personnel:employeeeducation:delete',
+        permission: 'human:resource:personnel:employeeeducation:delete',
         onClick: (record: EmployeeEducation) => handleDeleteOne(record)
       }
     ]

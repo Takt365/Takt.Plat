@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:assyoutput:create"
-      update-permission="logistics:manufacturing:output:assyoutput:update"
-      delete-permission="logistics:manufacturing:output:assyoutput:delete"
-      import-permission="logistics:manufacturing:output:assyoutput:import"
-      export-permission="logistics:manufacturing:output:assyoutput:export"
+      create-permission="logistics:manufacturing:output:assy:create"
+      update-permission="logistics:manufacturing:output:assy:update"
+      delete-permission="logistics:manufacturing:output:assy:delete"
+      import-permission="logistics:manufacturing:output:assy:import"
+      export-permission="logistics:manufacturing:output:assy:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -787,7 +787,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:assyoutput:update',
+        permission: 'logistics:manufacturing:output:assy:update',
         onClick: (record: AssyOutput) => handleEdit(record)
       },
       {
@@ -795,7 +795,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:assyoutput:delete',
+        permission: 'logistics:manufacturing:output:assy:delete',
         onClick: (record: AssyOutput) => handleDeleteOne(record)
       }
     ]

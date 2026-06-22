@@ -243,14 +243,14 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             // entity.talentstaffingrequirement.replaceemployee
             new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployee", "zh-HK", "替补员工_hk", "替补员工"),
 
-            // entity.talentstaffingrequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "en-US", "招聘计划_us", "招聘计划"),
-            // entity.talentstaffingrequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "ja-JP", "招聘计划_jp", "招聘计划"),
-            // entity.talentstaffingrequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "zh-CN", "招聘计划", "招聘计划"),
-            // entity.talentstaffingrequirement.talentrecruitmentplans
-            new TranslationSeedItem("entity.talentstaffingrequirement.talentrecruitmentplans", "zh-HK", "招聘计划_hk", "招聘计划"),
+            // entity.talentstaffingrequirement.talentjobpostings
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentjobpostings", "en-US", "职位发布_us", "职位发布"),
+            // entity.talentstaffingrequirement.talentjobpostings
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentjobpostings", "ja-JP", "职位发布_jp", "职位发布"),
+            // entity.talentstaffingrequirement.talentjobpostings
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentjobpostings", "zh-CN", "职位发布", "职位发布"),
+            // entity.talentstaffingrequirement.talentjobpostings
+            new TranslationSeedItem("entity.talentstaffingrequirement.talentjobpostings", "zh-HK", "职位发布_hk", "职位发布"),
         };
     }
 

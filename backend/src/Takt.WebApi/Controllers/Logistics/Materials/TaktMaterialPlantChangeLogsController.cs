@@ -41,7 +41,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:materialplant:list", "工厂物料变更记录列表")]
+    [TaktPermission("logistics:materials:material:plant:change:log:list", "工厂物料变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetMaterialPlantChangeLogListAsync([FromQuery] TaktMaterialPlantChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工厂物料变更记录ID</param>
     /// <returns>工厂物料变更记录DTO</returns>
-    [TaktPermission("logistics:materials:materialplant:query", "工厂物料变更记录详情")]
+    [TaktPermission("logistics:materials:material:plant:change:log:query", "工厂物料变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMaterialPlantChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// 获取工厂物料变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:materialplant:query", "工厂物料变更记录选项")]
+    [TaktPermission("logistics:materials:material:plant:change:log:query", "工厂物料变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetMaterialPlantChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工厂物料变更记录DTO</returns>
-    [TaktPermission("logistics:materials:materialplant:create", "创建工厂物料变更记录")]
+    [TaktPermission("logistics:materials:material:plant:change:log:create", "创建工厂物料变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateMaterialPlantChangeLogAsync([FromBody] TaktMaterialPlantChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// <param name="id">工厂物料变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工厂物料变更记录DTO</returns>
-    [TaktPermission("logistics:materials:materialplant:update", "更新工厂物料变更记录")]
+    [TaktPermission("logistics:materials:material:plant:change:log:update", "更新工厂物料变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMaterialPlantChangeLogAsync(long id, [FromBody] TaktMaterialPlantChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工厂物料变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:materialplant:delete", "删除工厂物料变更记录")]
+    [TaktPermission("logistics:materials:material:plant:change:log:delete", "删除工厂物料变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMaterialPlantChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:materialplant:delete", "批量删除工厂物料变更记录")]
+    [TaktPermission("logistics:materials:material:plant:change:log:delete", "批量删除工厂物料变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteMaterialPlantChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktMaterialPlantChangeLogsController : TaktControllerBase
     /// 导出工厂物料变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:materialplant:export", "导出工厂物料变更记录")]
+    [TaktPermission("logistics:materials:material:plant:change:log:export", "导出工厂物料变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportMaterialPlantChangeLogAsync([FromQuery] TaktMaterialPlantChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

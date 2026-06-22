@@ -20,8 +20,8 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      delete-permission="statistics:logging:operlog:delete"
-      export-permission="statistics:logging:operlog:export"
+      delete-permission="statistics:logging:oper:log:delete"
+      export-permission="statistics:logging:oper:log:export"
       :show-create="false"
       :show-update="false"
       :show-delete="true"
@@ -626,7 +626,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.detail'),
         shape: 'plain',
         icon: RiEyeLine,
-        permission: 'statistics:logging:operlog:query',
+        permission: 'statistics:logging:oper:log:query',
         onClick: (record: OperLog) => handleShowDetail(record),
       },
       {
@@ -634,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'statistics:logging:operlog:delete',
+        permission: 'statistics:logging:oper:log:delete',
         onClick: (record: OperLog) => handleDeleteOne(record)
       }
     ]

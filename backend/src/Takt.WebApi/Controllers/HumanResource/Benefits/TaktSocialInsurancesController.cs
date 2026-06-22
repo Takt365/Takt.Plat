@@ -41,7 +41,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:list", "社保公积金列表")]
+    [TaktPermission("human:resource:benefits:social:insurance:list", "社保公积金列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSocialInsuranceListAsync([FromQuery] TaktSocialInsuranceQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// </summary>
     /// <param name="id">社保公积金ID</param>
     /// <returns>社保公积金DTO</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:query", "社保公积金详情")]
+    [TaktPermission("human:resource:benefits:social:insurance:query", "社保公积金详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSocialInsuranceByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// 获取社保公积金选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:query", "社保公积金选项")]
+    [TaktPermission("human:resource:benefits:social:insurance:query", "社保公积金选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSocialInsuranceOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>社保公积金DTO</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:create", "创建社保公积金")]
+    [TaktPermission("human:resource:benefits:social:insurance:create", "创建社保公积金")]
     [HttpPost]
     public async Task<IActionResult> CreateSocialInsuranceAsync([FromBody] TaktSocialInsuranceCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// <param name="id">社保公积金ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>社保公积金DTO</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:update", "更新社保公积金")]
+    [TaktPermission("human:resource:benefits:social:insurance:update", "更新社保公积金")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSocialInsuranceAsync(long id, [FromBody] TaktSocialInsuranceUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// </summary>
     /// <param name="id">社保公积金ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:delete", "删除社保公积金")]
+    [TaktPermission("human:resource:benefits:social:insurance:delete", "删除社保公积金")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSocialInsuranceByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:delete", "批量删除社保公积金")]
+    [TaktPermission("human:resource:benefits:social:insurance:delete", "批量删除社保公积金")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSocialInsuranceBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>社保公积金DTO</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:update", "更新社保公积金状态")]
+    [TaktPermission("human:resource:benefits:social:insurance:update", "更新社保公积金状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSocialInsuranceStatusAsync([FromBody] TaktSocialInsuranceStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:import", "获取社保公积金导入模板")]
+    [TaktPermission("human:resource:benefits:social:insurance:import", "获取社保公积金导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSocialInsuranceTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:import", "导入社保公积金")]
+    [TaktPermission("human:resource:benefits:social:insurance:import", "导入社保公积金")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSocialInsuranceAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// 导出社保公积金
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:benefits:socialinsurance:export", "导出社保公积金")]
+    [TaktPermission("human:resource:benefits:social:insurance:export", "导出社保公积金")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSocialInsuranceAsync([FromQuery] TaktSocialInsuranceQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

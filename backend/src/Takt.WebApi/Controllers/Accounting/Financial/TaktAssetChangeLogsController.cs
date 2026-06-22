@@ -41,7 +41,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:financial:asset:list", "资产变更记录列表")]
+    [TaktPermission("accounting:financial:asset:change:log:list", "资产变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetAssetChangeLogListAsync([FromQuery] TaktAssetChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">资产变更记录ID</param>
     /// <returns>资产变更记录DTO</returns>
-    [TaktPermission("accounting:financial:asset:query", "资产变更记录详情")]
+    [TaktPermission("accounting:financial:asset:change:log:query", "资产变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAssetChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// 获取资产变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("accounting:financial:asset:query", "资产变更记录选项")]
+    [TaktPermission("accounting:financial:asset:change:log:query", "资产变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetAssetChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>资产变更记录DTO</returns>
-    [TaktPermission("accounting:financial:asset:create", "创建资产变更记录")]
+    [TaktPermission("accounting:financial:asset:change:log:create", "创建资产变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateAssetChangeLogAsync([FromBody] TaktAssetChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// <param name="id">资产变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>资产变更记录DTO</returns>
-    [TaktPermission("accounting:financial:asset:update", "更新资产变更记录")]
+    [TaktPermission("accounting:financial:asset:change:log:update", "更新资产变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAssetChangeLogAsync(long id, [FromBody] TaktAssetChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">资产变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:financial:asset:delete", "删除资产变更记录")]
+    [TaktPermission("accounting:financial:asset:change:log:delete", "删除资产变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAssetChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:financial:asset:delete", "批量删除资产变更记录")]
+    [TaktPermission("accounting:financial:asset:change:log:delete", "批量删除资产变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteAssetChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktAssetChangeLogsController : TaktControllerBase
     /// 导出资产变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:financial:asset:export", "导出资产变更记录")]
+    [TaktPermission("accounting:financial:asset:change:log:export", "导出资产变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportAssetChangeLogAsync([FromQuery] TaktAssetChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

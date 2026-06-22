@@ -21,13 +21,14 @@ namespace Takt.Infrastructure.Repositories;
 internal static class TaktRepositoryReadOnlySql
 {
     /// <summary>
-    /// 执行只读 SQL 并返回动态行
+    /// 执行只读 SQL 并返回动态行（列名不区分大小写；DBNull 转为 null）
     /// </summary>
     /// <param name="db">SqlSugar 客户端</param>
     /// <param name="sql">SQL 文本</param>
-    /// <param name="parameters">命名参数</param>
+    /// <param name="parameters">命名参数（可选）</param>
     /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>结果行列表</returns>
+    /// <returns>结果行列表；无数据时返回空列表</returns>
+    /// <exception cref="OperationCanceledException">取消令牌已触发时抛出</exception>
     public static async Task<IReadOnlyList<Dictionary<string, object>>> QueryAsync(
         ISqlSugarClient db,
         string sql,
@@ -44,6 +45,11 @@ internal static class TaktRepositoryReadOnlySql
         return ConvertDataTable(dataTable);
     }
 
+    /// <summary>
+    /// 将 ADO DataTable 转为字典行列表
+    /// </summary>
+    /// <param name="dataTable">查询结果表</param>
+    /// <returns>字典行列表；空表或 null 时返回空列表</returns>
     private static IReadOnlyList<Dictionary<string, object>> ConvertDataTable(DataTable? dataTable)
     {
         if (dataTable == null || dataTable.Rows.Count == 0)
@@ -67,6 +73,11 @@ internal static class TaktRepositoryReadOnlySql
         return rows;
     }
 
+    /// <summary>
+    /// 将命名参数字典转为 SqlSugar 参数数组
+    /// </summary>
+    /// <param name="parameters">命名参数字典（可选）</param>
+    /// <returns>SqlSugar 参数数组；无参数时返回空数组</returns>
     private static SugarParameter[] BuildSugarParameters(IReadOnlyDictionary<string, object?>? parameters)
     {
         if (parameters == null || parameters.Count == 0)

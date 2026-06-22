@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:personnel:employeejoined:create"
-      update-permission="humanresource:personnel:employeejoined:update"
-      delete-permission="humanresource:personnel:employeejoined:delete"
-      import-permission="humanresource:personnel:employeejoined:import"
-      export-permission="humanresource:personnel:employeejoined:export"
+      create-permission="human:resource:personnel:employeejoined:create"
+      update-permission="human:resource:personnel:employeejoined:update"
+      delete-permission="human:resource:personnel:employeejoined:delete"
+      import-permission="human:resource:personnel:employeejoined:import"
+      export-permission="human:resource:personnel:employeejoined:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -720,7 +720,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:personnel:employeejoined:update',
+        permission: 'human:resource:personnel:employeejoined:update',
         onClick: (record: EmployeeJoined) => handleEdit(record)
       },
       {
@@ -728,7 +728,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:personnel:employeejoined:delete',
+        permission: 'human:resource:personnel:employeejoined:delete',
         onClick: (record: EmployeeJoined) => handleDeleteOne(record)
       }
     ]

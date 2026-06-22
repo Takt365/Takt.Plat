@@ -41,7 +41,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:compensation:empsalary:list", "员工薪酬列表")]
+    [TaktPermission("human:resource:compensation:emp:salary:list", "员工薪酬列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmpSalaryListAsync([FromQuery] TaktEmpSalaryQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工薪酬ID</param>
     /// <returns>员工薪酬DTO</returns>
-    [TaktPermission("humanresource:compensation:empsalary:query", "员工薪酬详情")]
+    [TaktPermission("human:resource:compensation:emp:salary:query", "员工薪酬详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmpSalaryByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// 获取员工薪酬选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:compensation:empsalary:query", "员工薪酬选项")]
+    [TaktPermission("human:resource:compensation:emp:salary:query", "员工薪酬选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmpSalaryOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工薪酬DTO</returns>
-    [TaktPermission("humanresource:compensation:empsalary:create", "创建员工薪酬")]
+    [TaktPermission("human:resource:compensation:emp:salary:create", "创建员工薪酬")]
     [HttpPost]
     public async Task<IActionResult> CreateEmpSalaryAsync([FromBody] TaktEmpSalaryCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// <param name="id">员工薪酬ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工薪酬DTO</returns>
-    [TaktPermission("humanresource:compensation:empsalary:update", "更新员工薪酬")]
+    [TaktPermission("human:resource:compensation:emp:salary:update", "更新员工薪酬")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmpSalaryAsync(long id, [FromBody] TaktEmpSalaryUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工薪酬ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:empsalary:delete", "删除员工薪酬")]
+    [TaktPermission("human:resource:compensation:emp:salary:delete", "删除员工薪酬")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmpSalaryByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:empsalary:delete", "批量删除员工薪酬")]
+    [TaktPermission("human:resource:compensation:emp:salary:delete", "批量删除员工薪酬")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmpSalaryBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>员工薪酬DTO</returns>
-    [TaktPermission("humanresource:compensation:empsalary:update", "更新员工薪酬状态")]
+    [TaktPermission("human:resource:compensation:emp:salary:update", "更新员工薪酬状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateEmpSalaryStatusAsync([FromBody] TaktEmpSalaryStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:empsalary:import", "获取员工薪酬导入模板")]
+    [TaktPermission("human:resource:compensation:emp:salary:import", "获取员工薪酬导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmpSalaryTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:compensation:empsalary:import", "导入员工薪酬")]
+    [TaktPermission("human:resource:compensation:emp:salary:import", "导入员工薪酬")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmpSalaryAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktEmpSalariesController : TaktControllerBase
     /// 导出员工薪酬
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:empsalary:export", "导出员工薪酬")]
+    [TaktPermission("human:resource:compensation:emp:salary:export", "导出员工薪酬")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmpSalaryAsync([FromQuery] TaktEmpSalaryQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

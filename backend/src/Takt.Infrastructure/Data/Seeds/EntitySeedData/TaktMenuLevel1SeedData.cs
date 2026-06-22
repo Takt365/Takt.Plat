@@ -68,11 +68,11 @@ public class TaktMenuLevel1SeedData
             {
                 menu.MenuName = "主页";
                 menu.MenuCode = "HOME";
-                menu.I18nKey = "menu.home._self";
+                menu.I18nKey = "menu.home";
                 menu.Icon = "RiHomeLine";
                 menu.ParentId = 0;
                 menu.MenuType = 1;
-                menu.Permission = "takt:home:list";
+                menu.Permission = "home:info:list";
                 menu.RoutePath = "/home";
                 menu.ComponentPath = "home/index";
                 menu.SortOrder = 1;
@@ -165,11 +165,11 @@ public class TaktMenuLevel1SeedData
             updateCount += logisticsResult.UpdateCount;
 
             // 6. 人力资源(目录)
-            var humanResourceResult = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tc, "HUMANRESOURCE", menu =>
+            var humanResourceResult = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tc, "HUMAN_RESOURCE", menu =>
             {
                 menu.MenuName = "人力资源";
-                menu.MenuCode = "HUMANRESOURCE";
-                menu.I18nKey = "menu.humanresource._self";
+                menu.MenuCode = "HUMAN_RESOURCE";
+                menu.I18nKey = "menu.human.resource._self";
                 menu.Icon = "RiTeamLine";
                 menu.ParentId = 0;
                 menu.MenuType = 0;
@@ -289,11 +289,11 @@ public class TaktMenuLevel1SeedData
             {
                 menu.MenuName = "关于";
                 menu.MenuCode = "ABOUT";
-                menu.I18nKey = "menu.about._self";
+                menu.I18nKey = "menu.about";
                 menu.Icon = "RiInformationLine";
                 menu.ParentId = 0;
                 menu.MenuType = 1;
-                menu.Permission = "takt:about:list";
+                menu.Permission = "about:info:list";
                 menu.RoutePath = "/about";
                 menu.ComponentPath = "about/index";
                 menu.SortOrder = 12;

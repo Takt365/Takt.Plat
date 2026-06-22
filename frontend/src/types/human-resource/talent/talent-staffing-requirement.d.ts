@@ -138,11 +138,6 @@ export interface TalentStaffingRequirement extends ApprovalDtoBase {
    */
   replaceEmployee?: Employee;
 
-  /**
-   * 招聘计划 （子表：TaktTalentRecruitmentPlan）
-   */
-  talentRecruitmentPlans?: TalentRecruitmentPlan[];
-
 }
 
 
@@ -386,11 +381,6 @@ export interface TalentStaffingRequirementCreate {
    * 预算年度（BudgetYear，用于 headcount 控制）
    */
   budgetYear?: string;
-
-  /**
-   * 招聘计划（子表，级联保存）
-   */
-  talentRecruitmentPlans?: TalentRecruitmentPlanCreate[];
 
   /**
    * 扩展字段JSON

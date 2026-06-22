@@ -167,6 +167,11 @@ public class TaktMenuButtonSeedData
         if (parts[0].Equals("takt", StringComparison.OrdinalIgnoreCase))
             return string.Empty;
 
+        if (parts.Length >= 2
+            && parts[0].Equals("human", StringComparison.OrdinalIgnoreCase)
+            && parts[1].Equals("resource", StringComparison.OrdinalIgnoreCase))
+            return "human:resource";
+
         return parts[0].ToLowerInvariant();
     }
 
@@ -181,6 +186,17 @@ public class TaktMenuButtonSeedData
             return string.Empty;
 
         var parts = permission.Split(':');
+        if (parts.Length >= 2
+            && parts[0].Equals("human", StringComparison.OrdinalIgnoreCase)
+            && parts[1].Equals("resource", StringComparison.OrdinalIgnoreCase))
+        {
+            if (parts.Length > 3)
+                return string.Join(":", parts[2..^1]).ToLowerInvariant();
+            if (parts.Length == 3)
+                return parts[2].ToLowerInvariant();
+            return string.Empty;
+        }
+
         if (parts.Length > 2)
             // 截取第一个冒号之后、最后一个冒号之前的部分（支持多级路径）
             return string.Join(":", parts[1..^1]).ToLower();
@@ -437,7 +453,7 @@ public class TaktMenuButtonSeedData
             "accounting" or "finance" => MergeModuleButtons(AccountingExtraNames, AccountingExtraPerms),
             "code" or "generator" => MergeModuleButtons(CodeExtraNames, CodeExtraPerms),
             "foundation" => MergeModuleButtons(FoundationExtraNames, FoundationExtraPerms),
-            "humanresource" or "hr" => MergeModuleButtons(HumanResourceExtraNames, HumanResourceExtraPerms),
+            "human:resource" or "humanresource" or "hr" => MergeModuleButtons(HumanResourceExtraNames, HumanResourceExtraPerms),
             "identity" => MergeModuleButtons(IdentityExtraNames, IdentityExtraPerms),
             "routine" => MergeModuleButtons(RoutineExtraNames, RoutineExtraPerms),
             "workflow" => MergeModuleButtons(WorkflowExtraNames, WorkflowExtraPerms),

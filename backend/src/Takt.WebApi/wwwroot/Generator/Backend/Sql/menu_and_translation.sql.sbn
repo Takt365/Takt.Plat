@@ -15,7 +15,7 @@
 {{~ if mod == "routine" ~}}{{~ module_group = 2 ~}}{{~ end ~}}
 {{~ if mod == "accounting" ~}}{{~ module_group = 3 ~}}{{~ end ~}}
 {{~ if mod == "logistics" ~}}{{~ module_group = 4 ~}}{{~ end ~}}
-{{~ if mod == "humanresource" ~}}{{~ module_group = 5 ~}}{{~ end ~}}
+{{~ if mod == "human:resource" || mod == "humanresource" ~}}{{~ module_group = 5 ~}}{{~ end ~}}
 {{~ if mod == "workflow" ~}}{{~ module_group = 6 ~}}{{~ end ~}}
 {{~ if mod == "code" ~}}{{~ module_group = 7 ~}}{{~ end ~}}
 {{~ if mod == "statistics" ~}}{{~ module_group = 9 ~}}{{~ end ~}}

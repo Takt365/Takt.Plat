@@ -41,7 +41,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("statistics:logging:operlog:list", "操作日志列表")]
+    [TaktPermission("statistics:logging:oper:log:list", "操作日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetOperLogListAsync([FromQuery] TaktOperLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">操作日志ID</param>
     /// <returns>操作日志DTO</returns>
-    [TaktPermission("statistics:logging:operlog:query", "操作日志详情")]
+    [TaktPermission("statistics:logging:oper:log:query", "操作日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOperLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// 获取操作日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("statistics:logging:operlog:query", "操作日志选项")]
+    [TaktPermission("statistics:logging:oper:log:query", "操作日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetOperLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>操作日志DTO</returns>
-    [TaktPermission("statistics:logging:operlog:create", "创建操作日志")]
+    [TaktPermission("statistics:logging:oper:log:create", "创建操作日志")]
     [HttpPost]
     public async Task<IActionResult> CreateOperLogAsync([FromBody] TaktOperLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// <param name="id">操作日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>操作日志DTO</returns>
-    [TaktPermission("statistics:logging:operlog:update", "更新操作日志")]
+    [TaktPermission("statistics:logging:oper:log:update", "更新操作日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateOperLogAsync(long id, [FromBody] TaktOperLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">操作日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:logging:operlog:delete", "删除操作日志")]
+    [TaktPermission("statistics:logging:oper:log:delete", "删除操作日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOperLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:logging:operlog:delete", "批量删除操作日志")]
+    [TaktPermission("statistics:logging:oper:log:delete", "批量删除操作日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteOperLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO（TaktExecuteStatus 枚举）</param>
     /// <returns>操作日志DTO</returns>
-    [TaktPermission("statistics:logging:operlog:update", "更新操作日志状态")]
+    [TaktPermission("statistics:logging:oper:log:update", "更新操作日志状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateOperLogStatusAsync([FromBody] TaktOperLogStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktOperLogsController : TaktControllerBase
     /// 导出操作日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("statistics:logging:operlog:export", "导出操作日志")]
+    [TaktPermission("statistics:logging:oper:log:export", "导出操作日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportOperLogAsync([FromQuery] TaktOperLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

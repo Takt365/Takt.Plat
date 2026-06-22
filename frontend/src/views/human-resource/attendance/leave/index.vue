@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:attendance:leave:create"
-      update-permission="humanresource:attendance:leave:update"
-      delete-permission="humanresource:attendance:leave:delete"
-      import-permission="humanresource:attendance:leave:import"
-      export-permission="humanresource:attendance:leave:export"
+      create-permission="human:resource:attendance:leave:create"
+      update-permission="human:resource:attendance:leave:update"
+      delete-permission="human:resource:attendance:leave:delete"
+      import-permission="human:resource:attendance:leave:import"
+      export-permission="human:resource:attendance:leave:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -846,7 +846,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:attendance:leave:update',
+        permission: 'human:resource:attendance:leave:update',
         onClick: (record: Leave) => handleEdit(record)
       },
       {
@@ -854,7 +854,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:attendance:leave:delete',
+        permission: 'human:resource:attendance:leave:delete',
         onClick: (record: Leave) => handleDeleteOne(record)
       }
     ]

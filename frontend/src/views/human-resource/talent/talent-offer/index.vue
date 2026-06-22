@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:talent:talentoffer:create"
-      update-permission="humanresource:talent:talentoffer:update"
-      delete-permission="humanresource:talent:talentoffer:delete"
-      import-permission="humanresource:talent:talentoffer:import"
-      export-permission="humanresource:talent:talentoffer:export"
+      create-permission="human:resource:talent:talentoffer:create"
+      update-permission="human:resource:talent:talentoffer:update"
+      delete-permission="human:resource:talent:talentoffer:delete"
+      import-permission="human:resource:talent:talentoffer:import"
+      export-permission="human:resource:talent:talentoffer:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -108,11 +108,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('interviewId')">
-      <a-form-item :label="t('entity.talentOffer.interviewid')">
+      <div v-show="isFieldVisible('jobPostingId')">
+      <a-form-item :label="t('entity.talentOffer.jobpostingid')">
         <a-input
-          v-model:value="advancedQueryForm.interviewId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentOffer.interviewid') })"
+          v-model:value="advancedQueryForm.jobPostingId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentOffer.jobpostingid') })"
           allow-clear
         />
       </a-form-item>
@@ -386,7 +386,7 @@ const formLoading = ref(false)
 const formRef = ref()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  interviewId: '',
+  jobPostingId: '',
   offerNo: '',
   hireDateStart: '',
   hireDateEnd: '',
@@ -410,7 +410,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'interviewId', label: t('entity.talentOffer.interviewid') },
+  { key: 'jobPostingId', label: t('entity.talentOffer.jobpostingid') },
   { key: 'offerNo', label: t('entity.talentOffer.offerno') },
   { key: 'hireDateStart', label: t('entity.talentOffer.hiredatestart') },
   { key: 'hireDateEnd', label: t('entity.talentOffer.hiredateend') },
@@ -461,22 +461,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'talentOfferId') ?? ''
   },
   {
-    title: t('entity.talentOffer.interviewid'),
-    dataIndex: 'interviewId',
-    key: 'interviewId',
+    title: t('entity.talentOffer.jobpostingid'),
+    dataIndex: 'jobPostingId',
+    key: 'jobPostingId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'interviewId') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'jobPostingId') ?? ''
   },
   {
-    title: t('entity.talentOffer.interviewname'),
-    dataIndex: 'interviewName',
-    key: 'interviewName',
+    title: t('entity.talentOffer.jobpostingname'),
+    dataIndex: 'jobPostingName',
+    key: 'jobPostingName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'interviewName') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'jobPostingName') ?? ''
   },
   {
     title: t('entity.talentOffer.offerno'),
@@ -560,15 +560,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'reason') ?? ''
   },
   {
-    title: t('entity.talentOffer.interview'),
-    dataIndex: 'interview',
-    key: 'interview',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'interview') ?? ''
-  },
-  {
     title: t('entity.talentOffer.employeeonboardings'),
     dataIndex: 'employeeOnboardings',
     key: 'employeeOnboardings',
@@ -584,7 +575,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:talent:talentoffer:update',
+        permission: 'human:resource:talent:talentoffer:update',
         onClick: (record: TalentOffer) => handleEdit(record)
       },
       {
@@ -592,7 +583,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:talent:talentoffer:delete',
+        permission: 'human:resource:talent:talentoffer:delete',
         onClick: (record: TalentOffer) => handleDeleteOne(record)
       }
     ]
@@ -675,7 +666,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  interviewId: '',
+  jobPostingId: '',
   offerNo: '',
   hireDateStart: '',
   hireDateEnd: '',
@@ -851,7 +842,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  interviewId: '',
+  jobPostingId: '',
   offerNo: '',
   hireDateStart: '',
   hireDateEnd: '',

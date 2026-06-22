@@ -41,7 +41,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:list", "生产工单变更记录列表")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:list", "生产工单变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetProductionOrderChangeLogListAsync([FromQuery] TaktProductionOrderChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产工单变更记录ID</param>
     /// <returns>生产工单变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:query", "生产工单变更记录详情")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:query", "生产工单变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductionOrderChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// 获取生产工单变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:query", "生产工单变更记录选项")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:query", "生产工单变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetProductionOrderChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>生产工单变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:create", "创建生产工单变更记录")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:create", "创建生产工单变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateProductionOrderChangeLogAsync([FromBody] TaktProductionOrderChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// <param name="id">生产工单变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>生产工单变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:update", "更新生产工单变更记录")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:update", "更新生产工单变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProductionOrderChangeLogAsync(long id, [FromBody] TaktProductionOrderChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产工单变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:delete", "删除生产工单变更记录")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:delete", "删除生产工单变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProductionOrderChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:delete", "批量删除生产工单变更记录")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:delete", "批量删除生产工单变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteProductionOrderChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktProductionOrderChangeLogsController : TaktControllerBase
     /// 导出生产工单变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:productionorder:export", "导出生产工单变更记录")]
+    [TaktPermission("logistics:manufacturing:output:production:order:change:log:export", "导出生产工单变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportProductionOrderChangeLogAsync([FromQuery] TaktProductionOrderChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -41,7 +41,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:list", "抽样方案列表")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:list", "抽样方案列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSamplingSchemeListAsync([FromQuery] TaktSamplingSchemeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="id">抽样方案ID</param>
     /// <returns>抽样方案DTO</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:query", "抽样方案详情")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:query", "抽样方案详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSamplingSchemeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// 获取抽样方案选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:query", "抽样方案选项")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:query", "抽样方案选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSamplingSchemeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>抽样方案DTO</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:create", "创建抽样方案")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:create", "创建抽样方案")]
     [HttpPost]
     public async Task<IActionResult> CreateSamplingSchemeAsync([FromBody] TaktSamplingSchemeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// <param name="id">抽样方案ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>抽样方案DTO</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:update", "更新抽样方案")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:update", "更新抽样方案")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSamplingSchemeAsync(long id, [FromBody] TaktSamplingSchemeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="id">抽样方案ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:delete", "删除抽样方案")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:delete", "删除抽样方案")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSamplingSchemeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:delete", "批量删除抽样方案")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:delete", "批量删除抽样方案")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSamplingSchemeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>抽样方案DTO</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:update", "更新抽样方案状态")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:update", "更新抽样方案状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSamplingSchemeStatusAsync([FromBody] TaktSamplingSchemeStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:import", "获取抽样方案导入模板")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:import", "获取抽样方案导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSamplingSchemeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:import", "导入抽样方案")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:import", "导入抽样方案")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSamplingSchemeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// 导出抽样方案
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:samplingscheme:export", "导出抽样方案")]
+    [TaktPermission("logistics:quality:operation:sampling:scheme:export", "导出抽样方案")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSamplingSchemeAsync([FromQuery] TaktSamplingSchemeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

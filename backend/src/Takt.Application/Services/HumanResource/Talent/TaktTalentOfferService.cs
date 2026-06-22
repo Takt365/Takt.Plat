@@ -317,7 +317,7 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.InterviewId).Contains(keywords)
+                SqlFunc.ToString(x.JobPostingId).Contains(keywords)
                 || (x.OfferNo != null && x.OfferNo.Contains(keywords))
                 || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
@@ -332,9 +332,9 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
             );
         }
 
-        if (queryDto?.InterviewId.HasValue == true)
+        if (queryDto?.JobPostingId.HasValue == true)
         {
-            exp = exp.And(x => x.InterviewId == queryDto.InterviewId);
+            exp = exp.And(x => x.JobPostingId == queryDto.JobPostingId);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.OfferNo))

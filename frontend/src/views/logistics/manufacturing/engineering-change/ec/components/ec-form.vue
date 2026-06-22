@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec/components -->
 <!-- 文件名称：ec-form.vue -->
-<!-- 功能描述：设变维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：设变维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form"
+    class="takt-generated-form ec-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -284,12 +284,24 @@
         </div>
       </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 ecDetails -->
+    <TaktEditableTable
+      ref="ecDetailTableRef"
+      v-model="childEcDetailRows"
+      :columns="ecDetailFormColumns"
+      :title="t('entity.ecdetail._self')"
+      :add-button-entity="t('entity.ecdetail._self')"
+      id-field="ecDetailId"
+      :default-row="createDefaultEcDetailRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 设变维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 设变维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/ec/components
  */
 import { reactive, watch, computed, ref } from 'vue'
@@ -331,6 +343,99 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","ecNo","ecIssueDate","changeStatus","ecTitle","ecDetailText","ecLeader","ecLossAmount","ecDistinction","effectiveDate","ecEntryDate","ecStatus","extField","remark"]
 
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
+const childEcDetailRows = ref<Record<string, unknown>[]>([])
+const ecDetailTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
+
+/** 子表 ecDetail 可编辑列 */
+const ecDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
+  {
+    key: 'ecNo',
+    title: t('entity.ecdetail.ecno'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'lineNumber',
+    title: t('entity.ecdetail.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
+  },
+  {
+    key: 'ecModel',
+    title: t('entity.ecdetail.ecmodel'),
+    editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'ecBomItem',
+    title: t('entity.ecdetail.ecbomitem'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecbomitem') }),
+  },
+  {
+    key: 'ecBomSubItem',
+    title: t('entity.ecdetail.ecbomsubitem'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecbomsubitem') }),
+  },
+  {
+    key: 'ecBomNo',
+    title: t('entity.ecdetail.ecbomno'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecbomno') }),
+  },
+  {
+    key: 'ecChange',
+    title: t('entity.ecdetail.ecchange'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecchange') }),
+  },
+  {
+    key: 'ecLocal',
+    title: t('entity.ecdetail.eclocal'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.eclocal') }),
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<EcCreate & { ecId?: string }> | null | undefined) {
+  childEcDetailRows.value = ((val as any)?.ecDetails ?? []) as Record<string, unknown>[]
+}
+
+function createDefaultEcDetailRow(): Record<string, unknown> {
+  return {
+    ecNo: '',
+    lineNumber: (childEcDetailRows.value.length + 1) * 10,
+    ecModel: '',
+    ecBomItem: '',
+    ecBomSubItem: '',
+    ecBomNo: '',
+    ecChange: '',
+    ecLocal: '',
+  }
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  const masterId = props.formData?.ecId ?? ''
+  return {
+    ...formState,
+    ecDetails: ecDetailTableRef.value?.getRows?.() ?? childEcDetailRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      ecId: masterId,
+    })),
+  }
+}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -361,9 +466,10 @@ watch(
     if (val?.ecId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-
+    delete (next as any).ecDetails
       applyScopeDefaults(next)
       Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -498,12 +604,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await ecDetailTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = { ...formState }
+  const payload = buildSubmitPayload() as Record<string, unknown>
   if ('changeStatus' in payload) {
     const rawchangeStatus = payload.changeStatus
     payload.changeStatus = typeof rawchangeStatus === 'number' ? rawchangeStatus : Number(rawchangeStatus)
@@ -528,7 +635,8 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.ecId)
-
+  childEcDetailRows.value = []
+  ecDetailTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

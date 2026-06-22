@@ -41,7 +41,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:list", "生产切换记录列表")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:list", "生产切换记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetProductionChangeoverListAsync([FromQuery] TaktProductionChangeoverQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产切换记录ID</param>
     /// <returns>生产切换记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:query", "生产切换记录详情")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:query", "生产切换记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductionChangeoverByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// 获取生产切换记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:query", "生产切换记录选项")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:query", "生产切换记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetProductionChangeoverOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>生产切换记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:create", "创建生产切换记录")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:create", "创建生产切换记录")]
     [HttpPost]
     public async Task<IActionResult> CreateProductionChangeoverAsync([FromBody] TaktProductionChangeoverCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// <param name="id">生产切换记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>生产切换记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:update", "更新生产切换记录")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:update", "更新生产切换记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProductionChangeoverAsync(long id, [FromBody] TaktProductionChangeoverUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产切换记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:delete", "删除生产切换记录")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:delete", "删除生产切换记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProductionChangeoverByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:delete", "批量删除生产切换记录")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:delete", "批量删除生产切换记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteProductionChangeoverBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:import", "获取生产切换记录导入模板")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:import", "获取生产切换记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetProductionChangeoverTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:import", "导入生产切换记录")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:import", "导入生产切换记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportProductionChangeoverAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// 导出生产切换记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:productionchangeover:export", "导出生产切换记录")]
+    [TaktPermission("logistics:manufacturing:output:production:changeover:export", "导出生产切换记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportProductionChangeoverAsync([FromQuery] TaktProductionChangeoverQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

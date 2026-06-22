@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:materials:materialplant:create"
-      update-permission="logistics:materials:materialplant:update"
-      delete-permission="logistics:materials:materialplant:delete"
-      import-permission="logistics:materials:materialplant:import"
-      export-permission="logistics:materials:materialplant:export"
+      create-permission="logistics:materials:material:plant:change:log:create"
+      update-permission="logistics:materials:material:plant:change:log:update"
+      delete-permission="logistics:materials:material:plant:change:log:delete"
+      import-permission="logistics:materials:material:plant:change:log:import"
+      export-permission="logistics:materials:material:plant:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -1444,7 +1444,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:materials:materialplant:update',
+        permission: 'logistics:materials:material:plant:change:log:update',
         onClick: (record: MaterialPlant) => handleEdit(record)
       },
       {
@@ -1452,7 +1452,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:materials:materialplant:delete',
+        permission: 'logistics:materials:material:plant:change:log:delete',
         onClick: (record: MaterialPlant) => handleDeleteOne(record)
       }
     ]

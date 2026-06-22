@@ -41,7 +41,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:performance:analysis:list", "分析改进列表")]
+    [TaktPermission("human:resource:performance:perf:analysis:list", "分析改进列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPerfAnalysisListAsync([FromQuery] TaktPerfAnalysisQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// </summary>
     /// <param name="id">分析改进ID</param>
     /// <returns>分析改进DTO</returns>
-    [TaktPermission("humanresource:performance:analysis:query", "分析改进详情")]
+    [TaktPermission("human:resource:performance:perf:analysis:query", "分析改进详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPerfAnalysisByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// 获取分析改进选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:performance:analysis:query", "分析改进选项")]
+    [TaktPermission("human:resource:performance:perf:analysis:query", "分析改进选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPerfAnalysisOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>分析改进DTO</returns>
-    [TaktPermission("humanresource:performance:analysis:create", "创建分析改进")]
+    [TaktPermission("human:resource:performance:perf:analysis:create", "创建分析改进")]
     [HttpPost]
     public async Task<IActionResult> CreatePerfAnalysisAsync([FromBody] TaktPerfAnalysisCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// <param name="id">分析改进ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>分析改进DTO</returns>
-    [TaktPermission("humanresource:performance:analysis:update", "更新分析改进")]
+    [TaktPermission("human:resource:performance:perf:analysis:update", "更新分析改进")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePerfAnalysisAsync(long id, [FromBody] TaktPerfAnalysisUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// </summary>
     /// <param name="id">分析改进ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:analysis:delete", "删除分析改进")]
+    [TaktPermission("human:resource:performance:perf:analysis:delete", "删除分析改进")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePerfAnalysisByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:analysis:delete", "批量删除分析改进")]
+    [TaktPermission("human:resource:performance:perf:analysis:delete", "批量删除分析改进")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePerfAnalysisBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>分析改进DTO</returns>
-    [TaktPermission("humanresource:performance:analysis:update", "更新分析改进状态")]
+    [TaktPermission("human:resource:performance:perf:analysis:update", "更新分析改进状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePerfAnalysisStatusAsync([FromBody] TaktPerfAnalysisStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:analysis:import", "获取分析改进导入模板")]
+    [TaktPermission("human:resource:performance:perf:analysis:import", "获取分析改进导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPerfAnalysisTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:performance:analysis:import", "导入分析改进")]
+    [TaktPermission("human:resource:performance:perf:analysis:import", "导入分析改进")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPerfAnalysisAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// 导出分析改进
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:analysis:export", "导出分析改进")]
+    [TaktPermission("human:resource:performance:perf:analysis:export", "导出分析改进")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPerfAnalysisAsync([FromQuery] TaktPerfAnalysisQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

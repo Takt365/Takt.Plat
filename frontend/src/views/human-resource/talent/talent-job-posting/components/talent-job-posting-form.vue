@@ -67,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.talentJobPosting.recruitmentplanid')"
-                name="recruitmentPlanId"
+                :label="t('entity.talentJobPosting.staffingrequirementid')"
+                name="staffingRequirementId"
               >
                 <a-input
-                  v-model:value="formState.recruitmentPlanId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentJobPosting.recruitmentplanid') })"
+                  v-model:value="formState.staffingRequirementId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentJobPosting.staffingrequirementid') })"
                   size="small"
                   allow-clear
                 />
@@ -197,19 +197,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.talentJobPosting.talentinterviews')"
-                name="talentInterviews"
-              >
-                <a-input
-                  v-model:value="formState.talentInterviews"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentJobPosting.talentinterviews') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('common.page.entity.ExtField')"
                 name="ExtField"
               >
@@ -277,7 +264,7 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
 }
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","recruitmentPlanId","postingCode","title","postingStatus","publishDate","openDate","closeDate","publishChannel","reason","talentInterviews","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","staffingRequirementId","postingCode","title","postingStatus","publishDate","openDate","closeDate","publishChannel","reason","ExtField","remark"]
 
 
 interface Props {
@@ -316,10 +303,10 @@ watch(
 )
 
 const rules = computed<Record<string, Rule[]>>(() => ({
-  recruitmentPlanId: [
+  staffingRequirementId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.talentJobPosting.recruitmentplanid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.talentJobPosting.staffingrequirementid') }),
       trigger: 'blur'
     }
   ],

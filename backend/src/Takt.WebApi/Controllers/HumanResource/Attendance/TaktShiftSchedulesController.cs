@@ -41,7 +41,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:list", "排班信息列表")]
+    [TaktPermission("human:resource:attendance:shift:schedule:list", "排班信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetShiftScheduleListAsync([FromQuery] TaktShiftScheduleQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// </summary>
     /// <param name="id">排班信息ID</param>
     /// <returns>排班信息DTO</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:query", "排班信息详情")]
+    [TaktPermission("human:resource:attendance:shift:schedule:query", "排班信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetShiftScheduleByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// 获取排班信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:query", "排班信息选项")]
+    [TaktPermission("human:resource:attendance:shift:schedule:query", "排班信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetShiftScheduleOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>排班信息DTO</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:create", "创建排班信息")]
+    [TaktPermission("human:resource:attendance:shift:schedule:create", "创建排班信息")]
     [HttpPost]
     public async Task<IActionResult> CreateShiftScheduleAsync([FromBody] TaktShiftScheduleCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// <param name="id">排班信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>排班信息DTO</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:update", "更新排班信息")]
+    [TaktPermission("human:resource:attendance:shift:schedule:update", "更新排班信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateShiftScheduleAsync(long id, [FromBody] TaktShiftScheduleUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// </summary>
     /// <param name="id">排班信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:delete", "删除排班信息")]
+    [TaktPermission("human:resource:attendance:shift:schedule:delete", "删除排班信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteShiftScheduleByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:delete", "批量删除排班信息")]
+    [TaktPermission("human:resource:attendance:shift:schedule:delete", "批量删除排班信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteShiftScheduleBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:import", "获取排班信息导入模板")]
+    [TaktPermission("human:resource:attendance:shift:schedule:import", "获取排班信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetShiftScheduleTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:import", "导入排班信息")]
+    [TaktPermission("human:resource:attendance:shift:schedule:import", "导入排班信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportShiftScheduleAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktShiftSchedulesController : TaktControllerBase
     /// 导出排班信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:shiftschedule:export", "导出排班信息")]
+    [TaktPermission("human:resource:attendance:shift:schedule:export", "导出排班信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportShiftScheduleAsync([FromQuery] TaktShiftScheduleQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

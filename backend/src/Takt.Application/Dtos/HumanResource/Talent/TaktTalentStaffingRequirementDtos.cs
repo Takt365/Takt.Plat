@@ -143,12 +143,6 @@ public class TaktTalentStaffingRequirementDto : TaktApprovalDtoBase
     /// </summary>
     public TaktEmployeeDto? ReplaceEmployee { get; set; }
 
-    /// <summary>
-    /// 招聘计划
-    /// （子表：TaktTalentRecruitmentPlan）
-    /// </summary>
-    public List<TaktTalentRecruitmentPlanDto>? TalentRecruitmentPlans { get; set; }
-
 }
 
 // ========================================
@@ -406,11 +400,6 @@ public class TaktTalentStaffingRequirementCreateDto
     /// 预算年度（BudgetYear，用于 headcount 控制）
     /// </summary>
     public string? BudgetYear { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 招聘计划（子表，级联保存）
-    /// </summary>
-    public List<TaktTalentRecruitmentPlanCreateDto>? TalentRecruitmentPlans { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

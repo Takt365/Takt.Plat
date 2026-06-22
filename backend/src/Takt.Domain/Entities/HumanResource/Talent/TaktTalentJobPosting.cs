@@ -4,7 +4,7 @@
 // 文件名称：TaktTalentJobPosting.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
-// 功能描述：职位发布（人才链路第3步：基于招聘计划对外发布职位）
+// 功能描述：职位发布（人才链路：用人需求→职位发布→录用）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -21,14 +21,14 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 [SugarTable("takt_human_resource_talent_job_posting", "职位发布表")]
 [SugarIndex("ix_talent_job_posting_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_talent_job_posting_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PostingCode), OrderByType.Asc, true)]
-[SugarIndex("ix_talent_job_posting_plan", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RecruitmentPlanId), OrderByType.Asc, false)]
+[SugarIndex("ix_talent_job_posting_staffing", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StaffingRequirementId), OrderByType.Asc, false)]
 public class TaktTalentJobPosting : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 招聘计划ID
+    /// 用人需求ID
     /// </summary>
-    [SugarColumn(ColumnName = "recruitment_plan_id", ColumnDescription = "招聘计划ID", ColumnDataType = "bigint", IsNullable = false)]
-    public long RecruitmentPlanId { get; set; }
+    [SugarColumn(ColumnName = "staffing_requirement_id", ColumnDescription = "用人需求ID", ColumnDataType = "bigint", IsNullable = false)]
+    public long StaffingRequirementId { get; set; }
 
     /// <summary>
     /// 发布编号（租户+公司内唯一）
@@ -83,14 +83,14 @@ public class TaktTalentJobPosting : TaktCompanyEntityBase
     // ========================================
 
     /// <summary>
-    /// 招聘计划
+    /// 用人需求
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(RecruitmentPlanId))]
-    public TaktTalentRecruitmentPlan? RecruitmentPlan { get; set; }
+    [Navigate(NavigateType.ManyToOne, nameof(StaffingRequirementId))]
+    public TaktTalentStaffingRequirement? StaffingRequirement { get; set; }
 
     /// <summary>
-    /// 面试安排
+    /// 录用信息
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktTalentInterview.JobPostingId))]
-    public List<TaktTalentInterview>? TalentInterviews { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktTalentOffer.JobPostingId))]
+    public List<TaktTalentOffer>? TalentOffers { get; set; }
 }

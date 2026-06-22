@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:helpdesk:itasset:create"
-      update-permission="routine:helpdesk:itasset:update"
-      delete-permission="routine:helpdesk:itasset:delete"
-      import-permission="routine:helpdesk:itasset:import"
-      export-permission="routine:helpdesk:itasset:export"
+      create-permission="routine:help:desk:it:asset:change:log:create"
+      update-permission="routine:help:desk:it:asset:change:log:update"
+      delete-permission="routine:help:desk:it:asset:change:log:delete"
+      import-permission="routine:help:desk:it:asset:change:log:import"
+      export-permission="routine:help:desk:it:asset:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -733,7 +733,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:helpdesk:itasset:update',
+        permission: 'routine:help:desk:it:asset:change:log:update',
         onClick: (record: ItAsset) => handleEdit(record)
       },
       {
@@ -741,7 +741,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:helpdesk:itasset:delete',
+        permission: 'routine:help:desk:it:asset:change:log:delete',
         onClick: (record: ItAsset) => handleDeleteOne(record)
       }
     ]

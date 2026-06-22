@@ -41,7 +41,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:list", "采购订单变更记录列表")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:list", "采购订单变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPurchaseOrderChangeLogListAsync([FromQuery] TaktPurchaseOrderChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购订单变更记录ID</param>
     /// <returns>采购订单变更记录DTO</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:query", "采购订单变更记录详情")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:query", "采购订单变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPurchaseOrderChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// 获取采购订单变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:query", "采购订单变更记录选项")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:query", "采购订单变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPurchaseOrderChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>采购订单变更记录DTO</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:create", "创建采购订单变更记录")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:create", "创建采购订单变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreatePurchaseOrderChangeLogAsync([FromBody] TaktPurchaseOrderChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// <param name="id">采购订单变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>采购订单变更记录DTO</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:update", "更新采购订单变更记录")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:update", "更新采购订单变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePurchaseOrderChangeLogAsync(long id, [FromBody] TaktPurchaseOrderChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购订单变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:delete", "删除采购订单变更记录")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:delete", "删除采购订单变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePurchaseOrderChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:delete", "批量删除采购订单变更记录")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:delete", "批量删除采购订单变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePurchaseOrderChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktPurchaseOrderChangeLogsController : TaktControllerBase
     /// 导出采购订单变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:procurement:purchaseorder:export", "导出采购订单变更记录")]
+    [TaktPermission("logistics:procurement:purchase:order:change:log:export", "导出采购订单变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPurchaseOrderChangeLogAsync([FromQuery] TaktPurchaseOrderChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

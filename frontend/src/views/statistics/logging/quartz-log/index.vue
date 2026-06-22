@@ -20,8 +20,8 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      delete-permission="statistics:logging:quartzlog:delete"
-      export-permission="statistics:logging:quartzlog:export"
+      delete-permission="statistics:logging:quartz:log:delete"
+      export-permission="statistics:logging:quartz:log:export"
       :show-create="false"
       :show-update="false"
       :show-delete="true"
@@ -530,7 +530,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.detail'),
         shape: 'plain',
         icon: RiEyeLine,
-        permission: 'statistics:logging:quartzlog:query',
+        permission: 'statistics:logging:quartz:log:query',
         onClick: (record: QuartzLog) => handleShowDetail(record),
       },
       {
@@ -538,7 +538,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'statistics:logging:quartzlog:delete',
+        permission: 'statistics:logging:quartz:log:delete',
         onClick: (record: QuartzLog) => handleDeleteOne(record)
       }
     ]

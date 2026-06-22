@@ -132,8 +132,6 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
             ("hr_reassignment_type","调动类型","员工调动类型。0=转岗，1=调岗",43),
             ("hr_talent_job_posting_status","职位发布状态","职位发布状态（与 TaktTalentJobPosting.posting_status 一致）。0=草稿，1=招聘中，2=已暂停，3=已关闭",46),
             ("hr_talent_publish_channel_type","职位发布渠道","职位发布渠道（与 TaktTalentJobPosting.publish_channel 一致）。0=官网，1=招聘网站，2=内推，3=校园，9=其他",47),
-            ("hr_talent_interview_status","面试安排状态","面试安排状态（与 TaktTalentInterview.interview_status 一致）。0=草稿，1=已安排，2=已完成，3=未通过，4=已取消",48),
-            ("hr_talent_interview_round_type","面试轮次","面试轮次（与 TaktTalentInterview.interview_round 一致）。1=初试，2=复试，3=终试",49),
             ("hr_personnel_onboarding_status","入职待办状态","入职待办状态（与 TaktEmployeeOnboarding.todo_status 一致）。0=待办理，1=办理中，2=已完成，3=已取消",51),
             ("hr_resignation_category","离职类别","离职类别（列 resignation_type；字典 hr_resignation_category）。0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他",54),
             ("logistics_batch_management_type","批次管理标识","是否启用批次管理。0=否，1=是",44),

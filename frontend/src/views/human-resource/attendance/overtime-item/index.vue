@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:attendance:overtimeitem:create"
-      update-permission="humanresource:attendance:overtimeitem:update"
-      delete-permission="humanresource:attendance:overtimeitem:delete"
-      import-permission="humanresource:attendance:overtimeitem:import"
-      export-permission="humanresource:attendance:overtimeitem:export"
+      create-permission="human:resource:attendance:overtimeitem:create"
+      update-permission="human:resource:attendance:overtimeitem:update"
+      delete-permission="human:resource:attendance:overtimeitem:delete"
+      import-permission="human:resource:attendance:overtimeitem:import"
+      export-permission="human:resource:attendance:overtimeitem:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -484,7 +484,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:attendance:overtimeitem:update',
+        permission: 'human:resource:attendance:overtimeitem:update',
         onClick: (record: OvertimeItem) => handleEdit(record)
       },
       {
@@ -492,7 +492,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:attendance:overtimeitem:delete',
+        permission: 'human:resource:attendance:overtimeitem:delete',
         onClick: (record: OvertimeItem) => handleDeleteOne(record)
       }
     ]

@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:attendance:shiftschedule:create"
-      update-permission="humanresource:attendance:shiftschedule:update"
-      delete-permission="humanresource:attendance:shiftschedule:delete"
-      import-permission="humanresource:attendance:shiftschedule:import"
-      export-permission="humanresource:attendance:shiftschedule:export"
+      create-permission="human:resource:attendance:shift:schedule:create"
+      update-permission="human:resource:attendance:shift:schedule:update"
+      delete-permission="human:resource:attendance:shift:schedule:delete"
+      import-permission="human:resource:attendance:shift:schedule:import"
+      export-permission="human:resource:attendance:shift:schedule:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -509,7 +509,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:attendance:shiftschedule:update',
+        permission: 'human:resource:attendance:shift:schedule:update',
         onClick: (record: ShiftSchedule) => handleEdit(record)
       },
       {
@@ -517,7 +517,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:attendance:shiftschedule:delete',
+        permission: 'human:resource:attendance:shift:schedule:delete',
         onClick: (record: ShiftSchedule) => handleDeleteOne(record)
       }
     ]

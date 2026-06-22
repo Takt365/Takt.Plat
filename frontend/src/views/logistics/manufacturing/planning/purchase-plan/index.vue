@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:planning:purchaseplan:create"
-      update-permission="logistics:manufacturing:planning:purchaseplan:update"
-      delete-permission="logistics:manufacturing:planning:purchaseplan:delete"
-      import-permission="logistics:manufacturing:planning:purchaseplan:import"
-      export-permission="logistics:manufacturing:planning:purchaseplan:export"
+      create-permission="logistics:manufacturing:planning:purchase:plan:create"
+      update-permission="logistics:manufacturing:planning:purchase:plan:update"
+      delete-permission="logistics:manufacturing:planning:purchase:plan:delete"
+      import-permission="logistics:manufacturing:planning:purchase:plan:import"
+      export-permission="logistics:manufacturing:planning:purchase:plan:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -961,7 +961,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:planning:purchaseplan:update',
+        permission: 'logistics:manufacturing:planning:purchase:plan:update',
         onClick: (record: PurchasePlan) => handleEdit(record)
       },
       {
@@ -969,7 +969,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:planning:purchaseplan:delete',
+        permission: 'logistics:manufacturing:planning:purchase:plan:delete',
         onClick: (record: PurchasePlan) => handleDeleteOne(record)
       }
     ]

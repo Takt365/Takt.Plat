@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:quality:operation:fqcorder:create"
-      update-permission="logistics:quality:operation:fqcorder:update"
-      delete-permission="logistics:quality:operation:fqcorder:delete"
-      import-permission="logistics:quality:operation:fqcorder:import"
-      export-permission="logistics:quality:operation:fqcorder:export"
+      create-permission="logistics:quality:operation:fqc:order:create"
+      update-permission="logistics:quality:operation:fqc:order:update"
+      delete-permission="logistics:quality:operation:fqc:order:delete"
+      import-permission="logistics:quality:operation:fqc:order:import"
+      export-permission="logistics:quality:operation:fqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -752,7 +752,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:fqcorder:update',
+        permission: 'logistics:quality:operation:fqc:order:update',
         onClick: (record: FqcOrder) => handleEdit(record)
       },
       {
@@ -760,7 +760,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:fqcorder:delete',
+        permission: 'logistics:quality:operation:fqc:order:delete',
         onClick: (record: FqcOrder) => handleDeleteOne(record)
       }
     ]

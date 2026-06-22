@@ -41,7 +41,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:list", "进货检验单列表")]
+    [TaktPermission("logistics:quality:operation:iqc:order:list", "进货检验单列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetIqcOrderListAsync([FromQuery] TaktIqcOrderQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="id">进货检验单ID</param>
     /// <returns>进货检验单DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:query", "进货检验单详情")]
+    [TaktPermission("logistics:quality:operation:iqc:order:query", "进货检验单详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetIqcOrderByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// 获取进货检验单选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:query", "进货检验单选项")]
+    [TaktPermission("logistics:quality:operation:iqc:order:query", "进货检验单选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetIqcOrderOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>进货检验单DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:create", "创建进货检验单")]
+    [TaktPermission("logistics:quality:operation:iqc:order:create", "创建进货检验单")]
     [HttpPost]
     public async Task<IActionResult> CreateIqcOrderAsync([FromBody] TaktIqcOrderCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// <param name="id">进货检验单ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>进货检验单DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:update", "更新进货检验单")]
+    [TaktPermission("logistics:quality:operation:iqc:order:update", "更新进货检验单")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateIqcOrderAsync(long id, [FromBody] TaktIqcOrderUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="id">进货检验单ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:delete", "删除进货检验单")]
+    [TaktPermission("logistics:quality:operation:iqc:order:delete", "删除进货检验单")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteIqcOrderByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:delete", "批量删除进货检验单")]
+    [TaktPermission("logistics:quality:operation:iqc:order:delete", "批量删除进货检验单")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteIqcOrderBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>进货检验单DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:update", "更新进货检验单状态")]
+    [TaktPermission("logistics:quality:operation:iqc:order:update", "更新进货检验单状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateIqcOrderStatusAsync([FromBody] TaktIqcOrderStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:import", "获取进货检验单导入模板")]
+    [TaktPermission("logistics:quality:operation:iqc:order:import", "获取进货检验单导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetIqcOrderTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:import", "导入进货检验单")]
+    [TaktPermission("logistics:quality:operation:iqc:order:import", "导入进货检验单")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportIqcOrderAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktIqcOrdersController : TaktControllerBase
     /// 导出进货检验单
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:export", "导出进货检验单")]
+    [TaktPermission("logistics:quality:operation:iqc:order:export", "导出进货检验单")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportIqcOrderAsync([FromQuery] TaktIqcOrderQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

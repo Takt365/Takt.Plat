@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcsController.cs
-// 创建时间：2026-06-20
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变主控制器
 // 
@@ -41,7 +41,7 @@ public class TaktEcsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:list", "设变主列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:list", "设变主列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcListAsync([FromQuery] TaktEcQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEcsController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变主ID</param>
     /// <returns>设变主DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:query", "设变主详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:query", "设变主详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEcByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEcsController : TaktControllerBase
     /// 获取设变主选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:query", "设变主选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:query", "设变主选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEcsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变主DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:create", "创建设变主")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:create", "创建设变主")]
     [HttpPost]
     public async Task<IActionResult> CreateEcAsync([FromBody] TaktEcCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEcsController : TaktControllerBase
     /// <param name="id">设变主ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变主DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:update", "更新设变主")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:update", "更新设变主")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcAsync(long id, [FromBody] TaktEcUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEcsController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变主ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:delete", "删除设变主")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:delete", "删除设变主")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEcsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:delete", "批量删除设变主")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:delete", "批量删除设变主")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktEcsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>设变主DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:update", "更新设变主状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:update", "更新设变主状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateEcStatusAsync([FromBody] TaktEcStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktEcsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:import", "获取设变主导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:import", "获取设变主导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktEcsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:import", "导入设变主")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:import", "导入设变主")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktEcsController : TaktControllerBase
     /// 导出设变主
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ec:export", "导出设变主")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:export", "导出设变主")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcAsync([FromQuery] TaktEcQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

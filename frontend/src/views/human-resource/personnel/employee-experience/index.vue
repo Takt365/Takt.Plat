@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:personnel:employeeexperience:create"
-      update-permission="humanresource:personnel:employeeexperience:update"
-      delete-permission="humanresource:personnel:employeeexperience:delete"
-      import-permission="humanresource:personnel:employeeexperience:import"
-      export-permission="humanresource:personnel:employeeexperience:export"
+      create-permission="human:resource:personnel:employeeexperience:create"
+      update-permission="human:resource:personnel:employeeexperience:update"
+      delete-permission="human:resource:personnel:employeeexperience:delete"
+      import-permission="human:resource:personnel:employeeexperience:import"
+      export-permission="human:resource:personnel:employeeexperience:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -500,7 +500,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:personnel:employeeexperience:update',
+        permission: 'human:resource:personnel:employeeexperience:update',
         onClick: (record: EmployeeExperience) => handleEdit(record)
       },
       {
@@ -508,7 +508,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:personnel:employeeexperience:delete',
+        permission: 'human:resource:personnel:employeeexperience:delete',
         onClick: (record: EmployeeExperience) => handleDeleteOne(record)
       }
     ]

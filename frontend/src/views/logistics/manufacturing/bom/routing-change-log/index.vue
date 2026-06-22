@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:routing:create"
-      update-permission="logistics:manufacturing:bom:routing:update"
-      delete-permission="logistics:manufacturing:bom:routing:delete"
-      import-permission="logistics:manufacturing:bom:routing:import"
-      export-permission="logistics:manufacturing:bom:routing:export"
+      create-permission="logistics:manufacturing:bom:routing:change:log:create"
+      update-permission="logistics:manufacturing:bom:routing:change:log:update"
+      delete-permission="logistics:manufacturing:bom:routing:change:log:delete"
+      import-permission="logistics:manufacturing:bom:routing:change:log:import"
+      export-permission="logistics:manufacturing:bom:routing:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -793,7 +793,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:routing:update',
+        permission: 'logistics:manufacturing:bom:routing:change:log:update',
         onClick: (record: Routing) => handleEdit(record)
       },
       {
@@ -801,7 +801,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:routing:delete',
+        permission: 'logistics:manufacturing:bom:routing:change:log:delete',
         onClick: (record: Routing) => handleDeleteOne(record)
       }
     ]

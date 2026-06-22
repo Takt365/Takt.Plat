@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:quality:operation:ipqcorder:create"
-      update-permission="logistics:quality:operation:ipqcorder:update"
-      delete-permission="logistics:quality:operation:ipqcorder:delete"
-      import-permission="logistics:quality:operation:ipqcorder:import"
-      export-permission="logistics:quality:operation:ipqcorder:export"
+      create-permission="logistics:quality:operation:ipqc:order:create"
+      update-permission="logistics:quality:operation:ipqc:order:update"
+      delete-permission="logistics:quality:operation:ipqc:order:delete"
+      import-permission="logistics:quality:operation:ipqc:order:import"
+      export-permission="logistics:quality:operation:ipqc:order:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -757,7 +757,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:ipqcorder:update',
+        permission: 'logistics:quality:operation:ipqc:order:update',
         onClick: (record: IpqcOrder) => handleEdit(record)
       },
       {
@@ -765,7 +765,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:ipqcorder:delete',
+        permission: 'logistics:quality:operation:ipqc:order:delete',
         onClick: (record: IpqcOrder) => handleDeleteOne(record)
       }
     ]

@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="accounting:financial:asset:create"
-      update-permission="accounting:financial:asset:update"
-      delete-permission="accounting:financial:asset:delete"
-      import-permission="accounting:financial:asset:import"
-      export-permission="accounting:financial:asset:export"
+      create-permission="accounting:financial:asset:change:log:create"
+      update-permission="accounting:financial:asset:change:log:update"
+      delete-permission="accounting:financial:asset:change:log:delete"
+      import-permission="accounting:financial:asset:change:log:import"
+      export-permission="accounting:financial:asset:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -1058,7 +1058,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'accounting:financial:asset:update',
+        permission: 'accounting:financial:asset:change:log:update',
         onClick: (record: Asset) => handleEdit(record)
       },
       {
@@ -1066,7 +1066,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'accounting:financial:asset:delete',
+        permission: 'accounting:financial:asset:change:log:delete',
         onClick: (record: Asset) => handleDeleteOne(record)
       }
     ]

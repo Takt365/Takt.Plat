@@ -22,7 +22,7 @@
       <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo')"
         force-render
       >
         <div :class="formContentClass">
@@ -288,125 +288,6 @@
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：talentRecruitmentPlan -->
-      <a-tab-pane
-        key="child-talentRecruitmentPlans"
-        :tab="t('entity.talentRecruitmentPlan._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddTalentRecruitmentPlanRow">
-            {{ t('common.page.button.create') }}{{ t('entity.talentRecruitmentPlan._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="talentRecruitmentPlanFormColumns"
-          :data-source="childTalentRecruitmentPlanRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'staffingRequirementId'">
-              <a-input
-                v-model:value="record.staffingRequirementId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.staffingrequirementid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'planNo'">
-              <a-input
-                v-model:value="record.planNo"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.planno') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'planDate'">
-              <a-date-picker
-                v-model:value="record.planDate"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.plandate') })"
-                value-format="YYYY-MM-DD"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'planStartDate'">
-              <a-date-picker
-                v-model:value="record.planStartDate"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.planstartdate') })"
-                value-format="YYYY-MM-DD"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'planEndDate'">
-              <a-date-picker
-                v-model:value="record.planEndDate"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.talentRecruitmentPlan.planenddate') })"
-                value-format="YYYY-MM-DD"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'planHeadcount'">
-              <a-input-number
-                v-model:value="record.planHeadcount"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.planheadcount') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'reason'">
-              <a-input
-                v-model:value="record.reason"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.reason') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'talentJobPostings'">
-              <a-input
-                v-model:value="record.talentJobPostings"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentRecruitmentPlan.talentjobpostings') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveTalentRecruitmentPlanRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
   </a-form>
 </template>
@@ -419,7 +300,7 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { TalentStaffingRequirementCreate, TalentRecruitmentPlanCreate, TalentRecruitmentPlan } from '@/types/human-resource/talent/talent-staffing-requirement'
+import type { TalentStaffingRequirementCreate } from '@/types/human-resource/talent/talent-staffing-requirement'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -454,124 +335,6 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","reqNo","deptId","postId","jobGrade","requestQty","headcountType","reasonCode","replaceEmployeeId","expectedOnboardDate","contractType","workLocation","jobDesc","qualification","budgetYear","ExtField","remark"]
 
-/** talentRecruitmentPlan 子表行（表单 Tab 内嵌） */
-const childTalentRecruitmentPlanRows = ref<Record<string, unknown>[]>([])
-
-/** 子表 talentRecruitmentPlan 表单列定义 */
-const talentRecruitmentPlanFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.staffingrequirementid'),
-    dataIndex: 'staffingRequirementId',
-    key: 'staffingRequirementId',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planno'),
-    dataIndex: 'planNo',
-    key: 'planNo',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.plandate'),
-    dataIndex: 'planDate',
-    key: 'planDate',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planstartdate'),
-    dataIndex: 'planStartDate',
-    key: 'planStartDate',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planenddate'),
-    dataIndex: 'planEndDate',
-    key: 'planEndDate',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planheadcount'),
-    dataIndex: 'planHeadcount',
-    key: 'planHeadcount',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.reason'),
-    dataIndex: 'reason',
-    key: 'reason',
-    width: 140,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.talentjobpostings'),
-    dataIndex: 'talentJobPostings',
-    key: 'talentJobPostings',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<TalentStaffingRequirementCreate & { talentStaffingRequirementId?: string }> | null | undefined) {
-  childTalentRecruitmentPlanRows.value = ((val as any)?.talentRecruitmentPlans ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.talentRecruitmentPlanId ?? `new-${index}`,
-  }))
-}
-
-/** 表单 Tab 内新增 talentRecruitmentPlan 行 */
-function handleAddTalentRecruitmentPlanRow() {
-  childTalentRecruitmentPlanRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      staffingRequirementId: '',
-      planNo: '',
-      planDate: '',
-      planStartDate: '',
-      planEndDate: '',
-      planHeadcount: 0,
-      reason: '',
-      talentJobPostings: '',
-  })
-}
-
-/** 表单 Tab 内删除 talentRecruitmentPlan 行 */
-function handleRemoveTalentRecruitmentPlanRow(index: number) {
-  childTalentRecruitmentPlanRows.value.splice(index, 1)
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  return {
-    ...formState,
-    talentRecruitmentPlans: childTalentRecruitmentPlanRows.value.map(({ __rowKey, ...rest }) => rest),
-  }
-}
-
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<TalentStaffingRequirementCreate & { talentStaffingRequirementId?: string }> | null
@@ -595,10 +358,8 @@ watch(
   (val) => {
     const next = val ? { ...val } : {}
     Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).talentRecruitmentPlans
     applyScopeDefaults(next)
     Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
   },
   { immediate: true, deep: true }
 )
@@ -668,14 +429,13 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  return { ...formState }
 }
 
 /** 重置表单与子表行 */
 function resetFields() {
   formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-  childTalentRecruitmentPlanRows.value = []
   activeTab.value = 'tab-0'
 }
 

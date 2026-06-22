@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:planning:productionplan:create"
-      update-permission="logistics:manufacturing:planning:productionplan:update"
-      delete-permission="logistics:manufacturing:planning:productionplan:delete"
-      import-permission="logistics:manufacturing:planning:productionplan:import"
-      export-permission="logistics:manufacturing:planning:productionplan:export"
+      create-permission="logistics:manufacturing:planning:production:plan:create"
+      update-permission="logistics:manufacturing:planning:production:plan:update"
+      delete-permission="logistics:manufacturing:planning:production:plan:delete"
+      import-permission="logistics:manufacturing:planning:production:plan:import"
+      export-permission="logistics:manufacturing:planning:production:plan:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -938,7 +938,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:planning:productionplan:update',
+        permission: 'logistics:manufacturing:planning:production:plan:update',
         onClick: (record: ProductionPlan) => handleEdit(record)
       },
       {
@@ -946,7 +946,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:planning:productionplan:delete',
+        permission: 'logistics:manufacturing:planning:production:plan:delete',
         onClick: (record: ProductionPlan) => handleDeleteOne(record)
       }
     ]

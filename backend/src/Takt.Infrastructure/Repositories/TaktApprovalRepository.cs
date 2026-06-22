@@ -383,16 +383,27 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
     /// </summary>
     public virtual async Task<bool> DeleteAsync(long id)
     {
+        var entity = await GetByIdAsync(id);
+        if (entity == null)
+        {
+            return false;
+        }
+        var isBuiltIn = entity.GetType().GetProperty("IsBuiltIn")?.GetValue(entity);
+        if (isBuiltIn is int builtInFlag && builtInFlag == 1)
+        {
+            return false;
+        }
         var rows = await Db.Updateable<TEntity>()
-            .SetColumns(x => new TEntity 
-            { 
-                IsDeleted = 1, 
+            .SetColumns(x => new TEntity
+            {
+                IsDeleted = 1,
                 UpdatedAt = DateTime.Now,
                 UpdatedBy = CurrentUserId ?? 0
             })
             .Where(x => x.Id == id)
             .Where(x => x.TenantCode == CurrentTenantCode)
             .Where(x => x.CompanyCode == CurrentCompanyCode)
+            .Where(x => x.IsDeleted == 0)
             .ExecuteCommandAsync();
 
         return rows > 0;
@@ -404,15 +415,16 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
     public virtual async Task<int> DeleteAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Updateable<TEntity>()
-            .SetColumns(x => new TEntity 
-            { 
-                IsDeleted = 1, 
+            .SetColumns(x => new TEntity
+            {
+                IsDeleted = 1,
                 UpdatedAt = DateTime.Now,
                 UpdatedBy = CurrentUserId ?? 0
             })
             .Where(predicate)
             .Where(x => x.TenantCode == CurrentTenantCode)
             .Where(x => x.CompanyCode == CurrentCompanyCode)
+            .Where(x => x.IsDeleted == 0)
             .ExecuteCommandAsync();
     }
 

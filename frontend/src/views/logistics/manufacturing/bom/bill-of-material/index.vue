@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:billofmaterial:create"
-      update-permission="logistics:manufacturing:bom:billofmaterial:update"
-      delete-permission="logistics:manufacturing:bom:billofmaterial:delete"
-      import-permission="logistics:manufacturing:bom:billofmaterial:import"
-      export-permission="logistics:manufacturing:bom:billofmaterial:export"
+      create-permission="logistics:manufacturing:bom:bill:of:material:create"
+      update-permission="logistics:manufacturing:bom:bill:of:material:update"
+      delete-permission="logistics:manufacturing:bom:bill:of:material:delete"
+      import-permission="logistics:manufacturing:bom:bill:of:material:import"
+      export-permission="logistics:manufacturing:bom:bill:of:material:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -780,7 +780,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:billofmaterial:update',
+        permission: 'logistics:manufacturing:bom:bill:of:material:update',
         onClick: (record: BillOfMaterial) => handleEdit(record)
       },
       {
@@ -788,7 +788,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:billofmaterial:delete',
+        permission: 'logistics:manufacturing:bom:bill:of:material:delete',
         onClick: (record: BillOfMaterial) => handleDeleteOne(record)
       }
     ]

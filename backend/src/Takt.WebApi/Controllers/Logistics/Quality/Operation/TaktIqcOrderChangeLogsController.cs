@@ -41,7 +41,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:list", "进货检验单变更日志列表")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:list", "进货检验单变更日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetIqcOrderChangeLogListAsync([FromQuery] TaktIqcOrderChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">进货检验单变更日志ID</param>
     /// <returns>进货检验单变更日志DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:query", "进货检验单变更日志详情")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:query", "进货检验单变更日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetIqcOrderChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// 获取进货检验单变更日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:query", "进货检验单变更日志选项")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:query", "进货检验单变更日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetIqcOrderChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>进货检验单变更日志DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:create", "创建进货检验单变更日志")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:create", "创建进货检验单变更日志")]
     [HttpPost]
     public async Task<IActionResult> CreateIqcOrderChangeLogAsync([FromBody] TaktIqcOrderChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// <param name="id">进货检验单变更日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>进货检验单变更日志DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:update", "更新进货检验单变更日志")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:update", "更新进货检验单变更日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateIqcOrderChangeLogAsync(long id, [FromBody] TaktIqcOrderChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">进货检验单变更日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:delete", "删除进货检验单变更日志")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:delete", "删除进货检验单变更日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteIqcOrderChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:delete", "批量删除进货检验单变更日志")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:delete", "批量删除进货检验单变更日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteIqcOrderChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktIqcOrderChangeLogsController : TaktControllerBase
     /// 导出进货检验单变更日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:iqcorder:export", "导出进货检验单变更日志")]
+    [TaktPermission("logistics:quality:operation:iqc:order:change:log:export", "导出进货检验单变更日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportIqcOrderChangeLogAsync([FromQuery] TaktIqcOrderChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

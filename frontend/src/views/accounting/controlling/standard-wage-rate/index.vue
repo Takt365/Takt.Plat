@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="accounting:controlling:standardwagerate:create"
-      update-permission="accounting:controlling:standardwagerate:update"
-      delete-permission="accounting:controlling:standardwagerate:delete"
-      import-permission="accounting:controlling:standardwagerate:import"
-      export-permission="accounting:controlling:standardwagerate:export"
+      create-permission="accounting:controlling:standard:wage:rate:create"
+      update-permission="accounting:controlling:standard:wage:rate:update"
+      delete-permission="accounting:controlling:standard:wage:rate:delete"
+      import-permission="accounting:controlling:standard:wage:rate:import"
+      export-permission="accounting:controlling:standard:wage:rate:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -681,7 +681,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'accounting:controlling:standardwagerate:update',
+        permission: 'accounting:controlling:standard:wage:rate:update',
         onClick: (record: StandardWageRate) => handleEdit(record)
       },
       {
@@ -689,7 +689,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'accounting:controlling:standardwagerate:delete',
+        permission: 'accounting:controlling:standard:wage:rate:delete',
         onClick: (record: StandardWageRate) => handleDeleteOne(record)
       }
     ]

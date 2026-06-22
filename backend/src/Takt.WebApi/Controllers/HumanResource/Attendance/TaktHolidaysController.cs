@@ -42,7 +42,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:attendance:holiday:list", "假日信息列表")]
+    [TaktPermission("human:resource:attendance:holiday:list", "假日信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetHolidayListAsync([FromQuery] TaktHolidayQueryDto queryDto)
     {
@@ -62,7 +62,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// </summary>
     /// <param name="id">假日信息ID</param>
     /// <returns>假日信息DTO</returns>
-    [TaktPermission("humanresource:attendance:holiday:query", "假日信息详情")]
+    [TaktPermission("human:resource:attendance:holiday:query", "假日信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetHolidayByIdAsync(long id)
     {
@@ -85,7 +85,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// 获取假日信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:attendance:holiday:query", "假日信息选项")]
+    [TaktPermission("human:resource:attendance:holiday:query", "假日信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetHolidayOptionsAsync()
     {
@@ -105,7 +105,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>假日信息DTO</returns>
-    [TaktPermission("humanresource:attendance:holiday:create", "创建假日信息")]
+    [TaktPermission("human:resource:attendance:holiday:create", "创建假日信息")]
     [HttpPost]
     public async Task<IActionResult> CreateHolidayAsync([FromBody] TaktHolidayCreateDto dto)
     {
@@ -126,7 +126,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// <param name="id">假日信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>假日信息DTO</returns>
-    [TaktPermission("humanresource:attendance:holiday:update", "更新假日信息")]
+    [TaktPermission("human:resource:attendance:holiday:update", "更新假日信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateHolidayAsync(long id, [FromBody] TaktHolidayUpdateDto dto)
     {
@@ -146,7 +146,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// </summary>
     /// <param name="id">假日信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:holiday:delete", "删除假日信息")]
+    [TaktPermission("human:resource:attendance:holiday:delete", "删除假日信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteHolidayByIdAsync(long id)
     {
@@ -166,7 +166,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:holiday:delete", "批量删除假日信息")]
+    [TaktPermission("human:resource:attendance:holiday:delete", "批量删除假日信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteHolidayBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:holiday:import", "获取假日信息导入模板")]
+    [TaktPermission("human:resource:attendance:holiday:import", "获取假日信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetHolidayTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -205,7 +205,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:attendance:holiday:import", "导入假日信息")]
+    [TaktPermission("human:resource:attendance:holiday:import", "导入假日信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportHolidayAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -235,7 +235,7 @@ public class TaktHolidaysController : TaktControllerBase
     /// 导出假日信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:holiday:export", "导出假日信息")]
+    [TaktPermission("human:resource:attendance:holiday:export", "导出假日信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportHolidayAsync([FromQuery] TaktHolidayQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

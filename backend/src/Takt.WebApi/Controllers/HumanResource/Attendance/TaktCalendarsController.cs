@@ -41,7 +41,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:attendance:calendar:list", "工厂日历列表")]
+    [TaktPermission("human:resource:attendance:calendar:list", "工厂日历列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCalendarListAsync([FromQuery] TaktCalendarQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工厂日历ID</param>
     /// <returns>工厂日历DTO</returns>
-    [TaktPermission("humanresource:attendance:calendar:query", "工厂日历详情")]
+    [TaktPermission("human:resource:attendance:calendar:query", "工厂日历详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCalendarByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// 获取工厂日历选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:attendance:calendar:query", "工厂日历选项")]
+    [TaktPermission("human:resource:attendance:calendar:query", "工厂日历选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetCalendarOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工厂日历DTO</returns>
-    [TaktPermission("humanresource:attendance:calendar:create", "创建工厂日历")]
+    [TaktPermission("human:resource:attendance:calendar:create", "创建工厂日历")]
     [HttpPost]
     public async Task<IActionResult> CreateCalendarAsync([FromBody] TaktCalendarCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// <param name="id">工厂日历ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工厂日历DTO</returns>
-    [TaktPermission("humanresource:attendance:calendar:update", "更新工厂日历")]
+    [TaktPermission("human:resource:attendance:calendar:update", "更新工厂日历")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCalendarAsync(long id, [FromBody] TaktCalendarUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工厂日历ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:calendar:delete", "删除工厂日历")]
+    [TaktPermission("human:resource:attendance:calendar:delete", "删除工厂日历")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCalendarByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:calendar:delete", "批量删除工厂日历")]
+    [TaktPermission("human:resource:attendance:calendar:delete", "批量删除工厂日历")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCalendarBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:calendar:import", "获取工厂日历导入模板")]
+    [TaktPermission("human:resource:attendance:calendar:import", "获取工厂日历导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetCalendarTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:attendance:calendar:import", "导入工厂日历")]
+    [TaktPermission("human:resource:attendance:calendar:import", "导入工厂日历")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportCalendarAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktCalendarsController : TaktControllerBase
     /// 导出工厂日历
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:calendar:export", "导出工厂日历")]
+    [TaktPermission("human:resource:attendance:calendar:export", "导出工厂日历")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCalendarAsync([FromQuery] TaktCalendarQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

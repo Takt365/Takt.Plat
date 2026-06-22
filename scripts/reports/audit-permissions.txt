@@ -1,7 +1,7 @@
 Takt Permission Audit Report
 Report: scripts/reports/audit-permissions.txt
-Generated: 2026-06-21T08:43:16.510Z
-Services: 279 | Menu entries: 202 | Vue views: 337
+Generated: 2026-06-22T07:27:55.526Z
+Services: 300 | Menu entries: 206 | Vue views: 356
 
 RESULT: FAIL
 
@@ -9,7 +9,7 @@ RESULT: FAIL
 ChangeLog: 主实体前缀 + :change:log
 主子表: 子实体名以主表名为前缀时继承主表权限 + 子表剩余词段（如 overtime:item、news:attachment）
   例: accounting:controlling:cost:center:list
-  例: humanresource:attendance:overtime:item:list
+  例: human:resource:attendance:overtime:item:list
   例: routine:announcement:announcement:list
 
 对账范围:
@@ -18,71 +18,57 @@ ChangeLog: 主实体前缀 + :change:log
   - frontend/src/views/** index.vue / *-panel.vue 工具栏与 v-permission
   - 期望前缀: buildPermissionBase(服务路径, 实体) — 与 generate-controllers-from-services 一致
 
-=== CONTROLLER_VS_EXPECTED（控制器 :list 前缀 ≠ buildPermissionBase） (240) ===
-  [AccountTitle] 期望 accounting:financial:account:title:list，实际 accounting:financial:accounttitle:list | Takt.WebApi/Controllers/Accounting/Financial/TaktAccountTitlesController.cs
-  [AccountTitleChangeLog] 期望 accounting:financial:account:title:change:log:list，实际 accounting:financial:accounttitle:list | Takt.WebApi/Controllers/Accounting/Financial/TaktAccountTitleChangeLogsController.cs
-  [Announcement] 期望 routine:announcement:announcement:list，实际 routine:announcement:list | Takt.WebApi/Controllers/Routine/Announcement/TaktAnnouncementsController.cs
-  [ApsSchedule] 期望 logistics:manufacturing:scheduling:aps:schedule:list，实际 logistics:manufacturing:scheduling:apsschedule:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Scheduling/TaktApsSchedulesController.cs
-  [ApsScheduleChangeLog] 期望 logistics:manufacturing:scheduling:aps:schedule:change:log:list，实际 logistics:manufacturing:scheduling:apsschedule:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Scheduling/TaktApsScheduleChangeLogsController.cs
+=== CONTROLLER_VS_EXPECTED（控制器 :list 前缀 ≠ buildPermissionBase） (145) ===
   [ApsScheduleItem] 期望 logistics:manufacturing:scheduling:aps:schedule:item:list，实际 logistics:manufacturing:scheduling:apsscheduleitem:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Scheduling/TaktApsScheduleItemsController.cs
-  [AssetChangeLog] 期望 accounting:financial:asset:change:log:list，实际 accounting:financial:asset:list | Takt.WebApi/Controllers/Accounting/Financial/TaktAssetChangeLogsController.cs
-  [AssyDefect] 期望 logistics:manufacturing:defect:assy:defect:list，实际 logistics:manufacturing:defect:assydefect:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Defect/TaktAssyDefectsController.cs
-  [AssyDefectDetail] 期望 logistics:manufacturing:defect:assy:defect:detail:list，实际 logistics:manufacturing:defect:assydefect:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Defect/TaktAssyDefectDetailsController.cs
-  [AssyOutput] 期望 logistics:manufacturing:output:assy:output:list，实际 logistics:manufacturing:output:assyoutput:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktAssyOutputsController.cs
-  [AssyOutputDetail] 期望 logistics:manufacturing:output:assy:output:detail:list，实际 logistics:manufacturing:output:assyoutput:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktAssyOutputDetailsController.cs
-  [BenefitItem] 期望 humanresource:benefits:benefit:item:list，实际 humanresource:benefits:item:list | Takt.WebApi/Controllers/HumanResource/Benefits/TaktBenefitItemsController.cs
-  [BillOfMaterial] 期望 logistics:manufacturing:bom:bill:of:material:list，实际 logistics:manufacturing:bom:billofmaterial:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktBillOfMaterialsController.cs
-  [BillOfMaterialChangeLog] 期望 logistics:manufacturing:bom:bill:of:material:change:log:list，实际 logistics:manufacturing:bom:billofmaterial:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktBillOfMaterialChangeLogsController.cs
+  [AssyDefectDetail] 期望 logistics:manufacturing:defect:assy:detail:list，实际 logistics:manufacturing:defect:assydefect:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Defect/TaktAssyDefectDetailsController.cs
+  [AssyOutputDetail] 期望 logistics:manufacturing:output:assy:detail:list，实际 logistics:manufacturing:output:assyoutput:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktAssyOutputDetailsController.cs
   [BillOfMaterialItem] 期望 logistics:manufacturing:bom:bill:of:material:item:list，实际 logistics:manufacturing:bom:billofmaterial:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktBillOfMaterialItemsController.cs
   [BillOfMaterialSubstitute] 期望 logistics:manufacturing:bom:bill:of:material:substitute:list，实际 logistics:manufacturing:bom:billofmaterial:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktBillOfMaterialSubstitutesController.cs
-  [BonusPlan] 期望 humanresource:compensation:bonus:plan:list，实际 humanresource:compensation:bonusplan:list | Takt.WebApi/Controllers/HumanResource/Compensation/TaktBonusPlansController.cs
   [Caches] 缺少 TaktCachesesController；期望 list 前缀 foundation:caches
-  [Conference] 期望 routine:conferencecenter:conference:list，实际 routine:conferencecenter:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferencesController.cs
-  [ConferenceAgenda] 期望 routine:conferencecenter:conference:agenda:list，实际 routine:conferencecenter:agenda:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferenceAgendasController.cs
-  [ConferenceParticipant] 期望 routine:conferencecenter:conference:participant:list，实际 routine:conferencecenter:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferenceParticipantsController.cs
-  [ConferenceRoom] 期望 routine:conferencecenter:conference:room:list，实际 routine:conferencecenter:room:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferenceRoomsController.cs
+  [Conference] 期望 routine:conference:center:list，实际 routine:conferencecenter:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferencesController.cs
+  [ConferenceAgenda] 期望 routine:conference:center:agenda:list，实际 routine:conferencecenter:agenda:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferenceAgendasController.cs
+  [ConferenceParticipant] 期望 routine:conference:center:participant:list，实际 routine:conferencecenter:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferenceParticipantsController.cs
+  [ConferenceRoom] 期望 routine:conference:center:room:list，实际 routine:conferencecenter:room:list | Takt.WebApi/Controllers/Routine/ConferenceCenter/TaktConferenceRoomsController.cs
   [ConfigurableField] 期望 statistics:report:configurable:field:list，实际 statistics:report:configurablefield:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableFieldsController.cs
   [ConfigurableGroupBy] 期望 statistics:report:configurable:group:by:list，实际 statistics:report:configurablegroupby:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableGroupBiesController.cs
   [ConfigurableJoin] 期望 statistics:report:configurable:join:list，实际 statistics:report:configurablejoin:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableJoinsController.cs
   [ConfigurableOrderBy] 期望 statistics:report:configurable:order:by:list，实际 statistics:report:configurableorderby:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableOrderBiesController.cs
   [ConfigurableSelection] 期望 statistics:report:configurable:selection:list，实际 statistics:report:configurableselection:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableSelectionsController.cs
   [ConfigurableSource] 期望 statistics:report:configurable:source:list，实际 statistics:report:configurablesource:list | Takt.WebApi/Controllers/Statistics/Report/TaktConfigurableSourcesController.cs
-  [CostCenter] 期望 accounting:controlling:cost:center:list，实际 accounting:controlling:costcenter:list | Takt.WebApi/Controllers/Accounting/Controlling/TaktCostCentersController.cs
-  [CostCenterChangeLog] 期望 accounting:controlling:cost:center:change:log:list，实际 accounting:controlling:costcenter:list | Takt.WebApi/Controllers/Accounting/Controlling/TaktCostCenterChangeLogsController.cs
-  [CostElement] 期望 accounting:controlling:cost:element:list，实际 accounting:controlling:costelement:list | Takt.WebApi/Controllers/Accounting/Controlling/TaktCostElementsController.cs
-  [CostElementChangeLog] 期望 accounting:controlling:cost:element:change:log:list，实际 accounting:controlling:costelement:list | Takt.WebApi/Controllers/Accounting/Controlling/TaktCostElementChangeLogsController.cs
   [Culture] 期望 foundation:culture:list，实际 foundation:i18n:list | Takt.WebApi/Controllers/Foundation/TaktCulturesController.cs
-  [CustomerComplaint] 期望 logistics:quality:complaint:customer:complaint:list，实际 logistics:quality:complaint:customercomplaint:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerComplaintsController.cs
-  [CustomerComplaintHandling] 期望 logistics:quality:complaint:customer:complaint:handling:list，实际 logistics:quality:complaint:customercomplainthandling:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerComplaintHandlingsController.cs
-  [CustomerComplaintItem] 期望 logistics:quality:complaint:customer:complaint:item:list，实际 logistics:quality:complaint:customercomplaint:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerComplaintItemsController.cs
-  [CustomerSatisfactionSurvey] 期望 logistics:quality:complaint:customer:satisfaction:survey:list，实际 logistics:quality:complaint:customersatisfactionsurvey:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerSatisfactionSurveysController.cs
+  [CustomerComplaintHandling] 期望 logistics:quality:complaint:customer:handling:list，实际 logistics:quality:complaint:customer:complaint:handling:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerComplaintHandlingsController.cs
+  [CustomerComplaintItem] 期望 logistics:quality:complaint:customer:item:list，实际 logistics:quality:complaint:customercomplaint:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerComplaintItemsController.cs
   [CustomerSatisfactionSurveyItem] 期望 logistics:quality:complaint:customer:satisfaction:survey:item:list，实际 logistics:quality:complaint:customersatisfactionsurvey:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktCustomerSatisfactionSurveyItemsController.cs
-  [DatabaseInfo] 期望 code:database:database:info:list，实际 code:database:info:list | Takt.WebApi/Controllers/Code/Database/TaktDatabaseInfosController.cs
   [DataClone] 期望 code:database:data:clone:list，实际 (none):list | Takt.WebApi/Controllers/Code/Database/TaktDataClonesController.cs
-  [DeltaLog] 期望 statistics:logging:delta:log:list，实际 statistics:logging:deltalog:list | Takt.WebApi/Controllers/Statistics/Logging/TaktDeltaLogsController.cs
   [DictData] 期望 foundation:dict:data:list，实际 foundation:dict:list | Takt.WebApi/Controllers/Foundation/TaktDictDatasController.cs
   [DictType] 期望 foundation:dict:type:list，实际 foundation:dict:list | Takt.WebApi/Controllers/Foundation/TaktDictTypesController.cs
-  [DocumentChangeLog] 期望 routine:documentcenter:document:change:log:list，实际 routine:documentcenter:document:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentChangeLogsController.cs
-  [DocumentVersion] 期望 routine:documentcenter:document:version:list，实际 routine:documentcenter:documentversion:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentVersionsController.cs
-  [EcAttachment] 期望 logistics:manufacturing:engineeringchange:ec:attachment:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcAttachmentsController.cs
-  [EcDept] 期望 logistics:manufacturing:engineeringchange:ec:dept:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDeptsController.cs
-  [EcDetail] 期望 logistics:manufacturing:engineeringchange:ec:detail:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDetailsController.cs
-  [EcNotification] 期望 logistics:manufacturing:engineeringchange:ec:notification:list，实际 logistics:manufacturing:engineeringchange:ecnotification:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcNotificationsController.cs
-  [EmpBenefitPlan] 期望 humanresource:benefits:emp:benefit:plan:list，实际 humanresource:benefits:empplan:list | Takt.WebApi/Controllers/HumanResource/Benefits/TaktEmpBenefitPlansController.cs
-  [EmployeeAttachment] 期望 humanresource:personnel:employee:attachment:list，实际 humanresource:personnel:employeeattachment:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeAttachmentsController.cs
-  [EmployeeContract] 期望 humanresource:personnel:employee:contract:list，实际 humanresource:personnel:employeecontract:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeContractsController.cs
-  [EmployeeDelegation] 期望 humanresource:personnel:employee:delegation:list，实际 humanresource:personnel:employeedelegation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeDelegationsController.cs
-  [EmployeeEducation] 期望 humanresource:personnel:employee:education:list，实际 humanresource:personnel:employeeeducation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeEducationsController.cs
-  [EmployeeExperience] 期望 humanresource:personnel:employee:experience:list，实际 humanresource:personnel:employeeexperience:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeExperiencesController.cs
-  [EmployeeFamily] 期望 humanresource:personnel:employee:family:list，实际 humanresource:personnel:employeefamily:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeFamiliesController.cs
-  [EmployeeJoined] 期望 humanresource:personnel:employee:joined:list，实际 humanresource:personnel:employeejoined:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeJoinedsController.cs
-  [EmployeeOnboarding] 期望 humanresource:personnel:employee:onboarding:list，实际 humanresource:personnel:employeeonboarding:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeOnboardingsController.cs
-  [EmployeeReassignment] 期望 humanresource:personnel:employee:reassignment:list，实际 humanresource:personnel:employeereassignment:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeReassignmentsController.cs
-  [EmployeeResignation] 期望 humanresource:personnel:employee:resignation:list，实际 humanresource:personnel:employeeresignation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeResignationsController.cs
-  [EmployeeSkill] 期望 humanresource:personnel:employee:skill:list，实际 humanresource:personnel:employeeskill:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeSkillsController.cs
-  [EmpSalary] 期望 humanresource:compensation:emp:salary:list，实际 humanresource:compensation:empsalary:list | Takt.WebApi/Controllers/HumanResource/Compensation/TaktEmpSalariesController.cs
-  [EquipmentOperationRate] 期望 logistics:manufacturing:output:equipment:operation:rate:list，实际 logistics:manufacturing:output:equipmentoperationrate:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktEquipmentOperationRatesController.cs
-  [EquipmentOperationRateChangeLog] 期望 logistics:manufacturing:output:equipment:operation:rate:change:log:list，实际 logistics:manufacturing:output:equipmentoperationrate:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktEquipmentOperationRateChangeLogsController.cs
+  [Document] 期望 routine:document:center:list，实际 routine:document:center:document:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentsController.cs
+  [DocumentChangeLog] 期望 routine:document:center:change:log:list，实际 routine:document:center:document:change:log:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentChangeLogsController.cs
+  [DocumentVersion] 期望 routine:document:center:version:list，实际 routine:documentcenter:documentversion:list | Takt.WebApi/Controllers/Routine/DocumentCenter/TaktDocumentVersionsController.cs
+  [Ec] 期望 logistics:manufacturing:engineering:change:ec:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcsController.cs
+  [EcAttachment] 期望 logistics:manufacturing:engineering:change:ec:attachment:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcAttachmentsController.cs
+  [EcBatch] 期望 logistics:manufacturing:engineering:change:ec:batch:list，实际 logistics:manufacturing:engineeringchange:batch:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcBatchesController.cs
+  [EcBukan] 期望 logistics:manufacturing:engineering:change:ec:bukan:list，实际 logistics:manufacturing:engineeringchange:bukan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcBukansController.cs
+  [EcDept] 期望 logistics:manufacturing:engineering:change:ec:dept:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDeptsController.cs
+  [EcDetail] 期望 logistics:manufacturing:engineering:change:ec:detail:list，实际 logistics:manufacturing:engineeringchange:ec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcDetailsController.cs
+  [EcGijutsu] 期望 logistics:manufacturing:engineering:change:ec:gijutsu:list，实际 logistics:manufacturing:engineeringchange:gijutsu:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcGijutsusController.cs
+  [EcHinkan] 期望 logistics:manufacturing:engineering:change:ec:hinkan:list，实际 logistics:manufacturing:engineeringchange:hinkan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcHinkansController.cs
+  [EcKakunin] 期望 logistics:manufacturing:engineering:change:ec:kakunin:list，实际 logistics:manufacturing:engineeringchange:kakunin:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKakuninsController.cs
+  [EcKanban] 期望 logistics:manufacturing:engineering:change:ec:kanban:list，实际 logistics:manufacturing:engineeringchange:kanban:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKanbansController.cs
+  [EcKoubai] 期望 logistics:manufacturing:engineering:change:ec:koubai:list，实际 logistics:manufacturing:engineeringchange:koubai:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcKoubaisController.cs
+  [EcLegacyProduct] 期望 logistics:manufacturing:engineering:change:ec:legacy:product:list，实际 logistics:manufacturing:engineeringchange:legacyproduct:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcLegacyProductsController.cs
+  [EcSeikan] 期望 logistics:manufacturing:engineering:change:ec:seikan:list，实际 logistics:manufacturing:engineeringchange:seikan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeikansController.cs
+  [EcSeizouikka] 期望 logistics:manufacturing:engineering:change:ec:seizouikka:list，实际 logistics:manufacturing:engineeringchange:seizouikka:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeizouikkasController.cs
+  [EcSeizounika] 期望 logistics:manufacturing:engineering:change:ec:seizounika:list，实际 logistics:manufacturing:engineeringchange:seizounika:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcSeizounikasController.cs
+  [EcUkeken] 期望 logistics:manufacturing:engineering:change:ec:ukeken:list，实际 logistics:manufacturing:engineeringchange:ukeken:list | Takt.WebApi/Controllers/Logistics/Manufacturing/EngineeringChange/TaktEcUkekensController.cs
+  [EmployeeAttachment] 期望 human:resource:personnel:employee:attachment:list，实际 human:resource:personnel:employeeattachment:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeAttachmentsController.cs
+  [EmployeeDelegation] 期望 human:resource:personnel:employee:delegation:list，实际 human:resource:personnel:employeedelegation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeDelegationsController.cs
+  [EmployeeEducation] 期望 human:resource:personnel:employee:education:list，实际 human:resource:personnel:employeeeducation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeEducationsController.cs
+  [EmployeeExperience] 期望 human:resource:personnel:employee:experience:list，实际 human:resource:personnel:employeeexperience:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeExperiencesController.cs
+  [EmployeeFamily] 期望 human:resource:personnel:employee:family:list，实际 human:resource:personnel:employeefamily:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeFamiliesController.cs
+  [EmployeeJoined] 期望 human:resource:personnel:employee:joined:list，实际 human:resource:personnel:employeejoined:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeJoinedsController.cs
+  [EmployeeResignation] 期望 human:resource:personnel:employee:resignation:list，实际 human:resource:personnel:employeeresignation:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeResignationsController.cs
+  [EmployeeSkill] 期望 human:resource:personnel:employee:skill:list，实际 human:resource:personnel:employeeskill:list | Takt.WebApi/Controllers/HumanResource/Personnel/TaktEmployeeSkillsController.cs
   [FlowAddSign] 期望 workflow:flow:add:sign:list，实际 workflow:todo:list | Takt.WebApi/Controllers/Workflow/TaktFlowAddSignsController.cs
   [FlowForm] 期望 workflow:flow:form:list，实际 workflow:form:list | Takt.WebApi/Controllers/Workflow/TaktFlowFormsController.cs
   [FlowInstance] 期望 workflow:flow:instance:list，实际 workflow:instance:list | Takt.WebApi/Controllers/Workflow/TaktFlowInstancesController.cs
@@ -91,560 +77,239 @@ ChangeLog: 主实体前缀 + :change:log
   [FlowTransition] 期望 workflow:flow:transition:list，实际 workflow:instance:list | Takt.WebApi/Controllers/Workflow/TaktFlowTransitionsController.cs
   [FlowVariable] 期望 workflow:flow:variable:list，实际 workflow:instance:list | Takt.WebApi/Controllers/Workflow/TaktFlowVariablesController.cs
   [FqcDefectHandling] 期望 logistics:quality:operation:fqc:defect:handling:list，实际 logistics:quality:operation:fqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktFqcDefectHandlingsController.cs
-  [FqcOrder] 期望 logistics:quality:operation:fqc:order:list，实际 logistics:quality:operation:fqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktFqcOrdersController.cs
-  [FqcOrderChangeLog] 期望 logistics:quality:operation:fqc:order:change:log:list，实际 logistics:quality:operation:fqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktFqcOrderChangeLogsController.cs
   [FqcOrderItem] 期望 logistics:quality:operation:fqc:order:item:list，实际 logistics:quality:operation:fqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktFqcOrderItemsController.cs
   [GenTable] 期望 code:generator:gen:table:list，实际 code:generator:list | Takt.WebApi/Controllers/Code/Generator/TaktGenTablesController.cs
   [GenTableColumn] 期望 code:generator:gen:table:column:list，实际 code:generator:list | Takt.WebApi/Controllers/Code/Generator/TaktGenTableColumnsController.cs
-  [InspectionStandard] 期望 logistics:quality:operation:inspection:standard:list，实际 logistics:quality:operation:inspectionstandard:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktInspectionStandardsController.cs
   [InspectionStandardItem] 期望 logistics:quality:operation:inspection:standard:item:list，实际 logistics:quality:operation:inspectionstandard:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktInspectionStandardItemsController.cs
   [IpqcDefectHandling] 期望 logistics:quality:operation:ipqc:defect:handling:list，实际 logistics:quality:operation:ipqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIpqcDefectHandlingsController.cs
-  [IpqcOrder] 期望 logistics:quality:operation:ipqc:order:list，实际 logistics:quality:operation:ipqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIpqcOrdersController.cs
-  [IpqcOrderChangeLog] 期望 logistics:quality:operation:ipqc:order:change:log:list，实际 logistics:quality:operation:ipqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIpqcOrderChangeLogsController.cs
   [IpqcOrderItem] 期望 logistics:quality:operation:ipqc:order:item:list，实际 logistics:quality:operation:ipqcorderitem:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIpqcOrderItemsController.cs
   [IqcDefectHandling] 期望 logistics:quality:operation:iqc:defect:handling:list，实际 logistics:quality:operation:iqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIqcDefectHandlingsController.cs
-  [IqcOrder] 期望 logistics:quality:operation:iqc:order:list，实际 logistics:quality:operation:iqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIqcOrdersController.cs
-  [IqcOrderChangeLog] 期望 logistics:quality:operation:iqc:order:change:log:list，实际 logistics:quality:operation:iqcorder:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIqcOrderChangeLogsController.cs
   [IqcOrderItem] 期望 logistics:quality:operation:iqc:order:item:list，实际 logistics:quality:operation:iqcorderitem:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktIqcOrderItemsController.cs
-  [IsoCode] 期望 foundation:iso:code:list，实际 foundation:isocode:list | Takt.WebApi/Controllers/Foundation/TaktIsoCodesController.cs
-  [ItAsset] 期望 routine:helpdesk:it:asset:list，实际 routine:helpdesk:itasset:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktItAssetsController.cs
-  [ItAssetChangeLog] 期望 routine:helpdesk:it:asset:change:log:list，实际 routine:helpdesk:itasset:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktItAssetChangeLogsController.cs
-  [KnowledgeChangeLog] 期望 routine:helpdesk:knowledge:change:log:list，实际 routine:helpdesk:knowledge:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktKnowledgeChangeLogsController.cs
-  [LoginLog] 期望 statistics:logging:login:log:list，实际 statistics:logging:loginlog:list | Takt.WebApi/Controllers/Statistics/Logging/TaktLoginLogsController.cs
   [LoginTicket] 缺少 TaktLoginTicketsController；期望 list 前缀 identity:login:ticket
-  [MaintenanceHistory] 期望 logistics:maintenance:maintenance:history:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceHistoriesController.cs
-  [MaintenanceHistoryArchive] 缺少 TaktMaintenanceHistoryArchivesController；期望 list 前缀 logistics:maintenance:maintenance:history:archive
-  [MaintenanceNotification] 期望 logistics:maintenance:maintenance:notification:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceNotificationsController.cs
-  [MaintenanceWorkOrder] 期望 logistics:maintenance:maintenance:work:order:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceWorkOrdersController.cs
-  [MaintenanceWorkOrderLabor] 期望 logistics:maintenance:maintenance:work:order:labor:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceWorkOrderLaborsController.cs
-  [MaintenanceWorkOrderMaterial] 期望 logistics:maintenance:maintenance:work:order:material:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceWorkOrderMaterialsController.cs
+  [MaintenanceHistory] 期望 logistics:maintenance:history:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceHistoriesController.cs
+  [MaintenanceHistoryArchive] 缺少 TaktMaintenanceHistoryArchivesController；期望 list 前缀 logistics:maintenance:history:archive
+  [MaintenanceNotification] 期望 logistics:maintenance:notification:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceNotificationsController.cs
+  [MaintenanceWorkOrder] 期望 logistics:maintenance:work:order:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceWorkOrdersController.cs
+  [MaintenanceWorkOrderLabor] 期望 logistics:maintenance:work:order:labor:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceWorkOrderLaborsController.cs
+  [MaintenanceWorkOrderMaterial] 期望 logistics:maintenance:work:order:material:list，实际 logistics:maintenance:equipment:list | Takt.WebApi/Controllers/Logistics/Maintenance/TaktMaintenanceWorkOrderMaterialsController.cs
+  [Manufacturer] 期望 logistics:materials:manufacturer:list，实际 logistics:materials:manufacturer:material:list | Takt.WebApi/Controllers/Logistics/Materials/TaktManufacturersController.cs
   [ManufacturerMaterial] 期望 logistics:materials:manufacturer:material:list，实际 logistics:materials:manufacturermaterial:list | Takt.WebApi/Controllers/Logistics/Materials/TaktManufacturerMaterialsController.cs
-  [MaterialChangeLog] 期望 logistics:materials:material:change:log:list，实际 logistics:materials:material:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialChangeLogsController.cs
-  [MaterialGroup] 期望 logistics:materials:material:group:list，实际 logistics:materials:materialgroup:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialGroupsController.cs
-  [MaterialPlant] 期望 logistics:materials:material:plant:list，实际 logistics:materials:materialplant:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialPlantsController.cs
-  [MaterialPlantChangeLog] 期望 logistics:materials:material:plant:change:log:list，实际 logistics:materials:materialplant:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialPlantChangeLogsController.cs
-  [MaterialTransaction] 期望 logistics:materials:material:transaction:list，实际 logistics:materials:materialtransaction:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialTransactionsController.cs
   [MaterialTransactionItem] 期望 logistics:materials:material:transaction:item:list，实际 logistics:materials:materialtransaction:list | Takt.WebApi/Controllers/Logistics/Materials/TaktMaterialTransactionItemsController.cs
-  [ModelDestination] 期望 logistics:materials:model:destination:list，实际 logistics:materials:modeldestination:list | Takt.WebApi/Controllers/Logistics/Materials/TaktModelDestinationsController.cs
-  [News] 期望 routine:newscenter:news:list，实际 (none):list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsesController.cs
-  [NewsAttachment] 期望 routine:newscenter:news:attachment:list，实际 routine:newscenter:newsattachment:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsAttachmentsController.cs
-  [NewsComment] 期望 routine:newscenter:news:comment:list，实际 routine:newscenter:newscomment:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsCommentsController.cs
-  [NewsCommentLike] 期望 routine:newscenter:news:comment:like:list，实际 routine:newscenter:newscommentlike:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsCommentLikesController.cs
-  [NewsFavorite] 期望 routine:newscenter:news:favorite:list，实际 routine:newscenter:newsfavorite:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsFavoritesController.cs
-  [NewsLike] 期望 routine:newscenter:news:like:list，实际 routine:newscenter:newslike:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsLikesController.cs
-  [NewsRead] 期望 routine:newscenter:news:read:list，实际 routine:newscenter:newsread:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsReadsController.cs
-  [NewsShare] 期望 routine:newscenter:news:share:list，实际 routine:newscenter:newsshare:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsSharesController.cs
-  [OperLog] 期望 statistics:logging:oper:log:list，实际 statistics:logging:operlog:list | Takt.WebApi/Controllers/Statistics/Logging/TaktOperLogsController.cs
-  [OvertimeItem] 期望 humanresource:attendance:overtime:item:list，实际 humanresource:attendance:overtimeitem:list | Takt.WebApi/Controllers/HumanResource/Attendance/TaktOvertimeItemsController.cs
-  [PayScale] 期望 humanresource:compensation:pay:scale:list，实际 humanresource:compensation:payscale:list | Takt.WebApi/Controllers/HumanResource/Compensation/TaktPayScalesController.cs
-  [PcbaInspection] 期望 logistics:manufacturing:defect:pcba:inspection:list，实际 logistics:manufacturing:defect:pcbainspection:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Defect/TaktPcbaInspectionsController.cs
+  [News] 期望 routine:news:center:list，实际 (none):list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsesController.cs
+  [NewsAttachment] 期望 routine:news:center:attachment:list，实际 routine:newscenter:newsattachment:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsAttachmentsController.cs
+  [NewsComment] 期望 routine:news:center:comment:list，实际 routine:newscenter:newscomment:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsCommentsController.cs
+  [NewsCommentLike] 期望 routine:news:center:comment:like:list，实际 routine:newscenter:newscommentlike:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsCommentLikesController.cs
+  [NewsFavorite] 期望 routine:news:center:favorite:list，实际 routine:newscenter:newsfavorite:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsFavoritesController.cs
+  [NewsLike] 期望 routine:news:center:like:list，实际 routine:newscenter:newslike:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsLikesController.cs
+  [NewsRead] 期望 routine:news:center:read:list，实际 routine:newscenter:newsread:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsReadsController.cs
+  [NewsShare] 期望 routine:news:center:share:list，实际 routine:newscenter:newsshare:list | Takt.WebApi/Controllers/Routine/NewsCenter/TaktNewsSharesController.cs
+  [OvertimeItem] 期望 human:resource:attendance:overtime:item:list，实际 human:resource:attendance:overtimeitem:list | Takt.WebApi/Controllers/HumanResource/Attendance/TaktOvertimeItemsController.cs
   [PcbaInspectionDetail] 期望 logistics:manufacturing:defect:pcba:inspection:detail:list，实际 logistics:manufacturing:defect:pcbainspection:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Defect/TaktPcbaInspectionDetailsController.cs
-  [PcbaOutput] 期望 logistics:manufacturing:output:pcba:output:list，实际 logistics:manufacturing:output:pcbaoutput:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktPcbaOutputsController.cs
-  [PcbaOutputDetail] 期望 logistics:manufacturing:output:pcba:output:detail:list，实际 logistics:manufacturing:output:pcbaoutput:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktPcbaOutputDetailsController.cs
-  [PcbaRepair] 期望 logistics:manufacturing:defect:pcba:repair:list，实际 logistics:manufacturing:defect:pcbarepair:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Defect/TaktPcbaRepairsController.cs
+  [PcbaOutputDetail] 期望 logistics:manufacturing:output:pcba:detail:list，实际 logistics:manufacturing:output:pcbaoutput:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktPcbaOutputDetailsController.cs
   [PcbaRepairDetail] 期望 logistics:manufacturing:defect:pcba:repair:detail:list，实际 logistics:manufacturing:defect:pcbarepair:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Defect/TaktPcbaRepairDetailsController.cs
-  [PerfAnalysis] 期望 humanresource:performance:perf:analysis:list，实际 humanresource:performance:analysis:list | Takt.WebApi/Controllers/HumanResource/Performance/TaktPerfAnalysesController.cs
-  [PerfAssessment] 期望 humanresource:performance:perf:assessment:list，实际 humanresource:performance:assessment:list | Takt.WebApi/Controllers/HumanResource/Performance/TaktPerfAssessmentsController.cs
-  [PerfCycle] 期望 humanresource:performance:perf:cycle:list，实际 humanresource:performance:cycle:list | Takt.WebApi/Controllers/HumanResource/Performance/TaktPerfCyclesController.cs
-  [PerfObjective] 期望 humanresource:performance:perf:objective:list，实际 humanresource:performance:objective:list | Takt.WebApi/Controllers/HumanResource/Performance/TaktPerfObjectivesController.cs
-  [PerfScheme] 期望 humanresource:performance:perf:scheme:list，实际 humanresource:performance:scheme:list | Takt.WebApi/Controllers/HumanResource/Performance/TaktPerfSchemesController.cs
-  [PersonnelOperationRate] 期望 logistics:manufacturing:output:personnel:operation:rate:list，实际 logistics:manufacturing:output:personneloperationrate:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktPersonnelOperationRatesController.cs
-  [PersonnelOperationRateChangeLog] 期望 logistics:manufacturing:output:personnel:operation:rate:change:log:list，实际 logistics:manufacturing:output:personneloperationrate:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktPersonnelOperationRateChangeLogsController.cs
-  [ProductionChangeover] 期望 logistics:manufacturing:output:production:changeover:list，实际 logistics:manufacturing:output:productionchangeover:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktProductionChangeoversController.cs
-  [ProductionOrder] 期望 logistics:manufacturing:output:production:order:list，实际 logistics:manufacturing:output:productionorder:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktProductionOrdersController.cs
-  [ProductionOrderChangeLog] 期望 logistics:manufacturing:output:production:order:change:log:list，实际 logistics:manufacturing:output:productionorder:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktProductionOrderChangeLogsController.cs
-  [ProductionPlan] 期望 logistics:manufacturing:planning:production:plan:list，实际 logistics:manufacturing:planning:productionplan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Planning/TaktProductionPlansController.cs
   [ProductionPlanItem] 期望 logistics:manufacturing:planning:production:plan:item:list，实际 logistics:manufacturing:planning:productionplan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Planning/TaktProductionPlanItemsController.cs
-  [ProductionTeam] 期望 logistics:manufacturing:output:production:team:list，实际 logistics:manufacturing:output:productionteam:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktProductionTeamsController.cs
-  [ProfitCenter] 期望 accounting:controlling:profit:center:list，实际 accounting:controlling:profitcenter:list | Takt.WebApi/Controllers/Accounting/Controlling/TaktProfitCentersController.cs
-  [ProfitCenterChangeLog] 期望 accounting:controlling:profit:center:change:log:list，实际 accounting:controlling:profitcenter:list | Takt.WebApi/Controllers/Accounting/Controlling/TaktProfitCenterChangeLogsController.cs
   [PurchaseGroup] 缺少 TaktPurchaseGroupsController；期望 list 前缀 logistics:procurement:purchase:group
   [PurchaseInvoice] 缺少 TaktPurchaseInvoicesController；期望 list 前缀 logistics:procurement:purchase:invoice
   [PurchaseInvoiceItem] 缺少 TaktPurchaseInvoiceItemsController；期望 list 前缀 logistics:procurement:purchase:invoice:item
   [PurchaseOrder] 缺少 TaktPurchaseOrdersController；期望 list 前缀 logistics:procurement:purchase:order
-  [PurchaseOrderChangeLog] 期望 logistics:procurement:purchase:order:change:log:list，实际 logistics:procurement:purchaseorder:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchaseOrderChangeLogsController.cs
   [PurchaseOrderItem] 期望 logistics:procurement:purchase:order:item:list，实际 logistics:procurement:purchaseorder:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchaseOrderItemsController.cs
-  [PurchasePlan] 期望 logistics:manufacturing:planning:purchase:plan:list，实际 logistics:manufacturing:planning:purchaseplan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Planning/TaktPurchasePlansController.cs
   [PurchasePlanItem] 期望 logistics:manufacturing:planning:purchase:plan:item:list，实际 logistics:manufacturing:planning:purchaseplan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Planning/TaktPurchasePlanItemsController.cs
   [PurchasePrice] 缺少 TaktPurchasePricesController；期望 list 前缀 logistics:procurement:purchase:price
-  [PurchasePriceChangeLog] 期望 logistics:procurement:purchase:price:change:log:list，实际 logistics:procurement:purchaseprice:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchasePriceChangeLogsController.cs
   [PurchasePriceItem] 期望 logistics:procurement:purchase:price:item:list，实际 logistics:procurement:purchaseprice:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchasePriceItemsController.cs
   [PurchasePriceScale] 期望 logistics:procurement:purchase:price:scale:list，实际 logistics:procurement:purchaseprice:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchasePriceScalesController.cs
-  [PurchaseRequest] 期望 logistics:procurement:purchase:request:list，实际 logistics:procurement:purchaserequest:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchaseRequestsController.cs
-  [PurchaseRequestChangeLog] 期望 logistics:procurement:purchase:request:change:log:list，实际 logistics:procurement:purchaserequest:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchaseRequestChangeLogsController.cs
   [PurchaseRequestItem] 期望 logistics:procurement:purchase:request:item:list，实际 logistics:procurement:purchaserequest:list | Takt.WebApi/Controllers/Logistics/Procurement/TaktPurchaseRequestItemsController.cs
-  [QualityAssurance] 期望 logistics:quality:cost:quality:assurance:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssurancesController.cs
-  [QualityAssuranceCalibration] 期望 logistics:quality:cost:quality:assurance:calibration:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceCalibrationsController.cs
-  [QualityAssuranceCustomerResponse] 期望 logistics:quality:cost:quality:assurance:customer:response:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceCustomerResponsesController.cs
-  [QualityAssuranceFirstArticle] 期望 logistics:quality:cost:quality:assurance:first:article:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceFirstArticlesController.cs
-  [QualityAssuranceIncoming] 期望 logistics:quality:cost:quality:assurance:incoming:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceIncomingsController.cs
-  [QualityAssuranceOther] 期望 logistics:quality:cost:quality:assurance:other:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceOthersController.cs
-  [QualityAssuranceOutgoing] 期望 logistics:quality:cost:quality:assurance:outgoing:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceOutgoingsController.cs
-  [QualityAssuranceReliability] 期望 logistics:quality:cost:quality:assurance:reliability:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceReliabilitiesController.cs
-  [QualityIncident] 期望 logistics:quality:cost:quality:incident:list，实际 logistics:quality:cost:incident:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIncidentsController.cs
-  [QualityIncidentItem] 期望 logistics:quality:cost:quality:incident:item:list，实际 logistics:quality:cost:incident:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIncidentItemsController.cs
-  [QualityIssue] 期望 logistics:quality:cost:quality:issue:list，实际 logistics:quality:cost:issue:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIssuesController.cs
-  [QualityIssueAssyRework] 期望 logistics:quality:cost:quality:issue:assy:rework:list，实际 logistics:quality:cost:issue:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIssueAssyReworksController.cs
-  [QualityIssueMeeting] 期望 logistics:quality:cost:quality:issue:meeting:list，实际 logistics:quality:cost:issue:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIssueMeetingsController.cs
-  [QualityIssuePcbaRework] 期望 logistics:quality:cost:quality:issue:pcba:rework:list，实际 logistics:quality:cost:issue:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIssuePcbaReworksController.cs
-  [QuartzLog] 期望 statistics:logging:quartz:log:list，实际 statistics:logging:quartzlog:list | Takt.WebApi/Controllers/Statistics/Logging/TaktQuartzLogsController.cs
+  [QualityAssuranceCalibration] 期望 logistics:quality:cost:assurance:calibration:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceCalibrationsController.cs
+  [QualityAssuranceCustomerResponse] 期望 logistics:quality:cost:assurance:customer:response:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceCustomerResponsesController.cs
+  [QualityAssuranceFirstArticle] 期望 logistics:quality:cost:assurance:first:article:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceFirstArticlesController.cs
+  [QualityAssuranceIncoming] 期望 logistics:quality:cost:assurance:incoming:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceIncomingsController.cs
+  [QualityAssuranceOther] 期望 logistics:quality:cost:assurance:other:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceOthersController.cs
+  [QualityAssuranceOutgoing] 期望 logistics:quality:cost:assurance:outgoing:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceOutgoingsController.cs
+  [QualityAssuranceReliability] 期望 logistics:quality:cost:assurance:reliability:list，实际 logistics:quality:cost:assurance:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityAssuranceReliabilitiesController.cs
+  [QualityIncidentItem] 期望 logistics:quality:cost:incident:item:list，实际 logistics:quality:cost:incident:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIncidentItemsController.cs
+  [QualityIssueAssyRework] 期望 logistics:quality:cost:issue:assy:rework:list，实际 logistics:quality:cost:issue:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIssueAssyReworksController.cs
+  [QualityIssueMeeting] 期望 logistics:quality:cost:issue:meeting:list，实际 logistics:quality:cost:issue:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIssueMeetingsController.cs
+  [QualityIssuePcbaRework] 期望 logistics:quality:cost:issue:pcba:rework:list，实际 logistics:quality:cost:issue:list | Takt.WebApi/Controllers/Logistics/Quality/Cost/TaktQualityIssuePcbaReworksController.cs
   [QuartzTask] 期望 foundation:quartz:task:list，实际 foundation:quartztask:list | Takt.WebApi/Controllers/Foundation/TaktQuartzTasksController.cs
-  [RoutingChangeLog] 期望 logistics:manufacturing:bom:routing:change:log:list，实际 logistics:manufacturing:bom:routing:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktRoutingChangeLogsController.cs
   [RoutingItem] 期望 logistics:manufacturing:bom:routing:item:list，实际 logistics:manufacturing:bom:routingitem:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktRoutingItemsController.cs
   [RoutingItemArgument] 期望 logistics:manufacturing:bom:routing:item:argument:list，实际 logistics:manufacturing:bom:routingitemargument:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktRoutingItemArgumentsController.cs
-  [SalaryFormula] 期望 humanresource:compensation:salary:formula:list，实际 humanresource:compensation:salaryformula:list | Takt.WebApi/Controllers/HumanResource/Compensation/TaktSalaryFormulasController.cs
-  [SalaryItem] 期望 humanresource:compensation:salary:item:list，实际 humanresource:compensation:salaryitem:list | Takt.WebApi/Controllers/HumanResource/Compensation/TaktSalaryItemsController.cs
-  [SalesInvoice] 期望 logistics:sales:sales:invoice:list，实际 logistics:sales:invoice:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesInvoicesController.cs
-  [SalesInvoiceItem] 期望 logistics:sales:sales:invoice:item:list，实际 logistics:sales:invoice:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesInvoiceItemsController.cs
-  [SalesOrder] 期望 logistics:sales:sales:order:list，实际 logistics:sales:order:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesOrdersController.cs
-  [SalesOrderChangeLog] 期望 logistics:sales:sales:order:change:log:list，实际 logistics:sales:order:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesOrderChangeLogsController.cs
-  [SalesOrderItem] 期望 logistics:sales:sales:order:item:list，实际 logistics:sales:order:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesOrderItemsController.cs
-  [SalesPlan] 期望 logistics:manufacturing:planning:sales:plan:list，实际 logistics:manufacturing:planning:salesplan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Planning/TaktSalesPlansController.cs
+  [SalesInvoiceItem] 期望 logistics:sales:invoice:item:list，实际 logistics:sales:invoice:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesInvoiceItemsController.cs
+  [SalesOrderChangeLog] 期望 logistics:sales:order:change:log:list，实际 logistics:sales:order:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesOrderChangeLogsController.cs
+  [SalesOrderItem] 期望 logistics:sales:order:item:list，实际 logistics:sales:order:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesOrderItemsController.cs
   [SalesPlanItem] 期望 logistics:manufacturing:planning:sales:plan:item:list，实际 logistics:manufacturing:planning:salesplan:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Planning/TaktSalesPlanItemsController.cs
-  [SalesPrice] 期望 logistics:sales:sales:price:list，实际 logistics:sales:price:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesPricesController.cs
-  [SalesPriceChangeLog] 期望 logistics:sales:sales:price:change:log:list，实际 logistics:sales:price:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesPriceChangeLogsController.cs
-  [SalesPriceItem] 期望 logistics:sales:sales:price:item:list，实际 logistics:sales:salespriceitem:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesPriceItemsController.cs
-  [SalesPriceScale] 期望 logistics:sales:sales:price:scale:list，实际 logistics:sales:salespricescale:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesPriceScalesController.cs
-  [SalesQuotation] 期望 logistics:sales:sales:quotation:list，实际 logistics:sales:quotation:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesQuotationsController.cs
-  [SalesQuotationChangeLog] 期望 logistics:sales:sales:quotation:change:log:list，实际 logistics:sales:quotation:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesQuotationChangeLogsController.cs
-  [SalesQuotationItem] 期望 logistics:sales:sales:quotation:item:list，实际 logistics:sales:salesquotationitem:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesQuotationItemsController.cs
-  [SamplingScheme] 期望 logistics:quality:operation:sampling:scheme:list，实际 logistics:quality:operation:samplingscheme:list | Takt.WebApi/Controllers/Logistics/Quality/Operation/TaktSamplingSchemesController.cs
-  [SelfService] 期望 routine:helpdesk:self:service:list，实际 routine:helpdesk:selfservice:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktSelfServicesController.cs
-  [SerialInbound] 期望 logistics:serial:serial:inbound:list，实际 logistics:serial:inbound:list | Takt.WebApi/Controllers/Logistics/Serial/TaktSerialInboundsController.cs
-  [SerialInboundItem] 期望 logistics:serial:serial:inbound:item:list，实际 logistics:serial:inbound:list | Takt.WebApi/Controllers/Logistics/Serial/TaktSerialInboundItemsController.cs
-  [SerialOutbound] 期望 logistics:serial:serial:outbound:list，实际 logistics:serial:outbound:list | Takt.WebApi/Controllers/Logistics/Serial/TaktSerialOutboundsController.cs
-  [SerialOutboundItem] 期望 logistics:serial:serial:outbound:item:list，实际 logistics:serial:outbound:list | Takt.WebApi/Controllers/Logistics/Serial/TaktSerialOutboundItemsController.cs
-  [ServerMonitor] 期望 statistics:logging:server:monitor:list，实际 statistics:logging:servermonitor:list | Takt.WebApi/Controllers/Statistics/Logging/TaktServerMonitorsController.cs
-  [ServiceContract] 期望 logistics:customerservice:service:contract:list，实际 logistics:service:contract:list | Takt.WebApi/Controllers/Logistics/CustomerService/TaktServiceContractsController.cs
-  [ServiceOrder] 期望 logistics:customerservice:service:order:list，实际 logistics:service:order:list | Takt.WebApi/Controllers/Logistics/CustomerService/TaktServiceOrdersController.cs
-  [ServiceRequest] 期望 logistics:customerservice:service:request:list，实际 logistics:service:request:list | Takt.WebApi/Controllers/Logistics/CustomerService/TaktServiceRequestsController.cs
-  [ServiceTicket] 期望 logistics:customerservice:service:ticket:list，实际 logistics:service:ticket:list | Takt.WebApi/Controllers/Logistics/CustomerService/TaktServiceTicketsController.cs
-  [ShiftSchedule] 期望 humanresource:attendance:shift:schedule:list，实际 humanresource:attendance:shiftschedule:list | Takt.WebApi/Controllers/HumanResource/Attendance/TaktShiftSchedulesController.cs
-  [SocialInsurance] 期望 humanresource:benefits:social:insurance:list，实际 humanresource:benefits:socialinsurance:list | Takt.WebApi/Controllers/HumanResource/Benefits/TaktSocialInsurancesController.cs
-  [SopAck] 期望 logistics:manufacturing:sop:sop:ack:list，实际 logistics:manufacturing:sop:ack:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopAcksController.cs
-  [SopArgument] 期望 logistics:manufacturing:sop:sop:argument:list，实际 logistics:manufacturing:sop:exec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopArgumentsController.cs
-  [SopCall] 期望 logistics:manufacturing:sop:sop:call:list，实际 logistics:manufacturing:sop:call:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopCallsController.cs
-  [SopContent] 期望 logistics:manufacturing:sop:sop:content:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopContentsController.cs
-  [SopDoc] 期望 logistics:manufacturing:sop:sop:doc:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopDocsController.cs
-  [SopEsdCheck] 期望 logistics:manufacturing:sop:sop:esd:check:list，实际 logistics:manufacturing:sop:esdcheck:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopEsdChecksController.cs
-  [SopExec] 期望 logistics:manufacturing:sop:sop:exec:list，实际 logistics:manufacturing:sop:exec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopExecsController.cs
-  [SopExecScan] 期望 logistics:manufacturing:sop:sop:exec:scan:list，实际 logistics:manufacturing:sop:exec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopExecScansController.cs
-  [SopExecStep] 期望 logistics:manufacturing:sop:sop:exec:step:list，实际 logistics:manufacturing:sop:exec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopExecStepsController.cs
-  [SopRevision] 期望 logistics:manufacturing:sop:sop:revision:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopRevisionsController.cs
-  [SopStep] 期望 logistics:manufacturing:sop:sop:step:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopStepsController.cs
-  [SopStepCheckItem] 期望 logistics:manufacturing:sop:sop:step:check:item:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopStepCheckItemsController.cs
-  [SopStepMedia] 期望 logistics:manufacturing:sop:sop:step:media:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopStepMediasController.cs
-  [SopWorkstation] 期望 logistics:manufacturing:sop:sop:workstation:list，实际 logistics:manufacturing:sop:workstation:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopWorkstationsController.cs
+  [SalesPriceChangeLog] 期望 logistics:sales:price:change:log:list，实际 logistics:sales:price:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesPriceChangeLogsController.cs
+  [SalesPriceItem] 期望 logistics:sales:price:item:list，实际 logistics:sales:salespriceitem:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesPriceItemsController.cs
+  [SalesPriceScale] 期望 logistics:sales:price:scale:list，实际 logistics:sales:salespricescale:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesPriceScalesController.cs
+  [SalesQuotationChangeLog] 期望 logistics:sales:quotation:change:log:list，实际 logistics:sales:quotation:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesQuotationChangeLogsController.cs
+  [SalesQuotationItem] 期望 logistics:sales:quotation:item:list，实际 logistics:sales:salesquotationitem:list | Takt.WebApi/Controllers/Logistics/Sales/TaktSalesQuotationItemsController.cs
+  [SelfService] 期望 routine:help:desk:self:service:list，实际 routine:helpdesk:selfservice:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktSelfServicesController.cs
+  [SerialInboundItem] 期望 logistics:serial:inbound:item:list，实际 logistics:serial:inbound:list | Takt.WebApi/Controllers/Logistics/Serial/TaktSerialInboundItemsController.cs
+  [SerialOutboundItem] 期望 logistics:serial:outbound:item:list，实际 logistics:serial:outbound:list | Takt.WebApi/Controllers/Logistics/Serial/TaktSerialOutboundItemsController.cs
+  [SopArgument] 期望 logistics:manufacturing:sop:argument:list，实际 logistics:manufacturing:sop:exec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopArgumentsController.cs
+  [SopContent] 期望 logistics:manufacturing:sop:content:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopContentsController.cs
+  [SopEsdCheck] 期望 logistics:manufacturing:sop:esd:check:list，实际 logistics:manufacturing:sop:esdcheck:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopEsdChecksController.cs
+  [SopExecScan] 期望 logistics:manufacturing:sop:exec:scan:list，实际 logistics:manufacturing:sop:exec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopExecScansController.cs
+  [SopExecStep] 期望 logistics:manufacturing:sop:exec:step:list，实际 logistics:manufacturing:sop:exec:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopExecStepsController.cs
+  [SopRevision] 期望 logistics:manufacturing:sop:revision:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopRevisionsController.cs
+  [SopStep] 期望 logistics:manufacturing:sop:step:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopStepsController.cs
+  [SopStepCheckItem] 期望 logistics:manufacturing:sop:step:check:item:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopStepCheckItemsController.cs
+  [SopStepMedia] 期望 logistics:manufacturing:sop:step:media:list，实际 logistics:manufacturing:sop:doc:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Sop/TaktSopStepMediasController.cs
   [SourceOfSupply] 缺少 TaktSourceOfSuppliesController；期望 list 前缀 logistics:procurement:source:of:supply
-  [StandardOperationRate] 期望 logistics:manufacturing:output:standard:operation:rate:list，实际 logistics:manufacturing:output:standardoperationrate:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktStandardOperationRatesController.cs
-  [StandardOperationRateChangeLog] 期望 logistics:manufacturing:output:standard:operation:rate:change:log:list，实际 logistics:manufacturing:output:standardoperationrate:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Output/TaktStandardOperationRateChangeLogsController.cs
-  [StandardOperationTime] 期望 logistics:manufacturing:bom:standard:operation:time:list，实际 logistics:manufacturing:bom:standardoperationtime:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktStandardOperationTimesController.cs
-  [StandardOperationTimeChangeLog] 期望 logistics:manufacturing:bom:standard:operation:time:change:log:list，实际 logistics:manufacturing:bom:standardoperationtime:list | Takt.WebApi/Controllers/Logistics/Manufacturing/Bom/TaktStandardOperationTimeChangeLogsController.cs
-  [StandardWageRate] 期望 accounting:controlling:standard:wage:rate:list，实际 accounting:controlling:standardwagerate:list | Takt.WebApi/Controllers/Accounting/Controlling/TaktStandardWageRatesController.cs
-  [StorageLocation] 期望 logistics:materials:storage:location:list，实际 logistics:materials:storagelocation:list | Takt.WebApi/Controllers/Logistics/Materials/TaktStorageLocationsController.cs
-  [SupplierEvaluation] 期望 logistics:quality:complaint:supplier:evaluation:list，实际 logistics:quality:complaint:supplierevaluation:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktSupplierEvaluationsController.cs
   [SupplierEvaluationItem] 期望 logistics:quality:complaint:supplier:evaluation:item:list，实际 logistics:quality:complaint:supplierevaluation:list | Takt.WebApi/Controllers/Logistics/Quality/Complaint/TaktSupplierEvaluationItemsController.cs
   [TableClone] 期望 code:database:table:clone:list，实际 (none):list | Takt.WebApi/Controllers/Code/Database/TaktTableClonesController.cs
-  [TalentInterview] 期望 humanresource:talent:talent:interview:list，实际 humanresource:talent:talentinterview:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentInterviewsController.cs
-  [TalentJobPosting] 期望 humanresource:talent:talent:job:posting:list，实际 humanresource:talent:talentjobposting:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentJobPostingsController.cs
-  [TalentOffer] 期望 humanresource:talent:talent:offer:list，实际 humanresource:talent:talentoffer:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentOffersController.cs
-  [TalentRecruitmentPlan] 期望 humanresource:talent:talent:recruitment:plan:list，实际 humanresource:talent:talentrecruitmentplan:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentRecruitmentPlansController.cs
-  [TalentStaffingRequirement] 期望 humanresource:talent:talent:staffing:requirement:list，实际 humanresource:talent:talentstaffingrequirement:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentStaffingRequirementsController.cs
-  [TicketCategoryAssign] 期望 routine:helpdesk:ticket:category:assign:list，实际 routine:helpdesk:ticketcategoryassign:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktTicketCategoryAssignsController.cs
-  [TicketChangeLog] 期望 routine:helpdesk:ticket:change:log:list，实际 routine:helpdesk:ticket:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktTicketChangeLogsController.cs
-  [TicketEvaluation] 期望 routine:helpdesk:ticket:evaluation:list，实际 routine:helpdesk:ticketevaluation:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktTicketEvaluationsController.cs
-  [TrainingAttendee] 期望 humanresource:training:training:attendee:list，实际 humanresource:training:attendee:list | Takt.WebApi/Controllers/HumanResource/Training/TaktTrainingAttendeesController.cs
-  [TrainingCourse] 期望 humanresource:training:training:course:list，实际 humanresource:training:course:list | Takt.WebApi/Controllers/HumanResource/Training/TaktTrainingCoursesController.cs
-  [TrainingPlan] 期望 humanresource:training:training:plan:list，实际 humanresource:training:plan:list | Takt.WebApi/Controllers/HumanResource/Training/TaktTrainingPlansController.cs
+  [TalentJobPosting] 期望 human:resource:talent:job:posting:list，实际 human:resource:talent:talentjobposting:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentJobPostingsController.cs
+  [TalentOffer] 期望 human:resource:talent:offer:list，实际 human:resource:talent:talentoffer:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentOffersController.cs
+  [TalentStaffingRequirement] 期望 human:resource:talent:staffing:requirement:list，实际 human:resource:talent:talentstaffingrequirement:list | Takt.WebApi/Controllers/HumanResource/Talent/TaktTalentStaffingRequirementsController.cs
+  [TicketCategoryAssign] 期望 routine:help:desk:ticket:category:assign:list，实际 routine:helpdesk:ticketcategoryassign:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktTicketCategoryAssignsController.cs
+  [TicketEvaluation] 期望 routine:help:desk:ticket:evaluation:list，实际 routine:helpdesk:ticketevaluation:list | Takt.WebApi/Controllers/Routine/HelpDesk/TaktTicketEvaluationsController.cs
   [Translation] 期望 foundation:translation:list，实际 foundation:i18n:list | Takt.WebApi/Controllers/Foundation/TaktTranslationsController.cs
-  [VisitorCompanion] 期望 routine:visitorcenter:visitor:companion:list，实际 routine:visitorcenter:visitorcompanion:list | Takt.WebApi/Controllers/Routine/VisitorCenter/TaktVisitorCompanionsController.cs
-  [WorkShift] 期望 humanresource:attendance:work:shift:list，实际 humanresource:attendance:workshift:list | Takt.WebApi/Controllers/HumanResource/Attendance/TaktWorkShiftsController.cs
+  [Visitor] 期望 routine:visitor:center:list，实际 routine:visitorcenter:visitor:list | Takt.WebApi/Controllers/Routine/VisitorCenter/TaktVisitorsController.cs
+  [VisitorCompanion] 期望 routine:visitor:center:companion:list，实际 routine:visitorcenter:visitorcompanion:list | Takt.WebApi/Controllers/Routine/VisitorCenter/TaktVisitorCompanionsController.cs
 
-=== MENU_PAGE_VS_EXPECTED（页面菜单 :list ≠ 实体期望前缀） (113) ===
-  [ROUTINE_ANNOUNCEMENT] 菜单 routine:announcement:list 应对齐 routine:announcement:announcement:list | TaktMenuLevel2SeedData.cs | entity=Announcement
-  [ROUTINE_CONFERENCE_CENTER] 菜单 routine:conferencecenter:list 应对齐 routine:conferencecenter:conference:list | TaktMenuLevel2SeedData.cs | entity=Conference
+=== MENU_PAGE_VS_EXPECTED（页面菜单 :list ≠ 实体期望前缀） (14) ===
   [WORKFLOW_TODO] 菜单 workflow:todo:list 应对齐 workflow:flow:task:list | TaktMenuLevel2SeedData.cs | entity=FlowTask
   [WORKFLOW_INSTANCE] 菜单 workflow:instance:list 应对齐 workflow:flow:variable:list | TaktMenuLevel2SeedData.cs | entity=FlowVariable
   [WORKFLOW_SCHEME] 菜单 workflow:scheme:list 应对齐 workflow:flow:scheme:list | TaktMenuLevel2SeedData.cs | entity=FlowScheme
   [WORKFLOW_FORM] 菜单 workflow:form:list 应对齐 workflow:flow:form:list | TaktMenuLevel2SeedData.cs | entity=FlowForm
   [CODE_GENERATOR] 菜单 code:generator:list 应对齐 code:generator:gen:table:list | TaktMenuLevel2SeedData.cs | entity=GenTable
-  [FOUNDATION_ISO_CODE] 菜单 foundation:isocode:list 应对齐 foundation:iso:code:list | TaktMenuLevel2SeedData.cs | entity=IsoCode
   [FOUNDATION_DICT] 菜单 foundation:dict:list 应对齐 foundation:dict:type:list | TaktMenuLevel2SeedData.cs | entity=DictType
   [FOUNDATION_I18N] 菜单 foundation:i18n:list 应对齐 foundation:translation:list | TaktMenuLevel2SeedData.cs | entity=Translation
-  [ACCOUNTING_FINANCIAL_ACCOUNT_TITLE] 菜单 accounting:financial:accounttitle:list 应对齐 accounting:financial:account:title:list | TaktMenuLevel3SeedData.cs | entity=AccountTitle
-  [ACCOUNTING_FINANCIAL_ACCOUNT_TITLE_CHANGE_LOG] 菜单 accounting:financial:accounttitle:list 应对齐 accounting:financial:account:title:list | TaktMenuLevel3SeedData.cs | entity=AccountTitle
-  [ACCOUNTING_CONTROLLING_PROFIT_CENTER] 菜单 accounting:controlling:profitcenter:list 应对齐 accounting:controlling:profit:center:list | TaktMenuLevel3SeedData.cs | entity=ProfitCenter
-  [ACCOUNTING_CONTROLLING_PROFIT_CENTER_CHANGE_LOG] 菜单 accounting:controlling:profitcenter:list 应对齐 accounting:controlling:profit:center:list | TaktMenuLevel3SeedData.cs | entity=ProfitCenter
-  [ACCOUNTING_CONTROLLING_COST_CENTER] 菜单 accounting:controlling:costcenter:list 应对齐 accounting:controlling:cost:center:list | TaktMenuLevel3SeedData.cs | entity=CostCenter
-  [ACCOUNTING_CONTROLLING_COST_CENTER_CHANGE_LOG] 菜单 accounting:controlling:costcenter:list 应对齐 accounting:controlling:cost:center:list | TaktMenuLevel3SeedData.cs | entity=CostCenter
-  [ACCOUNTING_CONTROLLING_COST_ELEMENT] 菜单 accounting:controlling:costelement:list 应对齐 accounting:controlling:cost:element:list | TaktMenuLevel3SeedData.cs | entity=CostElement
-  [ACCOUNTING_CONTROLLING_COST_ELEMENT_CHANGE_LOG] 菜单 accounting:controlling:costelement:list 应对齐 accounting:controlling:cost:element:list | TaktMenuLevel3SeedData.cs | entity=CostElement
-  [ACCOUNTING_CONTROLLING_STANDARD_WAGE_RATE] 菜单 accounting:controlling:standardwagerate:list 应对齐 accounting:controlling:standard:wage:rate:list | TaktMenuLevel3SeedData.cs | entity=StandardWageRate
-  [LOGISTICS_MATERIALS_MATERIAL_PLANT] 菜单 logistics:materials:materialplant:list 应对齐 logistics:materials:material:plant:list | TaktMenuLevel3SeedData.cs | entity=MaterialPlant
-  [LOGISTICS_MATERIALS_MATERIAL_PLANT_CHANGE_LOG] 菜单 logistics:materials:materialplant:list 应对齐 logistics:materials:material:plant:list | TaktMenuLevel3SeedData.cs | entity=MaterialPlant
-  [LOGISTICS_MATERIALS_MATERIAL_GROUP] 菜单 logistics:materials:materialgroup:list 应对齐 logistics:materials:material:group:list | TaktMenuLevel3SeedData.cs | entity=MaterialGroup
-  [LOGISTICS_MATERIALS_STORAGE_LOCATION] 菜单 logistics:materials:storagelocation:list 应对齐 logistics:materials:storage:location:list | TaktMenuLevel3SeedData.cs | entity=StorageLocation
-  [LOGISTICS_MATERIALS_MODEL_DESTINATION] 菜单 logistics:materials:modeldestination:list 应对齐 logistics:materials:model:destination:list | TaktMenuLevel3SeedData.cs | entity=ModelDestination
-  [LOGISTICS_MATERIALS_MATERIAL_TRANSACTION] 菜单 logistics:materials:materialtransaction:list 应对齐 logistics:materials:material:transaction:list | TaktMenuLevel3SeedData.cs | entity=MaterialTransaction
-  [LOGISTICS_SERVICE_SERVICE_REQUEST] 菜单 logistics:service:contract:list 应对齐 logistics:customerservice:service:contract:list | TaktMenuLevel3SeedData.cs | entity=ServiceContract
-  [LOGISTICS_SERVICE_SERVICE_CONTRACT] 菜单 logistics:service:contract:list 应对齐 logistics:customerservice:service:contract:list | TaktMenuLevel3SeedData.cs | entity=ServiceContract
-  [LOGISTICS_SERVICE_SERVICE_ORDER] 菜单 logistics:service:contract:list 应对齐 logistics:customerservice:service:contract:list | TaktMenuLevel3SeedData.cs | entity=ServiceContract
-  [LOGISTICS_SERVICE_SERVICE_TICKET] 菜单 logistics:service:contract:list 应对齐 logistics:customerservice:service:contract:list | TaktMenuLevel3SeedData.cs | entity=ServiceContract
-  [LOGISTICS_MAINTENANCE_EQUIPMENT] 菜单 logistics:maintenance:equipment:list 应对齐 logistics:maintenance:maintenance:work:order:list | TaktMenuLevel3SeedData.cs | entity=MaintenanceWorkOrder
-  [LOGISTICS_SALES_QUOTATION] 菜单 logistics:sales:quotation:list 应对齐 logistics:sales:sales:quotation:list | TaktMenuLevel3SeedData.cs | entity=SalesQuotation
-  [LOGISTICS_SALES_QUOTATION_CHANGE_LOG] 菜单 logistics:sales:quotation:list 应对齐 logistics:sales:sales:quotation:list | TaktMenuLevel3SeedData.cs | entity=SalesQuotation
-  [LOGISTICS_SALES_PRICE] 菜单 logistics:sales:price:list 应对齐 logistics:sales:sales:price:list | TaktMenuLevel3SeedData.cs | entity=SalesPrice
-  [LOGISTICS_SALES_PRICE_CHANGE_LOG] 菜单 logistics:sales:price:list 应对齐 logistics:sales:sales:price:list | TaktMenuLevel3SeedData.cs | entity=SalesPrice
-  [LOGISTICS_SALES_ORDER] 菜单 logistics:sales:order:list 应对齐 logistics:sales:sales:order:list | TaktMenuLevel3SeedData.cs | entity=SalesOrder
-  [LOGISTICS_SALES_ORDER_CHANGE_LOG] 菜单 logistics:sales:order:list 应对齐 logistics:sales:sales:order:list | TaktMenuLevel3SeedData.cs | entity=SalesOrder
-  [LOGISTICS_SALES_INVOICE] 菜单 logistics:sales:invoice:list 应对齐 logistics:sales:sales:invoice:list | TaktMenuLevel3SeedData.cs | entity=SalesInvoice
-  [LOGISTICS_SERIAL_INBOUND] 菜单 logistics:serial:inbound:list 应对齐 logistics:serial:serial:inbound:list | TaktMenuLevel3SeedData.cs | entity=SerialInbound
-  [LOGISTICS_SERIAL_OUTBOUND] 菜单 logistics:serial:outbound:list 应对齐 logistics:serial:serial:outbound:list | TaktMenuLevel3SeedData.cs | entity=SerialOutbound
-  [HUMANRESOURCE_PERSONNEL_EMPLOYEE_CONTRACT] 菜单 humanresource:personnel:employeecontract:list 应对齐 humanresource:personnel:employee:contract:list | TaktMenuLevel3SeedData.cs | entity=EmployeeContract
-  [HUMANRESOURCE_PERSONNEL_EMPLOYEE_DELEGATE] 菜单 humanresource:personnel:employeedelegation:list 应对齐 humanresource:personnel:employee:delegation:list | TaktMenuLevel3SeedData.cs | entity=EmployeeDelegation
-  [HUMANRESOURCE_PERSONNEL_EMPLOYEE_REASSIGNMENT] 菜单 humanresource:personnel:employeereassignment:list 应对齐 humanresource:personnel:employee:reassignment:list | TaktMenuLevel3SeedData.cs | entity=EmployeeReassignment
-  [HUMANRESOURCE_PERSONNEL_EMPLOYEE_ONBOARDING] 菜单 humanresource:personnel:employeeonboarding:list 应对齐 humanresource:personnel:employee:onboarding:list | TaktMenuLevel3SeedData.cs | entity=EmployeeOnboarding
-  [HUMANRESOURCE_ATTENDANCE_SHIFT_SCHEDULE] 菜单 humanresource:attendance:shiftschedule:list 应对齐 humanresource:attendance:shift:schedule:list | TaktMenuLevel3SeedData.cs | entity=ShiftSchedule
-  [HUMANRESOURCE_ATTENDANCE_WORK_SHIFT] 菜单 humanresource:attendance:workshift:list 应对齐 humanresource:attendance:work:shift:list | TaktMenuLevel3SeedData.cs | entity=WorkShift
-  [HUMANRESOURCE_COMPENSATION_SALARY_ITEM] 菜单 humanresource:compensation:salaryitem:list 应对齐 humanresource:compensation:salary:item:list | TaktMenuLevel3SeedData.cs | entity=SalaryItem
-  [HUMANRESOURCE_COMPENSATION_PAY_SCALE] 菜单 humanresource:compensation:payscale:list 应对齐 humanresource:compensation:pay:scale:list | TaktMenuLevel3SeedData.cs | entity=PayScale
-  [HUMANRESOURCE_COMPENSATION_EMP_SALARY] 菜单 humanresource:compensation:empsalary:list 应对齐 humanresource:compensation:emp:salary:list | TaktMenuLevel3SeedData.cs | entity=EmpSalary
-  [HUMANRESOURCE_COMPENSATION_BONUS_PLAN] 菜单 humanresource:compensation:bonusplan:list 应对齐 humanresource:compensation:bonus:plan:list | TaktMenuLevel3SeedData.cs | entity=BonusPlan
-  [HUMANRESOURCE_COMPENSATION_SALARY_FORMULA] 菜单 humanresource:compensation:salaryformula:list 应对齐 humanresource:compensation:salary:formula:list | TaktMenuLevel3SeedData.cs | entity=SalaryFormula
-  [HUMANRESOURCE_BENEFITS_SOCIAL_INSURANCE] 菜单 humanresource:benefits:socialinsurance:list 应对齐 humanresource:benefits:social:insurance:list | TaktMenuLevel3SeedData.cs | entity=SocialInsurance
-  [HUMANRESOURCE_TRAINING_COURSE] 菜单 humanresource:training:course:list 应对齐 humanresource:training:training:course:list | TaktMenuLevel3SeedData.cs | entity=TrainingCourse
-  [HUMANRESOURCE_TRAINING_PLAN] 菜单 humanresource:training:plan:list 应对齐 humanresource:training:training:plan:list | TaktMenuLevel3SeedData.cs | entity=TrainingPlan
-  [HUMANRESOURCE_TRAINING_ATTENDEE] 菜单 humanresource:training:attendee:list 应对齐 humanresource:training:training:attendee:list | TaktMenuLevel3SeedData.cs | entity=TrainingAttendee
-  [STATISTICS_LOGGING_LOGIN_LOG] 菜单 statistics:logging:loginlog:list 应对齐 statistics:logging:login:log:list | TaktMenuLevel3SeedData.cs | entity=LoginLog
-  [STATISTICS_LOGGING_OPER_LOG] 菜单 statistics:logging:operlog:list 应对齐 statistics:logging:oper:log:list | TaktMenuLevel3SeedData.cs | entity=OperLog
-  [STATISTICS_LOGGING_DELTA_LOG] 菜单 statistics:logging:deltalog:list 应对齐 statistics:logging:delta:log:list | TaktMenuLevel3SeedData.cs | entity=DeltaLog
-  [STATISTICS_LOGGING_QUARTZ_LOG] 菜单 statistics:logging:quartzlog:list 应对齐 statistics:logging:quartz:log:list | TaktMenuLevel3SeedData.cs | entity=QuartzLog
-  [STATISTICS_LOGGING_SERVER_MONITOR] 菜单 statistics:logging:servermonitor:list 应对齐 statistics:logging:server:monitor:list | TaktMenuLevel3SeedData.cs | entity=ServerMonitor
-  [ROUTINE_HELP_DESK_IT_ASSET] 菜单 routine:helpdesk:itasset:list 应对齐 routine:helpdesk:it:asset:list | TaktMenuLevel3SeedData.cs | entity=ItAsset
-  [ROUTINE_HELP_DESK_IT_ASSET_CHANGE_LOG] 菜单 routine:helpdesk:itasset:list 应对齐 routine:helpdesk:it:asset:list | TaktMenuLevel3SeedData.cs | entity=ItAsset
-  [LOGISTICS_PROCUREMENT_PURCHASE_REQUEST] 菜单 logistics:procurement:purchaserequest:list 应对齐 logistics:procurement:purchase:request:list | TaktMenuLevel4SeedData.cs | entity=PurchaseRequest
-  [LOGISTICS_PROCUREMENT_PURCHASE_REQUEST_CHANGE_LOG] 菜单 logistics:procurement:purchaserequest:list 应对齐 logistics:procurement:purchase:request:list | TaktMenuLevel4SeedData.cs | entity=PurchaseRequest
-  [LOGISTICS_PROCUREMENT_PURCHASE_ORDER] 菜单 logistics:procurement:purchaseorder:list 应对齐 logistics:procurement:purchase:order:item:list | TaktMenuLevel4SeedData.cs | entity=PurchaseOrderItem
-  [LOGISTICS_PROCUREMENT_PURCHASE_ORDER_CHANGE_LOG] 菜单 logistics:procurement:purchaseorder:list 应对齐 logistics:procurement:purchase:order:item:list | TaktMenuLevel4SeedData.cs | entity=PurchaseOrderItem
-  [LOGISTICS_PROCUREMENT_PURCHASE_PRICE] 菜单 logistics:procurement:purchaseprice:list 应对齐 logistics:procurement:purchase:price:scale:list | TaktMenuLevel4SeedData.cs | entity=PurchasePriceScale
-  [LOGISTICS_PROCUREMENT_PURCHASE_PRICE_CHANGE_LOG] 菜单 logistics:procurement:purchaseprice:list 应对齐 logistics:procurement:purchase:price:scale:list | TaktMenuLevel4SeedData.cs | entity=PurchasePriceScale
-  [LOGISTICS_MANUFACTURING_BOM_BILL_OF_MATERIAL] 菜单 logistics:manufacturing:bom:billofmaterial:list 应对齐 logistics:manufacturing:bom:bill:of:material:substitute:list | TaktMenuLevel4SeedData.cs | entity=BillOfMaterialSubstitute
-  [LOGISTICS_MANUFACTURING_BOM_BILL_OF_MATERIAL_CHANGE_LOG] 菜单 logistics:manufacturing:bom:billofmaterial:list 应对齐 logistics:manufacturing:bom:bill:of:material:substitute:list | TaktMenuLevel4SeedData.cs | entity=BillOfMaterialSubstitute
-  [LOGISTICS_MANUFACTURING_BOM_STANDARD_OPERATION_TIME] 菜单 logistics:manufacturing:bom:standardoperationtime:list 应对齐 logistics:manufacturing:bom:standard:operation:time:list | TaktMenuLevel4SeedData.cs | entity=StandardOperationTime
-  [LOGISTICS_MANUFACTURING_BOM_STANDARD_OPERATION_TIME_CHANGE_LOG] 菜单 logistics:manufacturing:bom:standardoperationtime:list 应对齐 logistics:manufacturing:bom:standard:operation:time:list | TaktMenuLevel4SeedData.cs | entity=StandardOperationTime
-  [LOGISTICS_MANUFACTURING_PLANNING_SALES_PLAN] 菜单 logistics:manufacturing:planning:salesplan:list 应对齐 logistics:manufacturing:planning:sales:plan:list | TaktMenuLevel4SeedData.cs | entity=SalesPlan
-  [LOGISTICS_MANUFACTURING_PLANNING_PRODUCTION_PLAN] 菜单 logistics:manufacturing:planning:productionplan:list 应对齐 logistics:manufacturing:planning:production:plan:list | TaktMenuLevel4SeedData.cs | entity=ProductionPlan
-  [LOGISTICS_MANUFACTURING_PLANNING_PURCHASE_PLAN] 菜单 logistics:manufacturing:planning:purchaseplan:list 应对齐 logistics:manufacturing:planning:purchase:plan:list | TaktMenuLevel4SeedData.cs | entity=PurchasePlan
-  [LOGISTICS_MANUFACTURING_SCHEDULING_APS_SCHEDULE] 菜单 logistics:manufacturing:scheduling:apsschedule:list 应对齐 logistics:manufacturing:scheduling:aps:schedule:list | TaktMenuLevel4SeedData.cs | entity=ApsSchedule
-  [LOGISTICS_MANUFACTURING_SCHEDULING_APS_SCHEDULE_CHANGE_LOG] 菜单 logistics:manufacturing:scheduling:apsschedule:list 应对齐 logistics:manufacturing:scheduling:aps:schedule:list | TaktMenuLevel4SeedData.cs | entity=ApsSchedule
-  [LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_EC_NOTIFICATION] 菜单 logistics:manufacturing:engineeringchange:ecnotification:list 应对齐 logistics:manufacturing:engineeringchange:ec:notification:list | TaktMenuLevel4SeedData.cs | entity=EcNotification
-  [LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER] 菜单 logistics:manufacturing:output:productionorder:list 应对齐 logistics:manufacturing:output:production:order:list | TaktMenuLevel4SeedData.cs | entity=ProductionOrder
-  [LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER_CHANGE_LOG] 菜单 logistics:manufacturing:output:productionorder:list 应对齐 logistics:manufacturing:output:production:order:list | TaktMenuLevel4SeedData.cs | entity=ProductionOrder
-  [LOGISTICS_MANUFACTURING_OUTPUT_PCBA_OUTPUT] 菜单 logistics:manufacturing:output:pcbaoutput:list 应对齐 logistics:manufacturing:output:pcba:output:list | TaktMenuLevel4SeedData.cs | entity=PcbaOutput
-  [LOGISTICS_MANUFACTURING_OUTPUT_ASSY_OUTPUT] 菜单 logistics:manufacturing:output:assyoutput:list 应对齐 logistics:manufacturing:output:assy:output:list | TaktMenuLevel4SeedData.cs | entity=AssyOutput
-  [LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_CHANGEOVER] 菜单 logistics:manufacturing:output:productionchangeover:list 应对齐 logistics:manufacturing:output:production:changeover:list | TaktMenuLevel4SeedData.cs | entity=ProductionChangeover
-  [LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE] 菜单 logistics:manufacturing:output:equipmentoperationrate:list 应对齐 logistics:manufacturing:output:equipment:operation:rate:list | TaktMenuLevel4SeedData.cs | entity=EquipmentOperationRate
-  [LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE_CHANGE_LOG] 菜单 logistics:manufacturing:output:equipmentoperationrate:list 应对齐 logistics:manufacturing:output:equipment:operation:rate:list | TaktMenuLevel4SeedData.cs | entity=EquipmentOperationRate
-  [LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE] 菜单 logistics:manufacturing:output:personneloperationrate:list 应对齐 logistics:manufacturing:output:personnel:operation:rate:list | TaktMenuLevel4SeedData.cs | entity=PersonnelOperationRate
-  [LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE_CHANGE_LOG] 菜单 logistics:manufacturing:output:personneloperationrate:list 应对齐 logistics:manufacturing:output:personnel:operation:rate:list | TaktMenuLevel4SeedData.cs | entity=PersonnelOperationRate
-  [LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_TEAM] 菜单 logistics:manufacturing:output:productionteam:list 应对齐 logistics:manufacturing:output:production:team:list | TaktMenuLevel4SeedData.cs | entity=ProductionTeam
-  [LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE] 菜单 logistics:manufacturing:output:standardoperationrate:list 应对齐 logistics:manufacturing:output:standard:operation:rate:list | TaktMenuLevel4SeedData.cs | entity=StandardOperationRate
-  [LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE_CHANGE_LOG] 菜单 logistics:manufacturing:output:standardoperationrate:list 应对齐 logistics:manufacturing:output:standard:operation:rate:list | TaktMenuLevel4SeedData.cs | entity=StandardOperationRate
-  [LOGISTICS_MANUFACTURING_DEFECT_PCBA_INSPECTION] 菜单 logistics:manufacturing:defect:pcbainspection:list 应对齐 logistics:manufacturing:defect:pcba:inspection:list | TaktMenuLevel4SeedData.cs | entity=PcbaInspection
-  [LOGISTICS_MANUFACTURING_DEFECT_PCBA_REPAIR] 菜单 logistics:manufacturing:defect:pcbarepair:list 应对齐 logistics:manufacturing:defect:pcba:repair:list | TaktMenuLevel4SeedData.cs | entity=PcbaRepair
-  [LOGISTICS_MANUFACTURING_DEFECT_ASSY_DEFECT] 菜单 logistics:manufacturing:defect:assydefect:list 应对齐 logistics:manufacturing:defect:assy:defect:list | TaktMenuLevel4SeedData.cs | entity=AssyDefect
-  [LOGISTICS_MANUFACTURING_SOP_WORKSTATION] 菜单 logistics:manufacturing:sop:workstation:list 应对齐 logistics:manufacturing:sop:sop:workstation:list | TaktMenuLevel4SeedData.cs | entity=SopWorkstation
-  [LOGISTICS_MANUFACTURING_SOP_DOC] 菜单 logistics:manufacturing:sop:doc:list 应对齐 logistics:manufacturing:sop:sop:step:list | TaktMenuLevel4SeedData.cs | entity=SopStep
-  [LOGISTICS_MANUFACTURING_SOP_ACK] 菜单 logistics:manufacturing:sop:ack:list 应对齐 logistics:manufacturing:sop:sop:ack:list | TaktMenuLevel4SeedData.cs | entity=SopAck
-  [LOGISTICS_MANUFACTURING_SOP_EXEC] 菜单 logistics:manufacturing:sop:exec:list 应对齐 logistics:manufacturing:sop:sop:exec:step:list | TaktMenuLevel4SeedData.cs | entity=SopExecStep
-  [LOGISTICS_MANUFACTURING_SOP_ESD_CHECK] 菜单 logistics:manufacturing:sop:esdcheck:list 应对齐 logistics:manufacturing:sop:sop:esd:check:list | TaktMenuLevel4SeedData.cs | entity=SopEsdCheck
-  [LOGISTICS_MANUFACTURING_SOP_CALL] 菜单 logistics:manufacturing:sop:call:list 应对齐 logistics:manufacturing:sop:sop:call:list | TaktMenuLevel4SeedData.cs | entity=SopCall
-  [LOGISTICS_QUALITY_COST_ASSURANCE] 菜单 logistics:quality:cost:assurance:list 应对齐 logistics:quality:cost:quality:assurance:list | TaktMenuLevel4SeedData.cs | entity=QualityAssurance
-  [LOGISTICS_QUALITY_COST_ISSUE] 菜单 logistics:quality:cost:issue:list 应对齐 logistics:quality:cost:quality:issue:list | TaktMenuLevel4SeedData.cs | entity=QualityIssue
-  [LOGISTICS_QUALITY_COST_INCIDENT] 菜单 logistics:quality:cost:incident:list 应对齐 logistics:quality:cost:quality:incident:list | TaktMenuLevel4SeedData.cs | entity=QualityIncident
-  [LOGISTICS_QUALITY_OPERATION_SAMPLING_SCHEME] 菜单 logistics:quality:operation:samplingscheme:list 应对齐 logistics:quality:operation:sampling:scheme:list | TaktMenuLevel4SeedData.cs | entity=SamplingScheme
-  [LOGISTICS_QUALITY_OPERATION_INSPECTION_STANDARD] 菜单 logistics:quality:operation:inspectionstandard:list 应对齐 logistics:quality:operation:inspection:standard:list | TaktMenuLevel4SeedData.cs | entity=InspectionStandard
-  [LOGISTICS_QUALITY_OPERATION_IQC_ORDER] 菜单 logistics:quality:operation:iqcorder:list 应对齐 logistics:quality:operation:iqc:order:list | TaktMenuLevel4SeedData.cs | entity=IqcOrder
-  [LOGISTICS_QUALITY_OPERATION_IQC_ORDER_CHANGE_LOG] 菜单 logistics:quality:operation:iqcorder:list 应对齐 logistics:quality:operation:iqc:order:list | TaktMenuLevel4SeedData.cs | entity=IqcOrder
-  [LOGISTICS_QUALITY_OPERATION_IPQC_ORDER] 菜单 logistics:quality:operation:ipqcorder:list 应对齐 logistics:quality:operation:ipqc:order:list | TaktMenuLevel4SeedData.cs | entity=IpqcOrder
-  [LOGISTICS_QUALITY_OPERATION_IPQC_ORDER_CHANGE_LOG] 菜单 logistics:quality:operation:ipqcorder:list 应对齐 logistics:quality:operation:ipqc:order:list | TaktMenuLevel4SeedData.cs | entity=IpqcOrder
-  [LOGISTICS_QUALITY_OPERATION_FQC_ORDER] 菜单 logistics:quality:operation:fqcorder:list 应对齐 logistics:quality:operation:fqc:order:list | TaktMenuLevel4SeedData.cs | entity=FqcOrder
-  [LOGISTICS_QUALITY_OPERATION_FQC_ORDER_CHANGE_LOG] 菜单 logistics:quality:operation:fqcorder:list 应对齐 logistics:quality:operation:fqc:order:list | TaktMenuLevel4SeedData.cs | entity=FqcOrder
-  [LOGISTICS_QUALITY_COMPLAINT_REGISTRATION] 菜单 logistics:quality:complaint:customercomplaint:list 应对齐 logistics:quality:complaint:customer:complaint:list | TaktMenuLevel4SeedData.cs | entity=CustomerComplaint
-  [LOGISTICS_QUALITY_COMPLAINT_CUSTOMER_COMPLAINT_HANDLING] 菜单 logistics:quality:complaint:customercomplainthandling:list 应对齐 logistics:quality:complaint:customer:complaint:handling:list | TaktMenuLevel4SeedData.cs | entity=CustomerComplaintHandling
-  [LOGISTICS_QUALITY_COMPLAINT_CUSTOMER_SATISFACTION_SURVEY] 菜单 logistics:quality:complaint:customersatisfactionsurvey:list 应对齐 logistics:quality:complaint:customer:satisfaction:survey:list | TaktMenuLevel4SeedData.cs | entity=CustomerSatisfactionSurvey
-  [LOGISTICS_QUALITY_COMPLAINT_SUPPLIER_EVALUATION] 菜单 logistics:quality:complaint:supplierevaluation:list 应对齐 logistics:quality:complaint:supplier:evaluation:list | TaktMenuLevel4SeedData.cs | entity=SupplierEvaluation
+  [LOGISTICS_MATERIALS_MANUFACTURER_MATERIAL] 菜单 logistics:materials:manufacturer:material:list 应对齐 logistics:materials:manufacturer:list | TaktMenuLevel3SeedData.cs | entity=Manufacturer
+  [LOGISTICS_MAINTENANCE_EQUIPMENT] 菜单 logistics:maintenance:equipment:list 应对齐 logistics:maintenance:work:order:list | TaktMenuLevel3SeedData.cs | entity=MaintenanceWorkOrder
+  [ROUTINE_DOCUMENT_CENTER_DOCUMENT] 菜单 routine:document:center:document:list 应对齐 routine:document:center:list | TaktMenuLevel3SeedData.cs | entity=Document
+  [ROUTINE_DOCUMENT_CENTER_DOCUMENT_CHANGE_LOG] 菜单 routine:document:center:document:change:log:list 应对齐 routine:document:center:change:log:list | TaktMenuLevel3SeedData.cs | entity=DocumentChangeLog
+  [LOGISTICS_MANUFACTURING_SOP_DOC] 菜单 logistics:manufacturing:sop:doc:list 应对齐 logistics:manufacturing:sop:step:list | TaktMenuLevel4SeedData.cs | entity=SopStep
+  [LOGISTICS_MANUFACTURING_SOP_EXEC] 菜单 logistics:manufacturing:sop:exec:list 应对齐 logistics:manufacturing:sop:exec:step:list | TaktMenuLevel4SeedData.cs | entity=SopExecStep
+  [LOGISTICS_QUALITY_COMPLAINT_CUSTOMER_COMPLAINT_HANDLING] 菜单 logistics:quality:complaint:customer:complaint:handling:list 应对齐 logistics:quality:complaint:customer:handling:list | TaktMenuLevel4SeedData.cs | entity=CustomerComplaintHandling
 
-=== VUE_VS_CONTROLLER（视图工具栏前缀 ≠ 控制器/期望） (269) ===
-  [accounting/controlling/cost-center] 视图工具栏前缀 accounting:controlling:costcenter ≠ 期望 accounting:controlling:cost:center | frontend/src/views/accounting/controlling/cost-center/index.vue
-  [accounting/controlling/cost-center-change-log] 视图工具栏前缀 accounting:controlling:costcenter ≠ 期望 accounting:controlling:cost:center:change:log | frontend/src/views/accounting/controlling/cost-center-change-log/index.vue
-  [accounting/controlling/cost-center-change-log/components] 视图工具栏前缀 accounting:controlling:costcenter ≠ 期望 accounting:controlling:cost:center | frontend/src/views/accounting/controlling/cost-center-change-log/components/cost-center-change-log-panel.vue
-  [accounting/controlling/cost-element] 视图工具栏前缀 accounting:controlling:costelement ≠ 期望 accounting:controlling:cost:element | frontend/src/views/accounting/controlling/cost-element/index.vue
-  [accounting/controlling/cost-element-change-log] 视图工具栏前缀 accounting:controlling:costelement ≠ 期望 accounting:controlling:cost:element:change:log | frontend/src/views/accounting/controlling/cost-element-change-log/index.vue
-  [accounting/controlling/cost-element-change-log/components] 视图工具栏前缀 accounting:controlling:costelement ≠ 期望 accounting:controlling:cost:element | frontend/src/views/accounting/controlling/cost-element-change-log/components/cost-element-change-log-panel.vue
-  [accounting/controlling/profit-center] 视图工具栏前缀 accounting:controlling:profitcenter ≠ 期望 accounting:controlling:profit:center | frontend/src/views/accounting/controlling/profit-center/index.vue
-  [accounting/controlling/profit-center-change-log] 视图工具栏前缀 accounting:controlling:profitcenter ≠ 期望 accounting:controlling:profit:center:change:log | frontend/src/views/accounting/controlling/profit-center-change-log/index.vue
-  [accounting/controlling/profit-center-change-log/components] 视图工具栏前缀 accounting:controlling:profitcenter ≠ 期望 accounting:controlling:profit:center | frontend/src/views/accounting/controlling/profit-center-change-log/components/profit-center-change-log-panel.vue
-  [accounting/controlling/standard-wage-rate] 视图工具栏前缀 accounting:controlling:standardwagerate ≠ 期望 accounting:controlling:standard:wage:rate | frontend/src/views/accounting/controlling/standard-wage-rate/index.vue
-  [accounting/financial/account-title] 视图工具栏前缀 accounting:financial:accounttitle ≠ 期望 accounting:financial:account:title | frontend/src/views/accounting/financial/account-title/index.vue
-  [accounting/financial/account-title-change-log] 视图工具栏前缀 accounting:financial:accounttitle ≠ 期望 accounting:financial:account:title:change:log | frontend/src/views/accounting/financial/account-title-change-log/index.vue
-  [accounting/financial/account-title-change-log/components] 视图工具栏前缀 accounting:financial:accounttitle ≠ 期望 accounting:financial:account:title | frontend/src/views/accounting/financial/account-title-change-log/components/account-title-change-log-panel.vue
-  [accounting/financial/asset-change-log] 视图工具栏前缀 accounting:financial:asset ≠ 期望 accounting:financial:asset:change:log | frontend/src/views/accounting/financial/asset-change-log/index.vue
-  [foundation/iso-code] 视图工具栏前缀 foundation:isocode ≠ 期望 foundation:iso:code | frontend/src/views/foundation/iso-code/index.vue
+=== VUE_VS_CONTROLLER（视图工具栏前缀 ≠ 控制器/期望） (128) ===
+  [accounting/controlling/cost-center-change-log] 视图工具栏前缀 accounting:controlling:cost:center ≠ 控制器 accounting:controlling:cost:center:change:log | frontend/src/views/accounting/controlling/cost-center-change-log/index.vue
+  [accounting/controlling/cost-element-change-log] 视图工具栏前缀 accounting:controlling:cost:element ≠ 控制器 accounting:controlling:cost:element:change:log | frontend/src/views/accounting/controlling/cost-element-change-log/index.vue
+  [accounting/controlling/profit-center-change-log] 视图工具栏前缀 accounting:controlling:profit:center ≠ 控制器 accounting:controlling:profit:center:change:log | frontend/src/views/accounting/controlling/profit-center-change-log/index.vue
+  [accounting/financial/account-title-change-log] 视图工具栏前缀 accounting:financial:account:title ≠ 控制器 accounting:financial:account:title:change:log | frontend/src/views/accounting/financial/account-title-change-log/index.vue
   [foundation/quartz-task] 视图工具栏前缀 foundation:quartztask ≠ 期望 foundation:quartz:task | frontend/src/views/foundation/quartz-task/index.vue
-  [human-resource/attendance/overtime-item] 视图工具栏前缀 humanresource:attendance:overtimeitem ≠ 期望 humanresource:attendance:overtime:item | frontend/src/views/human-resource/attendance/overtime-item/index.vue
-  [human-resource/attendance/shift-schedule] 视图工具栏前缀 humanresource:attendance:shiftschedule ≠ 期望 humanresource:attendance:shift:schedule | frontend/src/views/human-resource/attendance/shift-schedule/index.vue
-  [human-resource/attendance/work-shift] 视图工具栏前缀 humanresource:attendance:workshift ≠ 期望 humanresource:attendance:work:shift | frontend/src/views/human-resource/attendance/work-shift/index.vue
-  [human-resource/benefits/benefit-item] 视图工具栏前缀 humanresource:benefits:item ≠ 期望 humanresource:benefits:benefit:item | frontend/src/views/human-resource/benefits/benefit-item/index.vue
-  [human-resource/benefits/emp-benefit-plan] 视图工具栏前缀 humanresource:training:attendee ≠ 控制器 humanresource:benefits:empplan | frontend/src/views/human-resource/benefits/emp-benefit-plan/index.vue
-  [human-resource/benefits/social-insurance] 视图工具栏前缀 humanresource:talent:staffingrequirement ≠ 控制器 humanresource:benefits:socialinsurance | frontend/src/views/human-resource/benefits/social-insurance/index.vue
-  [human-resource/compensation/bonus-plan] 视图工具栏前缀 humanresource:performance:assessment ≠ 控制器 humanresource:compensation:bonusplan | frontend/src/views/human-resource/compensation/bonus-plan/index.vue
-  [human-resource/compensation/emp-salary] 视图工具栏前缀 humanresource:performance:objective ≠ 控制器 humanresource:compensation:empsalary | frontend/src/views/human-resource/compensation/emp-salary/index.vue
-  [human-resource/compensation/pay-scale] 视图工具栏前缀 humanresource:performance:scheme ≠ 控制器 humanresource:compensation:payscale | frontend/src/views/human-resource/compensation/pay-scale/index.vue
-  [human-resource/compensation/payroll] 视图工具栏前缀 humanresource:performance:cycle ≠ 控制器 humanresource:compensation:payroll | frontend/src/views/human-resource/compensation/payroll/index.vue
-  [human-resource/compensation/payslip] 视图工具栏前缀 humanresource:training:course ≠ 控制器 humanresource:compensation:payslip | frontend/src/views/human-resource/compensation/payslip/index.vue
-  [human-resource/compensation/salary-formula] 视图工具栏前缀 humanresource:performance:analysis ≠ 控制器 humanresource:compensation:salaryformula | frontend/src/views/human-resource/compensation/salary-formula/index.vue
-  [human-resource/compensation/salary-item] 视图工具栏前缀 humanresource:benefits:socialinsurance ≠ 控制器 humanresource:compensation:salaryitem | frontend/src/views/human-resource/compensation/salary-item/index.vue
-  [human-resource/performance/perf-analysis] 视图工具栏前缀 humanresource:talent:offer ≠ 控制器 humanresource:performance:analysis | frontend/src/views/human-resource/performance/perf-analysis/index.vue
-  [human-resource/performance/perf-assessment] 视图工具栏前缀 humanresource:talent:interview ≠ 控制器 humanresource:performance:assessment | frontend/src/views/human-resource/performance/perf-assessment/index.vue
-  [human-resource/performance/perf-cycle] 视图工具栏前缀 humanresource:talent:recruitmentplan ≠ 控制器 humanresource:performance:cycle | frontend/src/views/human-resource/performance/perf-cycle/index.vue
-  [human-resource/performance/perf-objective] 视图工具栏前缀 humanresource:performance:objective ≠ 期望 humanresource:performance:perf:objective | frontend/src/views/human-resource/performance/perf-objective/index.vue
-  [human-resource/performance/perf-scheme] 视图工具栏前缀 humanresource:talent:jobposting ≠ 控制器 humanresource:performance:scheme | frontend/src/views/human-resource/performance/perf-scheme/index.vue
-  [human-resource/personnel/employee-attachment] 视图工具栏前缀 humanresource:personnel:employeeattachment ≠ 期望 humanresource:personnel:employee:attachment | frontend/src/views/human-resource/personnel/employee-attachment/index.vue
-  [human-resource/personnel/employee-contract] 视图工具栏前缀 humanresource:personnel:employeecontract ≠ 期望 humanresource:personnel:employee:contract | frontend/src/views/human-resource/personnel/employee-contract/index.vue
-  [human-resource/personnel/employee-delegation] 视图工具栏前缀 humanresource:personnel:employeedelegation ≠ 期望 humanresource:personnel:employee:delegation | frontend/src/views/human-resource/personnel/employee-delegation/index.vue
-  [human-resource/personnel/employee-education] 视图工具栏前缀 humanresource:personnel:employeeeducation ≠ 期望 humanresource:personnel:employee:education | frontend/src/views/human-resource/personnel/employee-education/index.vue
-  [human-resource/personnel/employee-experience] 视图工具栏前缀 humanresource:personnel:employeeexperience ≠ 期望 humanresource:personnel:employee:experience | frontend/src/views/human-resource/personnel/employee-experience/index.vue
-  [human-resource/personnel/employee-family] 视图工具栏前缀 humanresource:personnel:employeefamily ≠ 期望 humanresource:personnel:employee:family | frontend/src/views/human-resource/personnel/employee-family/index.vue
-  [human-resource/personnel/employee-joined] 视图工具栏前缀 humanresource:personnel:employeejoined ≠ 期望 humanresource:personnel:employee:joined | frontend/src/views/human-resource/personnel/employee-joined/index.vue
-  [human-resource/personnel/employee-onboarding] 视图工具栏前缀 humanresource:personnel:employeeonboarding ≠ 期望 humanresource:personnel:employee:onboarding | frontend/src/views/human-resource/personnel/employee-onboarding/index.vue
-  [human-resource/personnel/employee-reassignment] 视图工具栏前缀 humanresource:personnel:employeereassignment ≠ 期望 humanresource:personnel:employee:reassignment | frontend/src/views/human-resource/personnel/employee-reassignment/index.vue
-  [human-resource/personnel/employee-resignation] 视图工具栏前缀 humanresource:personnel:employeeresignation ≠ 期望 humanresource:personnel:employee:resignation | frontend/src/views/human-resource/personnel/employee-resignation/index.vue
-  [human-resource/personnel/employee-skill] 视图工具栏前缀 humanresource:personnel:employeeskill ≠ 期望 humanresource:personnel:employee:skill | frontend/src/views/human-resource/personnel/employee-skill/index.vue
-  [human-resource/talent/talent-interview] 视图工具栏前缀 humanresource:talent:talentinterview ≠ 期望 humanresource:talent:talent:interview | frontend/src/views/human-resource/talent/talent-interview/index.vue
-  [human-resource/talent/talent-job-posting] 视图工具栏前缀 humanresource:talent:talentjobposting ≠ 期望 humanresource:talent:talent:job:posting | frontend/src/views/human-resource/talent/talent-job-posting/index.vue
-  [human-resource/talent/talent-offer] 视图工具栏前缀 humanresource:talent:talentoffer ≠ 期望 humanresource:talent:talent:offer | frontend/src/views/human-resource/talent/talent-offer/index.vue
-  [human-resource/talent/talent-recruitment-plan] 视图工具栏前缀 humanresource:talent:talentrecruitmentplan ≠ 期望 humanresource:talent:talent:recruitment:plan | frontend/src/views/human-resource/talent/talent-recruitment-plan/index.vue
-  [human-resource/talent/talent-staffing-requirement] 视图工具栏前缀 humanresource:talent:talentstaffingrequirement ≠ 期望 humanresource:talent:talent:staffing:requirement | frontend/src/views/human-resource/talent/talent-staffing-requirement/index.vue
-  [human-resource/training/training-attendee] 视图工具栏前缀 statistics:logging:operlog ≠ 控制器 humanresource:training:attendee | frontend/src/views/human-resource/training/training-attendee/index.vue
-  [human-resource/training/training-course] 视图工具栏前缀 statistics:report:configurable ≠ 控制器 humanresource:training:course | frontend/src/views/human-resource/training/training-course/index.vue
-  [human-resource/training/training-plan] 视图工具栏前缀 statistics:logging:loginlog ≠ 控制器 humanresource:training:plan | frontend/src/views/human-resource/training/training-plan/index.vue
-  [logistics/maintenance/equipment/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:maintenance:work:order | frontend/src/views/logistics/maintenance/equipment/components/notification-panel.vue
-  [logistics/maintenance/history/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:maintenance:work:order | frontend/src/views/logistics/maintenance/history/components/history-panel.vue
-  [logistics/maintenance/notification/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:maintenance:work:order | frontend/src/views/logistics/maintenance/notification/components/notification-panel.vue
-  [logistics/maintenance/work-order/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:maintenance:work:order | frontend/src/views/logistics/maintenance/work-order/components/work-order-panel.vue
-  [logistics/manufacturing/bom/bill-of-material] 视图工具栏前缀 logistics:manufacturing:bom:billofmaterial ≠ 期望 logistics:manufacturing:bom:bill:of:material | frontend/src/views/logistics/manufacturing/bom/bill-of-material/index.vue
-  [logistics/manufacturing/bom/bill-of-material-change-log] 视图工具栏前缀 logistics:manufacturing:bom:billofmaterial ≠ 期望 logistics:manufacturing:bom:bill:of:material:change:log | frontend/src/views/logistics/manufacturing/bom/bill-of-material-change-log/index.vue
+  [human-resource/attendance/overtime-item] 视图工具栏前缀 human:resource:attendance:overtimeitem ≠ 期望 human:resource:attendance:overtime:item | frontend/src/views/human-resource/attendance/overtime-item/index.vue
+  [human-resource/benefits/emp-benefit-plan] 视图工具栏前缀 human:resource:training:attendee ≠ 控制器 human:resource:benefits:emp:benefit:plan | frontend/src/views/human-resource/benefits/emp-benefit-plan/index.vue
+  [human-resource/benefits/social-insurance] 视图工具栏前缀 human:resource:talent:staffingrequirement ≠ 控制器 human:resource:benefits:social:insurance | frontend/src/views/human-resource/benefits/social-insurance/index.vue
+  [human-resource/compensation/bonus-plan] 视图工具栏前缀 human:resource:performance:assessment ≠ 控制器 human:resource:compensation:bonus:plan | frontend/src/views/human-resource/compensation/bonus-plan/index.vue
+  [human-resource/compensation/emp-salary] 视图工具栏前缀 human:resource:performance:objective ≠ 控制器 human:resource:compensation:emp:salary | frontend/src/views/human-resource/compensation/emp-salary/index.vue
+  [human-resource/compensation/pay-scale] 视图工具栏前缀 human:resource:performance:scheme ≠ 控制器 human:resource:compensation:pay:scale | frontend/src/views/human-resource/compensation/pay-scale/index.vue
+  [human-resource/compensation/payroll] 视图工具栏前缀 human:resource:performance:cycle ≠ 控制器 human:resource:compensation:payroll | frontend/src/views/human-resource/compensation/payroll/index.vue
+  [human-resource/compensation/payslip] 视图工具栏前缀 human:resource:training:course ≠ 控制器 human:resource:compensation:payslip | frontend/src/views/human-resource/compensation/payslip/index.vue
+  [human-resource/compensation/salary-formula] 视图工具栏前缀 human:resource:performance:analysis ≠ 控制器 human:resource:compensation:salary:formula | frontend/src/views/human-resource/compensation/salary-formula/index.vue
+  [human-resource/compensation/salary-item] 视图工具栏前缀 human:resource:benefits:socialinsurance ≠ 控制器 human:resource:compensation:salary:item | frontend/src/views/human-resource/compensation/salary-item/index.vue
+  [human-resource/performance/perf-analysis] 视图工具栏前缀 human:resource:talent:offer ≠ 控制器 human:resource:performance:perf:analysis | frontend/src/views/human-resource/performance/perf-analysis/index.vue
+  [human-resource/performance/perf-assessment] 视图工具栏前缀 human:resource:talent:interview ≠ 控制器 human:resource:performance:perf:assessment | frontend/src/views/human-resource/performance/perf-assessment/index.vue
+  [human-resource/performance/perf-cycle] 视图工具栏前缀 human:resource:talent:recruitmentplan ≠ 控制器 human:resource:performance:perf:cycle | frontend/src/views/human-resource/performance/perf-cycle/index.vue
+  [human-resource/performance/perf-scheme] 视图工具栏前缀 human:resource:talent:jobposting ≠ 控制器 human:resource:performance:perf:scheme | frontend/src/views/human-resource/performance/perf-scheme/index.vue
+  [human-resource/personnel/employee-attachment] 视图工具栏前缀 human:resource:personnel:employeeattachment ≠ 期望 human:resource:personnel:employee:attachment | frontend/src/views/human-resource/personnel/employee-attachment/index.vue
+  [human-resource/personnel/employee-delegation] 视图工具栏前缀 human:resource:personnel:employeedelegation ≠ 期望 human:resource:personnel:employee:delegation | frontend/src/views/human-resource/personnel/employee-delegation/index.vue
+  [human-resource/personnel/employee-education] 视图工具栏前缀 human:resource:personnel:employeeeducation ≠ 期望 human:resource:personnel:employee:education | frontend/src/views/human-resource/personnel/employee-education/index.vue
+  [human-resource/personnel/employee-experience] 视图工具栏前缀 human:resource:personnel:employeeexperience ≠ 期望 human:resource:personnel:employee:experience | frontend/src/views/human-resource/personnel/employee-experience/index.vue
+  [human-resource/personnel/employee-family] 视图工具栏前缀 human:resource:personnel:employeefamily ≠ 期望 human:resource:personnel:employee:family | frontend/src/views/human-resource/personnel/employee-family/index.vue
+  [human-resource/personnel/employee-joined] 视图工具栏前缀 human:resource:personnel:employeejoined ≠ 期望 human:resource:personnel:employee:joined | frontend/src/views/human-resource/personnel/employee-joined/index.vue
+  [human-resource/personnel/employee-resignation] 视图工具栏前缀 human:resource:personnel:employeeresignation ≠ 期望 human:resource:personnel:employee:resignation | frontend/src/views/human-resource/personnel/employee-resignation/index.vue
+  [human-resource/personnel/employee-skill] 视图工具栏前缀 human:resource:personnel:employeeskill ≠ 期望 human:resource:personnel:employee:skill | frontend/src/views/human-resource/personnel/employee-skill/index.vue
+  [human-resource/talent/talent-job-posting] 视图工具栏前缀 human:resource:talent:talentjobposting ≠ 期望 human:resource:talent:job:posting | frontend/src/views/human-resource/talent/talent-job-posting/index.vue
+  [human-resource/talent/talent-offer] 视图工具栏前缀 human:resource:talent:talentoffer ≠ 期望 human:resource:talent:offer | frontend/src/views/human-resource/talent/talent-offer/index.vue
+  [human-resource/talent/talent-staffing-requirement] 视图工具栏前缀 human:resource:talent:talentstaffingrequirement ≠ 期望 human:resource:talent:staffing:requirement | frontend/src/views/human-resource/talent/talent-staffing-requirement/index.vue
+  [human-resource/training/training-attendee] 视图工具栏前缀 statistics:logging:operlog ≠ 控制器 human:resource:training:attendee | frontend/src/views/human-resource/training/training-attendee/index.vue
+  [human-resource/training/training-course] 视图工具栏前缀 statistics:report:configurable ≠ 控制器 human:resource:training:course | frontend/src/views/human-resource/training/training-course/index.vue
+  [human-resource/training/training-plan] 视图工具栏前缀 statistics:logging:loginlog ≠ 控制器 human:resource:training:plan | frontend/src/views/human-resource/training/training-plan/index.vue
+  [logistics/maintenance/equipment/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:work:order | frontend/src/views/logistics/maintenance/equipment/components/notification-panel.vue
+  [logistics/maintenance/history/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:work:order | frontend/src/views/logistics/maintenance/history/components/history-panel.vue
+  [logistics/maintenance/notification/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:work:order | frontend/src/views/logistics/maintenance/notification/components/notification-panel.vue
+  [logistics/maintenance/work-order/components] 视图工具栏前缀 logistics:maintenance:equipment ≠ 期望 logistics:maintenance:work:order | frontend/src/views/logistics/maintenance/work-order/components/work-order-panel.vue
   [logistics/manufacturing/bom/bill-of-material-change-log/components] 视图工具栏前缀 logistics:manufacturing:bom:billofmaterial ≠ 期望 logistics:manufacturing:bom:bill:of:material:substitute | frontend/src/views/logistics/manufacturing/bom/bill-of-material-change-log/components/bill-of-material-change-log-panel.vue
   [logistics/manufacturing/bom/bill-of-material/components] 视图工具栏前缀 logistics:manufacturing:bom:billofmaterial ≠ 期望 logistics:manufacturing:bom:bill:of:material:substitute | frontend/src/views/logistics/manufacturing/bom/bill-of-material/components/bill-of-material-item-panel.vue
-  [logistics/manufacturing/bom/routing-change-log] 视图工具栏前缀 logistics:manufacturing:bom:routing ≠ 期望 logistics:manufacturing:bom:routing:change:log | frontend/src/views/logistics/manufacturing/bom/routing-change-log/index.vue
-  [logistics/manufacturing/bom/standard-operation-time] 视图工具栏前缀 logistics:manufacturing:bom:standardoperationtime ≠ 期望 logistics:manufacturing:bom:standard:operation:time | frontend/src/views/logistics/manufacturing/bom/standard-operation-time/index.vue
-  [logistics/manufacturing/bom/standard-operation-time-change-log] 视图工具栏前缀 logistics:manufacturing:bom:standardoperationtime ≠ 期望 logistics:manufacturing:bom:standard:operation:time:change:log | frontend/src/views/logistics/manufacturing/bom/standard-operation-time-change-log/index.vue
-  [logistics/manufacturing/bom/standard-operation-time-change-log/components] 视图工具栏前缀 logistics:manufacturing:bom:standardoperationtime ≠ 期望 logistics:manufacturing:bom:standard:operation:time | frontend/src/views/logistics/manufacturing/bom/standard-operation-time-change-log/components/standard-operation-time-change-log-panel.vue
-  [logistics/manufacturing/bom/standard-operation-time/components] 视图工具栏前缀 logistics:manufacturing:bom:standardoperationtime ≠ 期望 logistics:manufacturing:bom:standard:operation:time | frontend/src/views/logistics/manufacturing/bom/standard-operation-time/components/standard-operation-time-change-log-panel.vue
-  [logistics/manufacturing/defect/assy-defect] 视图工具栏前缀 logistics:manufacturing:defect:assydefect ≠ 期望 logistics:manufacturing:defect:assy:defect | frontend/src/views/logistics/manufacturing/defect/assy-defect/index.vue
-  [logistics/manufacturing/defect/assy-defect-detail] 视图工具栏前缀 logistics:manufacturing:defect:assydefect ≠ 期望 logistics:manufacturing:defect:assy:defect:detail | frontend/src/views/logistics/manufacturing/defect/assy-defect-detail/index.vue
-  [logistics/manufacturing/defect/assy-defect-detail/components] 视图工具栏前缀 logistics:manufacturing:defect:assydefect ≠ 期望 logistics:manufacturing:defect:assy:defect | frontend/src/views/logistics/manufacturing/defect/assy-defect-detail/components/assy-defect-detail-panel.vue
-  [logistics/manufacturing/defect/assy-defect/components] 视图工具栏前缀 logistics:manufacturing:defect:assydefect ≠ 期望 logistics:manufacturing:defect:assy:defect | frontend/src/views/logistics/manufacturing/defect/assy-defect/components/assy-defect-detail-panel.vue
-  [logistics/manufacturing/defect/pcba-inspection] 视图工具栏前缀 logistics:manufacturing:defect:pcbainspection ≠ 期望 logistics:manufacturing:defect:pcba:inspection | frontend/src/views/logistics/manufacturing/defect/pcba-inspection/index.vue
+  [logistics/manufacturing/defect/assy-defect-detail] 视图工具栏前缀 logistics:manufacturing:defect:assydefect ≠ 期望 logistics:manufacturing:defect:assy:detail | frontend/src/views/logistics/manufacturing/defect/assy-defect-detail/index.vue
+  [logistics/manufacturing/defect/assy-defect-detail/components] 视图工具栏前缀 logistics:manufacturing:defect:assydefect ≠ 期望 logistics:manufacturing:defect:assy:detail | frontend/src/views/logistics/manufacturing/defect/assy-defect-detail/components/assy-defect-detail-panel.vue
+  [logistics/manufacturing/defect/assy-defect/components] 视图工具栏前缀 logistics:manufacturing:defect:assydefect ≠ 期望 logistics:manufacturing:defect:assy:detail | frontend/src/views/logistics/manufacturing/defect/assy-defect/components/assy-defect-detail-panel.vue
   [logistics/manufacturing/defect/pcba-inspection-detail] 视图工具栏前缀 logistics:manufacturing:defect:pcbainspection ≠ 期望 logistics:manufacturing:defect:pcba:inspection:detail | frontend/src/views/logistics/manufacturing/defect/pcba-inspection-detail/index.vue
-  [logistics/manufacturing/defect/pcba-inspection-detail/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbainspection ≠ 期望 logistics:manufacturing:defect:pcba:inspection | frontend/src/views/logistics/manufacturing/defect/pcba-inspection-detail/components/pcba-inspection-detail-panel.vue
-  [logistics/manufacturing/defect/pcba-inspection/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbainspection ≠ 期望 logistics:manufacturing:defect:pcba:inspection | frontend/src/views/logistics/manufacturing/defect/pcba-inspection/components/pcba-inspection-detail-panel.vue
-  [logistics/manufacturing/defect/pcba-repair] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair | frontend/src/views/logistics/manufacturing/defect/pcba-repair/index.vue
+  [logistics/manufacturing/defect/pcba-inspection-detail/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbainspection ≠ 期望 logistics:manufacturing:defect:pcba:inspection:detail | frontend/src/views/logistics/manufacturing/defect/pcba-inspection-detail/components/pcba-inspection-detail-panel.vue
+  [logistics/manufacturing/defect/pcba-inspection/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbainspection ≠ 期望 logistics:manufacturing:defect:pcba:inspection:detail | frontend/src/views/logistics/manufacturing/defect/pcba-inspection/components/pcba-inspection-detail-panel.vue
   [logistics/manufacturing/defect/pcba-repair-detail] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair:detail | frontend/src/views/logistics/manufacturing/defect/pcba-repair-detail/index.vue
-  [logistics/manufacturing/defect/pcba-repair-detail/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair | frontend/src/views/logistics/manufacturing/defect/pcba-repair-detail/components/pcba-repair-detail-panel.vue
-  [logistics/manufacturing/defect/pcba-repair/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair | frontend/src/views/logistics/manufacturing/defect/pcba-repair/components/pcba-repair-detail-panel.vue
-  [logistics/manufacturing/engineering-change/ec-attachment] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineeringchange:ec:attachment | frontend/src/views/logistics/manufacturing/engineering-change/ec-attachment/index.vue
-  [logistics/manufacturing/engineering-change/ec-detail] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineeringchange:ec:detail | frontend/src/views/logistics/manufacturing/engineering-change/ec-detail/index.vue
-  [logistics/manufacturing/engineering-change/ec-notification] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ecnotification ≠ 期望 logistics:manufacturing:engineeringchange:ec:notification | frontend/src/views/logistics/manufacturing/engineering-change/ec-notification/index.vue
-  [logistics/manufacturing/output/assy-output] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:output | frontend/src/views/logistics/manufacturing/output/assy-output/index.vue
-  [logistics/manufacturing/output/assy-output-detail] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:output:detail | frontend/src/views/logistics/manufacturing/output/assy-output-detail/index.vue
-  [logistics/manufacturing/output/assy-output-detail/components] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:output | frontend/src/views/logistics/manufacturing/output/assy-output-detail/components/assy-output-detail-panel.vue
-  [logistics/manufacturing/output/assy-output/components] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:output | frontend/src/views/logistics/manufacturing/output/assy-output/components/assy-output-detail-panel.vue
-  [logistics/manufacturing/output/equipment-operation-rate] 视图工具栏前缀 logistics:manufacturing:output:equipmentoperationrate ≠ 期望 logistics:manufacturing:output:equipment:operation:rate | frontend/src/views/logistics/manufacturing/output/equipment-operation-rate/index.vue
-  [logistics/manufacturing/output/equipment-operation-rate-change-log] 视图工具栏前缀 logistics:manufacturing:output:equipmentoperationrate ≠ 期望 logistics:manufacturing:output:equipment:operation:rate:change:log | frontend/src/views/logistics/manufacturing/output/equipment-operation-rate-change-log/index.vue
-  [logistics/manufacturing/output/equipment-operation-rate-change-log/components] 视图工具栏前缀 logistics:manufacturing:output:equipmentoperationrate ≠ 期望 logistics:manufacturing:output:equipment:operation:rate | frontend/src/views/logistics/manufacturing/output/equipment-operation-rate-change-log/components/equipment-operation-rate-change-log-panel.vue
-  [logistics/manufacturing/output/equipment-operation-rate/components] 视图工具栏前缀 logistics:manufacturing:output:equipmentoperationrate ≠ 期望 logistics:manufacturing:output:equipment:operation:rate | frontend/src/views/logistics/manufacturing/output/equipment-operation-rate/components/equipment-operation-rate-change-log-panel.vue
-  [logistics/manufacturing/output/pcba-output] 视图工具栏前缀 logistics:manufacturing:output:pcbaoutput ≠ 期望 logistics:manufacturing:output:pcba:output | frontend/src/views/logistics/manufacturing/output/pcba-output/index.vue
-  [logistics/manufacturing/output/pcba-output-detail] 视图工具栏前缀 logistics:manufacturing:output:pcbaoutput ≠ 期望 logistics:manufacturing:output:pcba:output:detail | frontend/src/views/logistics/manufacturing/output/pcba-output-detail/index.vue
-  [logistics/manufacturing/output/pcba-output-detail/components] 视图工具栏前缀 logistics:manufacturing:output:pcbaoutput ≠ 期望 logistics:manufacturing:output:pcba:output | frontend/src/views/logistics/manufacturing/output/pcba-output-detail/components/pcba-output-detail-panel.vue
-  [logistics/manufacturing/output/pcba-output/components] 视图工具栏前缀 logistics:manufacturing:output:pcbaoutput ≠ 期望 logistics:manufacturing:output:pcba:output | frontend/src/views/logistics/manufacturing/output/pcba-output/components/pcba-output-detail-panel.vue
-  [logistics/manufacturing/output/personnel-operation-rate] 视图工具栏前缀 logistics:manufacturing:output:personneloperationrate ≠ 期望 logistics:manufacturing:output:personnel:operation:rate | frontend/src/views/logistics/manufacturing/output/personnel-operation-rate/index.vue
-  [logistics/manufacturing/output/personnel-operation-rate-change-log] 视图工具栏前缀 logistics:manufacturing:output:personneloperationrate ≠ 期望 logistics:manufacturing:output:personnel:operation:rate:change:log | frontend/src/views/logistics/manufacturing/output/personnel-operation-rate-change-log/index.vue
-  [logistics/manufacturing/output/personnel-operation-rate-change-log/components] 视图工具栏前缀 logistics:manufacturing:output:personneloperationrate ≠ 期望 logistics:manufacturing:output:personnel:operation:rate | frontend/src/views/logistics/manufacturing/output/personnel-operation-rate-change-log/components/personnel-operation-rate-change-log-panel.vue
-  [logistics/manufacturing/output/personnel-operation-rate/components] 视图工具栏前缀 logistics:manufacturing:output:personneloperationrate ≠ 期望 logistics:manufacturing:output:personnel:operation:rate | frontend/src/views/logistics/manufacturing/output/personnel-operation-rate/components/personnel-operation-rate-change-log-panel.vue
-  [logistics/manufacturing/output/production-changeover] 视图工具栏前缀 logistics:manufacturing:output:productionchangeover ≠ 期望 logistics:manufacturing:output:production:changeover | frontend/src/views/logistics/manufacturing/output/production-changeover/index.vue
-  [logistics/manufacturing/output/production-order] 视图工具栏前缀 logistics:manufacturing:output:productionorder ≠ 期望 logistics:manufacturing:output:production:order | frontend/src/views/logistics/manufacturing/output/production-order/index.vue
-  [logistics/manufacturing/output/production-order-change-log] 视图工具栏前缀 logistics:manufacturing:output:productionorder ≠ 期望 logistics:manufacturing:output:production:order:change:log | frontend/src/views/logistics/manufacturing/output/production-order-change-log/index.vue
-  [logistics/manufacturing/output/production-order-change-log/components] 视图工具栏前缀 logistics:manufacturing:output:productionorder ≠ 期望 logistics:manufacturing:output:production:order | frontend/src/views/logistics/manufacturing/output/production-order-change-log/components/production-order-change-log-panel.vue
-  [logistics/manufacturing/output/production-order/components] 视图工具栏前缀 logistics:manufacturing:output:productionorder ≠ 期望 logistics:manufacturing:output:production:order | frontend/src/views/logistics/manufacturing/output/production-order/components/production-order-change-log-panel.vue
-  [logistics/manufacturing/output/production-team] 视图工具栏前缀 logistics:manufacturing:output:productionteam ≠ 期望 logistics:manufacturing:output:production:team | frontend/src/views/logistics/manufacturing/output/production-team/index.vue
-  [logistics/manufacturing/output/standard-operation-rate] 视图工具栏前缀 logistics:manufacturing:output:standardoperationrate ≠ 期望 logistics:manufacturing:output:standard:operation:rate | frontend/src/views/logistics/manufacturing/output/standard-operation-rate/index.vue
-  [logistics/manufacturing/output/standard-operation-rate-change-log] 视图工具栏前缀 logistics:manufacturing:output:standardoperationrate ≠ 期望 logistics:manufacturing:output:standard:operation:rate:change:log | frontend/src/views/logistics/manufacturing/output/standard-operation-rate-change-log/index.vue
-  [logistics/manufacturing/output/standard-operation-rate-change-log/components] 视图工具栏前缀 logistics:manufacturing:output:standardoperationrate ≠ 期望 logistics:manufacturing:output:standard:operation:rate | frontend/src/views/logistics/manufacturing/output/standard-operation-rate-change-log/components/standard-operation-rate-change-log-panel.vue
-  [logistics/manufacturing/output/standard-operation-rate/components] 视图工具栏前缀 logistics:manufacturing:output:standardoperationrate ≠ 期望 logistics:manufacturing:output:standard:operation:rate | frontend/src/views/logistics/manufacturing/output/standard-operation-rate/components/standard-operation-rate-change-log-panel.vue
-  [logistics/manufacturing/planning/production-plan] 视图工具栏前缀 logistics:manufacturing:planning:productionplan ≠ 期望 logistics:manufacturing:planning:production:plan | frontend/src/views/logistics/manufacturing/planning/production-plan/index.vue
-  [logistics/manufacturing/planning/production-plan/components] 视图工具栏前缀 logistics:manufacturing:planning:productionplan ≠ 期望 logistics:manufacturing:planning:production:plan | frontend/src/views/logistics/manufacturing/planning/production-plan/components/production-plan-item-panel.vue
-  [logistics/manufacturing/planning/purchase-plan] 视图工具栏前缀 logistics:manufacturing:planning:purchaseplan ≠ 期望 logistics:manufacturing:planning:purchase:plan | frontend/src/views/logistics/manufacturing/planning/purchase-plan/index.vue
-  [logistics/manufacturing/planning/purchase-plan/components] 视图工具栏前缀 logistics:manufacturing:planning:purchaseplan ≠ 期望 logistics:manufacturing:planning:purchase:plan | frontend/src/views/logistics/manufacturing/planning/purchase-plan/components/purchase-plan-item-panel.vue
-  [logistics/manufacturing/planning/sales-plan] 视图工具栏前缀 logistics:manufacturing:planning:salesplan ≠ 期望 logistics:manufacturing:planning:sales:plan | frontend/src/views/logistics/manufacturing/planning/sales-plan/index.vue
-  [logistics/manufacturing/planning/sales-plan/components] 视图工具栏前缀 logistics:manufacturing:planning:salesplan ≠ 期望 logistics:manufacturing:planning:sales:plan | frontend/src/views/logistics/manufacturing/planning/sales-plan/components/sales-plan-item-panel.vue
-  [logistics/manufacturing/scheduling/aps-schedule] 视图工具栏前缀 logistics:manufacturing:scheduling:apsschedule ≠ 期望 logistics:manufacturing:scheduling:aps:schedule | frontend/src/views/logistics/manufacturing/scheduling/aps-schedule/index.vue
-  [logistics/manufacturing/scheduling/aps-schedule-change-log] 视图工具栏前缀 logistics:manufacturing:scheduling:apsschedule ≠ 期望 logistics:manufacturing:scheduling:aps:schedule:change:log | frontend/src/views/logistics/manufacturing/scheduling/aps-schedule-change-log/index.vue
-  [logistics/manufacturing/scheduling/aps-schedule-change-log/components] 视图工具栏前缀 logistics:manufacturing:scheduling:apsschedule ≠ 期望 logistics:manufacturing:scheduling:aps:schedule | frontend/src/views/logistics/manufacturing/scheduling/aps-schedule-change-log/components/aps-schedule-change-log-panel.vue
-  [logistics/manufacturing/scheduling/aps-schedule/components] 视图工具栏前缀 logistics:manufacturing:scheduling:apsschedule ≠ 期望 logistics:manufacturing:scheduling:aps:schedule | frontend/src/views/logistics/manufacturing/scheduling/aps-schedule/components/aps-schedule-item-panel.vue
-  [logistics/manufacturing/sop/argument] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/argument/index.vue
-  [logistics/manufacturing/sop/argument/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/argument/components/argument-panel.vue
-  [logistics/manufacturing/sop/doc] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/doc/index.vue
-  [logistics/manufacturing/sop/doc/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/doc/components/sop-revision-panel.vue
-  [logistics/manufacturing/sop/exec] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec/index.vue
-  [logistics/manufacturing/sop/exec-scan] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-scan/index.vue
-  [logistics/manufacturing/sop/exec-scan/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-scan/components/exec-scan-panel.vue
-  [logistics/manufacturing/sop/exec-step] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-step/index.vue
-  [logistics/manufacturing/sop/exec-step/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-step/components/exec-step-panel.vue
-  [logistics/manufacturing/sop/revision] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/revision/index.vue
-  [logistics/manufacturing/sop/revision/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/revision/components/revision-panel.vue
-  [logistics/manufacturing/sop/sop-ack] 视图工具栏前缀 logistics:manufacturing:sop:ack ≠ 期望 logistics:manufacturing:sop:sop:ack | frontend/src/views/logistics/manufacturing/sop/sop-ack/index.vue
-  [logistics/manufacturing/sop/sop-argument] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:argument | frontend/src/views/logistics/manufacturing/sop/sop-argument/index.vue
-  [logistics/manufacturing/sop/sop-argument/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-argument/components/sop-argument-panel.vue
-  [logistics/manufacturing/sop/sop-call] 视图工具栏前缀 logistics:manufacturing:sop:call ≠ 期望 logistics:manufacturing:sop:sop:call | frontend/src/views/logistics/manufacturing/sop/sop-call/index.vue
-  [logistics/manufacturing/sop/sop-doc] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:doc | frontend/src/views/logistics/manufacturing/sop/sop-doc/index.vue
-  [logistics/manufacturing/sop/sop-esd-check] 视图工具栏前缀 logistics:manufacturing:sop:esdcheck ≠ 期望 logistics:manufacturing:sop:sop:esd:check | frontend/src/views/logistics/manufacturing/sop/sop-esd-check/index.vue
-  [logistics/manufacturing/sop/sop-exec] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec | frontend/src/views/logistics/manufacturing/sop/sop-exec/index.vue
-  [logistics/manufacturing/sop/sop-exec-scan] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:scan | frontend/src/views/logistics/manufacturing/sop/sop-exec-scan/index.vue
-  [logistics/manufacturing/sop/sop-exec-scan/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-exec-scan/components/sop-exec-scan-panel.vue
-  [logistics/manufacturing/sop/sop-exec-step] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-exec-step/index.vue
-  [logistics/manufacturing/sop/sop-exec-step/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-exec-step/components/sop-exec-step-panel.vue
-  [logistics/manufacturing/sop/sop-step-check-item] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step:check:item | frontend/src/views/logistics/manufacturing/sop/sop-step-check-item/index.vue
-  [logistics/manufacturing/sop/sop-step-check-item/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/sop-step-check-item/components/sop-step-check-item-panel.vue
-  [logistics/manufacturing/sop/sop-step-media] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step:media | frontend/src/views/logistics/manufacturing/sop/sop-step-media/index.vue
-  [logistics/manufacturing/sop/sop-step-media/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/sop-step-media/components/sop-step-media-panel.vue
-  [logistics/manufacturing/sop/sop-workstation] 视图工具栏前缀 logistics:manufacturing:sop:workstation ≠ 期望 logistics:manufacturing:sop:sop:workstation | frontend/src/views/logistics/manufacturing/sop/sop-workstation/index.vue
-  [logistics/manufacturing/sop/step-check-item] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/step-check-item/index.vue
-  [logistics/manufacturing/sop/step-check-item/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/step-check-item/components/step-check-item-panel.vue
-  [logistics/manufacturing/sop/step-media] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/step-media/index.vue
-  [logistics/manufacturing/sop/step-media/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:sop:step | frontend/src/views/logistics/manufacturing/sop/step-media/components/step-media-panel.vue
-  [logistics/materials/material-change-log] 视图工具栏前缀 logistics:materials:material ≠ 期望 logistics:materials:material:change:log | frontend/src/views/logistics/materials/material-change-log/index.vue
-  [logistics/materials/material-group] 视图工具栏前缀 logistics:materials:materialgroup ≠ 期望 logistics:materials:material:group | frontend/src/views/logistics/materials/material-group/index.vue
-  [logistics/materials/material-plant] 视图工具栏前缀 logistics:materials:materialplant ≠ 期望 logistics:materials:material:plant | frontend/src/views/logistics/materials/material-plant/index.vue
-  [logistics/materials/material-plant-change-log] 视图工具栏前缀 logistics:materials:materialplant ≠ 期望 logistics:materials:material:plant:change:log | frontend/src/views/logistics/materials/material-plant-change-log/index.vue
-  [logistics/materials/material-plant-change-log/components] 视图工具栏前缀 logistics:materials:materialplant ≠ 期望 logistics:materials:material:plant | frontend/src/views/logistics/materials/material-plant-change-log/components/material-plant-change-log-panel.vue
-  [logistics/materials/material-plant/components] 视图工具栏前缀 logistics:materials:materialplant ≠ 期望 logistics:materials:material:plant | frontend/src/views/logistics/materials/material-plant/components/material-plant-change-log-panel.vue
-  [logistics/materials/material-transaction] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction | frontend/src/views/logistics/materials/material-transaction/index.vue
+  [logistics/manufacturing/defect/pcba-repair-detail/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair:detail | frontend/src/views/logistics/manufacturing/defect/pcba-repair-detail/components/pcba-repair-detail-panel.vue
+  [logistics/manufacturing/defect/pcba-repair/components] 视图工具栏前缀 logistics:manufacturing:defect:pcbarepair ≠ 期望 logistics:manufacturing:defect:pcba:repair:detail | frontend/src/views/logistics/manufacturing/defect/pcba-repair/components/pcba-repair-detail-panel.vue
+  [logistics/manufacturing/engineering-change/ec] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec/index.vue
+  [logistics/manufacturing/engineering-change/ec-attachment] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec:attachment | frontend/src/views/logistics/manufacturing/engineering-change/ec-attachment/index.vue
+  [logistics/manufacturing/engineering-change/ec-attachment/components] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec-attachment/components/ec-attachment-panel.vue
+  [logistics/manufacturing/engineering-change/ec-detail] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec:detail | frontend/src/views/logistics/manufacturing/engineering-change/ec-detail/index.vue
+  [logistics/manufacturing/engineering-change/ec-detail/components] 视图工具栏前缀 logistics:manufacturing:engineeringchange:ec ≠ 期望 logistics:manufacturing:engineering:change:ec | frontend/src/views/logistics/manufacturing/engineering-change/ec-detail/components/ec-detail-panel.vue
+  [logistics/manufacturing/output/assy-output-detail] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:detail | frontend/src/views/logistics/manufacturing/output/assy-output-detail/index.vue
+  [logistics/manufacturing/output/assy-output-detail/components] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:detail | frontend/src/views/logistics/manufacturing/output/assy-output-detail/components/assy-output-detail-panel.vue
+  [logistics/manufacturing/output/assy-output/components] 视图工具栏前缀 logistics:manufacturing:output:assyoutput ≠ 期望 logistics:manufacturing:output:assy:detail | frontend/src/views/logistics/manufacturing/output/assy-output/components/assy-output-detail-panel.vue
+  [logistics/manufacturing/output/pcba-output-detail] 视图工具栏前缀 logistics:manufacturing:output:pcbaoutput ≠ 期望 logistics:manufacturing:output:pcba:detail | frontend/src/views/logistics/manufacturing/output/pcba-output-detail/index.vue
+  [logistics/manufacturing/output/pcba-output-detail/components] 视图工具栏前缀 logistics:manufacturing:output:pcbaoutput ≠ 期望 logistics:manufacturing:output:pcba:detail | frontend/src/views/logistics/manufacturing/output/pcba-output-detail/components/pcba-output-detail-panel.vue
+  [logistics/manufacturing/output/pcba-output/components] 视图工具栏前缀 logistics:manufacturing:output:pcbaoutput ≠ 期望 logistics:manufacturing:output:pcba:detail | frontend/src/views/logistics/manufacturing/output/pcba-output/components/pcba-output-detail-panel.vue
+  [logistics/manufacturing/planning/production-plan/components] 视图工具栏前缀 logistics:manufacturing:planning:productionplan ≠ 期望 logistics:manufacturing:planning:production:plan:item | frontend/src/views/logistics/manufacturing/planning/production-plan/components/production-plan-item-panel.vue
+  [logistics/manufacturing/planning/purchase-plan/components] 视图工具栏前缀 logistics:manufacturing:planning:purchaseplan ≠ 期望 logistics:manufacturing:planning:purchase:plan:item | frontend/src/views/logistics/manufacturing/planning/purchase-plan/components/purchase-plan-item-panel.vue
+  [logistics/manufacturing/planning/sales-plan/components] 视图工具栏前缀 logistics:manufacturing:planning:salesplan ≠ 期望 logistics:manufacturing:planning:sales:plan:item | frontend/src/views/logistics/manufacturing/planning/sales-plan/components/sales-plan-item-panel.vue
+  [logistics/manufacturing/sop/argument] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/argument/index.vue
+  [logistics/manufacturing/sop/argument/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/argument/components/argument-panel.vue
+  [logistics/manufacturing/sop/doc] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/doc/index.vue
+  [logistics/manufacturing/sop/doc/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/doc/components/sop-revision-panel.vue
+  [logistics/manufacturing/sop/exec] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec/index.vue
+  [logistics/manufacturing/sop/exec-scan] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-scan/index.vue
+  [logistics/manufacturing/sop/exec-scan/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-scan/components/exec-scan-panel.vue
+  [logistics/manufacturing/sop/exec-step] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-step/index.vue
+  [logistics/manufacturing/sop/exec-step/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/exec-step/components/exec-step-panel.vue
+  [logistics/manufacturing/sop/revision] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/revision/index.vue
+  [logistics/manufacturing/sop/revision/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/revision/components/revision-panel.vue
+  [logistics/manufacturing/sop/sop-argument] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:argument | frontend/src/views/logistics/manufacturing/sop/sop-argument/index.vue
+  [logistics/manufacturing/sop/sop-argument/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-argument/components/sop-argument-panel.vue
+  [logistics/manufacturing/sop/sop-esd-check] 视图工具栏前缀 logistics:manufacturing:sop:esdcheck ≠ 期望 logistics:manufacturing:sop:esd:check | frontend/src/views/logistics/manufacturing/sop/sop-esd-check/index.vue
+  [logistics/manufacturing/sop/sop-exec-scan] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:scan | frontend/src/views/logistics/manufacturing/sop/sop-exec-scan/index.vue
+  [logistics/manufacturing/sop/sop-exec-scan/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-exec-scan/components/sop-exec-scan-panel.vue
+  [logistics/manufacturing/sop/sop-exec-step] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-exec-step/index.vue
+  [logistics/manufacturing/sop/sop-exec-step/components] 视图工具栏前缀 logistics:manufacturing:sop:exec ≠ 期望 logistics:manufacturing:sop:exec:step | frontend/src/views/logistics/manufacturing/sop/sop-exec-step/components/sop-exec-step-panel.vue
+  [logistics/manufacturing/sop/sop-step-check-item] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step:check:item | frontend/src/views/logistics/manufacturing/sop/sop-step-check-item/index.vue
+  [logistics/manufacturing/sop/sop-step-check-item/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/sop-step-check-item/components/sop-step-check-item-panel.vue
+  [logistics/manufacturing/sop/sop-step-media] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step:media | frontend/src/views/logistics/manufacturing/sop/sop-step-media/index.vue
+  [logistics/manufacturing/sop/sop-step-media/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/sop-step-media/components/sop-step-media-panel.vue
+  [logistics/manufacturing/sop/step-check-item] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/step-check-item/index.vue
+  [logistics/manufacturing/sop/step-check-item/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/step-check-item/components/step-check-item-panel.vue
+  [logistics/manufacturing/sop/step-media] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/step-media/index.vue
+  [logistics/manufacturing/sop/step-media/components] 视图工具栏前缀 logistics:manufacturing:sop:doc ≠ 期望 logistics:manufacturing:sop:step | frontend/src/views/logistics/manufacturing/sop/step-media/components/step-media-panel.vue
+  [logistics/materials/manufacturer] 视图工具栏前缀 logistics:materials:manufacturer:material ≠ 期望 logistics:materials:manufacturer | frontend/src/views/logistics/materials/manufacturer/index.vue
   [logistics/materials/material-transaction-item] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction:item | frontend/src/views/logistics/materials/material-transaction-item/index.vue
-  [logistics/materials/material-transaction-item/components] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction | frontend/src/views/logistics/materials/material-transaction-item/components/material-transaction-item-panel.vue
-  [logistics/materials/material-transaction/components] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction | frontend/src/views/logistics/materials/material-transaction/components/material-transaction-item-panel.vue
-  [logistics/materials/model-destination] 视图工具栏前缀 logistics:materials:modeldestination ≠ 期望 logistics:materials:model:destination | frontend/src/views/logistics/materials/model-destination/index.vue
+  [logistics/materials/material-transaction-item/components] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction:item | frontend/src/views/logistics/materials/material-transaction-item/components/material-transaction-item-panel.vue
+  [logistics/materials/material-transaction/components] 视图工具栏前缀 logistics:materials:materialtransaction ≠ 期望 logistics:materials:material:transaction:item | frontend/src/views/logistics/materials/material-transaction/components/material-transaction-item-panel.vue
   [logistics/materials/purchasing/vendor] 视图工具栏前缀 logistics:materials:vendor ≠ 控制器 logistics:procurement:vendor | frontend/src/views/logistics/materials/purchasing/vendor/index.vue
-  [logistics/materials/storage-location] 视图工具栏前缀 logistics:materials:storagelocation ≠ 期望 logistics:materials:storage:location | frontend/src/views/logistics/materials/storage-location/index.vue
   [logistics/procurement/purchase-order] 视图工具栏前缀 logistics:procurement:purchaseorder ≠ 期望 logistics:procurement:purchase:order:item | frontend/src/views/logistics/procurement/purchase-order/index.vue
-  [logistics/procurement/purchase-order-change-log] 视图工具栏前缀 logistics:procurement:purchaseorder ≠ 期望 logistics:procurement:purchase:order:change:log | frontend/src/views/logistics/procurement/purchase-order-change-log/index.vue
   [logistics/procurement/purchase-order-change-log/components] 视图工具栏前缀 logistics:procurement:purchaseorder ≠ 期望 logistics:procurement:purchase:order:item | frontend/src/views/logistics/procurement/purchase-order-change-log/components/purchase-order-change-log-panel.vue
   [logistics/procurement/purchase-order/components] 视图工具栏前缀 logistics:procurement:purchaseorder ≠ 期望 logistics:procurement:purchase:order:item | frontend/src/views/logistics/procurement/purchase-order/components/purchase-order-item-panel.vue
   [logistics/procurement/purchase-price] 视图工具栏前缀 logistics:procurement:purchaseprice ≠ 期望 logistics:procurement:purchase:price:scale | frontend/src/views/logistics/procurement/purchase-price/index.vue
-  [logistics/procurement/purchase-price-change-log] 视图工具栏前缀 logistics:procurement:purchaseprice ≠ 期望 logistics:procurement:purchase:price:change:log | frontend/src/views/logistics/procurement/purchase-price-change-log/index.vue
   [logistics/procurement/purchase-price-change-log/components] 视图工具栏前缀 logistics:procurement:purchaseprice ≠ 期望 logistics:procurement:purchase:price:scale | frontend/src/views/logistics/procurement/purchase-price-change-log/components/purchase-price-change-log-panel.vue
   [logistics/procurement/purchase-price/components] 视图工具栏前缀 logistics:procurement:purchaseprice ≠ 期望 logistics:procurement:purchase:price:scale | frontend/src/views/logistics/procurement/purchase-price/components/purchase-price-item-panel.vue
-  [logistics/procurement/purchase-request] 视图工具栏前缀 logistics:procurement:purchaserequest ≠ 期望 logistics:procurement:purchase:request | frontend/src/views/logistics/procurement/purchase-request/index.vue
-  [logistics/procurement/purchase-request-change-log] 视图工具栏前缀 logistics:procurement:purchaserequest ≠ 期望 logistics:procurement:purchase:request:change:log | frontend/src/views/logistics/procurement/purchase-request-change-log/index.vue
-  [logistics/procurement/purchase-request-change-log/components] 视图工具栏前缀 logistics:procurement:purchaserequest ≠ 期望 logistics:procurement:purchase:request | frontend/src/views/logistics/procurement/purchase-request-change-log/components/purchase-request-change-log-panel.vue
-  [logistics/procurement/purchase-request/components] 视图工具栏前缀 logistics:procurement:purchaserequest ≠ 期望 logistics:procurement:purchase:request | frontend/src/views/logistics/procurement/purchase-request/components/purchase-request-item-panel.vue
-  [logistics/quality/complaint/customer-complaint] 视图工具栏前缀 logistics:quality:complaint:customercomplaint ≠ 期望 logistics:quality:complaint:customer:complaint | frontend/src/views/logistics/quality/complaint/customer-complaint/index.vue
-  [logistics/quality/complaint/customer-complaint-handling] 视图工具栏前缀 logistics:quality:complaint:customercomplainthandling ≠ 期望 logistics:quality:complaint:customer:complaint:handling | frontend/src/views/logistics/quality/complaint/customer-complaint-handling/index.vue
-  [logistics/quality/complaint/customer-complaint/components] 视图工具栏前缀 logistics:quality:complaint:customercomplaint ≠ 期望 logistics:quality:complaint:customer:complaint | frontend/src/views/logistics/quality/complaint/customer-complaint/components/customer-complaint-item-panel.vue
-  [logistics/quality/complaint/customer-satisfaction-survey] 视图工具栏前缀 logistics:quality:complaint:customersatisfactionsurvey ≠ 期望 logistics:quality:complaint:customer:satisfaction:survey | frontend/src/views/logistics/quality/complaint/customer-satisfaction-survey/index.vue
-  [logistics/quality/complaint/customer-satisfaction-survey/components] 视图工具栏前缀 logistics:quality:complaint:customersatisfactionsurvey ≠ 期望 logistics:quality:complaint:customer:satisfaction:survey | frontend/src/views/logistics/quality/complaint/customer-satisfaction-survey/components/customer-satisfaction-survey-item-panel.vue
-  [logistics/quality/complaint/supplier-evaluation] 视图工具栏前缀 logistics:quality:complaint:supplierevaluation ≠ 期望 logistics:quality:complaint:supplier:evaluation | frontend/src/views/logistics/quality/complaint/supplier-evaluation/index.vue
-  [logistics/quality/complaint/supplier-evaluation/components] 视图工具栏前缀 logistics:quality:complaint:supplierevaluation ≠ 期望 logistics:quality:complaint:supplier:evaluation | frontend/src/views/logistics/quality/complaint/supplier-evaluation/components/supplier-evaluation-item-panel.vue
-  [logistics/quality/cost/assurance] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance/index.vue
-  [logistics/quality/cost/assurance-calibration] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-calibration/index.vue
-  [logistics/quality/cost/assurance-calibration/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-calibration/components/assurance-calibration-panel.vue
-  [logistics/quality/cost/assurance-customer-response] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-customer-response/index.vue
-  [logistics/quality/cost/assurance-customer-response/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-customer-response/components/assurance-customer-response-panel.vue
-  [logistics/quality/cost/assurance-first-article] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-first-article/index.vue
-  [logistics/quality/cost/assurance-first-article/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-first-article/components/assurance-first-article-panel.vue
-  [logistics/quality/cost/assurance-incoming] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-incoming/index.vue
-  [logistics/quality/cost/assurance-incoming/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-incoming/components/assurance-incoming-panel.vue
-  [logistics/quality/cost/assurance-other] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-other/index.vue
-  [logistics/quality/cost/assurance-other/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-other/components/assurance-other-panel.vue
-  [logistics/quality/cost/assurance-outgoing] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-outgoing/index.vue
-  [logistics/quality/cost/assurance-outgoing/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-outgoing/components/assurance-outgoing-panel.vue
-  [logistics/quality/cost/assurance-reliability] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-reliability/index.vue
-  [logistics/quality/cost/assurance-reliability/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance-reliability/components/assurance-reliability-panel.vue
-  [logistics/quality/cost/assurance/components] 视图工具栏前缀 logistics:quality:cost:assurance ≠ 期望 logistics:quality:cost:quality:assurance | frontend/src/views/logistics/quality/cost/assurance/components/assurance-incoming-panel.vue
-  [logistics/quality/cost/incident] 视图工具栏前缀 logistics:quality:cost:incident ≠ 期望 logistics:quality:cost:quality:incident | frontend/src/views/logistics/quality/cost/incident/index.vue
-  [logistics/quality/cost/incident-item] 视图工具栏前缀 logistics:quality:cost:incident ≠ 期望 logistics:quality:cost:quality:incident | frontend/src/views/logistics/quality/cost/incident-item/index.vue
-  [logistics/quality/cost/incident-item/components] 视图工具栏前缀 logistics:quality:cost:incident ≠ 期望 logistics:quality:cost:quality:incident | frontend/src/views/logistics/quality/cost/incident-item/components/incident-item-panel.vue
-  [logistics/quality/cost/incident/components] 视图工具栏前缀 logistics:quality:cost:incident ≠ 期望 logistics:quality:cost:quality:incident | frontend/src/views/logistics/quality/cost/incident/components/incident-item-panel.vue
-  [logistics/quality/cost/issue] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue/index.vue
-  [logistics/quality/cost/issue-assy-rework] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue-assy-rework/index.vue
-  [logistics/quality/cost/issue-assy-rework/components] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue-assy-rework/components/issue-assy-rework-panel.vue
-  [logistics/quality/cost/issue-meeting] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue-meeting/index.vue
-  [logistics/quality/cost/issue-meeting/components] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue-meeting/components/issue-meeting-panel.vue
-  [logistics/quality/cost/issue-pcba-rework] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue-pcba-rework/index.vue
-  [logistics/quality/cost/issue-pcba-rework/components] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue-pcba-rework/components/issue-pcba-rework-panel.vue
-  [logistics/quality/cost/issue/components] 视图工具栏前缀 logistics:quality:cost:issue ≠ 期望 logistics:quality:cost:quality:issue | frontend/src/views/logistics/quality/cost/issue/components/issue-meeting-panel.vue
-  [logistics/quality/operation/fqc-order] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order | frontend/src/views/logistics/quality/operation/fqc-order/index.vue
-  [logistics/quality/operation/fqc-order-change-log] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order:change:log | frontend/src/views/logistics/quality/operation/fqc-order-change-log/index.vue
-  [logistics/quality/operation/fqc-order-change-log/components] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order | frontend/src/views/logistics/quality/operation/fqc-order-change-log/components/fqc-order-change-log-panel.vue
+  [logistics/procurement/purchase-request-change-log/components] 视图工具栏前缀 logistics:procurement:purchaserequest ≠ 期望 logistics:procurement:purchase:request:item | frontend/src/views/logistics/procurement/purchase-request-change-log/components/purchase-request-change-log-panel.vue
+  [logistics/procurement/purchase-request/components] 视图工具栏前缀 logistics:procurement:purchaserequest ≠ 期望 logistics:procurement:purchase:request:item | frontend/src/views/logistics/procurement/purchase-request/components/purchase-request-item-panel.vue
+  [logistics/quality/complaint/customer-complaint-handling] 视图工具栏前缀 logistics:quality:complaint:customer:complaint:handling ≠ 期望 logistics:quality:complaint:customer:handling | frontend/src/views/logistics/quality/complaint/customer-complaint-handling/index.vue
+  [logistics/quality/complaint/customer-complaint/components] 视图工具栏前缀 logistics:quality:complaint:customercomplaint ≠ 期望 logistics:quality:complaint:customer:item | frontend/src/views/logistics/quality/complaint/customer-complaint/components/customer-complaint-item-panel.vue
+  [logistics/quality/complaint/customer-satisfaction-survey/components] 视图工具栏前缀 logistics:quality:complaint:customersatisfactionsurvey ≠ 期望 logistics:quality:complaint:customer:satisfaction:survey:item | frontend/src/views/logistics/quality/complaint/customer-satisfaction-survey/components/customer-satisfaction-survey-item-panel.vue
+  [logistics/quality/complaint/supplier-evaluation/components] 视图工具栏前缀 logistics:quality:complaint:supplierevaluation ≠ 期望 logistics:quality:complaint:supplier:evaluation:item | frontend/src/views/logistics/quality/complaint/supplier-evaluation/components/supplier-evaluation-item-panel.vue
+  [logistics/quality/operation/fqc-order-change-log/components] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order:item | frontend/src/views/logistics/quality/operation/fqc-order-change-log/components/fqc-order-change-log-panel.vue
   [logistics/quality/operation/fqc-order-item] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order:item | frontend/src/views/logistics/quality/operation/fqc-order-item/index.vue
-  [logistics/quality/operation/fqc-order-item/components] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order | frontend/src/views/logistics/quality/operation/fqc-order-item/components/fqc-defect-handling-panel.vue
-  [logistics/quality/operation/fqc-order/components] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order | frontend/src/views/logistics/quality/operation/fqc-order/components/fqc-order-item-panel.vue
-  [logistics/quality/operation/inspection-standard] 视图工具栏前缀 logistics:quality:operation:inspectionstandard ≠ 期望 logistics:quality:operation:inspection:standard | frontend/src/views/logistics/quality/operation/inspection-standard/index.vue
-  [logistics/quality/operation/inspection-standard/components] 视图工具栏前缀 logistics:quality:operation:inspectionstandard ≠ 期望 logistics:quality:operation:inspection:standard | frontend/src/views/logistics/quality/operation/inspection-standard/components/inspection-standard-item-panel.vue
-  [logistics/quality/operation/ipqc-order] 视图工具栏前缀 logistics:quality:operation:ipqcorder ≠ 期望 logistics:quality:operation:ipqc:order | frontend/src/views/logistics/quality/operation/ipqc-order/index.vue
-  [logistics/quality/operation/ipqc-order-change-log] 视图工具栏前缀 logistics:quality:operation:ipqcorder ≠ 期望 logistics:quality:operation:ipqc:order:change:log | frontend/src/views/logistics/quality/operation/ipqc-order-change-log/index.vue
-  [logistics/quality/operation/ipqc-order-change-log/components] 视图工具栏前缀 logistics:quality:operation:ipqcorder ≠ 期望 logistics:quality:operation:ipqc:order | frontend/src/views/logistics/quality/operation/ipqc-order-change-log/components/ipqc-order-change-log-panel.vue
+  [logistics/quality/operation/fqc-order-item/components] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order:item | frontend/src/views/logistics/quality/operation/fqc-order-item/components/fqc-defect-handling-panel.vue
+  [logistics/quality/operation/fqc-order/components] 视图工具栏前缀 logistics:quality:operation:fqcorder ≠ 期望 logistics:quality:operation:fqc:order:item | frontend/src/views/logistics/quality/operation/fqc-order/components/fqc-order-item-panel.vue
+  [logistics/quality/operation/inspection-standard/components] 视图工具栏前缀 logistics:quality:operation:inspectionstandard ≠ 期望 logistics:quality:operation:inspection:standard:item | frontend/src/views/logistics/quality/operation/inspection-standard/components/inspection-standard-item-panel.vue
+  [logistics/quality/operation/ipqc-order-change-log/components] 视图工具栏前缀 logistics:quality:operation:ipqcorder ≠ 期望 logistics:quality:operation:ipqc:defect:handling | frontend/src/views/logistics/quality/operation/ipqc-order-change-log/components/ipqc-order-change-log-panel.vue
   [logistics/quality/operation/ipqc-order-item] 视图工具栏前缀 logistics:quality:operation:ipqcorderitem ≠ 期望 logistics:quality:operation:ipqc:order:item | frontend/src/views/logistics/quality/operation/ipqc-order-item/index.vue
   [logistics/quality/operation/ipqc-order-item/components] 视图工具栏前缀 logistics:quality:operation:ipqcorderitem ≠ 期望 logistics:quality:operation:ipqc:order:item | frontend/src/views/logistics/quality/operation/ipqc-order-item/components/ipqc-defect-handling-panel.vue
-  [logistics/quality/operation/ipqc-order/components] 视图工具栏前缀 logistics:quality:operation:ipqcorder ≠ 期望 logistics:quality:operation:ipqc:order | frontend/src/views/logistics/quality/operation/ipqc-order/components/ipqc-order-item-panel.vue
-  [logistics/quality/operation/iqc-order] 视图工具栏前缀 logistics:quality:operation:iqcorder ≠ 期望 logistics:quality:operation:iqc:order | frontend/src/views/logistics/quality/operation/iqc-order/index.vue
-  [logistics/quality/operation/iqc-order-change-log] 视图工具栏前缀 logistics:quality:operation:iqcorder ≠ 期望 logistics:quality:operation:iqc:order:change:log | frontend/src/views/logistics/quality/operation/iqc-order-change-log/index.vue
-  [logistics/quality/operation/iqc-order-change-log/components] 视图工具栏前缀 logistics:quality:operation:iqcorder ≠ 期望 logistics:quality:operation:iqc:order | frontend/src/views/logistics/quality/operation/iqc-order-change-log/components/iqc-order-change-log-panel.vue
+  [logistics/quality/operation/ipqc-order/components] 视图工具栏前缀 logistics:quality:operation:ipqcorder ≠ 期望 logistics:quality:operation:ipqc:defect:handling | frontend/src/views/logistics/quality/operation/ipqc-order/components/ipqc-order-item-panel.vue
+  [logistics/quality/operation/iqc-order-change-log/components] 视图工具栏前缀 logistics:quality:operation:iqcorder ≠ 期望 logistics:quality:operation:iqc:defect:handling | frontend/src/views/logistics/quality/operation/iqc-order-change-log/components/iqc-order-change-log-panel.vue
   [logistics/quality/operation/iqc-order-item] 视图工具栏前缀 logistics:quality:operation:iqcorderitem ≠ 期望 logistics:quality:operation:iqc:order:item | frontend/src/views/logistics/quality/operation/iqc-order-item/index.vue
   [logistics/quality/operation/iqc-order-item/components] 视图工具栏前缀 logistics:quality:operation:iqcorderitem ≠ 期望 logistics:quality:operation:iqc:order:item | frontend/src/views/logistics/quality/operation/iqc-order-item/components/iqc-defect-handling-panel.vue
-  [logistics/quality/operation/iqc-order/components] 视图工具栏前缀 logistics:quality:operation:iqcorder ≠ 期望 logistics:quality:operation:iqc:order | frontend/src/views/logistics/quality/operation/iqc-order/components/iqc-order-item-panel.vue
-  [logistics/quality/operation/sampling-scheme] 视图工具栏前缀 logistics:quality:operation:samplingscheme ≠ 期望 logistics:quality:operation:sampling:scheme | frontend/src/views/logistics/quality/operation/sampling-scheme/index.vue
-  [logistics/sales/invoice] 视图工具栏前缀 logistics:sales:invoice ≠ 期望 logistics:sales:sales:invoice | frontend/src/views/logistics/sales/invoice/index.vue
-  [logistics/sales/invoice/components] 视图工具栏前缀 logistics:sales:invoice ≠ 期望 logistics:sales:sales:invoice | frontend/src/views/logistics/sales/invoice/components/invoice-item-panel.vue
-  [logistics/sales/order] 视图工具栏前缀 logistics:sales:order ≠ 期望 logistics:sales:sales:order | frontend/src/views/logistics/sales/order/index.vue
-  [logistics/sales/order-change-log] 视图工具栏前缀 logistics:sales:order ≠ 期望 logistics:sales:sales:order | frontend/src/views/logistics/sales/order-change-log/index.vue
-  [logistics/sales/order-change-log/components] 视图工具栏前缀 logistics:sales:order ≠ 期望 logistics:sales:sales:order | frontend/src/views/logistics/sales/order-change-log/components/order-change-log-panel.vue
-  [logistics/sales/order/components] 视图工具栏前缀 logistics:sales:order ≠ 期望 logistics:sales:sales:order | frontend/src/views/logistics/sales/order/components/order-item-panel.vue
-  [logistics/sales/price] 视图工具栏前缀 logistics:sales:price ≠ 期望 logistics:sales:sales:price | frontend/src/views/logistics/sales/price/index.vue
-  [logistics/sales/price-change-log] 视图工具栏前缀 logistics:sales:price ≠ 期望 logistics:sales:sales:price | frontend/src/views/logistics/sales/price-change-log/index.vue
-  [logistics/sales/price-change-log/components] 视图工具栏前缀 logistics:sales:price ≠ 期望 logistics:sales:sales:price | frontend/src/views/logistics/sales/price-change-log/components/price-change-log-panel.vue
-  [logistics/sales/price/components] 视图工具栏前缀 logistics:sales:price ≠ 期望 logistics:sales:sales:price | frontend/src/views/logistics/sales/price/components/price-item-panel.vue
-  [logistics/sales/quotation] 视图工具栏前缀 logistics:sales:quotation ≠ 期望 logistics:sales:sales:quotation | frontend/src/views/logistics/sales/quotation/index.vue
-  [logistics/sales/quotation-change-log] 视图工具栏前缀 logistics:sales:quotation ≠ 期望 logistics:sales:sales:quotation | frontend/src/views/logistics/sales/quotation-change-log/index.vue
-  [logistics/sales/quotation-change-log/components] 视图工具栏前缀 logistics:sales:quotation ≠ 期望 logistics:sales:sales:quotation | frontend/src/views/logistics/sales/quotation-change-log/components/quotation-change-log-panel.vue
-  [logistics/sales/quotation/components] 视图工具栏前缀 logistics:sales:quotation ≠ 期望 logistics:sales:sales:quotation | frontend/src/views/logistics/sales/quotation/components/quotation-item-panel.vue
-  [logistics/serial/inbound] 视图工具栏前缀 logistics:serial:inbound ≠ 期望 logistics:serial:serial:inbound | frontend/src/views/logistics/serial/inbound/index.vue
-  [logistics/serial/inbound/components] 视图工具栏前缀 logistics:serial:inbound ≠ 期望 logistics:serial:serial:inbound | frontend/src/views/logistics/serial/inbound/components/inbound-item-panel.vue
-  [logistics/serial/outbound] 视图工具栏前缀 logistics:serial:outbound ≠ 期望 logistics:serial:serial:outbound | frontend/src/views/logistics/serial/outbound/index.vue
-  [logistics/serial/outbound/components] 视图工具栏前缀 logistics:serial:outbound ≠ 期望 logistics:serial:serial:outbound | frontend/src/views/logistics/serial/outbound/components/outbound-item-panel.vue
-  [logistics/service/service-contract] 视图工具栏前缀 logistics:service:contract ≠ 期望 logistics:customerservice:service:contract | frontend/src/views/logistics/service/service-contract/index.vue
-  [logistics/service/service-contract/components] 视图工具栏前缀 logistics:service:contract ≠ 期望 logistics:customerservice:service:contract | frontend/src/views/logistics/service/service-contract/components/service-order-panel.vue
-  [logistics/service/service-contract/components] 视图工具栏前缀 logistics:service:contract ≠ 期望 logistics:customerservice:service:contract | frontend/src/views/logistics/service/service-contract/components/service-request-panel.vue
-  [logistics/service/service-order] 视图工具栏前缀 logistics:service:order ≠ 期望 logistics:customerservice:service:order | frontend/src/views/logistics/service/service-order/index.vue
-  [logistics/service/service-order/components] 视图工具栏前缀 logistics:service:order ≠ 期望 logistics:customerservice:service:order | frontend/src/views/logistics/service/service-order/components/service-ticket-panel.vue
-  [logistics/service/service-request] 视图工具栏前缀 logistics:service:request ≠ 期望 logistics:customerservice:service:request | frontend/src/views/logistics/service/service-request/index.vue
-  [logistics/service/service-request/components] 视图工具栏前缀 logistics:service:request ≠ 期望 logistics:customerservice:service:request | frontend/src/views/logistics/service/service-request/components/service-ticket-panel.vue
-  [logistics/service/service-ticket] 视图工具栏前缀 logistics:service:ticket ≠ 期望 logistics:customerservice:service:ticket | frontend/src/views/logistics/service/service-ticket/index.vue
-  [routine/announcement] 视图工具栏前缀 routine:announcement ≠ 期望 routine:announcement:announcement | frontend/src/views/routine/announcement/index.vue
-  [routine/conference-center/conference] 视图工具栏前缀 routine:conferencecenter ≠ 期望 routine:conferencecenter:conference | frontend/src/views/routine/conference-center/conference/index.vue
-  [routine/conference-center/conference-agenda] 视图工具栏前缀 routine:conferencecenter:agenda ≠ 期望 routine:conferencecenter:conference:agenda | frontend/src/views/routine/conference-center/conference-agenda/index.vue
-  [routine/conference-center/conference-room] 视图工具栏前缀 routine:conferencecenter:room ≠ 期望 routine:conferencecenter:conference:room | frontend/src/views/routine/conference-center/conference-room/index.vue
-  [routine/conference-center/conference/components] 视图工具栏前缀 routine:conferencecenter ≠ 期望 routine:conferencecenter:conference | frontend/src/views/routine/conference-center/conference/components/conference-participant-panel.vue
-  [routine/document-center/document-change-log] 视图工具栏前缀 routine:documentcenter:document ≠ 期望 routine:documentcenter:document:change:log | frontend/src/views/routine/document-center/document-change-log/index.vue
-  [routine/help-desk/it-asset] 视图工具栏前缀 routine:helpdesk:itasset ≠ 期望 routine:helpdesk:it:asset | frontend/src/views/routine/help-desk/it-asset/index.vue
-  [routine/help-desk/it-asset-change-log] 视图工具栏前缀 routine:helpdesk:itasset ≠ 期望 routine:helpdesk:it:asset:change:log | frontend/src/views/routine/help-desk/it-asset-change-log/index.vue
-  [routine/help-desk/it-asset-change-log/components] 视图工具栏前缀 routine:helpdesk:itasset ≠ 期望 routine:helpdesk:it:asset | frontend/src/views/routine/help-desk/it-asset-change-log/components/it-asset-change-log-panel.vue
-  [routine/help-desk/knowledge-change-log] 视图工具栏前缀 routine:helpdesk:knowledge ≠ 期望 routine:helpdesk:knowledge:change:log | frontend/src/views/routine/help-desk/knowledge-change-log/index.vue
-  [routine/help-desk/self-service] 视图工具栏前缀 routine:helpdesk:selfservice ≠ 期望 routine:helpdesk:self:service | frontend/src/views/routine/help-desk/self-service/index.vue
-  [routine/help-desk/ticket-category-assign] 视图工具栏前缀 routine:helpdesk:ticketcategoryassign ≠ 期望 routine:helpdesk:ticket:category:assign | frontend/src/views/routine/help-desk/ticket-category-assign/index.vue
-  [routine/help-desk/ticket-change-log] 视图工具栏前缀 routine:helpdesk:ticket ≠ 期望 routine:helpdesk:ticket:change:log | frontend/src/views/routine/help-desk/ticket-change-log/index.vue
-  [routine/help-desk/ticket-evaluation] 视图工具栏前缀 routine:helpdesk:ticketevaluation ≠ 期望 routine:helpdesk:ticket:evaluation | frontend/src/views/routine/help-desk/ticket-evaluation/index.vue
+  [logistics/quality/operation/iqc-order/components] 视图工具栏前缀 logistics:quality:operation:iqcorder ≠ 期望 logistics:quality:operation:iqc:defect:handling | frontend/src/views/logistics/quality/operation/iqc-order/components/iqc-order-item-panel.vue
+  [routine/conference-center/conference] 视图工具栏前缀 routine:conferencecenter ≠ 期望 routine:conference:center | frontend/src/views/routine/conference-center/conference/index.vue
+  [routine/conference-center/conference-agenda] 视图工具栏前缀 routine:conferencecenter:agenda ≠ 期望 routine:conference:center:agenda | frontend/src/views/routine/conference-center/conference-agenda/index.vue
+  [routine/conference-center/conference-room] 视图工具栏前缀 routine:conferencecenter:room ≠ 期望 routine:conference:center:room | frontend/src/views/routine/conference-center/conference-room/index.vue
+  [routine/conference-center/conference/components] 视图工具栏前缀 routine:conferencecenter ≠ 期望 routine:conference:center | frontend/src/views/routine/conference-center/conference/components/conference-participant-panel.vue
+  [routine/document-center/document] 视图工具栏前缀 routine:document:center:document ≠ 期望 routine:document:center | frontend/src/views/routine/document-center/document/index.vue
+  [routine/document-center/document-change-log] 视图工具栏前缀 routine:document:center:document:change:log ≠ 期望 routine:document:center:change:log | frontend/src/views/routine/document-center/document-change-log/index.vue
+  [routine/help-desk/self-service] 视图工具栏前缀 routine:helpdesk:selfservice ≠ 期望 routine:help:desk:self:service | frontend/src/views/routine/help-desk/self-service/index.vue
+  [routine/help-desk/ticket-category-assign] 视图工具栏前缀 routine:helpdesk:ticketcategoryassign ≠ 期望 routine:help:desk:ticket:category:assign | frontend/src/views/routine/help-desk/ticket-category-assign/index.vue
+  [routine/help-desk/ticket-evaluation] 视图工具栏前缀 routine:helpdesk:ticketevaluation ≠ 期望 routine:help:desk:ticket:evaluation | frontend/src/views/routine/help-desk/ticket-evaluation/index.vue
+  [routine/visitor-center/visitor] 视图工具栏前缀 routine:visitorcenter:visitor ≠ 期望 routine:visitor:center | frontend/src/views/routine/visitor-center/visitor/index.vue
 
 === STEM_REDUNDANT（模块/实体词干重复，如 newscenter:news） (0) ===
   (none)
@@ -656,75 +321,63 @@ ChangeLog: 主实体前缀 + :change:log
   [vue] 'code:database:table:clone' 格式非法（须小写冒号分段）| frontend/src/views/code/database/table-clone/index.vue
 
 === CONTROLLER_ACTION_GAP（控制器仍用旧前缀 CRUD 码） (50) ===
-  [AccountTitle] 缺少 accounting:financial:account:title:list（仍使用 accounting:financial:accounttitle:list）
-  [AccountTitleChangeLog] 缺少 accounting:financial:account:title:change:log:list（仍使用 accounting:financial:accounttitle:list）
-  [Announcement] 缺少 routine:announcement:announcement:list（仍使用 routine:announcement:list）
-  [ApsSchedule] 缺少 logistics:manufacturing:scheduling:aps:schedule:list（仍使用 logistics:manufacturing:scheduling:apsschedule:list）
-  [ApsScheduleChangeLog] 缺少 logistics:manufacturing:scheduling:aps:schedule:change:log:list（仍使用 logistics:manufacturing:scheduling:apsschedule:list）
   [ApsScheduleItem] 缺少 logistics:manufacturing:scheduling:aps:schedule:item:list（仍使用 logistics:manufacturing:scheduling:apsscheduleitem:list）
-  [AssetChangeLog] 缺少 accounting:financial:asset:change:log:list（仍使用 accounting:financial:asset:list）
-  [AssyDefect] 缺少 logistics:manufacturing:defect:assy:defect:list（仍使用 logistics:manufacturing:defect:assydefect:list）
-  [AssyDefectDetail] 缺少 logistics:manufacturing:defect:assy:defect:detail:list（仍使用 logistics:manufacturing:defect:assydefect:list）
-  [AssyOutput] 缺少 logistics:manufacturing:output:assy:output:list（仍使用 logistics:manufacturing:output:assyoutput:list）
-  [AssyOutputDetail] 缺少 logistics:manufacturing:output:assy:output:detail:list（仍使用 logistics:manufacturing:output:assyoutput:list）
-  [BenefitItem] 缺少 humanresource:benefits:benefit:item:list（仍使用 humanresource:benefits:item:list）
-  [BillOfMaterial] 缺少 logistics:manufacturing:bom:bill:of:material:list（仍使用 logistics:manufacturing:bom:billofmaterial:list）
-  [BillOfMaterialChangeLog] 缺少 logistics:manufacturing:bom:bill:of:material:change:log:list（仍使用 logistics:manufacturing:bom:billofmaterial:list）
+  [AssyDefectDetail] 缺少 logistics:manufacturing:defect:assy:detail:list（仍使用 logistics:manufacturing:defect:assydefect:list）
+  [AssyOutputDetail] 缺少 logistics:manufacturing:output:assy:detail:list（仍使用 logistics:manufacturing:output:assyoutput:list）
   [BillOfMaterialItem] 缺少 logistics:manufacturing:bom:bill:of:material:item:list（仍使用 logistics:manufacturing:bom:billofmaterial:list）
   [BillOfMaterialSubstitute] 缺少 logistics:manufacturing:bom:bill:of:material:substitute:list（仍使用 logistics:manufacturing:bom:billofmaterial:list）
-  [BonusPlan] 缺少 humanresource:compensation:bonus:plan:list（仍使用 humanresource:compensation:bonusplan:list）
-  [Conference] 缺少 routine:conferencecenter:conference:list（仍使用 routine:conferencecenter:list）
-  [ConferenceAgenda] 缺少 routine:conferencecenter:conference:agenda:list（仍使用 routine:conferencecenter:agenda:list）
-  [ConferenceParticipant] 缺少 routine:conferencecenter:conference:participant:list（仍使用 routine:conferencecenter:list）
-  [ConferenceRoom] 缺少 routine:conferencecenter:conference:room:list（仍使用 routine:conferencecenter:room:list）
+  [Conference] 缺少 routine:conference:center:list（仍使用 routine:conferencecenter:list）
+  [ConferenceAgenda] 缺少 routine:conference:center:agenda:list（仍使用 routine:conferencecenter:agenda:list）
+  [ConferenceParticipant] 缺少 routine:conference:center:participant:list（仍使用 routine:conferencecenter:list）
+  [ConferenceRoom] 缺少 routine:conference:center:room:list（仍使用 routine:conferencecenter:room:list）
   [ConfigurableField] 缺少 statistics:report:configurable:field:list（仍使用 statistics:report:configurablefield:list）
   [ConfigurableGroupBy] 缺少 statistics:report:configurable:group:by:list（仍使用 statistics:report:configurablegroupby:list）
   [ConfigurableJoin] 缺少 statistics:report:configurable:join:list（仍使用 statistics:report:configurablejoin:list）
   [ConfigurableOrderBy] 缺少 statistics:report:configurable:order:by:list（仍使用 statistics:report:configurableorderby:list）
   [ConfigurableSelection] 缺少 statistics:report:configurable:selection:list（仍使用 statistics:report:configurableselection:list）
   [ConfigurableSource] 缺少 statistics:report:configurable:source:list（仍使用 statistics:report:configurablesource:list）
-  [CostCenter] 缺少 accounting:controlling:cost:center:list（仍使用 accounting:controlling:costcenter:list）
-  [CostCenterChangeLog] 缺少 accounting:controlling:cost:center:change:log:list（仍使用 accounting:controlling:costcenter:list）
-  [CostElement] 缺少 accounting:controlling:cost:element:list（仍使用 accounting:controlling:costelement:list）
-  [CostElementChangeLog] 缺少 accounting:controlling:cost:element:change:log:list（仍使用 accounting:controlling:costelement:list）
   [Culture] 缺少 foundation:culture:list（仍使用 foundation:i18n:list）
-  [CustomerComplaint] 缺少 logistics:quality:complaint:customer:complaint:list（仍使用 logistics:quality:complaint:customercomplaint:list）
-  [CustomerComplaintHandling] 缺少 logistics:quality:complaint:customer:complaint:handling:list（仍使用 logistics:quality:complaint:customercomplainthandling:list）
-  [CustomerComplaintItem] 缺少 logistics:quality:complaint:customer:complaint:item:list（仍使用 logistics:quality:complaint:customercomplaint:list）
-  [CustomerSatisfactionSurvey] 缺少 logistics:quality:complaint:customer:satisfaction:survey:list（仍使用 logistics:quality:complaint:customersatisfactionsurvey:list）
+  [CustomerComplaintHandling] 缺少 logistics:quality:complaint:customer:handling:list（仍使用 logistics:quality:complaint:customer:complaint:handling:list）
+  [CustomerComplaintItem] 缺少 logistics:quality:complaint:customer:item:list（仍使用 logistics:quality:complaint:customercomplaint:list）
   [CustomerSatisfactionSurveyItem] 缺少 logistics:quality:complaint:customer:satisfaction:survey:item:list（仍使用 logistics:quality:complaint:customersatisfactionsurvey:list）
-  [DatabaseInfo] 缺少 code:database:database:info:list（仍使用 code:database:info:list）
-  [DeltaLog] 缺少 statistics:logging:delta:log:list（仍使用 statistics:logging:deltalog:list）
   [DictData] 缺少 foundation:dict:data:list（仍使用 foundation:dict:list）
   [DictType] 缺少 foundation:dict:type:list（仍使用 foundation:dict:list）
-  [DocumentChangeLog] 缺少 routine:documentcenter:document:change:log:list（仍使用 routine:documentcenter:document:list）
-  [DocumentVersion] 缺少 routine:documentcenter:document:version:list（仍使用 routine:documentcenter:documentversion:list）
-  [EcAttachment] 缺少 logistics:manufacturing:engineeringchange:ec:attachment:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
-  [EcDept] 缺少 logistics:manufacturing:engineeringchange:ec:dept:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
-  [EcDetail] 缺少 logistics:manufacturing:engineeringchange:ec:detail:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
-  [EcNotification] 缺少 logistics:manufacturing:engineeringchange:ec:notification:list（仍使用 logistics:manufacturing:engineeringchange:ecnotification:list）
-  [EmpBenefitPlan] 缺少 humanresource:benefits:emp:benefit:plan:list（仍使用 humanresource:benefits:empplan:list）
-  [EmployeeAttachment] 缺少 humanresource:personnel:employee:attachment:list（仍使用 humanresource:personnel:employeeattachment:list）
-  [EmployeeContract] 缺少 humanresource:personnel:employee:contract:list（仍使用 humanresource:personnel:employeecontract:list）
+  [Document] 缺少 routine:document:center:list（仍使用 routine:document:center:document:list）
+  [DocumentChangeLog] 缺少 routine:document:center:change:log:list（仍使用 routine:document:center:document:change:log:list）
+  [DocumentVersion] 缺少 routine:document:center:version:list（仍使用 routine:documentcenter:documentversion:list）
+  [Ec] 缺少 logistics:manufacturing:engineering:change:ec:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
+  [EcAttachment] 缺少 logistics:manufacturing:engineering:change:ec:attachment:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
+  [EcBatch] 缺少 logistics:manufacturing:engineering:change:ec:batch:list（仍使用 logistics:manufacturing:engineeringchange:batch:list）
+  [EcBukan] 缺少 logistics:manufacturing:engineering:change:ec:bukan:list（仍使用 logistics:manufacturing:engineeringchange:bukan:list）
+  [EcDept] 缺少 logistics:manufacturing:engineering:change:ec:dept:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
+  [EcDetail] 缺少 logistics:manufacturing:engineering:change:ec:detail:list（仍使用 logistics:manufacturing:engineeringchange:ec:list）
+  [EcGijutsu] 缺少 logistics:manufacturing:engineering:change:ec:gijutsu:list（仍使用 logistics:manufacturing:engineeringchange:gijutsu:list）
+  [EcHinkan] 缺少 logistics:manufacturing:engineering:change:ec:hinkan:list（仍使用 logistics:manufacturing:engineeringchange:hinkan:list）
+  [EcKakunin] 缺少 logistics:manufacturing:engineering:change:ec:kakunin:list（仍使用 logistics:manufacturing:engineeringchange:kakunin:list）
+  [EcKanban] 缺少 logistics:manufacturing:engineering:change:ec:kanban:list（仍使用 logistics:manufacturing:engineeringchange:kanban:list）
+  [EcKoubai] 缺少 logistics:manufacturing:engineering:change:ec:koubai:list（仍使用 logistics:manufacturing:engineeringchange:koubai:list）
+  [EcLegacyProduct] 缺少 logistics:manufacturing:engineering:change:ec:legacy:product:list（仍使用 logistics:manufacturing:engineeringchange:legacyproduct:list）
+  [EcSeikan] 缺少 logistics:manufacturing:engineering:change:ec:seikan:list（仍使用 logistics:manufacturing:engineeringchange:seikan:list）
+  [EcSeizouikka] 缺少 logistics:manufacturing:engineering:change:ec:seizouikka:list（仍使用 logistics:manufacturing:engineeringchange:seizouikka:list）
+  [EcSeizounika] 缺少 logistics:manufacturing:engineering:change:ec:seizounika:list（仍使用 logistics:manufacturing:engineeringchange:seizounika:list）
+  [EcUkeken] 缺少 logistics:manufacturing:engineering:change:ec:ukeken:list（仍使用 logistics:manufacturing:engineeringchange:ukeken:list）
+  [EmployeeAttachment] 缺少 human:resource:personnel:employee:attachment:list（仍使用 human:resource:personnel:employeeattachment:list）
+  [EmployeeDelegation] 缺少 human:resource:personnel:employee:delegation:list（仍使用 human:resource:personnel:employeedelegation:list）
+  [EmployeeEducation] 缺少 human:resource:personnel:employee:education:list（仍使用 human:resource:personnel:employeeeducation:list）
+  [EmployeeExperience] 缺少 human:resource:personnel:employee:experience:list（仍使用 human:resource:personnel:employeeexperience:list）
+  [EmployeeFamily] 缺少 human:resource:personnel:employee:family:list（仍使用 human:resource:personnel:employeefamily:list）
+  [EmployeeJoined] 缺少 human:resource:personnel:employee:joined:list（仍使用 human:resource:personnel:employeejoined:list）
+  [EmployeeResignation] 缺少 human:resource:personnel:employee:resignation:list（仍使用 human:resource:personnel:employeeresignation:list）
+  [EmployeeSkill] 缺少 human:resource:personnel:employee:skill:list（仍使用 human:resource:personnel:employeeskill:list）
+  [FlowAddSign] 缺少 workflow:flow:add:sign:list（仍使用 workflow:todo:list）
+  [FlowForm] 缺少 workflow:flow:form:list（仍使用 workflow:form:list）
 
 批量修复控制器（逐实体）:
-  node scripts/generate-controllers-from-services.cjs --AccountTitle
-  node scripts/generate-controllers-from-services.cjs --AccountTitleChangeLog
-  node scripts/generate-controllers-from-services.cjs --Announcement
-  node scripts/generate-controllers-from-services.cjs --ApsSchedule
-  node scripts/generate-controllers-from-services.cjs --ApsScheduleChangeLog
   node scripts/generate-controllers-from-services.cjs --ApsScheduleItem
-  node scripts/generate-controllers-from-services.cjs --AssetChangeLog
-  node scripts/generate-controllers-from-services.cjs --AssyDefect
   node scripts/generate-controllers-from-services.cjs --AssyDefectDetail
-  node scripts/generate-controllers-from-services.cjs --AssyOutput
   node scripts/generate-controllers-from-services.cjs --AssyOutputDetail
-  node scripts/generate-controllers-from-services.cjs --BenefitItem
-  node scripts/generate-controllers-from-services.cjs --BillOfMaterial
-  node scripts/generate-controllers-from-services.cjs --BillOfMaterialChangeLog
   node scripts/generate-controllers-from-services.cjs --BillOfMaterialItem
   node scripts/generate-controllers-from-services.cjs --BillOfMaterialSubstitute
-  node scripts/generate-controllers-from-services.cjs --BonusPlan
   node scripts/generate-controllers-from-services.cjs --Caches
   node scripts/generate-controllers-from-services.cjs --Conference
   node scripts/generate-controllers-from-services.cjs --ConferenceAgenda
@@ -736,18 +389,30 @@ ChangeLog: 主实体前缀 + :change:log
   node scripts/generate-controllers-from-services.cjs --ConfigurableOrderBy
   node scripts/generate-controllers-from-services.cjs --ConfigurableSelection
   node scripts/generate-controllers-from-services.cjs --ConfigurableSource
-  node scripts/generate-controllers-from-services.cjs --CostCenter
-  node scripts/generate-controllers-from-services.cjs --CostCenterChangeLog
-  node scripts/generate-controllers-from-services.cjs --CostElement
-  node scripts/generate-controllers-from-services.cjs --CostElementChangeLog
   node scripts/generate-controllers-from-services.cjs --Culture
-  node scripts/generate-controllers-from-services.cjs --CustomerComplaint
   node scripts/generate-controllers-from-services.cjs --CustomerComplaintHandling
   node scripts/generate-controllers-from-services.cjs --CustomerComplaintItem
-  node scripts/generate-controllers-from-services.cjs --CustomerSatisfactionSurvey
   node scripts/generate-controllers-from-services.cjs --CustomerSatisfactionSurveyItem
   node scripts/generate-controllers-from-services.cjs --DataClone
-  node scripts/generate-controllers-from-services.cjs --DatabaseInfo
-  ... 共 240 个实体
+  node scripts/generate-controllers-from-services.cjs --DictData
+  node scripts/generate-controllers-from-services.cjs --DictType
+  node scripts/generate-controllers-from-services.cjs --Document
+  node scripts/generate-controllers-from-services.cjs --DocumentChangeLog
+  node scripts/generate-controllers-from-services.cjs --DocumentVersion
+  node scripts/generate-controllers-from-services.cjs --Ec
+  node scripts/generate-controllers-from-services.cjs --EcAttachment
+  node scripts/generate-controllers-from-services.cjs --EcBatch
+  node scripts/generate-controllers-from-services.cjs --EcBukan
+  node scripts/generate-controllers-from-services.cjs --EcDept
+  node scripts/generate-controllers-from-services.cjs --EcDetail
+  node scripts/generate-controllers-from-services.cjs --EcGijutsu
+  node scripts/generate-controllers-from-services.cjs --EcHinkan
+  node scripts/generate-controllers-from-services.cjs --EcKakunin
+  node scripts/generate-controllers-from-services.cjs --EcKanban
+  node scripts/generate-controllers-from-services.cjs --EcKoubai
+  node scripts/generate-controllers-from-services.cjs --EcLegacyProduct
+  node scripts/generate-controllers-from-services.cjs --EcSeikan
+  node scripts/generate-controllers-from-services.cjs --EcSeizouikka
+  ... 共 145 个实体
 
 修复后重跑: node scripts/audit-permissions.cjs

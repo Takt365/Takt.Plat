@@ -41,7 +41,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:list", "标准生产稼动率列表")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:list", "标准生产稼动率列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetStandardOperationRateListAsync([FromQuery] TaktStandardOperationRateQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="id">标准生产稼动率ID</param>
     /// <returns>标准生产稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:query", "标准生产稼动率详情")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:query", "标准生产稼动率详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetStandardOperationRateByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// 获取标准生产稼动率选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:query", "标准生产稼动率选项")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:query", "标准生产稼动率选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetStandardOperationRateOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>标准生产稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:create", "创建标准生产稼动率")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:create", "创建标准生产稼动率")]
     [HttpPost]
     public async Task<IActionResult> CreateStandardOperationRateAsync([FromBody] TaktStandardOperationRateCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// <param name="id">标准生产稼动率ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>标准生产稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:update", "更新标准生产稼动率")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:update", "更新标准生产稼动率")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStandardOperationRateAsync(long id, [FromBody] TaktStandardOperationRateUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="id">标准生产稼动率ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:delete", "删除标准生产稼动率")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:delete", "删除标准生产稼动率")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStandardOperationRateByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:delete", "批量删除标准生产稼动率")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:delete", "批量删除标准生产稼动率")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteStandardOperationRateBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>标准生产稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:update", "更新标准生产稼动率状态")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:update", "更新标准生产稼动率状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateStandardOperationRateStatusAsync([FromBody] TaktStandardOperationRateStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:import", "获取标准生产稼动率导入模板")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:import", "获取标准生产稼动率导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetStandardOperationRateTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:import", "导入标准生产稼动率")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:import", "导入标准生产稼动率")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportStandardOperationRateAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// 导出标准生产稼动率
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:standardoperationrate:export", "导出标准生产稼动率")]
+    [TaktPermission("logistics:manufacturing:output:standard:operation:rate:export", "导出标准生产稼动率")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportStandardOperationRateAsync([FromQuery] TaktStandardOperationRateQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

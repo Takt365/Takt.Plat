@@ -41,7 +41,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:list", "员工入职上岗列表")]
+    [TaktPermission("human:resource:personnel:employeejoined:list", "员工入职上岗列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeJoinedListAsync([FromQuery] TaktEmployeeJoinedQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工入职上岗ID</param>
     /// <returns>员工入职上岗DTO</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:query", "员工入职上岗详情")]
+    [TaktPermission("human:resource:personnel:employeejoined:query", "员工入职上岗详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeJoinedByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// 获取员工入职上岗选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:query", "员工入职上岗选项")]
+    [TaktPermission("human:resource:personnel:employeejoined:query", "员工入职上岗选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeJoinedOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工入职上岗DTO</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:create", "创建员工入职上岗")]
+    [TaktPermission("human:resource:personnel:employeejoined:create", "创建员工入职上岗")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeJoinedAsync([FromBody] TaktEmployeeJoinedCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// <param name="id">员工入职上岗ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工入职上岗DTO</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:update", "更新员工入职上岗")]
+    [TaktPermission("human:resource:personnel:employeejoined:update", "更新员工入职上岗")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeJoinedAsync(long id, [FromBody] TaktEmployeeJoinedUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工入职上岗ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:delete", "删除员工入职上岗")]
+    [TaktPermission("human:resource:personnel:employeejoined:delete", "删除员工入职上岗")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeJoinedByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:delete", "批量删除员工入职上岗")]
+    [TaktPermission("human:resource:personnel:employeejoined:delete", "批量删除员工入职上岗")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeJoinedBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:import", "获取员工入职上岗导入模板")]
+    [TaktPermission("human:resource:personnel:employeejoined:import", "获取员工入职上岗导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeJoinedTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:import", "导入员工入职上岗")]
+    [TaktPermission("human:resource:personnel:employeejoined:import", "导入员工入职上岗")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeJoinedAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// 导出员工入职上岗
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeejoined:export", "导出员工入职上岗")]
+    [TaktPermission("human:resource:personnel:employeejoined:export", "导出员工入职上岗")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeJoinedAsync([FromQuery] TaktEmployeeJoinedQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

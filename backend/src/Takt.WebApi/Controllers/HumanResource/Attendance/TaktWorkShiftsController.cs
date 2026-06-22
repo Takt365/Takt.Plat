@@ -41,7 +41,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:attendance:workshift:list", "班次信息列表")]
+    [TaktPermission("human:resource:attendance:work:shift:list", "班次信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetWorkShiftListAsync([FromQuery] TaktWorkShiftQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// </summary>
     /// <param name="id">班次信息ID</param>
     /// <returns>班次信息DTO</returns>
-    [TaktPermission("humanresource:attendance:workshift:query", "班次信息详情")]
+    [TaktPermission("human:resource:attendance:work:shift:query", "班次信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetWorkShiftByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// 获取班次信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:attendance:workshift:query", "班次信息选项")]
+    [TaktPermission("human:resource:attendance:work:shift:query", "班次信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetWorkShiftOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>班次信息DTO</returns>
-    [TaktPermission("humanresource:attendance:workshift:create", "创建班次信息")]
+    [TaktPermission("human:resource:attendance:work:shift:create", "创建班次信息")]
     [HttpPost]
     public async Task<IActionResult> CreateWorkShiftAsync([FromBody] TaktWorkShiftCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// <param name="id">班次信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>班次信息DTO</returns>
-    [TaktPermission("humanresource:attendance:workshift:update", "更新班次信息")]
+    [TaktPermission("human:resource:attendance:work:shift:update", "更新班次信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateWorkShiftAsync(long id, [FromBody] TaktWorkShiftUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// </summary>
     /// <param name="id">班次信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:workshift:delete", "删除班次信息")]
+    [TaktPermission("human:resource:attendance:work:shift:delete", "删除班次信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteWorkShiftByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:workshift:delete", "批量删除班次信息")]
+    [TaktPermission("human:resource:attendance:work:shift:delete", "批量删除班次信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteWorkShiftBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>班次信息DTO</returns>
-    [TaktPermission("humanresource:attendance:workshift:update", "更新班次信息排序")]
+    [TaktPermission("human:resource:attendance:work:shift:update", "更新班次信息排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateWorkShiftSortAsync([FromBody] TaktWorkShiftSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:workshift:import", "获取班次信息导入模板")]
+    [TaktPermission("human:resource:attendance:work:shift:import", "获取班次信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetWorkShiftTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:attendance:workshift:import", "导入班次信息")]
+    [TaktPermission("human:resource:attendance:work:shift:import", "导入班次信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportWorkShiftAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// 导出班次信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:workshift:export", "导出班次信息")]
+    [TaktPermission("human:resource:attendance:work:shift:export", "导出班次信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportWorkShiftAsync([FromQuery] TaktWorkShiftQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

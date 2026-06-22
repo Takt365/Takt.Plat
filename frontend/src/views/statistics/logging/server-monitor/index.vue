@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/statistics/logging/server-monitor -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：服务监控页面，展示应用状态与硬件信息；权限 statistics:logging:servermonitor:list -->
+<!-- 功能描述：服务监控页面，展示应用状态与硬件信息；权限 statistics:logging:server:monitor:list -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -385,7 +385,7 @@ const { echartsLocale } = useTaktComponentLocale()
 const permissionStore = usePermissionStore()
 
 /** 列表/query 权限（GET hardware、GET app-status） */
-const PERMISSION_LIST = 'statistics:logging:servermonitor:list'
+const PERMISSION_LIST = 'statistics:logging:server:monitor:list'
 
 /** CPU 汇总使用率仪表盘容器 */
 const cpuUsageGaugeRef = ref<HTMLDivElement | null>(null)
@@ -1133,7 +1133,7 @@ function getDriveUsageColor(usage: number): string {
 }
 
 /**
- * 加载监控数据（需 statistics:logging:servermonitor:list）
+ * 加载监控数据（需 statistics:logging:server:monitor:list）
  */
 async function loadData() {
   if (!permissionStore.hasPermission(PERMISSION_LIST)) {

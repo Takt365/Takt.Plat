@@ -39,12 +39,12 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     /// 招聘计划ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long RecruitmentPlanId { get; set; }
+    public long StaffingRequirementId { get; set; }
 
     /// <summary>
     /// 招聘计划名称（填充字段）
     /// </summary>
-    public string? RecruitmentPlanName { get; set; }
+    public string? StaffingRequirementName { get; set; }
 
     /// <summary>
     /// 发布编号（租户+公司内唯一）
@@ -86,18 +86,6 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
 
-    /// <summary>
-    /// 招聘计划
-    /// （主表：TaktTalentRecruitmentPlan）
-    /// </summary>
-    public TaktTalentRecruitmentPlanDto? RecruitmentPlan { get; set; }
-
-    /// <summary>
-    /// 面试安排
-    /// （子表：TaktTalentInterview）
-    /// </summary>
-    public List<TaktTalentInterviewDto>? TalentInterviews { get; set; }
-
 }
 
 // ========================================
@@ -124,7 +112,7 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     /// 招聘计划ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? RecruitmentPlanId { get; set; }
+    public long? StaffingRequirementId { get; set; }
 
     /// <summary>
     /// 发布编号（租户+公司内唯一）
@@ -230,7 +218,7 @@ public class TaktTalentJobPostingCreateDto
     /// 招聘计划ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long RecruitmentPlanId { get; set; }
+    public long StaffingRequirementId { get; set; }
 
     /// <summary>
     /// 发布编号（租户+公司内唯一）
@@ -273,11 +261,6 @@ public class TaktTalentJobPostingCreateDto
     /// 发布说明
     /// </summary>
     public string? Reason { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 面试安排（子表，级联保存）
-    /// </summary>
-    public List<TaktTalentInterviewCreateDto>? TalentInterviews { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -358,7 +341,7 @@ public class TaktTalentJobPostingTemplateDto
     /// 招聘计划ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? RecruitmentPlanId { get; set; }
+    public long? StaffingRequirementId { get; set; }
 
     /// <summary>
     /// 发布编号（租户+公司内唯一）
@@ -421,7 +404,7 @@ public class TaktTalentJobPostingImportDto
     /// 招聘计划ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? RecruitmentPlanId { get; set; }
+    public long? StaffingRequirementId { get; set; }
 
     /// <summary>
     /// 发布编号（租户+公司内唯一）
@@ -485,7 +468,7 @@ public class TaktTalentJobPostingExportDto
     /// 招聘计划ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long RecruitmentPlanId { get; set; }
+    public long StaffingRequirementId { get; set; }
 
     /// <summary>
     /// 发布编号（租户+公司内唯一）

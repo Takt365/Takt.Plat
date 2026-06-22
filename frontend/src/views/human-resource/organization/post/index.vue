@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:organization:post:create"
-      update-permission="humanresource:organization:post:update"
-      delete-permission="humanresource:organization:post:delete"
-      import-permission="humanresource:organization:post:import"
-      export-permission="humanresource:organization:post:export"
+      create-permission="human:resource:organization:post:create"
+      update-permission="human:resource:organization:post:update"
+      delete-permission="human:resource:organization:post:delete"
+      import-permission="human:resource:organization:post:import"
+      export-permission="human:resource:organization:post:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -788,7 +788,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:organization:post:update',
+        permission: 'human:resource:organization:post:update',
         onClick: (record: Post) => handleEdit(record)
       },
       {
@@ -796,7 +796,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.allocate') + t('entity.employee._self'),
         shape: 'plain',
         icon: RiUserLine,
-        permission: 'humanresource:organization:post:update',
+        permission: 'human:resource:organization:post:update',
         onClick: (record: Post) => handleAssignPostEmployees(record)
       },
       {
@@ -804,7 +804,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:organization:post:delete',
+        permission: 'human:resource:organization:post:delete',
         onClick: (record: Post) => handleDeleteOne(record)
       }
     ]

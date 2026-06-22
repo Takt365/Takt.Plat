@@ -40,7 +40,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:organization:dept:list", "部门列表")]
+    [TaktPermission("human:resource:organization:dept:list", "部门列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetDeptListAsync([FromQuery] TaktDeptQueryDto queryDto)
     {
@@ -60,7 +60,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="id">部门ID</param>
     /// <returns>部门DTO</returns>
-    [TaktPermission("humanresource:organization:dept:query", "部门详情")]
+    [TaktPermission("human:resource:organization:dept:query", "部门详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDeptByIdAsync(long id)
     {
@@ -83,7 +83,7 @@ public class TaktDeptsController : TaktControllerBase
     /// 获取部门树形选项列表
     /// </summary>
     /// <returns>树形选项</returns>
-    [TaktPermission("humanresource:organization:dept:query", "部门树形选项")]
+    [TaktPermission("human:resource:organization:dept:query", "部门树形选项")]
     [HttpGet("tree-options")]
     public async Task<IActionResult> GetDeptTreeOptionsAsync()
     {
@@ -103,7 +103,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
     /// <returns>树形数据</returns>
-    [TaktPermission("humanresource:organization:dept:query", "部门树")]
+    [TaktPermission("human:resource:organization:dept:query", "部门树")]
     [HttpGet("tree")]
     public async Task<IActionResult> GetDeptTreeAsync([FromQuery] long parentId = 0, [FromQuery] bool includeDisabled = false)
     {
@@ -123,7 +123,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>部门DTO</returns>
-    [TaktPermission("humanresource:organization:dept:create", "创建部门")]
+    [TaktPermission("human:resource:organization:dept:create", "创建部门")]
     [HttpPost]
     public async Task<IActionResult> CreateDeptAsync([FromBody] TaktDeptCreateDto dto)
     {
@@ -144,7 +144,7 @@ public class TaktDeptsController : TaktControllerBase
     /// <param name="id">部门ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>部门DTO</returns>
-    [TaktPermission("humanresource:organization:dept:update", "更新部门")]
+    [TaktPermission("human:resource:organization:dept:update", "更新部门")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDeptAsync(long id, [FromBody] TaktDeptUpdateDto dto)
     {
@@ -164,7 +164,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="id">部门ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:organization:dept:delete", "删除部门")]
+    [TaktPermission("human:resource:organization:dept:delete", "删除部门")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDeptByIdAsync(long id)
     {
@@ -184,7 +184,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:organization:dept:delete", "批量删除部门")]
+    [TaktPermission("human:resource:organization:dept:delete", "批量删除部门")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteDeptBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -204,7 +204,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
     /// <returns>部门DTO</returns>
-    [TaktPermission("humanresource:organization:dept:update", "更新部门状态")]
+    [TaktPermission("human:resource:organization:dept:update", "更新部门状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateDeptStatusAsync([FromBody] TaktDeptStatusDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">是否内置 DTO</param>
     /// <returns>部门DTO</returns>
-    [TaktPermission("humanresource:organization:dept:update", "更新部门是否内置")]
+    [TaktPermission("human:resource:organization:dept:update", "更新部门是否内置")]
     [HttpPut("built-in")]
     public async Task<IActionResult> UpdateDeptBuiltInAsync([FromBody] TaktDeptBuiltInDto dto)
     {
@@ -244,7 +244,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>部门DTO</returns>
-    [TaktPermission("humanresource:organization:dept:update", "更新部门排序")]
+    [TaktPermission("human:resource:organization:dept:update", "更新部门排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateDeptSortAsync([FromBody] TaktDeptSortDto dto)
     {
@@ -263,7 +263,7 @@ public class TaktDeptsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:organization:dept:import", "获取部门导入模板")]
+    [TaktPermission("human:resource:organization:dept:import", "获取部门导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetDeptTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -283,7 +283,7 @@ public class TaktDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:organization:dept:import", "导入部门")]
+    [TaktPermission("human:resource:organization:dept:import", "导入部门")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportDeptAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -313,7 +313,7 @@ public class TaktDeptsController : TaktControllerBase
     /// 导出部门
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:organization:dept:export", "导出部门")]
+    [TaktPermission("human:resource:organization:dept:export", "导出部门")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportDeptAsync([FromQuery] TaktDeptQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

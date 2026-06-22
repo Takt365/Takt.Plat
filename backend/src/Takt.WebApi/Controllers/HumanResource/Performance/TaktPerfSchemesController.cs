@@ -41,7 +41,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:performance:scheme:list", "绩效方案指标列表")]
+    [TaktPermission("human:resource:performance:perf:scheme:list", "绩效方案指标列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPerfSchemeListAsync([FromQuery] TaktPerfSchemeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效方案指标ID</param>
     /// <returns>绩效方案指标DTO</returns>
-    [TaktPermission("humanresource:performance:scheme:query", "绩效方案指标详情")]
+    [TaktPermission("human:resource:performance:perf:scheme:query", "绩效方案指标详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPerfSchemeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// 获取绩效方案指标选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:performance:scheme:query", "绩效方案指标选项")]
+    [TaktPermission("human:resource:performance:perf:scheme:query", "绩效方案指标选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPerfSchemeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>绩效方案指标DTO</returns>
-    [TaktPermission("humanresource:performance:scheme:create", "创建绩效方案指标")]
+    [TaktPermission("human:resource:performance:perf:scheme:create", "创建绩效方案指标")]
     [HttpPost]
     public async Task<IActionResult> CreatePerfSchemeAsync([FromBody] TaktPerfSchemeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// <param name="id">绩效方案指标ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>绩效方案指标DTO</returns>
-    [TaktPermission("humanresource:performance:scheme:update", "更新绩效方案指标")]
+    [TaktPermission("human:resource:performance:perf:scheme:update", "更新绩效方案指标")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePerfSchemeAsync(long id, [FromBody] TaktPerfSchemeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效方案指标ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:scheme:delete", "删除绩效方案指标")]
+    [TaktPermission("human:resource:performance:perf:scheme:delete", "删除绩效方案指标")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePerfSchemeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:scheme:delete", "批量删除绩效方案指标")]
+    [TaktPermission("human:resource:performance:perf:scheme:delete", "批量删除绩效方案指标")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePerfSchemeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>绩效方案指标DTO</returns>
-    [TaktPermission("humanresource:performance:scheme:update", "更新绩效方案指标状态")]
+    [TaktPermission("human:resource:performance:perf:scheme:update", "更新绩效方案指标状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePerfSchemeStatusAsync([FromBody] TaktPerfSchemeStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>绩效方案指标DTO</returns>
-    [TaktPermission("humanresource:performance:scheme:update", "更新绩效方案指标排序")]
+    [TaktPermission("human:resource:performance:perf:scheme:update", "更新绩效方案指标排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdatePerfSchemeSortAsync([FromBody] TaktPerfSchemeSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:scheme:import", "获取绩效方案指标导入模板")]
+    [TaktPermission("human:resource:performance:perf:scheme:import", "获取绩效方案指标导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPerfSchemeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:performance:scheme:import", "导入绩效方案指标")]
+    [TaktPermission("human:resource:performance:perf:scheme:import", "导入绩效方案指标")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPerfSchemeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// 导出绩效方案指标
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:scheme:export", "导出绩效方案指标")]
+    [TaktPermission("human:resource:performance:perf:scheme:export", "导出绩效方案指标")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPerfSchemeAsync([FromQuery] TaktPerfSchemeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

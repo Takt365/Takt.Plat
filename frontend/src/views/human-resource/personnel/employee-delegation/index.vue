@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:personnel:employeedelegation:create"
-      update-permission="humanresource:personnel:employeedelegation:update"
-      delete-permission="humanresource:personnel:employeedelegation:delete"
-      import-permission="humanresource:personnel:employeedelegation:import"
-      export-permission="humanresource:personnel:employeedelegation:export"
+      create-permission="human:resource:personnel:employeedelegation:create"
+      update-permission="human:resource:personnel:employeedelegation:update"
+      delete-permission="human:resource:personnel:employeedelegation:delete"
+      import-permission="human:resource:personnel:employeedelegation:import"
+      export-permission="human:resource:personnel:employeedelegation:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -577,7 +577,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:personnel:employeedelegation:update',
+        permission: 'human:resource:personnel:employeedelegation:update',
         onClick: (record: EmployeeDelegation) => handleEdit(record)
       },
       {
@@ -585,7 +585,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:personnel:employeedelegation:delete',
+        permission: 'human:resource:personnel:employeedelegation:delete',
         onClick: (record: EmployeeDelegation) => handleDeleteOne(record)
       }
     ]

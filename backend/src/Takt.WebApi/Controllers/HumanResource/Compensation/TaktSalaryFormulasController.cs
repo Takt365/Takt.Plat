@@ -41,7 +41,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:list", "薪资计算公式列表")]
+    [TaktPermission("human:resource:compensation:salary:formula:list", "薪资计算公式列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSalaryFormulaListAsync([FromQuery] TaktSalaryFormulaQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="id">薪资计算公式ID</param>
     /// <returns>薪资计算公式DTO</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:query", "薪资计算公式详情")]
+    [TaktPermission("human:resource:compensation:salary:formula:query", "薪资计算公式详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSalaryFormulaByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// 获取薪资计算公式选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:query", "薪资计算公式选项")]
+    [TaktPermission("human:resource:compensation:salary:formula:query", "薪资计算公式选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSalaryFormulaOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>薪资计算公式DTO</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:create", "创建薪资计算公式")]
+    [TaktPermission("human:resource:compensation:salary:formula:create", "创建薪资计算公式")]
     [HttpPost]
     public async Task<IActionResult> CreateSalaryFormulaAsync([FromBody] TaktSalaryFormulaCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// <param name="id">薪资计算公式ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>薪资计算公式DTO</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:update", "更新薪资计算公式")]
+    [TaktPermission("human:resource:compensation:salary:formula:update", "更新薪资计算公式")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSalaryFormulaAsync(long id, [FromBody] TaktSalaryFormulaUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="id">薪资计算公式ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:delete", "删除薪资计算公式")]
+    [TaktPermission("human:resource:compensation:salary:formula:delete", "删除薪资计算公式")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSalaryFormulaByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:delete", "批量删除薪资计算公式")]
+    [TaktPermission("human:resource:compensation:salary:formula:delete", "批量删除薪资计算公式")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSalaryFormulaBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>薪资计算公式DTO</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:update", "更新薪资计算公式状态")]
+    [TaktPermission("human:resource:compensation:salary:formula:update", "更新薪资计算公式状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSalaryFormulaStatusAsync([FromBody] TaktSalaryFormulaStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>薪资计算公式DTO</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:update", "更新薪资计算公式排序")]
+    [TaktPermission("human:resource:compensation:salary:formula:update", "更新薪资计算公式排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateSalaryFormulaSortAsync([FromBody] TaktSalaryFormulaSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:import", "获取薪资计算公式导入模板")]
+    [TaktPermission("human:resource:compensation:salary:formula:import", "获取薪资计算公式导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSalaryFormulaTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:import", "导入薪资计算公式")]
+    [TaktPermission("human:resource:compensation:salary:formula:import", "导入薪资计算公式")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSalaryFormulaAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// 导出薪资计算公式
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:salaryformula:export", "导出薪资计算公式")]
+    [TaktPermission("human:resource:compensation:salary:formula:export", "导出薪资计算公式")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSalaryFormulaAsync([FromQuery] TaktSalaryFormulaQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

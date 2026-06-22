@@ -41,7 +41,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:compensation:payslip:list", "工资条列表")]
+    [TaktPermission("human:resource:compensation:payslip:list", "工资条列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPayslipListAsync([FromQuery] TaktPayslipQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工资条ID</param>
     /// <returns>工资条DTO</returns>
-    [TaktPermission("humanresource:compensation:payslip:query", "工资条详情")]
+    [TaktPermission("human:resource:compensation:payslip:query", "工资条详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPayslipByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// 获取工资条选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:compensation:payslip:query", "工资条选项")]
+    [TaktPermission("human:resource:compensation:payslip:query", "工资条选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPayslipOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工资条DTO</returns>
-    [TaktPermission("humanresource:compensation:payslip:create", "创建工资条")]
+    [TaktPermission("human:resource:compensation:payslip:create", "创建工资条")]
     [HttpPost]
     public async Task<IActionResult> CreatePayslipAsync([FromBody] TaktPayslipCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// <param name="id">工资条ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工资条DTO</returns>
-    [TaktPermission("humanresource:compensation:payslip:update", "更新工资条")]
+    [TaktPermission("human:resource:compensation:payslip:update", "更新工资条")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePayslipAsync(long id, [FromBody] TaktPayslipUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工资条ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:payslip:delete", "删除工资条")]
+    [TaktPermission("human:resource:compensation:payslip:delete", "删除工资条")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePayslipByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:payslip:delete", "批量删除工资条")]
+    [TaktPermission("human:resource:compensation:payslip:delete", "批量删除工资条")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePayslipBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>工资条DTO</returns>
-    [TaktPermission("humanresource:compensation:payslip:update", "更新工资条状态")]
+    [TaktPermission("human:resource:compensation:payslip:update", "更新工资条状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePayslipStatusAsync([FromBody] TaktPayslipStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:payslip:import", "获取工资条导入模板")]
+    [TaktPermission("human:resource:compensation:payslip:import", "获取工资条导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPayslipTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:compensation:payslip:import", "导入工资条")]
+    [TaktPermission("human:resource:compensation:payslip:import", "导入工资条")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPayslipAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPayslipsController : TaktControllerBase
     /// 导出工资条
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:payslip:export", "导出工资条")]
+    [TaktPermission("human:resource:compensation:payslip:export", "导出工资条")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPayslipAsync([FromQuery] TaktPayslipQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -41,7 +41,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:list", "员工工作经历列表")]
+    [TaktPermission("human:resource:personnel:employeeexperience:list", "员工工作经历列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeExperienceListAsync([FromQuery] TaktEmployeeExperienceQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工工作经历ID</param>
     /// <returns>员工工作经历DTO</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:query", "员工工作经历详情")]
+    [TaktPermission("human:resource:personnel:employeeexperience:query", "员工工作经历详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeExperienceByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// 获取员工工作经历选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:query", "员工工作经历选项")]
+    [TaktPermission("human:resource:personnel:employeeexperience:query", "员工工作经历选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeExperienceOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工工作经历DTO</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:create", "创建员工工作经历")]
+    [TaktPermission("human:resource:personnel:employeeexperience:create", "创建员工工作经历")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeExperienceAsync([FromBody] TaktEmployeeExperienceCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// <param name="id">员工工作经历ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工工作经历DTO</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:update", "更新员工工作经历")]
+    [TaktPermission("human:resource:personnel:employeeexperience:update", "更新员工工作经历")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeExperienceAsync(long id, [FromBody] TaktEmployeeExperienceUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工工作经历ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:delete", "删除员工工作经历")]
+    [TaktPermission("human:resource:personnel:employeeexperience:delete", "删除员工工作经历")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeExperienceByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:delete", "批量删除员工工作经历")]
+    [TaktPermission("human:resource:personnel:employeeexperience:delete", "批量删除员工工作经历")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeExperienceBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:import", "获取员工工作经历导入模板")]
+    [TaktPermission("human:resource:personnel:employeeexperience:import", "获取员工工作经历导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeExperienceTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:import", "导入员工工作经历")]
+    [TaktPermission("human:resource:personnel:employeeexperience:import", "导入员工工作经历")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeExperienceAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// 导出员工工作经历
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeeexperience:export", "导出员工工作经历")]
+    [TaktPermission("human:resource:personnel:employeeexperience:export", "导出员工工作经历")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeExperienceAsync([FromQuery] TaktEmployeeExperienceQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

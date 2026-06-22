@@ -41,7 +41,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("statistics:logging:quartzlog:list", "任务执行日志列表")]
+    [TaktPermission("statistics:logging:quartz:log:list", "任务执行日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetQuartzLogListAsync([FromQuery] TaktQuartzLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">任务执行日志ID</param>
     /// <returns>任务执行日志DTO</returns>
-    [TaktPermission("statistics:logging:quartzlog:query", "任务执行日志详情")]
+    [TaktPermission("statistics:logging:quartz:log:query", "任务执行日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQuartzLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// 获取任务执行日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("statistics:logging:quartzlog:query", "任务执行日志选项")]
+    [TaktPermission("statistics:logging:quartz:log:query", "任务执行日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetQuartzLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>任务执行日志DTO</returns>
-    [TaktPermission("statistics:logging:quartzlog:create", "创建任务执行日志")]
+    [TaktPermission("statistics:logging:quartz:log:create", "创建任务执行日志")]
     [HttpPost]
     public async Task<IActionResult> CreateQuartzLogAsync([FromBody] TaktQuartzLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// <param name="id">任务执行日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>任务执行日志DTO</returns>
-    [TaktPermission("statistics:logging:quartzlog:update", "更新任务执行日志")]
+    [TaktPermission("statistics:logging:quartz:log:update", "更新任务执行日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateQuartzLogAsync(long id, [FromBody] TaktQuartzLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">任务执行日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:logging:quartzlog:delete", "删除任务执行日志")]
+    [TaktPermission("statistics:logging:quartz:log:delete", "删除任务执行日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteQuartzLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:logging:quartzlog:delete", "批量删除任务执行日志")]
+    [TaktPermission("statistics:logging:quartz:log:delete", "批量删除任务执行日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteQuartzLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO（TaktExecuteStatus 枚举）</param>
     /// <returns>任务执行日志DTO</returns>
-    [TaktPermission("statistics:logging:quartzlog:update", "更新任务执行日志状态")]
+    [TaktPermission("statistics:logging:quartz:log:update", "更新任务执行日志状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateQuartzLogStatusAsync([FromBody] TaktQuartzLogStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktQuartzLogsController : TaktControllerBase
     /// 导出任务执行日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("statistics:logging:quartzlog:export", "导出任务执行日志")]
+    [TaktPermission("statistics:logging:quartz:log:export", "导出任务执行日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportQuartzLogAsync([FromQuery] TaktQuartzLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

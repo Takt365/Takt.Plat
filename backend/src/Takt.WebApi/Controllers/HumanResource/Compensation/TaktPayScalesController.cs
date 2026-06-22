@@ -41,7 +41,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:compensation:payscale:list", "薪级列表")]
+    [TaktPermission("human:resource:compensation:pay:scale:list", "薪级列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPayScaleListAsync([FromQuery] TaktPayScaleQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="id">薪级ID</param>
     /// <returns>薪级DTO</returns>
-    [TaktPermission("humanresource:compensation:payscale:query", "薪级详情")]
+    [TaktPermission("human:resource:compensation:pay:scale:query", "薪级详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPayScaleByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// 获取薪级选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:compensation:payscale:query", "薪级选项")]
+    [TaktPermission("human:resource:compensation:pay:scale:query", "薪级选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPayScaleOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>薪级DTO</returns>
-    [TaktPermission("humanresource:compensation:payscale:create", "创建薪级")]
+    [TaktPermission("human:resource:compensation:pay:scale:create", "创建薪级")]
     [HttpPost]
     public async Task<IActionResult> CreatePayScaleAsync([FromBody] TaktPayScaleCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// <param name="id">薪级ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>薪级DTO</returns>
-    [TaktPermission("humanresource:compensation:payscale:update", "更新薪级")]
+    [TaktPermission("human:resource:compensation:pay:scale:update", "更新薪级")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePayScaleAsync(long id, [FromBody] TaktPayScaleUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="id">薪级ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:payscale:delete", "删除薪级")]
+    [TaktPermission("human:resource:compensation:pay:scale:delete", "删除薪级")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePayScaleByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:compensation:payscale:delete", "批量删除薪级")]
+    [TaktPermission("human:resource:compensation:pay:scale:delete", "批量删除薪级")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePayScaleBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>薪级DTO</returns>
-    [TaktPermission("humanresource:compensation:payscale:update", "更新薪级状态")]
+    [TaktPermission("human:resource:compensation:pay:scale:update", "更新薪级状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePayScaleStatusAsync([FromBody] TaktPayScaleStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>薪级DTO</returns>
-    [TaktPermission("humanresource:compensation:payscale:update", "更新薪级排序")]
+    [TaktPermission("human:resource:compensation:pay:scale:update", "更新薪级排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdatePayScaleSortAsync([FromBody] TaktPayScaleSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:payscale:import", "获取薪级导入模板")]
+    [TaktPermission("human:resource:compensation:pay:scale:import", "获取薪级导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPayScaleTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:compensation:payscale:import", "导入薪级")]
+    [TaktPermission("human:resource:compensation:pay:scale:import", "导入薪级")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPayScaleAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktPayScalesController : TaktControllerBase
     /// 导出薪级
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:compensation:payscale:export", "导出薪级")]
+    [TaktPermission("human:resource:compensation:pay:scale:export", "导出薪级")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPayScaleAsync([FromQuery] TaktPayScaleQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

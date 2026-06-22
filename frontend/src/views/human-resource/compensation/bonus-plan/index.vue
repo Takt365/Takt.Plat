@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:performance:assessment:create"
-      update-permission="humanresource:performance:assessment:update"
-      delete-permission="humanresource:performance:assessment:delete"
-      import-permission="humanresource:performance:assessment:import"
-      export-permission="humanresource:performance:assessment:export"
+      create-permission="human:resource:performance:assessment:create"
+      update-permission="human:resource:performance:assessment:update"
+      delete-permission="human:resource:performance:assessment:delete"
+      import-permission="human:resource:performance:assessment:import"
+      export-permission="human:resource:performance:assessment:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -539,7 +539,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:performance:assessment:update',
+        permission: 'human:resource:performance:assessment:update',
         onClick: (record: BonusPlan) => handleEdit(record)
       },
       {
@@ -547,7 +547,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:performance:assessment:delete',
+        permission: 'human:resource:performance:assessment:delete',
         onClick: (record: BonusPlan) => handleDeleteOne(record)
       }
     ]

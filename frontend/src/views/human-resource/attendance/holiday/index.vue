@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:attendance:holiday:create"
-      update-permission="humanresource:attendance:holiday:update"
-      delete-permission="humanresource:attendance:holiday:delete"
-      import-permission="humanresource:attendance:holiday:import"
-      export-permission="humanresource:attendance:holiday:export"
+      create-permission="human:resource:attendance:holiday:create"
+      update-permission="human:resource:attendance:holiday:update"
+      delete-permission="human:resource:attendance:holiday:delete"
+      import-permission="human:resource:attendance:holiday:import"
+      export-permission="human:resource:attendance:holiday:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -507,7 +507,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:attendance:holiday:update',
+        permission: 'human:resource:attendance:holiday:update',
         onClick: (record: Holiday) => handleEdit(record)
       },
       {
@@ -515,7 +515,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:attendance:holiday:delete',
+        permission: 'human:resource:attendance:holiday:delete',
         onClick: (record: Holiday) => handleDeleteOne(record)
       }
     ]

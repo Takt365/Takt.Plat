@@ -258,7 +258,7 @@ function main() {
     'ChangeLog: 主实体前缀 + :change:log',
     '主子表: 子实体名以主表名为前缀时继承主表权限 + 子表剩余词段（如 overtime:item、news:attachment）',
     '  例: accounting:controlling:cost:center:list',
-    '  例: humanresource:attendance:overtime:item:list',
+    '  例: human:resource:attendance:overtime:item:list',
     '  例: routine:announcement:announcement:list',
     '',
     '对账范围:',

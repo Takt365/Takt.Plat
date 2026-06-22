@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:engineeringchange:ecnotification:create"
-      update-permission="logistics:manufacturing:engineeringchange:ecnotification:update"
-      delete-permission="logistics:manufacturing:engineeringchange:ecnotification:delete"
-      import-permission="logistics:manufacturing:engineeringchange:ecnotification:import"
-      export-permission="logistics:manufacturing:engineeringchange:ecnotification:export"
+      create-permission="logistics:manufacturing:engineering:change:ec:notification:create"
+      update-permission="logistics:manufacturing:engineering:change:ec:notification:update"
+      delete-permission="logistics:manufacturing:engineering:change:ec:notification:delete"
+      import-permission="logistics:manufacturing:engineering:change:ec:notification:import"
+      export-permission="logistics:manufacturing:engineering:change:ec:notification:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -766,7 +766,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:engineeringchange:ecnotification:update',
+        permission: 'logistics:manufacturing:engineering:change:ec:notification:update',
         onClick: (record: EcNotification) => handleEdit(record)
       },
       {
@@ -774,7 +774,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:engineeringchange:ecnotification:delete',
+        permission: 'logistics:manufacturing:engineering:change:ec:notification:delete',
         onClick: (record: EcNotification) => handleDeleteOne(record)
       }
     ]

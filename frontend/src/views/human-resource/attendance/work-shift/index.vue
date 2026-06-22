@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:attendance:workshift:create"
-      update-permission="humanresource:attendance:workshift:update"
-      delete-permission="humanresource:attendance:workshift:delete"
-      import-permission="humanresource:attendance:workshift:import"
-      export-permission="humanresource:attendance:workshift:export"
+      create-permission="human:resource:attendance:work:shift:create"
+      update-permission="human:resource:attendance:work:shift:update"
+      delete-permission="human:resource:attendance:work:shift:delete"
+      import-permission="human:resource:attendance:work:shift:import"
+      export-permission="human:resource:attendance:work:shift:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -497,7 +497,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:attendance:workshift:update',
+        permission: 'human:resource:attendance:work:shift:update',
         onClick: (record: WorkShift) => handleEdit(record)
       },
       {
@@ -505,7 +505,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:attendance:workshift:delete',
+        permission: 'human:resource:attendance:work:shift:delete',
         onClick: (record: WorkShift) => handleDeleteOne(record)
       }
     ]

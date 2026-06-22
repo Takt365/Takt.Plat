@@ -41,7 +41,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:list", "用人需求列表")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:list", "用人需求列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTalentStaffingRequirementListAsync([FromQuery] TaktTalentStaffingRequirementQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// </summary>
     /// <param name="id">用人需求ID</param>
     /// <returns>用人需求DTO</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:query", "用人需求详情")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:query", "用人需求详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTalentStaffingRequirementByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// 获取用人需求选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:query", "用人需求选项")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:query", "用人需求选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTalentStaffingRequirementOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>用人需求DTO</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:create", "创建用人需求")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:create", "创建用人需求")]
     [HttpPost]
     public async Task<IActionResult> CreateTalentStaffingRequirementAsync([FromBody] TaktTalentStaffingRequirementCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// <param name="id">用人需求ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>用人需求DTO</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:update", "更新用人需求")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:update", "更新用人需求")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTalentStaffingRequirementAsync(long id, [FromBody] TaktTalentStaffingRequirementUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// </summary>
     /// <param name="id">用人需求ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:delete", "删除用人需求")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:delete", "删除用人需求")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTalentStaffingRequirementByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:delete", "批量删除用人需求")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:delete", "批量删除用人需求")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTalentStaffingRequirementBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:import", "获取用人需求导入模板")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:import", "获取用人需求导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetTalentStaffingRequirementTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:import", "导入用人需求")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:import", "导入用人需求")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportTalentStaffingRequirementAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// 导出用人需求
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:talent:talentstaffingrequirement:export", "导出用人需求")]
+    [TaktPermission("human:resource:talent:talentstaffingrequirement:export", "导出用人需求")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTalentStaffingRequirementAsync([FromQuery] TaktTalentStaffingRequirementQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

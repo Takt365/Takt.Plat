@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Talent;
+using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Entities.HumanResource.Talent;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -31,27 +32,35 @@ namespace Takt.Application.Services.HumanResource.Talent;
 public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalentStaffingRequirementService
 {
     private readonly ITaktApprovalRepository<TaktTalentStaffingRequirement> _talentStaffingRequirementRepository;
-    private readonly ITaktApprovalRepository<TaktTalentRecruitmentPlan> _talentRecruitmentPlanRepository;
+    private readonly ITaktCompanyRepository<TaktTalentJobPosting> _talentJobPostingRepository;
+    private readonly ITaktApprovalRepository<TaktTalentOffer> _talentOfferRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeOnboarding> _employeeOnboardingRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="talentStaffingRequirementRepository">用人需求仓储</param>
-    /// <param name="talentRecruitmentPlanRepository">TalentRecruitmentPlan仓储</param>
+    /// <param name="talentJobPostingRepository">职位发布仓储</param>
+    /// <param name="talentOfferRepository">录用信息仓储</param>
+    /// <param name="employeeOnboardingRepository">入职待办仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktTalentStaffingRequirementService(
         ITaktApprovalRepository<TaktTalentStaffingRequirement> talentStaffingRequirementRepository,
-        ITaktApprovalRepository<TaktTalentRecruitmentPlan> talentRecruitmentPlanRepository,
+        ITaktCompanyRepository<TaktTalentJobPosting> talentJobPostingRepository,
+        ITaktApprovalRepository<TaktTalentOffer> talentOfferRepository,
+        ITaktCompanyRepository<TaktEmployeeOnboarding> employeeOnboardingRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _talentStaffingRequirementRepository = talentStaffingRequirementRepository;
-        _talentRecruitmentPlanRepository = talentRecruitmentPlanRepository;
+        _talentJobPostingRepository = talentJobPostingRepository;
+        _talentOfferRepository = talentOfferRepository;
+        _employeeOnboardingRepository = employeeOnboardingRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -87,7 +96,6 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             return null;
         }
         var dto = entity.Adapt<TaktTalentStaffingRequirementDto>();
-        await FillTalentStaffingRequirementDetailsAsync(dto, entity);
         return dto;    }
 
     /// <summary>
@@ -124,7 +132,6 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             throw new TaktBusinessException("用人需求的ReqNo已存在");
         }
         entity = await _talentStaffingRequirementRepository.CreateAsync(entity);
-                await SaveTalentStaffingRequirementChildrenAsync(entity, dto);
         return await GetTalentStaffingRequirementByIdAsync(entity.Id) ?? entity.Adapt<TaktTalentStaffingRequirementDto>();
     }
 
@@ -151,7 +158,6 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             throw new TaktBusinessException("用人需求的ReqNo已存在");
         }
         await _talentStaffingRequirementRepository.UpdateAsync(entity);
-                await SaveTalentStaffingRequirementChildrenAsync(entity, dto);
         return await GetTalentStaffingRequirementByIdAsync(id) ?? throw new TaktBusinessException("用人需求不存在");
     }
 
@@ -167,7 +173,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
         {
             throw new TaktBusinessException("用人需求不存在或已删除");
         }
-        await _talentRecruitmentPlanRepository.DeleteAsync(x => x.StaffingRequirementId == entity.Id);
+        await DeleteTalentStaffingRequirementChildrenAsync(entity.Id);
         var deleted = await _talentStaffingRequirementRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -278,54 +284,29 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             fileName ?? "用人需求导出.xlsx");
     }
 
-    // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
     /// <summary>
-    /// 填充用人需求详情（加载 OneToMany 子表：招聘计划）
+    /// 删除用人需求关联职位发布、录用及入职待办
     /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
+    /// <param name="staffingRequirementId">用人需求ID</param>
     /// <returns>任务</returns>
-    private async Task FillTalentStaffingRequirementDetailsAsync(TaktTalentStaffingRequirementDto dto, TaktTalentStaffingRequirement entity)
+    private async Task DeleteTalentStaffingRequirementChildrenAsync(long staffingRequirementId)
     {
-        if (dto == null)
+        var postings = await _talentJobPostingRepository.GetListAsync(x => x.StaffingRequirementId == staffingRequirementId);
+        var postingIds = postings.Select(x => x.Id).ToList();
+        if (postingIds.Count == 0)
         {
             return;
         }
-        // 招聘计划 → dto.TalentRecruitmentPlans
-        var talentrecruitmentplans = await _talentRecruitmentPlanRepository.GetListAsync(x => x.StaffingRequirementId == entity.Id);
-        dto.TalentRecruitmentPlans = talentrecruitmentplans.Adapt<List<TaktTalentRecruitmentPlanDto>>();
+        var offers = await _talentOfferRepository.GetListAsync(x => postingIds.Contains(x.JobPostingId));
+        var offerIds = offers.Select(x => x.Id).ToList();
+        if (offerIds.Count > 0)
+        {
+            await _employeeOnboardingRepository.DeleteAsync(x => offerIds.Contains(x.OfferId));
+            await _talentOfferRepository.DeleteAsync(x => postingIds.Contains(x.JobPostingId));
+        }
+        await _talentJobPostingRepository.DeleteAsync(x => x.StaffingRequirementId == staffingRequirementId);
     }
 
-    /// <summary>
-    /// 保存用人需求子表级联（招聘计划；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveTalentStaffingRequirementChildrenAsync(TaktTalentStaffingRequirement entity, TaktTalentStaffingRequirementCreateDto dto)
-    {
-        // 招聘计划（TalentRecruitmentPlans）
-        if (dto.TalentRecruitmentPlans is not { Count: > 0 })
-        {
-            await _talentRecruitmentPlanRepository.DeleteAsync(x => x.StaffingRequirementId == entity.Id);
-        }
-        else
-        {
-            var talentrecruitmentplans = dto.TalentRecruitmentPlans.Adapt<List<TaktTalentRecruitmentPlan>>();
-            foreach (var child in talentrecruitmentplans)
-            {
-                child.StaffingRequirementId = entity.Id;
-            }
-            await _talentRecruitmentPlanRepository.DeleteAsync(x => x.StaffingRequirementId == entity.Id);
-            foreach (var child in talentrecruitmentplans)
-            {
-            }
-            await _talentRecruitmentPlanRepository.CreateRangeAsync(talentrecruitmentplans);
-        }
-    }
     // ========================================
     // 查询表达式
     // ========================================

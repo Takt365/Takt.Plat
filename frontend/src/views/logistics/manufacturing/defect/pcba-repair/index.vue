@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:defect:pcbarepair:create"
-      update-permission="logistics:manufacturing:defect:pcbarepair:update"
-      delete-permission="logistics:manufacturing:defect:pcbarepair:delete"
-      import-permission="logistics:manufacturing:defect:pcbarepair:import"
-      export-permission="logistics:manufacturing:defect:pcbarepair:export"
+      create-permission="logistics:manufacturing:defect:pcba:repair:create"
+      update-permission="logistics:manufacturing:defect:pcba:repair:update"
+      delete-permission="logistics:manufacturing:defect:pcba:repair:delete"
+      import-permission="logistics:manufacturing:defect:pcba:repair:import"
+      export-permission="logistics:manufacturing:defect:pcba:repair:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -672,7 +672,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:defect:pcbarepair:update',
+        permission: 'logistics:manufacturing:defect:pcba:repair:update',
         onClick: (record: PcbaRepair) => handleEdit(record)
       },
       {
@@ -680,7 +680,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:defect:pcbarepair:delete',
+        permission: 'logistics:manufacturing:defect:pcba:repair:delete',
         onClick: (record: PcbaRepair) => handleDeleteOne(record)
       }
     ]

@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:quality:operation:samplingscheme:create"
-      update-permission="logistics:quality:operation:samplingscheme:update"
-      delete-permission="logistics:quality:operation:samplingscheme:delete"
-      import-permission="logistics:quality:operation:samplingscheme:import"
-      export-permission="logistics:quality:operation:samplingscheme:export"
+      create-permission="logistics:quality:operation:sampling:scheme:create"
+      update-permission="logistics:quality:operation:sampling:scheme:update"
+      delete-permission="logistics:quality:operation:sampling:scheme:delete"
+      import-permission="logistics:quality:operation:sampling:scheme:import"
+      export-permission="logistics:quality:operation:sampling:scheme:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -749,7 +749,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:samplingscheme:update',
+        permission: 'logistics:quality:operation:sampling:scheme:update',
         onClick: (record: SamplingScheme) => handleEdit(record)
       },
       {
@@ -757,7 +757,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:samplingscheme:delete',
+        permission: 'logistics:quality:operation:sampling:scheme:delete',
         onClick: (record: SamplingScheme) => handleDeleteOne(record)
       }
     ]

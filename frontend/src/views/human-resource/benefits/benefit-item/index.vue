@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:benefits:item:create"
-      update-permission="humanresource:benefits:item:update"
-      delete-permission="humanresource:benefits:item:delete"
-      import-permission="humanresource:benefits:item:import"
-      export-permission="humanresource:benefits:item:export"
+      create-permission="human:resource:benefits:benefit:item:create"
+      update-permission="human:resource:benefits:benefit:item:update"
+      delete-permission="human:resource:benefits:benefit:item:delete"
+      import-permission="human:resource:benefits:benefit:item:import"
+      export-permission="human:resource:benefits:benefit:item:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -588,7 +588,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:benefits:item:update',
+        permission: 'human:resource:benefits:benefit:item:update',
         onClick: (record: BenefitItem) => handleEdit(record)
       },
       {
@@ -596,7 +596,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:benefits:item:delete',
+        permission: 'human:resource:benefits:benefit:item:delete',
         onClick: (record: BenefitItem) => handleDeleteOne(record)
       }
     ]

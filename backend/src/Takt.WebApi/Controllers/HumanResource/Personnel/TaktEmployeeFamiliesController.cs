@@ -41,7 +41,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:list", "员工家庭成员列表")]
+    [TaktPermission("human:resource:personnel:employeefamily:list", "员工家庭成员列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeFamilyListAsync([FromQuery] TaktEmployeeFamilyQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工家庭成员ID</param>
     /// <returns>员工家庭成员DTO</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:query", "员工家庭成员详情")]
+    [TaktPermission("human:resource:personnel:employeefamily:query", "员工家庭成员详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeFamilyByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// 获取员工家庭成员选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:query", "员工家庭成员选项")]
+    [TaktPermission("human:resource:personnel:employeefamily:query", "员工家庭成员选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeFamilyOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工家庭成员DTO</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:create", "创建员工家庭成员")]
+    [TaktPermission("human:resource:personnel:employeefamily:create", "创建员工家庭成员")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeFamilyAsync([FromBody] TaktEmployeeFamilyCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// <param name="id">员工家庭成员ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工家庭成员DTO</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:update", "更新员工家庭成员")]
+    [TaktPermission("human:resource:personnel:employeefamily:update", "更新员工家庭成员")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeFamilyAsync(long id, [FromBody] TaktEmployeeFamilyUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工家庭成员ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:delete", "删除员工家庭成员")]
+    [TaktPermission("human:resource:personnel:employeefamily:delete", "删除员工家庭成员")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeFamilyByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:delete", "批量删除员工家庭成员")]
+    [TaktPermission("human:resource:personnel:employeefamily:delete", "批量删除员工家庭成员")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeFamilyBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:import", "获取员工家庭成员导入模板")]
+    [TaktPermission("human:resource:personnel:employeefamily:import", "获取员工家庭成员导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeFamilyTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:import", "导入员工家庭成员")]
+    [TaktPermission("human:resource:personnel:employeefamily:import", "导入员工家庭成员")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeFamilyAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// 导出员工家庭成员
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:personnel:employeefamily:export", "导出员工家庭成员")]
+    [TaktPermission("human:resource:personnel:employeefamily:export", "导出员工家庭成员")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeFamilyAsync([FromQuery] TaktEmployeeFamilyQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

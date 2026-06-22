@@ -41,7 +41,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:performance:assessment:list", "绩效考核列表")]
+    [TaktPermission("human:resource:performance:perf:assessment:list", "绩效考核列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPerfAssessmentListAsync([FromQuery] TaktPerfAssessmentQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效考核ID</param>
     /// <returns>绩效考核DTO</returns>
-    [TaktPermission("humanresource:performance:assessment:query", "绩效考核详情")]
+    [TaktPermission("human:resource:performance:perf:assessment:query", "绩效考核详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPerfAssessmentByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// 获取绩效考核选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:performance:assessment:query", "绩效考核选项")]
+    [TaktPermission("human:resource:performance:perf:assessment:query", "绩效考核选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPerfAssessmentOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>绩效考核DTO</returns>
-    [TaktPermission("humanresource:performance:assessment:create", "创建绩效考核")]
+    [TaktPermission("human:resource:performance:perf:assessment:create", "创建绩效考核")]
     [HttpPost]
     public async Task<IActionResult> CreatePerfAssessmentAsync([FromBody] TaktPerfAssessmentCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// <param name="id">绩效考核ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>绩效考核DTO</returns>
-    [TaktPermission("humanresource:performance:assessment:update", "更新绩效考核")]
+    [TaktPermission("human:resource:performance:perf:assessment:update", "更新绩效考核")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePerfAssessmentAsync(long id, [FromBody] TaktPerfAssessmentUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效考核ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:assessment:delete", "删除绩效考核")]
+    [TaktPermission("human:resource:performance:perf:assessment:delete", "删除绩效考核")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePerfAssessmentByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:assessment:delete", "批量删除绩效考核")]
+    [TaktPermission("human:resource:performance:perf:assessment:delete", "批量删除绩效考核")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePerfAssessmentBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>绩效考核DTO</returns>
-    [TaktPermission("humanresource:performance:assessment:update", "更新绩效考核状态")]
+    [TaktPermission("human:resource:performance:perf:assessment:update", "更新绩效考核状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePerfAssessmentStatusAsync([FromBody] TaktPerfAssessmentStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:assessment:import", "获取绩效考核导入模板")]
+    [TaktPermission("human:resource:performance:perf:assessment:import", "获取绩效考核导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPerfAssessmentTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:performance:assessment:import", "导入绩效考核")]
+    [TaktPermission("human:resource:performance:perf:assessment:import", "导入绩效考核")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPerfAssessmentAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPerfAssessmentsController : TaktControllerBase
     /// 导出绩效考核
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:assessment:export", "导出绩效考核")]
+    [TaktPermission("human:resource:performance:perf:assessment:export", "导出绩效考核")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPerfAssessmentAsync([FromQuery] TaktPerfAssessmentQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

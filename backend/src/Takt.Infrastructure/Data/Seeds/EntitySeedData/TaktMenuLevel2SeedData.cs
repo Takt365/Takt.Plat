@@ -72,7 +72,7 @@ public class TaktMenuLevel2SeedData
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS" && m.IsDeleted == 0)
             .FirstAsync();
         var humanResourceMenu = await sqlSugarContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE" && m.IsDeleted == 0)
             .FirstAsync();
         var identityMenu = await sqlSugarContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "IDENTITY" && m.IsDeleted == 0)
@@ -97,11 +97,11 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "工作台";
                 menu.MenuCode = "WORKSPACE";
-                menu.I18nKey = "menu.dashboard.workspace";
+                menu.I18nKey = "menu.workspace";
                 menu.Icon = "RiGridLine";
                 menu.ParentId = dashboardMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "dashboard:workspace:list";
+                menu.Permission = "workspace:list";
                 menu.RoutePath = "/dashboard/workspace";
                 menu.ComponentPath = "dashboard/workspace/index";
                 menu.SortOrder = 1;
@@ -117,11 +117,11 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "数据看板";
                 menu.MenuCode = "DATA_BOARD";
-                menu.I18nKey = "menu.dashboard.databoard";
+                menu.I18nKey = "menu.data.board";
                 menu.Icon = "RiDashboard2Line";
                 menu.ParentId = dashboardMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "dashboard:databoard:list";
+                menu.Permission = "data:board:list";
                 menu.RoutePath = "/dashboard/data-board";
                 menu.ComponentPath = "dashboard/data-board/index";
                 menu.SortOrder = 2;
@@ -162,11 +162,11 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "会议中心";
                 menu.MenuCode = "ROUTINE_CONFERENCE_CENTER";
-                menu.I18nKey = "menu.routine.conferencecenter";
+                menu.I18nKey = "menu.routine.conference.center";
                 menu.Icon = "RiVideoLine";
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:conferencecenter:list";
+                menu.Permission = "routine:conference:center:list";
                 menu.RoutePath = "/routine/conference-center";
                 menu.ComponentPath = "routine/conference-center/index";
                 menu.SortOrder = 2;
@@ -182,11 +182,11 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "文管中心";
                 menu.MenuCode = "ROUTINE_DOCUMENT_CENTER";
-                menu.I18nKey = "menu.routine.documentcenter";
+                menu.I18nKey = "menu.routine.document.center";
                 menu.Icon = "RiFileTextLine";
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:documentcenter:list";
+                menu.Permission = "routine:document:center:list";
                 menu.RoutePath = "/routine/document-center";
                 menu.ComponentPath = "routine/document-center/index";
                 menu.SortOrder = 3;
@@ -202,11 +202,11 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "新闻中心";
                 menu.MenuCode = "ROUTINE_NEWS_CENTER";
-                menu.I18nKey = "menu.routine.newscenter";
+                menu.I18nKey = "menu.routine.news.center";
                 menu.Icon = "RiArticleLine";
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:newscenter:list";
+                menu.Permission = "routine:news:center:list";
                 menu.RoutePath = "/routine/news-center";
                 menu.ComponentPath = "routine/news-center/index";
                 menu.SortOrder = 4;
@@ -218,11 +218,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insert4;
             updateCount += update4;
 
-            var (insert5, update5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_HELPDESK", menu =>
+            var (insert5, update5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_HELP_DESK", menu =>
             {
                 menu.MenuName = "服务台";
-                menu.MenuCode = "ROUTINE_HELPDESK";
-                menu.I18nKey = "menu.routine.helpdesk._self";
+                menu.MenuCode = "ROUTINE_HELP_DESK";
+                menu.I18nKey = "menu.routine.help.desk._self";
                 menu.Icon = "RiCustomerService2Line";
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 0;
@@ -241,11 +241,11 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "访客中心";
                 menu.MenuCode = "ROUTINE_VISITOR_CENTER";
-                menu.I18nKey = "menu.routine.visitorcenter";
+                menu.I18nKey = "menu.routine.visitor.center";
                 menu.Icon = "RiUserSharedLine";
                 menu.ParentId = routineMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:visitorcenter:list";
+                menu.Permission = "routine:visitor:center:list";
                 menu.RoutePath = "/routine/visitor-center";
                 menu.ComponentPath = "routine/visitor-center/index";
                 menu.SortOrder = 6;
@@ -459,11 +459,11 @@ public class TaktMenuLevel2SeedData
         // ========== 人力资源下的二级菜单 (SortOrder: 6) ==========
         if (humanResourceMenu != null)
         {
-            var (insertHR1, updateHR1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_ORGANIZATION", menu =>
+            var (insertHR1, updateHR1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_ORGANIZATION", menu =>
             {
                 menu.MenuName = "组织管理";
-                menu.MenuCode = "HUMANRESOURCE_ORGANIZATION";
-                menu.I18nKey = "menu.humanresource.organization._self";
+                menu.MenuCode = "HUMAN_RESOURCE_ORGANIZATION";
+                menu.I18nKey = "menu.human.resource.organization._self";
                 menu.Icon = "RiOrganizationChart";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -478,11 +478,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR1;
             updateCount += updateHR1;
 
-            var (insertHR2, updateHR2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_PERSONNEL", menu =>
+            var (insertHR2, updateHR2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_PERSONNEL", menu =>
             {
                 menu.MenuName = "人事管理";
-                menu.MenuCode = "HUMANRESOURCE_PERSONNEL";
-                menu.I18nKey = "menu.humanresource.personnel._self";
+                menu.MenuCode = "HUMAN_RESOURCE_PERSONNEL";
+                menu.I18nKey = "menu.human.resource.personnel._self";
                 menu.Icon = "RiUserSettingsLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -497,11 +497,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR2;
             updateCount += updateHR2;
 
-            var (insertHR3, updateHR3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_ATTENDANCE", menu =>
+            var (insertHR3, updateHR3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_ATTENDANCE", menu =>
             {
                 menu.MenuName = "考勤管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE";
-                menu.I18nKey = "menu.humanresource.attendance._self";
+                menu.MenuCode = "HUMAN_RESOURCE_ATTENDANCE";
+                menu.I18nKey = "menu.human.resource.attendance._self";
                 menu.Icon = "RiCalendarCheckLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -516,11 +516,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR3;
             updateCount += updateHR3;
 
-            var (insertHR4, updateHR4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_COMPENSATION", menu =>
+            var (insertHR4, updateHR4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION", menu =>
             {
                 menu.MenuName = "薪酬管理";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION";
-                menu.I18nKey = "menu.humanresource.compensation._self";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION";
+                menu.I18nKey = "menu.human.resource.compensation._self";
                 menu.Icon = "RiMoneyCnyCircleLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -535,11 +535,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR4;
             updateCount += updateHR4;
 
-            var (insertHR4B, updateHR4B) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_BENEFITS", menu =>
+            var (insertHR4B, updateHR4B) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_BENEFITS", menu =>
             {
                 menu.MenuName = "福利管理";
-                menu.MenuCode = "HUMANRESOURCE_BENEFITS";
-                menu.I18nKey = "menu.humanresource.benefits._self";
+                menu.MenuCode = "HUMAN_RESOURCE_BENEFITS";
+                menu.I18nKey = "menu.human.resource.benefits._self";
                 menu.Icon = "RiGiftLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -554,11 +554,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR4B;
             updateCount += updateHR4B;
 
-            var (insertHR5, updateHR5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_PERFORMANCE", menu =>
+            var (insertHR5, updateHR5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_PERFORMANCE", menu =>
             {
                 menu.MenuName = "绩效管理";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE";
-                menu.I18nKey = "menu.humanresource.performance._self";
+                menu.MenuCode = "HUMAN_RESOURCE_PERFORMANCE";
+                menu.I18nKey = "menu.human.resource.performance._self";
                 menu.Icon = "RiTargetLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -573,11 +573,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR5;
             updateCount += updateHR5;
 
-            var (insertHR6, updateHR6) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_TRAINING", menu =>
+            var (insertHR6, updateHR6) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_TRAINING", menu =>
             {
                 menu.MenuName = "教育培训";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING";
-                menu.I18nKey = "menu.humanresource.training._self";
+                menu.MenuCode = "HUMAN_RESOURCE_TRAINING";
+                menu.I18nKey = "menu.human.resource.training._self";
                 menu.Icon = "RiBookOpenLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -592,11 +592,11 @@ public class TaktMenuLevel2SeedData
             insertCount += insertHR6;
             updateCount += updateHR6;
 
-            var (insertHR7, updateHR7) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMANRESOURCE_TALENT", menu =>
+            var (insertHR7, updateHR7) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "HUMAN_RESOURCE_TALENT", menu =>
             {
                 menu.MenuName = "人才管理";
-                menu.MenuCode = "HUMANRESOURCE_TALENT";
-                menu.I18nKey = "menu.humanresource.talent._self";
+                menu.MenuCode = "HUMAN_RESOURCE_TALENT";
+                menu.I18nKey = "menu.human.resource.talent._self";
                 menu.Icon = "RiUserStarLine";
                 menu.ParentId = humanResourceMenu.Id;
                 menu.MenuType = 0;
@@ -867,7 +867,7 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "表克隆";
                 menu.MenuCode = "CODE_DATABASE_TABLE_CLONE";
-                menu.I18nKey = "menu.code.database.tableclone";
+                menu.I18nKey = "menu.code.database.table.clone";
                 menu.Icon = "RiFileCopy2Line";
                 menu.ParentId = codeMenu.Id;
                 menu.MenuType = 1;
@@ -887,7 +887,7 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "数据克隆";
                 menu.MenuCode = "CODE_DATABASE_DATA_CLONE";
-                menu.I18nKey = "menu.code.database.dataclone";
+                menu.I18nKey = "menu.code.database.data.clone";
                 menu.Icon = "RiFileCopyLine";
                 menu.ParentId = codeMenu.Id;
                 menu.MenuType = 1;
@@ -931,7 +931,7 @@ public class TaktMenuLevel2SeedData
             {
                 menu.MenuName = "ISO编码";
                 menu.MenuCode = "FOUNDATION_ISO_CODE";
-                menu.I18nKey = "menu.foundation.isocode";
+                menu.I18nKey = "menu.foundation.iso.code";
                 menu.Icon = "RiBuilding4Line";
                 menu.ParentId = foundationMenu.Id;
                 menu.MenuType = 1;

@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:procurement:purchaseprice:create"
-      update-permission="logistics:procurement:purchaseprice:update"
-      delete-permission="logistics:procurement:purchaseprice:delete"
-      import-permission="logistics:procurement:purchaseprice:import"
-      export-permission="logistics:procurement:purchaseprice:export"
+      create-permission="logistics:procurement:purchase:price:change:log:create"
+      update-permission="logistics:procurement:purchase:price:change:log:update"
+      delete-permission="logistics:procurement:purchase:price:change:log:delete"
+      import-permission="logistics:procurement:purchase:price:change:log:import"
+      export-permission="logistics:procurement:purchase:price:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -612,7 +612,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:purchaseprice:update',
+        permission: 'logistics:procurement:purchase:price:change:log:update',
         onClick: (record: PurchasePrice) => handleEdit(record)
       },
       {
@@ -620,7 +620,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:purchaseprice:delete',
+        permission: 'logistics:procurement:purchase:price:change:log:delete',
         onClick: (record: PurchasePrice) => handleDeleteOne(record)
       }
     ]

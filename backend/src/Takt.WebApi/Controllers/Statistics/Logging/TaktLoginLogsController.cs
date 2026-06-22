@@ -41,7 +41,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("statistics:logging:loginlog:list", "登录日志列表")]
+    [TaktPermission("statistics:logging:login:log:list", "登录日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetLoginLogListAsync([FromQuery] TaktLoginLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">登录日志ID</param>
     /// <returns>登录日志DTO</returns>
-    [TaktPermission("statistics:logging:loginlog:query", "登录日志详情")]
+    [TaktPermission("statistics:logging:login:log:query", "登录日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetLoginLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// 获取登录日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("statistics:logging:loginlog:query", "登录日志选项")]
+    [TaktPermission("statistics:logging:login:log:query", "登录日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetLoginLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>登录日志DTO</returns>
-    [TaktPermission("statistics:logging:loginlog:create", "创建登录日志")]
+    [TaktPermission("statistics:logging:login:log:create", "创建登录日志")]
     [HttpPost]
     public async Task<IActionResult> CreateLoginLogAsync([FromBody] TaktLoginLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// <param name="id">登录日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>登录日志DTO</returns>
-    [TaktPermission("statistics:logging:loginlog:update", "更新登录日志")]
+    [TaktPermission("statistics:logging:login:log:update", "更新登录日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLoginLogAsync(long id, [FromBody] TaktLoginLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">登录日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:logging:loginlog:delete", "删除登录日志")]
+    [TaktPermission("statistics:logging:login:log:delete", "删除登录日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLoginLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("statistics:logging:loginlog:delete", "批量删除登录日志")]
+    [TaktPermission("statistics:logging:login:log:delete", "批量删除登录日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteLoginLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktLoginLogsController : TaktControllerBase
     /// 导出登录日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("statistics:logging:loginlog:export", "导出登录日志")]
+    [TaktPermission("statistics:logging:login:log:export", "导出登录日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportLoginLogAsync([FromQuery] TaktLoginLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -41,7 +41,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:materialtransaction:list", "物料交易列表")]
+    [TaktPermission("logistics:materials:material:transaction:list", "物料交易列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetMaterialTransactionListAsync([FromQuery] TaktMaterialTransactionQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料交易ID</param>
     /// <returns>物料交易DTO</returns>
-    [TaktPermission("logistics:materials:materialtransaction:query", "物料交易详情")]
+    [TaktPermission("logistics:materials:material:transaction:query", "物料交易详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMaterialTransactionByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// 获取物料交易选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:materialtransaction:query", "物料交易选项")]
+    [TaktPermission("logistics:materials:material:transaction:query", "物料交易选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetMaterialTransactionOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>物料交易DTO</returns>
-    [TaktPermission("logistics:materials:materialtransaction:create", "创建物料交易")]
+    [TaktPermission("logistics:materials:material:transaction:create", "创建物料交易")]
     [HttpPost]
     public async Task<IActionResult> CreateMaterialTransactionAsync([FromBody] TaktMaterialTransactionCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// <param name="id">物料交易ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>物料交易DTO</returns>
-    [TaktPermission("logistics:materials:materialtransaction:update", "更新物料交易")]
+    [TaktPermission("logistics:materials:material:transaction:update", "更新物料交易")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMaterialTransactionAsync(long id, [FromBody] TaktMaterialTransactionUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料交易ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:materialtransaction:delete", "删除物料交易")]
+    [TaktPermission("logistics:materials:material:transaction:delete", "删除物料交易")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMaterialTransactionByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:materialtransaction:delete", "批量删除物料交易")]
+    [TaktPermission("logistics:materials:material:transaction:delete", "批量删除物料交易")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteMaterialTransactionBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>物料交易DTO</returns>
-    [TaktPermission("logistics:materials:materialtransaction:update", "更新物料交易状态")]
+    [TaktPermission("logistics:materials:material:transaction:update", "更新物料交易状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateMaterialTransactionStatusAsync([FromBody] TaktMaterialTransactionStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:materialtransaction:import", "获取物料交易导入模板")]
+    [TaktPermission("logistics:materials:material:transaction:import", "获取物料交易导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetMaterialTransactionTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:materialtransaction:import", "导入物料交易")]
+    [TaktPermission("logistics:materials:material:transaction:import", "导入物料交易")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportMaterialTransactionAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktMaterialTransactionsController : TaktControllerBase
     /// 导出物料交易
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:materialtransaction:export", "导出物料交易")]
+    [TaktPermission("logistics:materials:material:transaction:export", "导出物料交易")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportMaterialTransactionAsync([FromQuery] TaktMaterialTransactionQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

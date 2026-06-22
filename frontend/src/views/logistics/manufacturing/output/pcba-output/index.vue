@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:pcbaoutput:create"
-      update-permission="logistics:manufacturing:output:pcbaoutput:update"
-      delete-permission="logistics:manufacturing:output:pcbaoutput:delete"
-      import-permission="logistics:manufacturing:output:pcbaoutput:import"
-      export-permission="logistics:manufacturing:output:pcbaoutput:export"
+      create-permission="logistics:manufacturing:output:pcba:create"
+      update-permission="logistics:manufacturing:output:pcba:update"
+      delete-permission="logistics:manufacturing:output:pcba:delete"
+      import-permission="logistics:manufacturing:output:pcba:import"
+      export-permission="logistics:manufacturing:output:pcba:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -718,7 +718,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:pcbaoutput:update',
+        permission: 'logistics:manufacturing:output:pcba:update',
         onClick: (record: PcbaOutput) => handleEdit(record)
       },
       {
@@ -726,7 +726,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:pcbaoutput:delete',
+        permission: 'logistics:manufacturing:output:pcba:delete',
         onClick: (record: PcbaOutput) => handleDeleteOne(record)
       }
     ]

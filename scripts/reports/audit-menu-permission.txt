@@ -1,0 +1,27 @@
+Takt Menu Permission Audit
+Report: scripts/reports/audit-menu-permission.txt
+Generated: 2026-06-22T07:30:02.226Z
+Blocks scanned: 247 | With Permission: 206
+
+RESULT: PASS (0 issues)
+
+权威：菜单种子 menu.Permission（控制器/视图须向其对齐，禁止反向）
+
+检查项:
+  1. 页面 :list 权限在菜单种子内重复（排除主表 + ChangeLog 合法共用）
+  2. 菜单种子 Permission 格式非法或词干重复
+  3. 控制器 [TaktPermission] :list ≠ 对应页面菜单种子
+  4. 三字段路径分段与 MenuCode 一致见 audit-menu-structure.cjs
+
+全栈对账（控制器/视图/前端）: node scripts/audit-permissions.cjs
+
+=== 菜单种子 :list 重复 ===
+重复组数: 0
+
+=== 菜单种子格式/词干问题 (0) ===
+无
+
+=== 控制器未与菜单种子对齐 ===
+控制器 :list 与菜单种子不一致: 0
+
+重跑: node scripts/audit-menu-permission.cjs

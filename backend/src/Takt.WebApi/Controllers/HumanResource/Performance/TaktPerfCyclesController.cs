@@ -41,7 +41,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:performance:cycle:list", "绩效周期日程列表")]
+    [TaktPermission("human:resource:performance:perf:cycle:list", "绩效周期日程列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPerfCycleListAsync([FromQuery] TaktPerfCycleQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效周期日程ID</param>
     /// <returns>绩效周期日程DTO</returns>
-    [TaktPermission("humanresource:performance:cycle:query", "绩效周期日程详情")]
+    [TaktPermission("human:resource:performance:perf:cycle:query", "绩效周期日程详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPerfCycleByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// 获取绩效周期日程选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:performance:cycle:query", "绩效周期日程选项")]
+    [TaktPermission("human:resource:performance:perf:cycle:query", "绩效周期日程选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPerfCycleOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>绩效周期日程DTO</returns>
-    [TaktPermission("humanresource:performance:cycle:create", "创建绩效周期日程")]
+    [TaktPermission("human:resource:performance:perf:cycle:create", "创建绩效周期日程")]
     [HttpPost]
     public async Task<IActionResult> CreatePerfCycleAsync([FromBody] TaktPerfCycleCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// <param name="id">绩效周期日程ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>绩效周期日程DTO</returns>
-    [TaktPermission("humanresource:performance:cycle:update", "更新绩效周期日程")]
+    [TaktPermission("human:resource:performance:perf:cycle:update", "更新绩效周期日程")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePerfCycleAsync(long id, [FromBody] TaktPerfCycleUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效周期日程ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:cycle:delete", "删除绩效周期日程")]
+    [TaktPermission("human:resource:performance:perf:cycle:delete", "删除绩效周期日程")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePerfCycleByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:cycle:delete", "批量删除绩效周期日程")]
+    [TaktPermission("human:resource:performance:perf:cycle:delete", "批量删除绩效周期日程")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePerfCycleBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>绩效周期日程DTO</returns>
-    [TaktPermission("humanresource:performance:cycle:update", "更新绩效周期日程状态")]
+    [TaktPermission("human:resource:performance:perf:cycle:update", "更新绩效周期日程状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePerfCycleStatusAsync([FromBody] TaktPerfCycleStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:cycle:import", "获取绩效周期日程导入模板")]
+    [TaktPermission("human:resource:performance:perf:cycle:import", "获取绩效周期日程导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPerfCycleTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:performance:cycle:import", "导入绩效周期日程")]
+    [TaktPermission("human:resource:performance:perf:cycle:import", "导入绩效周期日程")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPerfCycleAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPerfCyclesController : TaktControllerBase
     /// 导出绩效周期日程
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:cycle:export", "导出绩效周期日程")]
+    [TaktPermission("human:resource:performance:perf:cycle:export", "导出绩效周期日程")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPerfCycleAsync([FromQuery] TaktPerfCycleQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

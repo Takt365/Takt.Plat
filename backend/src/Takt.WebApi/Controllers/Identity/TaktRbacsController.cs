@@ -348,7 +348,7 @@ public class TaktRbacsController : TaktControllerBase
     /// </summary>
     /// <param name="employeeId">员工ID</param>
     /// <returns>员工-部门关联列表</returns>
-    [TaktPermission("humanresource:personnel:employee:query", "获取员工部门")]
+    [TaktPermission("human:resource:personnel:employee:query", "获取员工部门")]
     [HttpGet("employees/{employeeId}/depts")]
     public async Task<IActionResult> GetEmployeeDeptIdsAsync(long employeeId)
     {
@@ -369,7 +369,7 @@ public class TaktRbacsController : TaktControllerBase
     /// <param name="employeeId">员工ID</param>
     /// <param name="deptIds">部门ID列表</param>
     /// <returns>是否成功</returns>
-    [TaktPermission("humanresource:personnel:employee:update", "分配员工部门")]
+    [TaktPermission("human:resource:personnel:employee:update", "分配员工部门")]
     [HttpPut("employees/{employeeId}/depts")]
     public async Task<IActionResult> AssignEmployeeDeptsAsync(long employeeId, [FromBody] long[] deptIds)
     {
@@ -389,7 +389,7 @@ public class TaktRbacsController : TaktControllerBase
     /// </summary>
     /// <param name="employeeId">员工ID</param>
     /// <returns>员工-岗位关联列表</returns>
-    [TaktPermission("humanresource:personnel:employee:query", "获取员工岗位")]
+    [TaktPermission("human:resource:personnel:employee:query", "获取员工岗位")]
     [HttpGet("employees/{employeeId}/posts")]
     public async Task<IActionResult> GetEmployeePostIdsAsync(long employeeId)
     {
@@ -410,7 +410,7 @@ public class TaktRbacsController : TaktControllerBase
     /// <param name="employeeId">员工ID</param>
     /// <param name="postIds">岗位ID列表</param>
     /// <returns>是否成功</returns>
-    [TaktPermission("humanresource:personnel:employee:update", "分配员工岗位")]
+    [TaktPermission("human:resource:personnel:employee:update", "分配员工岗位")]
     [HttpPut("employees/{employeeId}/posts")]
     public async Task<IActionResult> AssignEmployeePostsAsync(long employeeId, [FromBody] long[] postIds)
     {
@@ -430,7 +430,7 @@ public class TaktRbacsController : TaktControllerBase
     /// </summary>
     /// <param name="postId">岗位ID</param>
     /// <returns>员工-岗位关联列表</returns>
-    [TaktPermission("humanresource:organization:post:update", "获取岗位员工")]
+    [TaktPermission("human:resource:organization:post:update", "获取岗位员工")]
     [HttpGet("posts/{postId}/employees")]
     public async Task<IActionResult> GetPostEmployeeIdsAsync(long postId)
     {
@@ -451,7 +451,7 @@ public class TaktRbacsController : TaktControllerBase
     /// <param name="postId">岗位ID</param>
     /// <param name="employeeIds">员工ID列表</param>
     /// <returns>是否成功</returns>
-    [TaktPermission("humanresource:organization:post:update", "分配岗位员工")]
+    [TaktPermission("human:resource:organization:post:update", "分配岗位员工")]
     [HttpPut("posts/{postId}/employees")]
     public async Task<IActionResult> AssignPostEmployeesAsync(long postId, [FromBody] long[] employeeIds)
     {
@@ -471,7 +471,7 @@ public class TaktRbacsController : TaktControllerBase
     /// </summary>
     /// <param name="deptId">部门ID</param>
     /// <returns>员工-部门关联列表</returns>
-    [TaktPermission("humanresource:organization:dept:update", "获取部门员工")]
+    [TaktPermission("human:resource:organization:dept:update", "获取部门员工")]
     [HttpGet("depts/{deptId}/employees")]
     public async Task<IActionResult> GetDeptEmployeeIdsAsync(long deptId)
     {
@@ -492,7 +492,7 @@ public class TaktRbacsController : TaktControllerBase
     /// <param name="deptId">部门ID</param>
     /// <param name="employeeIds">员工ID列表</param>
     /// <returns>是否成功</returns>
-    [TaktPermission("humanresource:organization:dept:update", "分配部门员工")]
+    [TaktPermission("human:resource:organization:dept:update", "分配部门员工")]
     [HttpPut("depts/{deptId}/employees")]
     public async Task<IActionResult> AssignDeptEmployeesAsync(long deptId, [FromBody] long[] employeeIds)
     {

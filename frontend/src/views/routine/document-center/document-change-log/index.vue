@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:documentcenter:document:create"
-      update-permission="routine:documentcenter:document:update"
-      delete-permission="routine:documentcenter:document:delete"
-      import-permission="routine:documentcenter:document:import"
-      export-permission="routine:documentcenter:document:export"
+      create-permission="routine:document:center:document:change:log:create"
+      update-permission="routine:document:center:document:change:log:update"
+      delete-permission="routine:document:center:document:change:log:delete"
+      import-permission="routine:document:center:document:change:log:import"
+      export-permission="routine:document:center:document:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -1169,7 +1169,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:documentcenter:document:update',
+        permission: 'routine:document:center:document:change:log:update',
         onClick: (record: Document) => handleEdit(record)
       },
       {
@@ -1177,7 +1177,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:documentcenter:document:delete',
+        permission: 'routine:document:center:document:change:log:delete',
         onClick: (record: Document) => handleDeleteOne(record)
       }
     ]

@@ -41,7 +41,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:materialgroup:list", "物料组主数据列表")]
+    [TaktPermission("logistics:materials:material:group:list", "物料组主数据列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetMaterialGroupListAsync([FromQuery] TaktMaterialGroupQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料组主数据ID</param>
     /// <returns>物料组主数据DTO</returns>
-    [TaktPermission("logistics:materials:materialgroup:query", "物料组主数据详情")]
+    [TaktPermission("logistics:materials:material:group:query", "物料组主数据详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMaterialGroupByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// 获取物料组主数据选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:materialgroup:query", "物料组主数据选项")]
+    [TaktPermission("logistics:materials:material:group:query", "物料组主数据选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetMaterialGroupOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>物料组主数据DTO</returns>
-    [TaktPermission("logistics:materials:materialgroup:create", "创建物料组主数据")]
+    [TaktPermission("logistics:materials:material:group:create", "创建物料组主数据")]
     [HttpPost]
     public async Task<IActionResult> CreateMaterialGroupAsync([FromBody] TaktMaterialGroupCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// <param name="id">物料组主数据ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>物料组主数据DTO</returns>
-    [TaktPermission("logistics:materials:materialgroup:update", "更新物料组主数据")]
+    [TaktPermission("logistics:materials:material:group:update", "更新物料组主数据")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMaterialGroupAsync(long id, [FromBody] TaktMaterialGroupUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料组主数据ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:materialgroup:delete", "删除物料组主数据")]
+    [TaktPermission("logistics:materials:material:group:delete", "删除物料组主数据")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMaterialGroupByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:materialgroup:delete", "批量删除物料组主数据")]
+    [TaktPermission("logistics:materials:material:group:delete", "批量删除物料组主数据")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteMaterialGroupBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>物料组主数据DTO</returns>
-    [TaktPermission("logistics:materials:materialgroup:update", "更新物料组主数据排序")]
+    [TaktPermission("logistics:materials:material:group:update", "更新物料组主数据排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateMaterialGroupSortAsync([FromBody] TaktMaterialGroupSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:materialgroup:import", "获取物料组主数据导入模板")]
+    [TaktPermission("logistics:materials:material:group:import", "获取物料组主数据导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetMaterialGroupTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:materialgroup:import", "导入物料组主数据")]
+    [TaktPermission("logistics:materials:material:group:import", "导入物料组主数据")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportMaterialGroupAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// 导出物料组主数据
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:materialgroup:export", "导出物料组主数据")]
+    [TaktPermission("logistics:materials:material:group:export", "导出物料组主数据")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportMaterialGroupAsync([FromQuery] TaktMaterialGroupQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

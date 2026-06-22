@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="foundation:isocode:create"
-      update-permission="foundation:isocode:update"
-      delete-permission="foundation:isocode:delete"
-      import-permission="foundation:isocode:import"
-      export-permission="foundation:isocode:export"
+      create-permission="foundation:iso:code:create"
+      update-permission="foundation:iso:code:update"
+      delete-permission="foundation:iso:code:delete"
+      import-permission="foundation:iso:code:import"
+      export-permission="foundation:iso:code:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -522,7 +522,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'foundation:isocode:update',
+        permission: 'foundation:iso:code:update',
         onClick: (record: IsoCode) => handleEdit(record)
       },
       {
@@ -530,7 +530,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'foundation:isocode:delete',
+        permission: 'foundation:iso:code:delete',
         onClick: (record: IsoCode) => handleDeleteOne(record)
       }
     ]

@@ -64,6 +64,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 创建实体（根据实体主键字段类型自动判断 ID 生成策略）
     /// </summary>
+    /// <param name="entity">实体对象（TenantCode 由调用方显式指定）</param>
+    /// <returns>创建后的实体（含生成的主键）</returns>
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         // 统一填充审计字段（种子数据使用 900001）
@@ -113,6 +115,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 批量创建实体（根据配置处理主键类型和审计字段）
     /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>创建的实体数量</returns>
     public virtual async Task<int> CreateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -143,6 +147,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 批量创建实体（大批量插入优化，根据配置处理主键类型和审计字段）
     /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>创建的实体数量</returns>
     public virtual async Task<int> CreateRangeBulkAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -177,6 +183,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 更新实体（自动填充审计字段）
     /// </summary>
+    /// <param name="entity">实体对象</param>
+    /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
         // 统一填充更新审计字段（种子数据使用 900001）
@@ -189,6 +197,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 批量更新实体（自动填充审计字段）
     /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>更新的实体数量</returns>
     public virtual async Task<int> UpdateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -212,6 +222,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 根据ID查询实体（不自动添加租户过滤）
     /// </summary>
+    /// <param name="id">实体主键</param>
+    /// <returns>未删除的实体；不存在时返回 null</returns>
     public virtual async Task<TEntity?> GetByIdAsync(long id)
     {
         return await Db.Queryable<TEntity>()
@@ -223,6 +235,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 根据条件查询单个实体（不自动添加租户过滤）
     /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>未删除的实体；不存在时返回 null</returns>
     public virtual async Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>()
@@ -234,6 +248,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 根据条件查询实体列表（不自动添加租户过滤）
     /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>未删除的实体列表</returns>
     public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>()
@@ -245,6 +261,8 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <summary>
     /// 检查实体是否存在
     /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>是否存在未删除的匹配记录</returns>
     public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>()
@@ -253,7 +271,6 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
             .AnyAsync();
     }
 }
-
 
 // ========================================
 // 公司级种子数据专用仓储实现
@@ -270,16 +287,41 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
 /// <typeparam name="TEntity">实体类型（必须继承TaktCompanyEntityBase）</typeparam>
 public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEntity> where TEntity : TaktCompanyEntityBase, new()
 {
+    /// <summary>
+    /// 种子数据数据库上下文
+    /// </summary>
     private readonly TaktSeedContext _dbContext;
+
+    /// <summary>
+    /// 主键类型配置
+    /// </summary>
     private readonly PrimaryKeyTypeOptions _primaryKeyTypeOptions;
+
+    /// <summary>
+    /// 数据库客户端
+    /// </summary>
     protected ISqlSugarClient Db => _dbContext.Db;
 
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="dbContext">种子数据上下文</param>
+    /// <param name="primaryKeyTypeOptions">主键类型配置</param>
     public TaktCompanySeedRepository(TaktSeedContext dbContext, Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions)
     {
         _dbContext = dbContext;
         _primaryKeyTypeOptions = primaryKeyTypeOptions.Value;
     }
 
+    // ========================================
+    // 新增操作（根据配置处理主键类型）
+    // ========================================
+
+    /// <summary>
+    /// 创建实体（根据实体主键字段类型自动判断 ID 生成策略）
+    /// </summary>
+    /// <param name="entity">实体对象（TenantCode、CompanyCode 由调用方显式指定）</param>
+    /// <returns>创建后的实体（含生成的主键）</returns>
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
@@ -310,6 +352,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         return entity;
     }
 
+    /// <summary>
+    /// 批量创建实体（根据配置处理主键类型和审计字段）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>创建的实体数量</returns>
     public virtual async Task<int> CreateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -327,6 +374,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         return await Db.Insertable(entities).ExecuteCommandAsync();
     }
 
+    /// <summary>
+    /// 批量创建实体（大批量插入优化，根据配置处理主键类型和审计字段）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>创建的实体数量</returns>
     public virtual async Task<int> CreateRangeBulkAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -344,6 +396,15 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         return await Db.Insertable(entities).ExecuteCommandAsync();
     }
 
+    // ========================================
+    // 更新操作
+    // ========================================
+
+    /// <summary>
+    /// 更新实体（自动填充审计字段）
+    /// </summary>
+    /// <param name="entity">实体对象</param>
+    /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
         entity.UpdatedAt = DateTime.Now;
@@ -351,6 +412,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
 
+    /// <summary>
+    /// 批量更新实体（自动填充审计字段）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>更新的实体数量</returns>
     public virtual async Task<int> UpdateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -363,21 +429,45 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         return await Db.Updateable(entities).ExecuteCommandAsync();
     }
 
+    // ========================================
+    // 查询操作（不自动添加租户/公司过滤）
+    // ========================================
+
+    /// <summary>
+    /// 根据ID查询实体（不自动添加租户/公司过滤）
+    /// </summary>
+    /// <param name="id">实体主键</param>
+    /// <returns>未删除的实体；不存在时返回 null</returns>
     public virtual async Task<TEntity?> GetByIdAsync(long id)
     {
         return await Db.Queryable<TEntity>().Where(x => x.Id == id).Where(x => x.IsDeleted == 0).FirstAsync();
     }
 
+    /// <summary>
+    /// 根据条件查询单个实体（不自动添加租户/公司过滤）
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>未删除的实体；不存在时返回 null</returns>
     public virtual async Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>().Where(predicate).Where(x => x.IsDeleted == 0).FirstAsync();
     }
 
+    /// <summary>
+    /// 根据条件查询实体列表（不自动添加租户/公司过滤）
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>未删除的实体列表</returns>
     public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>().Where(predicate).Where(x => x.IsDeleted == 0).ToListAsync();
     }
 
+    /// <summary>
+    /// 检查实体是否存在
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>是否存在未删除的匹配记录</returns>
     public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>().Where(predicate).Where(x => x.IsDeleted == 0).AnyAsync();
@@ -399,16 +489,41 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
 /// <typeparam name="TEntity">实体类型（必须继承TaktApprovalEntityBase）</typeparam>
 public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<TEntity> where TEntity : TaktApprovalEntityBase, new()
 {
+    /// <summary>
+    /// 种子数据数据库上下文
+    /// </summary>
     private readonly TaktSeedContext _dbContext;
+
+    /// <summary>
+    /// 主键类型配置
+    /// </summary>
     private readonly PrimaryKeyTypeOptions _primaryKeyTypeOptions;
+
+    /// <summary>
+    /// 数据库客户端
+    /// </summary>
     protected ISqlSugarClient Db => _dbContext.Db;
 
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="dbContext">种子数据上下文</param>
+    /// <param name="primaryKeyTypeOptions">主键类型配置</param>
     public TaktApprovalSeedRepository(TaktSeedContext dbContext, Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions)
     {
         _dbContext = dbContext;
         _primaryKeyTypeOptions = primaryKeyTypeOptions.Value;
     }
 
+    // ========================================
+    // 新增操作（根据配置处理主键类型）
+    // ========================================
+
+    /// <summary>
+    /// 创建实体（根据实体主键字段类型自动判断 ID 生成策略）
+    /// </summary>
+    /// <param name="entity">实体对象（TenantCode、CompanyCode 由调用方显式指定）</param>
+    /// <returns>创建后的实体（含生成的主键）</returns>
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
@@ -439,6 +554,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         return entity;
     }
 
+    /// <summary>
+    /// 批量创建实体（根据配置处理主键类型和审计字段）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>创建的实体数量</returns>
     public virtual async Task<int> CreateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -456,6 +576,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         return await Db.Insertable(entities).ExecuteCommandAsync();
     }
 
+    /// <summary>
+    /// 批量创建实体（大批量插入优化，根据配置处理主键类型和审计字段）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>创建的实体数量</returns>
     public virtual async Task<int> CreateRangeBulkAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -473,6 +598,15 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         return await Db.Insertable(entities).ExecuteCommandAsync();
     }
 
+    // ========================================
+    // 更新操作
+    // ========================================
+
+    /// <summary>
+    /// 更新实体（自动填充审计字段）
+    /// </summary>
+    /// <param name="entity">实体对象</param>
+    /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
         entity.UpdatedAt = DateTime.Now;
@@ -480,6 +614,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
 
+    /// <summary>
+    /// 批量更新实体（自动填充审计字段）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>更新的实体数量</returns>
     public virtual async Task<int> UpdateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
@@ -492,21 +631,45 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         return await Db.Updateable(entities).ExecuteCommandAsync();
     }
 
+    // ========================================
+    // 查询操作（不自动添加租户/公司过滤）
+    // ========================================
+
+    /// <summary>
+    /// 根据ID查询实体（不自动添加租户/公司过滤）
+    /// </summary>
+    /// <param name="id">实体主键</param>
+    /// <returns>未删除的实体；不存在时返回 null</returns>
     public virtual async Task<TEntity?> GetByIdAsync(long id)
     {
         return await Db.Queryable<TEntity>().Where(x => x.Id == id).Where(x => x.IsDeleted == 0).FirstAsync();
     }
 
+    /// <summary>
+    /// 根据条件查询单个实体（不自动添加租户/公司过滤）
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>未删除的实体；不存在时返回 null</returns>
     public virtual async Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>().Where(predicate).Where(x => x.IsDeleted == 0).FirstAsync();
     }
 
+    /// <summary>
+    /// 根据条件查询实体列表（不自动添加租户/公司过滤）
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>未删除的实体列表</returns>
     public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>().Where(predicate).Where(x => x.IsDeleted == 0).ToListAsync();
     }
 
+    /// <summary>
+    /// 检查实体是否存在
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>是否存在未删除的匹配记录</returns>
     public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Db.Queryable<TEntity>().Where(predicate).Where(x => x.IsDeleted == 0).AnyAsync();

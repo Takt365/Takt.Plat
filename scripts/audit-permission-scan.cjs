@@ -216,6 +216,56 @@ function buildControllerPermissionIndex() {
 }
 
 /**
+ * 从菜单种子解析 CreateOrUpdateMenuAsync 块（含 lookupKey、行号）
+ * @returns {Array<{ lookupKey: string, menuCode: string, menuName: string, i18nKey: string, permission: string, menuType: number, routePath: string, componentPath: string, viewModulePath: string, sourceFile: string, line: number }>}
+ */
+function parseAllMenuSeedBlocks() {
+  /** @type {ReturnType<typeof parseAllMenuSeedBlocks>} */
+  const blocks = [];
+  for (const fileName of MENU_LEVEL_FILES) {
+    const fullPath = path.join(SEEDS_DIR, fileName);
+    if (!fs.existsSync(fullPath)) {
+      continue;
+    }
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    const parts = content.split(/CreateOrUpdateMenuAsync\(/);
+    let searchFrom = 0;
+    for (let i = 1; i < parts.length; i += 1) {
+      const block = parts[i];
+      const blockStart = content.indexOf('CreateOrUpdateMenuAsync(', searchFrom);
+      searchFrom = blockStart >= 0 ? blockStart + 1 : searchFrom;
+      const line = blockStart >= 0 ? content.slice(0, blockStart).split('\n').length : 0;
+      const lookupMatch = block.match(/,\s*"([^"]+)"\s*,\s*menu\s*=>/);
+      const menuCodeMatch = block.match(/menu\.MenuCode\s*=\s*"([^"]+)"/);
+      const menuNameMatch = block.match(/menu\.MenuName\s*=\s*"([^"]+)"/);
+      const i18nMatch = block.match(/menu\.I18nKey\s*=\s*"([^"]+)"/);
+      const permMatch = block.match(/menu\.Permission\s*=\s*"([^"]+)"/);
+      const menuTypeMatch = block.match(/menu\.MenuType\s*=\s*(\d+)/);
+      const routeMatch = block.match(/menu\.RoutePath\s*=\s*"([^"]+)"/);
+      const componentMatch = block.match(/menu\.ComponentPath\s*=\s*"([^"]+)"/);
+      const componentPath = componentMatch ? componentMatch[1] : '';
+      if (!lookupMatch) {
+        continue;
+      }
+      blocks.push({
+        lookupKey: lookupMatch[1],
+        menuCode: menuCodeMatch ? menuCodeMatch[1] : '',
+        menuName: menuNameMatch ? menuNameMatch[1] : '',
+        i18nKey: i18nMatch ? i18nMatch[1].toLowerCase() : '',
+        permission: permMatch ? permMatch[1].toLowerCase() : '',
+        menuType: menuTypeMatch ? Number(menuTypeMatch[1]) : 0,
+        routePath: routeMatch ? routeMatch[1] : '',
+        componentPath,
+        viewModulePath: componentPath.endsWith('/index') ? componentPath.replace(/\/index$/, '') : '',
+        sourceFile: fileName,
+        line,
+      });
+    }
+  }
+  return blocks;
+}
+
+/**
  * 从菜单种子解析全部带 Permission 的菜单项
  * @returns {Array<{ menuCode: string, i18nKey: string, menuType: number, permission: string, routePath: string, componentPath: string, viewModulePath: string, sourceFile: string }>}
  */
@@ -405,6 +455,7 @@ module.exports = {
   findControllerFile,
   buildControllerPermissionIndex,
   parseAllMenuEntries,
+  parseAllMenuSeedBlocks,
   scanVueViewPermissions,
   permissionToBase,
   resolveEntityFromMenuListPermission,

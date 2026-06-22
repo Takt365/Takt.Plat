@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:personnel:employeecontract:create"
-      update-permission="humanresource:personnel:employeecontract:update"
-      delete-permission="humanresource:personnel:employeecontract:delete"
-      import-permission="humanresource:personnel:employeecontract:import"
-      export-permission="humanresource:personnel:employeecontract:export"
+      create-permission="human:resource:personnel:employee:contract:create"
+      update-permission="human:resource:personnel:employee:contract:update"
+      delete-permission="human:resource:personnel:employee:contract:delete"
+      import-permission="human:resource:personnel:employee:contract:import"
+      export-permission="human:resource:personnel:employee:contract:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -609,7 +609,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:personnel:employeecontract:update',
+        permission: 'human:resource:personnel:employee:contract:update',
         onClick: (record: EmployeeContract) => handleEdit(record)
       },
       {
@@ -617,7 +617,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:personnel:employeecontract:delete',
+        permission: 'human:resource:personnel:employee:contract:delete',
         onClick: (record: EmployeeContract) => handleDeleteOne(record)
       }
     ]

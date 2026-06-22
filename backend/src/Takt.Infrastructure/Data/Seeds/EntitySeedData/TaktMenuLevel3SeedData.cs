@@ -25,7 +25,7 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// <summary>
 /// Takt 三级菜单种子数据。
 /// <para>
-/// 父级为 TaktMenuLevel2SeedData 中定义的二级目录或分组（如 ROUTINE_NEWS_CENTER、LOGISTICS_SALES、HUMANRESOURCE_TALENT 等）。
+/// 父级为 TaktMenuLevel2SeedData 中定义的二级目录或分组（如 ROUTINE_NEWS_CENTER、LOGISTICS_SALES、HUMAN_RESOURCE_TALENT 等）。
 /// 页面类型菜单需配置以 <c>:list</c> 结尾的权限串，供 TaktMenuButtonSeedData 生成按钮。
 /// 由 TaktMenuSeedData 统一协调调用，不直接注册为 ITaktSeedDataCoordinator。
 /// </para>
@@ -93,28 +93,28 @@ public class TaktMenuLevel3SeedData
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_SERIAL" && m.IsDeleted == 0)
             .FirstAsync();
         var hrOrganizationMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_ORGANIZATION" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_ORGANIZATION" && m.IsDeleted == 0)
             .FirstAsync();
         var hrPersonnelMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_PERSONNEL" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_PERSONNEL" && m.IsDeleted == 0)
             .FirstAsync();
         var hrAttendanceMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_ATTENDANCE" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_ATTENDANCE" && m.IsDeleted == 0)
             .FirstAsync();
         var hrCompensationMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_COMPENSATION" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_COMPENSATION" && m.IsDeleted == 0)
             .FirstAsync();
         var hrBenefitsMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_BENEFITS" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_BENEFITS" && m.IsDeleted == 0)
             .FirstAsync();
         var hrPerformanceMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_PERFORMANCE" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_PERFORMANCE" && m.IsDeleted == 0)
             .FirstAsync();
         var hrTrainingMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_TRAINING" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_TRAINING" && m.IsDeleted == 0)
             .FirstAsync();
         var hrTalentMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMANRESOURCE_TALENT" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_TALENT" && m.IsDeleted == 0)
             .FirstAsync();
         var statisticsReportMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "STATISTICS_REPORT" && m.IsDeleted == 0)
@@ -123,7 +123,7 @@ public class TaktMenuLevel3SeedData
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "STATISTICS_LOGGING" && m.IsDeleted == 0)
             .FirstAsync();
         var routineHelpDeskMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "ROUTINE_HELPDESK" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "ROUTINE_HELP_DESK" && m.IsDeleted == 0)
             .FirstAsync();
         var routineDocumentCenterMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "ROUTINE_DOCUMENT_CENTER" && m.IsDeleted == 0)
@@ -136,7 +136,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "会计科目";
                 menu.MenuCode = "ACCOUNTING_FINANCIAL_ACCOUNT_TITLE";
-                menu.I18nKey = "menu.accounting.financial.accounttitle";
+                menu.I18nKey = "menu.accounting.financial.account.title";
                 menu.Icon = "RiBookletLine";
                 menu.ParentId = accountingFinancialMenu.Id;
                 menu.MenuType = 1;
@@ -156,11 +156,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "会计科目变更";
                 menu.MenuCode = "ACCOUNTING_FINANCIAL_ACCOUNT_TITLE_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.financial.accounttitle.changelog";
+                menu.I18nKey = "menu.accounting.financial.account.title.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = accountingFinancialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "accounting:financial:account:title:list";
+                menu.Permission = "accounting:financial:account:title:change:log:list";
                 menu.RoutePath = "/accounting/financial/account-title-change-log";
                 menu.ComponentPath = "accounting/financial/account-title-change-log/index";
                 menu.SortOrder = 2;
@@ -196,11 +196,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "固定资产变更";
                 menu.MenuCode = "ACCOUNTING_FINANCIAL_ASSET_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.financial.asset.changelog";
+                menu.I18nKey = "menu.accounting.financial.asset.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = accountingFinancialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "accounting:financial:asset:list";
+                menu.Permission = "accounting:financial:asset:change:log:list";
                 menu.RoutePath = "/accounting/financial/asset-change-log";
                 menu.ComponentPath = "accounting/financial/asset-change-log/index";
                 menu.SortOrder = 4;
@@ -260,7 +260,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "利润中心";
                 menu.MenuCode = "ACCOUNTING_CONTROLLING_PROFIT_CENTER";
-                menu.I18nKey = "menu.accounting.controlling.profitcenter";
+                menu.I18nKey = "menu.accounting.controlling.profit.center";
                 menu.Icon = "RiMoneyDollarCircleLine";
                 menu.ParentId = accountingControllingMenu.Id;
                 menu.MenuType = 1;
@@ -280,11 +280,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "利润中心变更";
                 menu.MenuCode = "ACCOUNTING_CONTROLLING_PROFIT_CENTER_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.controlling.profitcenter.changelog";
+                menu.I18nKey = "menu.accounting.controlling.profit.center.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = accountingControllingMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "accounting:controlling:profit:center:list";
+                menu.Permission = "accounting:controlling:profit:center:change:log:list";
                 menu.RoutePath = "/accounting/controlling/profit-center-change-log";
                 menu.ComponentPath = "accounting/controlling/profit-center-change-log/index";
                 menu.SortOrder = 2;
@@ -300,7 +300,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "成本中心";
                 menu.MenuCode = "ACCOUNTING_CONTROLLING_COST_CENTER";
-                menu.I18nKey = "menu.accounting.controlling.costcenter";
+                menu.I18nKey = "menu.accounting.controlling.cost.center";
                 menu.Icon = "RiPieChart2Line";
                 menu.ParentId = accountingControllingMenu.Id;
                 menu.MenuType = 1;
@@ -320,11 +320,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "成本中心变更";
                 menu.MenuCode = "ACCOUNTING_CONTROLLING_COST_CENTER_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.controlling.costcenter.changelog";
+                menu.I18nKey = "menu.accounting.controlling.cost.center.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = accountingControllingMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "accounting:controlling:cost:center:list";
+                menu.Permission = "accounting:controlling:cost:center:change:log:list";
                 menu.RoutePath = "/accounting/controlling/cost-center-change-log";
                 menu.ComponentPath = "accounting/controlling/cost-center-change-log/index";
                 menu.SortOrder = 4;
@@ -340,7 +340,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "成本要素";
                 menu.MenuCode = "ACCOUNTING_CONTROLLING_COST_ELEMENT";
-                menu.I18nKey = "menu.accounting.controlling.costelement";
+                menu.I18nKey = "menu.accounting.controlling.cost.element";
                 menu.Icon = "RiListCheck";
                 menu.ParentId = accountingControllingMenu.Id;
                 menu.MenuType = 1;
@@ -360,11 +360,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "成本要素变更";
                 menu.MenuCode = "ACCOUNTING_CONTROLLING_COST_ELEMENT_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.controlling.costelement.changelog";
+                menu.I18nKey = "menu.accounting.controlling.cost.element.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = accountingControllingMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "accounting:controlling:cost:element:list";
+                menu.Permission = "accounting:controlling:cost:element:change:log:list";
                 menu.RoutePath = "/accounting/controlling/cost-element-change-log";
                 menu.ComponentPath = "accounting/controlling/cost-element-change-log/index";
                 menu.SortOrder = 6;
@@ -380,7 +380,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "标准工资率";
                 menu.MenuCode = "ACCOUNTING_CONTROLLING_STANDARD_WAGE_RATE";
-                menu.I18nKey = "menu.accounting.controlling.standardwagerate";
+                menu.I18nKey = "menu.accounting.controlling.standard.wage.rate";
                 menu.Icon = "RiCalculatorLine";
                 menu.ParentId = accountingControllingMenu.Id;
                 menu.MenuType = 1;
@@ -400,6 +400,7 @@ public class TaktMenuLevel3SeedData
         // ========== 物料管理下的三级菜单 (LOGISTICS_MATERIALS) ==========
         if (logisticsMaterialMenu != null)
         {
+            // TaktPlant（工厂主数据）≠ TaktMaterialPlant（工厂物料）；MenuCode 不得混用 PLANT / MATERIAL_PLANT
             var (insertLM1, updateLM1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_PLANT", menu =>
             {
                 menu.MenuName = "工厂信息";
@@ -444,11 +445,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "全局物料变更";
                 menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.materials.material.changelog";
+                menu.I18nKey = "menu.logistics.materials.material.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:materials:material:list";
+                menu.Permission = "logistics:materials:material:change:log:list";
                 menu.RoutePath = "/logistics/materials/material-change-log";
                 menu.ComponentPath = "logistics/materials/material-change-log/index";
                 menu.SortOrder = 3;
@@ -460,11 +461,12 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM2Cl;
             updateCount += updateLM2Cl;
 
+            // TaktMaterialPlant：实体全名含 MATERIAL，MenuCode/I18nKey/Permission 均须 MATERIAL_PLANT 分段
             var (insertLM3, updateLM3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_PLANT", menu =>
             {
                 menu.MenuName = "工厂物料";
-                menu.MenuCode = "LOGISTICS_MATERIALS_PLANT";
-                menu.I18nKey = "menu.logistics.materials.materialplant";
+                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_PLANT";
+                menu.I18nKey = "menu.logistics.materials.material.plant";
                 menu.Icon = "RiArchiveStackLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
@@ -484,11 +486,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "工厂物料变更";
                 menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_PLANT_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.materials.materialplant.changelog";
+                menu.I18nKey = "menu.logistics.materials.material.plant.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:materials:material:plant:list";
+                menu.Permission = "logistics:materials:material:plant:change:log:list";
                 menu.RoutePath = "/logistics/materials/material-plant-change-log";
                 menu.ComponentPath = "logistics/materials/material-plant-change-log/index";
                 menu.SortOrder = 5;
@@ -500,6 +502,7 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM3Cl;
             updateCount += updateLM3Cl;
 
+            // TaktWarehouse 主表；TaktStorageLocation 为子表，在仓库页右栏维护，无独立菜单
             var (insertLM3Wh, updateLM3Wh) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_WAREHOUSE", menu =>
             {
                 menu.MenuName = "仓库信息";
@@ -523,8 +526,8 @@ public class TaktMenuLevel3SeedData
             var (insertLM3Mg, updateLM3Mg) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_GROUP", menu =>
             {
                 menu.MenuName = "物料组";
-                menu.MenuCode = "LOGISTICS_MATERIALS_GROUP";
-                menu.I18nKey = "menu.logistics.materials.materialgroup";
+                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_GROUP";
+                menu.I18nKey = "menu.logistics.materials.material.group";
                 menu.Icon = "RiStackLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
@@ -540,26 +543,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM3Mg;
             updateCount += updateLM3Mg;
 
-            var (insertLM3Sl, updateLM3Sl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_STORAGE_LOCATION", menu =>
-            {
-                menu.MenuName = "库位信息";
-                menu.MenuCode = "LOGISTICS_MATERIALS_STORAGE_LOCATION";
-                menu.I18nKey = "menu.logistics.materials.storagelocation";
-                menu.Icon = "RiLayoutGridLine";
-                menu.ParentId = logisticsMaterialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:materials:storage:location:list";
-                menu.RoutePath = "/logistics/materials/storage-location";
-                menu.ComponentPath = "logistics/materials/storage-location/index";
-                menu.SortOrder = 8;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLM3Sl;
-            updateCount += updateLM3Sl;
-
             var (insertLM4, updateLM4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_PACKAGING", menu =>
             {
                 menu.MenuName = "包装物料";
@@ -571,7 +554,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:packaging:list";
                 menu.RoutePath = "/logistics/materials/packaging";
                 menu.ComponentPath = "logistics/materials/packaging/index";
-                menu.SortOrder = 9;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -584,14 +567,14 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "机种仕向";
                 menu.MenuCode = "LOGISTICS_MATERIALS_MODEL_DESTINATION";
-                menu.I18nKey = "menu.logistics.materials.modeldestination";
+                menu.I18nKey = "menu.logistics.materials.model.destination";
                 menu.Icon = "RiEarthLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:materials:model:destination:list";
                 menu.RoutePath = "/logistics/materials/model-destination";
                 menu.ComponentPath = "logistics/materials/model-destination/index";
-                menu.SortOrder = 10;
+                menu.SortOrder = 9;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -604,14 +587,14 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "制造商物料";
                 menu.MenuCode = "LOGISTICS_MATERIALS_MANUFACTURER_MATERIAL";
-                menu.I18nKey = "menu.logistics.materials.manufacturer";
+                menu.I18nKey = "menu.logistics.materials.manufacturer.material";
                 menu.Icon = "RiBuilding4Line";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:materials:manufacturer:list";
+                menu.Permission = "logistics:materials:manufacturer:material:list";
                 menu.RoutePath = "/logistics/materials/manufacturer";
                 menu.ComponentPath = "logistics/materials/manufacturer/index";
-                menu.SortOrder = 11;
+                menu.SortOrder = 10;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -623,15 +606,15 @@ public class TaktMenuLevel3SeedData
             var (insertLM7, updateLM7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION", menu =>
             {
                 menu.MenuName = "物料交易";
-                menu.MenuCode = "LOGISTICS_MATERIALS_TRANSACTION";
-                menu.I18nKey = "menu.logistics.materials.materialtransaction";
+                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION";
+                menu.I18nKey = "menu.logistics.materials.material.transaction";
                 menu.Icon = "RiExchangeLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
                 menu.Permission = "logistics:materials:material:transaction:list";
                 menu.RoutePath = "/logistics/materials/material-transaction";
                 menu.ComponentPath = "logistics/materials/material-transaction/index";
-                menu.SortOrder = 12;
+                menu.SortOrder = 11;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -688,7 +671,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "货源";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_SOURCE_OF_SUPPLY";
-                menu.I18nKey = "menu.logistics.procurement.sourceofsupply";
+                menu.I18nKey = "menu.logistics.procurement.source.of.supply";
                 menu.Icon = "RiLinksLine";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
@@ -708,7 +691,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购申请";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_REQUEST";
-                menu.I18nKey = "menu.logistics.procurement.purchaserequest";
+                menu.I18nKey = "menu.logistics.procurement.purchase.request";
                 menu.Icon = "RiFileAddLine";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
@@ -728,11 +711,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购申请变更";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_REQUEST_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.procurement.purchaserequest.changelog";
+                menu.I18nKey = "menu.logistics.procurement.purchase.request.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:procurement:purchase:request:list";
+                menu.Permission = "logistics:procurement:purchase:request:change:log:list";
                 menu.RoutePath = "/logistics/procurement/purchase-request-change-log";
                 menu.ComponentPath = "logistics/procurement/purchase-request-change-log/index";
                 menu.SortOrder = 5;
@@ -748,7 +731,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购订单";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_ORDER";
-                menu.I18nKey = "menu.logistics.procurement.purchaseorder";
+                menu.I18nKey = "menu.logistics.procurement.purchase.order";
                 menu.Icon = "RiListOrdered";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
@@ -768,11 +751,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购订单变更";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.procurement.purchaseorder.changelog";
+                menu.I18nKey = "menu.logistics.procurement.purchase.order.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:procurement:purchase:order:list";
+                menu.Permission = "logistics:procurement:purchase:order:change:log:list";
                 menu.RoutePath = "/logistics/procurement/purchase-order-change-log";
                 menu.ComponentPath = "logistics/procurement/purchase-order-change-log/index";
                 menu.SortOrder = 7;
@@ -788,7 +771,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购价格";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_PRICE";
-                menu.I18nKey = "menu.logistics.procurement.purchaseprice";
+                menu.I18nKey = "menu.logistics.procurement.purchase.price";
                 menu.Icon = "RiPriceTag3Line";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
@@ -808,11 +791,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购价格变更";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_PRICE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.procurement.purchaseprice.changelog";
+                menu.I18nKey = "menu.logistics.procurement.purchase.price.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:procurement:purchase:price:list";
+                menu.Permission = "logistics:procurement:purchase:price:change:log:list";
                 menu.RoutePath = "/logistics/procurement/purchase-price-change-log";
                 menu.ComponentPath = "logistics/procurement/purchase-price-change-log/index";
                 menu.SortOrder = 9;
@@ -828,7 +811,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购发票";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_INVOICE";
-                menu.I18nKey = "menu.logistics.procurement.purchaseinvoice";
+                menu.I18nKey = "menu.logistics.procurement.purchase.invoice";
                 menu.Icon = "RiFilePaper2Line";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
@@ -848,7 +831,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "采购组";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_GROUP";
-                menu.I18nKey = "menu.logistics.procurement.purchasegroup";
+                menu.I18nKey = "menu.logistics.procurement.purchase.group";
                 menu.Icon = "RiGroupLine";
                 menu.ParentId = logisticsProcurementMenu.Id;
                 menu.MenuType = 1;
@@ -929,7 +912,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "设变";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange._self";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change._self";
                 menu.Icon = "RiEditCircleLine";
                 menu.ParentId = manufacturingMenu.Id;
                 menu.MenuType = 0;
@@ -1298,11 +1281,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "销售报价变更";
                 menu.MenuCode = "LOGISTICS_SALES_QUOTATION_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.sales.quotation.changelog";
+                menu.I18nKey = "menu.logistics.sales.quotation.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsSalesMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:sales:quotation:list";
+                menu.Permission = "logistics:sales:quotation:change:log:list";
                 menu.RoutePath = "/logistics/sales/quotation-change-log";
                 menu.ComponentPath = "logistics/sales/quotation-change-log/index";
                 menu.SortOrder = 4;
@@ -1338,11 +1321,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "销售价格变更";
                 menu.MenuCode = "LOGISTICS_SALES_PRICE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.sales.price.changelog";
+                menu.I18nKey = "menu.logistics.sales.price.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsSalesMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:sales:price:list";
+                menu.Permission = "logistics:sales:price:change:log:list";
                 menu.RoutePath = "/logistics/sales/price-change-log";
                 menu.ComponentPath = "logistics/sales/price-change-log/index";
                 menu.SortOrder = 6;
@@ -1378,11 +1361,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "销售订单变更";
                 menu.MenuCode = "LOGISTICS_SALES_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.sales.order.changelog";
+                menu.I18nKey = "menu.logistics.sales.order.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = logisticsSalesMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:sales:order:list";
+                menu.Permission = "logistics:sales:order:change:log:list";
                 menu.RoutePath = "/logistics/sales/order-change-log";
                 menu.ComponentPath = "logistics/sales/order-change-log/index";
                 menu.SortOrder = 8;
@@ -1459,18 +1442,18 @@ public class TaktMenuLevel3SeedData
             updateCount += updateSER3;
         }
 
-        // ========== 组织管理下的三级菜单 (HUMANRESOURCE_ORGANIZATION) ==========
+        // ========== 组织管理下的三级菜单 (HUMAN_RESOURCE_ORGANIZATION) ==========
         if (hrOrganizationMenu != null)
         {
-            var (insertHRO1, updateHRO1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ORGANIZATION_DEPT", menu =>
+            var (insertHRO1, updateHRO1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ORGANIZATION_DEPT", menu =>
             {
                 menu.MenuName = "部门管理";
-                menu.MenuCode = "HUMANRESOURCE_ORGANIZATION_DEPT";
-                menu.I18nKey = "menu.humanresource.organization.dept";
+                menu.MenuCode = "HUMAN_RESOURCE_ORGANIZATION_DEPT";
+                menu.I18nKey = "menu.human.resource.organization.dept";
                 menu.Icon = "RiGroupLine";
                 menu.ParentId = hrOrganizationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:organization:dept:list";
+                menu.Permission = "human:resource:organization:dept:list";
                 menu.RoutePath = "/human-resource/organization/dept";
                 menu.ComponentPath = "human-resource/organization/dept/index";
                 menu.SortOrder = 1;
@@ -1482,15 +1465,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRO1;
             updateCount += updateHRO1;
 
-            var (insertHRO2, updateHRO2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ORGANIZATION_POST", menu =>
+            var (insertHRO2, updateHRO2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ORGANIZATION_POST", menu =>
             {
                 menu.MenuName = "岗位管理";
-                menu.MenuCode = "HUMANRESOURCE_ORGANIZATION_POST";
-                menu.I18nKey = "menu.humanresource.organization.post";
+                menu.MenuCode = "HUMAN_RESOURCE_ORGANIZATION_POST";
+                menu.I18nKey = "menu.human.resource.organization.post";
                 menu.Icon = "RiAdminLine";
                 menu.ParentId = hrOrganizationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:organization:post:list";
+                menu.Permission = "human:resource:organization:post:list";
                 menu.RoutePath = "/human-resource/organization/post";
                 menu.ComponentPath = "human-resource/organization/post/index";
                 menu.SortOrder = 2;
@@ -1503,18 +1486,18 @@ public class TaktMenuLevel3SeedData
             updateCount += updateHRO2;
         }
 
-        // ========== 人事管理下的三级菜单 (HUMANRESOURCE_PERSONNEL) ==========
+        // ========== 人事管理下的三级菜单 (HUMAN_RESOURCE_PERSONNEL) ==========
         if (hrPersonnelMenu != null)
         {
-            var (insertHRP1, updateHRP1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERSONNEL_EMPLOYEE", menu =>
+            var (insertHRP1, updateHRP1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE", menu =>
             {
                 menu.MenuName = "员工档案";
-                menu.MenuCode = "HUMANRESOURCE_PERSONNEL_EMPLOYEE";
-                menu.I18nKey = "menu.humanresource.personnel.employee";
+                menu.MenuCode = "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE";
+                menu.I18nKey = "menu.human.resource.personnel.employee";
                 menu.Icon = "RiUserFollowLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:list";
                 menu.RoutePath = "/human-resource/personnel/employee";
                 menu.ComponentPath = "human-resource/personnel/employee/index";
                 menu.SortOrder = 1;
@@ -1526,18 +1509,38 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP1;
             updateCount += updateHRP1;
 
-            var (insertHRP2, updateHRP2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERSONNEL_EMPLOYEE_CONTRACT", menu =>
+            var (insertHRP1b, updateHRP1b) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_ONBOARDING", menu =>
+            {
+                menu.MenuName = "入职待办";
+                menu.MenuCode = "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_ONBOARDING";
+                menu.I18nKey = "menu.human.resource.personnel.employee.onboarding";
+                menu.Icon = "RiUserAddLine";
+                menu.ParentId = hrPersonnelMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "human:resource:personnel:employee:onboarding:list";
+                menu.RoutePath = "/human-resource/personnel/employee-onboarding";
+                menu.ComponentPath = "human-resource/personnel/employee-onboarding/index";
+                menu.SortOrder = 2;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertHRP1b;
+            updateCount += updateHRP1b;
+
+            var (insertHRP2, updateHRP2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_CONTRACT", menu =>
             {
                 menu.MenuName = "员工合同";
-                menu.MenuCode = "HUMANRESOURCE_PERSONNEL_EMPLOYEE_CONTRACT";
-                menu.I18nKey = "menu.humanresource.personnel.employeecontract";
+                menu.MenuCode = "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_CONTRACT";
+                menu.I18nKey = "menu.human.resource.personnel.employee.contract";
                 menu.Icon = "RiFilePaperLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:personnel:employee:contract:list";
+                menu.Permission = "human:resource:personnel:employee:contract:list";
                 menu.RoutePath = "/human-resource/personnel/employee-contract";
                 menu.ComponentPath = "human-resource/personnel/employee-contract/index";
-                menu.SortOrder = 2;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1546,18 +1549,18 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP2;
             updateCount += updateHRP2;
 
-            var (insertHRP3, updateHRP3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERSONNEL_EMPLOYEE_DELEGATE", menu =>
+            var (insertHRP3, updateHRP3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_DELEGATE", menu =>
             {
                 menu.MenuName = "员工代理";
-                menu.MenuCode = "HUMANRESOURCE_PERSONNEL_EMPLOYEE_DELEGATE";
-                menu.I18nKey = "menu.humanresource.personnel.employeedelegate";
+                menu.MenuCode = "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_DELEGATE";
+                menu.I18nKey = "menu.human.resource.personnel.employee.delegate";
                 menu.Icon = "RiUserSharedLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:personnel:employeedelegation:list";
+                menu.Permission = "human:resource:personnel:employee:delegate:list";
                 menu.RoutePath = "/human-resource/personnel/employee-delegate";
                 menu.ComponentPath = "human-resource/personnel/employee-delegate/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1566,18 +1569,18 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP3;
             updateCount += updateHRP3;
 
-            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERSONNEL_EMPLOYEE_REASSIGNMENT", menu =>
+            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_REASSIGNMENT", menu =>
             {
                 menu.MenuName = "员工调动";
-                menu.MenuCode = "HUMANRESOURCE_PERSONNEL_EMPLOYEE_REASSIGNMENT";
-                menu.I18nKey = "menu.humanresource.personnel.employeereassignment";
+                menu.MenuCode = "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE_REASSIGNMENT";
+                menu.I18nKey = "menu.human.resource.personnel.employee.reassignment";
                 menu.Icon = "RiExchangeLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:personnel:employee:reassignment:list";
+                menu.Permission = "human:resource:personnel:employee:reassignment:list";
                 menu.RoutePath = "/human-resource/personnel/employee-reassignment";
                 menu.ComponentPath = "human-resource/personnel/employee-reassignment/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1585,40 +1588,20 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertHRP4;
             updateCount += updateHRP4;
-
-            var (insertHRP5, updateHRP5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERSONNEL_EMPLOYEE_ONBOARDING", menu =>
-            {
-                menu.MenuName = "入职待办";
-                menu.MenuCode = "HUMANRESOURCE_PERSONNEL_EMPLOYEE_ONBOARDING";
-                menu.I18nKey = "menu.humanresource.personnel.employeeonboarding";
-                menu.Icon = "RiClipboardLine";
-                menu.ParentId = hrPersonnelMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "humanresource:talent:offer:list";
-                menu.RoutePath = "/human-resource/personnel/employee-onboarding";
-                menu.ComponentPath = "human-resource/personnel/employee-onboarding/index";
-                menu.SortOrder = 5;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHRP5;
-            updateCount += updateHRP5;
         }
 
-        // ========== 考勤管理下的三级菜单 (HUMANRESOURCE_ATTENDANCE，与 HumanResource/Attendance 实体及控制器对齐) ==========
+        // ========== 考勤管理下的三级菜单 (HUMAN_RESOURCE_ATTENDANCE，与 HumanResource/Attendance 实体及控制器对齐) ==========
         if (hrAttendanceMenu != null)
         {
-            var (insertHRAL1, updateHRAL1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_CALENDAR", menu =>
+            var (insertHRAL1, updateHRAL1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ATTENDANCE_CALENDAR", menu =>
             {
                 menu.MenuName = "工厂日历";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_CALENDAR";
-                menu.I18nKey = "menu.humanresource.attendance.calendar";
+                menu.MenuCode = "HUMAN_RESOURCE_ATTENDANCE_CALENDAR";
+                menu.I18nKey = "menu.human.resource.attendance.calendar";
                 menu.Icon = "RiCalendarLine";
                 menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendance:calendar:list";
+                menu.Permission = "human:resource:attendance:calendar:list";
                 menu.RoutePath = "/human-resource/attendance/calendar";
                 menu.ComponentPath = "human-resource/attendance/calendar/index";
                 menu.SortOrder = 1;
@@ -1630,15 +1613,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL1;
             updateCount += updateHRAL1;
 
-            var (insertHRAL2, updateHRAL2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_HOLIDAY", menu =>
+            var (insertHRAL2, updateHRAL2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ATTENDANCE_HOLIDAY", menu =>
             {
                 menu.MenuName = "假期管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_HOLIDAY";
-                menu.I18nKey = "menu.humanresource.attendance.holiday";
+                menu.MenuCode = "HUMAN_RESOURCE_ATTENDANCE_HOLIDAY";
+                menu.I18nKey = "menu.human.resource.attendance.holiday";
                 menu.Icon = "RiCalendarEventLine";
                 menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendance:holiday:list";
+                menu.Permission = "human:resource:attendance:holiday:list";
                 menu.RoutePath = "/human-resource/attendance/holiday";
                 menu.ComponentPath = "human-resource/attendance/holiday/index";
                 menu.SortOrder = 2;
@@ -1650,15 +1633,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL2;
             updateCount += updateHRAL2;
 
-            var (insertHRAL3, updateHRAL3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_SHIFT_SCHEDULE", menu =>
+            var (insertHRAL3, updateHRAL3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ATTENDANCE_SHIFT_SCHEDULE", menu =>
             {
                 menu.MenuName = "排班计划";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_SHIFT_SCHEDULE";
-                menu.I18nKey = "menu.humanresource.attendance.shiftschedule";
+                menu.MenuCode = "HUMAN_RESOURCE_ATTENDANCE_SHIFT_SCHEDULE";
+                menu.I18nKey = "menu.human.resource.attendance.shift.schedule";
                 menu.Icon = "RiCalendarScheduleLine";
                 menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendance:shift:schedule:list";
+                menu.Permission = "human:resource:attendance:shift:schedule:list";
                 menu.RoutePath = "/human-resource/attendance/shift-schedule";
                 menu.ComponentPath = "human-resource/attendance/shift-schedule/index";
                 menu.SortOrder = 3;
@@ -1670,15 +1653,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL3;
             updateCount += updateHRAL3;
 
-            var (insertHRAL4, updateHRAL4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_WORK_SHIFT", menu =>
+            var (insertHRAL4, updateHRAL4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ATTENDANCE_WORK_SHIFT", menu =>
             {
                 menu.MenuName = "班次管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_WORK_SHIFT";
-                menu.I18nKey = "menu.humanresource.attendance.workshift";
+                menu.MenuCode = "HUMAN_RESOURCE_ATTENDANCE_WORK_SHIFT";
+                menu.I18nKey = "menu.human.resource.attendance.work.shift";
                 menu.Icon = "RiTimeZoneLine";
                 menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendance:work:shift:list";
+                menu.Permission = "human:resource:attendance:work:shift:list";
                 menu.RoutePath = "/human-resource/attendance/work-shift";
                 menu.ComponentPath = "human-resource/attendance/work-shift/index";
                 menu.SortOrder = 4;
@@ -1690,15 +1673,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL4;
             updateCount += updateHRAL4;
 
-            var (insertHRAL5, updateHRAL5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_LEAVE", menu =>
+            var (insertHRAL5, updateHRAL5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ATTENDANCE_LEAVE", menu =>
             {
                 menu.MenuName = "请假管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_LEAVE";
-                menu.I18nKey = "menu.humanresource.attendance.leave";
+                menu.MenuCode = "HUMAN_RESOURCE_ATTENDANCE_LEAVE";
+                menu.I18nKey = "menu.human.resource.attendance.leave";
                 menu.Icon = "RiCalendarCheckLine";
                 menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendance:leave:list";
+                menu.Permission = "human:resource:attendance:leave:list";
                 menu.RoutePath = "/human-resource/attendance/leave";
                 menu.ComponentPath = "human-resource/attendance/leave/index";
                 menu.SortOrder = 5;
@@ -1710,15 +1693,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL5;
             updateCount += updateHRAL5;
 
-            var (insertHRAL6, updateHRAL6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_ATTENDANCE_OVERTIME", menu =>
+            var (insertHRAL6, updateHRAL6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_ATTENDANCE_OVERTIME", menu =>
             {
                 menu.MenuName = "加班管理";
-                menu.MenuCode = "HUMANRESOURCE_ATTENDANCE_OVERTIME";
-                menu.I18nKey = "menu.humanresource.attendance.overtime";
+                menu.MenuCode = "HUMAN_RESOURCE_ATTENDANCE_OVERTIME";
+                menu.I18nKey = "menu.human.resource.attendance.overtime";
                 menu.Icon = "RiTimeLine";
                 menu.ParentId = hrAttendanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:attendance:overtime:list";
+                menu.Permission = "human:resource:attendance:overtime:list";
                 menu.RoutePath = "/human-resource/attendance/overtime";
                 menu.ComponentPath = "human-resource/attendance/overtime/index";
                 menu.SortOrder = 6;
@@ -1730,18 +1713,18 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRAL6;
             updateCount += updateHRAL6;
         }
-        // ========== 薪酬管理下的三级菜单 (HUMANRESOURCE_COMPENSATION，与 Compensation 实体对齐) ==========
+        // ========== 薪酬管理下的三级菜单 (HUMAN_RESOURCE_COMPENSATION，与 Compensation 实体对齐) ==========
         if (hrCompensationMenu != null)
         {
-            var (insertHRC1, updateHRC1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_SALARY_ITEM", menu =>
+            var (insertHRC1, updateHRC1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION_SALARY_ITEM", menu =>
             {
                 menu.MenuName = "薪资项目";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_SALARY_ITEM";
-                menu.I18nKey = "menu.humanresource.compensation.salaryitem";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION_SALARY_ITEM";
+                menu.I18nKey = "menu.human.resource.compensation.salary.item";
                 menu.Icon = "RiPriceTag3Line";
                 menu.ParentId = hrCompensationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensation:salary:item:list";
+                menu.Permission = "human:resource:compensation:salary:item:list";
                 menu.RoutePath = "/human-resource/compensation/salary-item";
                 menu.ComponentPath = "human-resource/compensation/salary-item/index";
                 menu.SortOrder = 1;
@@ -1753,15 +1736,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRC1;
             updateCount += updateHRC1;
 
-            var (insertHRC2, updateHRC2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_PAYROLL", menu =>
+            var (insertHRC2, updateHRC2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION_PAYROLL", menu =>
             {
                 menu.MenuName = "薪酬体系";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_PAYROLL";
-                menu.I18nKey = "menu.humanresource.compensation.payroll";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION_PAYROLL";
+                menu.I18nKey = "menu.human.resource.compensation.payroll";
                 menu.Icon = "RiFileList3Line";
                 menu.ParentId = hrCompensationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensation:payroll:list";
+                menu.Permission = "human:resource:compensation:payroll:list";
                 menu.RoutePath = "/human-resource/compensation/payroll";
                 menu.ComponentPath = "human-resource/compensation/payroll/index";
                 menu.SortOrder = 2;
@@ -1773,15 +1756,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRC2;
             updateCount += updateHRC2;
 
-            var (insertHRC3, updateHRC3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_PAY_SCALE", menu =>
+            var (insertHRC3, updateHRC3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION_PAY_SCALE", menu =>
             {
                 menu.MenuName = "薪级";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_PAY_SCALE";
-                menu.I18nKey = "menu.humanresource.compensation.payscale";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION_PAY_SCALE";
+                menu.I18nKey = "menu.human.resource.compensation.pay.scale";
                 menu.Icon = "RiStackLine";
                 menu.ParentId = hrCompensationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensation:pay:scale:list";
+                menu.Permission = "human:resource:compensation:pay:scale:list";
                 menu.RoutePath = "/human-resource/compensation/pay-scale";
                 menu.ComponentPath = "human-resource/compensation/pay-scale/index";
                 menu.SortOrder = 3;
@@ -1793,15 +1776,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRC3;
             updateCount += updateHRC3;
 
-            var (insertHRC4, updateHRC4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_EMP_SALARY", menu =>
+            var (insertHRC4, updateHRC4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION_EMP_SALARY", menu =>
             {
                 menu.MenuName = "员工定薪";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_EMP_SALARY";
-                menu.I18nKey = "menu.humanresource.compensation.empsalary";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION_EMP_SALARY";
+                menu.I18nKey = "menu.human.resource.compensation.emp.salary";
                 menu.Icon = "RiUserSettingsLine";
                 menu.ParentId = hrCompensationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensation:emp:salary:list";
+                menu.Permission = "human:resource:compensation:emp:salary:list";
                 menu.RoutePath = "/human-resource/compensation/emp-salary";
                 menu.ComponentPath = "human-resource/compensation/emp-salary/index";
                 menu.SortOrder = 4;
@@ -1813,15 +1796,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRC4;
             updateCount += updateHRC4;
 
-            var (insertHRC5, updateHRC5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_BONUS_PLAN", menu =>
+            var (insertHRC5, updateHRC5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION_BONUS_PLAN", menu =>
             {
                 menu.MenuName = "奖金方案";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_BONUS_PLAN";
-                menu.I18nKey = "menu.humanresource.compensation.bonusplan";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION_BONUS_PLAN";
+                menu.I18nKey = "menu.human.resource.compensation.bonus.plan";
                 menu.Icon = "RiAwardLine";
                 menu.ParentId = hrCompensationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensation:bonus:plan:list";
+                menu.Permission = "human:resource:compensation:bonus:plan:list";
                 menu.RoutePath = "/human-resource/compensation/bonus-plan";
                 menu.ComponentPath = "human-resource/compensation/bonus-plan/index";
                 menu.SortOrder = 5;
@@ -1833,15 +1816,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRC5;
             updateCount += updateHRC5;
 
-            var (insertHRC6, updateHRC6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_SALARY_FORMULA", menu =>
+            var (insertHRC6, updateHRC6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION_SALARY_FORMULA", menu =>
             {
                 menu.MenuName = "薪资计算公式";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_SALARY_FORMULA";
-                menu.I18nKey = "menu.humanresource.compensation.salaryformula";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION_SALARY_FORMULA";
+                menu.I18nKey = "menu.human.resource.compensation.salary.formula";
                 menu.Icon = "RiFunctionsLine";
                 menu.ParentId = hrCompensationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensation:salary:formula:list";
+                menu.Permission = "human:resource:compensation:salary:formula:list";
                 menu.RoutePath = "/human-resource/compensation/salary-formula";
                 menu.ComponentPath = "human-resource/compensation/salary-formula/index";
                 menu.SortOrder = 6;
@@ -1853,15 +1836,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRC6;
             updateCount += updateHRC6;
 
-            var (insertHRC7, updateHRC7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_COMPENSATION_PAYSLIP", menu =>
+            var (insertHRC7, updateHRC7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_COMPENSATION_PAYSLIP", menu =>
             {
                 menu.MenuName = "工资条";
-                menu.MenuCode = "HUMANRESOURCE_COMPENSATION_PAYSLIP";
-                menu.I18nKey = "menu.humanresource.compensation.payslip";
+                menu.MenuCode = "HUMAN_RESOURCE_COMPENSATION_PAYSLIP";
+                menu.I18nKey = "menu.human.resource.compensation.payslip";
                 menu.Icon = "RiBillLine";
                 menu.ParentId = hrCompensationMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:compensation:payslip:list";
+                menu.Permission = "human:resource:compensation:payslip:list";
                 menu.RoutePath = "/human-resource/compensation/payslip";
                 menu.ComponentPath = "human-resource/compensation/payslip/index";
                 menu.SortOrder = 7;
@@ -1874,18 +1857,18 @@ public class TaktMenuLevel3SeedData
             updateCount += updateHRC7;
         }
 
-        // ========== 福利管理下的三级菜单 (HUMANRESOURCE_BENEFITS，与 Benefits 实体对齐) ==========
+        // ========== 福利管理下的三级菜单 (HUMAN_RESOURCE_BENEFITS，与 Benefits 实体对齐) ==========
         if (hrBenefitsMenu != null)
         {
-            var (insertHRB1, updateHRB1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_BENEFITS_BENEFIT_ITEM", menu =>
+            var (insertHRB1, updateHRB1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_BENEFITS_BENEFIT_ITEM", menu =>
             {
                 menu.MenuName = "福利项目";
-                menu.MenuCode = "HUMANRESOURCE_BENEFITS_BENEFIT_ITEM";
-                menu.I18nKey = "menu.humanresource.benefits.benefititem";
+                menu.MenuCode = "HUMAN_RESOURCE_BENEFITS_BENEFIT_ITEM";
+                menu.I18nKey = "menu.human.resource.benefits.benefit.item";
                 menu.Icon = "RiGiftLine";
                 menu.ParentId = hrBenefitsMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:benefits:benefit:item:list";
+                menu.Permission = "human:resource:benefits:benefit:item:list";
                 menu.RoutePath = "/human-resource/benefits/benefit-item";
                 menu.ComponentPath = "human-resource/benefits/benefit-item/index";
                 menu.SortOrder = 1;
@@ -1897,15 +1880,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRB1;
             updateCount += updateHRB1;
 
-            var (insertHRB2, updateHRB2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_BENEFITS_EMP_BENEFIT_PLAN", menu =>
+            var (insertHRB2, updateHRB2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_BENEFITS_EMP_BENEFIT_PLAN", menu =>
             {
                 menu.MenuName = "员工福利方案";
-                menu.MenuCode = "HUMANRESOURCE_BENEFITS_EMP_BENEFIT_PLAN";
-                menu.I18nKey = "menu.humanresource.benefits.empbenefitplan";
+                menu.MenuCode = "HUMAN_RESOURCE_BENEFITS_EMP_BENEFIT_PLAN";
+                menu.I18nKey = "menu.human.resource.benefits.emp.benefit.plan";
                 menu.Icon = "RiUserHeartLine";
                 menu.ParentId = hrBenefitsMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:benefits:emp:benefit:plan:list";
+                menu.Permission = "human:resource:benefits:emp:benefit:plan:list";
                 menu.RoutePath = "/human-resource/benefits/emp-benefit-plan";
                 menu.ComponentPath = "human-resource/benefits/emp-benefit-plan/index";
                 menu.SortOrder = 2;
@@ -1917,15 +1900,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRB2;
             updateCount += updateHRB2;
 
-            var (insertHRB3, updateHRB3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_BENEFITS_SOCIAL_INSURANCE", menu =>
+            var (insertHRB3, updateHRB3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_BENEFITS_SOCIAL_INSURANCE", menu =>
             {
                 menu.MenuName = "社保公积金";
-                menu.MenuCode = "HUMANRESOURCE_BENEFITS_SOCIAL_INSURANCE";
-                menu.I18nKey = "menu.humanresource.benefits.socialinsurance";
+                menu.MenuCode = "HUMAN_RESOURCE_BENEFITS_SOCIAL_INSURANCE";
+                menu.I18nKey = "menu.human.resource.benefits.social.insurance";
                 menu.Icon = "RiShieldCheckLine";
                 menu.ParentId = hrBenefitsMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:benefits:social:insurance:list";
+                menu.Permission = "human:resource:benefits:social:insurance:list";
                 menu.RoutePath = "/human-resource/benefits/social-insurance";
                 menu.ComponentPath = "human-resource/benefits/social-insurance/index";
                 menu.SortOrder = 3;
@@ -1938,18 +1921,18 @@ public class TaktMenuLevel3SeedData
             updateCount += updateHRB3;
         }
 
-        // ========== 绩效管理下的三级菜单 (HUMANRESOURCE_PERFORMANCE，与 5 个实体对齐) ==========
+        // ========== 绩效管理下的三级菜单 (HUMAN_RESOURCE_PERFORMANCE，与 5 个实体对齐) ==========
         if (hrPerformanceMenu != null)
         {
-            var (insertHRP1, updateHRP1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERF_CYCLE", menu =>
+            var (insertHRP1, updateHRP1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERFORMANCE_PERF_CYCLE", menu =>
             {
                 menu.MenuName = "绩效周期";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERF_CYCLE";
-                menu.I18nKey = "menu.humanresource.performance.perfcycle";
+                menu.MenuCode = "HUMAN_RESOURCE_PERFORMANCE_PERF_CYCLE";
+                menu.I18nKey = "menu.human.resource.performance.perf.cycle";
                 menu.Icon = "RiCalendarLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:perf:cycle:list";
+                menu.Permission = "human:resource:performance:perf:cycle:list";
                 menu.RoutePath = "/human-resource/performance/perf-cycle";
                 menu.ComponentPath = "human-resource/performance/perf-cycle/index";
                 menu.SortOrder = 1;
@@ -1961,15 +1944,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP1;
             updateCount += updateHRP1;
 
-            var (insertHRP2, updateHRP2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERF_SCHEME", menu =>
+            var (insertHRP2, updateHRP2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERFORMANCE_PERF_SCHEME", menu =>
             {
                 menu.MenuName = "绩效方案";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERF_SCHEME";
-                menu.I18nKey = "menu.humanresource.performance.perfscheme";
+                menu.MenuCode = "HUMAN_RESOURCE_PERFORMANCE_PERF_SCHEME";
+                menu.I18nKey = "menu.human.resource.performance.perf.scheme";
                 menu.Icon = "RiFileChartLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:perf:scheme:list";
+                menu.Permission = "human:resource:performance:perf:scheme:list";
                 menu.RoutePath = "/human-resource/performance/perf-scheme";
                 menu.ComponentPath = "human-resource/performance/perf-scheme/index";
                 menu.SortOrder = 2;
@@ -1981,15 +1964,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP2;
             updateCount += updateHRP2;
 
-            var (insertHRP3, updateHRP3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERF_OBJECTIVE", menu =>
+            var (insertHRP3, updateHRP3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERFORMANCE_PERF_OBJECTIVE", menu =>
             {
                 menu.MenuName = "绩效目标";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERF_OBJECTIVE";
-                menu.I18nKey = "menu.humanresource.performance.perfobjective";
+                menu.MenuCode = "HUMAN_RESOURCE_PERFORMANCE_PERF_OBJECTIVE";
+                menu.I18nKey = "menu.human.resource.performance.perf.objective";
                 menu.Icon = "RiTargetLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:perf:objective:list";
+                menu.Permission = "human:resource:performance:perf:objective:list";
                 menu.RoutePath = "/human-resource/performance/perf-objective";
                 menu.ComponentPath = "human-resource/performance/perf-objective/index";
                 menu.SortOrder = 3;
@@ -2001,15 +1984,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP3;
             updateCount += updateHRP3;
 
-            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERF_ASSESSMENT", menu =>
+            var (insertHRP4, updateHRP4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERFORMANCE_PERF_ASSESSMENT", menu =>
             {
                 menu.MenuName = "绩效考核";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERF_ASSESSMENT";
-                menu.I18nKey = "menu.humanresource.performance.perfassessment";
+                menu.MenuCode = "HUMAN_RESOURCE_PERFORMANCE_PERF_ASSESSMENT";
+                menu.I18nKey = "menu.human.resource.performance.perf.assessment";
                 menu.Icon = "RiClipboardLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:perf:assessment:list";
+                menu.Permission = "human:resource:performance:perf:assessment:list";
                 menu.RoutePath = "/human-resource/performance/perf-assessment";
                 menu.ComponentPath = "human-resource/performance/perf-assessment/index";
                 menu.SortOrder = 4;
@@ -2021,15 +2004,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRP4;
             updateCount += updateHRP4;
 
-            var (insertHRP5, updateHRP5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_PERFORMANCE_PERF_ANALYSIS", menu =>
+            var (insertHRP5, updateHRP5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_PERFORMANCE_PERF_ANALYSIS", menu =>
             {
                 menu.MenuName = "分析改进";
-                menu.MenuCode = "HUMANRESOURCE_PERFORMANCE_PERF_ANALYSIS";
-                menu.I18nKey = "menu.humanresource.performance.perfanalysis";
+                menu.MenuCode = "HUMAN_RESOURCE_PERFORMANCE_PERF_ANALYSIS";
+                menu.I18nKey = "menu.human.resource.performance.perf.analysis";
                 menu.Icon = "RiLightbulbLine";
                 menu.ParentId = hrPerformanceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:performance:perf:analysis:list";
+                menu.Permission = "human:resource:performance:perf:analysis:list";
                 menu.RoutePath = "/human-resource/performance/perf-analysis";
                 menu.ComponentPath = "human-resource/performance/perf-analysis/index";
                 menu.SortOrder = 5;
@@ -2042,18 +2025,18 @@ public class TaktMenuLevel3SeedData
             updateCount += updateHRP5;
         }
 
-        // ========== 教育培训下的三级菜单 (HUMANRESOURCE_TRAINING，与 TrainingCourse / TrainingPlan / TrainingAttendee 对齐) ==========
+        // ========== 教育培训下的三级菜单 (HUMAN_RESOURCE_TRAINING，与 TrainingCourse / TrainingPlan / TrainingAttendee 对齐) ==========
         if (hrTrainingMenu != null)
         {
-            var (insertHRT1, updateHRT1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_COURSE", menu =>
+            var (insertHRT1, updateHRT1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_TRAINING_COURSE", menu =>
             {
                 menu.MenuName = "培训课程";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING_COURSE";
-                menu.I18nKey = "menu.humanresource.training.course";
+                menu.MenuCode = "HUMAN_RESOURCE_TRAINING_COURSE";
+                menu.I18nKey = "menu.human.resource.training.course";
                 menu.Icon = "RiBookOpenLine";
                 menu.ParentId = hrTrainingMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:training:course:list";
+                menu.Permission = "human:resource:training:course:list";
                 menu.RoutePath = "/human-resource/training/training-course";
                 menu.ComponentPath = "human-resource/training/training-course/index";
                 menu.SortOrder = 1;
@@ -2065,15 +2048,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRT1;
             updateCount += updateHRT1;
 
-            var (insertHRT2, updateHRT2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_PLAN", menu =>
+            var (insertHRT2, updateHRT2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_TRAINING_PLAN", menu =>
             {
                 menu.MenuName = "年度计划";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING_PLAN";
-                menu.I18nKey = "menu.humanresource.training.plan";
+                menu.MenuCode = "HUMAN_RESOURCE_TRAINING_PLAN";
+                menu.I18nKey = "menu.human.resource.training.plan";
                 menu.Icon = "RiCalendarScheduleLine";
                 menu.ParentId = hrTrainingMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:training:plan:list";
+                menu.Permission = "human:resource:training:plan:list";
                 menu.RoutePath = "/human-resource/training/training-plan";
                 menu.ComponentPath = "human-resource/training/training-plan/index";
                 menu.SortOrder = 2;
@@ -2085,15 +2068,15 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRT2;
             updateCount += updateHRT2;
 
-            var (insertHRT3, updateHRT3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TRAINING_ATTENDEE", menu =>
+            var (insertHRT3, updateHRT3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_TRAINING_ATTENDEE", menu =>
             {
                 menu.MenuName = "参训记录";
-                menu.MenuCode = "HUMANRESOURCE_TRAINING_ATTENDEE";
-                menu.I18nKey = "menu.humanresource.training.attendee";
+                menu.MenuCode = "HUMAN_RESOURCE_TRAINING_ATTENDEE";
+                menu.I18nKey = "menu.human.resource.training.attendee";
                 menu.Icon = "RiUserFollowLine";
                 menu.ParentId = hrTrainingMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:training:attendee:list";
+                menu.Permission = "human:resource:training:attendee:list";
                 menu.RoutePath = "/human-resource/training/training-attendee";
                 menu.ComponentPath = "human-resource/training/training-attendee/index";
                 menu.SortOrder = 3;
@@ -2106,18 +2089,18 @@ public class TaktMenuLevel3SeedData
             updateCount += updateHRT3;
         }
 
-        // ========== 人才管理下的三级菜单 (HUMANRESOURCE_TALENT) ==========
+        // ========== 人才管理下的三级菜单 (HUMAN_RESOURCE_TALENT) ==========
         if (hrTalentMenu != null)
         {
-            var (insertHRT0, updateHRT0) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TALENT_STAFFING_REQUIREMENT", menu =>
+            var (insertHRT0, updateHRT0) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_TALENT_STAFFING_REQUIREMENT", menu =>
             {
                 menu.MenuName = "用人需求";
-                menu.MenuCode = "HUMANRESOURCE_TALENT_STAFFING_REQUIREMENT";
-                menu.I18nKey = "menu.humanresource.talent.staffingrequirement";
+                menu.MenuCode = "HUMAN_RESOURCE_TALENT_STAFFING_REQUIREMENT";
+                menu.I18nKey = "menu.human.resource.talent.staffing.requirement";
                 menu.Icon = "RiFileList3Line";
                 menu.ParentId = hrTalentMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:talent:staffingrequirement:list";
+                menu.Permission = "human:resource:talent:staffing:requirement:list";
                 menu.RoutePath = "/human-resource/talent/staffing-requirement";
                 menu.ComponentPath = "human-resource/talent/staffing-requirement/index";
                 menu.SortOrder = 1;
@@ -2129,38 +2112,18 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRT0;
             updateCount += updateHRT0;
 
-            var (insertHRT1, updateHRT1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TALENT_RECRUITMENT_PLAN", menu =>
-            {
-                menu.MenuName = "招聘计划";
-                menu.MenuCode = "HUMANRESOURCE_TALENT_RECRUITMENT_PLAN";
-                menu.I18nKey = "menu.humanresource.talent.recruitmentplan";
-                menu.Icon = "RiCalendarScheduleLine";
-                menu.ParentId = hrTalentMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "humanresource:talent:recruitmentplan:list";
-                menu.RoutePath = "/human-resource/talent/recruitment-plan";
-                menu.ComponentPath = "human-resource/talent/recruitment-plan/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHRT1;
-            updateCount += updateHRT1;
-
-            var (insertHRT2, updateHRT2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TALENT_JOB_POSTING", menu =>
+            var (insertHRT2, updateHRT2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_TALENT_JOB_POSTING", menu =>
             {
                 menu.MenuName = "职位发布";
-                menu.MenuCode = "HUMANRESOURCE_TALENT_JOB_POSTING";
-                menu.I18nKey = "menu.humanresource.talent.jobposting";
+                menu.MenuCode = "HUMAN_RESOURCE_TALENT_JOB_POSTING";
+                menu.I18nKey = "menu.human.resource.talent.job.posting";
                 menu.Icon = "RiMegaphoneLine";
                 menu.ParentId = hrTalentMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:talent:jobposting:list";
+                menu.Permission = "human:resource:talent:job:posting:list";
                 menu.RoutePath = "/human-resource/talent/job-posting";
                 menu.ComponentPath = "human-resource/talent/job-posting/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -2169,38 +2132,18 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHRT2;
             updateCount += updateHRT2;
 
-            var (insertHRT4, updateHRT4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TALENT_INTERVIEW", menu =>
-            {
-                menu.MenuName = "面试安排";
-                menu.MenuCode = "HUMANRESOURCE_TALENT_INTERVIEW";
-                menu.I18nKey = "menu.humanresource.talent.interview";
-                menu.Icon = "RiCalendarEventLine";
-                menu.ParentId = hrTalentMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "humanresource:talent:interview:list";
-                menu.RoutePath = "/human-resource/talent/interview";
-                menu.ComponentPath = "human-resource/talent/interview/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHRT4;
-            updateCount += updateHRT4;
-
-            var (insertHRT5, updateHRT5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMANRESOURCE_TALENT_OFFER", menu =>
+            var (insertHRT5, updateHRT5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "HUMAN_RESOURCE_TALENT_OFFER", menu =>
             {
                 menu.MenuName = "录用";
-                menu.MenuCode = "HUMANRESOURCE_TALENT_OFFER";
-                menu.I18nKey = "menu.humanresource.talent.offer";
+                menu.MenuCode = "HUMAN_RESOURCE_TALENT_OFFER";
+                menu.I18nKey = "menu.human.resource.talent.offer";
                 menu.Icon = "RiCheckboxCircleLine";
                 menu.ParentId = hrTalentMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "humanresource:talent:offer:list";
+                menu.Permission = "human:resource:talent:offer:list";
                 menu.RoutePath = "/human-resource/talent/offer";
                 menu.ComponentPath = "human-resource/talent/offer/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -2241,7 +2184,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "登录日志";
                 menu.MenuCode = "STATISTICS_LOGGING_LOGIN_LOG";
-                menu.I18nKey = "menu.statistics.logging.loginlog";
+                menu.I18nKey = "menu.statistics.logging.login.log";
                 menu.Icon = "RiLoginBoxLine";
                 menu.ParentId = statisticsLoggingMenu.Id;
                 menu.MenuType = 1;
@@ -2261,7 +2204,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "操作日志";
                 menu.MenuCode = "STATISTICS_LOGGING_OPER_LOG";
-                menu.I18nKey = "menu.statistics.logging.operlog";
+                menu.I18nKey = "menu.statistics.logging.oper.log";
                 menu.Icon = "RiHistoryLine";
                 menu.ParentId = statisticsLoggingMenu.Id;
                 menu.MenuType = 1;
@@ -2281,7 +2224,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "差异日志";
                 menu.MenuCode = "STATISTICS_LOGGING_DELTA_LOG";
-                menu.I18nKey = "menu.statistics.logging.deltalog";
+                menu.I18nKey = "menu.statistics.logging.delta.log";
                 menu.Icon = "RiGitCommitLine";
                 menu.ParentId = statisticsLoggingMenu.Id;
                 menu.MenuType = 1;
@@ -2301,7 +2244,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "任务日志";
                 menu.MenuCode = "STATISTICS_LOGGING_QUARTZ_LOG";
-                menu.I18nKey = "menu.statistics.logging.quartzlog";
+                menu.I18nKey = "menu.statistics.logging.quartz.log";
                 menu.Icon = "RiTimerLine";
                 menu.ParentId = statisticsLoggingMenu.Id;
                 menu.MenuType = 1;
@@ -2321,7 +2264,7 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "服务监控";
                 menu.MenuCode = "STATISTICS_LOGGING_SERVER_MONITOR";
-                menu.I18nKey = "menu.statistics.logging.servermonitor";
+                menu.I18nKey = "menu.statistics.logging.server.monitor";
                 menu.Icon = "RiServerLine";
                 menu.ParentId = statisticsLoggingMenu.Id;
                 menu.MenuType = 1;
@@ -2338,18 +2281,18 @@ public class TaktMenuLevel3SeedData
             updateCount += updateSL5;
         }
 
-        // ========== 服务台下的三级菜单 (ROUTINE_HELPDESK) ==========
+        // ========== 服务台下的三级菜单 (ROUTINE_HELP_DESK) ==========
         if (routineHelpDeskMenu != null)
         {
             var (insertHd1, updateHd1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_HELP_DESK_MY_TICKET", menu =>
             {
                 menu.MenuName = "我的工单";
                 menu.MenuCode = "ROUTINE_HELP_DESK_MY_TICKET";
-                menu.I18nKey = "menu.routine.helpdesk.myticket";
+                menu.I18nKey = "menu.routine.help.desk.my.ticket";
                 menu.Icon = "RiTicketLine";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:myticket:list";
+                menu.Permission = "routine:help:desk:my:ticket:list";
                 menu.RoutePath = "/routine/help-desk/my-ticket";
                 menu.ComponentPath = "routine/help-desk/my-ticket/index";
                 menu.SortOrder = 1;
@@ -2365,11 +2308,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "工单管理";
                 menu.MenuCode = "ROUTINE_HELP_DESK_TICKET";
-                menu.I18nKey = "menu.routine.helpdesk.ticket";
+                menu.I18nKey = "menu.routine.help.desk.ticket";
                 menu.Icon = "RiCustomerService2Line";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:ticket:list";
+                menu.Permission = "routine:help:desk:ticket:list";
                 menu.RoutePath = "/routine/help-desk/ticket";
                 menu.ComponentPath = "routine/help-desk/ticket/index";
                 menu.SortOrder = 2;
@@ -2385,11 +2328,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "工单变更";
                 menu.MenuCode = "ROUTINE_HELP_DESK_TICKET_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.helpdesk.ticket.changelog";
+                menu.I18nKey = "menu.routine.help.desk.ticket.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:ticket:list";
+                menu.Permission = "routine:help:desk:ticket:change:log:list";
                 menu.RoutePath = "/routine/help-desk/ticket-change-log";
                 menu.ComponentPath = "routine/help-desk/ticket-change-log/index";
                 menu.SortOrder = 3;
@@ -2405,11 +2348,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "知识库（FAQ）";
                 menu.MenuCode = "ROUTINE_HELP_DESK_KNOWLEDGE";
-                menu.I18nKey = "menu.routine.helpdesk.knowledge";
+                menu.I18nKey = "menu.routine.help.desk.knowledge";
                 menu.Icon = "RiBookOpenLine";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:knowledge:list";
+                menu.Permission = "routine:help:desk:knowledge:list";
                 menu.RoutePath = "/routine/help-desk/knowledge";
                 menu.ComponentPath = "routine/help-desk/knowledge/index";
                 menu.SortOrder = 4;
@@ -2425,11 +2368,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "知识库变更";
                 menu.MenuCode = "ROUTINE_HELP_DESK_KNOWLEDGE_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.helpdesk.knowledge.changelog";
+                menu.I18nKey = "menu.routine.help.desk.knowledge.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:knowledge:list";
+                menu.Permission = "routine:help:desk:knowledge:change:log:list";
                 menu.RoutePath = "/routine/help-desk/knowledge-change-log";
                 menu.ComponentPath = "routine/help-desk/knowledge-change-log/index";
                 menu.SortOrder = 5;
@@ -2445,11 +2388,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "我的资产";
                 menu.MenuCode = "ROUTINE_HELP_DESK_MY_ASSET";
-                menu.I18nKey = "menu.routine.helpdesk.myasset";
+                menu.I18nKey = "menu.routine.help.desk.my.asset";
                 menu.Icon = "RiDeviceLine";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:myasset:list";
+                menu.Permission = "routine:help:desk:my:asset:list";
                 menu.RoutePath = "/routine/help-desk/my-asset";
                 menu.ComponentPath = "routine/help-desk/my-asset/index";
                 menu.SortOrder = 6;
@@ -2465,11 +2408,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "IT设备保修";
                 menu.MenuCode = "ROUTINE_HELP_DESK_IT_ASSET";
-                menu.I18nKey = "menu.routine.helpdesk.itasset";
+                menu.I18nKey = "menu.routine.help.desk.it.asset";
                 menu.Icon = "RiDeviceLine";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:it:asset:list";
+                menu.Permission = "routine:help:desk:it:asset:list";
                 menu.RoutePath = "/routine/help-desk/it-asset";
                 menu.ComponentPath = "routine/help-desk/it-asset/index";
                 menu.SortOrder = 7;
@@ -2485,11 +2428,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "IT设备保修变更";
                 menu.MenuCode = "ROUTINE_HELP_DESK_IT_ASSET_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.helpdesk.itasset.changelog";
+                menu.I18nKey = "menu.routine.help.desk.it.asset.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = routineHelpDeskMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:helpdesk:it:asset:list";
+                menu.Permission = "routine:help:desk:it:asset:change:log:list";
                 menu.RoutePath = "/routine/help-desk/it-asset-change-log";
                 menu.ComponentPath = "routine/help-desk/it-asset-change-log/index";
                 menu.SortOrder = 8;
@@ -2509,11 +2452,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "文档管理";
                 menu.MenuCode = "ROUTINE_DOCUMENT_CENTER_DOCUMENT";
-                menu.I18nKey = "menu.routine.documentcenter.document";
+                menu.I18nKey = "menu.routine.document.center.document";
                 menu.Icon = "RiFileTextLine";
                 menu.ParentId = routineDocumentCenterMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:documentcenter:document:list";
+                menu.Permission = "routine:document:center:document:list";
                 menu.RoutePath = "/routine/document-center/document";
                 menu.ComponentPath = "routine/document-center/document/index";
                 menu.SortOrder = 1;
@@ -2529,11 +2472,11 @@ public class TaktMenuLevel3SeedData
             {
                 menu.MenuName = "文档变更";
                 menu.MenuCode = "ROUTINE_DOCUMENT_CENTER_DOCUMENT_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.documentcenter.document.changelog";
+                menu.I18nKey = "menu.routine.document.center.document.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = routineDocumentCenterMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:documentcenter:document:list";
+                menu.Permission = "routine:document:center:document:change:log:list";
                 menu.RoutePath = "/routine/document-center/document-change-log";
                 menu.ComponentPath = "routine/document-center/document-change-log/index";
                 menu.SortOrder = 2;

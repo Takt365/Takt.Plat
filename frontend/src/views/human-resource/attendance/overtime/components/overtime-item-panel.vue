@@ -12,9 +12,9 @@
       {{ t('entity.overtimeitem._self') }}
     </div>
     <TaktToolsBar
-      create-permission="humanresource:attendance:overtime:create"
-      update-permission="humanresource:attendance:overtime:update"
-      delete-permission="humanresource:attendance:overtime:delete"
+      create-permission="human:resource:attendance:overtime:create"
+      update-permission="human:resource:attendance:overtime:update"
+      delete-permission="human:resource:attendance:overtime:delete"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -194,7 +194,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:attendance:overtime:update',
+        permission: 'human:resource:attendance:overtime:update',
         onClick: (record: OvertimeItem) => void handleEdit(record),
       },
       {
@@ -202,7 +202,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:attendance:overtime:delete',
+        permission: 'human:resource:attendance:overtime:delete',
         onClick: (record: OvertimeItem) => void handleDeleteOne(record),
       },
     ],

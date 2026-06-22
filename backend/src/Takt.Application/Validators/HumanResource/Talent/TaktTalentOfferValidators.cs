@@ -35,8 +35,8 @@ public class TaktTalentOfferCreateValidator : AbstractValidator<TaktTalentOfferC
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
-        RuleFor(x => x.InterviewId)
-            .GreaterThanOrEqualTo(0).WithMessage("面试安排ID不能为负数");
+        RuleFor(x => x.JobPostingId)
+            .GreaterThanOrEqualTo(0).WithMessage("职位发布ID不能为负数");
         RuleFor(x => x.OfferNo)
             .NotEmpty().WithMessage("录用编号不能为空")
             .MaximumLength(20).WithMessage("录用编号长度不能超过20个字符");
@@ -97,8 +97,8 @@ public class TaktTalentOfferImportValidator : AbstractValidator<TaktTalentOfferI
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
-        RuleFor(x => x.InterviewId)
-            .GreaterThanOrEqualTo(0).WithMessage("面试安排ID不能为负数");
+        RuleFor(x => x.JobPostingId)
+            .GreaterThanOrEqualTo(0).WithMessage("职位发布ID不能为负数");
         RuleFor(x => x.OfferNo)
             .NotEmpty().WithMessage("录用编号不能为空")
             .MaximumLength(20).WithMessage("录用编号长度不能超过20个字符");

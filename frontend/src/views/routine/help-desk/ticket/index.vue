@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:helpdesk:ticket:create"
-      update-permission="routine:helpdesk:ticket:update"
-      delete-permission="routine:helpdesk:ticket:delete"
-      import-permission="routine:helpdesk:ticket:import"
-      export-permission="routine:helpdesk:ticket:export"
+      create-permission="routine:help:desk:ticket:create"
+      update-permission="routine:help:desk:ticket:update"
+      delete-permission="routine:help:desk:ticket:delete"
+      import-permission="routine:help:desk:ticket:import"
+      export-permission="routine:help:desk:ticket:export"
       :left-actions="toolbarLeftActions"
       :show-create="true"
       :show-update="true"
@@ -1062,7 +1062,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('routine.help-desk.ticket.page.workflow.title'),
         shape: 'plain',
         icon: RiCustomerService2Line,
-        permission: 'routine:helpdesk:ticket:query',
+        permission: 'routine:help:desk:ticket:query',
         onClick: (record: Ticket) => handleOpenWorkflow(record)
       },
       {
@@ -1070,7 +1070,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:helpdesk:ticket:update',
+        permission: 'routine:help:desk:ticket:update',
         onClick: (record: Ticket) => handleEdit(record)
       },
       {
@@ -1078,7 +1078,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:helpdesk:ticket:delete',
+        permission: 'routine:help:desk:ticket:delete',
         onClick: (record: Ticket) => handleDeleteOne(record)
       }
     ]
@@ -1227,7 +1227,7 @@ const toolbarLeftActions = computed<ToolBarAction[]>(() => [
     label: t('routine.help-desk.ticket.page.workflow.title'),
     shape: 'plain',
     icon: RiCustomerService2Line,
-    permission: 'routine:helpdesk:ticket:query',
+    permission: 'routine:help:desk:ticket:query',
     disabled: !selectedRow.value,
     onClick: () => {
       if (selectedRow.value) {

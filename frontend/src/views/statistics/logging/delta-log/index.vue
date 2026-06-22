@@ -20,8 +20,8 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      delete-permission="statistics:logging:deltalog:delete"
-      export-permission="statistics:logging:deltalog:export"
+      delete-permission="statistics:logging:delta:log:delete"
+      export-permission="statistics:logging:delta:log:export"
       :show-create="false"
       :show-update="false"
       :show-delete="true"
@@ -521,7 +521,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.detail'),
         shape: 'plain',
         icon: RiEyeLine,
-        permission: 'statistics:logging:deltalog:query',
+        permission: 'statistics:logging:delta:log:query',
         onClick: (record: DeltaLog) => handleShowDetail(record),
       },
       {
@@ -529,7 +529,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'statistics:logging:deltalog:delete',
+        permission: 'statistics:logging:delta:log:delete',
         onClick: (record: DeltaLog) => handleDeleteOne(record)
       }
     ]

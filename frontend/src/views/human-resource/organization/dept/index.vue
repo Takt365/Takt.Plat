@@ -28,11 +28,11 @@
         @search="loadFullDeptTree"
       />
       <TaktTreeRightToolsBar
-        create-permission="humanresource:organization:dept:create"
-        update-permission="humanresource:organization:dept:update"
-        delete-permission="humanresource:organization:dept:delete"
-        import-permission="humanresource:organization:dept:import"
-        export-permission="humanresource:organization:dept:export"
+        create-permission="human:resource:organization:dept:create"
+        update-permission="human:resource:organization:dept:update"
+        delete-permission="human:resource:organization:dept:delete"
+        import-permission="human:resource:organization:dept:import"
+        export-permission="human:resource:organization:dept:export"
         :show-create="true"
         :show-update="true"
         :show-delete="true"
@@ -700,9 +700,9 @@ watchEffect(() => {
   },
   CreateActionColumn<Dept>({
     actions: [
-      { key: 'update', label: t('common.page.button.edit'), shape: 'plain', icon: RiEditLine, permission: 'humanresource:organization:dept:update', onClick: (record: Dept) => handleEdit(record) },
-      { key: 'allocate-dept-user', label: t('common.page.button.allocate') + t('entity.employee._self'), shape: 'plain', icon: RiUserLine, permission: 'humanresource:organization:dept:update', onClick: (record: Dept) => handleAssignDeptEmployees(record) },
-      { key: 'delete', label: t('common.page.button.delete'), shape: 'plain', icon: RiDeleteBinLine, permission: 'humanresource:organization:dept:delete', onClick: (record: Dept) => handleDeleteOne(record) },
+      { key: 'update', label: t('common.page.button.edit'), shape: 'plain', icon: RiEditLine, permission: 'human:resource:organization:dept:update', onClick: (record: Dept) => handleEdit(record) },
+      { key: 'allocate-dept-user', label: t('common.page.button.allocate') + t('entity.employee._self'), shape: 'plain', icon: RiUserLine, permission: 'human:resource:organization:dept:update', onClick: (record: Dept) => handleAssignDeptEmployees(record) },
+      { key: 'delete', label: t('common.page.button.delete'), shape: 'plain', icon: RiDeleteBinLine, permission: 'human:resource:organization:dept:delete', onClick: (record: Dept) => handleDeleteOne(record) },
     ],
   }),
   ]

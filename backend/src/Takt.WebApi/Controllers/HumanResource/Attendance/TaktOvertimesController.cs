@@ -41,7 +41,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:attendance:overtime:list", "加班信息列表")]
+    [TaktPermission("human:resource:attendance:overtime:list", "加班信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetOvertimeListAsync([FromQuery] TaktOvertimeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// </summary>
     /// <param name="id">加班信息ID</param>
     /// <returns>加班信息DTO</returns>
-    [TaktPermission("humanresource:attendance:overtime:query", "加班信息详情")]
+    [TaktPermission("human:resource:attendance:overtime:query", "加班信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOvertimeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// 获取加班信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:attendance:overtime:query", "加班信息选项")]
+    [TaktPermission("human:resource:attendance:overtime:query", "加班信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetOvertimeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>加班信息DTO</returns>
-    [TaktPermission("humanresource:attendance:overtime:create", "创建加班信息")]
+    [TaktPermission("human:resource:attendance:overtime:create", "创建加班信息")]
     [HttpPost]
     public async Task<IActionResult> CreateOvertimeAsync([FromBody] TaktOvertimeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// <param name="id">加班信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>加班信息DTO</returns>
-    [TaktPermission("humanresource:attendance:overtime:update", "更新加班信息")]
+    [TaktPermission("human:resource:attendance:overtime:update", "更新加班信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateOvertimeAsync(long id, [FromBody] TaktOvertimeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// </summary>
     /// <param name="id">加班信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:overtime:delete", "删除加班信息")]
+    [TaktPermission("human:resource:attendance:overtime:delete", "删除加班信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOvertimeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:overtime:delete", "批量删除加班信息")]
+    [TaktPermission("human:resource:attendance:overtime:delete", "批量删除加班信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteOvertimeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>加班信息DTO</returns>
-    [TaktPermission("humanresource:attendance:overtime:update", "更新加班信息状态")]
+    [TaktPermission("human:resource:attendance:overtime:update", "更新加班信息状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateOvertimeStatusAsync([FromBody] TaktOvertimeStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:overtime:import", "获取加班信息导入模板")]
+    [TaktPermission("human:resource:attendance:overtime:import", "获取加班信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetOvertimeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:attendance:overtime:import", "导入加班信息")]
+    [TaktPermission("human:resource:attendance:overtime:import", "导入加班信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportOvertimeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktOvertimesController : TaktControllerBase
     /// 导出加班信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:overtime:export", "导出加班信息")]
+    [TaktPermission("human:resource:attendance:overtime:export", "导出加班信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportOvertimeAsync([FromQuery] TaktOvertimeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

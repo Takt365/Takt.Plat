@@ -41,7 +41,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:list", "人员稼动率列表")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:list", "人员稼动率列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPersonnelOperationRateListAsync([FromQuery] TaktPersonnelOperationRateQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="id">人员稼动率ID</param>
     /// <returns>人员稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:query", "人员稼动率详情")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:query", "人员稼动率详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPersonnelOperationRateByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// 获取人员稼动率选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:query", "人员稼动率选项")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:query", "人员稼动率选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPersonnelOperationRateOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>人员稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:create", "创建人员稼动率")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:create", "创建人员稼动率")]
     [HttpPost]
     public async Task<IActionResult> CreatePersonnelOperationRateAsync([FromBody] TaktPersonnelOperationRateCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// <param name="id">人员稼动率ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>人员稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:update", "更新人员稼动率")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:update", "更新人员稼动率")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePersonnelOperationRateAsync(long id, [FromBody] TaktPersonnelOperationRateUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="id">人员稼动率ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:delete", "删除人员稼动率")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:delete", "删除人员稼动率")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePersonnelOperationRateByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:delete", "批量删除人员稼动率")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:delete", "批量删除人员稼动率")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePersonnelOperationRateBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>人员稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:update", "更新人员稼动率状态")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:update", "更新人员稼动率状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePersonnelOperationRateStatusAsync([FromBody] TaktPersonnelOperationRateStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:import", "获取人员稼动率导入模板")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:import", "获取人员稼动率导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPersonnelOperationRateTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:import", "导入人员稼动率")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:import", "导入人员稼动率")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPersonnelOperationRateAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPersonnelOperationRatesController : TaktControllerBase
     /// 导出人员稼动率
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:personneloperationrate:export", "导出人员稼动率")]
+    [TaktPermission("logistics:manufacturing:output:personnel:operation:rate:export", "导出人员稼动率")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPersonnelOperationRateAsync([FromQuery] TaktPersonnelOperationRateQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

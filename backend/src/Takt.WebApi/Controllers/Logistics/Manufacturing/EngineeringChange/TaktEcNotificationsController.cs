@@ -41,7 +41,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:list", "工程变更通知单列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:list", "工程变更通知单列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcNotificationListAsync([FromQuery] TaktEcNotificationQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工程变更通知单ID</param>
     /// <returns>工程变更通知单DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:query", "工程变更通知单详情")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:query", "工程变更通知单详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEcNotificationByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// 获取工程变更通知单选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:query", "工程变更通知单选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:query", "工程变更通知单选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcNotificationOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工程变更通知单DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:create", "创建工程变更通知单")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:create", "创建工程变更通知单")]
     [HttpPost]
     public async Task<IActionResult> CreateEcNotificationAsync([FromBody] TaktEcNotificationCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// <param name="id">工程变更通知单ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工程变更通知单DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:update", "更新工程变更通知单")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:update", "更新工程变更通知单")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcNotificationAsync(long id, [FromBody] TaktEcNotificationUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工程变更通知单ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:delete", "删除工程变更通知单")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:delete", "删除工程变更通知单")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcNotificationByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:delete", "批量删除工程变更通知单")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:delete", "批量删除工程变更通知单")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcNotificationBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>工程变更通知单DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:update", "更新工程变更通知单状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:update", "更新工程变更通知单状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateEcNotificationStatusAsync([FromBody] TaktEcNotificationStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:import", "获取工程变更通知单导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:import", "获取工程变更通知单导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcNotificationTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:import", "导入工程变更通知单")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:import", "导入工程变更通知单")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcNotificationAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// 导出工程变更通知单
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecnotification:export", "导出工程变更通知单")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ec:notification:export", "导出工程变更通知单")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcNotificationAsync([FromQuery] TaktEcNotificationQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

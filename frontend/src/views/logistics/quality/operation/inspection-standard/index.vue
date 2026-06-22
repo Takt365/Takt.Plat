@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:quality:operation:inspectionstandard:create"
-      update-permission="logistics:quality:operation:inspectionstandard:update"
-      delete-permission="logistics:quality:operation:inspectionstandard:delete"
-      import-permission="logistics:quality:operation:inspectionstandard:import"
-      export-permission="logistics:quality:operation:inspectionstandard:export"
+      create-permission="logistics:quality:operation:inspection:standard:create"
+      update-permission="logistics:quality:operation:inspection:standard:update"
+      delete-permission="logistics:quality:operation:inspection:standard:delete"
+      import-permission="logistics:quality:operation:inspection:standard:import"
+      export-permission="logistics:quality:operation:inspection:standard:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -659,7 +659,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:operation:inspectionstandard:update',
+        permission: 'logistics:quality:operation:inspection:standard:update',
         onClick: (record: InspectionStandard) => handleEdit(record)
       },
       {
@@ -667,7 +667,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:operation:inspectionstandard:delete',
+        permission: 'logistics:quality:operation:inspection:standard:delete',
         onClick: (record: InspectionStandard) => handleDeleteOne(record)
       }
     ]

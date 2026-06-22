@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:quality:complaint:customercomplaint:create"
-      update-permission="logistics:quality:complaint:customercomplaint:update"
-      delete-permission="logistics:quality:complaint:customercomplaint:delete"
-      import-permission="logistics:quality:complaint:customercomplaint:import"
-      export-permission="logistics:quality:complaint:customercomplaint:export"
+      create-permission="logistics:quality:complaint:customer:create"
+      update-permission="logistics:quality:complaint:customer:update"
+      delete-permission="logistics:quality:complaint:customer:delete"
+      import-permission="logistics:quality:complaint:customer:import"
+      export-permission="logistics:quality:complaint:customer:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -879,7 +879,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:quality:complaint:customercomplaint:update',
+        permission: 'logistics:quality:complaint:customer:update',
         onClick: (record: CustomerComplaint) => handleEdit(record)
       },
       {
@@ -887,7 +887,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:quality:complaint:customercomplaint:delete',
+        permission: 'logistics:quality:complaint:customer:delete',
         onClick: (record: CustomerComplaint) => handleDeleteOne(record)
       }
     ]

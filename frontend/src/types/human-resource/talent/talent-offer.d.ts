@@ -36,12 +36,12 @@ export interface TalentOffer extends ApprovalDtoBase {
   /**
    * 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
    */
-  interviewId: string;
+  jobPostingId: string;
 
   /**
    * 面试安排名称（填充字段）
    */
-  interviewName?: string;
+  jobPostingName?: string;
 
   /**
    * 录用编号（租户+公司内业务编号）
@@ -89,11 +89,6 @@ export interface TalentOffer extends ApprovalDtoBase {
   reason?: string;
 
   /**
-   * 面试安排 （主表：TaktTalentInterview）
-   */
-  interview?: TalentInterview;
-
-  /**
    * 入职待办 （子表：TaktEmployeeOnboarding）
    */
   employeeOnboardings?: EmployeeOnboarding[];
@@ -121,7 +116,7 @@ export interface TalentOfferQuery extends TaktPagedQuery {
   /**
    * 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
    */
-  interviewId?: string;
+  jobPostingId?: string;
 
   /**
    * 录用编号（租户+公司内业务编号）
@@ -250,7 +245,7 @@ export interface TalentOfferCreate {
   /**
    * 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
    */
-  interviewId: string;
+  jobPostingId: string;
 
   /**
    * 录用编号（租户+公司内业务编号）
@@ -344,7 +339,7 @@ export interface TalentOfferTemplate {
   /**
    * 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
    */
-  interviewId?: string;
+  jobPostingId?: string;
 
   /**
    * 录用编号（租户+公司内业务编号）
@@ -418,7 +413,7 @@ export interface TalentOfferImport {
   /**
    * 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
    */
-  interviewId?: string;
+  jobPostingId?: string;
 
   /**
    * 录用编号（租户+公司内业务编号）
@@ -482,7 +477,7 @@ export interface TalentOfferExport {
   /**
    * 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
    */
-  interviewId: string;
+  jobPostingId: string;
 
   /**
    * 录用编号（租户+公司内业务编号）

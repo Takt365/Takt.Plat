@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:talent:talentjobposting:create"
-      update-permission="humanresource:talent:talentjobposting:update"
-      delete-permission="humanresource:talent:talentjobposting:delete"
-      import-permission="humanresource:talent:talentjobposting:import"
-      export-permission="humanresource:talent:talentjobposting:export"
+      create-permission="human:resource:talent:talentjobposting:create"
+      update-permission="human:resource:talent:talentjobposting:update"
+      delete-permission="human:resource:talent:talentjobposting:delete"
+      import-permission="human:resource:talent:talentjobposting:import"
+      export-permission="human:resource:talent:talentjobposting:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -108,11 +108,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('recruitmentPlanId')">
-      <a-form-item :label="t('entity.talentJobPosting.recruitmentplanid')">
+      <div v-show="isFieldVisible('staffingRequirementId')">
+      <a-form-item :label="t('entity.talentJobPosting.staffingrequirementid')">
         <a-input
-          v-model:value="advancedQueryForm.recruitmentPlanId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentJobPosting.recruitmentplanid') })"
+          v-model:value="advancedQueryForm.staffingRequirementId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentJobPosting.staffingrequirementid') })"
           allow-clear
         />
       </a-form-item>
@@ -343,7 +343,7 @@ const formLoading = ref(false)
 const formRef = ref()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  recruitmentPlanId: '',
+  staffingRequirementId: '',
   postingCode: '',
   title: '',
   postingStatus: undefined as number | undefined,
@@ -362,7 +362,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'recruitmentPlanId', label: t('entity.talentJobPosting.recruitmentplanid') },
+  { key: 'staffingRequirementId', label: t('entity.talentJobPosting.staffingrequirementid') },
   { key: 'postingCode', label: t('entity.talentJobPosting.postingcode') },
   { key: 'title', label: t('entity.talentJobPosting.title') },
   { key: 'postingStatus', label: t('entity.talentJobPosting.postingstatus') },
@@ -408,22 +408,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'talentJobPostingId') ?? ''
   },
   {
-    title: t('entity.talentJobPosting.recruitmentplanid'),
-    dataIndex: 'recruitmentPlanId',
-    key: 'recruitmentPlanId',
+    title: t('entity.talentJobPosting.staffingrequirementid'),
+    dataIndex: 'staffingRequirementId',
+    key: 'staffingRequirementId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'recruitmentPlanId') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'staffingRequirementId') ?? ''
   },
   {
-    title: t('entity.talentJobPosting.recruitmentplanname'),
-    dataIndex: 'recruitmentPlanName',
-    key: 'recruitmentPlanName',
+    title: t('entity.talentJobPosting.staffingrequirementname'),
+    dataIndex: 'staffingRequirementName',
+    key: 'staffingRequirementName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'recruitmentPlanName') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'staffingRequirementName') ?? ''
   },
   {
     title: t('entity.talentJobPosting.postingcode'),
@@ -497,24 +497,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'reason') ?? ''
   },
-  {
-    title: t('entity.talentJobPosting.recruitmentplan'),
-    dataIndex: 'recruitmentPlan',
-    key: 'recruitmentPlan',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'recruitmentPlan') ?? ''
-  },
-  {
-    title: t('entity.talentJobPosting.talentinterviews'),
-    dataIndex: 'talentInterviews',
-    key: 'talentInterviews',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentJobPostingField(record, 'talentInterviews') ?? ''
-  },
   CreateActionColumn({
     actions: [
       {
@@ -522,7 +504,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:talent:talentjobposting:update',
+        permission: 'human:resource:talent:talentjobposting:update',
         onClick: (record: TalentJobPosting) => handleEdit(record)
       },
       {
@@ -530,7 +512,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:talent:talentjobposting:delete',
+        permission: 'human:resource:talent:talentjobposting:delete',
         onClick: (record: TalentJobPosting) => handleDeleteOne(record)
       }
     ]
@@ -613,7 +595,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  recruitmentPlanId: '',
+  staffingRequirementId: '',
   postingCode: '',
   title: '',
   postingStatus: undefined as number | undefined,
@@ -784,7 +766,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  recruitmentPlanId: '',
+  staffingRequirementId: '',
   postingCode: '',
   title: '',
   postingStatus: undefined as number | undefined,

@@ -41,7 +41,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:list", "客诉主列表")]
+    [TaktPermission("logistics:quality:complaint:customer:list", "客诉主列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCustomerComplaintListAsync([FromQuery] TaktCustomerComplaintQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="id">客诉主ID</param>
     /// <returns>客诉主DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:query", "客诉主详情")]
+    [TaktPermission("logistics:quality:complaint:customer:query", "客诉主详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCustomerComplaintByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// 获取客诉主选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:query", "客诉主选项")]
+    [TaktPermission("logistics:quality:complaint:customer:query", "客诉主选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetCustomerComplaintOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>客诉主DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:create", "创建客诉主")]
+    [TaktPermission("logistics:quality:complaint:customer:create", "创建客诉主")]
     [HttpPost]
     public async Task<IActionResult> CreateCustomerComplaintAsync([FromBody] TaktCustomerComplaintCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// <param name="id">客诉主ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>客诉主DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:update", "更新客诉主")]
+    [TaktPermission("logistics:quality:complaint:customer:update", "更新客诉主")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCustomerComplaintAsync(long id, [FromBody] TaktCustomerComplaintUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="id">客诉主ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:delete", "删除客诉主")]
+    [TaktPermission("logistics:quality:complaint:customer:delete", "删除客诉主")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCustomerComplaintByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:delete", "批量删除客诉主")]
+    [TaktPermission("logistics:quality:complaint:customer:delete", "批量删除客诉主")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCustomerComplaintBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>客诉主DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:update", "更新客诉主状态")]
+    [TaktPermission("logistics:quality:complaint:customer:update", "更新客诉主状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateCustomerComplaintStatusAsync([FromBody] TaktCustomerComplaintStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>客诉主DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:update", "更新客诉主排序")]
+    [TaktPermission("logistics:quality:complaint:customer:update", "更新客诉主排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateCustomerComplaintSortAsync([FromBody] TaktCustomerComplaintSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:import", "获取客诉主导入模板")]
+    [TaktPermission("logistics:quality:complaint:customer:import", "获取客诉主导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetCustomerComplaintTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:import", "导入客诉主")]
+    [TaktPermission("logistics:quality:complaint:customer:import", "导入客诉主")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportCustomerComplaintAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// 导出客诉主
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:customercomplaint:export", "导出客诉主")]
+    [TaktPermission("logistics:quality:complaint:customer:export", "导出客诉主")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCustomerComplaintAsync([FromQuery] TaktCustomerComplaintQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

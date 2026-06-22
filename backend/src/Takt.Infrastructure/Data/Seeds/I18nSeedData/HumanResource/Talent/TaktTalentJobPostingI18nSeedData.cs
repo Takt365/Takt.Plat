@@ -90,14 +90,14 @@ public class TaktTalentJobPostingI18nSeedData : ITaktSeedDataCoordinator
             // entity.talentjobposting._self
             new TranslationSeedItem("entity.talentjobposting._self", "zh-HK", "职位发布信息_hk", "实体名称"),
 
-            // entity.talentjobposting.recruitmentplanid
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplanid", "en-US", "招聘计划ID_us", "招聘计划ID"),
-            // entity.talentjobposting.recruitmentplanid
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplanid", "ja-JP", "招聘计划ID_jp", "招聘计划ID"),
-            // entity.talentjobposting.recruitmentplanid
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplanid", "zh-CN", "招聘计划ID", "招聘计划ID"),
-            // entity.talentjobposting.recruitmentplanid
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplanid", "zh-HK", "招聘计划ID_hk", "招聘计划ID"),
+            // entity.talentjobposting.staffingrequirementid
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "en-US", "用人需求ID_us", "用人需求ID"),
+            // entity.talentjobposting.staffingrequirementid
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "ja-JP", "用人需求ID_jp", "用人需求ID"),
+            // entity.talentjobposting.staffingrequirementid
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-CN", "用人需求ID", "用人需求ID"),
+            // entity.talentjobposting.staffingrequirementid
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-HK", "用人需求ID_hk", "用人需求ID"),
 
             // entity.talentjobposting.postingcode
             new TranslationSeedItem("entity.talentjobposting.postingcode", "en-US", "发布编号_us", "发布编号（租户+公司内唯一）"),
@@ -171,23 +171,23 @@ public class TaktTalentJobPostingI18nSeedData : ITaktSeedDataCoordinator
             // entity.talentjobposting.reason
             new TranslationSeedItem("entity.talentjobposting.reason", "zh-HK", "发布说明_hk", "发布说明"),
 
-            // entity.talentjobposting.recruitmentplan
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplan", "en-US", "招聘计划_us", "招聘计划"),
-            // entity.talentjobposting.recruitmentplan
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplan", "ja-JP", "招聘计划_jp", "招聘计划"),
-            // entity.talentjobposting.recruitmentplan
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplan", "zh-CN", "招聘计划", "招聘计划"),
-            // entity.talentjobposting.recruitmentplan
-            new TranslationSeedItem("entity.talentjobposting.recruitmentplan", "zh-HK", "招聘计划_hk", "招聘计划"),
+            // entity.talentjobposting.staffingrequirement
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirement", "en-US", "用人需求_us", "用人需求"),
+            // entity.talentjobposting.staffingrequirement
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirement", "ja-JP", "用人需求_jp", "用人需求"),
+            // entity.talentjobposting.staffingrequirement
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirement", "zh-CN", "用人需求", "用人需求"),
+            // entity.talentjobposting.staffingrequirement
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirement", "zh-HK", "用人需求_hk", "用人需求"),
 
-            // entity.talentjobposting.talentinterviews
-            new TranslationSeedItem("entity.talentjobposting.talentinterviews", "en-US", "面试安排_us", "面试安排"),
-            // entity.talentjobposting.talentinterviews
-            new TranslationSeedItem("entity.talentjobposting.talentinterviews", "ja-JP", "面试安排_jp", "面试安排"),
-            // entity.talentjobposting.talentinterviews
-            new TranslationSeedItem("entity.talentjobposting.talentinterviews", "zh-CN", "面试安排", "面试安排"),
-            // entity.talentjobposting.talentinterviews
-            new TranslationSeedItem("entity.talentjobposting.talentinterviews", "zh-HK", "面试安排_hk", "面试安排"),
+            // entity.talentjobposting.talentoffers
+            new TranslationSeedItem("entity.talentjobposting.talentoffers", "en-US", "录用信息_us", "录用信息"),
+            // entity.talentjobposting.talentoffers
+            new TranslationSeedItem("entity.talentjobposting.talentoffers", "ja-JP", "录用信息_jp", "录用信息"),
+            // entity.talentjobposting.talentoffers
+            new TranslationSeedItem("entity.talentjobposting.talentoffers", "zh-CN", "录用信息", "录用信息"),
+            // entity.talentjobposting.talentoffers
+            new TranslationSeedItem("entity.talentjobposting.talentoffers", "zh-HK", "录用信息_hk", "录用信息"),
         };
     }
 

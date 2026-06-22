@@ -115,11 +115,11 @@ function buildViewModulePrefix(pathParts) {
 function buildI18nPrefixFromViewParent(viewModulePath) {
   const parts = viewModulePath.split('/');
   parts.pop();
-  return parts.map((segment) => segment.replace(/-/g, '')).join('.');
+  return parts.flatMap((segment) => segment.split('-').filter(Boolean)).join('.');
 }
 
 /**
- * 由服务路径 + 菜单 view 路径推导 MenuCode 前缀（与种子 HUMANRESOURCE / DOCUMENT_CENTER / LOGISTICS_SERVICE 一致）
+ * 由服务路径 + 菜单 view 路径推导 MenuCode 前缀（与种子 HUMAN_RESOURCE / DOCUMENT_CENTER / LOGISTICS_SERVICE 一致）
  * @param {{ pathParts: string[] }} svc
  * @param {string} menuViewModulePath
  * @returns {string}
@@ -137,7 +137,7 @@ function buildMenuCodePrefixForService(svc, menuViewModulePath) {
       continue;
     }
     if (pathPart && pascalToKebab(pathPart) === seg) {
-      parts.push(i === 0 ? pathPart.toUpperCase() : pascalToUpperSnake(pathPart));
+      parts.push(pascalToUpperSnake(pathPart));
       continue;
     }
     parts.push(seg.split('-').map((w) => w.toUpperCase()).join('_'));
@@ -154,7 +154,7 @@ function buildI18nPrefixForService(svc, menuViewModulePath) {
   if (svc.pathParts[1] === 'CustomerService') {
     return buildI18nPrefixFromViewParent(menuViewModulePath || computeDefaultViewModulePath(svc));
   }
-  return svc.pathParts.map((part) => part.toLowerCase()).join('.');
+  return svc.pathParts.flatMap((part) => pascalToKebab(part).split('-').filter(Boolean)).join('.');
 }
 
 /**

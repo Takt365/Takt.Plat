@@ -41,7 +41,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:list", "标准工资率列表")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:list", "标准工资率列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetStandardWageRateListAsync([FromQuery] TaktStandardWageRateQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// </summary>
     /// <param name="id">标准工资率ID</param>
     /// <returns>标准工资率DTO</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:query", "标准工资率详情")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:query", "标准工资率详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetStandardWageRateByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// 获取标准工资率选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:query", "标准工资率选项")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:query", "标准工资率选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetStandardWageRateOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>标准工资率DTO</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:create", "创建标准工资率")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:create", "创建标准工资率")]
     [HttpPost]
     public async Task<IActionResult> CreateStandardWageRateAsync([FromBody] TaktStandardWageRateCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// <param name="id">标准工资率ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>标准工资率DTO</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:update", "更新标准工资率")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:update", "更新标准工资率")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStandardWageRateAsync(long id, [FromBody] TaktStandardWageRateUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// </summary>
     /// <param name="id">标准工资率ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:delete", "删除标准工资率")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:delete", "删除标准工资率")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStandardWageRateByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:delete", "批量删除标准工资率")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:delete", "批量删除标准工资率")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteStandardWageRateBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:import", "获取标准工资率导入模板")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:import", "获取标准工资率导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetStandardWageRateTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:import", "导入标准工资率")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:import", "导入标准工资率")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportStandardWageRateAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// 导出标准工资率
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:standardwagerate:export", "导出标准工资率")]
+    [TaktPermission("accounting:controlling:standard:wage:rate:export", "导出标准工资率")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportStandardWageRateAsync([FromQuery] TaktStandardWageRateQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

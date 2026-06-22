@@ -41,7 +41,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:helpdesk:knowledge:list", "知识库列表")]
+    [TaktPermission("routine:help:desk:knowledge:list", "知识库列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetKnowledgeListAsync([FromQuery] TaktKnowledgeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="id">知识库ID</param>
     /// <returns>知识库DTO</returns>
-    [TaktPermission("routine:helpdesk:knowledge:query", "知识库详情")]
+    [TaktPermission("routine:help:desk:knowledge:query", "知识库详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetKnowledgeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// 获取知识库选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:helpdesk:knowledge:query", "知识库选项")]
+    [TaktPermission("routine:help:desk:knowledge:query", "知识库选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetKnowledgeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>知识库DTO</returns>
-    [TaktPermission("routine:helpdesk:knowledge:create", "创建知识库")]
+    [TaktPermission("routine:help:desk:knowledge:create", "创建知识库")]
     [HttpPost]
     public async Task<IActionResult> CreateKnowledgeAsync([FromBody] TaktKnowledgeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// <param name="id">知识库ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>知识库DTO</returns>
-    [TaktPermission("routine:helpdesk:knowledge:update", "更新知识库")]
+    [TaktPermission("routine:help:desk:knowledge:update", "更新知识库")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateKnowledgeAsync(long id, [FromBody] TaktKnowledgeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="id">知识库ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:knowledge:delete", "删除知识库")]
+    [TaktPermission("routine:help:desk:knowledge:delete", "删除知识库")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteKnowledgeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:knowledge:delete", "批量删除知识库")]
+    [TaktPermission("routine:help:desk:knowledge:delete", "批量删除知识库")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteKnowledgeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>知识库DTO</returns>
-    [TaktPermission("routine:helpdesk:knowledge:update", "更新知识库状态")]
+    [TaktPermission("routine:help:desk:knowledge:update", "更新知识库状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateKnowledgeStatusAsync([FromBody] TaktKnowledgeStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>知识库DTO</returns>
-    [TaktPermission("routine:helpdesk:knowledge:update", "更新知识库排序")]
+    [TaktPermission("routine:help:desk:knowledge:update", "更新知识库排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateKnowledgeSortAsync([FromBody] TaktKnowledgeSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:knowledge:import", "获取知识库导入模板")]
+    [TaktPermission("routine:help:desk:knowledge:import", "获取知识库导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetKnowledgeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:helpdesk:knowledge:import", "导入知识库")]
+    [TaktPermission("routine:help:desk:knowledge:import", "导入知识库")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportKnowledgeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktKnowledgesController : TaktControllerBase
     /// 导出知识库
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:knowledge:export", "导出知识库")]
+    [TaktPermission("routine:help:desk:knowledge:export", "导出知识库")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportKnowledgeAsync([FromQuery] TaktKnowledgeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

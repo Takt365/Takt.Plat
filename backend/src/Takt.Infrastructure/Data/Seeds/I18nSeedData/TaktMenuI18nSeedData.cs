@@ -77,14 +77,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
     {
         return new List<(string, string, string, string?)>
         {
-            // menu.home._self
-            ("menu.home._self", "en-US", "主页_us", "菜单导航"),
-            // menu.home._self
-            ("menu.home._self", "ja-JP", "主页_jp", "菜单导航"),
-            // menu.home._self
-            ("menu.home._self", "zh-CN", "主页", "菜单导航"),
-            // menu.home._self
-            ("menu.home._self", "zh-HK", "主页_hk", "菜单导航"),
+            // menu.home
+            ("menu.home", "en-US", "主页_us", "菜单导航"),
+            // menu.home
+            ("menu.home", "ja-JP", "主页_jp", "菜单导航"),
+            // menu.home
+            ("menu.home", "zh-CN", "主页", "菜单导航"),
+            // menu.home
+            ("menu.home", "zh-HK", "主页_hk", "菜单导航"),
 
             // menu.dashboard._self
             ("menu.dashboard._self", "en-US", "仪表盘_us", "菜单导航"),
@@ -122,14 +122,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics._self
             ("menu.logistics._self", "zh-HK", "后勤管理_hk", "菜单导航"),
 
-            // menu.humanresource._self
-            ("menu.humanresource._self", "en-US", "人力资源_us", "菜单导航"),
-            // menu.humanresource._self
-            ("menu.humanresource._self", "ja-JP", "人力资源_jp", "菜单导航"),
-            // menu.humanresource._self
-            ("menu.humanresource._self", "zh-CN", "人力资源", "菜单导航"),
-            // menu.humanresource._self
-            ("menu.humanresource._self", "zh-HK", "人力资源_hk", "菜单导航"),
+            // menu.human.resource._self
+            ("menu.human.resource._self", "en-US", "人力资源_us", "菜单导航"),
+            // menu.human.resource._self
+            ("menu.human.resource._self", "ja-JP", "人力资源_jp", "菜单导航"),
+            // menu.human.resource._self
+            ("menu.human.resource._self", "zh-CN", "人力资源", "菜单导航"),
+            // menu.human.resource._self
+            ("menu.human.resource._self", "zh-HK", "人力资源_hk", "菜单导航"),
 
             // menu.identity._self
             ("menu.identity._self", "en-US", "身份认证_us", "菜单导航"),
@@ -176,32 +176,32 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.statistics._self
             ("menu.statistics._self", "zh-HK", "统计看板_hk", "菜单导航"),
 
-            // menu.about._self
-            ("menu.about._self", "en-US", "关于_us", "菜单导航"),
-            // menu.about._self
-            ("menu.about._self", "ja-JP", "关于_jp", "菜单导航"),
-            // menu.about._self
-            ("menu.about._self", "zh-CN", "关于", "菜单导航"),
-            // menu.about._self
-            ("menu.about._self", "zh-HK", "关于_hk", "菜单导航"),
+            // menu.about
+            ("menu.about", "en-US", "关于_us", "菜单导航"),
+            // menu.about
+            ("menu.about", "ja-JP", "关于_jp", "菜单导航"),
+            // menu.about
+            ("menu.about", "zh-CN", "关于", "菜单导航"),
+            // menu.about
+            ("menu.about", "zh-HK", "关于_hk", "菜单导航"),
 
-            // menu.dashboard.workspace
-            ("menu.dashboard.workspace", "en-US", "工作台_us", "菜单导航"),
-            // menu.dashboard.workspace
-            ("menu.dashboard.workspace", "ja-JP", "工作台_jp", "菜单导航"),
-            // menu.dashboard.workspace
-            ("menu.dashboard.workspace", "zh-CN", "工作台", "菜单导航"),
-            // menu.dashboard.workspace
-            ("menu.dashboard.workspace", "zh-HK", "工作台_hk", "菜单导航"),
+            // menu.workspace
+            ("menu.workspace", "en-US", "工作台_us", "菜单导航"),
+            // menu.workspace
+            ("menu.workspace", "ja-JP", "工作台_jp", "菜单导航"),
+            // menu.workspace
+            ("menu.workspace", "zh-CN", "工作台", "菜单导航"),
+            // menu.workspace
+            ("menu.workspace", "zh-HK", "工作台_hk", "菜单导航"),
 
-            // menu.dashboard.databoard
-            ("menu.dashboard.databoard", "en-US", "数据看板_us", "菜单导航"),
-            // menu.dashboard.databoard
-            ("menu.dashboard.databoard", "ja-JP", "数据看板_jp", "菜单导航"),
-            // menu.dashboard.databoard
-            ("menu.dashboard.databoard", "zh-CN", "数据看板", "菜单导航"),
-            // menu.dashboard.databoard
-            ("menu.dashboard.databoard", "zh-HK", "数据看板_hk", "菜单导航"),
+            // menu.data.board
+            ("menu.data.board", "en-US", "数据看板_us", "菜单导航"),
+            // menu.data.board
+            ("menu.data.board", "ja-JP", "数据看板_jp", "菜单导航"),
+            // menu.data.board
+            ("menu.data.board", "zh-CN", "数据看板", "菜单导航"),
+            // menu.data.board
+            ("menu.data.board", "zh-HK", "数据看板_hk", "菜单导航"),
 
             // menu.routine.announcement
             ("menu.routine.announcement", "en-US", "公告通知_us", "菜单导航"),
@@ -212,50 +212,50 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.routine.announcement
             ("menu.routine.announcement", "zh-HK", "公告通知_hk", "菜单导航"),
 
-            // menu.routine.conferencecenter
-            ("menu.routine.conferencecenter", "en-US", "会议中心_us", "菜单导航"),
-            // menu.routine.conferencecenter
-            ("menu.routine.conferencecenter", "ja-JP", "会议中心_jp", "菜单导航"),
-            // menu.routine.conferencecenter
-            ("menu.routine.conferencecenter", "zh-CN", "会议中心", "菜单导航"),
-            // menu.routine.conferencecenter
-            ("menu.routine.conferencecenter", "zh-HK", "会议中心_hk", "菜单导航"),
+            // menu.routine.conference.center
+            ("menu.routine.conference.center", "en-US", "会议中心_us", "菜单导航"),
+            // menu.routine.conference.center
+            ("menu.routine.conference.center", "ja-JP", "会议中心_jp", "菜单导航"),
+            // menu.routine.conference.center
+            ("menu.routine.conference.center", "zh-CN", "会议中心", "菜单导航"),
+            // menu.routine.conference.center
+            ("menu.routine.conference.center", "zh-HK", "会议中心_hk", "菜单导航"),
 
-            // menu.routine.documentcenter
-            ("menu.routine.documentcenter", "en-US", "文管中心_us", "菜单导航"),
-            // menu.routine.documentcenter
-            ("menu.routine.documentcenter", "ja-JP", "文管中心_jp", "菜单导航"),
-            // menu.routine.documentcenter
-            ("menu.routine.documentcenter", "zh-CN", "文管中心", "菜单导航"),
-            // menu.routine.documentcenter
-            ("menu.routine.documentcenter", "zh-HK", "文管中心_hk", "菜单导航"),
+            // menu.routine.document.center
+            ("menu.routine.document.center", "en-US", "文管中心_us", "菜单导航"),
+            // menu.routine.document.center
+            ("menu.routine.document.center", "ja-JP", "文管中心_jp", "菜单导航"),
+            // menu.routine.document.center
+            ("menu.routine.document.center", "zh-CN", "文管中心", "菜单导航"),
+            // menu.routine.document.center
+            ("menu.routine.document.center", "zh-HK", "文管中心_hk", "菜单导航"),
 
-            // menu.routine.newscenter
-            ("menu.routine.newscenter", "en-US", "新闻中心_us", "菜单导航"),
-            // menu.routine.newscenter
-            ("menu.routine.newscenter", "ja-JP", "新闻中心_jp", "菜单导航"),
-            // menu.routine.newscenter
-            ("menu.routine.newscenter", "zh-CN", "新闻中心", "菜单导航"),
-            // menu.routine.newscenter
-            ("menu.routine.newscenter", "zh-HK", "新闻中心_hk", "菜单导航"),
+            // menu.routine.news.center
+            ("menu.routine.news.center", "en-US", "新闻中心_us", "菜单导航"),
+            // menu.routine.news.center
+            ("menu.routine.news.center", "ja-JP", "新闻中心_jp", "菜单导航"),
+            // menu.routine.news.center
+            ("menu.routine.news.center", "zh-CN", "新闻中心", "菜单导航"),
+            // menu.routine.news.center
+            ("menu.routine.news.center", "zh-HK", "新闻中心_hk", "菜单导航"),
 
-            // menu.routine.helpdesk._self
-            ("menu.routine.helpdesk._self", "en-US", "服务台_us", "菜单导航"),
-            // menu.routine.helpdesk._self
-            ("menu.routine.helpdesk._self", "ja-JP", "服务台_jp", "菜单导航"),
-            // menu.routine.helpdesk._self
-            ("menu.routine.helpdesk._self", "zh-CN", "服务台", "菜单导航"),
-            // menu.routine.helpdesk._self
-            ("menu.routine.helpdesk._self", "zh-HK", "服务台_hk", "菜单导航"),
+            // menu.routine.help.desk._self
+            ("menu.routine.help.desk._self", "en-US", "服务台_us", "菜单导航"),
+            // menu.routine.help.desk._self
+            ("menu.routine.help.desk._self", "ja-JP", "服务台_jp", "菜单导航"),
+            // menu.routine.help.desk._self
+            ("menu.routine.help.desk._self", "zh-CN", "服务台", "菜单导航"),
+            // menu.routine.help.desk._self
+            ("menu.routine.help.desk._self", "zh-HK", "服务台_hk", "菜单导航"),
 
-            // menu.routine.visitorcenter
-            ("menu.routine.visitorcenter", "en-US", "访客中心_us", "菜单导航"),
-            // menu.routine.visitorcenter
-            ("menu.routine.visitorcenter", "ja-JP", "访客中心_jp", "菜单导航"),
-            // menu.routine.visitorcenter
-            ("menu.routine.visitorcenter", "zh-CN", "访客中心", "菜单导航"),
-            // menu.routine.visitorcenter
-            ("menu.routine.visitorcenter", "zh-HK", "访客中心_hk", "菜单导航"),
+            // menu.routine.visitor.center
+            ("menu.routine.visitor.center", "en-US", "访客中心_us", "菜单导航"),
+            // menu.routine.visitor.center
+            ("menu.routine.visitor.center", "ja-JP", "访客中心_jp", "菜单导航"),
+            // menu.routine.visitor.center
+            ("menu.routine.visitor.center", "zh-CN", "访客中心", "菜单导航"),
+            // menu.routine.visitor.center
+            ("menu.routine.visitor.center", "zh-HK", "访客中心_hk", "菜单导航"),
 
             // menu.accounting.financial._self
             ("menu.accounting.financial._self", "en-US", "管理会计_us", "菜单导航"),
@@ -347,77 +347,77 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.serial._self
             ("menu.logistics.serial._self", "zh-HK", "序列号管理_hk", "菜单导航"),
 
-            // menu.humanresource.organization._self
-            ("menu.humanresource.organization._self", "en-US", "组织管理_us", "菜单导航"),
-            // menu.humanresource.organization._self
-            ("menu.humanresource.organization._self", "ja-JP", "组织管理_jp", "菜单导航"),
-            // menu.humanresource.organization._self
-            ("menu.humanresource.organization._self", "zh-CN", "组织管理", "菜单导航"),
-            // menu.humanresource.organization._self
-            ("menu.humanresource.organization._self", "zh-HK", "组织管理_hk", "菜单导航"),
+            // menu.human.resource.organization._self
+            ("menu.human.resource.organization._self", "en-US", "组织管理_us", "菜单导航"),
+            // menu.human.resource.organization._self
+            ("menu.human.resource.organization._self", "ja-JP", "组织管理_jp", "菜单导航"),
+            // menu.human.resource.organization._self
+            ("menu.human.resource.organization._self", "zh-CN", "组织管理", "菜单导航"),
+            // menu.human.resource.organization._self
+            ("menu.human.resource.organization._self", "zh-HK", "组织管理_hk", "菜单导航"),
 
-            // menu.humanresource.personnel._self
-            ("menu.humanresource.personnel._self", "en-US", "人事管理_us", "菜单导航"),
-            // menu.humanresource.personnel._self
-            ("menu.humanresource.personnel._self", "ja-JP", "人事管理_jp", "菜单导航"),
-            // menu.humanresource.personnel._self
-            ("menu.humanresource.personnel._self", "zh-CN", "人事管理", "菜单导航"),
-            // menu.humanresource.personnel._self
-            ("menu.humanresource.personnel._self", "zh-HK", "人事管理_hk", "菜单导航"),
+            // menu.human.resource.personnel._self
+            ("menu.human.resource.personnel._self", "en-US", "人事管理_us", "菜单导航"),
+            // menu.human.resource.personnel._self
+            ("menu.human.resource.personnel._self", "ja-JP", "人事管理_jp", "菜单导航"),
+            // menu.human.resource.personnel._self
+            ("menu.human.resource.personnel._self", "zh-CN", "人事管理", "菜单导航"),
+            // menu.human.resource.personnel._self
+            ("menu.human.resource.personnel._self", "zh-HK", "人事管理_hk", "菜单导航"),
 
-            // menu.humanresource.attendance._self
-            ("menu.humanresource.attendance._self", "en-US", "考勤管理_us", "菜单导航"),
-            // menu.humanresource.attendance._self
-            ("menu.humanresource.attendance._self", "ja-JP", "考勤管理_jp", "菜单导航"),
-            // menu.humanresource.attendance._self
-            ("menu.humanresource.attendance._self", "zh-CN", "考勤管理", "菜单导航"),
-            // menu.humanresource.attendance._self
-            ("menu.humanresource.attendance._self", "zh-HK", "考勤管理_hk", "菜单导航"),
+            // menu.human.resource.attendance._self
+            ("menu.human.resource.attendance._self", "en-US", "考勤管理_us", "菜单导航"),
+            // menu.human.resource.attendance._self
+            ("menu.human.resource.attendance._self", "ja-JP", "考勤管理_jp", "菜单导航"),
+            // menu.human.resource.attendance._self
+            ("menu.human.resource.attendance._self", "zh-CN", "考勤管理", "菜单导航"),
+            // menu.human.resource.attendance._self
+            ("menu.human.resource.attendance._self", "zh-HK", "考勤管理_hk", "菜单导航"),
 
-            // menu.humanresource.compensation._self
-            ("menu.humanresource.compensation._self", "en-US", "薪酬管理_us", "菜单导航"),
-            // menu.humanresource.compensation._self
-            ("menu.humanresource.compensation._self", "ja-JP", "薪酬管理_jp", "菜单导航"),
-            // menu.humanresource.compensation._self
-            ("menu.humanresource.compensation._self", "zh-CN", "薪酬管理", "菜单导航"),
-            // menu.humanresource.compensation._self
-            ("menu.humanresource.compensation._self", "zh-HK", "薪酬管理_hk", "菜单导航"),
+            // menu.human.resource.compensation._self
+            ("menu.human.resource.compensation._self", "en-US", "薪酬管理_us", "菜单导航"),
+            // menu.human.resource.compensation._self
+            ("menu.human.resource.compensation._self", "ja-JP", "薪酬管理_jp", "菜单导航"),
+            // menu.human.resource.compensation._self
+            ("menu.human.resource.compensation._self", "zh-CN", "薪酬管理", "菜单导航"),
+            // menu.human.resource.compensation._self
+            ("menu.human.resource.compensation._self", "zh-HK", "薪酬管理_hk", "菜单导航"),
 
-            // menu.humanresource.benefits._self
-            ("menu.humanresource.benefits._self", "en-US", "福利管理_us", "菜单导航"),
-            // menu.humanresource.benefits._self
-            ("menu.humanresource.benefits._self", "ja-JP", "福利管理_jp", "菜单导航"),
-            // menu.humanresource.benefits._self
-            ("menu.humanresource.benefits._self", "zh-CN", "福利管理", "菜单导航"),
-            // menu.humanresource.benefits._self
-            ("menu.humanresource.benefits._self", "zh-HK", "福利管理_hk", "菜单导航"),
+            // menu.human.resource.benefits._self
+            ("menu.human.resource.benefits._self", "en-US", "福利管理_us", "菜单导航"),
+            // menu.human.resource.benefits._self
+            ("menu.human.resource.benefits._self", "ja-JP", "福利管理_jp", "菜单导航"),
+            // menu.human.resource.benefits._self
+            ("menu.human.resource.benefits._self", "zh-CN", "福利管理", "菜单导航"),
+            // menu.human.resource.benefits._self
+            ("menu.human.resource.benefits._self", "zh-HK", "福利管理_hk", "菜单导航"),
 
-            // menu.humanresource.performance._self
-            ("menu.humanresource.performance._self", "en-US", "绩效管理_us", "菜单导航"),
-            // menu.humanresource.performance._self
-            ("menu.humanresource.performance._self", "ja-JP", "绩效管理_jp", "菜单导航"),
-            // menu.humanresource.performance._self
-            ("menu.humanresource.performance._self", "zh-CN", "绩效管理", "菜单导航"),
-            // menu.humanresource.performance._self
-            ("menu.humanresource.performance._self", "zh-HK", "绩效管理_hk", "菜单导航"),
+            // menu.human.resource.performance._self
+            ("menu.human.resource.performance._self", "en-US", "绩效管理_us", "菜单导航"),
+            // menu.human.resource.performance._self
+            ("menu.human.resource.performance._self", "ja-JP", "绩效管理_jp", "菜单导航"),
+            // menu.human.resource.performance._self
+            ("menu.human.resource.performance._self", "zh-CN", "绩效管理", "菜单导航"),
+            // menu.human.resource.performance._self
+            ("menu.human.resource.performance._self", "zh-HK", "绩效管理_hk", "菜单导航"),
 
-            // menu.humanresource.training._self
-            ("menu.humanresource.training._self", "en-US", "教育培训_us", "菜单导航"),
-            // menu.humanresource.training._self
-            ("menu.humanresource.training._self", "ja-JP", "教育培训_jp", "菜单导航"),
-            // menu.humanresource.training._self
-            ("menu.humanresource.training._self", "zh-CN", "教育培训", "菜单导航"),
-            // menu.humanresource.training._self
-            ("menu.humanresource.training._self", "zh-HK", "教育培训_hk", "菜单导航"),
+            // menu.human.resource.training._self
+            ("menu.human.resource.training._self", "en-US", "教育培训_us", "菜单导航"),
+            // menu.human.resource.training._self
+            ("menu.human.resource.training._self", "ja-JP", "教育培训_jp", "菜单导航"),
+            // menu.human.resource.training._self
+            ("menu.human.resource.training._self", "zh-CN", "教育培训", "菜单导航"),
+            // menu.human.resource.training._self
+            ("menu.human.resource.training._self", "zh-HK", "教育培训_hk", "菜单导航"),
 
-            // menu.humanresource.talent._self
-            ("menu.humanresource.talent._self", "en-US", "人才管理_us", "菜单导航"),
-            // menu.humanresource.talent._self
-            ("menu.humanresource.talent._self", "ja-JP", "人才管理_jp", "菜单导航"),
-            // menu.humanresource.talent._self
-            ("menu.humanresource.talent._self", "zh-CN", "人才管理", "菜单导航"),
-            // menu.humanresource.talent._self
-            ("menu.humanresource.talent._self", "zh-HK", "人才管理_hk", "菜单导航"),
+            // menu.human.resource.talent._self
+            ("menu.human.resource.talent._self", "en-US", "人才管理_us", "菜单导航"),
+            // menu.human.resource.talent._self
+            ("menu.human.resource.talent._self", "ja-JP", "人才管理_jp", "菜单导航"),
+            // menu.human.resource.talent._self
+            ("menu.human.resource.talent._self", "zh-CN", "人才管理", "菜单导航"),
+            // menu.human.resource.talent._self
+            ("menu.human.resource.talent._self", "zh-HK", "人才管理_hk", "菜单导航"),
 
             // menu.identity.tenant
             ("menu.identity.tenant", "en-US", "租户管理_us", "菜单导航"),
@@ -527,23 +527,23 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.code.database.info
             ("menu.code.database.info", "zh-HK", "数据库信息_hk", "菜单导航"),
 
-            // menu.code.database.tableclone
-            ("menu.code.database.tableclone", "en-US", "表克隆_us", "菜单导航"),
-            // menu.code.database.tableclone
-            ("menu.code.database.tableclone", "ja-JP", "表克隆_jp", "菜单导航"),
-            // menu.code.database.tableclone
-            ("menu.code.database.tableclone", "zh-CN", "表克隆", "菜单导航"),
-            // menu.code.database.tableclone
-            ("menu.code.database.tableclone", "zh-HK", "表克隆_hk", "菜单导航"),
+            // menu.code.database.table.clone
+            ("menu.code.database.table.clone", "en-US", "表克隆_us", "菜单导航"),
+            // menu.code.database.table.clone
+            ("menu.code.database.table.clone", "ja-JP", "表克隆_jp", "菜单导航"),
+            // menu.code.database.table.clone
+            ("menu.code.database.table.clone", "zh-CN", "表克隆", "菜单导航"),
+            // menu.code.database.table.clone
+            ("menu.code.database.table.clone", "zh-HK", "表克隆_hk", "菜单导航"),
 
-            // menu.code.database.dataclone
-            ("menu.code.database.dataclone", "en-US", "数据克隆_us", "菜单导航"),
-            // menu.code.database.dataclone
-            ("menu.code.database.dataclone", "ja-JP", "数据克隆_jp", "菜单导航"),
-            // menu.code.database.dataclone
-            ("menu.code.database.dataclone", "zh-CN", "数据克隆", "菜单导航"),
-            // menu.code.database.dataclone
-            ("menu.code.database.dataclone", "zh-HK", "数据克隆_hk", "菜单导航"),
+            // menu.code.database.data.clone
+            ("menu.code.database.data.clone", "en-US", "数据克隆_us", "菜单导航"),
+            // menu.code.database.data.clone
+            ("menu.code.database.data.clone", "ja-JP", "数据克隆_jp", "菜单导航"),
+            // menu.code.database.data.clone
+            ("menu.code.database.data.clone", "zh-CN", "数据克隆", "菜单导航"),
+            // menu.code.database.data.clone
+            ("menu.code.database.data.clone", "zh-HK", "数据克隆_hk", "菜单导航"),
 
             // menu.foundation.numbering
             ("menu.foundation.numbering", "en-US", "编码规则_us", "菜单导航"),
@@ -554,14 +554,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.foundation.numbering
             ("menu.foundation.numbering", "zh-HK", "编码规则_hk", "菜单导航"),
 
-            // menu.foundation.isocode
-            ("menu.foundation.isocode", "en-US", "ISO编码_us", "菜单导航"),
-            // menu.foundation.isocode
-            ("menu.foundation.isocode", "ja-JP", "ISO编码_jp", "菜单导航"),
-            // menu.foundation.isocode
-            ("menu.foundation.isocode", "zh-CN", "ISO编码", "菜单导航"),
-            // menu.foundation.isocode
-            ("menu.foundation.isocode", "zh-HK", "ISO编码_hk", "菜单导航"),
+            // menu.foundation.iso.code
+            ("menu.foundation.iso.code", "en-US", "ISO编码_us", "菜单导航"),
+            // menu.foundation.iso.code
+            ("menu.foundation.iso.code", "ja-JP", "ISO编码_jp", "菜单导航"),
+            // menu.foundation.iso.code
+            ("menu.foundation.iso.code", "zh-CN", "ISO编码", "菜单导航"),
+            // menu.foundation.iso.code
+            ("menu.foundation.iso.code", "zh-HK", "ISO编码_hk", "菜单导航"),
 
             // menu.foundation.dict
             ("menu.foundation.dict", "en-US", "数据字典_us", "菜单导航"),
@@ -653,23 +653,23 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.statistics.logging._self
             ("menu.statistics.logging._self", "zh-HK", "日志管理_hk", "菜单导航"),
 
-            // menu.accounting.financial.accounttitle
-            ("menu.accounting.financial.accounttitle", "en-US", "会计科目_us", "菜单导航"),
-            // menu.accounting.financial.accounttitle
-            ("menu.accounting.financial.accounttitle", "ja-JP", "会计科目_jp", "菜单导航"),
-            // menu.accounting.financial.accounttitle
-            ("menu.accounting.financial.accounttitle", "zh-CN", "会计科目", "菜单导航"),
-            // menu.accounting.financial.accounttitle
-            ("menu.accounting.financial.accounttitle", "zh-HK", "会计科目_hk", "菜单导航"),
+            // menu.accounting.financial.account.title
+            ("menu.accounting.financial.account.title", "en-US", "会计科目_us", "菜单导航"),
+            // menu.accounting.financial.account.title
+            ("menu.accounting.financial.account.title", "ja-JP", "会计科目_jp", "菜单导航"),
+            // menu.accounting.financial.account.title
+            ("menu.accounting.financial.account.title", "zh-CN", "会计科目", "菜单导航"),
+            // menu.accounting.financial.account.title
+            ("menu.accounting.financial.account.title", "zh-HK", "会计科目_hk", "菜单导航"),
 
-            // menu.accounting.financial.accounttitle.changelog
-            ("menu.accounting.financial.accounttitle.changelog", "en-US", "会计科目变更_us", "菜单导航"),
-            // menu.accounting.financial.accounttitle.changelog
-            ("menu.accounting.financial.accounttitle.changelog", "ja-JP", "会计科目变更_jp", "菜单导航"),
-            // menu.accounting.financial.accounttitle.changelog
-            ("menu.accounting.financial.accounttitle.changelog", "zh-CN", "会计科目变更", "菜单导航"),
-            // menu.accounting.financial.accounttitle.changelog
-            ("menu.accounting.financial.accounttitle.changelog", "zh-HK", "会计科目变更_hk", "菜单导航"),
+            // menu.accounting.financial.account.title.change.log
+            ("menu.accounting.financial.account.title.change.log", "en-US", "会计科目变更_us", "菜单导航"),
+            // menu.accounting.financial.account.title.change.log
+            ("menu.accounting.financial.account.title.change.log", "ja-JP", "会计科目变更_jp", "菜单导航"),
+            // menu.accounting.financial.account.title.change.log
+            ("menu.accounting.financial.account.title.change.log", "zh-CN", "会计科目变更", "菜单导航"),
+            // menu.accounting.financial.account.title.change.log
+            ("menu.accounting.financial.account.title.change.log", "zh-HK", "会计科目变更_hk", "菜单导航"),
 
             // menu.accounting.financial.asset
             ("menu.accounting.financial.asset", "en-US", "固定资产_us", "菜单导航"),
@@ -680,14 +680,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.accounting.financial.asset
             ("menu.accounting.financial.asset", "zh-HK", "固定资产_hk", "菜单导航"),
 
-            // menu.accounting.financial.asset.changelog
-            ("menu.accounting.financial.asset.changelog", "en-US", "固定资产变更_us", "菜单导航"),
-            // menu.accounting.financial.asset.changelog
-            ("menu.accounting.financial.asset.changelog", "ja-JP", "固定资产变更_jp", "菜单导航"),
-            // menu.accounting.financial.asset.changelog
-            ("menu.accounting.financial.asset.changelog", "zh-CN", "固定资产变更", "菜单导航"),
-            // menu.accounting.financial.asset.changelog
-            ("menu.accounting.financial.asset.changelog", "zh-HK", "固定资产变更_hk", "菜单导航"),
+            // menu.accounting.financial.asset.change.log
+            ("menu.accounting.financial.asset.change.log", "en-US", "固定资产变更_us", "菜单导航"),
+            // menu.accounting.financial.asset.change.log
+            ("menu.accounting.financial.asset.change.log", "ja-JP", "固定资产变更_jp", "菜单导航"),
+            // menu.accounting.financial.asset.change.log
+            ("menu.accounting.financial.asset.change.log", "zh-CN", "固定资产变更", "菜单导航"),
+            // menu.accounting.financial.asset.change.log
+            ("menu.accounting.financial.asset.change.log", "zh-HK", "固定资产变更_hk", "菜单导航"),
 
             // menu.accounting.financial.countersign
             ("menu.accounting.financial.countersign", "en-US", "会签管理_us", "菜单导航"),
@@ -707,68 +707,68 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.accounting.financial.company
             ("menu.accounting.financial.company", "zh-HK", "公司管理_hk", "菜单导航"),
 
-            // menu.accounting.controlling.profitcenter
-            ("menu.accounting.controlling.profitcenter", "en-US", "利润中心_us", "菜单导航"),
-            // menu.accounting.controlling.profitcenter
-            ("menu.accounting.controlling.profitcenter", "ja-JP", "利润中心_jp", "菜单导航"),
-            // menu.accounting.controlling.profitcenter
-            ("menu.accounting.controlling.profitcenter", "zh-CN", "利润中心", "菜单导航"),
-            // menu.accounting.controlling.profitcenter
-            ("menu.accounting.controlling.profitcenter", "zh-HK", "利润中心_hk", "菜单导航"),
+            // menu.accounting.controlling.profit.center
+            ("menu.accounting.controlling.profit.center", "en-US", "利润中心_us", "菜单导航"),
+            // menu.accounting.controlling.profit.center
+            ("menu.accounting.controlling.profit.center", "ja-JP", "利润中心_jp", "菜单导航"),
+            // menu.accounting.controlling.profit.center
+            ("menu.accounting.controlling.profit.center", "zh-CN", "利润中心", "菜单导航"),
+            // menu.accounting.controlling.profit.center
+            ("menu.accounting.controlling.profit.center", "zh-HK", "利润中心_hk", "菜单导航"),
 
-            // menu.accounting.controlling.profitcenter.changelog
-            ("menu.accounting.controlling.profitcenter.changelog", "en-US", "利润中心变更_us", "菜单导航"),
-            // menu.accounting.controlling.profitcenter.changelog
-            ("menu.accounting.controlling.profitcenter.changelog", "ja-JP", "利润中心变更_jp", "菜单导航"),
-            // menu.accounting.controlling.profitcenter.changelog
-            ("menu.accounting.controlling.profitcenter.changelog", "zh-CN", "利润中心变更", "菜单导航"),
-            // menu.accounting.controlling.profitcenter.changelog
-            ("menu.accounting.controlling.profitcenter.changelog", "zh-HK", "利润中心变更_hk", "菜单导航"),
+            // menu.accounting.controlling.profit.center.change.log
+            ("menu.accounting.controlling.profit.center.change.log", "en-US", "利润中心变更_us", "菜单导航"),
+            // menu.accounting.controlling.profit.center.change.log
+            ("menu.accounting.controlling.profit.center.change.log", "ja-JP", "利润中心变更_jp", "菜单导航"),
+            // menu.accounting.controlling.profit.center.change.log
+            ("menu.accounting.controlling.profit.center.change.log", "zh-CN", "利润中心变更", "菜单导航"),
+            // menu.accounting.controlling.profit.center.change.log
+            ("menu.accounting.controlling.profit.center.change.log", "zh-HK", "利润中心变更_hk", "菜单导航"),
 
-            // menu.accounting.controlling.costcenter
-            ("menu.accounting.controlling.costcenter", "en-US", "成本中心_us", "菜单导航"),
-            // menu.accounting.controlling.costcenter
-            ("menu.accounting.controlling.costcenter", "ja-JP", "成本中心_jp", "菜单导航"),
-            // menu.accounting.controlling.costcenter
-            ("menu.accounting.controlling.costcenter", "zh-CN", "成本中心", "菜单导航"),
-            // menu.accounting.controlling.costcenter
-            ("menu.accounting.controlling.costcenter", "zh-HK", "成本中心_hk", "菜单导航"),
+            // menu.accounting.controlling.cost.center
+            ("menu.accounting.controlling.cost.center", "en-US", "成本中心_us", "菜单导航"),
+            // menu.accounting.controlling.cost.center
+            ("menu.accounting.controlling.cost.center", "ja-JP", "成本中心_jp", "菜单导航"),
+            // menu.accounting.controlling.cost.center
+            ("menu.accounting.controlling.cost.center", "zh-CN", "成本中心", "菜单导航"),
+            // menu.accounting.controlling.cost.center
+            ("menu.accounting.controlling.cost.center", "zh-HK", "成本中心_hk", "菜单导航"),
 
-            // menu.accounting.controlling.costcenter.changelog
-            ("menu.accounting.controlling.costcenter.changelog", "en-US", "成本中心变更_us", "菜单导航"),
-            // menu.accounting.controlling.costcenter.changelog
-            ("menu.accounting.controlling.costcenter.changelog", "ja-JP", "成本中心变更_jp", "菜单导航"),
-            // menu.accounting.controlling.costcenter.changelog
-            ("menu.accounting.controlling.costcenter.changelog", "zh-CN", "成本中心变更", "菜单导航"),
-            // menu.accounting.controlling.costcenter.changelog
-            ("menu.accounting.controlling.costcenter.changelog", "zh-HK", "成本中心变更_hk", "菜单导航"),
+            // menu.accounting.controlling.cost.center.change.log
+            ("menu.accounting.controlling.cost.center.change.log", "en-US", "成本中心变更_us", "菜单导航"),
+            // menu.accounting.controlling.cost.center.change.log
+            ("menu.accounting.controlling.cost.center.change.log", "ja-JP", "成本中心变更_jp", "菜单导航"),
+            // menu.accounting.controlling.cost.center.change.log
+            ("menu.accounting.controlling.cost.center.change.log", "zh-CN", "成本中心变更", "菜单导航"),
+            // menu.accounting.controlling.cost.center.change.log
+            ("menu.accounting.controlling.cost.center.change.log", "zh-HK", "成本中心变更_hk", "菜单导航"),
 
-            // menu.accounting.controlling.costelement
-            ("menu.accounting.controlling.costelement", "en-US", "成本要素_us", "菜单导航"),
-            // menu.accounting.controlling.costelement
-            ("menu.accounting.controlling.costelement", "ja-JP", "成本要素_jp", "菜单导航"),
-            // menu.accounting.controlling.costelement
-            ("menu.accounting.controlling.costelement", "zh-CN", "成本要素", "菜单导航"),
-            // menu.accounting.controlling.costelement
-            ("menu.accounting.controlling.costelement", "zh-HK", "成本要素_hk", "菜单导航"),
+            // menu.accounting.controlling.cost.element
+            ("menu.accounting.controlling.cost.element", "en-US", "成本要素_us", "菜单导航"),
+            // menu.accounting.controlling.cost.element
+            ("menu.accounting.controlling.cost.element", "ja-JP", "成本要素_jp", "菜单导航"),
+            // menu.accounting.controlling.cost.element
+            ("menu.accounting.controlling.cost.element", "zh-CN", "成本要素", "菜单导航"),
+            // menu.accounting.controlling.cost.element
+            ("menu.accounting.controlling.cost.element", "zh-HK", "成本要素_hk", "菜单导航"),
 
-            // menu.accounting.controlling.costelement.changelog
-            ("menu.accounting.controlling.costelement.changelog", "en-US", "成本要素变更_us", "菜单导航"),
-            // menu.accounting.controlling.costelement.changelog
-            ("menu.accounting.controlling.costelement.changelog", "ja-JP", "成本要素变更_jp", "菜单导航"),
-            // menu.accounting.controlling.costelement.changelog
-            ("menu.accounting.controlling.costelement.changelog", "zh-CN", "成本要素变更", "菜单导航"),
-            // menu.accounting.controlling.costelement.changelog
-            ("menu.accounting.controlling.costelement.changelog", "zh-HK", "成本要素变更_hk", "菜单导航"),
+            // menu.accounting.controlling.cost.element.change.log
+            ("menu.accounting.controlling.cost.element.change.log", "en-US", "成本要素变更_us", "菜单导航"),
+            // menu.accounting.controlling.cost.element.change.log
+            ("menu.accounting.controlling.cost.element.change.log", "ja-JP", "成本要素变更_jp", "菜单导航"),
+            // menu.accounting.controlling.cost.element.change.log
+            ("menu.accounting.controlling.cost.element.change.log", "zh-CN", "成本要素变更", "菜单导航"),
+            // menu.accounting.controlling.cost.element.change.log
+            ("menu.accounting.controlling.cost.element.change.log", "zh-HK", "成本要素变更_hk", "菜单导航"),
 
-            // menu.accounting.controlling.standardwagerate
-            ("menu.accounting.controlling.standardwagerate", "en-US", "标准工资率_us", "菜单导航"),
-            // menu.accounting.controlling.standardwagerate
-            ("menu.accounting.controlling.standardwagerate", "ja-JP", "标准工资率_jp", "菜单导航"),
-            // menu.accounting.controlling.standardwagerate
-            ("menu.accounting.controlling.standardwagerate", "zh-CN", "标准工资率", "菜单导航"),
-            // menu.accounting.controlling.standardwagerate
-            ("menu.accounting.controlling.standardwagerate", "zh-HK", "标准工资率_hk", "菜单导航"),
+            // menu.accounting.controlling.standard.wage.rate
+            ("menu.accounting.controlling.standard.wage.rate", "en-US", "标准工资率_us", "菜单导航"),
+            // menu.accounting.controlling.standard.wage.rate
+            ("menu.accounting.controlling.standard.wage.rate", "ja-JP", "标准工资率_jp", "菜单导航"),
+            // menu.accounting.controlling.standard.wage.rate
+            ("menu.accounting.controlling.standard.wage.rate", "zh-CN", "标准工资率", "菜单导航"),
+            // menu.accounting.controlling.standard.wage.rate
+            ("menu.accounting.controlling.standard.wage.rate", "zh-HK", "标准工资率_hk", "菜单导航"),
 
             // menu.logistics.materials.plant
             ("menu.logistics.materials.plant", "en-US", "工厂信息_us", "菜单导航"),
@@ -788,32 +788,32 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.materials.material
             ("menu.logistics.materials.material", "zh-HK", "全局物料_hk", "菜单导航"),
 
-            // menu.logistics.materials.material.changelog
-            ("menu.logistics.materials.material.changelog", "en-US", "全局物料变更_us", "菜单导航"),
-            // menu.logistics.materials.material.changelog
-            ("menu.logistics.materials.material.changelog", "ja-JP", "全局物料变更_jp", "菜单导航"),
-            // menu.logistics.materials.material.changelog
-            ("menu.logistics.materials.material.changelog", "zh-CN", "全局物料变更", "菜单导航"),
-            // menu.logistics.materials.material.changelog
-            ("menu.logistics.materials.material.changelog", "zh-HK", "全局物料变更_hk", "菜单导航"),
+            // menu.logistics.materials.material.change.log
+            ("menu.logistics.materials.material.change.log", "en-US", "全局物料变更_us", "菜单导航"),
+            // menu.logistics.materials.material.change.log
+            ("menu.logistics.materials.material.change.log", "ja-JP", "全局物料变更_jp", "菜单导航"),
+            // menu.logistics.materials.material.change.log
+            ("menu.logistics.materials.material.change.log", "zh-CN", "全局物料变更", "菜单导航"),
+            // menu.logistics.materials.material.change.log
+            ("menu.logistics.materials.material.change.log", "zh-HK", "全局物料变更_hk", "菜单导航"),
 
-            // menu.logistics.materials.materialplant
-            ("menu.logistics.materials.materialplant", "en-US", "工厂物料_us", "菜单导航"),
-            // menu.logistics.materials.materialplant
-            ("menu.logistics.materials.materialplant", "ja-JP", "工厂物料_jp", "菜单导航"),
-            // menu.logistics.materials.materialplant
-            ("menu.logistics.materials.materialplant", "zh-CN", "工厂物料", "菜单导航"),
-            // menu.logistics.materials.materialplant
-            ("menu.logistics.materials.materialplant", "zh-HK", "工厂物料_hk", "菜单导航"),
+            // menu.logistics.materials.material.plant
+            ("menu.logistics.materials.material.plant", "en-US", "工厂物料_us", "菜单导航"),
+            // menu.logistics.materials.material.plant
+            ("menu.logistics.materials.material.plant", "ja-JP", "工厂物料_jp", "菜单导航"),
+            // menu.logistics.materials.material.plant
+            ("menu.logistics.materials.material.plant", "zh-CN", "工厂物料", "菜单导航"),
+            // menu.logistics.materials.material.plant
+            ("menu.logistics.materials.material.plant", "zh-HK", "工厂物料_hk", "菜单导航"),
 
-            // menu.logistics.materials.materialplant.changelog
-            ("menu.logistics.materials.materialplant.changelog", "en-US", "工厂物料变更_us", "菜单导航"),
-            // menu.logistics.materials.materialplant.changelog
-            ("menu.logistics.materials.materialplant.changelog", "ja-JP", "工厂物料变更_jp", "菜单导航"),
-            // menu.logistics.materials.materialplant.changelog
-            ("menu.logistics.materials.materialplant.changelog", "zh-CN", "工厂物料变更", "菜单导航"),
-            // menu.logistics.materials.materialplant.changelog
-            ("menu.logistics.materials.materialplant.changelog", "zh-HK", "工厂物料变更_hk", "菜单导航"),
+            // menu.logistics.materials.material.plant.change.log
+            ("menu.logistics.materials.material.plant.change.log", "en-US", "工厂物料变更_us", "菜单导航"),
+            // menu.logistics.materials.material.plant.change.log
+            ("menu.logistics.materials.material.plant.change.log", "ja-JP", "工厂物料变更_jp", "菜单导航"),
+            // menu.logistics.materials.material.plant.change.log
+            ("menu.logistics.materials.material.plant.change.log", "zh-CN", "工厂物料变更", "菜单导航"),
+            // menu.logistics.materials.material.plant.change.log
+            ("menu.logistics.materials.material.plant.change.log", "zh-HK", "工厂物料变更_hk", "菜单导航"),
 
             // menu.logistics.materials.warehouse
             ("menu.logistics.materials.warehouse", "en-US", "仓库信息_us", "菜单导航"),
@@ -824,23 +824,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.materials.warehouse
             ("menu.logistics.materials.warehouse", "zh-HK", "仓库信息_hk", "菜单导航"),
 
-            // menu.logistics.materials.materialgroup
-            ("menu.logistics.materials.materialgroup", "en-US", "物料组_us", "菜单导航"),
-            // menu.logistics.materials.materialgroup
-            ("menu.logistics.materials.materialgroup", "ja-JP", "物料组_jp", "菜单导航"),
-            // menu.logistics.materials.materialgroup
-            ("menu.logistics.materials.materialgroup", "zh-CN", "物料组", "菜单导航"),
-            // menu.logistics.materials.materialgroup
-            ("menu.logistics.materials.materialgroup", "zh-HK", "物料组_hk", "菜单导航"),
-
-            // menu.logistics.materials.storagelocation
-            ("menu.logistics.materials.storagelocation", "en-US", "库位信息_us", "菜单导航"),
-            // menu.logistics.materials.storagelocation
-            ("menu.logistics.materials.storagelocation", "ja-JP", "库位信息_jp", "菜单导航"),
-            // menu.logistics.materials.storagelocation
-            ("menu.logistics.materials.storagelocation", "zh-CN", "库位信息", "菜单导航"),
-            // menu.logistics.materials.storagelocation
-            ("menu.logistics.materials.storagelocation", "zh-HK", "库位信息_hk", "菜单导航"),
+            // menu.logistics.materials.material.group
+            ("menu.logistics.materials.material.group", "en-US", "物料组_us", "菜单导航"),
+            // menu.logistics.materials.material.group
+            ("menu.logistics.materials.material.group", "ja-JP", "物料组_jp", "菜单导航"),
+            // menu.logistics.materials.material.group
+            ("menu.logistics.materials.material.group", "zh-CN", "物料组", "菜单导航"),
+            // menu.logistics.materials.material.group
+            ("menu.logistics.materials.material.group", "zh-HK", "物料组_hk", "菜单导航"),
 
             // menu.logistics.materials.packaging
             ("menu.logistics.materials.packaging", "en-US", "包装物料_us", "菜单导航"),
@@ -851,32 +842,32 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.materials.packaging
             ("menu.logistics.materials.packaging", "zh-HK", "包装物料_hk", "菜单导航"),
 
-            // menu.logistics.materials.modeldestination
-            ("menu.logistics.materials.modeldestination", "en-US", "机种仕向_us", "菜单导航"),
-            // menu.logistics.materials.modeldestination
-            ("menu.logistics.materials.modeldestination", "ja-JP", "机种仕向_jp", "菜单导航"),
-            // menu.logistics.materials.modeldestination
-            ("menu.logistics.materials.modeldestination", "zh-CN", "机种仕向", "菜单导航"),
-            // menu.logistics.materials.modeldestination
-            ("menu.logistics.materials.modeldestination", "zh-HK", "机种仕向_hk", "菜单导航"),
+            // menu.logistics.materials.model.destination
+            ("menu.logistics.materials.model.destination", "en-US", "机种仕向_us", "菜单导航"),
+            // menu.logistics.materials.model.destination
+            ("menu.logistics.materials.model.destination", "ja-JP", "机种仕向_jp", "菜单导航"),
+            // menu.logistics.materials.model.destination
+            ("menu.logistics.materials.model.destination", "zh-CN", "机种仕向", "菜单导航"),
+            // menu.logistics.materials.model.destination
+            ("menu.logistics.materials.model.destination", "zh-HK", "机种仕向_hk", "菜单导航"),
 
-            // menu.logistics.materials.manufacturer
-            ("menu.logistics.materials.manufacturer", "en-US", "制造商物料_us", "菜单导航"),
-            // menu.logistics.materials.manufacturer
-            ("menu.logistics.materials.manufacturer", "ja-JP", "制造商物料_jp", "菜单导航"),
-            // menu.logistics.materials.manufacturer
-            ("menu.logistics.materials.manufacturer", "zh-CN", "制造商物料", "菜单导航"),
-            // menu.logistics.materials.manufacturer
-            ("menu.logistics.materials.manufacturer", "zh-HK", "制造商物料_hk", "菜单导航"),
+            // menu.logistics.materials.manufacturer.material
+            ("menu.logistics.materials.manufacturer.material", "en-US", "制造商物料_us", "菜单导航"),
+            // menu.logistics.materials.manufacturer.material
+            ("menu.logistics.materials.manufacturer.material", "ja-JP", "制造商物料_jp", "菜单导航"),
+            // menu.logistics.materials.manufacturer.material
+            ("menu.logistics.materials.manufacturer.material", "zh-CN", "制造商物料", "菜单导航"),
+            // menu.logistics.materials.manufacturer.material
+            ("menu.logistics.materials.manufacturer.material", "zh-HK", "制造商物料_hk", "菜单导航"),
 
-            // menu.logistics.materials.materialtransaction
-            ("menu.logistics.materials.materialtransaction", "en-US", "物料交易_us", "菜单导航"),
-            // menu.logistics.materials.materialtransaction
-            ("menu.logistics.materials.materialtransaction", "ja-JP", "物料交易_jp", "菜单导航"),
-            // menu.logistics.materials.materialtransaction
-            ("menu.logistics.materials.materialtransaction", "zh-CN", "物料交易", "菜单导航"),
-            // menu.logistics.materials.materialtransaction
-            ("menu.logistics.materials.materialtransaction", "zh-HK", "物料交易_hk", "菜单导航"),
+            // menu.logistics.materials.material.transaction
+            ("menu.logistics.materials.material.transaction", "en-US", "物料交易_us", "菜单导航"),
+            // menu.logistics.materials.material.transaction
+            ("menu.logistics.materials.material.transaction", "ja-JP", "物料交易_jp", "菜单导航"),
+            // menu.logistics.materials.material.transaction
+            ("menu.logistics.materials.material.transaction", "zh-CN", "物料交易", "菜单导航"),
+            // menu.logistics.materials.material.transaction
+            ("menu.logistics.materials.material.transaction", "zh-HK", "物料交易_hk", "菜单导航"),
 
             // menu.logistics.procurement.supplier
             ("menu.logistics.procurement.supplier", "en-US", "供应商_us", "菜单导航"),
@@ -896,86 +887,86 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.procurement.vendor
             ("menu.logistics.procurement.vendor", "zh-HK", "经销商_hk", "菜单导航"),
 
-            // menu.logistics.procurement.sourceofsupply
-            ("menu.logistics.procurement.sourceofsupply", "en-US", "货源_us", "菜单导航"),
-            // menu.logistics.procurement.sourceofsupply
-            ("menu.logistics.procurement.sourceofsupply", "ja-JP", "货源_jp", "菜单导航"),
-            // menu.logistics.procurement.sourceofsupply
-            ("menu.logistics.procurement.sourceofsupply", "zh-CN", "货源", "菜单导航"),
-            // menu.logistics.procurement.sourceofsupply
-            ("menu.logistics.procurement.sourceofsupply", "zh-HK", "货源_hk", "菜单导航"),
+            // menu.logistics.procurement.source.of.supply
+            ("menu.logistics.procurement.source.of.supply", "en-US", "货源_us", "菜单导航"),
+            // menu.logistics.procurement.source.of.supply
+            ("menu.logistics.procurement.source.of.supply", "ja-JP", "货源_jp", "菜单导航"),
+            // menu.logistics.procurement.source.of.supply
+            ("menu.logistics.procurement.source.of.supply", "zh-CN", "货源", "菜单导航"),
+            // menu.logistics.procurement.source.of.supply
+            ("menu.logistics.procurement.source.of.supply", "zh-HK", "货源_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchaserequest
-            ("menu.logistics.procurement.purchaserequest", "en-US", "采购申请_us", "菜单导航"),
-            // menu.logistics.procurement.purchaserequest
-            ("menu.logistics.procurement.purchaserequest", "ja-JP", "采购申请_jp", "菜单导航"),
-            // menu.logistics.procurement.purchaserequest
-            ("menu.logistics.procurement.purchaserequest", "zh-CN", "采购申请", "菜单导航"),
-            // menu.logistics.procurement.purchaserequest
-            ("menu.logistics.procurement.purchaserequest", "zh-HK", "采购申请_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.request
+            ("menu.logistics.procurement.purchase.request", "en-US", "采购申请_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.request
+            ("menu.logistics.procurement.purchase.request", "ja-JP", "采购申请_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.request
+            ("menu.logistics.procurement.purchase.request", "zh-CN", "采购申请", "菜单导航"),
+            // menu.logistics.procurement.purchase.request
+            ("menu.logistics.procurement.purchase.request", "zh-HK", "采购申请_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchaserequest.changelog
-            ("menu.logistics.procurement.purchaserequest.changelog", "en-US", "采购申请变更_us", "菜单导航"),
-            // menu.logistics.procurement.purchaserequest.changelog
-            ("menu.logistics.procurement.purchaserequest.changelog", "ja-JP", "采购申请变更_jp", "菜单导航"),
-            // menu.logistics.procurement.purchaserequest.changelog
-            ("menu.logistics.procurement.purchaserequest.changelog", "zh-CN", "采购申请变更", "菜单导航"),
-            // menu.logistics.procurement.purchaserequest.changelog
-            ("menu.logistics.procurement.purchaserequest.changelog", "zh-HK", "采购申请变更_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.request.change.log
+            ("menu.logistics.procurement.purchase.request.change.log", "en-US", "采购申请变更_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.request.change.log
+            ("menu.logistics.procurement.purchase.request.change.log", "ja-JP", "采购申请变更_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.request.change.log
+            ("menu.logistics.procurement.purchase.request.change.log", "zh-CN", "采购申请变更", "菜单导航"),
+            // menu.logistics.procurement.purchase.request.change.log
+            ("menu.logistics.procurement.purchase.request.change.log", "zh-HK", "采购申请变更_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchaseorder
-            ("menu.logistics.procurement.purchaseorder", "en-US", "采购订单_us", "菜单导航"),
-            // menu.logistics.procurement.purchaseorder
-            ("menu.logistics.procurement.purchaseorder", "ja-JP", "采购订单_jp", "菜单导航"),
-            // menu.logistics.procurement.purchaseorder
-            ("menu.logistics.procurement.purchaseorder", "zh-CN", "采购订单", "菜单导航"),
-            // menu.logistics.procurement.purchaseorder
-            ("menu.logistics.procurement.purchaseorder", "zh-HK", "采购订单_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.order
+            ("menu.logistics.procurement.purchase.order", "en-US", "采购订单_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.order
+            ("menu.logistics.procurement.purchase.order", "ja-JP", "采购订单_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.order
+            ("menu.logistics.procurement.purchase.order", "zh-CN", "采购订单", "菜单导航"),
+            // menu.logistics.procurement.purchase.order
+            ("menu.logistics.procurement.purchase.order", "zh-HK", "采购订单_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchaseorder.changelog
-            ("menu.logistics.procurement.purchaseorder.changelog", "en-US", "采购订单变更_us", "菜单导航"),
-            // menu.logistics.procurement.purchaseorder.changelog
-            ("menu.logistics.procurement.purchaseorder.changelog", "ja-JP", "采购订单变更_jp", "菜单导航"),
-            // menu.logistics.procurement.purchaseorder.changelog
-            ("menu.logistics.procurement.purchaseorder.changelog", "zh-CN", "采购订单变更", "菜单导航"),
-            // menu.logistics.procurement.purchaseorder.changelog
-            ("menu.logistics.procurement.purchaseorder.changelog", "zh-HK", "采购订单变更_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.order.change.log
+            ("menu.logistics.procurement.purchase.order.change.log", "en-US", "采购订单变更_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.order.change.log
+            ("menu.logistics.procurement.purchase.order.change.log", "ja-JP", "采购订单变更_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.order.change.log
+            ("menu.logistics.procurement.purchase.order.change.log", "zh-CN", "采购订单变更", "菜单导航"),
+            // menu.logistics.procurement.purchase.order.change.log
+            ("menu.logistics.procurement.purchase.order.change.log", "zh-HK", "采购订单变更_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchaseprice
-            ("menu.logistics.procurement.purchaseprice", "en-US", "采购价格_us", "菜单导航"),
-            // menu.logistics.procurement.purchaseprice
-            ("menu.logistics.procurement.purchaseprice", "ja-JP", "采购价格_jp", "菜单导航"),
-            // menu.logistics.procurement.purchaseprice
-            ("menu.logistics.procurement.purchaseprice", "zh-CN", "采购价格", "菜单导航"),
-            // menu.logistics.procurement.purchaseprice
-            ("menu.logistics.procurement.purchaseprice", "zh-HK", "采购价格_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.price
+            ("menu.logistics.procurement.purchase.price", "en-US", "采购价格_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.price
+            ("menu.logistics.procurement.purchase.price", "ja-JP", "采购价格_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.price
+            ("menu.logistics.procurement.purchase.price", "zh-CN", "采购价格", "菜单导航"),
+            // menu.logistics.procurement.purchase.price
+            ("menu.logistics.procurement.purchase.price", "zh-HK", "采购价格_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchaseprice.changelog
-            ("menu.logistics.procurement.purchaseprice.changelog", "en-US", "采购价格变更_us", "菜单导航"),
-            // menu.logistics.procurement.purchaseprice.changelog
-            ("menu.logistics.procurement.purchaseprice.changelog", "ja-JP", "采购价格变更_jp", "菜单导航"),
-            // menu.logistics.procurement.purchaseprice.changelog
-            ("menu.logistics.procurement.purchaseprice.changelog", "zh-CN", "采购价格变更", "菜单导航"),
-            // menu.logistics.procurement.purchaseprice.changelog
-            ("menu.logistics.procurement.purchaseprice.changelog", "zh-HK", "采购价格变更_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.price.change.log
+            ("menu.logistics.procurement.purchase.price.change.log", "en-US", "采购价格变更_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.price.change.log
+            ("menu.logistics.procurement.purchase.price.change.log", "ja-JP", "采购价格变更_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.price.change.log
+            ("menu.logistics.procurement.purchase.price.change.log", "zh-CN", "采购价格变更", "菜单导航"),
+            // menu.logistics.procurement.purchase.price.change.log
+            ("menu.logistics.procurement.purchase.price.change.log", "zh-HK", "采购价格变更_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchaseinvoice
-            ("menu.logistics.procurement.purchaseinvoice", "en-US", "采购发票_us", "菜单导航"),
-            // menu.logistics.procurement.purchaseinvoice
-            ("menu.logistics.procurement.purchaseinvoice", "ja-JP", "采购发票_jp", "菜单导航"),
-            // menu.logistics.procurement.purchaseinvoice
-            ("menu.logistics.procurement.purchaseinvoice", "zh-CN", "采购发票", "菜单导航"),
-            // menu.logistics.procurement.purchaseinvoice
-            ("menu.logistics.procurement.purchaseinvoice", "zh-HK", "采购发票_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.invoice
+            ("menu.logistics.procurement.purchase.invoice", "en-US", "采购发票_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.invoice
+            ("menu.logistics.procurement.purchase.invoice", "ja-JP", "采购发票_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.invoice
+            ("menu.logistics.procurement.purchase.invoice", "zh-CN", "采购发票", "菜单导航"),
+            // menu.logistics.procurement.purchase.invoice
+            ("menu.logistics.procurement.purchase.invoice", "zh-HK", "采购发票_hk", "菜单导航"),
 
-            // menu.logistics.procurement.purchasegroup
-            ("menu.logistics.procurement.purchasegroup", "en-US", "采购组_us", "菜单导航"),
-            // menu.logistics.procurement.purchasegroup
-            ("menu.logistics.procurement.purchasegroup", "ja-JP", "采购组_jp", "菜单导航"),
-            // menu.logistics.procurement.purchasegroup
-            ("menu.logistics.procurement.purchasegroup", "zh-CN", "采购组", "菜单导航"),
-            // menu.logistics.procurement.purchasegroup
-            ("menu.logistics.procurement.purchasegroup", "zh-HK", "采购组_hk", "菜单导航"),
+            // menu.logistics.procurement.purchase.group
+            ("menu.logistics.procurement.purchase.group", "en-US", "采购组_us", "菜单导航"),
+            // menu.logistics.procurement.purchase.group
+            ("menu.logistics.procurement.purchase.group", "ja-JP", "采购组_jp", "菜单导航"),
+            // menu.logistics.procurement.purchase.group
+            ("menu.logistics.procurement.purchase.group", "zh-CN", "采购组", "菜单导航"),
+            // menu.logistics.procurement.purchase.group
+            ("menu.logistics.procurement.purchase.group", "zh-HK", "采购组_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.bom._self
             ("menu.logistics.manufacturing.bom._self", "en-US", "BOM管理_us", "菜单导航"),
@@ -1004,14 +995,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.scheduling._self
             ("menu.logistics.manufacturing.scheduling._self", "zh-HK", "生产排程_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange._self
-            ("menu.logistics.manufacturing.engineeringchange._self", "en-US", "设变_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange._self
-            ("menu.logistics.manufacturing.engineeringchange._self", "ja-JP", "设变_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange._self
-            ("menu.logistics.manufacturing.engineeringchange._self", "zh-CN", "设变", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange._self
-            ("menu.logistics.manufacturing.engineeringchange._self", "zh-HK", "设变_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "en-US", "设变_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "ja-JP", "设变_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "zh-CN", "设变", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "zh-HK", "设变_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.output._self
             ("menu.logistics.manufacturing.output._self", "en-US", "产出管理_us", "菜单导航"),
@@ -1166,14 +1157,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.sales.quotation
             ("menu.logistics.sales.quotation", "zh-HK", "销售报价_hk", "菜单导航"),
 
-            // menu.logistics.sales.quotation.changelog
-            ("menu.logistics.sales.quotation.changelog", "en-US", "销售报价变更_us", "菜单导航"),
-            // menu.logistics.sales.quotation.changelog
-            ("menu.logistics.sales.quotation.changelog", "ja-JP", "销售报价变更_jp", "菜单导航"),
-            // menu.logistics.sales.quotation.changelog
-            ("menu.logistics.sales.quotation.changelog", "zh-CN", "销售报价变更", "菜单导航"),
-            // menu.logistics.sales.quotation.changelog
-            ("menu.logistics.sales.quotation.changelog", "zh-HK", "销售报价变更_hk", "菜单导航"),
+            // menu.logistics.sales.quotation.change.log
+            ("menu.logistics.sales.quotation.change.log", "en-US", "销售报价变更_us", "菜单导航"),
+            // menu.logistics.sales.quotation.change.log
+            ("menu.logistics.sales.quotation.change.log", "ja-JP", "销售报价变更_jp", "菜单导航"),
+            // menu.logistics.sales.quotation.change.log
+            ("menu.logistics.sales.quotation.change.log", "zh-CN", "销售报价变更", "菜单导航"),
+            // menu.logistics.sales.quotation.change.log
+            ("menu.logistics.sales.quotation.change.log", "zh-HK", "销售报价变更_hk", "菜单导航"),
 
             // menu.logistics.sales.price
             ("menu.logistics.sales.price", "en-US", "销售价格_us", "菜单导航"),
@@ -1184,14 +1175,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.sales.price
             ("menu.logistics.sales.price", "zh-HK", "销售价格_hk", "菜单导航"),
 
-            // menu.logistics.sales.price.changelog
-            ("menu.logistics.sales.price.changelog", "en-US", "销售价格变更_us", "菜单导航"),
-            // menu.logistics.sales.price.changelog
-            ("menu.logistics.sales.price.changelog", "ja-JP", "销售价格变更_jp", "菜单导航"),
-            // menu.logistics.sales.price.changelog
-            ("menu.logistics.sales.price.changelog", "zh-CN", "销售价格变更", "菜单导航"),
-            // menu.logistics.sales.price.changelog
-            ("menu.logistics.sales.price.changelog", "zh-HK", "销售价格变更_hk", "菜单导航"),
+            // menu.logistics.sales.price.change.log
+            ("menu.logistics.sales.price.change.log", "en-US", "销售价格变更_us", "菜单导航"),
+            // menu.logistics.sales.price.change.log
+            ("menu.logistics.sales.price.change.log", "ja-JP", "销售价格变更_jp", "菜单导航"),
+            // menu.logistics.sales.price.change.log
+            ("menu.logistics.sales.price.change.log", "zh-CN", "销售价格变更", "菜单导航"),
+            // menu.logistics.sales.price.change.log
+            ("menu.logistics.sales.price.change.log", "zh-HK", "销售价格变更_hk", "菜单导航"),
 
             // menu.logistics.sales.order
             ("menu.logistics.sales.order", "en-US", "销售订单_us", "菜单导航"),
@@ -1202,14 +1193,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.sales.order
             ("menu.logistics.sales.order", "zh-HK", "销售订单_hk", "菜单导航"),
 
-            // menu.logistics.sales.order.changelog
-            ("menu.logistics.sales.order.changelog", "en-US", "销售订单变更_us", "菜单导航"),
-            // menu.logistics.sales.order.changelog
-            ("menu.logistics.sales.order.changelog", "ja-JP", "销售订单变更_jp", "菜单导航"),
-            // menu.logistics.sales.order.changelog
-            ("menu.logistics.sales.order.changelog", "zh-CN", "销售订单变更", "菜单导航"),
-            // menu.logistics.sales.order.changelog
-            ("menu.logistics.sales.order.changelog", "zh-HK", "销售订单变更_hk", "菜单导航"),
+            // menu.logistics.sales.order.change.log
+            ("menu.logistics.sales.order.change.log", "en-US", "销售订单变更_us", "菜单导航"),
+            // menu.logistics.sales.order.change.log
+            ("menu.logistics.sales.order.change.log", "ja-JP", "销售订单变更_jp", "菜单导航"),
+            // menu.logistics.sales.order.change.log
+            ("menu.logistics.sales.order.change.log", "zh-CN", "销售订单变更", "菜单导航"),
+            // menu.logistics.sales.order.change.log
+            ("menu.logistics.sales.order.change.log", "zh-HK", "销售订单变更_hk", "菜单导航"),
 
             // menu.logistics.sales.invoice
             ("menu.logistics.sales.invoice", "en-US", "销售发票_us", "菜单导航"),
@@ -1238,329 +1229,311 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.serial.outbound
             ("menu.logistics.serial.outbound", "zh-HK", "序列号出库_hk", "菜单导航"),
 
-            // menu.humanresource.organization.dept
-            ("menu.humanresource.organization.dept", "en-US", "部门管理_us", "菜单导航"),
-            // menu.humanresource.organization.dept
-            ("menu.humanresource.organization.dept", "ja-JP", "部门管理_jp", "菜单导航"),
-            // menu.humanresource.organization.dept
-            ("menu.humanresource.organization.dept", "zh-CN", "部门管理", "菜单导航"),
-            // menu.humanresource.organization.dept
-            ("menu.humanresource.organization.dept", "zh-HK", "部门管理_hk", "菜单导航"),
+            // menu.human.resource.organization.dept
+            ("menu.human.resource.organization.dept", "en-US", "部门管理_us", "菜单导航"),
+            // menu.human.resource.organization.dept
+            ("menu.human.resource.organization.dept", "ja-JP", "部门管理_jp", "菜单导航"),
+            // menu.human.resource.organization.dept
+            ("menu.human.resource.organization.dept", "zh-CN", "部门管理", "菜单导航"),
+            // menu.human.resource.organization.dept
+            ("menu.human.resource.organization.dept", "zh-HK", "部门管理_hk", "菜单导航"),
 
-            // menu.humanresource.organization.post
-            ("menu.humanresource.organization.post", "en-US", "岗位管理_us", "菜单导航"),
-            // menu.humanresource.organization.post
-            ("menu.humanresource.organization.post", "ja-JP", "岗位管理_jp", "菜单导航"),
-            // menu.humanresource.organization.post
-            ("menu.humanresource.organization.post", "zh-CN", "岗位管理", "菜单导航"),
-            // menu.humanresource.organization.post
-            ("menu.humanresource.organization.post", "zh-HK", "岗位管理_hk", "菜单导航"),
+            // menu.human.resource.organization.post
+            ("menu.human.resource.organization.post", "en-US", "岗位管理_us", "菜单导航"),
+            // menu.human.resource.organization.post
+            ("menu.human.resource.organization.post", "ja-JP", "岗位管理_jp", "菜单导航"),
+            // menu.human.resource.organization.post
+            ("menu.human.resource.organization.post", "zh-CN", "岗位管理", "菜单导航"),
+            // menu.human.resource.organization.post
+            ("menu.human.resource.organization.post", "zh-HK", "岗位管理_hk", "菜单导航"),
 
-            // menu.humanresource.personnel.employee
-            ("menu.humanresource.personnel.employee", "en-US", "员工档案_us", "菜单导航"),
-            // menu.humanresource.personnel.employee
-            ("menu.humanresource.personnel.employee", "ja-JP", "员工档案_jp", "菜单导航"),
-            // menu.humanresource.personnel.employee
-            ("menu.humanresource.personnel.employee", "zh-CN", "员工档案", "菜单导航"),
-            // menu.humanresource.personnel.employee
-            ("menu.humanresource.personnel.employee", "zh-HK", "员工档案_hk", "菜单导航"),
+            // menu.human.resource.personnel.employee
+            ("menu.human.resource.personnel.employee", "en-US", "员工档案_us", "菜单导航"),
+            // menu.human.resource.personnel.employee
+            ("menu.human.resource.personnel.employee", "ja-JP", "员工档案_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee
+            ("menu.human.resource.personnel.employee", "zh-CN", "员工档案", "菜单导航"),
+            // menu.human.resource.personnel.employee
+            ("menu.human.resource.personnel.employee", "zh-HK", "员工档案_hk", "菜单导航"),
 
-            // menu.humanresource.personnel.employeecontract
-            ("menu.humanresource.personnel.employeecontract", "en-US", "员工合同_us", "菜单导航"),
-            // menu.humanresource.personnel.employeecontract
-            ("menu.humanresource.personnel.employeecontract", "ja-JP", "员工合同_jp", "菜单导航"),
-            // menu.humanresource.personnel.employeecontract
-            ("menu.humanresource.personnel.employeecontract", "zh-CN", "员工合同", "菜单导航"),
-            // menu.humanresource.personnel.employeecontract
-            ("menu.humanresource.personnel.employeecontract", "zh-HK", "员工合同_hk", "菜单导航"),
+            // menu.human.resource.personnel.employee.onboarding
+            ("menu.human.resource.personnel.employee.onboarding", "en-US", "入职待办_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.onboarding
+            ("menu.human.resource.personnel.employee.onboarding", "ja-JP", "入职待办_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.onboarding
+            ("menu.human.resource.personnel.employee.onboarding", "zh-CN", "入职待办", "菜单导航"),
+            // menu.human.resource.personnel.employee.onboarding
+            ("menu.human.resource.personnel.employee.onboarding", "zh-HK", "入职待办_hk", "菜单导航"),
 
-            // menu.humanresource.personnel.employeedelegate
-            ("menu.humanresource.personnel.employeedelegate", "en-US", "员工代理_us", "菜单导航"),
-            // menu.humanresource.personnel.employeedelegate
-            ("menu.humanresource.personnel.employeedelegate", "ja-JP", "员工代理_jp", "菜单导航"),
-            // menu.humanresource.personnel.employeedelegate
-            ("menu.humanresource.personnel.employeedelegate", "zh-CN", "员工代理", "菜单导航"),
-            // menu.humanresource.personnel.employeedelegate
-            ("menu.humanresource.personnel.employeedelegate", "zh-HK", "员工代理_hk", "菜单导航"),
+            // menu.human.resource.personnel.employee.contract
+            ("menu.human.resource.personnel.employee.contract", "en-US", "员工合同_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.contract
+            ("menu.human.resource.personnel.employee.contract", "ja-JP", "员工合同_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.contract
+            ("menu.human.resource.personnel.employee.contract", "zh-CN", "员工合同", "菜单导航"),
+            // menu.human.resource.personnel.employee.contract
+            ("menu.human.resource.personnel.employee.contract", "zh-HK", "员工合同_hk", "菜单导航"),
 
-            // menu.humanresource.personnel.employeereassignment
-            ("menu.humanresource.personnel.employeereassignment", "en-US", "员工调动_us", "菜单导航"),
-            // menu.humanresource.personnel.employeereassignment
-            ("menu.humanresource.personnel.employeereassignment", "ja-JP", "员工调动_jp", "菜单导航"),
-            // menu.humanresource.personnel.employeereassignment
-            ("menu.humanresource.personnel.employeereassignment", "zh-CN", "员工调动", "菜单导航"),
-            // menu.humanresource.personnel.employeereassignment
-            ("menu.humanresource.personnel.employeereassignment", "zh-HK", "员工调动_hk", "菜单导航"),
+            // menu.human.resource.personnel.employee.delegate
+            ("menu.human.resource.personnel.employee.delegate", "en-US", "员工代理_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.delegate
+            ("menu.human.resource.personnel.employee.delegate", "ja-JP", "员工代理_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.delegate
+            ("menu.human.resource.personnel.employee.delegate", "zh-CN", "员工代理", "菜单导航"),
+            // menu.human.resource.personnel.employee.delegate
+            ("menu.human.resource.personnel.employee.delegate", "zh-HK", "员工代理_hk", "菜单导航"),
 
-            // menu.humanresource.personnel.employeeonboarding
-            ("menu.humanresource.personnel.employeeonboarding", "en-US", "入职待办_us", "菜单导航"),
-            // menu.humanresource.personnel.employeeonboarding
-            ("menu.humanresource.personnel.employeeonboarding", "ja-JP", "入职待办_jp", "菜单导航"),
-            // menu.humanresource.personnel.employeeonboarding
-            ("menu.humanresource.personnel.employeeonboarding", "zh-CN", "入职待办", "菜单导航"),
-            // menu.humanresource.personnel.employeeonboarding
-            ("menu.humanresource.personnel.employeeonboarding", "zh-HK", "入职待办_hk", "菜单导航"),
+            // menu.human.resource.personnel.employee.reassignment
+            ("menu.human.resource.personnel.employee.reassignment", "en-US", "员工调动_us", "菜单导航"),
+            // menu.human.resource.personnel.employee.reassignment
+            ("menu.human.resource.personnel.employee.reassignment", "ja-JP", "员工调动_jp", "菜单导航"),
+            // menu.human.resource.personnel.employee.reassignment
+            ("menu.human.resource.personnel.employee.reassignment", "zh-CN", "员工调动", "菜单导航"),
+            // menu.human.resource.personnel.employee.reassignment
+            ("menu.human.resource.personnel.employee.reassignment", "zh-HK", "员工调动_hk", "菜单导航"),
 
-            // menu.humanresource.attendance.calendar
-            ("menu.humanresource.attendance.calendar", "en-US", "工厂日历_us", "菜单导航"),
-            // menu.humanresource.attendance.calendar
-            ("menu.humanresource.attendance.calendar", "ja-JP", "工厂日历_jp", "菜单导航"),
-            // menu.humanresource.attendance.calendar
-            ("menu.humanresource.attendance.calendar", "zh-CN", "工厂日历", "菜单导航"),
-            // menu.humanresource.attendance.calendar
-            ("menu.humanresource.attendance.calendar", "zh-HK", "工厂日历_hk", "菜单导航"),
+            // menu.human.resource.attendance.calendar
+            ("menu.human.resource.attendance.calendar", "en-US", "工厂日历_us", "菜单导航"),
+            // menu.human.resource.attendance.calendar
+            ("menu.human.resource.attendance.calendar", "ja-JP", "工厂日历_jp", "菜单导航"),
+            // menu.human.resource.attendance.calendar
+            ("menu.human.resource.attendance.calendar", "zh-CN", "工厂日历", "菜单导航"),
+            // menu.human.resource.attendance.calendar
+            ("menu.human.resource.attendance.calendar", "zh-HK", "工厂日历_hk", "菜单导航"),
 
-            // menu.humanresource.attendance.holiday
-            ("menu.humanresource.attendance.holiday", "en-US", "假期管理_us", "菜单导航"),
-            // menu.humanresource.attendance.holiday
-            ("menu.humanresource.attendance.holiday", "ja-JP", "假期管理_jp", "菜单导航"),
-            // menu.humanresource.attendance.holiday
-            ("menu.humanresource.attendance.holiday", "zh-CN", "假期管理", "菜单导航"),
-            // menu.humanresource.attendance.holiday
-            ("menu.humanresource.attendance.holiday", "zh-HK", "假期管理_hk", "菜单导航"),
+            // menu.human.resource.attendance.holiday
+            ("menu.human.resource.attendance.holiday", "en-US", "假期管理_us", "菜单导航"),
+            // menu.human.resource.attendance.holiday
+            ("menu.human.resource.attendance.holiday", "ja-JP", "假期管理_jp", "菜单导航"),
+            // menu.human.resource.attendance.holiday
+            ("menu.human.resource.attendance.holiday", "zh-CN", "假期管理", "菜单导航"),
+            // menu.human.resource.attendance.holiday
+            ("menu.human.resource.attendance.holiday", "zh-HK", "假期管理_hk", "菜单导航"),
 
-            // menu.humanresource.attendance.shiftschedule
-            ("menu.humanresource.attendance.shiftschedule", "en-US", "排班计划_us", "菜单导航"),
-            // menu.humanresource.attendance.shiftschedule
-            ("menu.humanresource.attendance.shiftschedule", "ja-JP", "排班计划_jp", "菜单导航"),
-            // menu.humanresource.attendance.shiftschedule
-            ("menu.humanresource.attendance.shiftschedule", "zh-CN", "排班计划", "菜单导航"),
-            // menu.humanresource.attendance.shiftschedule
-            ("menu.humanresource.attendance.shiftschedule", "zh-HK", "排班计划_hk", "菜单导航"),
+            // menu.human.resource.attendance.shift.schedule
+            ("menu.human.resource.attendance.shift.schedule", "en-US", "排班计划_us", "菜单导航"),
+            // menu.human.resource.attendance.shift.schedule
+            ("menu.human.resource.attendance.shift.schedule", "ja-JP", "排班计划_jp", "菜单导航"),
+            // menu.human.resource.attendance.shift.schedule
+            ("menu.human.resource.attendance.shift.schedule", "zh-CN", "排班计划", "菜单导航"),
+            // menu.human.resource.attendance.shift.schedule
+            ("menu.human.resource.attendance.shift.schedule", "zh-HK", "排班计划_hk", "菜单导航"),
 
-            // menu.humanresource.attendance.workshift
-            ("menu.humanresource.attendance.workshift", "en-US", "班次管理_us", "菜单导航"),
-            // menu.humanresource.attendance.workshift
-            ("menu.humanresource.attendance.workshift", "ja-JP", "班次管理_jp", "菜单导航"),
-            // menu.humanresource.attendance.workshift
-            ("menu.humanresource.attendance.workshift", "zh-CN", "班次管理", "菜单导航"),
-            // menu.humanresource.attendance.workshift
-            ("menu.humanresource.attendance.workshift", "zh-HK", "班次管理_hk", "菜单导航"),
+            // menu.human.resource.attendance.work.shift
+            ("menu.human.resource.attendance.work.shift", "en-US", "班次管理_us", "菜单导航"),
+            // menu.human.resource.attendance.work.shift
+            ("menu.human.resource.attendance.work.shift", "ja-JP", "班次管理_jp", "菜单导航"),
+            // menu.human.resource.attendance.work.shift
+            ("menu.human.resource.attendance.work.shift", "zh-CN", "班次管理", "菜单导航"),
+            // menu.human.resource.attendance.work.shift
+            ("menu.human.resource.attendance.work.shift", "zh-HK", "班次管理_hk", "菜单导航"),
 
-            // menu.humanresource.attendance.leave
-            ("menu.humanresource.attendance.leave", "en-US", "请假管理_us", "菜单导航"),
-            // menu.humanresource.attendance.leave
-            ("menu.humanresource.attendance.leave", "ja-JP", "请假管理_jp", "菜单导航"),
-            // menu.humanresource.attendance.leave
-            ("menu.humanresource.attendance.leave", "zh-CN", "请假管理", "菜单导航"),
-            // menu.humanresource.attendance.leave
-            ("menu.humanresource.attendance.leave", "zh-HK", "请假管理_hk", "菜单导航"),
+            // menu.human.resource.attendance.leave
+            ("menu.human.resource.attendance.leave", "en-US", "请假管理_us", "菜单导航"),
+            // menu.human.resource.attendance.leave
+            ("menu.human.resource.attendance.leave", "ja-JP", "请假管理_jp", "菜单导航"),
+            // menu.human.resource.attendance.leave
+            ("menu.human.resource.attendance.leave", "zh-CN", "请假管理", "菜单导航"),
+            // menu.human.resource.attendance.leave
+            ("menu.human.resource.attendance.leave", "zh-HK", "请假管理_hk", "菜单导航"),
 
-            // menu.humanresource.attendance.overtime
-            ("menu.humanresource.attendance.overtime", "en-US", "加班管理_us", "菜单导航"),
-            // menu.humanresource.attendance.overtime
-            ("menu.humanresource.attendance.overtime", "ja-JP", "加班管理_jp", "菜单导航"),
-            // menu.humanresource.attendance.overtime
-            ("menu.humanresource.attendance.overtime", "zh-CN", "加班管理", "菜单导航"),
-            // menu.humanresource.attendance.overtime
-            ("menu.humanresource.attendance.overtime", "zh-HK", "加班管理_hk", "菜单导航"),
+            // menu.human.resource.attendance.overtime
+            ("menu.human.resource.attendance.overtime", "en-US", "加班管理_us", "菜单导航"),
+            // menu.human.resource.attendance.overtime
+            ("menu.human.resource.attendance.overtime", "ja-JP", "加班管理_jp", "菜单导航"),
+            // menu.human.resource.attendance.overtime
+            ("menu.human.resource.attendance.overtime", "zh-CN", "加班管理", "菜单导航"),
+            // menu.human.resource.attendance.overtime
+            ("menu.human.resource.attendance.overtime", "zh-HK", "加班管理_hk", "菜单导航"),
 
-            // menu.humanresource.compensation.salaryitem
-            ("menu.humanresource.compensation.salaryitem", "en-US", "薪资项目_us", "菜单导航"),
-            // menu.humanresource.compensation.salaryitem
-            ("menu.humanresource.compensation.salaryitem", "ja-JP", "薪资项目_jp", "菜单导航"),
-            // menu.humanresource.compensation.salaryitem
-            ("menu.humanresource.compensation.salaryitem", "zh-CN", "薪资项目", "菜单导航"),
-            // menu.humanresource.compensation.salaryitem
-            ("menu.humanresource.compensation.salaryitem", "zh-HK", "薪资项目_hk", "菜单导航"),
+            // menu.human.resource.compensation.salary.item
+            ("menu.human.resource.compensation.salary.item", "en-US", "薪资项目_us", "菜单导航"),
+            // menu.human.resource.compensation.salary.item
+            ("menu.human.resource.compensation.salary.item", "ja-JP", "薪资项目_jp", "菜单导航"),
+            // menu.human.resource.compensation.salary.item
+            ("menu.human.resource.compensation.salary.item", "zh-CN", "薪资项目", "菜单导航"),
+            // menu.human.resource.compensation.salary.item
+            ("menu.human.resource.compensation.salary.item", "zh-HK", "薪资项目_hk", "菜单导航"),
 
-            // menu.humanresource.compensation.payroll
-            ("menu.humanresource.compensation.payroll", "en-US", "薪酬体系_us", "菜单导航"),
-            // menu.humanresource.compensation.payroll
-            ("menu.humanresource.compensation.payroll", "ja-JP", "薪酬体系_jp", "菜单导航"),
-            // menu.humanresource.compensation.payroll
-            ("menu.humanresource.compensation.payroll", "zh-CN", "薪酬体系", "菜单导航"),
-            // menu.humanresource.compensation.payroll
-            ("menu.humanresource.compensation.payroll", "zh-HK", "薪酬体系_hk", "菜单导航"),
+            // menu.human.resource.compensation.payroll
+            ("menu.human.resource.compensation.payroll", "en-US", "薪酬体系_us", "菜单导航"),
+            // menu.human.resource.compensation.payroll
+            ("menu.human.resource.compensation.payroll", "ja-JP", "薪酬体系_jp", "菜单导航"),
+            // menu.human.resource.compensation.payroll
+            ("menu.human.resource.compensation.payroll", "zh-CN", "薪酬体系", "菜单导航"),
+            // menu.human.resource.compensation.payroll
+            ("menu.human.resource.compensation.payroll", "zh-HK", "薪酬体系_hk", "菜单导航"),
 
-            // menu.humanresource.compensation.payscale
-            ("menu.humanresource.compensation.payscale", "en-US", "薪级_us", "菜单导航"),
-            // menu.humanresource.compensation.payscale
-            ("menu.humanresource.compensation.payscale", "ja-JP", "薪级_jp", "菜单导航"),
-            // menu.humanresource.compensation.payscale
-            ("menu.humanresource.compensation.payscale", "zh-CN", "薪级", "菜单导航"),
-            // menu.humanresource.compensation.payscale
-            ("menu.humanresource.compensation.payscale", "zh-HK", "薪级_hk", "菜单导航"),
+            // menu.human.resource.compensation.pay.scale
+            ("menu.human.resource.compensation.pay.scale", "en-US", "薪级_us", "菜单导航"),
+            // menu.human.resource.compensation.pay.scale
+            ("menu.human.resource.compensation.pay.scale", "ja-JP", "薪级_jp", "菜单导航"),
+            // menu.human.resource.compensation.pay.scale
+            ("menu.human.resource.compensation.pay.scale", "zh-CN", "薪级", "菜单导航"),
+            // menu.human.resource.compensation.pay.scale
+            ("menu.human.resource.compensation.pay.scale", "zh-HK", "薪级_hk", "菜单导航"),
 
-            // menu.humanresource.compensation.empsalary
-            ("menu.humanresource.compensation.empsalary", "en-US", "员工定薪_us", "菜单导航"),
-            // menu.humanresource.compensation.empsalary
-            ("menu.humanresource.compensation.empsalary", "ja-JP", "员工定薪_jp", "菜单导航"),
-            // menu.humanresource.compensation.empsalary
-            ("menu.humanresource.compensation.empsalary", "zh-CN", "员工定薪", "菜单导航"),
-            // menu.humanresource.compensation.empsalary
-            ("menu.humanresource.compensation.empsalary", "zh-HK", "员工定薪_hk", "菜单导航"),
+            // menu.human.resource.compensation.emp.salary
+            ("menu.human.resource.compensation.emp.salary", "en-US", "员工定薪_us", "菜单导航"),
+            // menu.human.resource.compensation.emp.salary
+            ("menu.human.resource.compensation.emp.salary", "ja-JP", "员工定薪_jp", "菜单导航"),
+            // menu.human.resource.compensation.emp.salary
+            ("menu.human.resource.compensation.emp.salary", "zh-CN", "员工定薪", "菜单导航"),
+            // menu.human.resource.compensation.emp.salary
+            ("menu.human.resource.compensation.emp.salary", "zh-HK", "员工定薪_hk", "菜单导航"),
 
-            // menu.humanresource.compensation.bonusplan
-            ("menu.humanresource.compensation.bonusplan", "en-US", "奖金方案_us", "菜单导航"),
-            // menu.humanresource.compensation.bonusplan
-            ("menu.humanresource.compensation.bonusplan", "ja-JP", "奖金方案_jp", "菜单导航"),
-            // menu.humanresource.compensation.bonusplan
-            ("menu.humanresource.compensation.bonusplan", "zh-CN", "奖金方案", "菜单导航"),
-            // menu.humanresource.compensation.bonusplan
-            ("menu.humanresource.compensation.bonusplan", "zh-HK", "奖金方案_hk", "菜单导航"),
+            // menu.human.resource.compensation.bonus.plan
+            ("menu.human.resource.compensation.bonus.plan", "en-US", "奖金方案_us", "菜单导航"),
+            // menu.human.resource.compensation.bonus.plan
+            ("menu.human.resource.compensation.bonus.plan", "ja-JP", "奖金方案_jp", "菜单导航"),
+            // menu.human.resource.compensation.bonus.plan
+            ("menu.human.resource.compensation.bonus.plan", "zh-CN", "奖金方案", "菜单导航"),
+            // menu.human.resource.compensation.bonus.plan
+            ("menu.human.resource.compensation.bonus.plan", "zh-HK", "奖金方案_hk", "菜单导航"),
 
-            // menu.humanresource.compensation.salaryformula
-            ("menu.humanresource.compensation.salaryformula", "en-US", "薪资计算公式_us", "菜单导航"),
-            // menu.humanresource.compensation.salaryformula
-            ("menu.humanresource.compensation.salaryformula", "ja-JP", "薪资计算公式_jp", "菜单导航"),
-            // menu.humanresource.compensation.salaryformula
-            ("menu.humanresource.compensation.salaryformula", "zh-CN", "薪资计算公式", "菜单导航"),
-            // menu.humanresource.compensation.salaryformula
-            ("menu.humanresource.compensation.salaryformula", "zh-HK", "薪资计算公式_hk", "菜单导航"),
+            // menu.human.resource.compensation.salary.formula
+            ("menu.human.resource.compensation.salary.formula", "en-US", "薪资计算公式_us", "菜单导航"),
+            // menu.human.resource.compensation.salary.formula
+            ("menu.human.resource.compensation.salary.formula", "ja-JP", "薪资计算公式_jp", "菜单导航"),
+            // menu.human.resource.compensation.salary.formula
+            ("menu.human.resource.compensation.salary.formula", "zh-CN", "薪资计算公式", "菜单导航"),
+            // menu.human.resource.compensation.salary.formula
+            ("menu.human.resource.compensation.salary.formula", "zh-HK", "薪资计算公式_hk", "菜单导航"),
 
-            // menu.humanresource.compensation.payslip
-            ("menu.humanresource.compensation.payslip", "en-US", "工资条_us", "菜单导航"),
-            // menu.humanresource.compensation.payslip
-            ("menu.humanresource.compensation.payslip", "ja-JP", "工资条_jp", "菜单导航"),
-            // menu.humanresource.compensation.payslip
-            ("menu.humanresource.compensation.payslip", "zh-CN", "工资条", "菜单导航"),
-            // menu.humanresource.compensation.payslip
-            ("menu.humanresource.compensation.payslip", "zh-HK", "工资条_hk", "菜单导航"),
+            // menu.human.resource.compensation.payslip
+            ("menu.human.resource.compensation.payslip", "en-US", "工资条_us", "菜单导航"),
+            // menu.human.resource.compensation.payslip
+            ("menu.human.resource.compensation.payslip", "ja-JP", "工资条_jp", "菜单导航"),
+            // menu.human.resource.compensation.payslip
+            ("menu.human.resource.compensation.payslip", "zh-CN", "工资条", "菜单导航"),
+            // menu.human.resource.compensation.payslip
+            ("menu.human.resource.compensation.payslip", "zh-HK", "工资条_hk", "菜单导航"),
 
-            // menu.humanresource.benefits.benefititem
-            ("menu.humanresource.benefits.benefititem", "en-US", "福利项目_us", "菜单导航"),
-            // menu.humanresource.benefits.benefititem
-            ("menu.humanresource.benefits.benefititem", "ja-JP", "福利项目_jp", "菜单导航"),
-            // menu.humanresource.benefits.benefititem
-            ("menu.humanresource.benefits.benefititem", "zh-CN", "福利项目", "菜单导航"),
-            // menu.humanresource.benefits.benefititem
-            ("menu.humanresource.benefits.benefititem", "zh-HK", "福利项目_hk", "菜单导航"),
+            // menu.human.resource.benefits.benefit.item
+            ("menu.human.resource.benefits.benefit.item", "en-US", "福利项目_us", "菜单导航"),
+            // menu.human.resource.benefits.benefit.item
+            ("menu.human.resource.benefits.benefit.item", "ja-JP", "福利项目_jp", "菜单导航"),
+            // menu.human.resource.benefits.benefit.item
+            ("menu.human.resource.benefits.benefit.item", "zh-CN", "福利项目", "菜单导航"),
+            // menu.human.resource.benefits.benefit.item
+            ("menu.human.resource.benefits.benefit.item", "zh-HK", "福利项目_hk", "菜单导航"),
 
-            // menu.humanresource.benefits.empbenefitplan
-            ("menu.humanresource.benefits.empbenefitplan", "en-US", "员工福利方案_us", "菜单导航"),
-            // menu.humanresource.benefits.empbenefitplan
-            ("menu.humanresource.benefits.empbenefitplan", "ja-JP", "员工福利方案_jp", "菜单导航"),
-            // menu.humanresource.benefits.empbenefitplan
-            ("menu.humanresource.benefits.empbenefitplan", "zh-CN", "员工福利方案", "菜单导航"),
-            // menu.humanresource.benefits.empbenefitplan
-            ("menu.humanresource.benefits.empbenefitplan", "zh-HK", "员工福利方案_hk", "菜单导航"),
+            // menu.human.resource.benefits.emp.benefit.plan
+            ("menu.human.resource.benefits.emp.benefit.plan", "en-US", "员工福利方案_us", "菜单导航"),
+            // menu.human.resource.benefits.emp.benefit.plan
+            ("menu.human.resource.benefits.emp.benefit.plan", "ja-JP", "员工福利方案_jp", "菜单导航"),
+            // menu.human.resource.benefits.emp.benefit.plan
+            ("menu.human.resource.benefits.emp.benefit.plan", "zh-CN", "员工福利方案", "菜单导航"),
+            // menu.human.resource.benefits.emp.benefit.plan
+            ("menu.human.resource.benefits.emp.benefit.plan", "zh-HK", "员工福利方案_hk", "菜单导航"),
 
-            // menu.humanresource.benefits.socialinsurance
-            ("menu.humanresource.benefits.socialinsurance", "en-US", "社保公积金_us", "菜单导航"),
-            // menu.humanresource.benefits.socialinsurance
-            ("menu.humanresource.benefits.socialinsurance", "ja-JP", "社保公积金_jp", "菜单导航"),
-            // menu.humanresource.benefits.socialinsurance
-            ("menu.humanresource.benefits.socialinsurance", "zh-CN", "社保公积金", "菜单导航"),
-            // menu.humanresource.benefits.socialinsurance
-            ("menu.humanresource.benefits.socialinsurance", "zh-HK", "社保公积金_hk", "菜单导航"),
+            // menu.human.resource.benefits.social.insurance
+            ("menu.human.resource.benefits.social.insurance", "en-US", "社保公积金_us", "菜单导航"),
+            // menu.human.resource.benefits.social.insurance
+            ("menu.human.resource.benefits.social.insurance", "ja-JP", "社保公积金_jp", "菜单导航"),
+            // menu.human.resource.benefits.social.insurance
+            ("menu.human.resource.benefits.social.insurance", "zh-CN", "社保公积金", "菜单导航"),
+            // menu.human.resource.benefits.social.insurance
+            ("menu.human.resource.benefits.social.insurance", "zh-HK", "社保公积金_hk", "菜单导航"),
 
-            // menu.humanresource.performance.perfcycle
-            ("menu.humanresource.performance.perfcycle", "en-US", "绩效周期_us", "菜单导航"),
-            // menu.humanresource.performance.perfcycle
-            ("menu.humanresource.performance.perfcycle", "ja-JP", "绩效周期_jp", "菜单导航"),
-            // menu.humanresource.performance.perfcycle
-            ("menu.humanresource.performance.perfcycle", "zh-CN", "绩效周期", "菜单导航"),
-            // menu.humanresource.performance.perfcycle
-            ("menu.humanresource.performance.perfcycle", "zh-HK", "绩效周期_hk", "菜单导航"),
+            // menu.human.resource.performance.perf.cycle
+            ("menu.human.resource.performance.perf.cycle", "en-US", "绩效周期_us", "菜单导航"),
+            // menu.human.resource.performance.perf.cycle
+            ("menu.human.resource.performance.perf.cycle", "ja-JP", "绩效周期_jp", "菜单导航"),
+            // menu.human.resource.performance.perf.cycle
+            ("menu.human.resource.performance.perf.cycle", "zh-CN", "绩效周期", "菜单导航"),
+            // menu.human.resource.performance.perf.cycle
+            ("menu.human.resource.performance.perf.cycle", "zh-HK", "绩效周期_hk", "菜单导航"),
 
-            // menu.humanresource.performance.perfscheme
-            ("menu.humanresource.performance.perfscheme", "en-US", "绩效方案_us", "菜单导航"),
-            // menu.humanresource.performance.perfscheme
-            ("menu.humanresource.performance.perfscheme", "ja-JP", "绩效方案_jp", "菜单导航"),
-            // menu.humanresource.performance.perfscheme
-            ("menu.humanresource.performance.perfscheme", "zh-CN", "绩效方案", "菜单导航"),
-            // menu.humanresource.performance.perfscheme
-            ("menu.humanresource.performance.perfscheme", "zh-HK", "绩效方案_hk", "菜单导航"),
+            // menu.human.resource.performance.perf.scheme
+            ("menu.human.resource.performance.perf.scheme", "en-US", "绩效方案_us", "菜单导航"),
+            // menu.human.resource.performance.perf.scheme
+            ("menu.human.resource.performance.perf.scheme", "ja-JP", "绩效方案_jp", "菜单导航"),
+            // menu.human.resource.performance.perf.scheme
+            ("menu.human.resource.performance.perf.scheme", "zh-CN", "绩效方案", "菜单导航"),
+            // menu.human.resource.performance.perf.scheme
+            ("menu.human.resource.performance.perf.scheme", "zh-HK", "绩效方案_hk", "菜单导航"),
 
-            // menu.humanresource.performance.perfobjective
-            ("menu.humanresource.performance.perfobjective", "en-US", "绩效目标_us", "菜单导航"),
-            // menu.humanresource.performance.perfobjective
-            ("menu.humanresource.performance.perfobjective", "ja-JP", "绩效目标_jp", "菜单导航"),
-            // menu.humanresource.performance.perfobjective
-            ("menu.humanresource.performance.perfobjective", "zh-CN", "绩效目标", "菜单导航"),
-            // menu.humanresource.performance.perfobjective
-            ("menu.humanresource.performance.perfobjective", "zh-HK", "绩效目标_hk", "菜单导航"),
+            // menu.human.resource.performance.perf.objective
+            ("menu.human.resource.performance.perf.objective", "en-US", "绩效目标_us", "菜单导航"),
+            // menu.human.resource.performance.perf.objective
+            ("menu.human.resource.performance.perf.objective", "ja-JP", "绩效目标_jp", "菜单导航"),
+            // menu.human.resource.performance.perf.objective
+            ("menu.human.resource.performance.perf.objective", "zh-CN", "绩效目标", "菜单导航"),
+            // menu.human.resource.performance.perf.objective
+            ("menu.human.resource.performance.perf.objective", "zh-HK", "绩效目标_hk", "菜单导航"),
 
-            // menu.humanresource.performance.perfassessment
-            ("menu.humanresource.performance.perfassessment", "en-US", "绩效考核_us", "菜单导航"),
-            // menu.humanresource.performance.perfassessment
-            ("menu.humanresource.performance.perfassessment", "ja-JP", "绩效考核_jp", "菜单导航"),
-            // menu.humanresource.performance.perfassessment
-            ("menu.humanresource.performance.perfassessment", "zh-CN", "绩效考核", "菜单导航"),
-            // menu.humanresource.performance.perfassessment
-            ("menu.humanresource.performance.perfassessment", "zh-HK", "绩效考核_hk", "菜单导航"),
+            // menu.human.resource.performance.perf.assessment
+            ("menu.human.resource.performance.perf.assessment", "en-US", "绩效考核_us", "菜单导航"),
+            // menu.human.resource.performance.perf.assessment
+            ("menu.human.resource.performance.perf.assessment", "ja-JP", "绩效考核_jp", "菜单导航"),
+            // menu.human.resource.performance.perf.assessment
+            ("menu.human.resource.performance.perf.assessment", "zh-CN", "绩效考核", "菜单导航"),
+            // menu.human.resource.performance.perf.assessment
+            ("menu.human.resource.performance.perf.assessment", "zh-HK", "绩效考核_hk", "菜单导航"),
 
-            // menu.humanresource.performance.perfanalysis
-            ("menu.humanresource.performance.perfanalysis", "en-US", "分析改进_us", "菜单导航"),
-            // menu.humanresource.performance.perfanalysis
-            ("menu.humanresource.performance.perfanalysis", "ja-JP", "分析改进_jp", "菜单导航"),
-            // menu.humanresource.performance.perfanalysis
-            ("menu.humanresource.performance.perfanalysis", "zh-CN", "分析改进", "菜单导航"),
-            // menu.humanresource.performance.perfanalysis
-            ("menu.humanresource.performance.perfanalysis", "zh-HK", "分析改进_hk", "菜单导航"),
+            // menu.human.resource.performance.perf.analysis
+            ("menu.human.resource.performance.perf.analysis", "en-US", "分析改进_us", "菜单导航"),
+            // menu.human.resource.performance.perf.analysis
+            ("menu.human.resource.performance.perf.analysis", "ja-JP", "分析改进_jp", "菜单导航"),
+            // menu.human.resource.performance.perf.analysis
+            ("menu.human.resource.performance.perf.analysis", "zh-CN", "分析改进", "菜单导航"),
+            // menu.human.resource.performance.perf.analysis
+            ("menu.human.resource.performance.perf.analysis", "zh-HK", "分析改进_hk", "菜单导航"),
 
-            // menu.humanresource.training.course
-            ("menu.humanresource.training.course", "en-US", "培训课程_us", "菜单导航"),
-            // menu.humanresource.training.course
-            ("menu.humanresource.training.course", "ja-JP", "培训课程_jp", "菜单导航"),
-            // menu.humanresource.training.course
-            ("menu.humanresource.training.course", "zh-CN", "培训课程", "菜单导航"),
-            // menu.humanresource.training.course
-            ("menu.humanresource.training.course", "zh-HK", "培训课程_hk", "菜单导航"),
+            // menu.human.resource.training.course
+            ("menu.human.resource.training.course", "en-US", "培训课程_us", "菜单导航"),
+            // menu.human.resource.training.course
+            ("menu.human.resource.training.course", "ja-JP", "培训课程_jp", "菜单导航"),
+            // menu.human.resource.training.course
+            ("menu.human.resource.training.course", "zh-CN", "培训课程", "菜单导航"),
+            // menu.human.resource.training.course
+            ("menu.human.resource.training.course", "zh-HK", "培训课程_hk", "菜单导航"),
 
-            // menu.humanresource.training.plan
-            ("menu.humanresource.training.plan", "en-US", "年度计划_us", "菜单导航"),
-            // menu.humanresource.training.plan
-            ("menu.humanresource.training.plan", "ja-JP", "年度计划_jp", "菜单导航"),
-            // menu.humanresource.training.plan
-            ("menu.humanresource.training.plan", "zh-CN", "年度计划", "菜单导航"),
-            // menu.humanresource.training.plan
-            ("menu.humanresource.training.plan", "zh-HK", "年度计划_hk", "菜单导航"),
+            // menu.human.resource.training.plan
+            ("menu.human.resource.training.plan", "en-US", "年度计划_us", "菜单导航"),
+            // menu.human.resource.training.plan
+            ("menu.human.resource.training.plan", "ja-JP", "年度计划_jp", "菜单导航"),
+            // menu.human.resource.training.plan
+            ("menu.human.resource.training.plan", "zh-CN", "年度计划", "菜单导航"),
+            // menu.human.resource.training.plan
+            ("menu.human.resource.training.plan", "zh-HK", "年度计划_hk", "菜单导航"),
 
-            // menu.humanresource.training.attendee
-            ("menu.humanresource.training.attendee", "en-US", "参训记录_us", "菜单导航"),
-            // menu.humanresource.training.attendee
-            ("menu.humanresource.training.attendee", "ja-JP", "参训记录_jp", "菜单导航"),
-            // menu.humanresource.training.attendee
-            ("menu.humanresource.training.attendee", "zh-CN", "参训记录", "菜单导航"),
-            // menu.humanresource.training.attendee
-            ("menu.humanresource.training.attendee", "zh-HK", "参训记录_hk", "菜单导航"),
+            // menu.human.resource.training.attendee
+            ("menu.human.resource.training.attendee", "en-US", "参训记录_us", "菜单导航"),
+            // menu.human.resource.training.attendee
+            ("menu.human.resource.training.attendee", "ja-JP", "参训记录_jp", "菜单导航"),
+            // menu.human.resource.training.attendee
+            ("menu.human.resource.training.attendee", "zh-CN", "参训记录", "菜单导航"),
+            // menu.human.resource.training.attendee
+            ("menu.human.resource.training.attendee", "zh-HK", "参训记录_hk", "菜单导航"),
 
-            // menu.humanresource.talent.staffingrequirement
-            ("menu.humanresource.talent.staffingrequirement", "en-US", "用人需求_us", "菜单导航"),
-            // menu.humanresource.talent.staffingrequirement
-            ("menu.humanresource.talent.staffingrequirement", "ja-JP", "用人需求_jp", "菜单导航"),
-            // menu.humanresource.talent.staffingrequirement
-            ("menu.humanresource.talent.staffingrequirement", "zh-CN", "用人需求", "菜单导航"),
-            // menu.humanresource.talent.staffingrequirement
-            ("menu.humanresource.talent.staffingrequirement", "zh-HK", "用人需求_hk", "菜单导航"),
+            // menu.human.resource.talent.staffing.requirement
+            ("menu.human.resource.talent.staffing.requirement", "en-US", "用人需求_us", "菜单导航"),
+            // menu.human.resource.talent.staffing.requirement
+            ("menu.human.resource.talent.staffing.requirement", "ja-JP", "用人需求_jp", "菜单导航"),
+            // menu.human.resource.talent.staffing.requirement
+            ("menu.human.resource.talent.staffing.requirement", "zh-CN", "用人需求", "菜单导航"),
+            // menu.human.resource.talent.staffing.requirement
+            ("menu.human.resource.talent.staffing.requirement", "zh-HK", "用人需求_hk", "菜单导航"),
 
-            // menu.humanresource.talent.recruitmentplan
-            ("menu.humanresource.talent.recruitmentplan", "en-US", "招聘计划_us", "菜单导航"),
-            // menu.humanresource.talent.recruitmentplan
-            ("menu.humanresource.talent.recruitmentplan", "ja-JP", "招聘计划_jp", "菜单导航"),
-            // menu.humanresource.talent.recruitmentplan
-            ("menu.humanresource.talent.recruitmentplan", "zh-CN", "招聘计划", "菜单导航"),
-            // menu.humanresource.talent.recruitmentplan
-            ("menu.humanresource.talent.recruitmentplan", "zh-HK", "招聘计划_hk", "菜单导航"),
+            // menu.human.resource.talent.job.posting
+            ("menu.human.resource.talent.job.posting", "en-US", "职位发布_us", "菜单导航"),
+            // menu.human.resource.talent.job.posting
+            ("menu.human.resource.talent.job.posting", "ja-JP", "职位发布_jp", "菜单导航"),
+            // menu.human.resource.talent.job.posting
+            ("menu.human.resource.talent.job.posting", "zh-CN", "职位发布", "菜单导航"),
+            // menu.human.resource.talent.job.posting
+            ("menu.human.resource.talent.job.posting", "zh-HK", "职位发布_hk", "菜单导航"),
 
-            // menu.humanresource.talent.jobposting
-            ("menu.humanresource.talent.jobposting", "en-US", "职位发布_us", "菜单导航"),
-            // menu.humanresource.talent.jobposting
-            ("menu.humanresource.talent.jobposting", "ja-JP", "职位发布_jp", "菜单导航"),
-            // menu.humanresource.talent.jobposting
-            ("menu.humanresource.talent.jobposting", "zh-CN", "职位发布", "菜单导航"),
-            // menu.humanresource.talent.jobposting
-            ("menu.humanresource.talent.jobposting", "zh-HK", "职位发布_hk", "菜单导航"),
-
-            // menu.humanresource.talent.interview
-            ("menu.humanresource.talent.interview", "en-US", "面试安排_us", "菜单导航"),
-            // menu.humanresource.talent.interview
-            ("menu.humanresource.talent.interview", "ja-JP", "面试安排_jp", "菜单导航"),
-            // menu.humanresource.talent.interview
-            ("menu.humanresource.talent.interview", "zh-CN", "面试安排", "菜单导航"),
-            // menu.humanresource.talent.interview
-            ("menu.humanresource.talent.interview", "zh-HK", "面试安排_hk", "菜单导航"),
-
-            // menu.humanresource.talent.offer
-            ("menu.humanresource.talent.offer", "en-US", "录用_us", "菜单导航"),
-            // menu.humanresource.talent.offer
-            ("menu.humanresource.talent.offer", "ja-JP", "录用_jp", "菜单导航"),
-            // menu.humanresource.talent.offer
-            ("menu.humanresource.talent.offer", "zh-CN", "录用", "菜单导航"),
-            // menu.humanresource.talent.offer
-            ("menu.humanresource.talent.offer", "zh-HK", "录用_hk", "菜单导航"),
+            // menu.human.resource.talent.offer
+            ("menu.human.resource.talent.offer", "en-US", "录用_us", "菜单导航"),
+            // menu.human.resource.talent.offer
+            ("menu.human.resource.talent.offer", "ja-JP", "录用_jp", "菜单导航"),
+            // menu.human.resource.talent.offer
+            ("menu.human.resource.talent.offer", "zh-CN", "录用", "菜单导航"),
+            // menu.human.resource.talent.offer
+            ("menu.human.resource.talent.offer", "zh-HK", "录用_hk", "菜单导航"),
 
             // menu.statistics.report.configurable
             ("menu.statistics.report.configurable", "en-US", "SQVI报表_us", "菜单导航"),
@@ -1571,158 +1544,158 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.statistics.report.configurable
             ("menu.statistics.report.configurable", "zh-HK", "SQVI报表_hk", "菜单导航"),
 
-            // menu.statistics.logging.loginlog
-            ("menu.statistics.logging.loginlog", "en-US", "登录日志_us", "菜单导航"),
-            // menu.statistics.logging.loginlog
-            ("menu.statistics.logging.loginlog", "ja-JP", "登录日志_jp", "菜单导航"),
-            // menu.statistics.logging.loginlog
-            ("menu.statistics.logging.loginlog", "zh-CN", "登录日志", "菜单导航"),
-            // menu.statistics.logging.loginlog
-            ("menu.statistics.logging.loginlog", "zh-HK", "登录日志_hk", "菜单导航"),
+            // menu.statistics.logging.login.log
+            ("menu.statistics.logging.login.log", "en-US", "登录日志_us", "菜单导航"),
+            // menu.statistics.logging.login.log
+            ("menu.statistics.logging.login.log", "ja-JP", "登录日志_jp", "菜单导航"),
+            // menu.statistics.logging.login.log
+            ("menu.statistics.logging.login.log", "zh-CN", "登录日志", "菜单导航"),
+            // menu.statistics.logging.login.log
+            ("menu.statistics.logging.login.log", "zh-HK", "登录日志_hk", "菜单导航"),
 
-            // menu.statistics.logging.operlog
-            ("menu.statistics.logging.operlog", "en-US", "操作日志_us", "菜单导航"),
-            // menu.statistics.logging.operlog
-            ("menu.statistics.logging.operlog", "ja-JP", "操作日志_jp", "菜单导航"),
-            // menu.statistics.logging.operlog
-            ("menu.statistics.logging.operlog", "zh-CN", "操作日志", "菜单导航"),
-            // menu.statistics.logging.operlog
-            ("menu.statistics.logging.operlog", "zh-HK", "操作日志_hk", "菜单导航"),
+            // menu.statistics.logging.oper.log
+            ("menu.statistics.logging.oper.log", "en-US", "操作日志_us", "菜单导航"),
+            // menu.statistics.logging.oper.log
+            ("menu.statistics.logging.oper.log", "ja-JP", "操作日志_jp", "菜单导航"),
+            // menu.statistics.logging.oper.log
+            ("menu.statistics.logging.oper.log", "zh-CN", "操作日志", "菜单导航"),
+            // menu.statistics.logging.oper.log
+            ("menu.statistics.logging.oper.log", "zh-HK", "操作日志_hk", "菜单导航"),
 
-            // menu.statistics.logging.deltalog
-            ("menu.statistics.logging.deltalog", "en-US", "差异日志_us", "菜单导航"),
-            // menu.statistics.logging.deltalog
-            ("menu.statistics.logging.deltalog", "ja-JP", "差异日志_jp", "菜单导航"),
-            // menu.statistics.logging.deltalog
-            ("menu.statistics.logging.deltalog", "zh-CN", "差异日志", "菜单导航"),
-            // menu.statistics.logging.deltalog
-            ("menu.statistics.logging.deltalog", "zh-HK", "差异日志_hk", "菜单导航"),
+            // menu.statistics.logging.delta.log
+            ("menu.statistics.logging.delta.log", "en-US", "差异日志_us", "菜单导航"),
+            // menu.statistics.logging.delta.log
+            ("menu.statistics.logging.delta.log", "ja-JP", "差异日志_jp", "菜单导航"),
+            // menu.statistics.logging.delta.log
+            ("menu.statistics.logging.delta.log", "zh-CN", "差异日志", "菜单导航"),
+            // menu.statistics.logging.delta.log
+            ("menu.statistics.logging.delta.log", "zh-HK", "差异日志_hk", "菜单导航"),
 
-            // menu.statistics.logging.quartzlog
-            ("menu.statistics.logging.quartzlog", "en-US", "任务日志_us", "菜单导航"),
-            // menu.statistics.logging.quartzlog
-            ("menu.statistics.logging.quartzlog", "ja-JP", "任务日志_jp", "菜单导航"),
-            // menu.statistics.logging.quartzlog
-            ("menu.statistics.logging.quartzlog", "zh-CN", "任务日志", "菜单导航"),
-            // menu.statistics.logging.quartzlog
-            ("menu.statistics.logging.quartzlog", "zh-HK", "任务日志_hk", "菜单导航"),
+            // menu.statistics.logging.quartz.log
+            ("menu.statistics.logging.quartz.log", "en-US", "任务日志_us", "菜单导航"),
+            // menu.statistics.logging.quartz.log
+            ("menu.statistics.logging.quartz.log", "ja-JP", "任务日志_jp", "菜单导航"),
+            // menu.statistics.logging.quartz.log
+            ("menu.statistics.logging.quartz.log", "zh-CN", "任务日志", "菜单导航"),
+            // menu.statistics.logging.quartz.log
+            ("menu.statistics.logging.quartz.log", "zh-HK", "任务日志_hk", "菜单导航"),
 
-            // menu.statistics.logging.servermonitor
-            ("menu.statistics.logging.servermonitor", "en-US", "服务监控_us", "菜单导航"),
-            // menu.statistics.logging.servermonitor
-            ("menu.statistics.logging.servermonitor", "ja-JP", "服务监控_jp", "菜单导航"),
-            // menu.statistics.logging.servermonitor
-            ("menu.statistics.logging.servermonitor", "zh-CN", "服务监控", "菜单导航"),
-            // menu.statistics.logging.servermonitor
-            ("menu.statistics.logging.servermonitor", "zh-HK", "服务监控_hk", "菜单导航"),
+            // menu.statistics.logging.server.monitor
+            ("menu.statistics.logging.server.monitor", "en-US", "服务监控_us", "菜单导航"),
+            // menu.statistics.logging.server.monitor
+            ("menu.statistics.logging.server.monitor", "ja-JP", "服务监控_jp", "菜单导航"),
+            // menu.statistics.logging.server.monitor
+            ("menu.statistics.logging.server.monitor", "zh-CN", "服务监控", "菜单导航"),
+            // menu.statistics.logging.server.monitor
+            ("menu.statistics.logging.server.monitor", "zh-HK", "服务监控_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.myticket
-            ("menu.routine.helpdesk.myticket", "en-US", "我的工单_us", "菜单导航"),
-            // menu.routine.helpdesk.myticket
-            ("menu.routine.helpdesk.myticket", "ja-JP", "我的工单_jp", "菜单导航"),
-            // menu.routine.helpdesk.myticket
-            ("menu.routine.helpdesk.myticket", "zh-CN", "我的工单", "菜单导航"),
-            // menu.routine.helpdesk.myticket
-            ("menu.routine.helpdesk.myticket", "zh-HK", "我的工单_hk", "菜单导航"),
+            // menu.routine.help.desk.my.ticket
+            ("menu.routine.help.desk.my.ticket", "en-US", "我的工单_us", "菜单导航"),
+            // menu.routine.help.desk.my.ticket
+            ("menu.routine.help.desk.my.ticket", "ja-JP", "我的工单_jp", "菜单导航"),
+            // menu.routine.help.desk.my.ticket
+            ("menu.routine.help.desk.my.ticket", "zh-CN", "我的工单", "菜单导航"),
+            // menu.routine.help.desk.my.ticket
+            ("menu.routine.help.desk.my.ticket", "zh-HK", "我的工单_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.ticket
-            ("menu.routine.helpdesk.ticket", "en-US", "工单管理_us", "菜单导航"),
-            // menu.routine.helpdesk.ticket
-            ("menu.routine.helpdesk.ticket", "ja-JP", "工单管理_jp", "菜单导航"),
-            // menu.routine.helpdesk.ticket
-            ("menu.routine.helpdesk.ticket", "zh-CN", "工单管理", "菜单导航"),
-            // menu.routine.helpdesk.ticket
-            ("menu.routine.helpdesk.ticket", "zh-HK", "工单管理_hk", "菜单导航"),
+            // menu.routine.help.desk.ticket
+            ("menu.routine.help.desk.ticket", "en-US", "工单管理_us", "菜单导航"),
+            // menu.routine.help.desk.ticket
+            ("menu.routine.help.desk.ticket", "ja-JP", "工单管理_jp", "菜单导航"),
+            // menu.routine.help.desk.ticket
+            ("menu.routine.help.desk.ticket", "zh-CN", "工单管理", "菜单导航"),
+            // menu.routine.help.desk.ticket
+            ("menu.routine.help.desk.ticket", "zh-HK", "工单管理_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.ticket.changelog
-            ("menu.routine.helpdesk.ticket.changelog", "en-US", "工单变更_us", "菜单导航"),
-            // menu.routine.helpdesk.ticket.changelog
-            ("menu.routine.helpdesk.ticket.changelog", "ja-JP", "工单变更_jp", "菜单导航"),
-            // menu.routine.helpdesk.ticket.changelog
-            ("menu.routine.helpdesk.ticket.changelog", "zh-CN", "工单变更", "菜单导航"),
-            // menu.routine.helpdesk.ticket.changelog
-            ("menu.routine.helpdesk.ticket.changelog", "zh-HK", "工单变更_hk", "菜单导航"),
+            // menu.routine.help.desk.ticket.change.log
+            ("menu.routine.help.desk.ticket.change.log", "en-US", "工单变更_us", "菜单导航"),
+            // menu.routine.help.desk.ticket.change.log
+            ("menu.routine.help.desk.ticket.change.log", "ja-JP", "工单变更_jp", "菜单导航"),
+            // menu.routine.help.desk.ticket.change.log
+            ("menu.routine.help.desk.ticket.change.log", "zh-CN", "工单变更", "菜单导航"),
+            // menu.routine.help.desk.ticket.change.log
+            ("menu.routine.help.desk.ticket.change.log", "zh-HK", "工单变更_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.knowledge
-            ("menu.routine.helpdesk.knowledge", "en-US", "知识库（FAQ）_us", "菜单导航"),
-            // menu.routine.helpdesk.knowledge
-            ("menu.routine.helpdesk.knowledge", "ja-JP", "知识库（FAQ）_jp", "菜单导航"),
-            // menu.routine.helpdesk.knowledge
-            ("menu.routine.helpdesk.knowledge", "zh-CN", "知识库（FAQ）", "菜单导航"),
-            // menu.routine.helpdesk.knowledge
-            ("menu.routine.helpdesk.knowledge", "zh-HK", "知识库（FAQ）_hk", "菜单导航"),
+            // menu.routine.help.desk.knowledge
+            ("menu.routine.help.desk.knowledge", "en-US", "知识库（FAQ）_us", "菜单导航"),
+            // menu.routine.help.desk.knowledge
+            ("menu.routine.help.desk.knowledge", "ja-JP", "知识库（FAQ）_jp", "菜单导航"),
+            // menu.routine.help.desk.knowledge
+            ("menu.routine.help.desk.knowledge", "zh-CN", "知识库（FAQ）", "菜单导航"),
+            // menu.routine.help.desk.knowledge
+            ("menu.routine.help.desk.knowledge", "zh-HK", "知识库（FAQ）_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.knowledge.changelog
-            ("menu.routine.helpdesk.knowledge.changelog", "en-US", "知识库变更_us", "菜单导航"),
-            // menu.routine.helpdesk.knowledge.changelog
-            ("menu.routine.helpdesk.knowledge.changelog", "ja-JP", "知识库变更_jp", "菜单导航"),
-            // menu.routine.helpdesk.knowledge.changelog
-            ("menu.routine.helpdesk.knowledge.changelog", "zh-CN", "知识库变更", "菜单导航"),
-            // menu.routine.helpdesk.knowledge.changelog
-            ("menu.routine.helpdesk.knowledge.changelog", "zh-HK", "知识库变更_hk", "菜单导航"),
+            // menu.routine.help.desk.knowledge.change.log
+            ("menu.routine.help.desk.knowledge.change.log", "en-US", "知识库变更_us", "菜单导航"),
+            // menu.routine.help.desk.knowledge.change.log
+            ("menu.routine.help.desk.knowledge.change.log", "ja-JP", "知识库变更_jp", "菜单导航"),
+            // menu.routine.help.desk.knowledge.change.log
+            ("menu.routine.help.desk.knowledge.change.log", "zh-CN", "知识库变更", "菜单导航"),
+            // menu.routine.help.desk.knowledge.change.log
+            ("menu.routine.help.desk.knowledge.change.log", "zh-HK", "知识库变更_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.myasset
-            ("menu.routine.helpdesk.myasset", "en-US", "我的资产_us", "菜单导航"),
-            // menu.routine.helpdesk.myasset
-            ("menu.routine.helpdesk.myasset", "ja-JP", "我的资产_jp", "菜单导航"),
-            // menu.routine.helpdesk.myasset
-            ("menu.routine.helpdesk.myasset", "zh-CN", "我的资产", "菜单导航"),
-            // menu.routine.helpdesk.myasset
-            ("menu.routine.helpdesk.myasset", "zh-HK", "我的资产_hk", "菜单导航"),
+            // menu.routine.help.desk.my.asset
+            ("menu.routine.help.desk.my.asset", "en-US", "我的资产_us", "菜单导航"),
+            // menu.routine.help.desk.my.asset
+            ("menu.routine.help.desk.my.asset", "ja-JP", "我的资产_jp", "菜单导航"),
+            // menu.routine.help.desk.my.asset
+            ("menu.routine.help.desk.my.asset", "zh-CN", "我的资产", "菜单导航"),
+            // menu.routine.help.desk.my.asset
+            ("menu.routine.help.desk.my.asset", "zh-HK", "我的资产_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.itasset
-            ("menu.routine.helpdesk.itasset", "en-US", "IT设备保修_us", "菜单导航"),
-            // menu.routine.helpdesk.itasset
-            ("menu.routine.helpdesk.itasset", "ja-JP", "IT设备保修_jp", "菜单导航"),
-            // menu.routine.helpdesk.itasset
-            ("menu.routine.helpdesk.itasset", "zh-CN", "IT设备保修", "菜单导航"),
-            // menu.routine.helpdesk.itasset
-            ("menu.routine.helpdesk.itasset", "zh-HK", "IT设备保修_hk", "菜单导航"),
+            // menu.routine.help.desk.it.asset
+            ("menu.routine.help.desk.it.asset", "en-US", "IT设备保修_us", "菜单导航"),
+            // menu.routine.help.desk.it.asset
+            ("menu.routine.help.desk.it.asset", "ja-JP", "IT设备保修_jp", "菜单导航"),
+            // menu.routine.help.desk.it.asset
+            ("menu.routine.help.desk.it.asset", "zh-CN", "IT设备保修", "菜单导航"),
+            // menu.routine.help.desk.it.asset
+            ("menu.routine.help.desk.it.asset", "zh-HK", "IT设备保修_hk", "菜单导航"),
 
-            // menu.routine.helpdesk.itasset.changelog
-            ("menu.routine.helpdesk.itasset.changelog", "en-US", "IT设备保修变更_us", "菜单导航"),
-            // menu.routine.helpdesk.itasset.changelog
-            ("menu.routine.helpdesk.itasset.changelog", "ja-JP", "IT设备保修变更_jp", "菜单导航"),
-            // menu.routine.helpdesk.itasset.changelog
-            ("menu.routine.helpdesk.itasset.changelog", "zh-CN", "IT设备保修变更", "菜单导航"),
-            // menu.routine.helpdesk.itasset.changelog
-            ("menu.routine.helpdesk.itasset.changelog", "zh-HK", "IT设备保修变更_hk", "菜单导航"),
+            // menu.routine.help.desk.it.asset.change.log
+            ("menu.routine.help.desk.it.asset.change.log", "en-US", "IT设备保修变更_us", "菜单导航"),
+            // menu.routine.help.desk.it.asset.change.log
+            ("menu.routine.help.desk.it.asset.change.log", "ja-JP", "IT设备保修变更_jp", "菜单导航"),
+            // menu.routine.help.desk.it.asset.change.log
+            ("menu.routine.help.desk.it.asset.change.log", "zh-CN", "IT设备保修变更", "菜单导航"),
+            // menu.routine.help.desk.it.asset.change.log
+            ("menu.routine.help.desk.it.asset.change.log", "zh-HK", "IT设备保修变更_hk", "菜单导航"),
 
-            // menu.routine.documentcenter.document
-            ("menu.routine.documentcenter.document", "en-US", "文档管理_us", "菜单导航"),
-            // menu.routine.documentcenter.document
-            ("menu.routine.documentcenter.document", "ja-JP", "文档管理_jp", "菜单导航"),
-            // menu.routine.documentcenter.document
-            ("menu.routine.documentcenter.document", "zh-CN", "文档管理", "菜单导航"),
-            // menu.routine.documentcenter.document
-            ("menu.routine.documentcenter.document", "zh-HK", "文档管理_hk", "菜单导航"),
+            // menu.routine.document.center.document
+            ("menu.routine.document.center.document", "en-US", "文档管理_us", "菜单导航"),
+            // menu.routine.document.center.document
+            ("menu.routine.document.center.document", "ja-JP", "文档管理_jp", "菜单导航"),
+            // menu.routine.document.center.document
+            ("menu.routine.document.center.document", "zh-CN", "文档管理", "菜单导航"),
+            // menu.routine.document.center.document
+            ("menu.routine.document.center.document", "zh-HK", "文档管理_hk", "菜单导航"),
 
-            // menu.routine.documentcenter.document.changelog
-            ("menu.routine.documentcenter.document.changelog", "en-US", "文档变更_us", "菜单导航"),
-            // menu.routine.documentcenter.document.changelog
-            ("menu.routine.documentcenter.document.changelog", "ja-JP", "文档变更_jp", "菜单导航"),
-            // menu.routine.documentcenter.document.changelog
-            ("menu.routine.documentcenter.document.changelog", "zh-CN", "文档变更", "菜单导航"),
-            // menu.routine.documentcenter.document.changelog
-            ("menu.routine.documentcenter.document.changelog", "zh-HK", "文档变更_hk", "菜单导航"),
+            // menu.routine.document.center.document.change.log
+            ("menu.routine.document.center.document.change.log", "en-US", "文档变更_us", "菜单导航"),
+            // menu.routine.document.center.document.change.log
+            ("menu.routine.document.center.document.change.log", "ja-JP", "文档变更_jp", "菜单导航"),
+            // menu.routine.document.center.document.change.log
+            ("menu.routine.document.center.document.change.log", "zh-CN", "文档变更", "菜单导航"),
+            // menu.routine.document.center.document.change.log
+            ("menu.routine.document.center.document.change.log", "zh-HK", "文档变更_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.bom.billofmaterial
-            ("menu.logistics.manufacturing.bom.billofmaterial", "en-US", "物料清单_us", "菜单导航"),
-            // menu.logistics.manufacturing.bom.billofmaterial
-            ("menu.logistics.manufacturing.bom.billofmaterial", "ja-JP", "物料清单_jp", "菜单导航"),
-            // menu.logistics.manufacturing.bom.billofmaterial
-            ("menu.logistics.manufacturing.bom.billofmaterial", "zh-CN", "物料清单", "菜单导航"),
-            // menu.logistics.manufacturing.bom.billofmaterial
-            ("menu.logistics.manufacturing.bom.billofmaterial", "zh-HK", "物料清单_hk", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material
+            ("menu.logistics.manufacturing.bom.bill.of.material", "en-US", "物料清单_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material
+            ("menu.logistics.manufacturing.bom.bill.of.material", "ja-JP", "物料清单_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material
+            ("menu.logistics.manufacturing.bom.bill.of.material", "zh-CN", "物料清单", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material
+            ("menu.logistics.manufacturing.bom.bill.of.material", "zh-HK", "物料清单_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.bom.billofmaterial.changelog
-            ("menu.logistics.manufacturing.bom.billofmaterial.changelog", "en-US", "物料清单变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.bom.billofmaterial.changelog
-            ("menu.logistics.manufacturing.bom.billofmaterial.changelog", "ja-JP", "物料清单变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.bom.billofmaterial.changelog
-            ("menu.logistics.manufacturing.bom.billofmaterial.changelog", "zh-CN", "物料清单变更", "菜单导航"),
-            // menu.logistics.manufacturing.bom.billofmaterial.changelog
-            ("menu.logistics.manufacturing.bom.billofmaterial.changelog", "zh-HK", "物料清单变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material.change.log
+            ("menu.logistics.manufacturing.bom.bill.of.material.change.log", "en-US", "物料清单变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material.change.log
+            ("menu.logistics.manufacturing.bom.bill.of.material.change.log", "ja-JP", "物料清单变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material.change.log
+            ("menu.logistics.manufacturing.bom.bill.of.material.change.log", "zh-CN", "物料清单变更", "菜单导航"),
+            // menu.logistics.manufacturing.bom.bill.of.material.change.log
+            ("menu.logistics.manufacturing.bom.bill.of.material.change.log", "zh-HK", "物料清单变更_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.bom.routing
             ("menu.logistics.manufacturing.bom.routing", "en-US", "工艺路线_us", "菜单导航"),
@@ -1733,275 +1706,275 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.bom.routing
             ("menu.logistics.manufacturing.bom.routing", "zh-HK", "工艺路线_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.bom.routing.changelog
-            ("menu.logistics.manufacturing.bom.routing.changelog", "en-US", "工艺路线变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.bom.routing.changelog
-            ("menu.logistics.manufacturing.bom.routing.changelog", "ja-JP", "工艺路线变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.bom.routing.changelog
-            ("menu.logistics.manufacturing.bom.routing.changelog", "zh-CN", "工艺路线变更", "菜单导航"),
-            // menu.logistics.manufacturing.bom.routing.changelog
-            ("menu.logistics.manufacturing.bom.routing.changelog", "zh-HK", "工艺路线变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.bom.routing.change.log
+            ("menu.logistics.manufacturing.bom.routing.change.log", "en-US", "工艺路线变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.routing.change.log
+            ("menu.logistics.manufacturing.bom.routing.change.log", "ja-JP", "工艺路线变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.routing.change.log
+            ("menu.logistics.manufacturing.bom.routing.change.log", "zh-CN", "工艺路线变更", "菜单导航"),
+            // menu.logistics.manufacturing.bom.routing.change.log
+            ("menu.logistics.manufacturing.bom.routing.change.log", "zh-HK", "工艺路线变更_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.bom.standardoperationtime
-            ("menu.logistics.manufacturing.bom.standardoperationtime", "en-US", "标准工序时间_us", "菜单导航"),
-            // menu.logistics.manufacturing.bom.standardoperationtime
-            ("menu.logistics.manufacturing.bom.standardoperationtime", "ja-JP", "标准工序时间_jp", "菜单导航"),
-            // menu.logistics.manufacturing.bom.standardoperationtime
-            ("menu.logistics.manufacturing.bom.standardoperationtime", "zh-CN", "标准工序时间", "菜单导航"),
-            // menu.logistics.manufacturing.bom.standardoperationtime
-            ("menu.logistics.manufacturing.bom.standardoperationtime", "zh-HK", "标准工序时间_hk", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time
+            ("menu.logistics.manufacturing.bom.standard.operation.time", "en-US", "标准工序时间_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time
+            ("menu.logistics.manufacturing.bom.standard.operation.time", "ja-JP", "标准工序时间_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time
+            ("menu.logistics.manufacturing.bom.standard.operation.time", "zh-CN", "标准工序时间", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time
+            ("menu.logistics.manufacturing.bom.standard.operation.time", "zh-HK", "标准工序时间_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.bom.standardoperationtime.changelog
-            ("menu.logistics.manufacturing.bom.standardoperationtime.changelog", "en-US", "标准工序时间变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.bom.standardoperationtime.changelog
-            ("menu.logistics.manufacturing.bom.standardoperationtime.changelog", "ja-JP", "标准工序时间变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.bom.standardoperationtime.changelog
-            ("menu.logistics.manufacturing.bom.standardoperationtime.changelog", "zh-CN", "标准工序时间变更", "菜单导航"),
-            // menu.logistics.manufacturing.bom.standardoperationtime.changelog
-            ("menu.logistics.manufacturing.bom.standardoperationtime.changelog", "zh-HK", "标准工序时间变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time.change.log
+            ("menu.logistics.manufacturing.bom.standard.operation.time.change.log", "en-US", "标准工序时间变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time.change.log
+            ("menu.logistics.manufacturing.bom.standard.operation.time.change.log", "ja-JP", "标准工序时间变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time.change.log
+            ("menu.logistics.manufacturing.bom.standard.operation.time.change.log", "zh-CN", "标准工序时间变更", "菜单导航"),
+            // menu.logistics.manufacturing.bom.standard.operation.time.change.log
+            ("menu.logistics.manufacturing.bom.standard.operation.time.change.log", "zh-HK", "标准工序时间变更_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.planning.masterdemandschedule
-            ("menu.logistics.manufacturing.planning.masterdemandschedule", "en-US", "主需求计划_us", "菜单导航"),
-            // menu.logistics.manufacturing.planning.masterdemandschedule
-            ("menu.logistics.manufacturing.planning.masterdemandschedule", "ja-JP", "主需求计划_jp", "菜单导航"),
-            // menu.logistics.manufacturing.planning.masterdemandschedule
-            ("menu.logistics.manufacturing.planning.masterdemandschedule", "zh-CN", "主需求计划", "菜单导航"),
-            // menu.logistics.manufacturing.planning.masterdemandschedule
-            ("menu.logistics.manufacturing.planning.masterdemandschedule", "zh-HK", "主需求计划_hk", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.demand.schedule
+            ("menu.logistics.manufacturing.planning.master.demand.schedule", "en-US", "主需求计划_us", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.demand.schedule
+            ("menu.logistics.manufacturing.planning.master.demand.schedule", "ja-JP", "主需求计划_jp", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.demand.schedule
+            ("menu.logistics.manufacturing.planning.master.demand.schedule", "zh-CN", "主需求计划", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.demand.schedule
+            ("menu.logistics.manufacturing.planning.master.demand.schedule", "zh-HK", "主需求计划_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.planning.masterproductionschedule
-            ("menu.logistics.manufacturing.planning.masterproductionschedule", "en-US", "主生产计划_us", "菜单导航"),
-            // menu.logistics.manufacturing.planning.masterproductionschedule
-            ("menu.logistics.manufacturing.planning.masterproductionschedule", "ja-JP", "主生产计划_jp", "菜单导航"),
-            // menu.logistics.manufacturing.planning.masterproductionschedule
-            ("menu.logistics.manufacturing.planning.masterproductionschedule", "zh-CN", "主生产计划", "菜单导航"),
-            // menu.logistics.manufacturing.planning.masterproductionschedule
-            ("menu.logistics.manufacturing.planning.masterproductionschedule", "zh-HK", "主生产计划_hk", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.production.schedule
+            ("menu.logistics.manufacturing.planning.master.production.schedule", "en-US", "主生产计划_us", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.production.schedule
+            ("menu.logistics.manufacturing.planning.master.production.schedule", "ja-JP", "主生产计划_jp", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.production.schedule
+            ("menu.logistics.manufacturing.planning.master.production.schedule", "zh-CN", "主生产计划", "菜单导航"),
+            // menu.logistics.manufacturing.planning.master.production.schedule
+            ("menu.logistics.manufacturing.planning.master.production.schedule", "zh-HK", "主生产计划_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.planning.plannedorder
-            ("menu.logistics.manufacturing.planning.plannedorder", "en-US", "计划订单_us", "菜单导航"),
-            // menu.logistics.manufacturing.planning.plannedorder
-            ("menu.logistics.manufacturing.planning.plannedorder", "ja-JP", "计划订单_jp", "菜单导航"),
-            // menu.logistics.manufacturing.planning.plannedorder
-            ("menu.logistics.manufacturing.planning.plannedorder", "zh-CN", "计划订单", "菜单导航"),
-            // menu.logistics.manufacturing.planning.plannedorder
-            ("menu.logistics.manufacturing.planning.plannedorder", "zh-HK", "计划订单_hk", "菜单导航"),
+            // menu.logistics.manufacturing.planning.planned.order
+            ("menu.logistics.manufacturing.planning.planned.order", "en-US", "计划订单_us", "菜单导航"),
+            // menu.logistics.manufacturing.planning.planned.order
+            ("menu.logistics.manufacturing.planning.planned.order", "ja-JP", "计划订单_jp", "菜单导航"),
+            // menu.logistics.manufacturing.planning.planned.order
+            ("menu.logistics.manufacturing.planning.planned.order", "zh-CN", "计划订单", "菜单导航"),
+            // menu.logistics.manufacturing.planning.planned.order
+            ("menu.logistics.manufacturing.planning.planned.order", "zh-HK", "计划订单_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.planning.salesplan
-            ("menu.logistics.manufacturing.planning.salesplan", "en-US", "销售计划_us", "菜单导航"),
-            // menu.logistics.manufacturing.planning.salesplan
-            ("menu.logistics.manufacturing.planning.salesplan", "ja-JP", "销售计划_jp", "菜单导航"),
-            // menu.logistics.manufacturing.planning.salesplan
-            ("menu.logistics.manufacturing.planning.salesplan", "zh-CN", "销售计划", "菜单导航"),
-            // menu.logistics.manufacturing.planning.salesplan
-            ("menu.logistics.manufacturing.planning.salesplan", "zh-HK", "销售计划_hk", "菜单导航"),
+            // menu.logistics.manufacturing.planning.sales.plan
+            ("menu.logistics.manufacturing.planning.sales.plan", "en-US", "销售计划_us", "菜单导航"),
+            // menu.logistics.manufacturing.planning.sales.plan
+            ("menu.logistics.manufacturing.planning.sales.plan", "ja-JP", "销售计划_jp", "菜单导航"),
+            // menu.logistics.manufacturing.planning.sales.plan
+            ("menu.logistics.manufacturing.planning.sales.plan", "zh-CN", "销售计划", "菜单导航"),
+            // menu.logistics.manufacturing.planning.sales.plan
+            ("menu.logistics.manufacturing.planning.sales.plan", "zh-HK", "销售计划_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.planning.productionplan
-            ("menu.logistics.manufacturing.planning.productionplan", "en-US", "生产计划_us", "菜单导航"),
-            // menu.logistics.manufacturing.planning.productionplan
-            ("menu.logistics.manufacturing.planning.productionplan", "ja-JP", "生产计划_jp", "菜单导航"),
-            // menu.logistics.manufacturing.planning.productionplan
-            ("menu.logistics.manufacturing.planning.productionplan", "zh-CN", "生产计划", "菜单导航"),
-            // menu.logistics.manufacturing.planning.productionplan
-            ("menu.logistics.manufacturing.planning.productionplan", "zh-HK", "生产计划_hk", "菜单导航"),
+            // menu.logistics.manufacturing.planning.production.plan
+            ("menu.logistics.manufacturing.planning.production.plan", "en-US", "生产计划_us", "菜单导航"),
+            // menu.logistics.manufacturing.planning.production.plan
+            ("menu.logistics.manufacturing.planning.production.plan", "ja-JP", "生产计划_jp", "菜单导航"),
+            // menu.logistics.manufacturing.planning.production.plan
+            ("menu.logistics.manufacturing.planning.production.plan", "zh-CN", "生产计划", "菜单导航"),
+            // menu.logistics.manufacturing.planning.production.plan
+            ("menu.logistics.manufacturing.planning.production.plan", "zh-HK", "生产计划_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.planning.purchaseplan
-            ("menu.logistics.manufacturing.planning.purchaseplan", "en-US", "采购计划_us", "菜单导航"),
-            // menu.logistics.manufacturing.planning.purchaseplan
-            ("menu.logistics.manufacturing.planning.purchaseplan", "ja-JP", "采购计划_jp", "菜单导航"),
-            // menu.logistics.manufacturing.planning.purchaseplan
-            ("menu.logistics.manufacturing.planning.purchaseplan", "zh-CN", "采购计划", "菜单导航"),
-            // menu.logistics.manufacturing.planning.purchaseplan
-            ("menu.logistics.manufacturing.planning.purchaseplan", "zh-HK", "采购计划_hk", "菜单导航"),
+            // menu.logistics.manufacturing.planning.purchase.plan
+            ("menu.logistics.manufacturing.planning.purchase.plan", "en-US", "采购计划_us", "菜单导航"),
+            // menu.logistics.manufacturing.planning.purchase.plan
+            ("menu.logistics.manufacturing.planning.purchase.plan", "ja-JP", "采购计划_jp", "菜单导航"),
+            // menu.logistics.manufacturing.planning.purchase.plan
+            ("menu.logistics.manufacturing.planning.purchase.plan", "zh-CN", "采购计划", "菜单导航"),
+            // menu.logistics.manufacturing.planning.purchase.plan
+            ("menu.logistics.manufacturing.planning.purchase.plan", "zh-HK", "采购计划_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.scheduling.apsschedule
-            ("menu.logistics.manufacturing.scheduling.apsschedule", "en-US", "APS排程_us", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsschedule
-            ("menu.logistics.manufacturing.scheduling.apsschedule", "ja-JP", "APS排程_jp", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsschedule
-            ("menu.logistics.manufacturing.scheduling.apsschedule", "zh-CN", "APS排程", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsschedule
-            ("menu.logistics.manufacturing.scheduling.apsschedule", "zh-HK", "APS排程_hk", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule
+            ("menu.logistics.manufacturing.scheduling.aps.schedule", "en-US", "APS排程_us", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule
+            ("menu.logistics.manufacturing.scheduling.aps.schedule", "ja-JP", "APS排程_jp", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule
+            ("menu.logistics.manufacturing.scheduling.aps.schedule", "zh-CN", "APS排程", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule
+            ("menu.logistics.manufacturing.scheduling.aps.schedule", "zh-HK", "APS排程_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.scheduling.apsschedule.changelog
-            ("menu.logistics.manufacturing.scheduling.apsschedule.changelog", "en-US", "APS排程变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsschedule.changelog
-            ("menu.logistics.manufacturing.scheduling.apsschedule.changelog", "ja-JP", "APS排程变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsschedule.changelog
-            ("menu.logistics.manufacturing.scheduling.apsschedule.changelog", "zh-CN", "APS排程变更", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsschedule.changelog
-            ("menu.logistics.manufacturing.scheduling.apsschedule.changelog", "zh-HK", "APS排程变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule.change.log
+            ("menu.logistics.manufacturing.scheduling.aps.schedule.change.log", "en-US", "APS排程变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule.change.log
+            ("menu.logistics.manufacturing.scheduling.aps.schedule.change.log", "ja-JP", "APS排程变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule.change.log
+            ("menu.logistics.manufacturing.scheduling.aps.schedule.change.log", "zh-CN", "APS排程变更", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.schedule.change.log
+            ("menu.logistics.manufacturing.scheduling.aps.schedule.change.log", "zh-HK", "APS排程变更_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.scheduling.workcenter
-            ("menu.logistics.manufacturing.scheduling.workcenter", "en-US", "工作中心_us", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.workcenter
-            ("menu.logistics.manufacturing.scheduling.workcenter", "ja-JP", "工作中心_jp", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.workcenter
-            ("menu.logistics.manufacturing.scheduling.workcenter", "zh-CN", "工作中心", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.workcenter
-            ("menu.logistics.manufacturing.scheduling.workcenter", "zh-HK", "工作中心_hk", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.work.center
+            ("menu.logistics.manufacturing.scheduling.work.center", "en-US", "工作中心_us", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.work.center
+            ("menu.logistics.manufacturing.scheduling.work.center", "ja-JP", "工作中心_jp", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.work.center
+            ("menu.logistics.manufacturing.scheduling.work.center", "zh-CN", "工作中心", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.work.center
+            ("menu.logistics.manufacturing.scheduling.work.center", "zh-HK", "工作中心_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.scheduling.changeovermatrix
-            ("menu.logistics.manufacturing.scheduling.changeovermatrix", "en-US", "换型矩阵_us", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.changeovermatrix
-            ("menu.logistics.manufacturing.scheduling.changeovermatrix", "ja-JP", "换型矩阵_jp", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.changeovermatrix
-            ("menu.logistics.manufacturing.scheduling.changeovermatrix", "zh-CN", "换型矩阵", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.changeovermatrix
-            ("menu.logistics.manufacturing.scheduling.changeovermatrix", "zh-HK", "换型矩阵_hk", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.changeover.matrix
+            ("menu.logistics.manufacturing.scheduling.changeover.matrix", "en-US", "换型矩阵_us", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.changeover.matrix
+            ("menu.logistics.manufacturing.scheduling.changeover.matrix", "ja-JP", "换型矩阵_jp", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.changeover.matrix
+            ("menu.logistics.manufacturing.scheduling.changeover.matrix", "zh-CN", "换型矩阵", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.changeover.matrix
+            ("menu.logistics.manufacturing.scheduling.changeover.matrix", "zh-HK", "换型矩阵_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.scheduling.apsorder
-            ("menu.logistics.manufacturing.scheduling.apsorder", "en-US", "APS订单_us", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsorder
-            ("menu.logistics.manufacturing.scheduling.apsorder", "ja-JP", "APS订单_jp", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsorder
-            ("menu.logistics.manufacturing.scheduling.apsorder", "zh-CN", "APS订单", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.apsorder
-            ("menu.logistics.manufacturing.scheduling.apsorder", "zh-HK", "APS订单_hk", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.order
+            ("menu.logistics.manufacturing.scheduling.aps.order", "en-US", "APS订单_us", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.order
+            ("menu.logistics.manufacturing.scheduling.aps.order", "ja-JP", "APS订单_jp", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.order
+            ("menu.logistics.manufacturing.scheduling.aps.order", "zh-CN", "APS订单", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.aps.order
+            ("menu.logistics.manufacturing.scheduling.aps.order", "zh-HK", "APS订单_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.scheduling.productiondispatch
-            ("menu.logistics.manufacturing.scheduling.productiondispatch", "en-US", "生产派工_us", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.productiondispatch
-            ("menu.logistics.manufacturing.scheduling.productiondispatch", "ja-JP", "生产派工_jp", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.productiondispatch
-            ("menu.logistics.manufacturing.scheduling.productiondispatch", "zh-CN", "生产派工", "菜单导航"),
-            // menu.logistics.manufacturing.scheduling.productiondispatch
-            ("menu.logistics.manufacturing.scheduling.productiondispatch", "zh-HK", "生产派工_hk", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.production.dispatch
+            ("menu.logistics.manufacturing.scheduling.production.dispatch", "en-US", "生产派工_us", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.production.dispatch
+            ("menu.logistics.manufacturing.scheduling.production.dispatch", "ja-JP", "生产派工_jp", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.production.dispatch
+            ("menu.logistics.manufacturing.scheduling.production.dispatch", "zh-CN", "生产派工", "菜单导航"),
+            // menu.logistics.manufacturing.scheduling.production.dispatch
+            ("menu.logistics.manufacturing.scheduling.production.dispatch", "zh-HK", "生产派工_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.kanban
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "en-US", "设变看板_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.kanban
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "ja-JP", "设变看板_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.kanban
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "zh-CN", "设变看板", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.kanban
-            ("menu.logistics.manufacturing.engineeringchange.kanban", "zh-HK", "设变看板_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kanban
+            ("menu.logistics.manufacturing.engineering.change.kanban", "en-US", "设变看板_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kanban
+            ("menu.logistics.manufacturing.engineering.change.kanban", "ja-JP", "设变看板_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kanban
+            ("menu.logistics.manufacturing.engineering.change.kanban", "zh-CN", "设变看板", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kanban
+            ("menu.logistics.manufacturing.engineering.change.kanban", "zh-HK", "设变看板_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.batch
-            ("menu.logistics.manufacturing.engineeringchange.batch", "en-US", "投入批次_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.batch
-            ("menu.logistics.manufacturing.engineeringchange.batch", "ja-JP", "投入批次_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.batch
-            ("menu.logistics.manufacturing.engineeringchange.batch", "zh-CN", "投入批次", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.batch
-            ("menu.logistics.manufacturing.engineeringchange.batch", "zh-HK", "投入批次_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.batch
+            ("menu.logistics.manufacturing.engineering.change.batch", "en-US", "投入批次_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.batch
+            ("menu.logistics.manufacturing.engineering.change.batch", "ja-JP", "投入批次_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.batch
+            ("menu.logistics.manufacturing.engineering.change.batch", "zh-CN", "投入批次", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.batch
+            ("menu.logistics.manufacturing.engineering.change.batch", "zh-HK", "投入批次_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.kakunin
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "en-US", "物料确认_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.kakunin
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "ja-JP", "物料确认_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.kakunin
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "zh-CN", "物料确认", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.kakunin
-            ("menu.logistics.manufacturing.engineeringchange.kakunin", "zh-HK", "物料确认_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kakunin
+            ("menu.logistics.manufacturing.engineering.change.kakunin", "en-US", "物料确认_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kakunin
+            ("menu.logistics.manufacturing.engineering.change.kakunin", "ja-JP", "物料确认_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kakunin
+            ("menu.logistics.manufacturing.engineering.change.kakunin", "zh-CN", "物料确认", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.kakunin
+            ("menu.logistics.manufacturing.engineering.change.kakunin", "zh-HK", "物料确认_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.ecnotification
-            ("menu.logistics.manufacturing.engineeringchange.ecnotification", "en-US", "设变通知_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.ecnotification
-            ("menu.logistics.manufacturing.engineeringchange.ecnotification", "ja-JP", "设变通知_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.ecnotification
-            ("menu.logistics.manufacturing.engineeringchange.ecnotification", "zh-CN", "设变通知", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.ecnotification
-            ("menu.logistics.manufacturing.engineeringchange.ecnotification", "zh-HK", "设变通知_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ec.notification
+            ("menu.logistics.manufacturing.engineering.change.ec.notification", "en-US", "设变通知_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ec.notification
+            ("menu.logistics.manufacturing.engineering.change.ec.notification", "ja-JP", "设变通知_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ec.notification
+            ("menu.logistics.manufacturing.engineering.change.ec.notification", "zh-CN", "设变通知", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ec.notification
+            ("menu.logistics.manufacturing.engineering.change.ec.notification", "zh-HK", "设变通知_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.gijutsu
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "en-US", "技术部门_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.gijutsu
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "ja-JP", "技术部门_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.gijutsu
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "zh-CN", "技术部门", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.gijutsu
-            ("menu.logistics.manufacturing.engineeringchange.gijutsu", "zh-HK", "技术部门_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.gijutsu
+            ("menu.logistics.manufacturing.engineering.change.gijutsu", "en-US", "技术部门_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.gijutsu
+            ("menu.logistics.manufacturing.engineering.change.gijutsu", "ja-JP", "技术部门_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.gijutsu
+            ("menu.logistics.manufacturing.engineering.change.gijutsu", "zh-CN", "技术部门", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.gijutsu
+            ("menu.logistics.manufacturing.engineering.change.gijutsu", "zh-HK", "技术部门_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.koubai
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "en-US", "采购部门_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.koubai
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "ja-JP", "采购部门_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.koubai
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "zh-CN", "采购部门", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.koubai
-            ("menu.logistics.manufacturing.engineeringchange.koubai", "zh-HK", "采购部门_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.koubai
+            ("menu.logistics.manufacturing.engineering.change.koubai", "en-US", "采购部门_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.koubai
+            ("menu.logistics.manufacturing.engineering.change.koubai", "ja-JP", "采购部门_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.koubai
+            ("menu.logistics.manufacturing.engineering.change.koubai", "zh-CN", "采购部门", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.koubai
+            ("menu.logistics.manufacturing.engineering.change.koubai", "zh-HK", "采购部门_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.seikan
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "en-US", "生管部门_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seikan
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "ja-JP", "生管部门_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seikan
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "zh-CN", "生管部门", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seikan
-            ("menu.logistics.manufacturing.engineeringchange.seikan", "zh-HK", "生管部门_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seikan
+            ("menu.logistics.manufacturing.engineering.change.seikan", "en-US", "生管部门_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seikan
+            ("menu.logistics.manufacturing.engineering.change.seikan", "ja-JP", "生管部门_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seikan
+            ("menu.logistics.manufacturing.engineering.change.seikan", "zh-CN", "生管部门", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seikan
+            ("menu.logistics.manufacturing.engineering.change.seikan", "zh-HK", "生管部门_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.ukeken
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "en-US", "受检部门_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.ukeken
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "ja-JP", "受检部门_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.ukeken
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "zh-CN", "受检部门", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.ukeken
-            ("menu.logistics.manufacturing.engineeringchange.ukeken", "zh-HK", "受检部门_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ukeken
+            ("menu.logistics.manufacturing.engineering.change.ukeken", "en-US", "受检部门_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ukeken
+            ("menu.logistics.manufacturing.engineering.change.ukeken", "ja-JP", "受检部门_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ukeken
+            ("menu.logistics.manufacturing.engineering.change.ukeken", "zh-CN", "受检部门", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ukeken
+            ("menu.logistics.manufacturing.engineering.change.ukeken", "zh-HK", "受检部门_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.bukan
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "en-US", "部管部门_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.bukan
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "ja-JP", "部管部门_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.bukan
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "zh-CN", "部管部门", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.bukan
-            ("menu.logistics.manufacturing.engineeringchange.bukan", "zh-HK", "部管部门_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.bukan
+            ("menu.logistics.manufacturing.engineering.change.bukan", "en-US", "部管部门_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.bukan
+            ("menu.logistics.manufacturing.engineering.change.bukan", "ja-JP", "部管部门_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.bukan
+            ("menu.logistics.manufacturing.engineering.change.bukan", "zh-CN", "部管部门", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.bukan
+            ("menu.logistics.manufacturing.engineering.change.bukan", "zh-HK", "部管部门_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.seizounika
-            ("menu.logistics.manufacturing.engineeringchange.seizounika", "en-US", "制造二课_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seizounika
-            ("menu.logistics.manufacturing.engineeringchange.seizounika", "ja-JP", "制造二课_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seizounika
-            ("menu.logistics.manufacturing.engineeringchange.seizounika", "zh-CN", "制造二课", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seizounika
-            ("menu.logistics.manufacturing.engineeringchange.seizounika", "zh-HK", "制造二课_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizounika
+            ("menu.logistics.manufacturing.engineering.change.seizounika", "en-US", "制造二课_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizounika
+            ("menu.logistics.manufacturing.engineering.change.seizounika", "ja-JP", "制造二课_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizounika
+            ("menu.logistics.manufacturing.engineering.change.seizounika", "zh-CN", "制造二课", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizounika
+            ("menu.logistics.manufacturing.engineering.change.seizounika", "zh-HK", "制造二课_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.seizouikka
-            ("menu.logistics.manufacturing.engineeringchange.seizouikka", "en-US", "制造一课_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seizouikka
-            ("menu.logistics.manufacturing.engineeringchange.seizouikka", "ja-JP", "制造一课_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seizouikka
-            ("menu.logistics.manufacturing.engineeringchange.seizouikka", "zh-CN", "制造一课", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.seizouikka
-            ("menu.logistics.manufacturing.engineeringchange.seizouikka", "zh-HK", "制造一课_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizouikka
+            ("menu.logistics.manufacturing.engineering.change.seizouikka", "en-US", "制造一课_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizouikka
+            ("menu.logistics.manufacturing.engineering.change.seizouikka", "ja-JP", "制造一课_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizouikka
+            ("menu.logistics.manufacturing.engineering.change.seizouikka", "zh-CN", "制造一课", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.seizouikka
+            ("menu.logistics.manufacturing.engineering.change.seizouikka", "zh-HK", "制造一课_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.hinkan
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "en-US", "品管部门_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.hinkan
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "ja-JP", "品管部门_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.hinkan
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "zh-CN", "品管部门", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.hinkan
-            ("menu.logistics.manufacturing.engineeringchange.hinkan", "zh-HK", "品管部门_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.hinkan
+            ("menu.logistics.manufacturing.engineering.change.hinkan", "en-US", "品管部门_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.hinkan
+            ("menu.logistics.manufacturing.engineering.change.hinkan", "ja-JP", "品管部门_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.hinkan
+            ("menu.logistics.manufacturing.engineering.change.hinkan", "zh-CN", "品管部门", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.hinkan
+            ("menu.logistics.manufacturing.engineering.change.hinkan", "zh-HK", "品管部门_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineeringchange.legacyproduct
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "en-US", "旧品管制_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.legacyproduct
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "ja-JP", "旧品管制_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.legacyproduct
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "zh-CN", "旧品管制", "菜单导航"),
-            // menu.logistics.manufacturing.engineeringchange.legacyproduct
-            ("menu.logistics.manufacturing.engineeringchange.legacyproduct", "zh-HK", "旧品管制_hk", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.legacy.product
+            ("menu.logistics.manufacturing.engineering.change.legacy.product", "en-US", "旧品管制_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.legacy.product
+            ("menu.logistics.manufacturing.engineering.change.legacy.product", "ja-JP", "旧品管制_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.legacy.product
+            ("menu.logistics.manufacturing.engineering.change.legacy.product", "zh-CN", "旧品管制", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.legacy.product
+            ("menu.logistics.manufacturing.engineering.change.legacy.product", "zh-HK", "旧品管制_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.productionorder
-            ("menu.logistics.manufacturing.output.productionorder", "en-US", "生产工单_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionorder
-            ("menu.logistics.manufacturing.output.productionorder", "ja-JP", "生产工单_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionorder
-            ("menu.logistics.manufacturing.output.productionorder", "zh-CN", "生产工单", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionorder
-            ("menu.logistics.manufacturing.output.productionorder", "zh-HK", "生产工单_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order
+            ("menu.logistics.manufacturing.output.production.order", "en-US", "生产工单_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order
+            ("menu.logistics.manufacturing.output.production.order", "ja-JP", "生产工单_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order
+            ("menu.logistics.manufacturing.output.production.order", "zh-CN", "生产工单", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order
+            ("menu.logistics.manufacturing.output.production.order", "zh-HK", "生产工单_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.productionorder.changelog
-            ("menu.logistics.manufacturing.output.productionorder.changelog", "en-US", "生产工单变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionorder.changelog
-            ("menu.logistics.manufacturing.output.productionorder.changelog", "ja-JP", "生产工单变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionorder.changelog
-            ("menu.logistics.manufacturing.output.productionorder.changelog", "zh-CN", "生产工单变更", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionorder.changelog
-            ("menu.logistics.manufacturing.output.productionorder.changelog", "zh-HK", "生产工单变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order.change.log
+            ("menu.logistics.manufacturing.output.production.order.change.log", "en-US", "生产工单变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order.change.log
+            ("menu.logistics.manufacturing.output.production.order.change.log", "ja-JP", "生产工单变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order.change.log
+            ("menu.logistics.manufacturing.output.production.order.change.log", "zh-CN", "生产工单变更", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.order.change.log
+            ("menu.logistics.manufacturing.output.production.order.change.log", "zh-HK", "生产工单变更_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.output.pcba
             ("menu.logistics.manufacturing.output.pcba", "en-US", "PCBA日报_us", "菜单导航"),
@@ -2021,95 +1994,95 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.output.assy
             ("menu.logistics.manufacturing.output.assy", "zh-HK", "组立日报_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.productionchangeover
-            ("menu.logistics.manufacturing.output.productionchangeover", "en-US", "生产切换_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionchangeover
-            ("menu.logistics.manufacturing.output.productionchangeover", "ja-JP", "生产切换_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionchangeover
-            ("menu.logistics.manufacturing.output.productionchangeover", "zh-CN", "生产切换", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionchangeover
-            ("menu.logistics.manufacturing.output.productionchangeover", "zh-HK", "生产切换_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.changeover
+            ("menu.logistics.manufacturing.output.production.changeover", "en-US", "生产切换_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.changeover
+            ("menu.logistics.manufacturing.output.production.changeover", "ja-JP", "生产切换_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.changeover
+            ("menu.logistics.manufacturing.output.production.changeover", "zh-CN", "生产切换", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.changeover
+            ("menu.logistics.manufacturing.output.production.changeover", "zh-HK", "生产切换_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.equipmentoperationrate
-            ("menu.logistics.manufacturing.output.equipmentoperationrate", "en-US", "机器稼动率_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.equipmentoperationrate
-            ("menu.logistics.manufacturing.output.equipmentoperationrate", "ja-JP", "机器稼动率_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.equipmentoperationrate
-            ("menu.logistics.manufacturing.output.equipmentoperationrate", "zh-CN", "机器稼动率", "菜单导航"),
-            // menu.logistics.manufacturing.output.equipmentoperationrate
-            ("menu.logistics.manufacturing.output.equipmentoperationrate", "zh-HK", "机器稼动率_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate
+            ("menu.logistics.manufacturing.output.equipment.operation.rate", "en-US", "机器稼动率_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate
+            ("menu.logistics.manufacturing.output.equipment.operation.rate", "ja-JP", "机器稼动率_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate
+            ("menu.logistics.manufacturing.output.equipment.operation.rate", "zh-CN", "机器稼动率", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate
+            ("menu.logistics.manufacturing.output.equipment.operation.rate", "zh-HK", "机器稼动率_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.equipmentoperationrate.changelog
-            ("menu.logistics.manufacturing.output.equipmentoperationrate.changelog", "en-US", "机器稼动率变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.equipmentoperationrate.changelog
-            ("menu.logistics.manufacturing.output.equipmentoperationrate.changelog", "ja-JP", "机器稼动率变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.equipmentoperationrate.changelog
-            ("menu.logistics.manufacturing.output.equipmentoperationrate.changelog", "zh-CN", "机器稼动率变更", "菜单导航"),
-            // menu.logistics.manufacturing.output.equipmentoperationrate.changelog
-            ("menu.logistics.manufacturing.output.equipmentoperationrate.changelog", "zh-HK", "机器稼动率变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.equipment.operation.rate.change.log", "en-US", "机器稼动率变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.equipment.operation.rate.change.log", "ja-JP", "机器稼动率变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.equipment.operation.rate.change.log", "zh-CN", "机器稼动率变更", "菜单导航"),
+            // menu.logistics.manufacturing.output.equipment.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.equipment.operation.rate.change.log", "zh-HK", "机器稼动率变更_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.personneloperationrate
-            ("menu.logistics.manufacturing.output.personneloperationrate", "en-US", "人员稼动率_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.personneloperationrate
-            ("menu.logistics.manufacturing.output.personneloperationrate", "ja-JP", "人员稼动率_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.personneloperationrate
-            ("menu.logistics.manufacturing.output.personneloperationrate", "zh-CN", "人员稼动率", "菜单导航"),
-            // menu.logistics.manufacturing.output.personneloperationrate
-            ("menu.logistics.manufacturing.output.personneloperationrate", "zh-HK", "人员稼动率_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate
+            ("menu.logistics.manufacturing.output.personnel.operation.rate", "en-US", "人员稼动率_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate
+            ("menu.logistics.manufacturing.output.personnel.operation.rate", "ja-JP", "人员稼动率_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate
+            ("menu.logistics.manufacturing.output.personnel.operation.rate", "zh-CN", "人员稼动率", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate
+            ("menu.logistics.manufacturing.output.personnel.operation.rate", "zh-HK", "人员稼动率_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.personneloperationrate.changelog
-            ("menu.logistics.manufacturing.output.personneloperationrate.changelog", "en-US", "人员稼动率变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.personneloperationrate.changelog
-            ("menu.logistics.manufacturing.output.personneloperationrate.changelog", "ja-JP", "人员稼动率变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.personneloperationrate.changelog
-            ("menu.logistics.manufacturing.output.personneloperationrate.changelog", "zh-CN", "人员稼动率变更", "菜单导航"),
-            // menu.logistics.manufacturing.output.personneloperationrate.changelog
-            ("menu.logistics.manufacturing.output.personneloperationrate.changelog", "zh-HK", "人员稼动率变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.personnel.operation.rate.change.log", "en-US", "人员稼动率变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.personnel.operation.rate.change.log", "ja-JP", "人员稼动率变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.personnel.operation.rate.change.log", "zh-CN", "人员稼动率变更", "菜单导航"),
+            // menu.logistics.manufacturing.output.personnel.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.personnel.operation.rate.change.log", "zh-HK", "人员稼动率变更_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.productionteam
-            ("menu.logistics.manufacturing.output.productionteam", "en-US", "生产班组_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionteam
-            ("menu.logistics.manufacturing.output.productionteam", "ja-JP", "生产班组_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionteam
-            ("menu.logistics.manufacturing.output.productionteam", "zh-CN", "生产班组", "菜单导航"),
-            // menu.logistics.manufacturing.output.productionteam
-            ("menu.logistics.manufacturing.output.productionteam", "zh-HK", "生产班组_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.team
+            ("menu.logistics.manufacturing.output.production.team", "en-US", "生产班组_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.team
+            ("menu.logistics.manufacturing.output.production.team", "ja-JP", "生产班组_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.team
+            ("menu.logistics.manufacturing.output.production.team", "zh-CN", "生产班组", "菜单导航"),
+            // menu.logistics.manufacturing.output.production.team
+            ("menu.logistics.manufacturing.output.production.team", "zh-HK", "生产班组_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.standardoperationrate
-            ("menu.logistics.manufacturing.output.standardoperationrate", "en-US", "标准生产稼动率_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.standardoperationrate
-            ("menu.logistics.manufacturing.output.standardoperationrate", "ja-JP", "标准生产稼动率_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.standardoperationrate
-            ("menu.logistics.manufacturing.output.standardoperationrate", "zh-CN", "标准生产稼动率", "菜单导航"),
-            // menu.logistics.manufacturing.output.standardoperationrate
-            ("menu.logistics.manufacturing.output.standardoperationrate", "zh-HK", "标准生产稼动率_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate
+            ("menu.logistics.manufacturing.output.standard.operation.rate", "en-US", "标准生产稼动率_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate
+            ("menu.logistics.manufacturing.output.standard.operation.rate", "ja-JP", "标准生产稼动率_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate
+            ("menu.logistics.manufacturing.output.standard.operation.rate", "zh-CN", "标准生产稼动率", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate
+            ("menu.logistics.manufacturing.output.standard.operation.rate", "zh-HK", "标准生产稼动率_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.output.standardoperationrate.changelog
-            ("menu.logistics.manufacturing.output.standardoperationrate.changelog", "en-US", "标准生产稼动率变更_us", "菜单导航"),
-            // menu.logistics.manufacturing.output.standardoperationrate.changelog
-            ("menu.logistics.manufacturing.output.standardoperationrate.changelog", "ja-JP", "标准生产稼动率变更_jp", "菜单导航"),
-            // menu.logistics.manufacturing.output.standardoperationrate.changelog
-            ("menu.logistics.manufacturing.output.standardoperationrate.changelog", "zh-CN", "标准生产稼动率变更", "菜单导航"),
-            // menu.logistics.manufacturing.output.standardoperationrate.changelog
-            ("menu.logistics.manufacturing.output.standardoperationrate.changelog", "zh-HK", "标准生产稼动率变更_hk", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.standard.operation.rate.change.log", "en-US", "标准生产稼动率变更_us", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.standard.operation.rate.change.log", "ja-JP", "标准生产稼动率变更_jp", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.standard.operation.rate.change.log", "zh-CN", "标准生产稼动率变更", "菜单导航"),
+            // menu.logistics.manufacturing.output.standard.operation.rate.change.log
+            ("menu.logistics.manufacturing.output.standard.operation.rate.change.log", "zh-HK", "标准生产稼动率变更_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.defect.pcbainspection
-            ("menu.logistics.manufacturing.defect.pcbainspection", "en-US", "PCBA检查_us", "菜单导航"),
-            // menu.logistics.manufacturing.defect.pcbainspection
-            ("menu.logistics.manufacturing.defect.pcbainspection", "ja-JP", "PCBA检查_jp", "菜单导航"),
-            // menu.logistics.manufacturing.defect.pcbainspection
-            ("menu.logistics.manufacturing.defect.pcbainspection", "zh-CN", "PCBA检查", "菜单导航"),
-            // menu.logistics.manufacturing.defect.pcbainspection
-            ("menu.logistics.manufacturing.defect.pcbainspection", "zh-HK", "PCBA检查_hk", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.inspection
+            ("menu.logistics.manufacturing.defect.pcba.inspection", "en-US", "PCBA检查_us", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.inspection
+            ("menu.logistics.manufacturing.defect.pcba.inspection", "ja-JP", "PCBA检查_jp", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.inspection
+            ("menu.logistics.manufacturing.defect.pcba.inspection", "zh-CN", "PCBA检查", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.inspection
+            ("menu.logistics.manufacturing.defect.pcba.inspection", "zh-HK", "PCBA检查_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.defect.pcbarepair
-            ("menu.logistics.manufacturing.defect.pcbarepair", "en-US", "PCBA改修_us", "菜单导航"),
-            // menu.logistics.manufacturing.defect.pcbarepair
-            ("menu.logistics.manufacturing.defect.pcbarepair", "ja-JP", "PCBA改修_jp", "菜单导航"),
-            // menu.logistics.manufacturing.defect.pcbarepair
-            ("menu.logistics.manufacturing.defect.pcbarepair", "zh-CN", "PCBA改修", "菜单导航"),
-            // menu.logistics.manufacturing.defect.pcbarepair
-            ("menu.logistics.manufacturing.defect.pcbarepair", "zh-HK", "PCBA改修_hk", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.repair
+            ("menu.logistics.manufacturing.defect.pcba.repair", "en-US", "PCBA改修_us", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.repair
+            ("menu.logistics.manufacturing.defect.pcba.repair", "ja-JP", "PCBA改修_jp", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.repair
+            ("menu.logistics.manufacturing.defect.pcba.repair", "zh-CN", "PCBA改修", "菜单导航"),
+            // menu.logistics.manufacturing.defect.pcba.repair
+            ("menu.logistics.manufacturing.defect.pcba.repair", "zh-HK", "PCBA改修_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.defect.assy
             ("menu.logistics.manufacturing.defect.assy", "en-US", "组立不良_us", "菜单导航"),
@@ -2165,23 +2138,23 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.sop.exec
             ("menu.logistics.manufacturing.sop.exec", "zh-HK", "工位执行_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.sop.execscan
-            ("menu.logistics.manufacturing.sop.execscan", "en-US", "扫码记录_us", "菜单导航"),
-            // menu.logistics.manufacturing.sop.execscan
-            ("menu.logistics.manufacturing.sop.execscan", "ja-JP", "扫码记录_jp", "菜单导航"),
-            // menu.logistics.manufacturing.sop.execscan
-            ("menu.logistics.manufacturing.sop.execscan", "zh-CN", "扫码记录", "菜单导航"),
-            // menu.logistics.manufacturing.sop.execscan
-            ("menu.logistics.manufacturing.sop.execscan", "zh-HK", "扫码记录_hk", "菜单导航"),
+            // menu.logistics.manufacturing.sop.exec.scan
+            ("menu.logistics.manufacturing.sop.exec.scan", "en-US", "扫码记录_us", "菜单导航"),
+            // menu.logistics.manufacturing.sop.exec.scan
+            ("menu.logistics.manufacturing.sop.exec.scan", "ja-JP", "扫码记录_jp", "菜单导航"),
+            // menu.logistics.manufacturing.sop.exec.scan
+            ("menu.logistics.manufacturing.sop.exec.scan", "zh-CN", "扫码记录", "菜单导航"),
+            // menu.logistics.manufacturing.sop.exec.scan
+            ("menu.logistics.manufacturing.sop.exec.scan", "zh-HK", "扫码记录_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.sop.esdcheck
-            ("menu.logistics.manufacturing.sop.esdcheck", "en-US", "ESD检查_us", "菜单导航"),
-            // menu.logistics.manufacturing.sop.esdcheck
-            ("menu.logistics.manufacturing.sop.esdcheck", "ja-JP", "ESD检查_jp", "菜单导航"),
-            // menu.logistics.manufacturing.sop.esdcheck
-            ("menu.logistics.manufacturing.sop.esdcheck", "zh-CN", "ESD检查", "菜单导航"),
-            // menu.logistics.manufacturing.sop.esdcheck
-            ("menu.logistics.manufacturing.sop.esdcheck", "zh-HK", "ESD检查_hk", "菜单导航"),
+            // menu.logistics.manufacturing.sop.esd.check
+            ("menu.logistics.manufacturing.sop.esd.check", "en-US", "ESD检查_us", "菜单导航"),
+            // menu.logistics.manufacturing.sop.esd.check
+            ("menu.logistics.manufacturing.sop.esd.check", "ja-JP", "ESD检查_jp", "菜单导航"),
+            // menu.logistics.manufacturing.sop.esd.check
+            ("menu.logistics.manufacturing.sop.esd.check", "zh-CN", "ESD检查", "菜单导航"),
+            // menu.logistics.manufacturing.sop.esd.check
+            ("menu.logistics.manufacturing.sop.esd.check", "zh-HK", "ESD检查_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.sop.call
             ("menu.logistics.manufacturing.sop.call", "en-US", "安灯呼叫_us", "菜单导航"),
@@ -2219,77 +2192,77 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.quality.cost.incident
             ("menu.logistics.quality.cost.incident", "zh-HK", "品质事故_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.samplingscheme
-            ("menu.logistics.quality.operation.samplingscheme", "en-US", "抽样方案_us", "菜单导航"),
-            // menu.logistics.quality.operation.samplingscheme
-            ("menu.logistics.quality.operation.samplingscheme", "ja-JP", "抽样方案_jp", "菜单导航"),
-            // menu.logistics.quality.operation.samplingscheme
-            ("menu.logistics.quality.operation.samplingscheme", "zh-CN", "抽样方案", "菜单导航"),
-            // menu.logistics.quality.operation.samplingscheme
-            ("menu.logistics.quality.operation.samplingscheme", "zh-HK", "抽样方案_hk", "菜单导航"),
+            // menu.logistics.quality.operation.sampling.scheme
+            ("menu.logistics.quality.operation.sampling.scheme", "en-US", "抽样方案_us", "菜单导航"),
+            // menu.logistics.quality.operation.sampling.scheme
+            ("menu.logistics.quality.operation.sampling.scheme", "ja-JP", "抽样方案_jp", "菜单导航"),
+            // menu.logistics.quality.operation.sampling.scheme
+            ("menu.logistics.quality.operation.sampling.scheme", "zh-CN", "抽样方案", "菜单导航"),
+            // menu.logistics.quality.operation.sampling.scheme
+            ("menu.logistics.quality.operation.sampling.scheme", "zh-HK", "抽样方案_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.inspectionstandard
-            ("menu.logistics.quality.operation.inspectionstandard", "en-US", "检验标准_us", "菜单导航"),
-            // menu.logistics.quality.operation.inspectionstandard
-            ("menu.logistics.quality.operation.inspectionstandard", "ja-JP", "检验标准_jp", "菜单导航"),
-            // menu.logistics.quality.operation.inspectionstandard
-            ("menu.logistics.quality.operation.inspectionstandard", "zh-CN", "检验标准", "菜单导航"),
-            // menu.logistics.quality.operation.inspectionstandard
-            ("menu.logistics.quality.operation.inspectionstandard", "zh-HK", "检验标准_hk", "菜单导航"),
+            // menu.logistics.quality.operation.inspection.standard
+            ("menu.logistics.quality.operation.inspection.standard", "en-US", "检验标准_us", "菜单导航"),
+            // menu.logistics.quality.operation.inspection.standard
+            ("menu.logistics.quality.operation.inspection.standard", "ja-JP", "检验标准_jp", "菜单导航"),
+            // menu.logistics.quality.operation.inspection.standard
+            ("menu.logistics.quality.operation.inspection.standard", "zh-CN", "检验标准", "菜单导航"),
+            // menu.logistics.quality.operation.inspection.standard
+            ("menu.logistics.quality.operation.inspection.standard", "zh-HK", "检验标准_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.iqcorder
-            ("menu.logistics.quality.operation.iqcorder", "en-US", "进货检验_us", "菜单导航"),
-            // menu.logistics.quality.operation.iqcorder
-            ("menu.logistics.quality.operation.iqcorder", "ja-JP", "进货检验_jp", "菜单导航"),
-            // menu.logistics.quality.operation.iqcorder
-            ("menu.logistics.quality.operation.iqcorder", "zh-CN", "进货检验", "菜单导航"),
-            // menu.logistics.quality.operation.iqcorder
-            ("menu.logistics.quality.operation.iqcorder", "zh-HK", "进货检验_hk", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order
+            ("menu.logistics.quality.operation.iqc.order", "en-US", "进货检验_us", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order
+            ("menu.logistics.quality.operation.iqc.order", "ja-JP", "进货检验_jp", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order
+            ("menu.logistics.quality.operation.iqc.order", "zh-CN", "进货检验", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order
+            ("menu.logistics.quality.operation.iqc.order", "zh-HK", "进货检验_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.iqcorder.changelog
-            ("menu.logistics.quality.operation.iqcorder.changelog", "en-US", "进货检验变更_us", "菜单导航"),
-            // menu.logistics.quality.operation.iqcorder.changelog
-            ("menu.logistics.quality.operation.iqcorder.changelog", "ja-JP", "进货检验变更_jp", "菜单导航"),
-            // menu.logistics.quality.operation.iqcorder.changelog
-            ("menu.logistics.quality.operation.iqcorder.changelog", "zh-CN", "进货检验变更", "菜单导航"),
-            // menu.logistics.quality.operation.iqcorder.changelog
-            ("menu.logistics.quality.operation.iqcorder.changelog", "zh-HK", "进货检验变更_hk", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order.change.log
+            ("menu.logistics.quality.operation.iqc.order.change.log", "en-US", "进货检验变更_us", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order.change.log
+            ("menu.logistics.quality.operation.iqc.order.change.log", "ja-JP", "进货检验变更_jp", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order.change.log
+            ("menu.logistics.quality.operation.iqc.order.change.log", "zh-CN", "进货检验变更", "菜单导航"),
+            // menu.logistics.quality.operation.iqc.order.change.log
+            ("menu.logistics.quality.operation.iqc.order.change.log", "zh-HK", "进货检验变更_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.ipqcorder
-            ("menu.logistics.quality.operation.ipqcorder", "en-US", "制程检验_us", "菜单导航"),
-            // menu.logistics.quality.operation.ipqcorder
-            ("menu.logistics.quality.operation.ipqcorder", "ja-JP", "制程检验_jp", "菜单导航"),
-            // menu.logistics.quality.operation.ipqcorder
-            ("menu.logistics.quality.operation.ipqcorder", "zh-CN", "制程检验", "菜单导航"),
-            // menu.logistics.quality.operation.ipqcorder
-            ("menu.logistics.quality.operation.ipqcorder", "zh-HK", "制程检验_hk", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order
+            ("menu.logistics.quality.operation.ipqc.order", "en-US", "制程检验_us", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order
+            ("menu.logistics.quality.operation.ipqc.order", "ja-JP", "制程检验_jp", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order
+            ("menu.logistics.quality.operation.ipqc.order", "zh-CN", "制程检验", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order
+            ("menu.logistics.quality.operation.ipqc.order", "zh-HK", "制程检验_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.ipqcorder.changelog
-            ("menu.logistics.quality.operation.ipqcorder.changelog", "en-US", "制程检验变更_us", "菜单导航"),
-            // menu.logistics.quality.operation.ipqcorder.changelog
-            ("menu.logistics.quality.operation.ipqcorder.changelog", "ja-JP", "制程检验变更_jp", "菜单导航"),
-            // menu.logistics.quality.operation.ipqcorder.changelog
-            ("menu.logistics.quality.operation.ipqcorder.changelog", "zh-CN", "制程检验变更", "菜单导航"),
-            // menu.logistics.quality.operation.ipqcorder.changelog
-            ("menu.logistics.quality.operation.ipqcorder.changelog", "zh-HK", "制程检验变更_hk", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order.change.log
+            ("menu.logistics.quality.operation.ipqc.order.change.log", "en-US", "制程检验变更_us", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order.change.log
+            ("menu.logistics.quality.operation.ipqc.order.change.log", "ja-JP", "制程检验变更_jp", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order.change.log
+            ("menu.logistics.quality.operation.ipqc.order.change.log", "zh-CN", "制程检验变更", "菜单导航"),
+            // menu.logistics.quality.operation.ipqc.order.change.log
+            ("menu.logistics.quality.operation.ipqc.order.change.log", "zh-HK", "制程检验变更_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.fqcorder
-            ("menu.logistics.quality.operation.fqcorder", "en-US", "入库检验_us", "菜单导航"),
-            // menu.logistics.quality.operation.fqcorder
-            ("menu.logistics.quality.operation.fqcorder", "ja-JP", "入库检验_jp", "菜单导航"),
-            // menu.logistics.quality.operation.fqcorder
-            ("menu.logistics.quality.operation.fqcorder", "zh-CN", "入库检验", "菜单导航"),
-            // menu.logistics.quality.operation.fqcorder
-            ("menu.logistics.quality.operation.fqcorder", "zh-HK", "入库检验_hk", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order
+            ("menu.logistics.quality.operation.fqc.order", "en-US", "入库检验_us", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order
+            ("menu.logistics.quality.operation.fqc.order", "ja-JP", "入库检验_jp", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order
+            ("menu.logistics.quality.operation.fqc.order", "zh-CN", "入库检验", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order
+            ("menu.logistics.quality.operation.fqc.order", "zh-HK", "入库检验_hk", "菜单导航"),
 
-            // menu.logistics.quality.operation.fqcorder.changelog
-            ("menu.logistics.quality.operation.fqcorder.changelog", "en-US", "入库检验变更_us", "菜单导航"),
-            // menu.logistics.quality.operation.fqcorder.changelog
-            ("menu.logistics.quality.operation.fqcorder.changelog", "ja-JP", "入库检验变更_jp", "菜单导航"),
-            // menu.logistics.quality.operation.fqcorder.changelog
-            ("menu.logistics.quality.operation.fqcorder.changelog", "zh-CN", "入库检验变更", "菜单导航"),
-            // menu.logistics.quality.operation.fqcorder.changelog
-            ("menu.logistics.quality.operation.fqcorder.changelog", "zh-HK", "入库检验变更_hk", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order.change.log
+            ("menu.logistics.quality.operation.fqc.order.change.log", "en-US", "入库检验变更_us", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order.change.log
+            ("menu.logistics.quality.operation.fqc.order.change.log", "ja-JP", "入库检验变更_jp", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order.change.log
+            ("menu.logistics.quality.operation.fqc.order.change.log", "zh-CN", "入库检验变更", "菜单导航"),
+            // menu.logistics.quality.operation.fqc.order.change.log
+            ("menu.logistics.quality.operation.fqc.order.change.log", "zh-HK", "入库检验变更_hk", "菜单导航"),
 
             // menu.logistics.quality.complaint.customer
             ("menu.logistics.quality.complaint.customer", "en-US", "客诉登记_us", "菜单导航"),
@@ -2300,32 +2273,32 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.quality.complaint.customer
             ("menu.logistics.quality.complaint.customer", "zh-HK", "客诉登记_hk", "菜单导航"),
 
-            // menu.logistics.quality.complaint.customercomplainthandling
-            ("menu.logistics.quality.complaint.customercomplainthandling", "en-US", "客诉处理_us", "菜单导航"),
-            // menu.logistics.quality.complaint.customercomplainthandling
-            ("menu.logistics.quality.complaint.customercomplainthandling", "ja-JP", "客诉处理_jp", "菜单导航"),
-            // menu.logistics.quality.complaint.customercomplainthandling
-            ("menu.logistics.quality.complaint.customercomplainthandling", "zh-CN", "客诉处理", "菜单导航"),
-            // menu.logistics.quality.complaint.customercomplainthandling
-            ("menu.logistics.quality.complaint.customercomplainthandling", "zh-HK", "客诉处理_hk", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.complaint.handling
+            ("menu.logistics.quality.complaint.customer.complaint.handling", "en-US", "客诉处理_us", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.complaint.handling
+            ("menu.logistics.quality.complaint.customer.complaint.handling", "ja-JP", "客诉处理_jp", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.complaint.handling
+            ("menu.logistics.quality.complaint.customer.complaint.handling", "zh-CN", "客诉处理", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.complaint.handling
+            ("menu.logistics.quality.complaint.customer.complaint.handling", "zh-HK", "客诉处理_hk", "菜单导航"),
 
-            // menu.logistics.quality.complaint.customersatisfactionsurvey
-            ("menu.logistics.quality.complaint.customersatisfactionsurvey", "en-US", "客户满意度调查_us", "菜单导航"),
-            // menu.logistics.quality.complaint.customersatisfactionsurvey
-            ("menu.logistics.quality.complaint.customersatisfactionsurvey", "ja-JP", "客户满意度调查_jp", "菜单导航"),
-            // menu.logistics.quality.complaint.customersatisfactionsurvey
-            ("menu.logistics.quality.complaint.customersatisfactionsurvey", "zh-CN", "客户满意度调查", "菜单导航"),
-            // menu.logistics.quality.complaint.customersatisfactionsurvey
-            ("menu.logistics.quality.complaint.customersatisfactionsurvey", "zh-HK", "客户满意度调查_hk", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.satisfaction.survey
+            ("menu.logistics.quality.complaint.customer.satisfaction.survey", "en-US", "客户满意度调查_us", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.satisfaction.survey
+            ("menu.logistics.quality.complaint.customer.satisfaction.survey", "ja-JP", "客户满意度调查_jp", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.satisfaction.survey
+            ("menu.logistics.quality.complaint.customer.satisfaction.survey", "zh-CN", "客户满意度调查", "菜单导航"),
+            // menu.logistics.quality.complaint.customer.satisfaction.survey
+            ("menu.logistics.quality.complaint.customer.satisfaction.survey", "zh-HK", "客户满意度调查_hk", "菜单导航"),
 
-            // menu.logistics.quality.complaint.supplierevaluation
-            ("menu.logistics.quality.complaint.supplierevaluation", "en-US", "供应商评价考核_us", "菜单导航"),
-            // menu.logistics.quality.complaint.supplierevaluation
-            ("menu.logistics.quality.complaint.supplierevaluation", "ja-JP", "供应商评价考核_jp", "菜单导航"),
-            // menu.logistics.quality.complaint.supplierevaluation
-            ("menu.logistics.quality.complaint.supplierevaluation", "zh-CN", "供应商评价考核", "菜单导航"),
-            // menu.logistics.quality.complaint.supplierevaluation
-            ("menu.logistics.quality.complaint.supplierevaluation", "zh-HK", "供应商评价考核_hk", "菜单导航"),
+            // menu.logistics.quality.complaint.supplier.evaluation
+            ("menu.logistics.quality.complaint.supplier.evaluation", "en-US", "供应商评价考核_us", "菜单导航"),
+            // menu.logistics.quality.complaint.supplier.evaluation
+            ("menu.logistics.quality.complaint.supplier.evaluation", "ja-JP", "供应商评价考核_jp", "菜单导航"),
+            // menu.logistics.quality.complaint.supplier.evaluation
+            ("menu.logistics.quality.complaint.supplier.evaluation", "zh-CN", "供应商评价考核", "菜单导航"),
+            // menu.logistics.quality.complaint.supplier.evaluation
+            ("menu.logistics.quality.complaint.supplier.evaluation", "zh-HK", "供应商评价考核_hk", "菜单导航"),
         };
     }
 

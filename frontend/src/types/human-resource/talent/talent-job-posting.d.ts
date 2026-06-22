@@ -31,12 +31,12 @@ export interface TalentJobPosting extends CompanyDtoBase {
   /**
    * 招聘计划ID
    */
-  recruitmentPlanId: string;
+  staffingRequirementId: string;
 
   /**
    * 招聘计划名称（填充字段）
    */
-  recruitmentPlanName?: string;
+  staffingRequirementName?: string;
 
   /**
    * 发布编号（租户+公司内唯一）
@@ -78,16 +78,6 @@ export interface TalentJobPosting extends CompanyDtoBase {
    */
   reason?: string;
 
-  /**
-   * 招聘计划 （主表：TaktTalentRecruitmentPlan）
-   */
-  recruitmentPlan?: TalentRecruitmentPlan;
-
-  /**
-   * 面试安排 （子表：TaktTalentInterview）
-   */
-  talentInterviews?: TalentInterview[];
-
 }
 
 
@@ -111,7 +101,7 @@ export interface TalentJobPostingQuery extends TaktPagedQuery {
   /**
    * 招聘计划ID
    */
-  recruitmentPlanId?: string;
+  staffingRequirementId?: string;
 
   /**
    * 发布编号（租户+公司内唯一）
@@ -215,7 +205,7 @@ export interface TalentJobPostingCreate {
   /**
    * 招聘计划ID
    */
-  recruitmentPlanId: string;
+  staffingRequirementId: string;
 
   /**
    * 发布编号（租户+公司内唯一）
@@ -256,11 +246,6 @@ export interface TalentJobPostingCreate {
    * 发布说明
    */
   reason?: string;
-
-  /**
-   * 面试安排（子表，级联保存）
-   */
-  talentInterviews?: TalentInterviewCreate[];
 
   /**
    * 扩展字段JSON
@@ -328,7 +313,7 @@ export interface TalentJobPostingTemplate {
   /**
    * 招聘计划ID
    */
-  recruitmentPlanId?: string;
+  staffingRequirementId?: string;
 
   /**
    * 发布编号（租户+公司内唯一）
@@ -392,7 +377,7 @@ export interface TalentJobPostingImport {
   /**
    * 招聘计划ID
    */
-  recruitmentPlanId?: string;
+  staffingRequirementId?: string;
 
   /**
    * 发布编号（租户+公司内唯一）
@@ -451,7 +436,7 @@ export interface TalentJobPostingExport {
   /**
    * 招聘计划ID
    */
-  recruitmentPlanId: string;
+  staffingRequirementId: string;
 
   /**
    * 发布编号（租户+公司内唯一）

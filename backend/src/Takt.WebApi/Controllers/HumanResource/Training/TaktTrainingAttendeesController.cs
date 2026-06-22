@@ -41,7 +41,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:training:attendee:list", "培训参训记录列表")]
+    [TaktPermission("human:resource:training:attendee:list", "培训参训记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTrainingAttendeeListAsync([FromQuery] TaktTrainingAttendeeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// </summary>
     /// <param name="id">培训参训记录ID</param>
     /// <returns>培训参训记录DTO</returns>
-    [TaktPermission("humanresource:training:attendee:query", "培训参训记录详情")]
+    [TaktPermission("human:resource:training:attendee:query", "培训参训记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTrainingAttendeeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// 获取培训结果选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:training:attendee:query", "培训参训记录选项")]
+    [TaktPermission("human:resource:training:attendee:query", "培训参训记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTrainingAttendeeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>培训参训记录DTO</returns>
-    [TaktPermission("humanresource:training:attendee:create", "创建培训参训记录")]
+    [TaktPermission("human:resource:training:attendee:create", "创建培训参训记录")]
     [HttpPost]
     public async Task<IActionResult> CreateTrainingAttendeeAsync([FromBody] TaktTrainingAttendeeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// <param name="id">培训参训记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>培训参训记录DTO</returns>
-    [TaktPermission("humanresource:training:attendee:update", "更新培训参训记录")]
+    [TaktPermission("human:resource:training:attendee:update", "更新培训参训记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTrainingAttendeeAsync(long id, [FromBody] TaktTrainingAttendeeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// </summary>
     /// <param name="id">培训参训记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:training:attendee:delete", "删除培训参训记录")]
+    [TaktPermission("human:resource:training:attendee:delete", "删除培训参训记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTrainingAttendeeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:training:attendee:delete", "批量删除培训参训记录")]
+    [TaktPermission("human:resource:training:attendee:delete", "批量删除培训参训记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTrainingAttendeeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>培训参训记录DTO</returns>
-    [TaktPermission("humanresource:training:attendee:update", "更新培训参训记录状态")]
+    [TaktPermission("human:resource:training:attendee:update", "更新培训参训记录状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateTrainingAttendeeStatusAsync([FromBody] TaktTrainingAttendeeStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:training:attendee:import", "获取培训参训记录导入模板")]
+    [TaktPermission("human:resource:training:attendee:import", "获取培训参训记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetTrainingAttendeeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:training:attendee:import", "导入培训参训记录")]
+    [TaktPermission("human:resource:training:attendee:import", "导入培训参训记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportTrainingAttendeeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktTrainingAttendeesController : TaktControllerBase
     /// 导出培训参训记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:training:attendee:export", "导出培训参训记录")]
+    [TaktPermission("human:resource:training:attendee:export", "导出培训参训记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTrainingAttendeeAsync([FromQuery] TaktTrainingAttendeeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

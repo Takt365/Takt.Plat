@@ -4,7 +4,7 @@
 // 文件名称：TaktTalentOffer.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
-// 功能描述：录用信息（人才链路第5步：面试通过后发 offer，HireDate=录用日期）
+// 功能描述：录用信息（人才链路：用人需求→职位发布→录用）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,19 +17,19 @@ using Takt.Domain.Entities.HumanResource.Personnel;
 namespace Takt.Domain.Entities.HumanResource.Talent;
 
 /// <summary>
-/// 录用信息（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
+/// 录用信息（审批单，状态见 TaktApprovalEntityBase.ApprovalStatus）
 /// </summary>
 [SugarTable("takt_human_resource_talent_offer", "录用信息表")]
 [SugarIndex("ix_talent_offer_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_talent_offer_interview", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InterviewId), OrderByType.Asc, false)]
+[SugarIndex("ix_talent_offer_job_posting", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(JobPostingId), OrderByType.Asc, false)]
 [SugarIndex("ix_talent_offer_approval", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApprovalStatus), OrderByType.Asc, false)]
 public class TaktTalentOffer : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）
+    /// 职位发布ID（用人需求→职位发布→录用）
     /// </summary>
-    [SugarColumn(ColumnName = "interview_id", ColumnDescription = "面试安排ID", ColumnDataType = "bigint", IsNullable = false)]
-    public long InterviewId { get; set; }
+    [SugarColumn(ColumnName = "job_posting_id", ColumnDescription = "职位发布ID", ColumnDataType = "bigint", IsNullable = false)]
+    public long JobPostingId { get; set; }
 
     /// <summary>
     /// 录用编号（租户+公司内业务编号）
@@ -84,10 +84,10 @@ public class TaktTalentOffer : TaktApprovalEntityBase
     // ========================================
 
     /// <summary>
-    /// 面试安排
+    /// 职位发布
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(InterviewId))]
-    public TaktTalentInterview? Interview { get; set; }
+    [Navigate(NavigateType.ManyToOne, nameof(JobPostingId))]
+    public TaktTalentJobPosting? JobPosting { get; set; }
 
     /// <summary>
     /// 入职待办

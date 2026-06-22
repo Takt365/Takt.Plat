@@ -41,7 +41,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("foundation:isocode:list", "ISO编码列表")]
+    [TaktPermission("foundation:iso:code:list", "ISO编码列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetIsoCodeListAsync([FromQuery] TaktIsoCodeQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="id">ISO编码ID</param>
     /// <returns>ISO编码DTO</returns>
-    [TaktPermission("foundation:isocode:query", "ISO编码详情")]
+    [TaktPermission("foundation:iso:code:query", "ISO编码详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetIsoCodeByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// 获取ISO编码选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("foundation:isocode:query", "ISO编码选项")]
+    [TaktPermission("foundation:iso:code:query", "ISO编码选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetIsoCodeOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>ISO编码DTO</returns>
-    [TaktPermission("foundation:isocode:create", "创建ISO编码")]
+    [TaktPermission("foundation:iso:code:create", "创建ISO编码")]
     [HttpPost]
     public async Task<IActionResult> CreateIsoCodeAsync([FromBody] TaktIsoCodeCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// <param name="id">ISO编码ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>ISO编码DTO</returns>
-    [TaktPermission("foundation:isocode:update", "更新ISO编码")]
+    [TaktPermission("foundation:iso:code:update", "更新ISO编码")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateIsoCodeAsync(long id, [FromBody] TaktIsoCodeUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="id">ISO编码ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:isocode:delete", "删除ISO编码")]
+    [TaktPermission("foundation:iso:code:delete", "删除ISO编码")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteIsoCodeByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:isocode:delete", "批量删除ISO编码")]
+    [TaktPermission("foundation:iso:code:delete", "批量删除ISO编码")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteIsoCodeBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>ISO编码DTO</returns>
-    [TaktPermission("foundation:isocode:update", "更新ISO编码状态")]
+    [TaktPermission("foundation:iso:code:update", "更新ISO编码状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateIsoCodeStatusAsync([FromBody] TaktIsoCodeStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>ISO编码DTO</returns>
-    [TaktPermission("foundation:isocode:update", "更新ISO编码排序")]
+    [TaktPermission("foundation:iso:code:update", "更新ISO编码排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateIsoCodeSortAsync([FromBody] TaktIsoCodeSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:isocode:import", "获取ISO编码导入模板")]
+    [TaktPermission("foundation:iso:code:import", "获取ISO编码导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetIsoCodeTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("foundation:isocode:import", "导入ISO编码")]
+    [TaktPermission("foundation:iso:code:import", "导入ISO编码")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportIsoCodeAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktIsoCodesController : TaktControllerBase
     /// 导出ISO编码
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:isocode:export", "导出ISO编码")]
+    [TaktPermission("foundation:iso:code:export", "导出ISO编码")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportIsoCodeAsync([FromQuery] TaktIsoCodeQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

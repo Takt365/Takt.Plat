@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:scheduling:apsschedule:create"
-      update-permission="logistics:manufacturing:scheduling:apsschedule:update"
-      delete-permission="logistics:manufacturing:scheduling:apsschedule:delete"
-      import-permission="logistics:manufacturing:scheduling:apsschedule:import"
-      export-permission="logistics:manufacturing:scheduling:apsschedule:export"
+      create-permission="logistics:manufacturing:scheduling:aps:schedule:change:log:create"
+      update-permission="logistics:manufacturing:scheduling:aps:schedule:change:log:update"
+      delete-permission="logistics:manufacturing:scheduling:aps:schedule:change:log:delete"
+      import-permission="logistics:manufacturing:scheduling:aps:schedule:change:log:import"
+      export-permission="logistics:manufacturing:scheduling:aps:schedule:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -948,7 +948,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:scheduling:apsschedule:update',
+        permission: 'logistics:manufacturing:scheduling:aps:schedule:change:log:update',
         onClick: (record: ApsSchedule) => handleEdit(record)
       },
       {
@@ -956,7 +956,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:scheduling:apsschedule:delete',
+        permission: 'logistics:manufacturing:scheduling:aps:schedule:change:log:delete',
         onClick: (record: ApsSchedule) => handleDeleteOne(record)
       }
     ]

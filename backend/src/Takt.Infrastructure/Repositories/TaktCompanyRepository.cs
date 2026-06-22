@@ -433,6 +433,16 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// </summary>
     public virtual async Task<bool> DeleteAsync(long id)
     {
+        var entity = await GetByIdAsync(id);
+        if (entity == null)
+        {
+            return false;
+        }
+        var isBuiltIn = entity.GetType().GetProperty("IsBuiltIn")?.GetValue(entity);
+        if (isBuiltIn is int builtInFlag && builtInFlag == 1)
+        {
+            return false;
+        }
         var now = DateTime.Now;
         var rows = await ApplyWriteScope(Db.Updateable<TEntity>()
             .SetColumns(x => new TEntity

@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：设变管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：设变管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="p-4">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:engineeringchange:ec:create"
-      update-permission="logistics:manufacturing:engineeringchange:ec:update"
-      delete-permission="logistics:manufacturing:engineeringchange:ec:delete"
-      import-permission="logistics:manufacturing:engineeringchange:ec:import"
-      export-permission="logistics:manufacturing:engineeringchange:ec:export"
+      create-permission="logistics:manufacturing:engineering:change:ec:create"
+      update-permission="logistics:manufacturing:engineering:change:ec:update"
+      delete-permission="logistics:manufacturing:engineering:change:ec:delete"
+      import-permission="logistics:manufacturing:engineering:change:ec:import"
+      export-permission="logistics:manufacturing:engineering:change:ec:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -52,40 +52,39 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      entity-scope="company"
-      :columns="columns"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'ecId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getEcId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getEcId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="ecId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-
-    </TaktSingleTable>
-
-    <!-- 分页（服务端分页，外置 TaktPagination） -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+      <template #detail>
+        <EcDetailPanel
+          ref="ecDetailPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -268,7 +267,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -279,7 +278,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -365,7 +364,7 @@
 
 <script setup lang="ts">
 /**
- * 设变管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 设变管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/ec
  */
 import { ref, computed, onMounted } from 'vue'
@@ -375,6 +374,8 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EcForm from './components/ec-form.vue'
+import EcDetailPanel from './components/ec-detail-panel.vue'
+import { provideEcMasterContext } from './composables/use-ec-master-context'
 import { getEcList, getEcById, createEc, updateEc, deleteEcById, deleteEcBatch, getEcTemplate, importEc, exportEc, updateEcStatus } from '@/api/logistics/manufacturing/engineering-change/ec'
 import type { Ec, EcQuery } from '@/types/logistics/manufacturing/engineering-change/ec'
 import { taktExcelEntityNames } from '@/utils/naming'
@@ -481,7 +482,9 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideEcMasterContext()
+const ecDetailPanelRef = ref<InstanceType<typeof EcDetailPanel> | null>(null)
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -539,10 +542,55 @@ onMounted(async () => {
 })
 
 
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: Ec | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getEcId(record) : ''
+}
 
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as Ec
+  const key = getEcId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
+}
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
+/** 加载主表详情并回填当前页 dataSource */
+async function loadEcDetail(record: Ec): Promise<Ec | null> {
+  const id = getEcId(record)
+  if (!id) {
+    return null
+  }
+  try {
+    const detail = await getEcById(id)
+    const index = dataSource.value.findIndex((row) => getEcId(row) === id)
+    if (index !== -1) {
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Ec
+    }
+    return detail
+  } catch (error: any) {
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    return null
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -671,7 +719,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:engineeringchange:ec:update',
+        permission: 'logistics:manufacturing:engineering:change:ec:update',
         onClick: (record: Ec) => handleEdit(record)
       },
       {
@@ -679,7 +727,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:engineeringchange:ec:delete',
+        permission: 'logistics:manufacturing:engineering:change:ec:delete',
         onClick: (record: Ec) => handleDeleteOne(record)
       }
     ]
@@ -703,36 +751,26 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: Ec, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getEcId(selectedRow.value) === getEcId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: Ec[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Ec) => ({
-  onClick: () => {
-    const key = getEcId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getEcId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
@@ -795,17 +833,23 @@ function handleCreate() {
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Ec) {
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
+async function handleEdit(record: Ec) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ec._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+  formLoading.value = true
+  try {
+    const detail = await loadEcDetail(record)
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ec._self') }))
   }
@@ -833,6 +877,9 @@ async function handleFormSubmit() {
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  ecDetailPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -916,6 +963,10 @@ async function handleDeleteOne(record: Ec) {
     onOk: async () => {
       await deleteEcById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.ec._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -935,6 +986,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEcBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.ec._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -999,17 +1054,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number, size: number) {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-/** 分页每页条数变更（重置到第 1 页） */
-function handlePaginationSizeChange(_current: number, size: number) {
-  currentPage.value = getTaktDefaultPageIndex()
-  pageSize.value = size
-  loadData()
-}
 </script>

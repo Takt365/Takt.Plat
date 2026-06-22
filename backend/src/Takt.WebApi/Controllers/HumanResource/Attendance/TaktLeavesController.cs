@@ -41,7 +41,7 @@ public class TaktLeavesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:attendance:leave:list", "请假信息列表")]
+    [TaktPermission("human:resource:attendance:leave:list", "请假信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetLeaveListAsync([FromQuery] TaktLeaveQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktLeavesController : TaktControllerBase
     /// </summary>
     /// <param name="id">请假信息ID</param>
     /// <returns>请假信息DTO</returns>
-    [TaktPermission("humanresource:attendance:leave:query", "请假信息详情")]
+    [TaktPermission("human:resource:attendance:leave:query", "请假信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetLeaveByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktLeavesController : TaktControllerBase
     /// 获取请假信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:attendance:leave:query", "请假信息选项")]
+    [TaktPermission("human:resource:attendance:leave:query", "请假信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetLeaveOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktLeavesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>请假信息DTO</returns>
-    [TaktPermission("humanresource:attendance:leave:create", "创建请假信息")]
+    [TaktPermission("human:resource:attendance:leave:create", "创建请假信息")]
     [HttpPost]
     public async Task<IActionResult> CreateLeaveAsync([FromBody] TaktLeaveCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktLeavesController : TaktControllerBase
     /// <param name="id">请假信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>请假信息DTO</returns>
-    [TaktPermission("humanresource:attendance:leave:update", "更新请假信息")]
+    [TaktPermission("human:resource:attendance:leave:update", "更新请假信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLeaveAsync(long id, [FromBody] TaktLeaveUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktLeavesController : TaktControllerBase
     /// </summary>
     /// <param name="id">请假信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:leave:delete", "删除请假信息")]
+    [TaktPermission("human:resource:attendance:leave:delete", "删除请假信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLeaveByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktLeavesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:attendance:leave:delete", "批量删除请假信息")]
+    [TaktPermission("human:resource:attendance:leave:delete", "批量删除请假信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteLeaveBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktLeavesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>请假信息DTO</returns>
-    [TaktPermission("humanresource:attendance:leave:update", "更新请假信息状态")]
+    [TaktPermission("human:resource:attendance:leave:update", "更新请假信息状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateLeaveStatusAsync([FromBody] TaktLeaveStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktLeavesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:leave:import", "获取请假信息导入模板")]
+    [TaktPermission("human:resource:attendance:leave:import", "获取请假信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetLeaveTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktLeavesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:attendance:leave:import", "导入请假信息")]
+    [TaktPermission("human:resource:attendance:leave:import", "导入请假信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportLeaveAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktLeavesController : TaktControllerBase
     /// 导出请假信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:attendance:leave:export", "导出请假信息")]
+    [TaktPermission("human:resource:attendance:leave:export", "导出请假信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportLeaveAsync([FromQuery] TaktLeaveQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

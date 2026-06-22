@@ -41,7 +41,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:performance:objective:list", "绩效目标列表")]
+    [TaktPermission("human:resource:performance:perf:objective:list", "绩效目标列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPerfObjectiveListAsync([FromQuery] TaktPerfObjectiveQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效目标ID</param>
     /// <returns>绩效目标DTO</returns>
-    [TaktPermission("humanresource:performance:objective:query", "绩效目标详情")]
+    [TaktPermission("human:resource:performance:perf:objective:query", "绩效目标详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPerfObjectiveByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// 获取绩效目标选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:performance:objective:query", "绩效目标选项")]
+    [TaktPermission("human:resource:performance:perf:objective:query", "绩效目标选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPerfObjectiveOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>绩效目标DTO</returns>
-    [TaktPermission("humanresource:performance:objective:create", "创建绩效目标")]
+    [TaktPermission("human:resource:performance:perf:objective:create", "创建绩效目标")]
     [HttpPost]
     public async Task<IActionResult> CreatePerfObjectiveAsync([FromBody] TaktPerfObjectiveCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// <param name="id">绩效目标ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>绩效目标DTO</returns>
-    [TaktPermission("humanresource:performance:objective:update", "更新绩效目标")]
+    [TaktPermission("human:resource:performance:perf:objective:update", "更新绩效目标")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePerfObjectiveAsync(long id, [FromBody] TaktPerfObjectiveUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// </summary>
     /// <param name="id">绩效目标ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:objective:delete", "删除绩效目标")]
+    [TaktPermission("human:resource:performance:perf:objective:delete", "删除绩效目标")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePerfObjectiveByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:performance:objective:delete", "批量删除绩效目标")]
+    [TaktPermission("human:resource:performance:perf:objective:delete", "批量删除绩效目标")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePerfObjectiveBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>绩效目标DTO</returns>
-    [TaktPermission("humanresource:performance:objective:update", "更新绩效目标状态")]
+    [TaktPermission("human:resource:performance:perf:objective:update", "更新绩效目标状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePerfObjectiveStatusAsync([FromBody] TaktPerfObjectiveStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:objective:import", "获取绩效目标导入模板")]
+    [TaktPermission("human:resource:performance:perf:objective:import", "获取绩效目标导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPerfObjectiveTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:performance:objective:import", "导入绩效目标")]
+    [TaktPermission("human:resource:performance:perf:objective:import", "导入绩效目标")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPerfObjectiveAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// 导出绩效目标
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:performance:objective:export", "导出绩效目标")]
+    [TaktPermission("human:resource:performance:perf:objective:export", "导出绩效目标")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPerfObjectiveAsync([FromQuery] TaktPerfObjectiveQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -1,5 +1,6 @@
 @echo off
 chcp 65001 >nul
+set DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION=1
 echo ========================================
 echo Takt.Plat 后端服务启动
 echo ========================================

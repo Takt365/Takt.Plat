@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:personnel:employeereassignment:create"
-      update-permission="humanresource:personnel:employeereassignment:update"
-      delete-permission="humanresource:personnel:employeereassignment:delete"
-      import-permission="humanresource:personnel:employeereassignment:import"
-      export-permission="humanresource:personnel:employeereassignment:export"
+      create-permission="human:resource:personnel:employee:reassignment:create"
+      update-permission="human:resource:personnel:employee:reassignment:update"
+      delete-permission="human:resource:personnel:employee:reassignment:delete"
+      import-permission="human:resource:personnel:employee:reassignment:import"
+      export-permission="human:resource:personnel:employee:reassignment:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -723,7 +723,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:personnel:employeereassignment:update',
+        permission: 'human:resource:personnel:employee:reassignment:update',
         onClick: (record: EmployeeReassignment) => handleEdit(record)
       },
       {
@@ -731,7 +731,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:personnel:employeereassignment:delete',
+        permission: 'human:resource:personnel:employee:reassignment:delete',
         onClick: (record: EmployeeReassignment) => handleDeleteOne(record)
       }
     ]

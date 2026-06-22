@@ -90,14 +90,14 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             // entity.talentoffer._self
             new TranslationSeedItem("entity.talentoffer._self", "zh-HK", "录用信息_hk", "实体名称"),
 
-            // entity.talentoffer.interviewid
-            new TranslationSeedItem("entity.talentoffer.interviewid", "en-US", "面试安排ID_us", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
-            // entity.talentoffer.interviewid
-            new TranslationSeedItem("entity.talentoffer.interviewid", "ja-JP", "面试安排ID_jp", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
-            // entity.talentoffer.interviewid
-            new TranslationSeedItem("entity.talentoffer.interviewid", "zh-CN", "面试安排ID", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
-            // entity.talentoffer.interviewid
-            new TranslationSeedItem("entity.talentoffer.interviewid", "zh-HK", "面试安排ID_hk", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
+            // entity.talentoffer.jobpostingid
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "en-US", "职位发布ID_us", "职位发布ID（用人需求→职位发布→录用）"),
+            // entity.talentoffer.jobpostingid
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "ja-JP", "职位发布ID_jp", "职位发布ID（用人需求→职位发布→录用）"),
+            // entity.talentoffer.jobpostingid
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "zh-CN", "职位发布ID", "职位发布ID（用人需求→职位发布→录用）"),
+            // entity.talentoffer.jobpostingid
+            new TranslationSeedItem("entity.talentoffer.jobpostingid", "zh-HK", "职位发布ID_hk", "职位发布ID（用人需求→职位发布→录用）"),
 
             // entity.talentoffer.offerno
             new TranslationSeedItem("entity.talentoffer.offerno", "en-US", "录用编号_us", "录用编号（租户+公司内业务编号）"),
@@ -171,14 +171,14 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             // entity.talentoffer.reason
             new TranslationSeedItem("entity.talentoffer.reason", "zh-HK", "录用说明_hk", "录用说明"),
 
-            // entity.talentoffer.interview
-            new TranslationSeedItem("entity.talentoffer.interview", "en-US", "面试安排_us", "面试安排"),
-            // entity.talentoffer.interview
-            new TranslationSeedItem("entity.talentoffer.interview", "ja-JP", "面试安排_jp", "面试安排"),
-            // entity.talentoffer.interview
-            new TranslationSeedItem("entity.talentoffer.interview", "zh-CN", "面试安排", "面试安排"),
-            // entity.talentoffer.interview
-            new TranslationSeedItem("entity.talentoffer.interview", "zh-HK", "面试安排_hk", "面试安排"),
+            // entity.talentoffer.jobposting
+            new TranslationSeedItem("entity.talentoffer.jobposting", "en-US", "职位发布_us", "职位发布"),
+            // entity.talentoffer.jobposting
+            new TranslationSeedItem("entity.talentoffer.jobposting", "ja-JP", "职位发布_jp", "职位发布"),
+            // entity.talentoffer.jobposting
+            new TranslationSeedItem("entity.talentoffer.jobposting", "zh-CN", "职位发布", "职位发布"),
+            // entity.talentoffer.jobposting
+            new TranslationSeedItem("entity.talentoffer.jobposting", "zh-HK", "职位发布_hk", "职位发布"),
 
             // entity.talentoffer.employeeonboardings
             new TranslationSeedItem("entity.talentoffer.employeeonboardings", "en-US", "入职待办_us", "入职待办"),

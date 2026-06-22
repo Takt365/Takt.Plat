@@ -43,7 +43,6 @@ const MANUAL_STANDALONE_SERVICE_ENTITY_NAMES = new Set([
  */
 const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
   'QuartzLog',
-  'StorageLocation',
   'ServiceRequest',
   'ServiceOrder',
   'ServiceTicket',

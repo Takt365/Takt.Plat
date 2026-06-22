@@ -20,17 +20,17 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:talent:talentstaffingrequirement:create"
-      update-permission="humanresource:talent:talentstaffingrequirement:update"
-      delete-permission="humanresource:talent:talentstaffingrequirement:delete"
-      import-permission="humanresource:talent:talentstaffingrequirement:import"
-      export-permission="humanresource:talent:talentstaffingrequirement:export"
+      create-permission="human:resource:talent:talentstaffingrequirement:create"
+      update-permission="human:resource:talent:talentstaffingrequirement:update"
+      delete-permission="human:resource:talent:talentstaffingrequirement:delete"
+      import-permission="human:resource:talent:talentstaffingrequirement:import"
+      export-permission="human:resource:talent:talentstaffingrequirement:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -66,29 +66,9 @@
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
-    >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.talentRecruitmentPlan._self') }}</div>
-          <a-table
-            v-if="hasTalentRecruitmentPlanRows(record)"
-            :columns="talentRecruitmentPlanExpandColumns"
-            :data-source="getTalentRecruitmentPlanRows(record)"
-            :row-key="(row: TalentRecruitmentPlan, index?: number) => row?.talentRecruitmentPlanId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
-      </template>
-    </TaktSingleTable>
+    />
 
     <!-- 分页组件 -->
     <TaktPagination
@@ -421,8 +401,6 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import TalentStaffingRequirementForm from './components/talent-staffing-requirement-form.vue'
 import { getTalentStaffingRequirementList, getTalentStaffingRequirementById, createTalentStaffingRequirement, updateTalentStaffingRequirement, deleteTalentStaffingRequirementById, deleteTalentStaffingRequirementBatch, getTalentStaffingRequirementTemplate, importTalentStaffingRequirement, exportTalentStaffingRequirement } from '@/api/human-resource/talent/talent-staffing-requirement'
-import * as talentRecruitmentPlanApi from '@/api/human-resource/talent/talent-recruitment-plan'
-import type { TalentRecruitmentPlan, TalentRecruitmentPlanQuery } from '@/types/human-resource/talent/talent-recruitment-plan'
 import type { TalentStaffingRequirement, TalentStaffingRequirementQuery, TalentStaffingRequirementCreate, TalentStaffingRequirementUpdate } from '@/types/human-resource/talent/talent-staffing-requirement'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -540,76 +518,10 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
-
 /** 页面挂载后加载分页列表 */
 onMounted(() => {
   loadData()
 })
-
-/** 展开行预览：talentRecruitmentPlan 列 */
-const talentRecruitmentPlanExpandColumns = computed(() => [
-  {
-    title: t('entity.talentRecruitmentPlan.staffingrequirementid'),
-    dataIndex: 'staffingRequirementId',
-    key: 'staffingRequirementId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.staffingrequirementname'),
-    dataIndex: 'staffingRequirementName',
-    key: 'staffingRequirementName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planno'),
-    dataIndex: 'planNo',
-    key: 'planNo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.plandate'),
-    dataIndex: 'planDate',
-    key: 'planDate',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planstartdate'),
-    dataIndex: 'planStartDate',
-    key: 'planStartDate',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planenddate'),
-    dataIndex: 'planEndDate',
-    key: 'planEndDate',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.planheadcount'),
-    dataIndex: 'planHeadcount',
-    key: 'planHeadcount',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.talentRecruitmentPlan.reason'),
-    dataIndex: 'reason',
-    key: 'reason',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 talentRecruitmentPlan 子表缓存 */
-function getTalentRecruitmentPlanRows(record: TalentStaffingRequirement): TalentRecruitmentPlan[] {
-  return (record as any)?.talentRecruitmentPlans ?? []
-}
-
-/** 主表行是否已加载 talentRecruitmentPlan 子表 */
-function hasTalentRecruitmentPlanRows(record: TalentStaffingRequirement): boolean {
-  return getTalentRecruitmentPlanRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadTalentStaffingRequirementDetail(record: TalentStaffingRequirement): Promise<TalentStaffingRequirement | null> {
@@ -629,53 +541,6 @@ async function loadTalentStaffingRequirementDetail(record: TalentStaffingRequire
     return null
   }
 }
-/** 懒加载 talentRecruitmentPlan 子表（TalentRecruitmentPlanQuery + talentRecruitmentPlanApi，与主表 TalentStaffingRequirementQuery 分离） */
-async function loadTalentRecruitmentPlanForTalentStaffingRequirement(record: TalentStaffingRequirement): Promise<TalentRecruitmentPlan[]> {
-  const masterId = getTalentStaffingRequirementId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: TalentRecruitmentPlanQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      talentStaffingRequirementId: masterId,
-    }
-    const result = await talentRecruitmentPlanApi.getTalentRecruitmentPlanList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getTalentStaffingRequirementId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, talentRecruitmentPlans: rows } as TalentStaffingRequirement
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureTalentStaffingRequirementChildrenLoaded(record: TalentStaffingRequirement) {
-  if (!hasTalentRecruitmentPlanRows(record)) {
-    await loadTalentRecruitmentPlanForTalentStaffingRequirement(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: TalentStaffingRequirement) {
-  const key = getTalentStaffingRequirementId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureTalentStaffingRequirementChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
-
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -875,7 +740,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:talent:talentstaffingrequirement:update',
+        permission: 'human:resource:talent:talentstaffingrequirement:update',
         onClick: (record: TalentStaffingRequirement) => handleEdit(record)
       },
       {
@@ -883,7 +748,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:talent:talentstaffingrequirement:delete',
+        permission: 'human:resource:talent:talentstaffingrequirement:delete',
         onClick: (record: TalentStaffingRequirement) => handleDeleteOne(record)
       }
     ]

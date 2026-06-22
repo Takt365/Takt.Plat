@@ -41,7 +41,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:list", "生产班组列表")]
+    [TaktPermission("logistics:manufacturing:output:production:team:list", "生产班组列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetProductionTeamListAsync([FromQuery] TaktProductionTeamQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产班组ID</param>
     /// <returns>生产班组DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:query", "生产班组详情")]
+    [TaktPermission("logistics:manufacturing:output:production:team:query", "生产班组详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductionTeamByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// 获取生产班组选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:query", "生产班组选项")]
+    [TaktPermission("logistics:manufacturing:output:production:team:query", "生产班组选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetProductionTeamOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>生产班组DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:create", "创建生产班组")]
+    [TaktPermission("logistics:manufacturing:output:production:team:create", "创建生产班组")]
     [HttpPost]
     public async Task<IActionResult> CreateProductionTeamAsync([FromBody] TaktProductionTeamCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// <param name="id">生产班组ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>生产班组DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:update", "更新生产班组")]
+    [TaktPermission("logistics:manufacturing:output:production:team:update", "更新生产班组")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProductionTeamAsync(long id, [FromBody] TaktProductionTeamUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产班组ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:delete", "删除生产班组")]
+    [TaktPermission("logistics:manufacturing:output:production:team:delete", "删除生产班组")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProductionTeamByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:delete", "批量删除生产班组")]
+    [TaktPermission("logistics:manufacturing:output:production:team:delete", "批量删除生产班组")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteProductionTeamBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>生产班组DTO</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:update", "更新生产班组状态")]
+    [TaktPermission("logistics:manufacturing:output:production:team:update", "更新生产班组状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateProductionTeamStatusAsync([FromBody] TaktProductionTeamStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:import", "获取生产班组导入模板")]
+    [TaktPermission("logistics:manufacturing:output:production:team:import", "获取生产班组导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetProductionTeamTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:import", "导入生产班组")]
+    [TaktPermission("logistics:manufacturing:output:production:team:import", "导入生产班组")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportProductionTeamAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// 导出生产班组
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:output:productionteam:export", "导出生产班组")]
+    [TaktPermission("logistics:manufacturing:output:production:team:export", "导出生产班组")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportProductionTeamAsync([FromQuery] TaktProductionTeamQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -22,7 +22,7 @@ export const REPORT_DOMAIN_MENU_CODES: Readonly<Record<string, number>> = {
   ROUTINE: 2,
   ACCOUNTING: 3,
   LOGISTICS: 4,
-  HUMANRESOURCE: 5,
+  HUMAN_RESOURCE: 5,
   WORKFLOW: 6,
   CODE: 7,
   FOUNDATION: 8,

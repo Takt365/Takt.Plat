@@ -41,7 +41,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:storagelocation:list", "库位主数据列表")]
+    [TaktPermission("logistics:materials:storage:location:list", "库位主数据列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetStorageLocationListAsync([FromQuery] TaktStorageLocationQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">库位主数据ID</param>
     /// <returns>库位主数据DTO</returns>
-    [TaktPermission("logistics:materials:storagelocation:query", "库位主数据详情")]
+    [TaktPermission("logistics:materials:storage:location:query", "库位主数据详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetStorageLocationByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// 获取库位主数据选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:storagelocation:query", "库位主数据选项")]
+    [TaktPermission("logistics:materials:storage:location:query", "库位主数据选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetStorageLocationOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>库位主数据DTO</returns>
-    [TaktPermission("logistics:materials:storagelocation:create", "创建库位主数据")]
+    [TaktPermission("logistics:materials:storage:location:create", "创建库位主数据")]
     [HttpPost]
     public async Task<IActionResult> CreateStorageLocationAsync([FromBody] TaktStorageLocationCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// <param name="id">库位主数据ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>库位主数据DTO</returns>
-    [TaktPermission("logistics:materials:storagelocation:update", "更新库位主数据")]
+    [TaktPermission("logistics:materials:storage:location:update", "更新库位主数据")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStorageLocationAsync(long id, [FromBody] TaktStorageLocationUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">库位主数据ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:storagelocation:delete", "删除库位主数据")]
+    [TaktPermission("logistics:materials:storage:location:delete", "删除库位主数据")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStorageLocationByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:storagelocation:delete", "批量删除库位主数据")]
+    [TaktPermission("logistics:materials:storage:location:delete", "批量删除库位主数据")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteStorageLocationBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>库位主数据DTO</returns>
-    [TaktPermission("logistics:materials:storagelocation:update", "更新库位主数据状态")]
+    [TaktPermission("logistics:materials:storage:location:update", "更新库位主数据状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateStorageLocationStatusAsync([FromBody] TaktStorageLocationStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>库位主数据DTO</returns>
-    [TaktPermission("logistics:materials:storagelocation:update", "更新库位主数据排序")]
+    [TaktPermission("logistics:materials:storage:location:update", "更新库位主数据排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateStorageLocationSortAsync([FromBody] TaktStorageLocationSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:storagelocation:import", "获取库位主数据导入模板")]
+    [TaktPermission("logistics:materials:storage:location:import", "获取库位主数据导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetStorageLocationTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:storagelocation:import", "导入库位主数据")]
+    [TaktPermission("logistics:materials:storage:location:import", "导入库位主数据")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportStorageLocationAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktStorageLocationsController : TaktControllerBase
     /// 导出库位主数据
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:storagelocation:export", "导出库位主数据")]
+    [TaktPermission("logistics:materials:storage:location:export", "导出库位主数据")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportStorageLocationAsync([FromQuery] TaktStorageLocationQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

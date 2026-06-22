@@ -41,7 +41,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:talent:talentoffer:list", "录用信息列表")]
+    [TaktPermission("human:resource:talent:talentoffer:list", "录用信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTalentOfferListAsync([FromQuery] TaktTalentOfferQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// </summary>
     /// <param name="id">录用信息ID</param>
     /// <returns>录用信息DTO</returns>
-    [TaktPermission("humanresource:talent:talentoffer:query", "录用信息详情")]
+    [TaktPermission("human:resource:talent:talentoffer:query", "录用信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTalentOfferByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// 获取录用信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:talent:talentoffer:query", "录用信息选项")]
+    [TaktPermission("human:resource:talent:talentoffer:query", "录用信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTalentOfferOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>录用信息DTO</returns>
-    [TaktPermission("humanresource:talent:talentoffer:create", "创建录用信息")]
+    [TaktPermission("human:resource:talent:talentoffer:create", "创建录用信息")]
     [HttpPost]
     public async Task<IActionResult> CreateTalentOfferAsync([FromBody] TaktTalentOfferCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// <param name="id">录用信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>录用信息DTO</returns>
-    [TaktPermission("humanresource:talent:talentoffer:update", "更新录用信息")]
+    [TaktPermission("human:resource:talent:talentoffer:update", "更新录用信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTalentOfferAsync(long id, [FromBody] TaktTalentOfferUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// </summary>
     /// <param name="id">录用信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:talent:talentoffer:delete", "删除录用信息")]
+    [TaktPermission("human:resource:talent:talentoffer:delete", "删除录用信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTalentOfferByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:talent:talentoffer:delete", "批量删除录用信息")]
+    [TaktPermission("human:resource:talent:talentoffer:delete", "批量删除录用信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTalentOfferBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:talent:talentoffer:import", "获取录用信息导入模板")]
+    [TaktPermission("human:resource:talent:talentoffer:import", "获取录用信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetTalentOfferTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:talent:talentoffer:import", "导入录用信息")]
+    [TaktPermission("human:resource:talent:talentoffer:import", "导入录用信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportTalentOfferAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktTalentOffersController : TaktControllerBase
     /// 导出录用信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:talent:talentoffer:export", "导出录用信息")]
+    [TaktPermission("human:resource:talent:talentoffer:export", "导出录用信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTalentOfferAsync([FromQuery] TaktTalentOfferQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

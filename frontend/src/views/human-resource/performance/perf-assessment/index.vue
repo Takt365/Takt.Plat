@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:talent:interview:create"
-      update-permission="humanresource:talent:interview:update"
-      delete-permission="humanresource:talent:interview:delete"
-      import-permission="humanresource:talent:interview:import"
-      export-permission="humanresource:talent:interview:export"
+      create-permission="human:resource:talent:interview:create"
+      update-permission="human:resource:talent:interview:update"
+      delete-permission="human:resource:talent:interview:delete"
+      import-permission="human:resource:talent:interview:import"
+      export-permission="human:resource:talent:interview:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -652,7 +652,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:talent:interview:update',
+        permission: 'human:resource:talent:interview:update',
         onClick: (record: PerfAssessment) => handleEdit(record)
       },
       {
@@ -660,7 +660,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:talent:interview:delete',
+        permission: 'human:resource:talent:interview:delete',
         onClick: (record: PerfAssessment) => handleDeleteOne(record)
       }
     ]

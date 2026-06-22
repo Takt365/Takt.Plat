@@ -41,7 +41,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:helpdesk:ticket:list", "工单列表")]
+    [TaktPermission("routine:help:desk:ticket:list", "工单列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetTicketListAsync([FromQuery] TaktTicketQueryDto queryDto)
     {
@@ -106,7 +106,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工单ID</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:query", "工单详情")]
+    [TaktPermission("routine:help:desk:ticket:query", "工单详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTicketByIdAsync(long id)
     {
@@ -129,7 +129,7 @@ public class TaktTicketsController : TaktControllerBase
     /// 获取工单选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:helpdesk:ticket:query", "工单选项")]
+    [TaktPermission("routine:help:desk:ticket:query", "工单选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetTicketOptionsAsync()
     {
@@ -149,7 +149,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:create", "创建工单")]
+    [TaktPermission("routine:help:desk:ticket:create", "创建工单")]
     [HttpPost]
     public async Task<IActionResult> CreateTicketAsync([FromBody] TaktTicketCreateDto dto)
     {
@@ -170,7 +170,7 @@ public class TaktTicketsController : TaktControllerBase
     /// <param name="id">工单ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:update", "更新工单")]
+    [TaktPermission("routine:help:desk:ticket:update", "更新工单")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTicketAsync(long id, [FromBody] TaktTicketUpdateDto dto)
     {
@@ -190,7 +190,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工单ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:ticket:delete", "删除工单")]
+    [TaktPermission("routine:help:desk:ticket:delete", "删除工单")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTicketByIdAsync(long id)
     {
@@ -210,7 +210,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:ticket:delete", "批量删除工单")]
+    [TaktPermission("routine:help:desk:ticket:delete", "批量删除工单")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteTicketBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -230,7 +230,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:update", "更新工单状态")]
+    [TaktPermission("routine:help:desk:ticket:update", "更新工单状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateTicketStatusAsync([FromBody] TaktTicketStatusDto dto)
     {
@@ -250,7 +250,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">提交 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:create", "提交工单")]
+    [TaktPermission("routine:help:desk:ticket:create", "提交工单")]
     [HttpPost("submit")]
     public async Task<IActionResult> SubmitTicketAsync([FromBody] TaktTicketSubmitDto dto)
     {
@@ -270,7 +270,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">渠道建单 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:create", "渠道建单")]
+    [TaktPermission("routine:help:desk:ticket:create", "渠道建单")]
     [HttpPost("channel")]
     public async Task<IActionResult> CreateTicketFromChannelAsync([FromBody] TaktTicketCreateFromChannelDto dto)
     {
@@ -290,7 +290,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">指派 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:update", "指派工单")]
+    [TaktPermission("routine:help:desk:ticket:update", "指派工单")]
     [HttpPut("assign")]
     public async Task<IActionResult> AssignTicketAsync([FromBody] TaktTicketAssignDto dto)
     {
@@ -310,7 +310,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">动作 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:update", "开始处理")]
+    [TaktPermission("routine:help:desk:ticket:update", "开始处理")]
     [HttpPut("start")]
     public async Task<IActionResult> StartTicketProgressAsync([FromBody] TaktTicketWorkflowActionDto dto)
     {
@@ -330,7 +330,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">动作 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:update", "等待用户回复")]
+    [TaktPermission("routine:help:desk:ticket:update", "等待用户回复")]
     [HttpPut("wait-requester")]
     public async Task<IActionResult> WaitForRequesterAsync([FromBody] TaktTicketWorkflowActionDto dto)
     {
@@ -350,7 +350,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">动作 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:update", "标记已解决")]
+    [TaktPermission("routine:help:desk:ticket:update", "标记已解决")]
     [HttpPut("resolve")]
     public async Task<IActionResult> ResolveTicketAsync([FromBody] TaktTicketWorkflowActionDto dto)
     {
@@ -370,7 +370,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">动作 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:confirm", "确认关闭")]
+    [TaktPermission("routine:help:desk:ticket:confirm", "确认关闭")]
     [HttpPut("confirm-close")]
     public async Task<IActionResult> ConfirmCloseTicketAsync([FromBody] TaktTicketWorkflowActionDto dto)
     {
@@ -390,7 +390,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">动作 DTO</param>
     /// <returns>工单DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:update", "重新打开")]
+    [TaktPermission("routine:help:desk:ticket:update", "重新打开")]
     [HttpPut("reopen")]
     public async Task<IActionResult> ReopenTicketAsync([FromBody] TaktTicketWorkflowActionDto dto)
     {
@@ -410,7 +410,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">回复 DTO</param>
     /// <returns>回复 DTO</returns>
-    [TaktPermission("routine:helpdesk:ticket:reply", "回复工单")]
+    [TaktPermission("routine:help:desk:ticket:reply", "回复工单")]
     [HttpPost("reply")]
     public async Task<IActionResult> ReplyTicketAsync([FromBody] TaktTicketReplyCreateDto dto)
     {
@@ -430,7 +430,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:helpdesk:ticket:query", "工单回复列表")]
+    [TaktPermission("routine:help:desk:ticket:query", "工单回复列表")]
     [HttpGet("replies")]
     public async Task<IActionResult> GetTicketReplyListAsync([FromQuery] TaktTicketReplyQueryDto queryDto)
     {
@@ -449,7 +449,7 @@ public class TaktTicketsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:ticket:import", "获取工单导入模板")]
+    [TaktPermission("routine:help:desk:ticket:import", "获取工单导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetTicketTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -469,7 +469,7 @@ public class TaktTicketsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:helpdesk:ticket:import", "导入工单")]
+    [TaktPermission("routine:help:desk:ticket:import", "导入工单")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportTicketAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -499,7 +499,7 @@ public class TaktTicketsController : TaktControllerBase
     /// 导出工单
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:ticket:export", "导出工单")]
+    [TaktPermission("routine:help:desk:ticket:export", "导出工单")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportTicketAsync([FromQuery] TaktTicketQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:procurement:purchaseorder:create"
-      update-permission="logistics:procurement:purchaseorder:update"
-      delete-permission="logistics:procurement:purchaseorder:delete"
-      import-permission="logistics:procurement:purchaseorder:import"
-      export-permission="logistics:procurement:purchaseorder:export"
+      create-permission="logistics:procurement:purchase:order:change:log:create"
+      update-permission="logistics:procurement:purchase:order:change:log:update"
+      delete-permission="logistics:procurement:purchase:order:change:log:delete"
+      import-permission="logistics:procurement:purchase:order:change:log:import"
+      export-permission="logistics:procurement:purchase:order:change:log:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -957,7 +957,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:procurement:purchaseorder:update',
+        permission: 'logistics:procurement:purchase:order:change:log:update',
         onClick: (record: PurchaseOrder) => handleEdit(record)
       },
       {
@@ -965,7 +965,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:procurement:purchaseorder:delete',
+        permission: 'logistics:procurement:purchase:order:change:log:delete',
         onClick: (record: PurchaseOrder) => handleDeleteOne(record)
       }
     ]

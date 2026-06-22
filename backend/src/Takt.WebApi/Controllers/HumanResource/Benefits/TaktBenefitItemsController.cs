@@ -41,7 +41,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("humanresource:benefits:item:list", "福利项目列表")]
+    [TaktPermission("human:resource:benefits:benefit:item:list", "福利项目列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetBenefitItemListAsync([FromQuery] TaktBenefitItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">福利项目ID</param>
     /// <returns>福利项目DTO</returns>
-    [TaktPermission("humanresource:benefits:item:query", "福利项目详情")]
+    [TaktPermission("human:resource:benefits:benefit:item:query", "福利项目详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBenefitItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// 获取福利项目选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("humanresource:benefits:item:query", "福利项目选项")]
+    [TaktPermission("human:resource:benefits:benefit:item:query", "福利项目选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetBenefitItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>福利项目DTO</returns>
-    [TaktPermission("humanresource:benefits:item:create", "创建福利项目")]
+    [TaktPermission("human:resource:benefits:benefit:item:create", "创建福利项目")]
     [HttpPost]
     public async Task<IActionResult> CreateBenefitItemAsync([FromBody] TaktBenefitItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// <param name="id">福利项目ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>福利项目DTO</returns>
-    [TaktPermission("humanresource:benefits:item:update", "更新福利项目")]
+    [TaktPermission("human:resource:benefits:benefit:item:update", "更新福利项目")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBenefitItemAsync(long id, [FromBody] TaktBenefitItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">福利项目ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:benefits:item:delete", "删除福利项目")]
+    [TaktPermission("human:resource:benefits:benefit:item:delete", "删除福利项目")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBenefitItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("humanresource:benefits:item:delete", "批量删除福利项目")]
+    [TaktPermission("human:resource:benefits:benefit:item:delete", "批量删除福利项目")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteBenefitItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>福利项目DTO</returns>
-    [TaktPermission("humanresource:benefits:item:update", "更新福利项目状态")]
+    [TaktPermission("human:resource:benefits:benefit:item:update", "更新福利项目状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateBenefitItemStatusAsync([FromBody] TaktBenefitItemStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>福利项目DTO</returns>
-    [TaktPermission("humanresource:benefits:item:update", "更新福利项目排序")]
+    [TaktPermission("human:resource:benefits:benefit:item:update", "更新福利项目排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateBenefitItemSortAsync([FromBody] TaktBenefitItemSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:benefits:item:import", "获取福利项目导入模板")]
+    [TaktPermission("human:resource:benefits:benefit:item:import", "获取福利项目导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetBenefitItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("humanresource:benefits:item:import", "导入福利项目")]
+    [TaktPermission("human:resource:benefits:benefit:item:import", "导入福利项目")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportBenefitItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktBenefitItemsController : TaktControllerBase
     /// 导出福利项目
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("humanresource:benefits:item:export", "导出福利项目")]
+    [TaktPermission("human:resource:benefits:benefit:item:export", "导出福利项目")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportBenefitItemAsync([FromQuery] TaktBenefitItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

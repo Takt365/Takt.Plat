@@ -41,7 +41,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:list", "采购申请列表")]
+    [TaktPermission("logistics:procurement:purchase:request:list", "采购申请列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPurchaseRequestListAsync([FromQuery] TaktPurchaseRequestQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购申请ID</param>
     /// <returns>采购申请DTO</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:query", "采购申请详情")]
+    [TaktPermission("logistics:procurement:purchase:request:query", "采购申请详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPurchaseRequestByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// 获取采购申请选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:query", "采购申请选项")]
+    [TaktPermission("logistics:procurement:purchase:request:query", "采购申请选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPurchaseRequestOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>采购申请DTO</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:create", "创建采购申请")]
+    [TaktPermission("logistics:procurement:purchase:request:create", "创建采购申请")]
     [HttpPost]
     public async Task<IActionResult> CreatePurchaseRequestAsync([FromBody] TaktPurchaseRequestCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// <param name="id">采购申请ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>采购申请DTO</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:update", "更新采购申请")]
+    [TaktPermission("logistics:procurement:purchase:request:update", "更新采购申请")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePurchaseRequestAsync(long id, [FromBody] TaktPurchaseRequestUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购申请ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:delete", "删除采购申请")]
+    [TaktPermission("logistics:procurement:purchase:request:delete", "删除采购申请")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePurchaseRequestByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:delete", "批量删除采购申请")]
+    [TaktPermission("logistics:procurement:purchase:request:delete", "批量删除采购申请")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePurchaseRequestBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>采购申请DTO</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:update", "更新采购申请状态")]
+    [TaktPermission("logistics:procurement:purchase:request:update", "更新采购申请状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePurchaseRequestStatusAsync([FromBody] TaktPurchaseRequestStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:import", "获取采购申请导入模板")]
+    [TaktPermission("logistics:procurement:purchase:request:import", "获取采购申请导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPurchaseRequestTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:import", "导入采购申请")]
+    [TaktPermission("logistics:procurement:purchase:request:import", "导入采购申请")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPurchaseRequestAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPurchaseRequestsController : TaktControllerBase
     /// 导出采购申请
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:procurement:purchaserequest:export", "导出采购申请")]
+    [TaktPermission("logistics:procurement:purchase:request:export", "导出采购申请")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPurchaseRequestAsync([FromQuery] TaktPurchaseRequestQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

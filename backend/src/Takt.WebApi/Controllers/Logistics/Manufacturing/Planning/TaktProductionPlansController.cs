@@ -41,7 +41,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:list", "生产计划列表")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:list", "生产计划列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetProductionPlanListAsync([FromQuery] TaktProductionPlanQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产计划ID</param>
     /// <returns>生产计划DTO</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:query", "生产计划详情")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:query", "生产计划详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductionPlanByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// 获取生产计划选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:query", "生产计划选项")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:query", "生产计划选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetProductionPlanOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>生产计划DTO</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:create", "创建生产计划")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:create", "创建生产计划")]
     [HttpPost]
     public async Task<IActionResult> CreateProductionPlanAsync([FromBody] TaktProductionPlanCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// <param name="id">生产计划ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>生产计划DTO</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:update", "更新生产计划")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:update", "更新生产计划")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProductionPlanAsync(long id, [FromBody] TaktProductionPlanUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// </summary>
     /// <param name="id">生产计划ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:delete", "删除生产计划")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:delete", "删除生产计划")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProductionPlanByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:delete", "批量删除生产计划")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:delete", "批量删除生产计划")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteProductionPlanBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>生产计划DTO</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:update", "更新生产计划状态")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:update", "更新生产计划状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateProductionPlanStatusAsync([FromBody] TaktProductionPlanStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:import", "获取生产计划导入模板")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:import", "获取生产计划导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetProductionPlanTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:import", "导入生产计划")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:import", "导入生产计划")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportProductionPlanAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktProductionPlansController : TaktControllerBase
     /// 导出生产计划
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:planning:productionplan:export", "导出生产计划")]
+    [TaktPermission("logistics:manufacturing:planning:production:plan:export", "导出生产计划")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportProductionPlanAsync([FromQuery] TaktProductionPlanQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

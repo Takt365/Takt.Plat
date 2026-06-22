@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:engineeringchange:ec:create"
-      update-permission="logistics:manufacturing:engineeringchange:ec:update"
-      delete-permission="logistics:manufacturing:engineeringchange:ec:delete"
-      import-permission="logistics:manufacturing:engineeringchange:ec:import"
-      export-permission="logistics:manufacturing:engineeringchange:ec:export"
+      create-permission="logistics:manufacturing:engineering:change:ec:detail:create"
+      update-permission="logistics:manufacturing:engineering:change:ec:detail:update"
+      delete-permission="logistics:manufacturing:engineering:change:ec:detail:delete"
+      import-permission="logistics:manufacturing:engineering:change:ec:detail:import"
+      export-permission="logistics:manufacturing:engineering:change:ec:detail:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -61,9 +61,9 @@
       :master-columns="columns"
       :master-data-source="dataSource"
       :master-loading="loading"
-      :master-row-key="getEcId"
+      :master-row-key="getEcDetailId"
       :master-row-selection="rowSelection"
-      master-id-column-key="ecId"
+      master-id-column-key="ecDetailId"
       :master-visible-column-keys="visibleColumnKeys"
       :master-total="total"
       master-entity-scope="company"
@@ -73,8 +73,8 @@
       @master-select="handleMasterSelect"
     >
       <template #detail>
-        <EcDetailPanel
-          ref="ecDetailPanelRef"
+        <EcDeptPanel
+          ref="ecDeptPanelRef"
           class="h-full min-h-0 flex-1"
         />
       </template>
@@ -90,8 +90,8 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <EcForm
-        :key="formData?.ecId ?? 'create'"
+      <EcDetailForm
+        :key="formData?.ecDetailId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -108,155 +108,282 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.ec.plantcode')">
+      <div v-show="isFieldVisible('ecId')">
+      <a-form-item :label="t('entity.ecdetail.ecid')">
         <a-input
-          v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.plantcode') })"
-          show-count
-          :maxlength="4"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecNo')">
-      <a-form-item :label="t('entity.ec.no')">
-        <a-input
-          v-model:value="advancedQueryForm.ecNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.no') })"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecIssueDateStart')">
-      <a-form-item :label="t('entity.ec.issuedatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.ecIssueDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.issuedatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecIssueDateEnd')">
-      <a-form-item :label="t('entity.ec.issuedateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.ecIssueDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.issuedateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('changeStatus')">
-      <a-form-item :label="t('entity.ec.changestatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.changeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.changestatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecTitle')">
-      <a-form-item :label="t('entity.ec.title')">
-        <a-input
-          v-model:value="advancedQueryForm.ecTitle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.title') })"
-          show-count
-          :maxlength="500"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('ecDetailText')">
-      <a-form-item :label="t('entity.ec.detailtext')">
-        <a-input
-          v-model:value="advancedQueryForm.ecDetailText"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.detailtext') })"
+          v-model:value="advancedQueryForm.ecId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecid') })"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecLeader')">
-      <a-form-item :label="t('entity.ec.leader')">
+      <div v-show="isFieldVisible('ecNo')">
+      <a-form-item :label="t('entity.ecdetail.ecno')">
         <a-input
-          v-model:value="advancedQueryForm.ecLeader"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.leader') })"
+          v-model:value="advancedQueryForm.ecNo"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecno') })"
           show-count
-          :maxlength="50"
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecLossAmount')">
-      <a-form-item :label="t('entity.ec.lossamount')">
+      <div v-show="isFieldVisible('lineNumber')">
+      <a-form-item :label="t('entity.ecdetail.linenumber')">
         <a-input-number
-          v-model:value="advancedQueryForm.ecLossAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.lossamount') })"
+          v-model:value="advancedQueryForm.lineNumber"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.linenumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecDistinction')">
-      <a-form-item :label="t('entity.ec.distinction')">
+      <div v-show="isFieldVisible('ecModel')">
+      <a-form-item :label="t('entity.ecdetail.ecmodel')">
         <a-input
-          v-model:value="advancedQueryForm.ecDistinction"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.distinction') })"
+          v-model:value="advancedQueryForm.ecModel"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecmodel') })"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveDateStart')">
-      <a-form-item :label="t('entity.ec.effectivedatestart')">
+      <div v-show="isFieldVisible('ecBomItem')">
+      <a-form-item :label="t('entity.ecdetail.ecbomitem')">
+        <a-input
+          v-model:value="advancedQueryForm.ecBomItem"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecbomitem') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecBomSubItem')">
+      <a-form-item :label="t('entity.ecdetail.ecbomsubitem')">
+        <a-input
+          v-model:value="advancedQueryForm.ecBomSubItem"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecbomsubitem') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecBomNo')">
+      <a-form-item :label="t('entity.ecdetail.ecbomno')">
+        <a-input
+          v-model:value="advancedQueryForm.ecBomNo"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecbomno') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecChange')">
+      <a-form-item :label="t('entity.ecdetail.ecchange')">
+        <a-input
+          v-model:value="advancedQueryForm.ecChange"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecchange') })"
+          show-count
+          :maxlength="500"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecLocal')">
+      <a-form-item :label="t('entity.ecdetail.eclocal')">
+        <a-input
+          v-model:value="advancedQueryForm.ecLocal"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.eclocal') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecNote')">
+      <a-form-item :label="t('entity.ecdetail.ecnote')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ecNote"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ecdetail.ecnote') })"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecProcess')">
+      <a-form-item :label="t('entity.ecdetail.ecprocess')">
+        <a-input
+          v-model:value="advancedQueryForm.ecProcess"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecprocess') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecBomDateStart')">
+      <a-form-item :label="t('entity.ecdetail.ecbomdatestart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.effectivedatestart') })"
+          v-model:value="advancedQueryForm.ecBomDateStart"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecbomdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveDateEnd')">
-      <a-form-item :label="t('entity.ec.effectivedateend')">
+      <div v-show="isFieldVisible('ecBomDateEnd')">
+      <a-form-item :label="t('entity.ecdetail.ecbomdateend')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.effectivedateend') })"
+          v-model:value="advancedQueryForm.ecBomDateEnd"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecbomdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecEntryDateStart')">
-      <a-form-item :label="t('entity.ec.entrydatestart')">
+      <a-form-item :label="t('entity.ecdetail.ecentrydatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecEntryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.entrydatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecentrydatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecEntryDateEnd')">
-      <a-form-item :label="t('entity.ec.entrydateend')">
+      <a-form-item :label="t('entity.ecdetail.ecentrydateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecEntryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.entrydateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecentrydateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecStatus')">
-      <a-form-item :label="t('entity.ec.status')">
+      <div v-show="isFieldVisible('ecOldItem')">
+      <a-form-item :label="t('entity.ecdetail.ecolditem')">
+        <a-input
+          v-model:value="advancedQueryForm.ecOldItem"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecolditem') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecOldText')">
+      <a-form-item :label="t('entity.ecdetail.ecoldtext')">
+        <a-input
+          v-model:value="advancedQueryForm.ecOldText"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecoldtext') })"
+          show-count
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecOldQty')">
+      <a-form-item :label="t('entity.ecdetail.ecoldqty')">
         <a-input-number
-          v-model:value="advancedQueryForm.ecStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.status') })"
+          v-model:value="advancedQueryForm.ecOldQty"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecoldqty') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecOldSet')">
+      <a-form-item :label="t('entity.ecdetail.ecoldset')">
+        <a-input
+          v-model:value="advancedQueryForm.ecOldSet"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecoldset') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecNewItem')">
+      <a-form-item :label="t('entity.ecdetail.ecnewitem')">
+        <a-input
+          v-model:value="advancedQueryForm.ecNewItem"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewitem') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecNewText')">
+      <a-form-item :label="t('entity.ecdetail.ecnewtext')">
+        <a-input
+          v-model:value="advancedQueryForm.ecNewText"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewtext') })"
+          show-count
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecNewQty')">
+      <a-form-item :label="t('entity.ecdetail.ecnewqty')">
+        <a-input-number
+          v-model:value="advancedQueryForm.ecNewQty"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewqty') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecNewSet')">
+      <a-form-item :label="t('entity.ecdetail.ecnewset')">
+        <a-input
+          v-model:value="advancedQueryForm.ecNewSet"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecnewset') })"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isProcurement')">
+      <a-form-item :label="t('entity.ecdetail.isprocurement')">
+        <a-input-number
+          v-model:value="advancedQueryForm.isProcurement"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.isprocurement') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isCheck')">
+      <a-form-item :label="t('entity.ecdetail.ischeck')">
+        <a-input-number
+          v-model:value="advancedQueryForm.isCheck"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ischeck') })"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ecWarehouse')">
+      <a-form-item :label="t('entity.ecdetail.ecwarehouse')">
+        <a-input
+          v-model:value="advancedQueryForm.ecWarehouse"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecwarehouse') })"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isEndOfLine')">
+      <a-form-item :label="t('entity.ecdetail.isendofline')">
+        <a-input-number
+          v-model:value="advancedQueryForm.isEndOfLine"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.isendofline') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -267,7 +394,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -278,7 +405,7 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -329,14 +456,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ec._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.ecdetail._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.ec._self"
+        entity-i18n-key="entity.ecdetail._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -352,7 +479,7 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'ecId'"
+      :id-column-key="'ecDetailId'"
       :action-column-key="'action'"
       entity-scope="company"
       table-mode="single"
@@ -373,11 +500,11 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import EcForm from './components/ec-form.vue'
-import EcDetailPanel from './components/ec-detail-panel.vue'
-import { provideEcMasterContext } from './composables/use-ec-master-context'
-import { getEcList, getEcById, createEc, updateEc, deleteEcById, deleteEcBatch, getEcTemplate, importEc, exportEc, updateEcStatus } from '@/api/logistics/manufacturing/engineering-change/ec'
-import type { Ec, EcQuery } from '@/types/logistics/manufacturing/engineering-change/ec'
+import EcDetailForm from './components/ec-detail-form.vue'
+import EcDeptPanel from './components/ec-dept-panel.vue'
+import { provideEcDetailMasterContext } from './composables/use-ec-detail-master-context'
+import { getEcDetailList, getEcDetailById, createEcDetail, updateEcDetail, deleteEcDetailById, deleteEcDetailBatch, getEcDetailTemplate, importEcDetail, exportEcDetail } from '@/api/logistics/manufacturing/engineering-change/ec-detail'
+import type { EcDetail, EcDetailQuery } from '@/types/logistics/manufacturing/engineering-change/ec-detail'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
@@ -385,10 +512,10 @@ import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktEc')
+const excelNames = taktExcelEntityNames('TaktEcDetail')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ec._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.ecdetail._self') })
 )
 
 /** 快捷查询关键字 */
@@ -396,7 +523,7 @@ const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
 /** 分页列表数据 */
-const dataSource = ref<Ec[]>([])
+const dataSource = ref<EcDetail[]>([])
 /** 当前页码 */
 const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
@@ -404,9 +531,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Ec | null>(null)
+const selectedRow = ref<EcDetail | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Ec[]>([])
+const selectedRows = ref<EcDetail[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -415,7 +542,7 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Ec> | null>(null)
+const formData = ref<Partial<EcDetail> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
@@ -425,21 +552,33 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
-  plantCode: '',
+  ecId: '',
   ecNo: '',
-  ecIssueDateStart: '',
-  ecIssueDateEnd: '',
-  changeStatus: undefined as number | undefined,
-  ecTitle: '',
-  ecDetailText: '',
-  ecLeader: '',
-  ecLossAmount: undefined as number | undefined,
-  ecDistinction: '',
-  effectiveDateStart: '',
-  effectiveDateEnd: '',
+  lineNumber: undefined as number | undefined,
+  ecModel: '',
+  ecBomItem: '',
+  ecBomSubItem: '',
+  ecBomNo: '',
+  ecChange: '',
+  ecLocal: '',
+  ecNote: '',
+  ecProcess: '',
+  ecBomDateStart: '',
+  ecBomDateEnd: '',
   ecEntryDateStart: '',
   ecEntryDateEnd: '',
-  ecStatus: undefined as number | undefined,
+  ecOldItem: '',
+  ecOldText: '',
+  ecOldQty: undefined as number | undefined,
+  ecOldSet: '',
+  ecNewItem: '',
+  ecNewText: '',
+  ecNewQty: undefined as number | undefined,
+  ecNewSet: '',
+  isProcurement: undefined as number | undefined,
+  isCheck: undefined as number | undefined,
+  ecWarehouse: '',
+  isEndOfLine: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -447,21 +586,33 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.ec.plantcode') },
-  { key: 'ecNo', label: t('entity.ec.no') },
-  { key: 'ecIssueDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
-  { key: 'ecIssueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
-  { key: 'changeStatus', label: t('entity.ec.changestatus') },
-  { key: 'ecTitle', label: t('entity.ec.title') },
-  { key: 'ecDetailText', label: t('entity.ec.detailtext') },
-  { key: 'ecLeader', label: t('entity.ec.leader') },
-  { key: 'ecLossAmount', label: t('entity.ec.lossamount') },
-  { key: 'ecDistinction', label: t('entity.ec.distinction') },
-  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ec.effectivedate')) },
-  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ec.effectivedate')) },
-  { key: 'ecEntryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ec.entrydate')) },
-  { key: 'ecEntryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ec.entrydate')) },
-  { key: 'ecStatus', label: t('entity.ec.status') },
+  { key: 'ecId', label: t('entity.ecdetail.ecid') },
+  { key: 'ecNo', label: t('entity.ecdetail.ecno') },
+  { key: 'lineNumber', label: t('entity.ecdetail.linenumber') },
+  { key: 'ecModel', label: t('entity.ecdetail.ecmodel') },
+  { key: 'ecBomItem', label: t('entity.ecdetail.ecbomitem') },
+  { key: 'ecBomSubItem', label: t('entity.ecdetail.ecbomsubitem') },
+  { key: 'ecBomNo', label: t('entity.ecdetail.ecbomno') },
+  { key: 'ecChange', label: t('entity.ecdetail.ecchange') },
+  { key: 'ecLocal', label: t('entity.ecdetail.eclocal') },
+  { key: 'ecNote', label: t('entity.ecdetail.ecnote') },
+  { key: 'ecProcess', label: t('entity.ecdetail.ecprocess') },
+  { key: 'ecBomDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ecdetail.ecbomdate')) },
+  { key: 'ecBomDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ecdetail.ecbomdate')) },
+  { key: 'ecEntryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ecdetail.ecentrydate')) },
+  { key: 'ecEntryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ecdetail.ecentrydate')) },
+  { key: 'ecOldItem', label: t('entity.ecdetail.ecolditem') },
+  { key: 'ecOldText', label: t('entity.ecdetail.ecoldtext') },
+  { key: 'ecOldQty', label: t('entity.ecdetail.ecoldqty') },
+  { key: 'ecOldSet', label: t('entity.ecdetail.ecoldset') },
+  { key: 'ecNewItem', label: t('entity.ecdetail.ecnewitem') },
+  { key: 'ecNewText', label: t('entity.ecdetail.ecnewtext') },
+  { key: 'ecNewQty', label: t('entity.ecdetail.ecnewqty') },
+  { key: 'ecNewSet', label: t('entity.ecdetail.ecnewset') },
+  { key: 'isProcurement', label: t('entity.ecdetail.isprocurement') },
+  { key: 'isCheck', label: t('entity.ecdetail.ischeck') },
+  { key: 'ecWarehouse', label: t('entity.ecdetail.ecwarehouse') },
+  { key: 'isEndOfLine', label: t('entity.ecdetail.isendofline') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -476,25 +627,25 @@ const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
-const entityIdName = 'ecId'
+const entityIdName = 'ecDetailId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** 主表选中行上下文（右侧明细面板读取） */
-const { selectedMasterRow } = provideEcMasterContext()
-const ecDetailPanelRef = ref<InstanceType<typeof EcDetailPanel> | null>(null)
+const { selectedMasterRow } = provideEcDetailMasterContext()
+const ecDeptPanelRef = ref<InstanceType<typeof EcDeptPanel> | null>(null)
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
- * @returns {EcQuery} 查询 DTO
+ * @returns {EcDetailQuery} 查询 DTO
  */
-function buildListQuery(overrides?: Partial<EcQuery>): EcQuery {
+function buildListQuery(overrides?: Partial<EcDetailQuery>): EcDetailQuery {
   const form = advancedQueryForm.value
   const kw = (queryKeyword.value ?? '').trim()
-  const query: EcQuery = {
+  const query: EcDetailQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
     ...overrides,
@@ -502,32 +653,50 @@ function buildListQuery(overrides?: Partial<EcQuery>): EcQuery {
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: keyof EcQuery, value: string | undefined) => {
+  const assignTrimmed = (key: keyof EcDetailQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('ecId', form.ecId)
   assignTrimmed('ecNo', form.ecNo)
-  assignTrimmed('ecIssueDateStart', form.ecIssueDateStart)
-  assignTrimmed('ecIssueDateEnd', form.ecIssueDateEnd)
-  if (form.changeStatus !== undefined && form.changeStatus !== null) {
-    query.changeStatus = form.changeStatus
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    query.lineNumber = form.lineNumber
   }
-  assignTrimmed('ecTitle', form.ecTitle)
-  assignTrimmed('ecDetailText', form.ecDetailText)
-  assignTrimmed('ecLeader', form.ecLeader)
-  if (form.ecLossAmount !== undefined && form.ecLossAmount !== null) {
-    query.ecLossAmount = form.ecLossAmount
-  }
-  assignTrimmed('ecDistinction', form.ecDistinction)
-  assignTrimmed('effectiveDateStart', form.effectiveDateStart)
-  assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
+  assignTrimmed('ecModel', form.ecModel)
+  assignTrimmed('ecBomItem', form.ecBomItem)
+  assignTrimmed('ecBomSubItem', form.ecBomSubItem)
+  assignTrimmed('ecBomNo', form.ecBomNo)
+  assignTrimmed('ecChange', form.ecChange)
+  assignTrimmed('ecLocal', form.ecLocal)
+  assignTrimmed('ecNote', form.ecNote)
+  assignTrimmed('ecProcess', form.ecProcess)
+  assignTrimmed('ecBomDateStart', form.ecBomDateStart)
+  assignTrimmed('ecBomDateEnd', form.ecBomDateEnd)
   assignTrimmed('ecEntryDateStart', form.ecEntryDateStart)
   assignTrimmed('ecEntryDateEnd', form.ecEntryDateEnd)
-  if (form.ecStatus !== undefined && form.ecStatus !== null) {
-    query.ecStatus = form.ecStatus
+  assignTrimmed('ecOldItem', form.ecOldItem)
+  assignTrimmed('ecOldText', form.ecOldText)
+  if (form.ecOldQty !== undefined && form.ecOldQty !== null) {
+    query.ecOldQty = form.ecOldQty
+  }
+  assignTrimmed('ecOldSet', form.ecOldSet)
+  assignTrimmed('ecNewItem', form.ecNewItem)
+  assignTrimmed('ecNewText', form.ecNewText)
+  if (form.ecNewQty !== undefined && form.ecNewQty !== null) {
+    query.ecNewQty = form.ecNewQty
+  }
+  assignTrimmed('ecNewSet', form.ecNewSet)
+  if (form.isProcurement !== undefined && form.isProcurement !== null) {
+    query.isProcurement = form.isProcurement
+  }
+  if (form.isCheck !== undefined && form.isCheck !== null) {
+    query.isCheck = form.isCheck
+  }
+  assignTrimmed('ecWarehouse', form.ecWarehouse)
+  if (form.isEndOfLine !== undefined && form.isEndOfLine !== null) {
+    query.isEndOfLine = form.isEndOfLine
   }
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
@@ -546,9 +715,9 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: Ec | null) {
+function syncMasterSelection(record: EcDetail | null) {
   selectedMasterRow.value = record
-  selectedMasterKey.value = record ? getEcId(record) : ''
+  selectedMasterKey.value = record ? getEcDetailId(record) : ''
 }
 
 /**
@@ -556,8 +725,8 @@ function syncMasterSelection(record: Ec | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as Ec
-  const key = getEcId(row)
+  const row = record as unknown as EcDetail
+  const key = getEcDetailId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
   selectedRow.value = row
@@ -574,16 +743,16 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadEcDetail(record: Ec): Promise<Ec | null> {
-  const id = getEcId(record)
+async function loadEcDetailDetail(record: EcDetail): Promise<EcDetail | null> {
+  const id = getEcDetailId(record)
   if (!id) {
     return null
   }
   try {
-    const detail = await getEcById(id)
-    const index = dataSource.value.findIndex((row) => getEcId(row) === id)
+    const detail = await getEcDetailById(id)
+    const index = dataSource.value.findIndex((row) => getEcDetailId(row) === id)
     if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Ec
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as EcDetail
     }
     return detail
   } catch (error: any) {
@@ -596,121 +765,247 @@ async function loadEcDetail(record: Ec): Promise<Ec | null> {
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'ecId',
-    key: 'ecId',
+    dataIndex: 'ecDetailId',
+    key: 'ecDetailId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecId') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecDetailId') ?? ''
   },
   {
-    title: t('entity.ec.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
+    title: t('entity.ecdetail.ecid'),
+    dataIndex: 'ecId',
+    key: 'ecId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'plantCode') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecId') ?? ''
   },
   {
-    title: t('entity.ec.no'),
+    title: t('entity.ecdetail.ecno'),
     dataIndex: 'ecNo',
     key: 'ecNo',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecNo') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecNo') ?? ''
   },
   {
-    title: t('entity.ec.issuedate'),
-    dataIndex: 'ecIssueDate',
-    key: 'ecIssueDate',
+    title: t('entity.ecdetail.linenumber'),
+    dataIndex: 'lineNumber',
+    key: 'lineNumber',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecIssueDate') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'lineNumber') ?? ''
   },
   {
-    title: t('entity.ec.changestatus'),
-    dataIndex: 'changeStatus',
-    key: 'changeStatus',
+    title: t('entity.ecdetail.ecmodel'),
+    dataIndex: 'ecModel',
+    key: 'ecModel',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'changeStatus') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecModel') ?? ''
   },
   {
-    title: t('entity.ec.title'),
-    dataIndex: 'ecTitle',
-    key: 'ecTitle',
+    title: t('entity.ecdetail.ecbomitem'),
+    dataIndex: 'ecBomItem',
+    key: 'ecBomItem',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecTitle') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecBomItem') ?? ''
   },
   {
-    title: t('entity.ec.detailtext'),
-    dataIndex: 'ecDetailText',
-    key: 'ecDetailText',
+    title: t('entity.ecdetail.ecbomsubitem'),
+    dataIndex: 'ecBomSubItem',
+    key: 'ecBomSubItem',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecDetailText') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecBomSubItem') ?? ''
   },
   {
-    title: t('entity.ec.leader'),
-    dataIndex: 'ecLeader',
-    key: 'ecLeader',
+    title: t('entity.ecdetail.ecbomno'),
+    dataIndex: 'ecBomNo',
+    key: 'ecBomNo',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecLeader') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecBomNo') ?? ''
   },
   {
-    title: t('entity.ec.lossamount'),
-    dataIndex: 'ecLossAmount',
-    key: 'ecLossAmount',
+    title: t('entity.ecdetail.ecchange'),
+    dataIndex: 'ecChange',
+    key: 'ecChange',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecLossAmount') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecChange') ?? ''
   },
   {
-    title: t('entity.ec.distinction'),
-    dataIndex: 'ecDistinction',
-    key: 'ecDistinction',
+    title: t('entity.ecdetail.eclocal'),
+    dataIndex: 'ecLocal',
+    key: 'ecLocal',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecDistinction') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecLocal') ?? ''
   },
   {
-    title: t('entity.ec.effectivedate'),
-    dataIndex: 'effectiveDate',
-    key: 'effectiveDate',
+    title: t('entity.ecdetail.ecnote'),
+    dataIndex: 'ecNote',
+    key: 'ecNote',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'effectiveDate') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecNote') ?? ''
   },
   {
-    title: t('entity.ec.entrydate'),
+    title: t('entity.ecdetail.ecprocess'),
+    dataIndex: 'ecProcess',
+    key: 'ecProcess',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecProcess') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecbomdate'),
+    dataIndex: 'ecBomDate',
+    key: 'ecBomDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecBomDate') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecentrydate'),
     dataIndex: 'ecEntryDate',
     key: 'ecEntryDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecEntryDate') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecEntryDate') ?? ''
   },
   {
-    title: t('entity.ec.status'),
-    dataIndex: 'ecStatus',
-    key: 'ecStatus',
+    title: t('entity.ecdetail.ecolditem'),
+    dataIndex: 'ecOldItem',
+    key: 'ecOldItem',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecStatus') ?? ''
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecOldItem') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecoldtext'),
+    dataIndex: 'ecOldText',
+    key: 'ecOldText',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecOldText') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecoldqty'),
+    dataIndex: 'ecOldQty',
+    key: 'ecOldQty',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecOldQty') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecoldset'),
+    dataIndex: 'ecOldSet',
+    key: 'ecOldSet',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecOldSet') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecnewitem'),
+    dataIndex: 'ecNewItem',
+    key: 'ecNewItem',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecNewItem') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecnewtext'),
+    dataIndex: 'ecNewText',
+    key: 'ecNewText',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecNewText') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecnewqty'),
+    dataIndex: 'ecNewQty',
+    key: 'ecNewQty',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecNewQty') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecnewset'),
+    dataIndex: 'ecNewSet',
+    key: 'ecNewSet',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecNewSet') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.isprocurement'),
+    dataIndex: 'isProcurement',
+    key: 'isProcurement',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'isProcurement') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ischeck'),
+    dataIndex: 'isCheck',
+    key: 'isCheck',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'isCheck') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ecwarehouse'),
+    dataIndex: 'ecWarehouse',
+    key: 'ecWarehouse',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ecWarehouse') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.isendofline'),
+    dataIndex: 'isEndOfLine',
+    key: 'isEndOfLine',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'isEndOfLine') ?? ''
+  },
+  {
+    title: t('entity.ecdetail.ec'),
+    dataIndex: 'ec',
+    key: 'ec',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getEcDetailField(record, 'ec') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -719,35 +1014,35 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:engineeringchange:ec:update',
-        onClick: (record: Ec) => handleEdit(record)
+        permission: 'logistics:manufacturing:engineering:change:ec:detail:update',
+        onClick: (record: EcDetail) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:engineeringchange:ec:delete',
-        onClick: (record: Ec) => handleDeleteOne(record)
+        permission: 'logistics:manufacturing:engineering:change:ec:detail:delete',
+        onClick: (record: EcDetail) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getEcId = (record: any): string => record?.[entityIdName] ?? ''
+const getEcDetailId = (record: any): string => record?.[entityIdName] ?? ''
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
-const getEcField = (record: any, field: string): any => record?.[field]
+const getEcDetailField = (record: any, field: string): any => record?.[field]
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Ec[]) => {
+  onChange: (keys: (string | number)[], rows: EcDetail[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -757,16 +1052,16 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: Ec, selected: boolean) => {
+  onSelect: (record: EcDetail, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
-    } else if (getEcId(selectedRow.value) === getEcId(record)) {
+    } else if (getEcDetailId(selectedRow.value) === getEcDetailId(record)) {
       selectedRow.value = null
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Ec[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EcDetail[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -776,11 +1071,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
-    const res = await getEcList(buildListQuery())
+    const res = await getEcDetailList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[Ec] 加载数据失败', { error })
+    logger.error('[EcDetail] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -802,21 +1097,33 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  plantCode: '',
+  ecId: '',
   ecNo: '',
-  ecIssueDateStart: '',
-  ecIssueDateEnd: '',
-  changeStatus: undefined as number | undefined,
-  ecTitle: '',
-  ecDetailText: '',
-  ecLeader: '',
-  ecLossAmount: undefined as number | undefined,
-  ecDistinction: '',
-  effectiveDateStart: '',
-  effectiveDateEnd: '',
+  lineNumber: undefined as number | undefined,
+  ecModel: '',
+  ecBomItem: '',
+  ecBomSubItem: '',
+  ecBomNo: '',
+  ecChange: '',
+  ecLocal: '',
+  ecNote: '',
+  ecProcess: '',
+  ecBomDateStart: '',
+  ecBomDateEnd: '',
   ecEntryDateStart: '',
   ecEntryDateEnd: '',
-  ecStatus: undefined as number | undefined,
+  ecOldItem: '',
+  ecOldText: '',
+  ecOldQty: undefined as number | undefined,
+  ecOldSet: '',
+  ecNewItem: '',
+  ecNewText: '',
+  ecNewQty: undefined as number | undefined,
+  ecNewSet: '',
+  isProcurement: undefined as number | undefined,
+  isCheck: undefined as number | undefined,
+  ecWarehouse: '',
+  isEndOfLine: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -828,17 +1135,17 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ec._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ecdetail._self') })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: Ec) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ec._self') })
+async function handleEdit(record: EcDetail) {
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ecdetail._self') })
   formLoading.value = true
   try {
-    const detail = await loadEcDetail(record)
+    const detail = await loadEcDetailDetail(record)
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -851,7 +1158,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ec._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ecdetail._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -868,17 +1175,17 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateEc(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.ec._self') }))
+      await updateEcDetail(id, payload as any)
+      message.success(t('common.feedback.updated', { target: t('entity.ecdetail._self') }))
     } else {
-      await createEc(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.ec._self') }))
+      await createEcDetail(payload as any)
+      message.success(t('common.feedback.created', { target: t('entity.ecdetail._self') }))
     }
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
     if (selectedMasterKey.value) {
-  ecDetailPanelRef.value?.reload?.()
+  ecDeptPanelRef.value?.reload?.()
     }
     loadData()
   } finally {
@@ -899,13 +1206,13 @@ function handleImport() {
 
 /** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getEcTemplate(sheetName, fileName)
+  const res = await getEcDetailTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
 /** 上传并导入 Excel 文件 */
 async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEc(file, sheetName)
+  return await importEcDetail(file, sheetName)
 }
 
 /** 导入完成回调：刷新列表并可选关闭对话框 */
@@ -922,7 +1229,7 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const exportMeta = await exportEc(
+    const exportMeta = await exportEcDetail(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
       excelNames.fileBase
@@ -945,24 +1252,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ec._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.ecdetail._self') }))
   } catch (error: any) {
-    logger.error('[Ec] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.ec._self') }))
+    logger.error('[EcDetail] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.ecdetail._self') }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Ec) {
+async function handleDeleteOne(record: EcDetail) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.ec._self'), name: t('common.tip.this.target', { target: t('entity.ec._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.ecdetail._self'), name: t('common.tip.this.target', { target: t('entity.ecdetail._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteEcById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.ec._self') }))
+      await deleteEcDetailById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: t('entity.ecdetail._self') }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -974,18 +1281,18 @@ async function handleDeleteOne(record: Ec) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.ec._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.ecdetail._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.ec._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.ecdetail._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteEcBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ec._self') }))
+      await deleteEcDetailBatch(ids)
+      message.success(t('common.feedback.deleted', { target: t('entity.ecdetail._self') }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1008,21 +1315,33 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  plantCode: '',
+  ecId: '',
   ecNo: '',
-  ecIssueDateStart: '',
-  ecIssueDateEnd: '',
-  changeStatus: undefined as number | undefined,
-  ecTitle: '',
-  ecDetailText: '',
-  ecLeader: '',
-  ecLossAmount: undefined as number | undefined,
-  ecDistinction: '',
-  effectiveDateStart: '',
-  effectiveDateEnd: '',
+  lineNumber: undefined as number | undefined,
+  ecModel: '',
+  ecBomItem: '',
+  ecBomSubItem: '',
+  ecBomNo: '',
+  ecChange: '',
+  ecLocal: '',
+  ecNote: '',
+  ecProcess: '',
+  ecBomDateStart: '',
+  ecBomDateEnd: '',
   ecEntryDateStart: '',
   ecEntryDateEnd: '',
-  ecStatus: undefined as number | undefined,
+  ecOldItem: '',
+  ecOldText: '',
+  ecOldQty: undefined as number | undefined,
+  ecOldSet: '',
+  ecNewItem: '',
+  ecNewText: '',
+  ecNewQty: undefined as number | undefined,
+  ecNewSet: '',
+  isProcurement: undefined as number | undefined,
+  isCheck: undefined as number | undefined,
+  ecWarehouse: '',
+  isEndOfLine: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

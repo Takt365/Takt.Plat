@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="humanresource:talent:staffingrequirement:create"
-      update-permission="humanresource:talent:staffingrequirement:update"
-      delete-permission="humanresource:talent:staffingrequirement:delete"
-      import-permission="humanresource:talent:staffingrequirement:import"
-      export-permission="humanresource:talent:staffingrequirement:export"
+      create-permission="human:resource:talent:staffingrequirement:create"
+      update-permission="human:resource:talent:staffingrequirement:update"
+      delete-permission="human:resource:talent:staffingrequirement:delete"
+      import-permission="human:resource:talent:staffingrequirement:import"
+      export-permission="human:resource:talent:staffingrequirement:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -613,7 +613,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'humanresource:talent:staffingrequirement:update',
+        permission: 'human:resource:talent:staffingrequirement:update',
         onClick: (record: SocialInsurance) => handleEdit(record)
       },
       {
@@ -621,7 +621,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'humanresource:talent:staffingrequirement:delete',
+        permission: 'human:resource:talent:staffingrequirement:delete',
         onClick: (record: SocialInsurance) => handleDeleteOne(record)
       }
     ]

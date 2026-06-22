@@ -41,7 +41,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:list", "客户满意度调查列表")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:list", "客户满意度调查列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCustomerSatisfactionSurveyListAsync([FromQuery] TaktCustomerSatisfactionSurveyQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="id">客户满意度调查ID</param>
     /// <returns>客户满意度调查DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:query", "客户满意度调查详情")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:query", "客户满意度调查详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCustomerSatisfactionSurveyByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// 获取客户满意度调查选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:query", "客户满意度调查选项")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:query", "客户满意度调查选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetCustomerSatisfactionSurveyOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>客户满意度调查DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:create", "创建客户满意度调查")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:create", "创建客户满意度调查")]
     [HttpPost]
     public async Task<IActionResult> CreateCustomerSatisfactionSurveyAsync([FromBody] TaktCustomerSatisfactionSurveyCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// <param name="id">客户满意度调查ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>客户满意度调查DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:update", "更新客户满意度调查")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:update", "更新客户满意度调查")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCustomerSatisfactionSurveyAsync(long id, [FromBody] TaktCustomerSatisfactionSurveyUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="id">客户满意度调查ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:delete", "删除客户满意度调查")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:delete", "删除客户满意度调查")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCustomerSatisfactionSurveyByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:delete", "批量删除客户满意度调查")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:delete", "批量删除客户满意度调查")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCustomerSatisfactionSurveyBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>客户满意度调查DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:update", "更新客户满意度调查状态")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:update", "更新客户满意度调查状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateCustomerSatisfactionSurveyStatusAsync([FromBody] TaktCustomerSatisfactionSurveyStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>客户满意度调查DTO</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:update", "更新客户满意度调查排序")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:update", "更新客户满意度调查排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateCustomerSatisfactionSurveySortAsync([FromBody] TaktCustomerSatisfactionSurveySortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:import", "获取客户满意度调查导入模板")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:import", "获取客户满意度调查导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetCustomerSatisfactionSurveyTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:import", "导入客户满意度调查")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:import", "导入客户满意度调查")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportCustomerSatisfactionSurveyAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// 导出客户满意度调查
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:customersatisfactionsurvey:export", "导出客户满意度调查")]
+    [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:export", "导出客户满意度调查")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCustomerSatisfactionSurveyAsync([FromQuery] TaktCustomerSatisfactionSurveyQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

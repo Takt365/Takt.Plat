@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:equipmentoperationrate:create"
-      update-permission="logistics:manufacturing:output:equipmentoperationrate:update"
-      delete-permission="logistics:manufacturing:output:equipmentoperationrate:delete"
-      import-permission="logistics:manufacturing:output:equipmentoperationrate:import"
-      export-permission="logistics:manufacturing:output:equipmentoperationrate:export"
+      create-permission="logistics:manufacturing:output:equipment:operation:rate:create"
+      update-permission="logistics:manufacturing:output:equipment:operation:rate:update"
+      delete-permission="logistics:manufacturing:output:equipment:operation:rate:delete"
+      import-permission="logistics:manufacturing:output:equipment:operation:rate:import"
+      export-permission="logistics:manufacturing:output:equipment:operation:rate:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -1004,7 +1004,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:equipmentoperationrate:update',
+        permission: 'logistics:manufacturing:output:equipment:operation:rate:update',
         onClick: (record: EquipmentOperationRate) => handleEdit(record)
       },
       {
@@ -1012,7 +1012,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:equipmentoperationrate:delete',
+        permission: 'logistics:manufacturing:output:equipment:operation:rate:delete',
         onClick: (record: EquipmentOperationRate) => handleDeleteOne(record)
       }
     ]

@@ -134,8 +134,8 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     public TaktEmployee? ReplaceEmployee { get; set; }
 
     /// <summary>
-    /// 招聘计划
+    /// 职位发布
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktTalentRecruitmentPlan.StaffingRequirementId))]
-    public List<TaktTalentRecruitmentPlan>? TalentRecruitmentPlans { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktTalentJobPosting.StaffingRequirementId))]
+    public List<TaktTalentJobPosting>? TalentJobPostings { get; set; }
 }

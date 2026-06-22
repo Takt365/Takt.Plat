@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:output:productionchangeover:create"
-      update-permission="logistics:manufacturing:output:productionchangeover:update"
-      delete-permission="logistics:manufacturing:output:productionchangeover:delete"
-      import-permission="logistics:manufacturing:output:productionchangeover:import"
-      export-permission="logistics:manufacturing:output:productionchangeover:export"
+      create-permission="logistics:manufacturing:output:production:changeover:create"
+      update-permission="logistics:manufacturing:output:production:changeover:update"
+      delete-permission="logistics:manufacturing:output:production:changeover:delete"
+      import-permission="logistics:manufacturing:output:production:changeover:import"
+      export-permission="logistics:manufacturing:output:production:changeover:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -601,7 +601,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:output:productionchangeover:update',
+        permission: 'logistics:manufacturing:output:production:changeover:update',
         onClick: (record: ProductionChangeover) => handleEdit(record)
       },
       {
@@ -609,7 +609,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:output:productionchangeover:delete',
+        permission: 'logistics:manufacturing:output:production:changeover:delete',
         onClick: (record: ProductionChangeover) => handleDeleteOne(record)
       }
     ]

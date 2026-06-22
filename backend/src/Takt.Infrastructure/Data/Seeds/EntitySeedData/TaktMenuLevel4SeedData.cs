@@ -77,7 +77,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "物料清单";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_BILL_OF_MATERIAL";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.billofmaterial";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.bill.of.material";
                 menu.Icon = "RiFileList2Line";
                 menu.ParentId = manufacturingBomMenu.Id;
                 menu.MenuType = 1;
@@ -97,11 +97,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "物料清单变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_BILL_OF_MATERIAL_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.billofmaterial.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.bill.of.material.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingBomMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:bill:of:material:list";
+                menu.Permission = "logistics:manufacturing:bom:bill:of:material:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/bill-of-material-change-log";
                 menu.ComponentPath = "logistics/manufacturing/bom/bill-of-material-change-log/index";
                 menu.SortOrder = 2;
@@ -137,11 +137,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "工艺路线变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_ROUTING_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.routing.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.routing.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingBomMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:routing:list";
+                menu.Permission = "logistics:manufacturing:bom:routing:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/routing-change-log";
                 menu.ComponentPath = "logistics/manufacturing/bom/routing-change-log/index";
                 menu.SortOrder = 4;
@@ -157,7 +157,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "标准工序时间";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_STANDARD_OPERATION_TIME";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.standardoperationtime";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.standard.operation.time";
                 menu.Icon = "RiTimerLine";
                 menu.ParentId = manufacturingBomMenu.Id;
                 menu.MenuType = 1;
@@ -177,11 +177,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "标准工序时间变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_STANDARD_OPERATION_TIME_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.standardoperationtime.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.standard.operation.time.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingBomMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:standard:operation:time:list";
+                menu.Permission = "logistics:manufacturing:bom:standard:operation:time:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/standard-operation-time-change-log";
                 menu.ComponentPath = "logistics/manufacturing/bom/standard-operation-time-change-log/index";
                 menu.SortOrder = 7;
@@ -201,7 +201,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "主需求计划";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_MASTER_DEMAND_SCHEDULE";
-                menu.I18nKey = "menu.logistics.manufacturing.planning.masterdemandschedule";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.master.demand.schedule";
                 menu.Icon = "RiBarChartGroupedLine";
                 menu.ParentId = manufacturingPlanningMenu.Id;
                 menu.MenuType = 1;
@@ -221,7 +221,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "主生产计划";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_MASTER_PRODUCTION_SCHEDULE";
-                menu.I18nKey = "menu.logistics.manufacturing.planning.masterproductionschedule";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.master.production.schedule";
                 menu.Icon = "RiCalendarTodoLine";
                 menu.ParentId = manufacturingPlanningMenu.Id;
                 menu.MenuType = 1;
@@ -241,7 +241,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "计划订单";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_PLANNED_ORDER";
-                menu.I18nKey = "menu.logistics.manufacturing.planning.plannedorder";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.planned.order";
                 menu.Icon = "RiFilePaper2Line";
                 menu.ParentId = manufacturingPlanningMenu.Id;
                 menu.MenuType = 1;
@@ -261,7 +261,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "销售计划";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_SALES_PLAN";
-                menu.I18nKey = "menu.logistics.manufacturing.planning.salesplan";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.sales.plan";
                 menu.Icon = "RiLineChartLine";
                 menu.ParentId = manufacturingPlanningMenu.Id;
                 menu.MenuType = 1;
@@ -281,7 +281,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "生产计划";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_PRODUCTION_PLAN";
-                menu.I18nKey = "menu.logistics.manufacturing.planning.productionplan";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.production.plan";
                 menu.Icon = "RiCalendarCheckLine";
                 menu.ParentId = manufacturingPlanningMenu.Id;
                 menu.MenuType = 1;
@@ -301,7 +301,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "采购计划";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_PURCHASE_PLAN";
-                menu.I18nKey = "menu.logistics.manufacturing.planning.purchaseplan";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.purchase.plan";
                 menu.Icon = "RiShoppingCartLine";
                 menu.ParentId = manufacturingPlanningMenu.Id;
                 menu.MenuType = 1;
@@ -325,7 +325,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "APS排程";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SCHEDULING_APS_SCHEDULE";
-                menu.I18nKey = "menu.logistics.manufacturing.scheduling.apsschedule";
+                menu.I18nKey = "menu.logistics.manufacturing.scheduling.aps.schedule";
                 menu.Icon = "RiCalendarScheduleLine";
                 menu.ParentId = manufacturingSchedulingMenu.Id;
                 menu.MenuType = 1;
@@ -345,11 +345,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "APS排程变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SCHEDULING_APS_SCHEDULE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.scheduling.apsschedule.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.scheduling.aps.schedule.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingSchedulingMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:scheduling:aps:schedule:list";
+                menu.Permission = "logistics:manufacturing:scheduling:aps:schedule:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/scheduling/aps-schedule-change-log";
                 menu.ComponentPath = "logistics/manufacturing/scheduling/aps-schedule-change-log/index";
                 menu.SortOrder = 2;
@@ -365,7 +365,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "工作中心";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SCHEDULING_WORK_CENTER";
-                menu.I18nKey = "menu.logistics.manufacturing.scheduling.workcenter";
+                menu.I18nKey = "menu.logistics.manufacturing.scheduling.work.center";
                 menu.Icon = "RiBuilding4Line";
                 menu.ParentId = manufacturingSchedulingMenu.Id;
                 menu.MenuType = 1;
@@ -385,7 +385,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "换型矩阵";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SCHEDULING_CHANGEOVER_MATRIX";
-                menu.I18nKey = "menu.logistics.manufacturing.scheduling.changeovermatrix";
+                menu.I18nKey = "menu.logistics.manufacturing.scheduling.changeover.matrix";
                 menu.Icon = "RiExchangeLine";
                 menu.ParentId = manufacturingSchedulingMenu.Id;
                 menu.MenuType = 1;
@@ -405,7 +405,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "APS订单";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SCHEDULING_APS_ORDER";
-                menu.I18nKey = "menu.logistics.manufacturing.scheduling.apsorder";
+                menu.I18nKey = "menu.logistics.manufacturing.scheduling.aps.order";
                 menu.Icon = "RiListOrdered";
                 menu.ParentId = manufacturingSchedulingMenu.Id;
                 menu.MenuType = 1;
@@ -425,7 +425,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "生产派工";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SCHEDULING_PRODUCTION_DISPATCH";
-                menu.I18nKey = "menu.logistics.manufacturing.scheduling.productiondispatch";
+                menu.I18nKey = "menu.logistics.manufacturing.scheduling.production.dispatch";
                 menu.Icon = "RiSendPlaneLine";
                 menu.ParentId = manufacturingSchedulingMenu.Id;
                 menu.MenuType = 1;
@@ -449,11 +449,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "设变看板";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KANBAN";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.kanban";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.kanban";
                 menu.Icon = "RiDashboardLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:kanban:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:kanban:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/kanban";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/kanban/index";
                 menu.SortOrder = 1;
@@ -469,11 +469,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "投入批次";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_BATCH";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.batch";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.batch";
                 menu.Icon = "RiListCheck";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:batch:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:batch:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/batch";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/batch/index";
                 menu.SortOrder = 2;
@@ -489,11 +489,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "物料确认";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KAKUNIN";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.kakunin";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.kakunin";
                 menu.Icon = "RiCheckboxCircleLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:kakunin:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:kakunin:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/kakunin";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/kakunin/index";
                 menu.SortOrder = 3;
@@ -509,11 +509,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "设变通知";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_EC_NOTIFICATION";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.ecnotification";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.ec.notification";
                 menu.Icon = "RiNotificationLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:ec:notification:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:ec:notification:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-notification";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-notification/index";
                 menu.SortOrder = 4;
@@ -529,11 +529,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "技术部门";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_GIJUTSU";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.gijutsu";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.gijutsu";
                 menu.Icon = "RiCpuLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:gijutsu:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:gijutsu:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/gijutsu";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/gijutsu/index";
                 menu.SortOrder = 5;
@@ -549,11 +549,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "采购部门";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KOUBAI";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.koubai";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.koubai";
                 menu.Icon = "RiShoppingCart2Line";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:koubai:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:koubai:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/koubai";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/koubai/index";
                 menu.SortOrder = 6;
@@ -569,11 +569,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "生管部门";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIKAN";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.seikan";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.seikan";
                 menu.Icon = "RiSettings3Line";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:seikan:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:seikan:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/seikan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/seikan/index";
                 menu.SortOrder = 7;
@@ -589,11 +589,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "受检部门";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_UKEKEN";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.ukeken";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.ukeken";
                 menu.Icon = "RiSearchEyeLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:ukeken:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:ukeken:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ukeken";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ukeken/index";
                 menu.SortOrder = 8;
@@ -609,11 +609,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "部管部门";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_BUKAN";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.bukan";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.bukan";
                 menu.Icon = "RiArchiveDrawerLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:bukan:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:bukan:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/bukan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/bukan/index";
                 menu.SortOrder = 9;
@@ -629,11 +629,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "制造二课";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUNIKA";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.seizounika";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.seizounika";
                 menu.Icon = "RiSeedlingLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:seizounika:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:seizounika:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/seizounika";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/seizounika/index";
                 menu.SortOrder = 10;
@@ -649,11 +649,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "制造一课";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUIKKA";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.seizouikka";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.seizouikka";
                 menu.Icon = "RiPlantLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:seizouikka:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:seizouikka:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/seizouikka";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/seizouikka/index";
                 menu.SortOrder = 11;
@@ -669,11 +669,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "品管部门";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_HINKAN";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.hinkan";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.hinkan";
                 menu.Icon = "RiShieldCheckLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:hinkan:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:hinkan:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/hinkan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/hinkan/index";
                 menu.SortOrder = 12;
@@ -689,11 +689,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "旧品管制";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_LEGACY_PRODUCT";
-                menu.I18nKey = "menu.logistics.manufacturing.engineeringchange.legacyproduct";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.legacy.product";
                 menu.Icon = "RiTimeLine";
                 menu.ParentId = manufacturingEngineeringChangeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:engineeringchange:legacyproduct:list";
+                menu.Permission = "logistics:manufacturing:engineering:change:legacy:product:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/legacy-product";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/legacy-product/index";
                 menu.SortOrder = 13;
@@ -713,7 +713,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "生产工单";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER";
-                menu.I18nKey = "menu.logistics.manufacturing.output.productionorder";
+                menu.I18nKey = "menu.logistics.manufacturing.output.production.order";
                 menu.Icon = "RiFileList3Line";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
@@ -733,11 +733,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "生产工单变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.productionorder.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.output.production.order.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:production:order:list";
+                menu.Permission = "logistics:manufacturing:output:production:order:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/output/production-order-change-log";
                 menu.ComponentPath = "logistics/manufacturing/output/production-order-change-log/index";
                 menu.SortOrder = 2;
@@ -793,7 +793,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "生产切换";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_CHANGEOVER";
-                menu.I18nKey = "menu.logistics.manufacturing.output.productionchangeover";
+                menu.I18nKey = "menu.logistics.manufacturing.output.production.changeover";
                 menu.Icon = "RiRefreshLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
@@ -813,7 +813,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "机器稼动率";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE";
-                menu.I18nKey = "menu.logistics.manufacturing.output.equipmentoperationrate";
+                menu.I18nKey = "menu.logistics.manufacturing.output.equipment.operation.rate";
                 menu.Icon = "RiPulseLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
@@ -833,11 +833,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "机器稼动率变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.equipmentoperationrate.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.output.equipment.operation.rate.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:equipment:operation:rate:list";
+                menu.Permission = "logistics:manufacturing:output:equipment:operation:rate:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/output/equipment-operation-rate-change-log";
                 menu.ComponentPath = "logistics/manufacturing/output/equipment-operation-rate-change-log/index";
                 menu.SortOrder = 7;
@@ -853,7 +853,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "人员稼动率";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE";
-                menu.I18nKey = "menu.logistics.manufacturing.output.personneloperationrate";
+                menu.I18nKey = "menu.logistics.manufacturing.output.personnel.operation.rate";
                 menu.Icon = "RiUserLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
@@ -873,11 +873,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "人员稼动率变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.personneloperationrate.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.output.personnel.operation.rate.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:personnel:operation:rate:list";
+                menu.Permission = "logistics:manufacturing:output:personnel:operation:rate:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/output/personnel-operation-rate-change-log";
                 menu.ComponentPath = "logistics/manufacturing/output/personnel-operation-rate-change-log/index";
                 menu.SortOrder = 9;
@@ -893,7 +893,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "生产班组";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_TEAM";
-                menu.I18nKey = "menu.logistics.manufacturing.output.productionteam";
+                menu.I18nKey = "menu.logistics.manufacturing.output.production.team";
                 menu.Icon = "RiTeamLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
@@ -913,7 +913,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "标准生产稼动率";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE";
-                menu.I18nKey = "menu.logistics.manufacturing.output.standardoperationrate";
+                menu.I18nKey = "menu.logistics.manufacturing.output.standard.operation.rate";
                 menu.Icon = "RiBarChartLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
@@ -933,11 +933,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "标准生产稼动率变更";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.standardoperationrate.changelog";
+                menu.I18nKey = "menu.logistics.manufacturing.output.standard.operation.rate.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = manufacturingOutputMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:standard:operation:rate:list";
+                menu.Permission = "logistics:manufacturing:output:standard:operation:rate:change:log:list";
                 menu.RoutePath = "/logistics/manufacturing/output/standard-operation-rate-change-log";
                 menu.ComponentPath = "logistics/manufacturing/output/standard-operation-rate-change-log/index";
                 menu.SortOrder = 12;
@@ -957,7 +957,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "PCBA检查";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_DEFECT_PCBA_INSPECTION";
-                menu.I18nKey = "menu.logistics.manufacturing.defect.pcbainspection";
+                menu.I18nKey = "menu.logistics.manufacturing.defect.pcba.inspection";
                 menu.Icon = "RiSearchLine";
                 menu.ParentId = manufacturingDefectMenu.Id;
                 menu.MenuType = 1;
@@ -977,7 +977,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "PCBA改修";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_DEFECT_PCBA_REPAIR";
-                menu.I18nKey = "menu.logistics.manufacturing.defect.pcbarepair";
+                menu.I18nKey = "menu.logistics.manufacturing.defect.pcba.repair";
                 menu.Icon = "RiToolsLine";
                 menu.ParentId = manufacturingDefectMenu.Id;
                 menu.MenuType = 1;
@@ -1121,11 +1121,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "扫码记录";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SOP_EXEC_SCAN";
-                menu.I18nKey = "menu.logistics.manufacturing.sop.execscan";
+                menu.I18nKey = "menu.logistics.manufacturing.sop.exec.scan";
                 menu.Icon = "RiBarcodeLine";
                 menu.ParentId = manufacturingSopMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:sop:execscan:list";
+                menu.Permission = "logistics:manufacturing:sop:exec:scan:list";
                 menu.RoutePath = "/logistics/manufacturing/sop/exec-scan";
                 menu.ComponentPath = "logistics/manufacturing/sop/exec-scan/index";
                 menu.SortOrder = 6;
@@ -1141,11 +1141,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "ESD检查";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_SOP_ESD_CHECK";
-                menu.I18nKey = "menu.logistics.manufacturing.sop.esdcheck";
+                menu.I18nKey = "menu.logistics.manufacturing.sop.esd.check";
                 menu.Icon = "RiShieldFlashLine";
                 menu.ParentId = manufacturingSopMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:sop:esdcheck:list";
+                menu.Permission = "logistics:manufacturing:sop:esd:check:list";
                 menu.RoutePath = "/logistics/manufacturing/sop/esd-check";
                 menu.ComponentPath = "logistics/manufacturing/sop/esd-check/index";
                 menu.SortOrder = 7;
@@ -1249,7 +1249,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "抽样方案";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_SAMPLING_SCHEME";
-                menu.I18nKey = "menu.logistics.quality.operation.samplingscheme";
+                menu.I18nKey = "menu.logistics.quality.operation.sampling.scheme";
                 menu.Icon = "RiListCheck";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
@@ -1269,7 +1269,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "检验标准";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_INSPECTION_STANDARD";
-                menu.I18nKey = "menu.logistics.quality.operation.inspectionstandard";
+                menu.I18nKey = "menu.logistics.quality.operation.inspection.standard";
                 menu.Icon = "RiFileTextLine";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
@@ -1289,7 +1289,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "进货检验";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_IQC_ORDER";
-                menu.I18nKey = "menu.logistics.quality.operation.iqcorder";
+                menu.I18nKey = "menu.logistics.quality.operation.iqc.order";
                 menu.Icon = "RiInboxArchiveLine";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
@@ -1309,11 +1309,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "进货检验变更";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_IQC_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.quality.operation.iqcorder.changelog";
+                menu.I18nKey = "menu.logistics.quality.operation.iqc.order.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:quality:operation:iqc:order:list";
+                menu.Permission = "logistics:quality:operation:iqc:order:change:log:list";
                 menu.RoutePath = "/logistics/quality/operation/iqc-order-change-log";
                 menu.ComponentPath = "logistics/quality/operation/iqc-order-change-log/index";
                 menu.SortOrder = 4;
@@ -1329,7 +1329,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "制程检验";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_IPQC_ORDER";
-                menu.I18nKey = "menu.logistics.quality.operation.ipqcorder";
+                menu.I18nKey = "menu.logistics.quality.operation.ipqc.order";
                 menu.Icon = "RiSettings3Line";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
@@ -1349,11 +1349,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "制程检验变更";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_IPQC_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.quality.operation.ipqcorder.changelog";
+                menu.I18nKey = "menu.logistics.quality.operation.ipqc.order.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:quality:operation:ipqc:order:list";
+                menu.Permission = "logistics:quality:operation:ipqc:order:change:log:list";
                 menu.RoutePath = "/logistics/quality/operation/ipqc-order-change-log";
                 menu.ComponentPath = "logistics/quality/operation/ipqc-order-change-log/index";
                 menu.SortOrder = 6;
@@ -1369,7 +1369,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "入库检验";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_FQC_ORDER";
-                menu.I18nKey = "menu.logistics.quality.operation.fqcorder";
+                menu.I18nKey = "menu.logistics.quality.operation.fqc.order";
                 menu.Icon = "RiArchiveDrawerLine";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
@@ -1389,11 +1389,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "入库检验变更";
                 menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_FQC_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.quality.operation.fqcorder.changelog";
+                menu.I18nKey = "menu.logistics.quality.operation.fqc.order.change.log";
                 menu.Icon = "RiFileHistoryLine";
                 menu.ParentId = qualityAssuranceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:quality:operation:fqc:order:list";
+                menu.Permission = "logistics:quality:operation:fqc:order:change:log:list";
                 menu.RoutePath = "/logistics/quality/operation/fqc-order-change-log";
                 menu.ComponentPath = "logistics/quality/operation/fqc-order-change-log/index";
                 menu.SortOrder = 8;
@@ -1433,11 +1433,11 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "客诉处理";
                 menu.MenuCode = "LOGISTICS_QUALITY_COMPLAINT_CUSTOMER_COMPLAINT_HANDLING";
-                menu.I18nKey = "menu.logistics.quality.complaint.customercomplainthandling";
+                menu.I18nKey = "menu.logistics.quality.complaint.customer.complaint.handling";
                 menu.Icon = "RiFileEditLine";
                 menu.ParentId = qualityComplaintMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:quality:complaint:customer:handling:list";
+                menu.Permission = "logistics:quality:complaint:customer:complaint:handling:list";
                 menu.RoutePath = "/logistics/quality/complaint/customer-complaint-handling";
                 menu.ComponentPath = "logistics/quality/complaint/customer-complaint-handling/index";
                 menu.SortOrder = 2;
@@ -1453,7 +1453,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "客户满意度调查";
                 menu.MenuCode = "LOGISTICS_QUALITY_COMPLAINT_CUSTOMER_SATISFACTION_SURVEY";
-                menu.I18nKey = "menu.logistics.quality.complaint.customersatisfactionsurvey";
+                menu.I18nKey = "menu.logistics.quality.complaint.customer.satisfaction.survey";
                 menu.Icon = "RiSurveyLine";
                 menu.ParentId = qualityComplaintMenu.Id;
                 menu.MenuType = 1;
@@ -1473,7 +1473,7 @@ public class TaktMenuLevel4SeedData
             {
                 menu.MenuName = "供应商评价考核";
                 menu.MenuCode = "LOGISTICS_QUALITY_COMPLAINT_SUPPLIER_EVALUATION";
-                menu.I18nKey = "menu.logistics.quality.complaint.supplierevaluation";
+                menu.I18nKey = "menu.logistics.quality.complaint.supplier.evaluation";
                 menu.Icon = "RiStarLine";
                 menu.ParentId = qualityComplaintMenu.Id;
                 menu.MenuType = 1;
