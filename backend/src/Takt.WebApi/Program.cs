@@ -83,7 +83,7 @@ try
         builder.Configuration.GetSection(TaktTenantContextOptions.SectionName));
     
     var databaseOptions = builder.Configuration.RequireOptions<TaktDatabaseOptions>(TaktDatabaseOptions.SectionName);
-    databaseOptions.Validate();
+    databaseOptions.NormalizeAndValidate();
     
     builder.Services.Configure<TaktDatabaseOptions>(
         builder.Configuration.GetSection(TaktDatabaseOptions.SectionName));

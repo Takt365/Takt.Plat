@@ -13,6 +13,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using SqlSugar;
+using Takt.Shared.Helpers;
 using Takt.Shared.Models.Code;
 using Takt.Shared.Options;
 
@@ -65,17 +66,12 @@ internal static class TaktDatabaseCloneSqlHelper
     /// <summary>
     /// 创建 SqlSugar 客户端
     /// </summary>
-    internal static SqlSugarClient CreateClient(string connectionString, string tenantCode)
-    {
-        return new SqlSugarClient(new ConnectionConfig
-        {
-            ConfigId = tenantCode,
-            ConnectionString = connectionString,
-            DbType = DbType.SqlServer,
-            IsAutoCloseConnection = true,
-            InitKeyType = InitKeyType.Attribute
-        });
-    }
+    /// <param name="sugarDbType">已解析的 SqlSugar 数据库类型</param>
+    /// <param name="connectionString">连接字符串</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <returns>SqlSugar 客户端</returns>
+    internal static SqlSugarClient CreateClient(DbType sugarDbType, string connectionString, string tenantCode) =>
+        TaktSqlSugarConnectionHelper.CreateClient(sugarDbType, tenantCode, connectionString);
 
     /// <summary>
     /// 判断两个租户连接是否指向同一 SQL Server 实例

@@ -16,6 +16,7 @@ using SqlSugar;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models.Code;
+using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Data.Schema;
 
@@ -25,6 +26,7 @@ namespace Takt.Infrastructure.Data.Schema;
 public class TaktTableCloneProvider : ITaktTableCloneProvider
 {
     private readonly IConfiguration _configuration;
+    private readonly SqlSugar.DbType _sugarDbType;
     private readonly ITaktDatabaseSchemaProvider _schemaProvider;
 
     /// <summary>
@@ -37,6 +39,7 @@ public class TaktTableCloneProvider : ITaktTableCloneProvider
         ITaktDatabaseSchemaProvider schemaProvider)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _sugarDbType = configuration.GetSugarDbType();
         _schemaProvider = schemaProvider ?? throw new ArgumentNullException(nameof(schemaProvider));
     }
 
@@ -73,8 +76,8 @@ public class TaktTableCloneProvider : ITaktTableCloneProvider
             options.TargetDatabaseName);
 
         var columnMapping = await BuildColumnMappingAsync(source.TenantCode, target.TenantCode, options).ConfigureAwait(false);
-        using var sourceDb = TaktDatabaseCloneSqlHelper.CreateClient(source.ConnectionString, source.TenantCode);
-        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(target.ConnectionString, target.TenantCode);
+        using var sourceDb = TaktDatabaseCloneSqlHelper.CreateClient(_sugarDbType, source.ConnectionString, source.TenantCode);
+        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(_sugarDbType, target.ConnectionString, target.TenantCode);
 
         var sourceRowCount = await CountRowsAsync(sourceDb, options.SourceTableName, cancellationToken).ConfigureAwait(false);
         if (sourceRowCount > TaktDatabaseCloneSqlHelper.MaxCloneRowCount)
@@ -157,7 +160,7 @@ public class TaktTableCloneProvider : ITaktTableCloneProvider
             _configuration,
             options.TargetTenantCode,
             options.TargetDatabaseName);
-        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(target.ConnectionString, target.TenantCode);
+        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(_sugarDbType, target.ConnectionString, target.TenantCode);
         cancellationToken.ThrowIfCancellationRequested();
         var rowCount = await TaktDatabaseCloneSqlHelper.CountTableRowsAsync(targetDb, options.TargetTableName).ConfigureAwait(false);
         return TaktDatabaseCloneSqlHelper.BuildFullTableBackupPreview(options.TargetTableName.Trim(), rowCount);

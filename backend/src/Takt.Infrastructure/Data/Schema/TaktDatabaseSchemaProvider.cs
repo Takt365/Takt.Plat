@@ -45,6 +45,8 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 
     /// <summary>应用配置（读取租户连接字符串）</summary>
     private readonly IConfiguration _configuration;
+    /// <summary>已解析的 SqlSugar 数据库类型（构造时映射一次）</summary>
+    private readonly DbType _sugarDbType;
 
     /// <summary>
     /// 初始化数据库 Schema 提供者
@@ -54,6 +56,7 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
     public TaktDatabaseSchemaProvider(IConfiguration configuration)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _sugarDbType = configuration.GetSugarDbType();
     }
 
     /// <summary>
@@ -169,14 +172,7 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
         {
             throw new InvalidOperationException($"未找到 TenantCode={tenantCode} 对应的租户连接字符串。");
         }
-        return new SqlSugarClient(new ConnectionConfig
-        {
-            ConfigId = tenantCode,
-            ConnectionString = match.ConnectionString,
-            DbType = DbType.SqlServer,
-            IsAutoCloseConnection = true,
-            InitKeyType = InitKeyType.Attribute
-        });
+        return TaktSqlSugarConnectionHelper.CreateClient(_sugarDbType, tenantCode, match.ConnectionString);
     }
 
     /// <summary>

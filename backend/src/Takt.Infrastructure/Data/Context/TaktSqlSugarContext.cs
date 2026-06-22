@@ -44,6 +44,10 @@ public class TaktSqlSugarContext : IDisposable
     /// 当前上下文绑定的租户编码
     /// </summary>
     private readonly string _tenantCode;
+    /// <summary>
+    /// 已解析的 SqlSugar 数据库类型（构造时从配置映射一次）
+    /// </summary>
+    private readonly DbType _sugarDbType;
 
     /// <summary>
     /// SqlSugar客户端实例
@@ -96,20 +100,14 @@ public class TaktSqlSugarContext : IDisposable
         
         _configuration = configuration;
         _tenantCode = tenantCode;
+        _sugarDbType = configuration.GetSugarDbType();
         var connectionString = _configuration.GetConnectionString($"Tenant_{tenantCode}");
         if (string.IsNullOrWhiteSpace(connectionString))
         {
             throw new InvalidOperationException(
                 $"未找到租户 {tenantCode} 的连接字符串配置。请在 appsettings.json 中配置 'ConnectionStrings:Tenant_{tenantCode}'。");
         }
-        _db = new SqlSugarClient(new ConnectionConfig
-        {
-            ConfigId = tenantCode,
-            ConnectionString = connectionString,
-            DbType = DbType.SqlServer,
-            IsAutoCloseConnection = true,
-            InitKeyType = InitKeyType.Attribute
-        });
+        _db = TaktSqlSugarConnectionHelper.CreateClient(_sugarDbType, tenantCode, connectionString);
         
         // SqlSugar 内置雪花ID：当实体主键为 long 类型时，插入时自动生成
         // 无需手动配置，SqlSugar 会自动处理
@@ -295,14 +293,10 @@ public class TaktSqlSugarContext : IDisposable
             throw new InvalidOperationException(
                 $"未找到租户 {tenantCode} 的连接字符串配置。请在 appsettings.json 中配置 'ConnectionStrings:Tenant_{tenantCode}'。");
         }
-        return new SqlSugarClient(new ConnectionConfig
-        {
-            ConfigId = tenantCode,
-            ConnectionString = connectionString,
-            DbType = DbType.SqlServer,
-            IsAutoCloseConnection = true,
-            InitKeyType = InitKeyType.Attribute
-        });
+        return TaktSqlSugarConnectionHelper.CreateClient(
+            configuration.GetSugarDbType(),
+            tenantCode,
+            connectionString);
     }
         
     /// <summary>

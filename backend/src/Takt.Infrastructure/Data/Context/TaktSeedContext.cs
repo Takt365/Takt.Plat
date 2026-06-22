@@ -16,6 +16,7 @@ using SqlSugar;
 using Takt.Domain.Entities;
 using Takt.Infrastructure.Data.Seeds;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Data.Context;
 
@@ -26,6 +27,7 @@ public class TaktSeedContext : IDisposable
 {
     private ISqlSugarClient _db;
     private readonly IConfiguration _configuration;
+    private readonly DbType _sugarDbType;
     private string _currentTenantCode;
     private bool _disposed = false;
 
@@ -72,6 +74,7 @@ public class TaktSeedContext : IDisposable
         }
         
         _configuration = configuration;
+        _sugarDbType = configuration.GetSugarDbType();
         _currentTenantCode = tenantCode;
         _db = CreateSqlSugarClient(tenantCode);
     }
@@ -114,14 +117,7 @@ public class TaktSeedContext : IDisposable
             throw new InvalidOperationException(
                 $"未找到租户 {tenantCode} 的连接字符串配置。请在 appsettings.json 中配置 'ConnectionStrings:Tenant_{tenantCode}'。");
         }
-        var db = new SqlSugarClient(new ConnectionConfig
-        {
-            ConfigId = tenantCode,
-            ConnectionString = connectionString,
-            DbType = DbType.SqlServer,
-            IsAutoCloseConnection = true,
-            InitKeyType = InitKeyType.Attribute
-        });
+        var db = TaktSqlSugarConnectionHelper.CreateClient(_sugarDbType, tenantCode, connectionString);
 #if DEBUG
         db.Aop.OnLogExecuting = (sql, pars) =>
         {

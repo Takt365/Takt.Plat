@@ -16,6 +16,7 @@ using SqlSugar;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models.Code;
+using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Data.Schema;
 
@@ -25,6 +26,7 @@ namespace Takt.Infrastructure.Data.Schema;
 public class TaktDataCloneProvider : ITaktDataCloneProvider
 {
     private readonly IConfiguration _configuration;
+    private readonly SqlSugar.DbType _sugarDbType;
     private readonly ITaktDatabaseSchemaProvider _schemaProvider;
 
     /// <summary>
@@ -37,6 +39,7 @@ public class TaktDataCloneProvider : ITaktDataCloneProvider
         ITaktDatabaseSchemaProvider schemaProvider)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _sugarDbType = configuration.GetSugarDbType();
         _schemaProvider = schemaProvider ?? throw new ArgumentNullException(nameof(schemaProvider));
     }
 
@@ -72,8 +75,8 @@ public class TaktDataCloneProvider : ITaktDataCloneProvider
             throw new InvalidOperationException($"表 {options.SourceTableName} 不含 company_code 列，无法按公司克隆");
         }
 
-        using var sourceDb = TaktDatabaseCloneSqlHelper.CreateClient(source.ConnectionString, source.TenantCode);
-        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(target.ConnectionString, target.TenantCode);
+        using var sourceDb = TaktDatabaseCloneSqlHelper.CreateClient(_sugarDbType, source.ConnectionString, source.TenantCode);
+        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(_sugarDbType, target.ConnectionString, target.TenantCode);
 
         var sourceRowCount = await CountScopedRowsAsync(
             sourceDb,
@@ -187,7 +190,7 @@ public class TaktDataCloneProvider : ITaktDataCloneProvider
         {
             throw new InvalidOperationException($"表 {options.TargetTableName} 不含 company_code 列，无法按公司克隆");
         }
-        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(target.ConnectionString, target.TenantCode);
+        using var targetDb = TaktDatabaseCloneSqlHelper.CreateClient(_sugarDbType, target.ConnectionString, target.TenantCode);
         cancellationToken.ThrowIfCancellationRequested();
         var rowCount = await TaktDatabaseCloneSqlHelper.CountCompanyRowsAsync(
             targetDb,

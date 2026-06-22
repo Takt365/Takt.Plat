@@ -11,6 +11,7 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Helpers;
 
 namespace Takt.Shared.Options;
 
@@ -22,9 +23,14 @@ public class TaktDatabaseOptions
     public const string SectionName = "Database";
 
     /// <summary>
-    /// 数据库类型（0=MySql, 1=SqlServer, 2=Sqlite, 3=Oracle, 4=PostgreSQL, 5=Dm, 6=Kdbndp）
+    /// 数据库类型（与 SqlSugar DbType 枚举整型值一致；见 TaktDatabaseTypeHelper 常量与 ResolveSugarDbType）
     /// </summary>
     public int DbType { get; set; }
+
+    /// <summary>
+    /// 已解析的 SqlSugar 数据库类型（NormalizeAndValidate 时由 DbType 映射一次并缓存）
+    /// </summary>
+    public SqlSugar.DbType? SugarDbType { get; private set; }
 
     /// <summary>
     /// 需要初始化的租户编码列表（顺序与 appsettings 一致）
@@ -54,6 +60,7 @@ public class TaktDatabaseOptions
         TenantCodes = NormalizeCodeList(TenantCodes);
         CompanyCodes = NormalizeCodeList(CompanyCodes);
         PlantCodes = NormalizeCodeList(PlantCodes);
+        SugarDbType = TaktDatabaseTypeHelper.ResolveSugarDbType(DbType);
         Validate();
     }
 
@@ -70,21 +77,13 @@ public class TaktDatabaseOptions
     public string GetSeedCompanyCode() => CompanyCodes[0];
 
     /// <summary>
-    /// 获取 SqlSugar 的 DbType 枚举
+    /// 获取已解析的 SqlSugar 数据库类型（未缓存时按 DbType 配置即时映射）
     /// </summary>
+    /// <returns>SqlSugar DbType</returns>
     public SqlSugar.DbType GetSugarDbType()
     {
-        return DbType switch
-        {
-            0 => SqlSugar.DbType.MySql,
-            1 => SqlSugar.DbType.SqlServer,
-            2 => SqlSugar.DbType.Sqlite,
-            3 => SqlSugar.DbType.Oracle,
-            4 => SqlSugar.DbType.PostgreSQL,
-            5 => SqlSugar.DbType.Dm,
-            6 => SqlSugar.DbType.Kdbndp,
-            _ => throw new InvalidOperationException($"不支持的数据库类型: {DbType}")
-        };
+        EnsureSugarDbTypeResolved();
+        return SugarDbType!.Value;
     }
 
     /// <summary>
@@ -106,18 +105,10 @@ public class TaktDatabaseOptions
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
         var trimmed = tenantCode.Trim();
-        return new ConnectionConfig
-        {
-            ConfigId = trimmed,
-            DbType = GetSugarDbType(),
-            ConnectionString = GetConnectionString(trimmed),
-            IsAutoCloseConnection = true,
-            InitKeyType = InitKeyType.Attribute,
-            MoreSettings = new ConnMoreSettings
-            {
-                SqlServerCodeFirstNvarchar = true,
-            },
-        };
+        return TaktSqlSugarConnectionHelper.CreateConnectionConfig(
+            GetSugarDbType(),
+            trimmed,
+            GetConnectionString(trimmed));
     }
 
     /// <summary>
@@ -125,7 +116,7 @@ public class TaktDatabaseOptions
     /// </summary>
     public void Validate()
     {
-        _ = GetSugarDbType();
+        EnsureSugarDbTypeResolved();
         if (TenantCodes.Count == 0)
         {
             throw new InvalidOperationException($"{SectionName}:TenantCodes 不能为空");
@@ -187,6 +178,17 @@ public class TaktDatabaseOptions
             .Where(code => !string.IsNullOrWhiteSpace(code))
             .Select(code => code.Trim())
             .ToList();
+    }
+
+    /// <summary>
+    /// 将 DbType 配置映射为 SqlSugar 类型并缓存（幂等）
+    /// </summary>
+    private void EnsureSugarDbTypeResolved()
+    {
+        if (!SugarDbType.HasValue)
+        {
+            SugarDbType = TaktDatabaseTypeHelper.ResolveSugarDbType(DbType);
+        }
     }
 
 }

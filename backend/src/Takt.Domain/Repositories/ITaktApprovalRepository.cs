@@ -184,6 +184,50 @@ public interface ITaktApprovalRepository<TEntity> : ITaktUniqueExistenceReposito
     Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);
 
     // ========================================
+    // 聚合统计
+    // ========================================
+
+    /// <summary>
+    /// 取字段最大值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>最大值；无记录时为类型默认值</returns>
+    Task<TResult> MaxAsync<TResult>(Expression<Func<TEntity, TResult>> fieldSelector, Expression<Func<TEntity, bool>>? predicate = null);
+
+    /// <summary>
+    /// 取字段最小值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>最小值；无记录时为类型默认值</returns>
+    Task<TResult> MinAsync<TResult>(Expression<Func<TEntity, TResult>> fieldSelector, Expression<Func<TEntity, bool>>? predicate = null);
+
+    /// <summary>
+    /// 求字段之和（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>求和结果；无记录时为类型默认值</returns>
+    Task<TResult> SumAsync<TResult>(Expression<Func<TEntity, TResult>> fieldSelector, Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct;
+
+    /// <summary>
+    /// 求字段平均值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>平均值；无记录时为类型默认值</returns>
+    Task<TResult> AvgAsync<TResult>(Expression<Func<TEntity, TResult>> fieldSelector, Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct;
+
+    /// <summary>
+    /// 求字段中位数（当前租户与公司范围内、未删除；SqlServer/PostgreSQL/Oracle 等走 PERCENTILE_CONT，MySql/Sqlite 有序切片回退）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>中位数；无记录时为类型默认值</returns>
+    Task<TResult> MedianAsync<TResult>(Expression<Func<TEntity, TResult>> fieldSelector, Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct;
+
+    // ========================================
     // 序列与只读脚本
     // ========================================
 

@@ -186,14 +186,11 @@ public static class TaktTenantDatabaseHelper
 
         try
         {
-            using var db = new SqlSugarClient(new ConnectionConfig
-            {
-                ConfigId = tenantCode.Trim(),
-                ConnectionString = connectionString,
-                DbType = DbType.SqlServer,
-                IsAutoCloseConnection = true,
-                InitKeyType = InitKeyType.Attribute,
-            });
+            using var db = TaktSqlSugarConnectionHelper.CreateClient(
+                configuration.GetSugarDbType(),
+                tenantCode.Trim(),
+                connectionString,
+                registerRepositorySqlFunc: false);
             db.Ado.GetInt("SELECT 1");
             return true;
         }

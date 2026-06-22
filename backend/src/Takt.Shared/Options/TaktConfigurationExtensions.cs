@@ -11,6 +11,7 @@
 // ========================================
 
 using Microsoft.Extensions.Configuration;
+using SqlSugar;
 
 namespace Takt.Shared.Options;
 
@@ -57,6 +58,14 @@ public static class TaktConfigurationExtensions
         options.NormalizeAndValidate();
         return options;
     }
+
+    /// <summary>
+    /// 获取已解析的 SqlSugar 数据库类型（经 Database 节一次映射并缓存）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>SqlSugar DbType</returns>
+    public static DbType GetSugarDbType(this IConfiguration configuration) =>
+        configuration.RequireDatabase().GetSugarDbType();
 
     /// <summary>
     /// 绑定 <c>Init</c> 节（建表/种子开关，与 TaktDatabaseOptions 数据范围分离）

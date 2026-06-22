@@ -513,6 +513,55 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     }
 
     // ========================================
+    // 聚合统计
+    // ========================================
+
+    /// <summary>
+    /// 构建聚合读查询（租户/公司隔离、未删除）
+    /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>可聚合的查询</returns>
+    private ISugarQueryable<TEntity> BuildAggregateReadQuery(Expression<Func<TEntity, bool>>? predicate)
+    {
+        var query = ApplyReadScope(Db.Queryable<TEntity>());
+        if (predicate != null)
+        {
+            query = query.Where(predicate);
+        }
+        return query;
+    }
+
+    /// <inheritdoc />
+    public virtual Task<TResult> MaxAsync<TResult>(
+        Expression<Func<TEntity, TResult>> fieldSelector,
+        Expression<Func<TEntity, bool>>? predicate = null) =>
+        BuildAggregateReadQuery(predicate).MaxAsync(fieldSelector);
+
+    /// <inheritdoc />
+    public virtual Task<TResult> MinAsync<TResult>(
+        Expression<Func<TEntity, TResult>> fieldSelector,
+        Expression<Func<TEntity, bool>>? predicate = null) =>
+        BuildAggregateReadQuery(predicate).MinAsync(fieldSelector);
+
+    /// <inheritdoc />
+    public virtual Task<TResult> SumAsync<TResult>(
+        Expression<Func<TEntity, TResult>> fieldSelector,
+        Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>
+        BuildAggregateReadQuery(predicate).SumAsync(fieldSelector);
+
+    /// <inheritdoc />
+    public virtual Task<TResult> AvgAsync<TResult>(
+        Expression<Func<TEntity, TResult>> fieldSelector,
+        Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>
+        BuildAggregateReadQuery(predicate).AvgAsync(fieldSelector);
+
+    /// <inheritdoc />
+    public virtual Task<TResult> MedianAsync<TResult>(
+        Expression<Func<TEntity, TResult>> fieldSelector,
+        Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>
+        TaktRepositoryAggregateSql.MedianAsync(Db, BuildAggregateReadQuery(predicate), fieldSelector);
+
+    // ========================================
     // 序列与只读脚本
     // ========================================
 
@@ -522,13 +571,10 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <param name="predicate">查询条件</param>
     /// <param name="fieldSelector">整型字段</param>
     /// <returns>最大值；无记录时为 0</returns>
-    public virtual async Task<int> GetMaxIntAsync(
+    public virtual Task<int> GetMaxIntAsync(
         Expression<Func<TEntity, bool>> predicate,
-        Expression<Func<TEntity, int>> fieldSelector)
-    {
-        return await ApplyReadScope(Db.Queryable<TEntity>().Where(predicate))
-            .MaxAsync(fieldSelector);
-    }
+        Expression<Func<TEntity, int>> fieldSelector) =>
+        MaxAsync(fieldSelector, predicate);
 
     /// <summary>
     /// 执行只读 SQL 并返回动态行
